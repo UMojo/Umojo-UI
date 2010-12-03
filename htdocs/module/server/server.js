@@ -7,7 +7,12 @@ winkstart.module.define('server', {
 		'server.save'   : { url : 'api/v2/server/save' },
 		'server.delete' : { url : 'api/v2/server/delete' }
 	},
-
+	
+	// Method for execution when this module is first loaded
+	onDefine: function() {
+	},
+	
+	// Called when modules are to initialize
 	init: function() {
 	}
 });
