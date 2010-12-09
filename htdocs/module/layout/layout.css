@@ -1,0 +1,15 @@
+#ws-header {
+	height: 100px;
+	border: 1px solid #757575;
+	padding: 10px;
+	margin-bottom: 12px;
+}
+#ws-nav {
+	float: left;
+	width: 200px;
+	border: 1px solid #757575;
+}
+#ws-content {
+	margin-left: 220px;
+	padding: 11px;
+}

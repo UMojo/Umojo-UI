@@ -1,0 +1,11 @@
+#ws-nav ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid #757575;
+}
+#ws-nav ul li {
+	display: block;
+	padding: 5px 10px;
+	border-bottom: 1px solid #757575;
+}
