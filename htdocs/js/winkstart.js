@@ -12,7 +12,7 @@
 			this.templates = {};
 			$.each(this.config.templates, function(name, url) {
 				completed++;
-				$.get('/module/' + THIS.__module + '/' + url, function(template) {
+				$.get('module/' + THIS.__module + '/' + url, function(template) {
 					console.log('Loaded template ' + name + ' at ' + url);
 					completed--;
 					THIS.templates[name] = $(template);
@@ -33,7 +33,7 @@
 				if ( css === true ) {
 					THIS.__module + '.css';
 				}
-				css = '/module/' + THIS.__module + '/' + css;
+				css = 'module/' + THIS.__module + '/' + css;
 				//completed++;
 				console.log('Loading css: ' + css);
 				$('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
