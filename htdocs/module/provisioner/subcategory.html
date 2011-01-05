@@ -1,0 +1,12 @@
+<div>
+   <div class="col_box subcategory">
+      <h1>${name}</h1>
+      <form id="${name.replace(/\W/g, '_')}">
+         <fieldset>
+{{each(i, el) item}}
+   {{tmpl({"item" : el}) "item"}}<br>
+{{/each}}
+         </fieldset>
+      </form>
+   </div>
+</div>

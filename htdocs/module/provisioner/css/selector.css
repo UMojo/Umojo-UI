@@ -1,0 +1,19 @@
+.brand {
+   display: inline-block;
+   width: 100px;
+   vertical-align: top;
+}
+
+.brand .name {
+   width: 100%;
+   height: 50px;
+   margin: 4px;
+   text-align: center;
+}
+
+.model {
+   width: 100%;
+   height: 50px;
+   text-align: center;
+}
+

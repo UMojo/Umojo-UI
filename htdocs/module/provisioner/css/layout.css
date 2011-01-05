@@ -1,0 +1,10 @@
+#settings {
+   vertical-align: top;
+}
+
+.col_box {
+   display: inline-block;
+   vertical-align: top;
+   width: 300px;
+   margin: 10px;
+}

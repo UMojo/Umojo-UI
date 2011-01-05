@@ -1,0 +1,10 @@
+<div>
+   <div>
+{{each(category, actions) categories}}
+      <div id="${category}" name="${category}" class="category"><b>${category}</b></div>
+   {{each(i, action) actions}}
+      <div class="tool"><div name="${action}" class="action">${action}</div></div>
+   {{/each}}
+{{/each}}
+   </div>
+</div>
