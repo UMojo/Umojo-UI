@@ -82,25 +82,29 @@
 				this.init({ parent: $('body') }, function() {
 					console.log('Layout initialized');
 					
+					winkstart.module.load('account', function() {
+						this.init();
+					});
+					
+					winkstart.module.load('media', function() {
+						this.init();
+					});
+
 					winkstart.module.load('auth', function() {
 						this.init();
 					});
+					
 					winkstart.module.load('dashboard', function() {
-						this.init(function() {
-							// Activate the dashboard by default (target selector is a hack)
-							//winkstart.publish('dashboard.activate', { target: $('#ws-content') });
-						});
+						this.init();
 					});
-                                        winkstart.module.load('provisioner', function() {
-                                                this.init(function(){
-                                                   //winkstart.publish('provisioner.activate', { target: $('#ws-content') });
-                                                });
-                                        });
-                                        winkstart.module.load('callflow', function() {
-                                                this.init(function(){
-                                                   winkstart.publish('callflow.activate', { target: $('#ws-content') });
-                                                });
-                                        });
+                    
+					winkstart.module.load('provisioner', function() {
+	                    this.init();
+                    });
+                    
+					winkstart.module.load('callflow', function() {
+	                    this.init();
+                    });
 				});
 			});
 		});

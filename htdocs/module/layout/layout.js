@@ -1,9 +1,15 @@
 winkstart.module('layout', {
 		requires: ['nav'],
-		css: ['layout.css'],
+		css: [
+		      'layout.css'
+		],
 		
 		templates: {
 			layout: 'layout.html'
+		},
+		
+		subscribe: {
+			'layout.updateLoadedModule'    : 'updateModule'
 		},
 		
 		elements: {
@@ -24,9 +30,15 @@ winkstart.module('layout', {
 		// END HACK
 		
 		// Attach our nav
-		winkstart.module('nav').init({ parent: this.elements.nav });
+		winkstart.module('nav').init({ parent: this.elements.nav});
 	},
-	{	attach: function() {
+	{	
+		attach: function() {
 			this.templates.layout.tmpl().appendTo( this.parent );
+		},
+		
+		updateModule: function(data){
+			$('#bread-crumbs').empty().html(data.label);
 		}
-	});
+	}
+);

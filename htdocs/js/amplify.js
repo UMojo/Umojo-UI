@@ -717,7 +717,8 @@ amplify.module = function(module, config, construct, methods) {
 };
 
 amplify.module.load = function(module, callback) {
-	$LAB.script('module/' + module + '/' + module + '.js?_=' + (new Date()))
+	//$LAB.script('module/' + module + '/' + module + '.js?_=' + (new Date()))
+	$LAB.script('module/' + module + '/' + module + '.js')
 		.wait(function() {
 			callback.call( amplify.module(module) );
 		});

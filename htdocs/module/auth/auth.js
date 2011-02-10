@@ -58,11 +58,15 @@ winkstart.module('auth', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Login' });
+		winkstart.publish('nav.add', { 
+			module: this.__module, 
+			label: 'LOGIN'
+		});
 	},
 	{	activate: function(args) {
 			$(args.target).empty();
 			
 			this.templates.login.appendTo(args.target);
+			winkstart.publish('layout.updateLoadedModule', {label: 'User Authentication', module: this.__module});
 		}
 	});

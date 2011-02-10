@@ -20,7 +20,10 @@ winkstart.module('server', {
 		}
 	},
 	function() {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Servers' });
+		winkstart.publish('nav.add', { 
+			module: this.__module, 
+			label: 'SERVERS'
+		});
 		
 		//amplify.route('server.dashboard', '/server*');
 		//amplify.route.watch('server.dashboard', function() {
@@ -30,5 +33,6 @@ winkstart.module('server', {
 	{	activate: function(args) {
 			$(args.target).empty();
 			this.templates.server.appendTo(args.target);
+			winkstart.publish('layout.updateLoadedModule', {label: 'Server Management', module: this.__module});
 		}
 	});

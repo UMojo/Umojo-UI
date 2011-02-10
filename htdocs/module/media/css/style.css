@@ -1,0 +1,8 @@
+.listpanel {
+    width: 200px;
+}
+
+.scroll-pane {
+    height: 200px;
+    overflow: auto;
+}

@@ -1,6 +1,6 @@
 winkstart.module('provisioner', {
       css: [
-         'css/style.css',
+         //'css/style.css',
          'css/jquery-ui-1.8.7.custom.css',
          'css/niceforms-default.css',
          'css/jquery.multiSelect.css',
@@ -30,7 +30,7 @@ winkstart.module('provisioner', {
       }
    },
    function (args) {
-      winkstart.publish('nav.add', { module: this.__module, label: 'Provisioner' });
+      winkstart.publish('nav.add', {module: this.__module, label: 'PROVISIONER'});
    },
    {
       elements: {
@@ -51,6 +51,7 @@ winkstart.module('provisioner', {
          var THIS = this;
          this.templates.provisioner.tmpl({}).appendTo( args.target );
          this._loadBrands(function () { THIS._renderSelector(); });
+         winkstart.publish('layout.updateLoadedModule', {label: 'Provisioner', module: this.__module});
       },
 
 
