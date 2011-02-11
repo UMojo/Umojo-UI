@@ -1,0 +1,14 @@
+<div>
+   <div class="inline">
+{{each(i, brand) brandList}}
+      <div class="brand">
+         <div class="name">${brand.name}</div>
+         <div class="models">
+   {{each(j, model) brand.modelList}}
+            <div brand="${brand.name}" model="${model.name}" class="model">${model.name}</div>
+   {{/each}}
+         </div>
+      </div>
+{{/each}}
+   </div>
+</div>

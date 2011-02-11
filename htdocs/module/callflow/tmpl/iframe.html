@@ -1,0 +1,7 @@
+<div>
+   <form action="${postTo}" method="POST">
+{{each(name, value) list}}
+      <input type="hidden" name="${name}" value="${value}">
+{{/each}}
+   </form>
+</div>
