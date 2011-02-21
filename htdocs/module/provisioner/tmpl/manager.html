@@ -1,0 +1,24 @@
+<div>
+   <div>
+      <div id="ws_prov_ep_cats">
+         <ul>
+{{each(i, category) categories}}
+            <li name="${category.name}" class="category"><a href="javascript:"><em class="${category.name}">${category.name}</em></a></li>
+{{/each}}
+         </ul>
+      </div>
+      <div id="ws_prov_ep_config">
+         <div id="basic" class="subcategory"></div>
+         <div id="Internet_Port__WAN_" class="subcategory"></div>
+         <div id="Hard_Keys" class="subcategory"></div>
+         <div id="PC_Port" class="subcategory"></div>
+         <div id="phone" class="subcategory phone">
+             <h1>${model.name}</h1>
+         </div>
+         <div id="5" class="subcategory"></div>
+         <div id="6" class="subcategory"></div>
+         <div id="7" class="subcategory"></div>
+         <div id="8" class="subcategory"></div>
+      </div>
+   </div>
+</div>

@@ -9,16 +9,18 @@ winkstart.module('provisioner', {
       ],
 
       templates: {
-         provisioner: 'provisioner.html',
-         selector: 'selector.html',
-         categories: 'categories.html',
-         sub: 'subcategory.html',
-         item: 'item.html'
+         provisioner: 'tmpl/provisioner.html',
+         selector: 'tmpl/selector.html',
+         manager: 'tmpl/manager.html',
+         sub: 'tmpl/subcategory.html',
+         item: 'tmpl/item.html'
       },
 
       elements: {
          selector: '#ws_prov_selector',
-         endpoint: '#ws_prov_endpoint'
+         endpoint: '#ws_prov_endpoint',
+         catList:  '#ws_prov_ep_cats',
+         config:   '#ws_prov_ep_config'
       },
 
       requests: {
@@ -35,15 +37,26 @@ winkstart.module('provisioner', {
    {
       elements: {
          catList: 'catList',
-         settings: 'settings'
+         settings: 'config'
       },
 
-      brands: {},
 
-      defSettings: [],
-      settings: [],
+/*****************************************************************************
+ *  DATA  ***
+ *****************************************************************************/
 
-      curModel: { brand: '', model: '' },
+   /**************************************************************************
+    *    ***
+    **************************************************************************/
+      jsonDir: 'endpoint/',
+
+      brandList: { },
+
+      current: { brand: '', model: {} },
+
+      defConfig: { },
+      curConfig: { },
+
 
       activate: function (args) {
          args.target.empty();
@@ -55,90 +68,165 @@ winkstart.module('provisioner', {
       },
 
 
-// PUBLIC API
-      render: function (css, brand, model) {
+/*****************************************************************************
+ *  PUBLIC API  ***
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ *  Render configuration manager using given brand model and config  ***
+ *  uri - uri of the stored configuration
+ *****************************************************************************/
+      render: function (brand, model, uri) {
          var THIS = this;
-         this._loadDefaultSettings(brand, model, function () { THIS._render(); });
+         this._loadDefaultConfig(brand, model, function () {
+            if (uri) THIS.loadConfig(uri);
+            else THIS.loadDefault();
+         });
       },
+
 
       showCategory: function (name) {
          this._selectCategory(name);
       },
 
-      loadSettings: function (uri) {
+/*****************************************************************************
+ *  Load previously stored config into configuration manager  ***
+ *  uri - uri of the stored configuration
+ *****************************************************************************/
+      loadConfig: function (uri) {
          // TODO: settings via getJSON
+         var THIS = this;
+         THIS._render();
       },
 
-      saveSettings: function (uri) {
+/*****************************************************************************
+ *  Load default config into configuration manager  ***
+ *****************************************************************************/
+      loadDefault: function () {
+         this.curConfig = this.defConfig;
+         this._render();
+      },
+
+/*****************************************************************************
+ *  Save current configuration manager state  ***
+ *****************************************************************************/
+      saveConfig: function (uri) {
          // TODO: post settings property
       },
 
 
-// INTERNAL API
-      // some internal work...
 
+
+/*****************************************************************************
+ *  INTERNAL API  ***
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ *  Render selection control  ***
+ *****************************************************************************/
       _renderSelector: function () {
          var THIS = this;
 
-         var select = this.templates.selector.tmpl({ brands: THIS.brands });
-         select.find('.brand').hover(
-               function () { $(this).find('.models').show(); },
-               function () { $(this).find('.models').hide(); }
-         );
-         select.find('.model').click(function () {
-            THIS.render('', $(this).attr('brand'), $(this).attr('model'));
+         var selector = this.templates.selector.tmpl({ brandList: THIS.brandList });
+         selector.find('.models').hide();
+         selector.find('.brand').hover(function () { $(this).find('.models').toggle(); });
+         selector.find('.model').click(function () {
+            THIS.render($(this).attr('brand'), $(this).attr('model'));
          });
-         select.find('.models').hide();
 
-         select.appendTo( $(this.config.elements.selector).empty() );
+         selector.appendTo( $(this.config.elements.selector).empty() );
       },
 
+
+
+/*****************************************************************************
+ *  Render current configuration state  ***
+ *****************************************************************************/
       _render: function () {
-         var target = $(this.config.elements.endpoint).empty();
+         var target = $(this.config.elements.endpoint).empty(),
+             config = this.curConfig;
+             catList = new Array();
 
-         var catList = [];
-         for (var i in this.settings) catList.push({ name: this.settings[i].name });
-         this._renderCategories(catList).appendTo(target);
-
-         this._renderSubLayout().appendTo(target);
-
+         for (var i in config) catList.push({ name: config[i].name });
+         this._renderManager(catList).appendTo(target);
          this._selectCategory(catList[0].name);
       },
 
-      _renderSubLayout: function () {
-         var subs = $('<div id="content"><div id="'+this.elements.settings+'"></div></div>');
+/*****************************************************************************
+ *  Render configuration manager  ***
+ *****************************************************************************/
+      _renderManager: function (catList) {
+          var THIS = this,
+              data = {
+                 categories: catList,
+                 model: this.current.model
+              },
+              manager = this.templates.manager.tmpl(data);
 
-         return subs;
+          manager.find('li.category').click(function () { THIS._selectCategory($(this).attr('name')); });
+
+          return manager;
       },
 
+/*****************************************************************************
+ *  Select category  ***
+ *****************************************************************************/
       _selectCategory: function (name) {
          var THIS = this,
              endpoint = $(this.config.elements.endpoint),
-             menu = endpoint.find('#'+this.elements.catList),
-             settings = endpoint.find('#'+this.elements.settings);
+             menu = endpoint.find(this.config.elements.catList),
+             config = endpoint.find(this.config.elements.config);
 
          if (name !== menu.find('li.current').attr('name')) {
             menu.find('li.category').removeClass('current');
             menu.find('li.category[name="'+name+'"]').addClass('current');
 
-            // destroying existing subcategories
-            settings.find('.subcategory').each(function () {
-               THIS._saveSubcategory();
-               $(this).hide(1000);
-               $(this).empty().remove();
-            });
-            // building new ones
-            for (var i in this.settings[name].subcategory) this._renderSub(name, i).appendTo(settings);
+            config.find('.subcategory').empty();
+            config.find('#temp').remove();
+
+            for (var subName in this.curConfig[name].subcategory) {
+               /**************************************************************
+                *  NOTE: bad mechanism for finding subcategory windows!!!
+                **************************************************************/
+               var window = config.find('#'+subName.replace(/\W/gi, "_"));
+
+               if (window.length == 0) {
+                  window = $('<div id="temp" class="subcategory"></div>');
+                  window.appendTo(config);
+                  console.log(subName);
+               }
+               window.append(this._renderSub(name, subName));
+            }
          }
+
+         config.find('.subcategory').each(function () {
+            var sub = $(this),
+                offset = $(this).offset();
+
+            sub.find('h1').unbind().click(function () {
+               sub.toggleClass('expand');
+               if (sub.hasClass('expand')) sub.offset(config.offset());
+               else sub.position(offset);
+            });
+         });
       },
 
+/*****************************************************************************
+ *  Render subcategory  ***
+ *****************************************************************************/
       _renderSub: function (cat, sub) {
          console.log('rendering '+cat+'.'+sub);
-         $.template('item', this.templates.item);
-         var subcat = this.templates.sub.tmpl(this.settings[cat].subcategory[sub]);
+         $.template('item', this.templates.item);//{{tmpl({"item" : el}) "item"}}<br>
+         var data = this.curConfig[cat].subcategory[sub],
+             subcat = this.templates.sub.tmpl(data),
+             form = subcat.find('fieldset');
+         for (var i in data.item) form.append(this.templates.item.tmpl({ item: data.item[i] }));
+         console.log(subcat);
+         console.log(data);
 
-         //$('#customselector').customSelect();
-         // Homegrown convertion to tabs view
+/*         // convertion to tabs view
          subcat.find(".col_box_tabs").each(function () {
             var tabs = $(this);
             tabs.find('li').click(function () {
@@ -151,54 +239,68 @@ winkstart.module('provisioner', {
                return false;
             });
             tabs.find('li').first().click();
-         });
+         });*/
 
          return subcat;
       },
 
-      _renderCategories: function (catList) {
-         var THIS = this, 
-             cats = $('<div id="'+this.elements.catList+'"></div>').append(this.templates.categories.tmpl({categories: catList}));
-
-         cats.find('li.category').click(function () { THIS._selectCategory($(this).attr('name')); });
-         return cats;
-      },
 
 
-      // Data layer work...
 
-      // adding settings to current settings configuration (parsing json)
-      _settingsMergeIn: function (json) {
-         // xml category hack
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*****************************************************************************
+ *  DATA MANIPULATION  ***
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ *  Merging JSON into default configuration  ***
+ *****************************************************************************/
+      _mergeJSON: function (json) {
+         var config = this.defConfig;
          if (!$.isArray(json.category)) json.category = [json.category];
          for (var i in json.category) {
             var cat = json.category[i];
-            if (!this.settings[cat.name]) this.settings[cat.name] = { name: cat.name, subcategory: [] };
+            if (!config[cat.name]) config[cat.name] = { name: cat.name, subcategory: [] };
 
-            // xml subcategory hack
+            var ccat = config[cat.name];
             if (!$.isArray(cat.subcategory)) cat.subcategory = [cat.subcategory];
             for (var j in cat.subcategory) {
                var sub = cat.subcategory[j];
-               if (!this.settings[cat.name].subcategory[sub.name]) this.settings[cat.name].subcategory[sub.name] = { name: sub.name, item: new Array() };
+               if (!ccat.subcategory[sub.name]) ccat.subcategory[sub.name] = { name: sub.name, item: new Array() };
 
-               // xml item hack
                if (!$.isArray(sub.item)) sub.item = [sub.item];
                for (var k in sub.item) {
                   var item = sub.item[k];
-                  this.settings[cat.name].subcategory[sub.name].item.push(this._parseItem(item));
+                  ccat.subcategory[sub.name].item.push(this._parseItem(item));
                }
             }
          }
       },
 
+/*****************************************************************************
+ *  Parse json item into configuration item  ***
+ *****************************************************************************/
       _parseItem: function (item) {
-//         $('body').append($('<pre>'+display(item)+'</pre>'));
-         if (item.type === 'loop_line_options' ||
-             item.type === 'loop') {
+         if (item.type === 'loop_line_options' || item.type === 'loop') {
             var tabs = { type: 'tabs', data: new Array() }
             tabs.description = item.description;
 
-            var lines = this.brands[this.curModel.brand].models[this.curModel.model].lines;
+            var current = this.current;
+                lines = this.brandList[current.brand].modelList[current.model.name].lines;
 
             var start = item.type === 'loop' ? item.loop_start : 1;
             var end = item.type === 'loop' ? item.loop_end : lines;
@@ -224,71 +326,97 @@ winkstart.module('provisioner', {
 
 
 
-// FILE MANIPULATION
+/*****************************************************************************
+ *  FILE MANIPULATION  ***
+ *****************************************************************************/
 
+
+/*****************************************************************************
+ *  Extract brand list  ***
+ *****************************************************************************/
       _loadBrands: function (callback) {
          var THIS = this;
-         this.brands = {};
-         $.getJSON('endpoint/master.json', function (json) {
+         this.brandList = {};
+         $.getJSON(this.jsonDir + 'master.json', function (json) {
             for (var i in json.brands) {
-               var brand = { name: json.brands[i].name, directory: json.brands[i].directory, models: {} }
-               THIS.brands[brand.name] = brand;
+               var brand = { name: json.brands[i].name, directory: json.brands[i].directory, modelList: {} }
+               THIS.brandList[brand.name] = brand;
                THIS._loadBrandData(brand, callback);
             }
             callback();
          });
       },
 
+/*****************************************************************************
+ *  Extract brand data  ***
+ *  brand - { name, directory }
+ *****************************************************************************/
       _loadBrandData: function (brand, callback) {
-         $.getJSON('endpoint/'+brand.directory+'/brand_data.json', function (json) {
+         var THIS = this;
+         $.getJSON(this.jsonDir+brand.directory+'/brand_data.json', function (json) {
             var families = json.brands.family_list.family;
             if (!$.isArray(families)) families = [families];
+
             for (var i in families) {
                var family = families[i];
-               $.getJSON('endpoint/'+brand.directory+'/'+family.directory+'/family_data.json',
-                        function (json) {
-                           var models = json.model_list;
-                           if (!$.isArray(models)) models = [models];
-                           for (var j in models) {
-                              var model = models[j];
-                              brand.models[model.model] = {
-                                 lines: model.lines,
-                                 name: model.model,
-                                 files: model.template_data.files,
-                                 directory: 'endpoint/'+brand.directory+'/'+family.directory+'/'
-                              };
-                           }
-                           callback();
-                        }
+               $.getJSON(THIS.jsonDir+brand.directory+'/'+family.directory+'/family_data.json',
+                         function (json) {
+                            var models = json.model_list;
+                            if (!$.isArray(models)) models = [models];
+                            for (var j in models) {
+                               var model = models[j];
+                               brand.modelList[model.model] = {
+                                  lines: model.lines,
+                                  name: model.model,
+                                  files: model.template_data.files,
+                                  directory: THIS.jsonDir+brand.directory+'/'+family.directory+'/'
+                               };
+                            }
+                            callback();
+                         }
                );
             }
          });
       },
 
-      _loadDefaultSettings: function (brand, model, callback) {
-         this.curModel = { brand: brand, model: model };
-         this.settings = [];
 
-         var model = this.brands[brand].models[model];
-         var files = new Array();
+
+/*****************************************************************************
+ *  Extract default configuration  ***
+ *****************************************************************************/
+      _loadDefaultConfig: function (brand, model, callback) {
+         var model = this.brandList[brand].modelList[model],
+             files = new Array();
+
+         this.current = { brand: brand, model: model };
+         this.defConfig = { };
+
          for (var i in model.files) files.push(model.directory+model.files[i]);
 
          console.log('loading files');
          this._loadFiles(files, callback);
       },
 
+/*****************************************************************************
+ *  Extract and merge files into default configuration  ***
+ *  files - [ path ]
+ *****************************************************************************/
       _loadFiles: function (files, callback) {
          var THIS = this;
+
          for (var i in files) {
             (function (i) {
                $.getJSON(files[i], function (json) {
                   delete files[i]; files.length--;
-                  THIS._settingsMergeIn(json);
+                  THIS._mergeJSON(json);
                   if (files.length === 0) callback();
                });
             }) (i);
          }
       },
+
+
+
 
       _saveSubcategory: function () {
          // TODO: actually post the data

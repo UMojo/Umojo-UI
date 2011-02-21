@@ -1,0 +1,11 @@
+<div>
+   <div id="container">
+      <div id="debug"></div>
+      <div class="control_bar"><div id="${save.substr(1)}" class="save">SAVE</div></div>
+      <table class="callflow">
+         <td class="flow"><div id="content" class="app_tree"><div>Flow</div><div id="${flow.substr(1)}"></div></div></td>
+         <td class="tools right_col"><div id="right_col"><div>Tools</div><div id="${tools.substr(1)}"></div></div></td>
+      </table>
+      <div id="${buf.substr(1)}"></div>
+   </div>
+</div>

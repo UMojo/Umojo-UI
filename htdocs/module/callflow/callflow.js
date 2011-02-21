@@ -1,24 +1,28 @@
 winkstart.module('callflow',
    {
       css: [
-         'callflow.css',
+         'css/style.css',
+         'css/callflow.css'
       ],
 
       templates: {
-         callflow: 'callflow.html',
-         branch: 'branch.html',
-         tools: 'tools.html',
-         node: 'node.html'
+         callflow: 'tmpl/callflow.html',
+         branch: 'tmpl/branch.html',
+         tools: 'tmpl/tools.html',
+         root: 'tmpl/root.html',
+         node: 'tmpl/node.html',
+         iframe: 'tmpl/iframe.html'
       },
 
       elements: {
          flow: '#ws_cf_flow',
          tools: '#ws_cf_tools',
+         save: '#ws_cf_save',
          buf: '#ws_cf_buf'
       },
 
       requests: {
-//         'provisioner.get' : { url : 'serverside script that spits json' }
+         'callflow.save' : { url : 'place for posting callflow json' }
       },
 
       subscribe: {
@@ -55,12 +59,17 @@ winkstart.module('callflow',
    },
    {
       activate: function (args) {
+         var THIS = this
+
          args.target.empty();
          this.templates.callflow.tmpl(this.config.elements).appendTo( args.target );
+
          this.renderTools();
          this._resetFlow();
          this.renderFlow();
+         
          winkstart.publish('layout.updateLoadedModule', {label: 'Callflow Management', module: this.__module});
+         $(this.config.elements.save).click(function () { THIS.save(); }).hover(function () { $(this).addClass('active'); }, function () { $(this).removeClass('active'); });
       },
 
       renderFlow: function () {
@@ -142,10 +151,10 @@ winkstart.module('callflow',
             }
 
             this.serialize = function () {
-               var json = '{"module":"'+this.actionName+'","id":"'+this.id+'","data":"'+this.data+'","children":[';
+               var json = '{"module":"'+this.actionName+'","id":"'+this.id+'","data":"'+'data'/*this.data*/+'","children":[';
                for (var i in this.children) {
                   json += this.children[i].serialize();
-                  if ((i+1) in this.children) json += ',';
+                  if ((parseInt(i)+1) in this.children) json += ',';
                }
                json += ']}';
                return json;
@@ -165,8 +174,8 @@ winkstart.module('callflow',
 
 // A set of actions: modules/apps tighted together with rules, restricting dependencies between the actions
       actions: {
-         root       : { name : 'root',         rules : [ {type : 'quantity', maxSize : 1} ], isUsable : false },
-         answer     : { name : 'answer',       rules : [ {type : 'quantity', maxSize : 1} ], isUsable : true },
+         root       : { name : 'root',         rules : [ {type : 'quantity', maxSize : 1} ],   isUsable : false},
+         answer     : { name : 'answer',       rules : [ {type : 'quantity', maxSize : 1} ],   isUsable : true },
          conference : { name : 'conference',   rules : [ {type : 'quantity', maxSize : 1} ], isUsable : true },
          hangup     : { name : 'hangup',       rules : [ {type : 'quantity', maxSize : 0} ], isUsable : true },
          menu       : { name : 'menu',         rules : [ ],                                  isUsable : true },
@@ -175,7 +184,8 @@ winkstart.module('callflow',
 
 // Action categories
       categories: {
-         'basic' : ['answer','conference','hangup','menu','voicemail']
+         'basic' : ['answer','conference','hangup','menu','voicemail'],
+//         'test' : ['answer','conference','hangup']
       },
 
       flow: {},
@@ -200,8 +210,15 @@ winkstart.module('callflow',
 
          var layout = this._renderBranch(this.flow.root);
 
+         layout.find('.node').hover(function () { $(this).addClass('over'); }, function () { $(this).removeClass('over'); });
+
          layout.find('.node').each(function () {
-            var node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+            var node;
+            if ($(this).hasClass('root')) {
+               $(this).removeClass('icons_black root');
+               node = THIS.templates.root.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+            }
+            else node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
             $(this).append(node);
 
             $(this).droppable({
@@ -235,12 +252,13 @@ winkstart.module('callflow',
                   children.offset({ top: t, left: l });
                },
                stop: function () {
+                  THIS._disableDestinations();
                   THIS.renderFlow();
                }
             });
          });
 
-         layout.find('.close').click(function() {
+         layout.find('.delete').click(function() {
             var node = THIS.flow.nodes[$(this).attr('id')];
             if (node.parent) {
                node.parent.removeChild(node);
@@ -266,12 +284,18 @@ winkstart.module('callflow',
          var tools = this.templates.tools.tmpl({categories: this.categories});
 
          tools.find('.category').click(function () {
+            $(this).toggleClass('voicemail_apps');
+            $(this).children().toggleClass('open');
             var current = $(this);
-            while(current.next().hasClass('tool')) {
+            while(current.next().hasClass('tool') ||
+                  current.next().hasClass('app_list_nav') ||
+                  current.next().hasClass('clear')) {
                current = current.next();
                current.toggle();
             }
          });
+
+//         tools.find('.category').click();
 
          tools.find('.tool').hover(function () {$(this).addClass('active');}, function () {$(this).removeClass('active');})
 
@@ -282,6 +306,7 @@ winkstart.module('callflow',
 
                   var clone = $(this).clone();
                   action(clone);
+                  clone.addClass('inactive');
                   clone.insertBefore($(this));
 
                   $(this).addClass('active');
@@ -290,6 +315,7 @@ winkstart.module('callflow',
                },
                stop: function () {
                   THIS._disableDestinations();
+                  $(this).prev().removeClass('inactive');
                   $(this).remove();
                }
             });
@@ -324,6 +350,23 @@ winkstart.module('callflow',
             $(this).removeClass('inactive');
             $(this).droppable('enable');
          });
-      }
+         $('.tool').removeClass('active');
+      },
+
+      save: function () {
+         var cf = {
+            _id : 'callflow_test',
+            numbers : 'some number list',
+            flow : this.flow.root.serialize()
+         }
+
+         alert(cf.flow);
+
+         var form = this.templates.iframe.tmpl({ postTo: 'http://localhost:8000/v1/accounts/e030a025125d3deca7d77db040001e3b/callflow/callflow_test?auth_token=1234', list: cf });
+         console.log(form);
+         form.submit(function () {
+
+         }).submit();
+      },
    }
 );

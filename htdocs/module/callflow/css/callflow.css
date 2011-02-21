@@ -1,0 +1,82 @@
+#ws_cf_flow {
+   width: 800px;
+   overflow-x: auto;
+   min-height: 400px;
+   padding-top: 20px;
+   text-align: center;
+}
+
+div.control_bar {
+   text-align: center;
+   height: 50px;
+   padding: 10px;
+}
+
+div.save {
+   display: inline-block;
+   text-align: center;
+   border: solid 1px;
+   width: 70px;
+   padding: 6px;
+}
+
+div.save.active {
+   background-color: #eee;
+}
+
+table.callflow {
+   width: 100%;
+   /*border: solid 1px;*/
+}
+
+table.callflow td {
+   vertical-align: top;
+}
+
+td.flow {
+   width: 80%;
+}
+
+
+
+div.child {
+   display: inline-block;
+   vertical-align: top;
+   text-align: center;
+   white-space: normal;
+}
+
+div.branch {
+   display: block;
+   text-align: center;
+}
+
+div.node.active {
+   background-color: #eee;
+}
+
+div.node.inactive {
+   border-color: #808080;
+}
+
+
+div.children {
+   display: block;
+   white-space: pre;
+}
+
+
+
+
+td.tools {
+   width: 20%;
+}
+
+.tool {
+   text-align: center;
+   vertical-align: middle;
+}
+
+.tool .action.inactive {
+   display: none;
+}
