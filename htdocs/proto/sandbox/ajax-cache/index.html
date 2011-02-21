@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Amplify Sandbox</title>
+	<script src="../../../external/jquery-1.4.4.js"></script>
+	<script src="request.js"></script>
+	<script>
+	amplify.request.define( "simplejson", "ajax", {
+		type: "GET",
+		url: "simplejson.php",
+		dataType: "json"
+	});
+
+	amplify.request( "simplejson", {}, function( data ) {
+		console.log( "simplejson" );
+		console.log( data );
+	});
+	
+
+	amplify.request.define( "echo", "ajax", {
+		url: "echo.php",
+		dataType: "json",
+		type: "POST",
+		data: { i: "echo", really: "loud" }
+	});
+
+	amplify.request( "echo", { like: "canyon" }, function( data ) {
+		console.log( "echo" );
+		console.log( data );
+	});
+
+
+	amplify.request.define( "user", "ajax", {
+		url: "user-{id}.php",
+		dataType: "json"
+	});
+
+	amplify.request( "user", { id: 25 }, function( data ) {
+		console.log( "user" );
+		console.log( data );
+	});
+
+	
+	amplify.request.define( "simplejsend", "ajax", {
+		decoder: "jsend",
+		url: "simplejson.php",
+		dataType: "json"
+	});
+	
+	amplify.request( "simplejsend", {}, function( data ) {
+		console.log( "simplejsend" );
+		console.log( data );
+	});
+	
+	
+	amplify.request.define( "simplehello", "ajax", {
+		decoder: function( response ) {
+			response.success( response.data.data.hello );
+		},
+		url: "simplejson.php",
+		dataType: "json"
+	});
+	
+	amplify.request( "simplehello", {}, function( data ) {
+		console.log( "simplehello" );
+		console.log( "hello, " + data );
+	});
+	
+
+	amplify.request.decoders.xml2json = function( response ) {
+		response.success({
+			xml: "json",
+			hello: $( response.data ).find( "hello" ).text()
+		});
+	};
+	
+	amplify.request.define( "simplexml", "ajax", {
+		decoder: "xml2json",
+		url: "simple.xml",
+		dataType: "xml"
+	});
+
+	amplify.request( "simplexml", {}, function( data ) {
+		console.log( "simplexml" );
+		console.log( data );
+	});
+
+
+	amplify.request.define( "one-off", function( settings ) {
+		settings.success({
+			value: settings.data.value,
+			triple: settings.data.value * 3
+		});
+	});
+
+	amplify.request( "one-off", { value: 10 }, function( data ) {
+		console.log( "one-off" );
+		console.log( data );
+	});
+
+
+	amplify.request.define( "cached", "ajax", {
+		url: "simplejson.php",
+		dataType: "json",
+		cache: true,
+		decoder: "jsend"
+	});
+
+	amplify.request( "cached", function( data ) {
+		console.log( "cached - miss" );
+		console.log( data );
+	});
+
+	setTimeout(function() {
+		amplify.request( "cached", function( data ) {
+			console.log( "cached - hit" );
+			console.log( data );
+		});
+	}, 100 );
+	</script>
+</head>
+<body>
+</body>
+</html>

@@ -11,6 +11,11 @@ winkstart.module('account', {
 		subscribe: {
 			'account.activate' : 'activate',
 			'account.list-panel-click' : 'viewAccount'
+		},
+		
+		resources: {
+			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts', dataType: 'json', type: 'GET'},        
+			"accounts.get": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}', dataType: 'json', type: 'GET'},        
 		}
 	},
 	function(args) {
@@ -41,7 +46,7 @@ winkstart.module('account', {
 			]
 		});
 	},
-	{	
+	{
 		viewAccount: function(account_data){
 			$('#account-view').empty();
 			this.templates.viewAccount.tmpl(account_data).appendTo( $('#account-view') );
@@ -53,10 +58,11 @@ winkstart.module('account', {
 			$('#ws-content').empty();	
 			var THIS = this;
          	this.templates.account.tmpl({}).appendTo( $('#ws-content') );
+         	winkstart.registerResources(this.config.resources);
          	
          	winkstart.publish('layout.updateLoadedModule', {label: 'Account Management', module: this.__module});
          	
-         	$.getJSON('endpoint/account/accounts.json', function (json) {
+         	winkstart.getJSON('accounts.list', {}, function (json) {
             	//List Data that would be sent back from server
 	            
 				var options = {};

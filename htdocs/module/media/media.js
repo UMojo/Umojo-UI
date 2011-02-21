@@ -10,6 +10,10 @@ winkstart.module('media', {
 		subscribe: {
 			'media.activate' : 'activate',
 			'media.list-panel-click' : 'viewMedia'
+		},
+		resources: {
+			"media.list": {url: CROSSBAR_REST_API_ENDPOINT + '/media', dataType: 'json', type: 'GET'},        
+			"media.get": {url: CROSSBAR_REST_API_ENDPOINT + '/media/{id}', dataType: 'json', type: 'GET'},        
 		}
 	},
 	function(args) {
@@ -49,6 +53,7 @@ winkstart.module('media', {
 			var THIS = this;
 			$('#ws-content').empty();
          	this.templates.media.tmpl({}).appendTo( $('#ws-content') );
+         	winkstart.registerResources(this.config.resources);
          	
 			$(".media_tabs").tabs("div.media_pane > div");
 			$("ul.advanced_tabs").tabs("div.advanced_pane > div");
@@ -62,7 +67,7 @@ winkstart.module('media', {
          	
 			winkstart.publish('layout.updateLoadedModule', {label: 'Media Management', module: this.__module});         	
          	
-            $.getJSON('endpoint/media/media_assets.json', function (json) {
+            winkstart.getJSON('media.list', {}, function (json) {
             	//List Data that would be sent back from server
             	
             	var options = {};
