@@ -149,4 +149,124 @@ ul#topnav .sub ul li a:hover {
 #live-notifications {
     padding: 4px 0px 0px 4px;
 }
+
+.main_content {
+    float: left;
+    width: 832px;
+}
+
+/*******************************
+----REMOVE & SAVE BUTTONS-----
+*******************************/
+
+ul.remove_save_btn{
+    display: block;
+    list-style-type: none;
+    margin: 21px 0 0 650px; 
+    
+}
+
+ul.remove_save_btn li{
+    float: left;
+    text-align: center;
+    padding-right: 3px;
+    
+}
+
+ul.remove_save_btn a{
+    display: block;
+    background-image: url(../img/button/button_bg.png);
+    width: 81px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+ul.remove_save_btn a:hover{
+    color: #29abe1;
+
+}
+
+/**************************
+----TOP TABS MEDIA---------
+****************************/
+
+.media_tabs {
+    background-color: #9d9d9d;
+    width: 788px;
+    height: 130px;
+    margin: 54px 0 0 18px; 
+    padding: 0 6px;
+    position:relative;  
+    z-index:600;
+}
+
+.buttons{
+    width: 191px;
+    height: 130px;
+    float: left; 
+    position: relative;
+    margin: 0 3px;  
+}
+
+.buttons a.upload{
+    width: 191px;
+    height: 130px;
+    display: block;
+    background-image:url(../img/media/uploadfile_btn.png);
+    background-position: 0px 0px;       
+}
+
+.buttons a.audio{
+    width: 191px;
+    height: 130px;
+    display: block;
+    background-image:url(../img/media/audiostream_btn.png);
+    background-position: 0px 0px;       
+}
+
+.buttons a.text{
+    width: 191px;
+    height: 130px;
+    display: block;
+    background-image:url(../img/media/texttospeech_btn.png);
+    background-position: 0px 0px;       
+}
+
+.buttons a.record{
+    width: 191px;
+    height: 130px;
+    display: block;
+    background-image:url(../img/media/record_btn.png);
+    background-position: 0px 0px;       
+}
+
+.buttons a:hover{
+    background-position: 0px -130px;        
+}
+
+.buttons a.current, .buttons a.current:hover{
+    background-position: 0px -130px;        
+    cursor:default !important; 
+    color:#fff !important;
+    -moz-box-shadow: 3px 5px 10px #383838;
+    -webkit-box-shadow: 3px 5px 10px #383838;
+    box-shadow: 3px 5px 10px #383838;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.media_pane{
+    width:760px;
+    border: 1px solid #727272;
+    margin-left:18px;
+    padding: 64px 20px 20px 20px;   
+    background-color: #a3a3a3;
+    z-index:-1;
+    position:relative;
+    top: 7px;
+    
+}
     

@@ -23,11 +23,7 @@
             searchable: true,
             animated: 'fast',
             show: 'slideDown',
-            hide: 'slideUp',
-            click_handler: function() {
-                console.log($.data(this, 'data'));
-                return false;
-            }
+            hide: 'slideUp'
         },
         _create: function() {
             this.id = this.element.attr("id");
@@ -122,7 +118,11 @@
         },
 
         _registerClickEvents: function(elements) {
-            elements.click(this.options.click_handler);
+            var self = this;
+        	elements.click(function(){
+            	self.publisher(self.notifyMethod, $.data(this, 'data'));
+                return false;
+            });
         },
         
         _registerSearchEvents: function(input) {

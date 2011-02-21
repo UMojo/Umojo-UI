@@ -25,10 +25,8 @@
             show: 'slideDown',
             hide: 'slideUp',
             new_entity_label: 'new entity',
-            click_handler: function() {
-                console.log($.data(this, 'data'));
-                return false;
-            }
+            publisher: function(){},
+            notifyMethod: ''
         },
         _create: function() {
         	
@@ -168,7 +166,11 @@
         },
 
         _registerClickEvents: function(elements) {
-            elements.click(this.options.click_handler);
+            var self = this;
+        	elements.click(function(){
+            	self.options.publisher(self.options.notifyMethod, $.data(this, 'data'));
+                return false;
+            });
         },
         
         _registerSearchEvents: function(input) {

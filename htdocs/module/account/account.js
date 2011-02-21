@@ -4,11 +4,13 @@ winkstart.module('account', {
 		],
 				
 		templates: {
-			account: 'account.html'
+			account: 'account.html',
+			viewAccount: 'view.html'
 		},
 		
 		subscribe: {
-			'account.activate' : 'activate'
+			'account.activate' : 'activate',
+			'account.list-panel-click' : 'viewAccount'
 		}
 	},
 	function(args) {
@@ -40,6 +42,13 @@ winkstart.module('account', {
 		});
 	},
 	{	
+		viewAccount: function(account_data){
+			$('#account-view').empty();
+			this.templates.viewAccount.tmpl(account_data).appendTo( $('#account-view') );
+			$("ul.account_tabs").tabs("div.pane > div");
+			$("ul.advanced_tabs").tabs("div.advanced_pane > div");
+		},
+		
 		activate: function(data) {
 			$('#ws-content').empty();	
 			var THIS = this;
@@ -50,16 +59,13 @@ winkstart.module('account', {
          	$.getJSON('endpoint/account/accounts.json', function (json) {
             	//List Data that would be sent back from server
 	            
-            	//Overridden Click Handler
-	            var test = function(){
-	                console.log($.data(this, 'data').title);
-	            };
-            	
-            	var options = {};
+				var options = {};
 	            options.label = 'Account Module';
+	            options.identifier = 'account-module-listview';
 	            options.new_entity_label = 'Account';
 	            options.data = json.accounts;
-	            options.click_handler = test;
+	            options.publisher = winkstart.publish;
+	            options.notifyMethod = 'account.list-panel-click';
 	
 	            //Build us some searchable list panel
 	            $(".listpanel").listpanel(options);
