@@ -1,26 +1,28 @@
 winkstart.module('provisioner', {
       css: [
          //'css/style.css',
-         'css/jquery-ui-1.8.7.custom.css',
-         'css/niceforms-default.css',
-         'css/jquery.multiSelect.css',
-         'css/layout.css',
-         'css/selector.css'
+         //'css/jquery-ui-1.8.7.custom.css',
+         //'css/niceforms-default.css',
+         //'css/jquery.multiSelect.css',
+         //'css/layout.css',
+         //'css/selector.css',
+         'css/visual.css'
       ],
 
       templates: {
-         provisioner: 'tmpl/provisioner.html',
-         selector: 'tmpl/selector.html',
-         manager: 'tmpl/manager.html',
-         sub: 'tmpl/subcategory.html',
-         item: 'tmpl/item.html'
+         provisioner : 'tmpl/provisioner.html',
+         selector    : 'tmpl/selector.html',
+         manager     : 'tmpl/manager.html',
+         sub         : 'tmpl/subcategory.html',
+         item        : 'tmpl/item.html'
       },
 
       elements: {
-         selector: '#ws_prov_selector',
-         endpoint: '#ws_prov_endpoint',
-         catList:  '#ws_prov_ep_cats',
-         config:   '#ws_prov_ep_config'
+         content  : '#ws_prov',
+         selector : '#selector',
+         endpoint : '#endpoint',
+         catList  : '#cats',
+         config   : '#config'
       },
 
       requests: {
@@ -127,7 +129,7 @@ winkstart.module('provisioner', {
  *  Render selection control  ***
  *****************************************************************************/
       _renderSelector: function () {
-         var THIS = this;
+         var THIS = this, elements = this.config.elements;
 
          var selector = this.templates.selector.tmpl({ brandList: THIS.brandList });
          selector.find('.models').hide();
@@ -136,7 +138,7 @@ winkstart.module('provisioner', {
             THIS.render($(this).attr('brand'), $(this).attr('model'));
          });
 
-         selector.appendTo( $(this.config.elements.selector).empty() );
+         selector.appendTo( $(elements.content).find(elements.selector).empty() );
       },
 
 
@@ -145,7 +147,8 @@ winkstart.module('provisioner', {
  *  Render current configuration state  ***
  *****************************************************************************/
       _render: function () {
-         var target = $(this.config.elements.endpoint).empty(),
+         var elements = this.config.elements,
+             target = $(elements.content).find(elements.endpoint).empty(),
              config = this.curConfig;
              catList = new Array();
 
@@ -165,7 +168,8 @@ winkstart.module('provisioner', {
               },
               manager = this.templates.manager.tmpl(data);
 
-          manager.find('li.category').click(function () { THIS._selectCategory($(this).attr('name')); });
+          manager.find('li.category').click(function () { THIS._selectCategory($(this).attr('name')); }
+          );
 
           return manager;
       },
@@ -175,9 +179,10 @@ winkstart.module('provisioner', {
  *****************************************************************************/
       _selectCategory: function (name) {
          var THIS = this,
-             endpoint = $(this.config.elements.endpoint),
-             menu = endpoint.find(this.config.elements.catList),
-             config = endpoint.find(this.config.elements.config);
+             elements = this.config.elements,
+             endpoint = $(elements.content).find(elements.endpoint),
+             menu = endpoint.find(elements.catList),
+             config = endpoint.find(elements.config);
 
          if (name !== menu.find('li.current').attr('name')) {
             menu.find('li.category').removeClass('current');
