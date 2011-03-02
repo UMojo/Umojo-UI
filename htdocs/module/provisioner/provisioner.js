@@ -6,10 +6,12 @@ winkstart.module('provisioner', {
          //'css/jquery.multiSelect.css',
          //'css/layout.css',
          //'css/selector.css',
+         'css/window.css',
          'css/visual.css'
       ],
 
       templates: {
+         window      : 'tmpl/window.html',
          provisioner : 'tmpl/provisioner.html',
          selector    : 'tmpl/selector.html',
          manager     : 'tmpl/manager.html',
@@ -153,26 +155,22 @@ winkstart.module('provisioner', {
              catList = new Array();
 
          for (var i in config) catList.push({ name: config[i].name });
-         this._renderManager(catList).appendTo(target);
-         this._selectCategory(catList[0].name);
+         var manager = this.templates.manager.tmpl({categories: catList, model: this.current.model});
+         manager.find('.category').click(function ( ) { alert("I should be done with rendering subcategory forms by the end of tomorrow");/*THIS._selectCategory($(this).attr('name'));*/ });
+         var config = manager.find('#config');
+         config.append(this._window({title: "Basic", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "Internet Port WAN", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "Hard Keys", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "PC Port", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: this.current.model.name, expand: false, collapse: false, close: false}).addClass('phone'));
+         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
+         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
+         manager.appendTo(target);
+         //this._selectCategory(catList[0].name);
       },
 
-/*****************************************************************************
- *  Render configuration manager  ***
- *****************************************************************************/
-      _renderManager: function (catList) {
-          var THIS = this,
-              data = {
-                 categories: catList,
-                 model: this.current.model
-              },
-              manager = this.templates.manager.tmpl(data);
-
-          manager.find('li.category').click(function () { THIS._selectCategory($(this).attr('name')); }
-          );
-
-          return manager;
-      },
 
 /*****************************************************************************
  *  Select category  ***
@@ -247,6 +245,18 @@ winkstart.module('provisioner', {
          });*/
 
          return subcat;
+      },
+
+
+/*****************************************************************************
+ *  Render window  ***
+ *****************************************************************************/
+      _window: function (params) {
+         var w = this.templates.window.tmpl(params);
+         w.find(".button.expand").click(function ( ) {
+            w.toggleClass("maximized");
+         });
+         return w;
       },
 
 
@@ -428,48 +438,3 @@ winkstart.module('provisioner', {
          console.log('saving subcategory');
       }
 });
-
-
-
-
-
-
-
-
-
-
-
-function display(obj, level) {
-   var out = '';
-   if (!level) level = 0;
-   var pref = '';
-   for (var i = 0; i < level; i++) pref += '     ';
-   if ($.isArray(obj)||obj.toString() === '[object Object]') {
-      for (var i in obj) {
-         //console.log(pref+i+':');
-         out += pref+i+':\n';
-         if ($.isArray(obj)) {
-            //console.log(pref+'['); 
-            out += pref+'[\n';
-         }
-         else {
-            //console.log(pref+'{');
-            out += pref+'{\n';
-         }
-         out += display(obj[i], level+1);
-         if ($.isArray(obj)) {
-            //console.log(pref+']'); 
-            out += pref+']\n';
-         }
-         else {
-           //console.log(pref+'}');
-           out += pref+'}\n';
-         }
-      }
-   }
-   else {
-      //console.log(pref+obj.toString());
-      out += pref+obj.toString()+'\n';
-   }
-   return out;
-}

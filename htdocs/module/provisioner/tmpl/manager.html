@@ -1,24 +1,11 @@
 <div>
    <div>
-      <div id="categories">
-         <ul>
+      <div id="manager">
 {{each(i, category) categories}}
-            <li name="${category.name}" class="category"><a href="javascript:"><em class="${category.name}">${category.name}</em></a></li>
+         <a href="javascript:" name="${category.name}" class="category"><em class="${category.name}">${category.name}</em></a>
 {{/each}}
-         </ul>
       </div>
       <div id="config">
-         <div id="basic" class="subcategory"></div>
-         <div id="Internet_Port__WAN_" class="subcategory"></div>
-         <div id="Hard_Keys" class="subcategory"></div>
-         <div id="PC_Port" class="subcategory"></div>
-         <div id="phone" class="subcategory phone">
-             <h1>${model.name}</h1>
-         </div>
-         <div id="5" class="subcategory"></div>
-         <div id="6" class="subcategory"></div>
-         <div id="7" class="subcategory"></div>
-         <div id="8" class="subcategory"></div>
       </div>
    </div>
 </div>
