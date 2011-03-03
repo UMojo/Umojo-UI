@@ -1,45 +1,39 @@
 <div>
-{{if item.type === "tabs"}}
-   <div class="col_box_tabs" id="${item.description.replace(/\W/g, '_')}">
-      <ul class="tabs">
-         {{each(j, tab) item.data}}
-         <li class="${tab.last}"><a href="#${tab.description.replace(/\W/g, '_')}">${tab.description}</a></li>
-         {{/each}}
-      </ul>
-         {{each(j, tab) item.data}}
-      <div id="${tab.description.replace(/\W/g, '_')}" class="tab_content">
-            <h1>${tab.description}</h1>
-            {{each(k, el) tab.item}}
-               {{tmpl({"item" : el}) "item"}}
-            {{/each}}
-      </div>
-         {{/each}}
+   <div class="groups">
+{{each(i, group) item.data}}
+      <a href="javascript:" class="group">.</a>
+{{/each}}
    </div>
-{{else}}
-   <dl>
-   {{if item.type === "break"}}
+{{each(i, group) item.data}}
+   <hr>
+   <div class="group" >
+      <div><h1>${group.description}</h1></div>
+   {{each(j, el) group.item}}
+      {{if el.type === "break"}}
       <br><br>
-   {{else}}
-      <dt><label for="${item.variable}">${item.description}:</label></dt>
-      <dd>
-      {{if item.type === "radio"}}
-         {{each(j, op) item.data}}
-         <input type="radio" name="${item.variable}" id="option${j}" value="${op.value}" />
-         <label for="option${j}" class="opt">${op.text}</label>
-         {{/each}}
-      {{/if}}
-      {{if item.type === "input"}}
-         <input type="input" name="${item.variable}" id="${item.variable}" value="${item.value}" />
-      {{/if}}
-      {{if item.type === "list"}}
-         <select size="1" name="${item.variable}" id="${item.variable}">
-         {{each(j, op) item.data}}
-            <option value="${op.value}">${op.text}</option>
-         {{/each}}
+      {{else}}
+      <div class="label">${el.description}</div>
+      <div>
+         {{if el.type === "radio"}}
+            {{each(k, op) el.data}}
+         <input type="radio" name="${el.variable}" id="option${k}" value="${op.value}" />
+         <div class="label">${op.text}</div>
+            {{/each}}
+         {{/if}}
+         {{if el.type === "input"}}
+         <input type="input" name="${el.variable}" id="${el.variable}" value="${el.value}" />
+         {{/if}}
+         {{if el.type === "list"}}
+         <select size="1" name="${el.variable}" id="${el.variable}">
+            {{each(k, op) el.data}}
+         <option value="${op.value}">${op.text}</option>
+            {{/each}}
          </select>
+         {{/if}}
+      </div>
       {{/if}}
-      </dd>
-   {{/if}}
-   </dl>
-{{/if}}
+   {{/each}}
+   </div>
+   <hr>
+{{/each}}
 </div>

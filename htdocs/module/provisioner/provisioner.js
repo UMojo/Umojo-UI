@@ -9,7 +9,6 @@ winkstart.module('provisioner', {
          provisioner : 'tmpl/provisioner.html',
          selector    : 'tmpl/selector.html',
          categories  : 'tmpl/categories.html',
-         sub         : 'tmpl/subcategory.html',
          item        : 'tmpl/item.html'
       },
 
@@ -115,7 +114,6 @@ winkstart.module('provisioner', {
  *  Select category  ***
  *****************************************************************************/
       _selectCategory: function (name) {
-         console.log("=====================");
          var THIS = this,
              categories = this.target.find(this.config.elements.categories),
              target = this.target.find(this.config.elements.endpoint).empty();
@@ -136,7 +134,6 @@ winkstart.module('provisioner', {
                   sub.appendTo(target);
             }
             if (i in subs) {
-               console.log(subs[i]);
                var sub = this._window({title: subs[i].name, expand: true, collapse: false, close: false});
                sub.find('.body').append(this._renderForm(subs[i].item));
                sub.appendTo(target);
@@ -152,7 +149,12 @@ winkstart.module('provisioner', {
  *  Render form  ***
  *****************************************************************************/
       _renderForm: function (item) {
-         return $('<div>FORM!</div>');
+         console.log("==========");
+         console.log(item);console.log(item.length);
+         var group = item.length > 1 ? [{data: item, description: ' ', type: "group"}] : item[0];
+         console.log(group);
+         return this.templates.item.tmpl({item: group});
+         console.log("==========");
       },
 
 
@@ -245,7 +247,7 @@ winkstart.module('provisioner', {
  *****************************************************************************/
       _parseItem: function (item) {
          if (item.type === 'loop_line_options' || item.type === 'loop') {
-            var tabs = { type: 'tabs', data: new Array() }
+            var tabs = { type: 'group', data: new Array() }
             tabs.description = item.description;
 
             var current = this.current;
