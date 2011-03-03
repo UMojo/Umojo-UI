@@ -107,18 +107,6 @@ winkstart.module('provisioner', {
          for (var i in this.curConfig) catList.push({ name: this.curConfig[i].name });
          this.templates.categories.tmpl({categories: catList}).appendTo(target);
          target.find('.category').click(function ( ) { THIS._selectCategory($(this).attr('name')); });
-
-         /*var config = manager.find('#config');
-         config.append(this._window({title: "Basic", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "Internet Port WAN", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "Hard Keys", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "PC Port", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: this.current.model.name, expand: false, collapse: false, close: false}).addClass('phone'));
-         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "", expand: true, collapse: false, close: false}));*/
-
          this._selectCategory(catList[0].name);
       },
 
@@ -127,47 +115,46 @@ winkstart.module('provisioner', {
  *  Select category  ***
  *****************************************************************************/
       _selectCategory: function (name) {
+         console.log("=====================");
          var THIS = this,
              categories = this.target.find(this.config.elements.categories),
-             target = this.target.find(this.config.elements.endpoint);
+             target = this.target.find(this.config.elements.endpoint).empty();
 
          categories.find('.category').each(function () {
             if ($(this).attr('name') != name) $(this).removeClass('current');
             else $(this).addClass('current');
          });
-/*         if (name !== menu.find('li.current').attr('name')) {
-            menu.find('li.category').removeClass('current');
-            menu.find('li.category[name="'+name+'"]').addClass('current');
 
-            config.find('.subcategory').empty();
-            config.find('#temp').remove();
+         // this is way better than it was before but still it needs a better way for mapping subcategories
+         var subs = new Array();
+         for (var sub in this.curConfig[name].subcategory) subs.push(this.curConfig[name].subcategory[sub]);
 
-            for (var subName in this.curConfig[name].subcategory) {
-               /**************************************************************
-                *  NOTE: bad mechanism for finding subcategory windows!!!
-                **************************************************************//*
-               var window = config.find('#'+subName.replace(/\W/gi, "_"));
-
-               if (window.length == 0) {
-                  window = $('<div id="temp" class="subcategory"></div>');
-                  window.appendTo(config);
-                  console.log(subName);
-               }
-               window.append(this._renderSub(name, subName));
+         for (var i = 0; i < (subs.length > 8 ? subs.length : 8); i++) {
+            if ( i == 4 ) {
+                  var sub = this._window({title: this.current.model.name, expand: false, collapse: false, close: false});
+                  sub.addClass('phone');
+                  sub.appendTo(target);
+            }
+            if (i in subs) {
+               console.log(subs[i]);
+               var sub = this._window({title: subs[i].name, expand: true, collapse: false, close: false});
+               sub.find('.body').append(this._renderForm(subs[i].item));
+               sub.appendTo(target);
+            }
+            else {
+               this._window({title: "Empty", expand: false, collapse: false, close: false}).appendTo(target);
             }
          }
-
-         config.find('.subcategory').each(function () {
-            var sub = $(this),
-                offset = $(this).offset();
-
-            sub.find('h1').unbind().click(function () {
-               sub.toggleClass('expand');
-               if (sub.hasClass('expand')) sub.offset(config.offset());
-               else sub.position(offset);
-            });
-         });*/
       },
+
+
+/*****************************************************************************
+ *  Render form  ***
+ *****************************************************************************/
+      _renderForm: function (item) {
+         return $('<div>FORM!</div>');
+      },
+
 
 /*****************************************************************************
  *  Render subcategory  ***
