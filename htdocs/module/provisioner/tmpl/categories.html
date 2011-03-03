@@ -1,9 +1,5 @@
 <div>
-   <div class="categories">
-      <ul>
-         {{each(i, category) categories}}
-         <li name="${category.name}" class="category"><a href="javascript:"><em class="${category.name}">${category.name}</em></a></li>
-         {{/each}}
-      </ul>
-   </div>
+{{each(i, category) categories}}
+   <a href="javascript:" name="${category.name}" class="category"><em class="${category.name}">${category.name}</em></a>
+{{/each}}
 </div>

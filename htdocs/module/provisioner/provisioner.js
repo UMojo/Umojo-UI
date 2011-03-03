@@ -1,11 +1,5 @@
 winkstart.module('provisioner', {
       css: [
-         //'css/style.css',
-         //'css/jquery-ui-1.8.7.custom.css',
-         //'css/niceforms-default.css',
-         //'css/jquery.multiSelect.css',
-         //'css/layout.css',
-         //'css/selector.css',
          'css/window.css',
          'css/visual.css'
       ],
@@ -14,17 +8,18 @@ winkstart.module('provisioner', {
          window      : 'tmpl/window.html',
          provisioner : 'tmpl/provisioner.html',
          selector    : 'tmpl/selector.html',
-         manager     : 'tmpl/manager.html',
+         categories  : 'tmpl/categories.html',
          sub         : 'tmpl/subcategory.html',
          item        : 'tmpl/item.html'
       },
 
       elements: {
-         content  : '#ws_prov',
-         selector : '#selector',
-         endpoint : '#endpoint',
-         catList  : '#cats',
-         config   : '#config'
+         content    : '#ws_prov',
+         selector   : '#selector',
+         categories : '#categories',
+         endpoint   : '#endpoint',
+         catList    : '#cats',
+         config     : '#config'
       },
 
       requests: {
@@ -39,12 +34,6 @@ winkstart.module('provisioner', {
       winkstart.publish('nav.add', {module: this.__module, label: 'PROVISIONER'});
    },
    {
-      elements: {
-         catList: 'catList',
-         settings: 'config'
-      },
-
-
 /*****************************************************************************
  *  DATA  ***
  *****************************************************************************/
@@ -52,6 +41,7 @@ winkstart.module('provisioner', {
    /**************************************************************************
     *    ***
     **************************************************************************/
+      target: $('body'),
       jsonDir: 'endpoint/',
 
       brandList: { },
@@ -63,10 +53,9 @@ winkstart.module('provisioner', {
 
 
       activate: function (args) {
-         args.target.empty();
-
          var THIS = this;
-         this.templates.provisioner.tmpl({}).appendTo( args.target );
+         this.templates.provisioner.tmpl({}).appendTo( args.target.empty() );
+         this.target = $(this.config.elements.content);
          this._loadBrands(function () { THIS._renderSelector(); });
          winkstart.publish('layout.updateLoadedModule', {label: 'Provisioner', module: this.__module});
       },
@@ -83,42 +72,11 @@ winkstart.module('provisioner', {
  *****************************************************************************/
       render: function (brand, model, uri) {
          var THIS = this;
-         this._loadDefaultConfig(brand, model, function () {
-            if (uri) THIS.loadConfig(uri);
-            else THIS.loadDefault();
+         this.loadModel(brand, model, function () {
+            if (uri) { /*TODO:load config*/THIS._render(); }
+            else { THIS.curConfig = THIS.defConfig; THIS._render(); }
          });
       },
-
-
-      showCategory: function (name) {
-         this._selectCategory(name);
-      },
-
-/*****************************************************************************
- *  Load previously stored config into configuration manager  ***
- *  uri - uri of the stored configuration
- *****************************************************************************/
-      loadConfig: function (uri) {
-         // TODO: settings via getJSON
-         var THIS = this;
-         THIS._render();
-      },
-
-/*****************************************************************************
- *  Load default config into configuration manager  ***
- *****************************************************************************/
-      loadDefault: function () {
-         this.curConfig = this.defConfig;
-         this._render();
-      },
-
-/*****************************************************************************
- *  Save current configuration manager state  ***
- *****************************************************************************/
-      saveConfig: function (uri) {
-         // TODO: post settings property
-      },
-
 
 
 
@@ -131,16 +89,10 @@ winkstart.module('provisioner', {
  *  Render selection control  ***
  *****************************************************************************/
       _renderSelector: function () {
-         var THIS = this, elements = this.config.elements;
-
-         var selector = this.templates.selector.tmpl({ brandList: THIS.brandList });
-         selector.find('.models').hide();
-         selector.find('.brand').hover(function () { $(this).find('.models').toggle(); });
-         selector.find('.model').click(function () {
-            THIS.render($(this).attr('brand'), $(this).attr('model'));
-         });
-
-         selector.appendTo( $(elements.content).find(elements.selector).empty() );
+         var THIS = this,
+             selector = this.templates.selector.tmpl({ brandList: THIS.brandList });
+         selector.find('.model').click(function () { THIS.render($(this).attr('brand'), $(this).attr('model')); });
+         selector.appendTo( this.target.find(this.config.elements.selector).empty() );
       },
 
 
@@ -149,15 +101,14 @@ winkstart.module('provisioner', {
  *  Render current configuration state  ***
  *****************************************************************************/
       _render: function () {
-         var elements = this.config.elements,
-             target = $(elements.content).find(elements.endpoint).empty(),
-             config = this.curConfig;
+         var THIS = this,
+             target = this.target.find(this.config.elements.categories).empty(),
              catList = new Array();
+         for (var i in this.curConfig) catList.push({ name: this.curConfig[i].name });
+         this.templates.categories.tmpl({categories: catList}).appendTo(target);
+         target.find('.category').click(function ( ) { THIS._selectCategory($(this).attr('name')); });
 
-         for (var i in config) catList.push({ name: config[i].name });
-         var manager = this.templates.manager.tmpl({categories: catList, model: this.current.model});
-         manager.find('.category').click(function ( ) { alert("I should be done with rendering subcategory forms by the end of tomorrow");/*THIS._selectCategory($(this).attr('name'));*/ });
-         var config = manager.find('#config');
+         /*var config = manager.find('#config');
          config.append(this._window({title: "Basic", expand: true, collapse: false, close: false}));
          config.append(this._window({title: "Internet Port WAN", expand: true, collapse: false, close: false}));
          config.append(this._window({title: "Hard Keys", expand: true, collapse: false, close: false}));
@@ -166,9 +117,9 @@ winkstart.module('provisioner', {
          config.append(this._window({title: "", expand: true, collapse: false, close: false}));
          config.append(this._window({title: "", expand: true, collapse: false, close: false}));
          config.append(this._window({title: "", expand: true, collapse: false, close: false}));
-         config.append(this._window({title: "", expand: true, collapse: false, close: false}));
-         manager.appendTo(target);
-         //this._selectCategory(catList[0].name);
+         config.append(this._window({title: "", expand: true, collapse: false, close: false}));*/
+
+         this._selectCategory(catList[0].name);
       },
 
 
@@ -177,12 +128,14 @@ winkstart.module('provisioner', {
  *****************************************************************************/
       _selectCategory: function (name) {
          var THIS = this,
-             elements = this.config.elements,
-             endpoint = $(elements.content).find(elements.endpoint),
-             menu = endpoint.find(elements.catList),
-             config = endpoint.find(elements.config);
+             categories = this.target.find(this.config.elements.categories),
+             target = this.target.find(this.config.elements.endpoint);
 
-         if (name !== menu.find('li.current').attr('name')) {
+         categories.find('.category').each(function () {
+            if ($(this).attr('name') != name) $(this).removeClass('current');
+            else $(this).addClass('current');
+         });
+/*         if (name !== menu.find('li.current').attr('name')) {
             menu.find('li.category').removeClass('current');
             menu.find('li.category[name="'+name+'"]').addClass('current');
 
@@ -192,7 +145,7 @@ winkstart.module('provisioner', {
             for (var subName in this.curConfig[name].subcategory) {
                /**************************************************************
                 *  NOTE: bad mechanism for finding subcategory windows!!!
-                **************************************************************/
+                **************************************************************//*
                var window = config.find('#'+subName.replace(/\W/gi, "_"));
 
                if (window.length == 0) {
@@ -213,7 +166,7 @@ winkstart.module('provisioner', {
                if (sub.hasClass('expand')) sub.offset(config.offset());
                else sub.position(offset);
             });
-         });
+         });*/
       },
 
 /*****************************************************************************
@@ -258,12 +211,6 @@ winkstart.module('provisioner', {
          });
          return w;
       },
-
-
-
-
-
-
 
 
 
@@ -334,13 +281,6 @@ winkstart.module('provisioner', {
       },
 
 
-
-
-
-
-
-
-
 /*****************************************************************************
  *  FILE MANIPULATION  ***
  *****************************************************************************/
@@ -399,7 +339,7 @@ winkstart.module('provisioner', {
 /*****************************************************************************
  *  Extract default configuration  ***
  *****************************************************************************/
-      _loadDefaultConfig: function (brand, model, callback) {
+      loadModel: function (brand, model, callback) {
          var model = this.brandList[brand].modelList[model],
              files = new Array();
 
