@@ -9,7 +9,9 @@ winkstart.module('provisioner', {
          provisioner : 'tmpl/provisioner.html',
          selector    : 'tmpl/selector.html',
          categories  : 'tmpl/categories.html',
-         item        : 'tmpl/item.html'
+         item        : 'tmpl/item.html',
+         groups      : 'tmpl/groups.html',
+         group       : 'tmpl/group.html'
       },
 
       elements: {
@@ -135,11 +137,13 @@ winkstart.module('provisioner', {
             }
             if (i in subs) {
                var sub = this._window({title: subs[i].name, expand: true, collapse: false, close: false});
-               sub.find('.body').append(this._renderForm(subs[i].item));
+               sub.find('.body').append(this._renderForm(subs[i].groups));
                sub.appendTo(target);
             }
             else {
-               this._window({title: "Empty", expand: false, collapse: false, close: false}).appendTo(target);
+               var empty = this._window({title: "Empty", expand: false, collapse: false, close: false});
+               empty.addClass('hidden');
+               empty.appendTo(target);
             }
          }
       },
@@ -148,45 +152,11 @@ winkstart.module('provisioner', {
 /*****************************************************************************
  *  Render form  ***
  *****************************************************************************/
-      _renderForm: function (item) {
-         console.log("==========");
-         console.log(item);console.log(item.length);
-         var group = item.length > 1 ? [{data: item, description: ' ', type: "group"}] : item[0];
-         console.log(group);
-         return this.templates.item.tmpl({item: group});
-         console.log("==========");
-      },
-
-
-/*****************************************************************************
- *  Render subcategory  ***
- *****************************************************************************/
-      _renderSub: function (cat, sub) {
-         console.log('rendering '+cat+'.'+sub);
-         $.template('item', this.templates.item);//{{tmpl({"item" : el}) "item"}}<br>
-         var data = this.curConfig[cat].subcategory[sub],
-             subcat = this.templates.sub.tmpl(data),
-             form = subcat.find('fieldset');
-         for (var i in data.item) form.append(this.templates.item.tmpl({ item: data.item[i] }));
-         console.log(subcat);
-         console.log(data);
-
-/*         // convertion to tabs view
-         subcat.find(".col_box_tabs").each(function () {
-            var tabs = $(this);
-            tabs.find('li').click(function () {
-               if (!$(this).hasClass('active')) {
-                  $(this).addClass('active');
-                  tabs.find('li').removeClass('active');
-                  tabs.find('div.tab_content').hide();
-                  tabs.find($(this).find('a').attr('href')).show();
-               }
-               return false;
-            });
-            tabs.find('li').first().click();
-         });*/
-
-         return subcat;
+      _renderForm: function (groups) {
+         console.log(groups);
+         var form = this.templates.groups.tmpl({groupList: groups, render: groups.length > 1});
+         for (var i in groups) this.templates.group.tmpl({group: groups[i]}).appendTo(form);
+         return form;
       },
 
 
@@ -200,14 +170,6 @@ winkstart.module('provisioner', {
          });
          return w;
       },
-
-
-
-
-
-
-
-
 
 
 
@@ -231,13 +193,10 @@ winkstart.module('provisioner', {
             if (!$.isArray(cat.subcategory)) cat.subcategory = [cat.subcategory];
             for (var j in cat.subcategory) {
                var sub = cat.subcategory[j];
-               if (!ccat.subcategory[sub.name]) ccat.subcategory[sub.name] = { name: sub.name, item: new Array() };
+               if (!ccat.subcategory[sub.name]) ccat.subcategory[sub.name] = { name: sub.name, groups: new Array() };
 
-               if (!$.isArray(sub.item)) sub.item = [sub.item];
-               for (var k in sub.item) {
-                  var item = sub.item[k];
-                  ccat.subcategory[sub.name].item.push(this._parseItem(item));
-               }
+               if ($.isArray(sub.item)) sub.item = { data: sub.item };
+               ccat.subcategory[sub.name].groups = this._parseItem(sub.item);
             }
          }
       },
@@ -246,27 +205,29 @@ winkstart.module('provisioner', {
  *  Parse json item into configuration item  ***
  *****************************************************************************/
       _parseItem: function (item) {
+         var groupList = [];
          if (item.type === 'loop_line_options' || item.type === 'loop') {
-            var tabs = { type: 'group', data: new Array() }
-            tabs.description = item.description;
+            var current = this.current,
+                lines = this.brandList[current.brand].modelList[current.model.name].lines,
+                start = item.type === 'loop' ? item.loop_start : 1,
+                end = item.type === 'loop' ? item.loop_end : lines;
 
-            var current = this.current;
-                lines = this.brandList[current.brand].modelList[current.model.name].lines;
-
-            var start = item.type === 'loop' ? item.loop_start : 1;
-            var end = item.type === 'loop' ? item.loop_end : lines;
             for (var i = start; i <= end; i++) {
-               var tab = { item: new Array() }
-               tab.description = item.type === 'loop_line_options' ? 'Line '+i : item.description+': '+i;
-               for (var j in item.data.item) {
-                  tab.item.push(item.data.item[j]);
+               var group = {
+                  item: item.data.item,
+                  description: item.type === 'loop_line_options' ? 'Line '+i : item.description+': '+i
                }
-               tabs.data.push(tab);
+               groupList.push(group);
             }
-            tabs.data[end-1].last = 'last';
-            return tabs;
          }
-         return item;
+         else {
+            var group = {
+               item: item.data,
+               description: ""
+            }
+            groupList.push(group);
+         }
+         return groupList;
       },
 
 

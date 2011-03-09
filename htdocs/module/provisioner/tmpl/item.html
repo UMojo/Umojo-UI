@@ -16,17 +16,17 @@
       <div>
          {{if el.type === "radio"}}
             {{each(k, op) el.data}}
-         <input type="radio" name="${el.variable}" id="option${k}" value="${op.value}" />
+         <input type="radio" value="${op.value}" />
          <div class="label">${op.text}</div>
             {{/each}}
          {{/if}}
          {{if el.type === "input"}}
-         <input type="input" name="${el.variable}" id="${el.variable}" value="${el.value}" />
+         <input type="input" value="${el.value}" />
          {{/if}}
          {{if el.type === "list"}}
-         <select size="1" name="${el.variable}" id="${el.variable}">
+         <select>
             {{each(k, op) el.data}}
-         <option value="${op.value}">${op.text}</option>
+            <option value="${op.value}">${op.text}</option>
             {{/each}}
          </select>
          {{/if}}

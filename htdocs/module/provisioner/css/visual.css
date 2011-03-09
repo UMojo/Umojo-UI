@@ -1,5 +1,7 @@
 #ws_prov { min-height: 600px; }
 
+#ws_prov .hidden { visibility: hidden; }
+
 #ws_prov ol, #ws_prov ul, #ws_prov li { list-style: none;}
 
 #ws_prov #selector .brand { display: inline-block; width: 150px; vertical-align: top; }
