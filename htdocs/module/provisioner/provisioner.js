@@ -11,7 +11,14 @@ winkstart.module('provisioner', {
          categories  : 'tmpl/categories.html',
          item        : 'tmpl/item.html',
          groups      : 'tmpl/groups.html',
-         group       : 'tmpl/group.html'
+         group       : 'tmpl/group.html',
+         input       : 'tmpl/input.html',
+         list        : 'tmpl/list.html',
+         radio       : 'tmpl/radio.html',
+/*For temporary select hack*/
+         select      : 'tmpl/select.html',
+/**/
+         default     : 'tmpl/default.html'
       },
 
       elements: {
@@ -155,8 +162,31 @@ winkstart.module('provisioner', {
       _renderForm: function (groups) {
          console.log(groups);
          var form = this.templates.groups.tmpl({groupList: groups, render: groups.length > 1});
-         for (var i in groups) this.templates.group.tmpl({group: groups[i]}).appendTo(form);
+         for (var i in groups) this._renderGroup(groups[i]).appendTo(form);
          return form;
+      },
+
+      _renderGroup: function (group) {
+         var g = this.templates.group.tmpl({group: group});
+         for (var i in group.item) {
+            var item = group.item[i];
+            var id = "";
+            /*this is a temporary hack for the select bug...*/
+            if (item.type == "list") {
+               var select = this.templates.select.tmpl({item: item, id: id});
+               var opt = select.find('select');
+               for (var j in item.data) {
+                  var option = item.data[j];
+                  opt.append('<option value="'+option.value+'">'+option.text+'</option>');
+               }
+               g.append(select);
+            }
+            else /**/ if (item.type in this.templates)
+               this.templates[item.type].tmpl({item: item, id: id}).appendTo(g);
+            else
+               this.templates.default.tmpl({item: item, id: id}).appendTo(g);
+         }
+         return g;
       },
 
 
