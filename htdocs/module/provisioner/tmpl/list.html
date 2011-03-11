@@ -1,0 +1,10 @@
+<div>
+   <div>
+      <div class="label">${item.description}</div>
+      <select id="${id}" class="variable">
+{{each(i, option) item.data}}
+         <option value="${option.value}">${option.text}</option>
+{{/each}}
+      </select>
+   </div>
+</div>
