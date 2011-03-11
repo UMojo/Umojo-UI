@@ -8,8 +8,8 @@ winkstart.module('provisioner', {
          window      : 'tmpl/window.html',
          provisioner : 'tmpl/provisioner.html',
          selector    : 'tmpl/selector.html',
+         save_load   : 'tmpl/save_load.html',
          categories  : 'tmpl/categories.html',
-         item        : 'tmpl/item.html',
          groups      : 'tmpl/groups.html',
          group       : 'tmpl/group.html',
          input       : 'tmpl/input.html',
@@ -59,6 +59,8 @@ winkstart.module('provisioner', {
       defConfig: { },
       curConfig: { },
 
+      configForm: { },
+
 
       activate: function (args) {
          var THIS = this;
@@ -80,9 +82,41 @@ winkstart.module('provisioner', {
  *****************************************************************************/
       render: function (brand, model, uri) {
          var THIS = this;
-         this.loadModel(brand, model, function () {
-            if (uri) { /*TODO:load config*/THIS._render(); }
-            else { THIS.curConfig = THIS.defConfig; THIS._render(); }
+         this._loadModel(brand, model, function () {
+            THIS.curConfig = THIS._clone(THIS.defConfig);
+            if (uri) { THIS._load(uri, function ( ) { THIS._render(); }); }
+            else { THIS._render(); }
+         });
+      },
+
+/*****************************************************************************
+ *  Save current endpoint configuration  ***
+ *****************************************************************************/
+      save: function ( uri ) {
+         var THIS = this, target = this.target, map = { }, json = '';
+
+         for (var i in this.curConfig) map[this._idEncode(i)] = i;
+
+         target.find('.variable').each(function ( ) {
+            var item = $(this), id = item.attr('id');
+            switch (item.attr('type')) {
+               case 'radio': if (item.attr('checked') && map[id]) THIS.curConfig[map[id]] = item.attr('value');
+               default: if (map[id]) THIS.curConfig[map[id]] = item.attr('value');
+            }
+         });
+// CONVERSION TO PROPER JSON IS NEEDED
+         for (var i in this.curConfig) json += i + ': ' + this.curConfig[i] + '\n';
+         alert('Saving:\n'+json);
+      },
+
+/*****************************************************************************
+ *  Load endpoint configuration  ***
+ *****************************************************************************/
+      _load: function ( uri, callback ) {
+         if (!uri) return;
+         var THIS = this;
+         $.getJSON(uri, function (data) {
+            THIS.curConfig = data;
          });
       },
 
@@ -112,7 +146,12 @@ winkstart.module('provisioner', {
          var THIS = this,
              target = this.target.find(this.config.elements.categories).empty(),
              catList = new Array();
-         for (var i in this.curConfig) catList.push({ name: this.curConfig[i].name });
+
+         this.templates.save_load.tmpl({}).appendTo(target);
+         target.find('.load').find('a').click(function ( ) { THIS.load(); });
+         target.find('.save').find('a').click(function ( ) { THIS.save(); });
+
+         for (var i in this.configForm) catList.push({ name: this.configForm[i].name });
          this.templates.categories.tmpl({categories: catList}).appendTo(target);
          target.find('.category').click(function ( ) { THIS._selectCategory($(this).attr('name')); });
          this._selectCategory(catList[0].name);
@@ -134,7 +173,7 @@ winkstart.module('provisioner', {
 
          // this is way better than it was before but still it needs a better way for mapping subcategories
          var subs = new Array();
-         for (var sub in this.curConfig[name].subcategory) subs.push(this.curConfig[name].subcategory[sub]);
+         for (var sub in this.configForm[name].subcategory) subs.push(this.configForm[name].subcategory[sub]);
 
          for (var i = 0; i < (subs.length > 8 ? subs.length : 8); i++) {
             if ( i == 4 ) {
@@ -143,8 +182,9 @@ winkstart.module('provisioner', {
                   sub.appendTo(target);
             }
             if (i in subs) {
-               var sub = this._window({title: subs[i].name, expand: true, collapse: false, close: false});
-               sub.find('.body').append(this._renderForm(subs[i].groups));
+               var sub = this._window({title: subs[i].name, expand: true, collapse: false, close: false}),
+                   id = name + '.' + subs[i].name;
+               sub.find('.body').append(this._renderForm(subs[i].groups, id));
                sub.appendTo(target);
             }
             else {
@@ -153,24 +193,29 @@ winkstart.module('provisioner', {
                empty.appendTo(target);
             }
          }
+
+         this._populate(this.curConfig);
       },
 
 
 /*****************************************************************************
  *  Render form  ***
  *****************************************************************************/
-      _renderForm: function (groups) {
-         console.log(groups);
+      _renderForm: function (groups, base_id) {
          var form = this.templates.groups.tmpl({groupList: groups, render: groups.length > 1});
-         for (var i in groups) this._renderGroup(groups[i]).appendTo(form);
+         for (var i in groups) {
+            var group = groups[i],
+                id = base_id + '.' + group.count;
+            this._renderGroup(groups[i], id).appendTo(form);
+         }
          return form;
       },
 
-      _renderGroup: function (group) {
+      _renderGroup: function (group, base_id) {
          var g = this.templates.group.tmpl({group: group});
          for (var i in group.item) {
-            var item = group.item[i];
-            var id = "";
+            var item = group.item[i],
+                id = this._idEncode(base_id + '.' + item.variable);
             /*this is a temporary hack for the select bug...*/
             if (item.type == "list") {
                var select = this.templates.select.tmpl({item: item, id: id});
@@ -213,11 +258,11 @@ winkstart.module('provisioner', {
  *  Merging JSON into default configuration  ***
  *****************************************************************************/
       _mergeJSON: function (json) {
-         var config = this.defConfig;
+         var config = this.configForm;
          if (!$.isArray(json.category)) json.category = [json.category];
          for (var i in json.category) {
             var cat = json.category[i];
-            if (!config[cat.name]) config[cat.name] = { name: cat.name, subcategory: [] };
+            if (!config[cat.name]) config[cat.name] = { name: cat.name, subcategory: {} };
 
             var ccat = config[cat.name];
             if (!$.isArray(cat.subcategory)) cat.subcategory = [cat.subcategory];
@@ -243,17 +288,25 @@ winkstart.module('provisioner', {
                 end = item.type === 'loop' ? item.loop_end : lines;
 
             for (var i = start; i <= end; i++) {
-               var group = {
-                  item: item.data.item,
-                  description: item.type === 'loop_line_options' ? 'Line '+i : item.description+': '+i
+               var items = this._clone(item.data.item);
+               for (var j in items) {
+                  var el = items[j];
+                  if (el.description) el.description = el.description.replace("{$count}", i);
                }
+               var group = {
+                  item: items,
+                  description: item.type === 'loop_line_options' ? 'Line '+i : item.description+': '+i,
+                  count: i
+               };
                groupList.push(group);
             }
          }
          else {
+            var items = this._clone(item.data);
             var group = {
-               item: item.data,
-               description: ""
+               item: items,
+               description: "",
+               count: 1
             }
             groupList.push(group);
          }
@@ -319,17 +372,18 @@ winkstart.module('provisioner', {
 /*****************************************************************************
  *  Extract default configuration  ***
  *****************************************************************************/
-      loadModel: function (brand, model, callback) {
-         var model = this.brandList[brand].modelList[model],
+      _loadModel: function (brand, model, callback) {
+         var THIS = this,
+             model = this.brandList[brand].modelList[model],
              files = new Array();
 
          this.current = { brand: brand, model: model };
-         this.defConfig = { };
+         this.configForm = { };
 
          for (var i in model.files) files.push(model.directory+model.files[i]);
 
          console.log('loading files');
-         this._loadFiles(files, callback);
+         this._loadFiles(files, function ( ) { THIS._parseDefault(); callback(); });
       },
 
 /*****************************************************************************
@@ -351,10 +405,64 @@ winkstart.module('provisioner', {
       },
 
 
+/*****************************************************************************
+ *  Parse default model configuration  ***
+ *****************************************************************************/
+      _parseDefault: function ( ) {
+         this.defConfig = { };
+         for (var i in this.configForm) {
+            var cat = this.configForm[i];
+            for (var j in cat.subcategory) {
+               var sub = cat.subcategory[j];
+               for (var k in sub.groups) {
+                  var group = sub.groups[k];
+                  for (var l in group.item) {
+                     var item = group.item[l];
+                     if (item.default_value && typeof (item.default_value) != 'object') {
+                        var id = cat.name+'.'+sub.name+'.'+group.count+'.'+item.variable;
+                        this.defConfig[id] = item.default_value;
+                     }
+                  }
+               }
+            }
+         }
+      },
+
+      _populate: function ( config ) {
+         var target = this.target;
+         for (var i in config) {
+            target.find('#'+this._idEncode(i)).each(function ( ) {
+               item = $(this);
+               switch(item.attr('type')) {
+                  case 'text': item.attr('value', config[i]); break;
+                  case 'select-one': item.attr('value', config[i]); break;
+                  case 'radio': if (item.attr('value') == config[i]) item.attr('checked', true); else item.attr('checked', false); break;
+               }
+            });
+         }
+      },
 
 
-      _saveSubcategory: function () {
-         // TODO: actually post the data
-         console.log('saving subcategory');
-      }
+/*****************************************************************************
+ *  HELPERS  ***
+ *****************************************************************************/
+
+/*****************************************************************************
+ *  ID encoding  ***
+ *****************************************************************************/
+   _idEncode: function ( id ) {
+      var enc = id.replace(/\$/gi, ":");
+      enc = enc.replace(/\W/gi, "_");
+      return enc;
+   },
+
+/*****************************************************************************
+ *  Deep object cloning  ***
+ *****************************************************************************/
+   _clone: function (obj) {
+      if (obj == null || typeof(obj) != 'object') return obj;
+      var o = new obj.constructor(); 
+      for (var key in obj) o[key] = this._clone(obj[key]);
+      return o;
+   }
 });

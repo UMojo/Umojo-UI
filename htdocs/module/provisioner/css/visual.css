@@ -11,6 +11,14 @@
 #ws_prov #selector .brand .models .model { display: block; width: 150px; padding-top: 5px; padding-bottom: 5px; text-align: center; border: 1px solid; color: #fff; text-decoration: none; }
 
 #ws_prov #categories { width: 100%; text-align: center; margin-top: 70px; }
+
+#ws_prov #categories .save_load { height: 40px; text-align: left; }
+#ws_prov #categories .save_load .load { display: inline-block; float: left; }
+#ws_prov #categories .save_load .load input { width: 300px; }
+#ws_prov #categories .save_load .save { display: inline-block; float: right; }
+#ws_prov #categories .save_load a { margin-left: 20px; color: #fff; text-decoration: none; }
+#ws_prov #categories .save_load .label { display: inline-block; width: 150px; }
+
 #ws_prov #categories .category { display: inline-block; text-transform: uppercase; font-size: 10px; height: 40px; line-height: 40px; background: url(../images/bottom_bar.jpg) center -4px; color: #fff; text-decoration: none; }
 #ws_prov #categories .category:hover { background-image: url(../images/btm_tab_active.jpg); }
 #ws_prov #categories .category.current { background-image: url(../images/btm_tab_active.jpg); }
