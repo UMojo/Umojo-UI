@@ -1,82 +1,19 @@
-#ws_cf_flow {
-   width: 800px;
-   overflow-x: auto;
-   min-height: 400px;
-   padding-top: 20px;
-   text-align: center;
-}
+#ws_callflow #ws_cf_flow { width: 800px; overflow-x: auto; min-height: 400px; padding-top: 20px; text-align: center; }
+#ws_callflow .control_bar { text-align: center; height: 50px; padding: 10px; }
 
-div.control_bar {
-   text-align: center;
-   height: 50px;
-   padding: 10px;
-}
+#ws_callflow .save { display: inline-block; text-align: center; border: solid 1px; width: 70px; padding: 6px; }
+#ws_callflow .save.active { background-color: #eee; }
 
-div.save {
-   display: inline-block;
-   text-align: center;
-   border: solid 1px;
-   width: 70px;
-   padding: 6px;
-}
+#ws_callflow table.callflow { width: 100%; /*border: solid 1px;*/ }
+#ws_callflow table.callflow td { vertical-align: top; }
+#ws_callflow td.flow { width: 80%; }
 
-div.save.active {
-   background-color: #eee;
-}
+#ws_callflow .child { display: inline-block; vertical-align: top; text-align: center; white-space: normal; }
+#ws_callflow .branch { display: block; text-align: center; }
+#ws_callflow .node.active { background-color: #eee; }
+#ws_callflow .node.inactive { border-color: #808080; }
+#ws_callflow .children { display: block; white-space: pre; }
 
-table.callflow {
-   width: 100%;
-   /*border: solid 1px;*/
-}
-
-table.callflow td {
-   vertical-align: top;
-}
-
-td.flow {
-   width: 80%;
-}
-
-
-
-div.child {
-   display: inline-block;
-   vertical-align: top;
-   text-align: center;
-   white-space: normal;
-}
-
-div.branch {
-   display: block;
-   text-align: center;
-}
-
-div.node.active {
-   background-color: #eee;
-}
-
-div.node.inactive {
-   border-color: #808080;
-}
-
-
-div.children {
-   display: block;
-   white-space: pre;
-}
-
-
-
-
-td.tools {
-   width: 20%;
-}
-
-.tool {
-   text-align: center;
-   vertical-align: middle;
-}
-
-.tool .action.inactive {
-   display: none;
-}
+#ws_callflow td.tools { width: 20%; }
+#ws_callflow .tool { text-align: center; vertical-align: middle; }
+#ws_callflow .tool .action.inactive { display: none; }

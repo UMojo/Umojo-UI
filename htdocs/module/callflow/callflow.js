@@ -362,11 +362,7 @@ winkstart.module('callflow',
 
          alert(cf.flow);
 
-         var form = this.templates.iframe.tmpl({ postTo: 'http://localhost:8000/v1/accounts/e030a025125d3deca7d77db040001e3b/callflow/callflow_test?auth_token=1234', list: cf });
-         console.log(form);
-         form.submit(function () {
-
-         }).submit();
+         //POSTING THE DATA SHOULD BE HERE....
       },
    }
 );
