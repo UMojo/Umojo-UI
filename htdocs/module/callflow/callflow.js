@@ -374,12 +374,14 @@ winkstart.module('callflow',
       },
 
       save: function () {
-         var cf = {
+         var flow = this.flow.root;
+             cf = {
             numbers : 'some number list',
-            flow : this.flow.root.child(0).serialize()
+            flow : flow.children.length > 0 ? flow.children[0].serialize() : { }
          }
 
-         alert(cf);
+//         alert(JSON.stringify(cf));
+         alert('{"numbers":['+cf.numbers+'], "flow":'+cf.flow+'}');
 
          //POSTING THE DATA SHOULD BE HERE....
       },
