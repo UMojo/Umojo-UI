@@ -21,9 +21,12 @@ winkstart.module('callflow',
          buf: '#ws_cf_buf'
       },
 
-      requests: {
-         'callflow.save' : { url : 'place for posting callflow json' }
+      json: { // uris to json data
+          actions: 'module/callflow/actions.json',
+          categories: 'module/callflow/categories.json'
       },
+
+      popup: 'module/callflow/app/',
 
       subscribe: {
          'callflow.activate' : 'activate'
@@ -59,6 +62,22 @@ winkstart.module('callflow',
    },
    {
       activate: function (args) {
+         var THIS = this, count = 1,
+             tryRun = function ( ) { count--; if (count == 0) THIS._activate(args); };
+         count++;
+         $.getJSON(this.config.json.actions, function (data) {
+            THIS.actions = data;
+            tryRun();
+         });
+         count++;
+         $.getJSON(this.config.json.categories, function (data) {
+            THIS.categories = data;
+            tryRun();
+         });
+         tryRun();
+      },
+
+      _activate: function (args) {
          var THIS = this
 
          args.target.empty();
@@ -170,25 +189,15 @@ winkstart.module('callflow',
          return count;
       },
 
+// A set of actions: modules/apps tied together with rules, restricting dependencies between the actions
+      root: { name : 'root', rules : [ {type : 'quantity', maxSize : 1} ], isUsable : false},
 
-
-// A set of actions: modules/apps tighted together with rules, restricting dependencies between the actions
-      actions: {
-         root       : { name : 'root',         rules : [ {type : 'quantity', maxSize : 1} ],   isUsable : false},
-         answer     : { name : 'answer',       rules : [ {type : 'quantity', maxSize : 1} ],   isUsable : true },
-         conference : { name : 'conference',   rules : [ {type : 'quantity', maxSize : 1} ], isUsable : true },
-         hangup     : { name : 'hangup',       rules : [ {type : 'quantity', maxSize : 0} ], isUsable : true },
-         menu       : { name : 'menu',         rules : [ ],                                  isUsable : true },
-         voicemail  : { name : 'voicemail',    rules : [ {type : 'quantity', maxSize : 1} ], isUsable : true }
-      },
+      actions: { root : this.root },
 
 // Action categories
-      categories: {
-         'basic' : ['answer','conference','hangup','menu','voicemail'],
-//         'test' : ['answer','conference','hangup']
-      },
+      categories: { },
 
-      flow: {},
+      flow: { },
 
       _resetFlow: function () {
          this.flow = {};
@@ -218,15 +227,23 @@ winkstart.module('callflow',
                $(this).removeClass('icons_black root');
                node = THIS.templates.root.tmpl(THIS.flow.nodes[$(this).attr('id')]);
             }
-            else node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+            else {
+               node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+               // ADD ONCLICK EVENT FOR MODIFYING DATA
+            }
             $(this).append(node);
 
             $(this).droppable({
                drop: function (event, ui) {
                   var target = THIS.flow.nodes[$(this).attr('id')];
                   if (ui.draggable.hasClass('action')) {
-                     var branch = THIS.branch(ui.draggable.attr('name'));
-                     if (target.addChild(branch)) THIS.renderFlow();
+                     var action = ui.draggable.attr('name'),
+                         branch = THIS.branch(action);
+                     if (target.addChild(branch)) {
+                        // OPENNING POPUP FORM WINDOW FOR POPULATING DATA PORTION OF THE NODE
+                        if (THIS.actions[action].popup) alert('calling '+action+' module to setup node data');
+                        THIS.renderFlow();
+                     }
                   }
                   if (ui.draggable.hasClass('node')) {
                      var branch = THIS.flow.nodes[ui.draggable.attr('id')];
@@ -340,7 +357,10 @@ winkstart.module('callflow',
             }
             else activate = false;
             if (activate) $(this).addClass('active');
-            else $(this).droppable('disable');
+            else {
+               $(this).addClass('inactive');
+               $(this).droppable('disable');
+            }
          });
       },
 
@@ -355,12 +375,11 @@ winkstart.module('callflow',
 
       save: function () {
          var cf = {
-            _id : 'callflow_test',
             numbers : 'some number list',
-            flow : this.flow.root.serialize()
+            flow : this.flow.root.child(0).serialize()
          }
 
-         alert(cf.flow);
+         alert(cf);
 
          //POSTING THE DATA SHOULD BE HERE....
       },

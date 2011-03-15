@@ -148,7 +148,7 @@ winkstart.module('provisioner', {
              catList = new Array();
 
          this.templates.save_load.tmpl({}).appendTo(target);
-         target.find('.load').find('a').click(function ( ) { THIS.load(); });
+         target.find('.load').find('a').click(function ( ) { THIS._load(); });
          target.find('.save').find('a').click(function ( ) { THIS.save(); });
 
          for (var i in this.configForm) catList.push({ name: this.configForm[i].name });

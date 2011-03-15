@@ -10,8 +10,8 @@
 
 #ws_callflow .child { display: inline-block; vertical-align: top; text-align: center; white-space: normal; }
 #ws_callflow .branch { display: block; text-align: center; }
-#ws_callflow .node.active { background-color: #eee; }
-#ws_callflow .node.inactive { border-color: #808080; }
+#ws_callflow .node.active { background-color: #fff; }
+#ws_callflow .node.inactive { filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5; }
 #ws_callflow .children { display: block; white-space: pre; }
 
 #ws_callflow td.tools { width: 20%; }

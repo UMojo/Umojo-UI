@@ -97,6 +97,7 @@ ul#topnav li .sub {
     -khtml-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
     display: none;
+    z-index: 10000;
 }
 ul#topnav li .row {clear: both; float: left; width: 100%; margin-bottom: 10px;}
 ul#topnav li .sub ul{
