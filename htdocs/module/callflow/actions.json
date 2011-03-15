@@ -1,8 +1,8 @@
 {
    "root"       : { "name" : "root",       "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "false"},
-   "answer"     : { "name" : "answer",     "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-   "conference" : { "name" : "conference", "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true",  "popup" : "conference"},
-   "hangup"     : { "name" : "hangup",     "rules" : [ {"type" : "quantity", "maxSize" : "0"} ], "isUsable" : "true"},
-   "menu"       : { "name" : "menu",       "rules" : [ ],                                        "isUsable" : "true",  "popup" : "menu"},
-   "voicemail"  : { "name" : "voicemail",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true",  "popup" : "voicemail"}
+   "answer"     : { "name" : "answer",     "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true",  "popup" : "dialplan"},
+   "conference" : { "name" : "conference", "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
+   "hangup"     : { "name" : "hangup",     "rules" : [ {"type" : "quantity", "maxSize" : "0"} ], "isUsable" : "true",  "popup" : "dialplan"},
+   "menu"       : { "name" : "menu",       "rules" : [ ],                                        "isUsable" : "true"},
+   "voicemail"  : { "name" : "voicemail",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"}
 }

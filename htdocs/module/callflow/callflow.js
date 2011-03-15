@@ -66,6 +66,14 @@ winkstart.module('callflow',
              tryRun = function ( ) { count--; if (count == 0) THIS._activate(args); };
          count++;
          $.getJSON(this.config.json.actions, function (data) {
+            var popups = { };
+            for (var i in data) {
+               var popup = data[i].popup;
+               if (popup && !popups[popup]) {
+                  popups[popup] = popup; count++;
+                  winkstart.module.load(popup, function() { this.init(); tryRun(); });
+               }
+            }
             THIS.actions = data;
             tryRun();
          });
@@ -170,12 +178,9 @@ winkstart.module('callflow',
             }
 
             this.serialize = function () {
-               var json = '{"module":"'+this.actionName+'","id":"'+this.id+'","data":"'+'data'/*this.data*/+'","children":[';
-               for (var i in this.children) {
-                  json += this.children[i].serialize();
-                  if ((parseInt(i)+1) in this.children) json += ',';
-               }
-               json += ']}';
+               var json = THIS._clone(this.data);
+               json.children = {};
+               for (var i in this.children) json.children[i] = (this.children[i].serialize());
                return json;
             }
          }
@@ -229,7 +234,6 @@ winkstart.module('callflow',
             }
             else {
                node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
-               // ADD ONCLICK EVENT FOR MODIFYING DATA
             }
             $(this).append(node);
 
@@ -240,8 +244,8 @@ winkstart.module('callflow',
                      var action = ui.draggable.attr('name'),
                          branch = THIS.branch(action);
                      if (target.addChild(branch)) {
-                        // OPENNING POPUP FORM WINDOW FOR POPULATING DATA PORTION OF THE NODE
-                        if (THIS.actions[action].popup) alert('calling '+action+' module to setup node data');
+                        var popup = THIS.actions[action].popup;
+                        if (popup) winkstart.publish(popup+'.popup', target.children[target.children.length-1]);
                         THIS.renderFlow();
                      }
                   }
@@ -281,6 +285,12 @@ winkstart.module('callflow',
                node.parent.removeChild(node);
                THIS.renderFlow();
             }
+         });
+
+         layout.find('.edit').click(function() {
+            var node = THIS.flow.nodes[$(this).attr('id')],
+                popup = THIS.actions[node.actionName].popup;
+            if (popup) winkstart.publish(popup+'.popup', node);
          });
 
          return layout;
@@ -380,10 +390,19 @@ winkstart.module('callflow',
             flow : flow.children.length > 0 ? flow.children[0].serialize() : { }
          }
 
-//         alert(JSON.stringify(cf));
-         alert('{"numbers":['+cf.numbers+'], "flow":'+cf.flow+'}');
+         alert(JSON.stringify(cf));
 
          //POSTING THE DATA SHOULD BE HERE....
       },
+
+/*****************************************************************************
+ *  Deep object cloning  ***
+ *****************************************************************************/
+      _clone: function (obj) {
+         if (obj == null || typeof(obj) != 'object') return obj;
+         var o = new obj.constructor(); 
+         for (var key in obj) o[key] = this._clone(obj[key]);
+         return o;
+      }
    }
 );
