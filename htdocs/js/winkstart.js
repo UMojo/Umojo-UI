@@ -99,12 +99,16 @@
 					});
                     
 					winkstart.module.load('provisioner', function() {
-	                    this.init();
-                    });
+	                    			this.init();
+                    			});
                     
 					winkstart.module.load('callflow', function() {
-	                    this.init();
-                    });
+	            				this.init();
+                    			});
+
+					winkstart.module.load('deploy', function() {
+	            				this.init();
+                    			});
 				});
 			});
 		});
