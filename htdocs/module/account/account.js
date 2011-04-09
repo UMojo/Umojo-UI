@@ -14,8 +14,8 @@ winkstart.module('account', {
 		},
 		
 		resources: {
-			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts', dataType: 'json', type: 'GET'},        
-			"accounts.get": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}', dataType: 'json', type: 'GET'},        
+			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts', dataType: 'json', httpMethod: 'GET'},        
+			"accounts.get": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}', dataType: 'json', httpMethod: 'GET'}        
 		}
 	},
 	function(args) {
@@ -65,11 +65,19 @@ winkstart.module('account', {
          	winkstart.getJSON('accounts.list', {}, function (json) {
             	//List Data that would be sent back from server
 	            
+            	function map_crossbar_data(crossbar_data){
+            		var new_list = [];
+            		_.each(crossbar_data, function(elem){
+            			new_list.push({id: elem.id, title: elem.name});
+            		});
+            		return new_list;
+            	};
+            	            	
 				var options = {};
 	            options.label = 'Account Module';
 	            options.identifier = 'account-module-listview';
 	            options.new_entity_label = 'Account';
-	            options.data = json.accounts;
+	            options.data = map_crossbar_data(json.data);
 	            options.publisher = winkstart.publish;
 	            options.notifyMethod = 'account.list-panel-click';
 	

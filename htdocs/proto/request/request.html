@@ -9,10 +9,9 @@
 	width: 30%;
 }
 </style>
-<script src="/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+<script src="/js/jquery-1.5.1.js" type="text/javascript"></script>
 <script src="/js/amplify.js" type="text/javascript"></script>
 <script src="/js/amplify.request.js" type="text/javascript"></script>
-<script src="/js/amplify.request.poll.js" type="text/javascript"></script>
 <script type="text/javascript">
     /*amplify.request.define( "server", "ajax-poll", {
         url: "/proto/request/server.php",
@@ -40,8 +39,11 @@
     });*/
     
     amplify.request.define( "server", "ajax", {
-        url: "/proto/server/accounts",
-        dataType: "json"
+        url: 'http://apps001-dev-ord.2600hz.com:8000/v1/accounts',
+        dataType: "json",
+        //headers: {'X-Auth-Token': 'tickbw'},
+        type: 'GET',
+        accepts: "application/json"
     });
     
     amplify.request("server", function(data){
@@ -52,7 +54,7 @@
     </script>
 </head>
 <body>
-	<!-- <h1>Amplify Prototype</h1>
+<!-- <h1>Amplify Prototype</h1>
 	<div>
 	<button>publish a message</button>
 	</div>
