@@ -17,6 +17,10 @@
 	};
 	
 	winkstart.normalizeRequest = function(params){
+		
+		//We were placing this in the params to denote a call to crossbar
+		delete params.crossbar;
+		
 		var base_params = {};
 		base_params['auth-token'] = winkstart.getAuthToken();
 		base_params.base = params;
@@ -24,25 +28,25 @@
 	};
 	
 	winkstart.getJSON = function(resource_name, params, callback){
-		amplify.request( resource_name, winkstart.normalizeRequest(params), function( data ) {
+		amplify.request( resource_name, (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params ), function( data ) {
 			callback(data);
 		});
 	};
 	
 	winkstart.postJSON = function(resource_name, params, callback){
-		amplify.request( resource_name, winkstart.normalizeRequest(params), function( data ) {
+		amplify.request( resource_name, (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params ), function( data ) {
 			callback(data);
 		});
 	};
 	
 	winkstart.deleteJSON = function(resource_name, params, callback){
-		amplify.request( resource_name, winkstart.normalizeRequest(params), function( data ) {
+		amplify.request( resource_name, (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params ), function( data ) {
 			callback(data);
 		});
 	};
 	
 	winkstart.putJSON = function(resource_name, params, callback){
-		amplify.request( resource_name, winkstart.normalizeRequest(params), function( data ) {
+		amplify.request( resource_name, (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params ), function( data ) {
 			callback(data);
 		});
 	};
