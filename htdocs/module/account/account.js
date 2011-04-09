@@ -62,7 +62,7 @@ winkstart.module('account', {
          	
          	winkstart.publish('layout.updateLoadedModule', {label: 'Account Management', module: this.__module});
          	
-         	winkstart.getJSON('accounts.list', {}, function (json) {
+         	winkstart.getJSON('accounts.list', {crossbar: true}, function (json) {
             	//List Data that would be sent back from server
 	            
             	function map_crossbar_data(crossbar_data){
