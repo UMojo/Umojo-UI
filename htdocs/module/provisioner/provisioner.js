@@ -39,7 +39,7 @@ winkstart.module('provisioner', {
       }
    },
    function (args) {
-      winkstart.publish('nav.add', {module: this.__module, label: 'PROVISIONER'});
+      winkstart.publish('nav.add', { module: this.__module, label: 'Provisioner', nav_category: 'category-3'});
    },
    {
 /*****************************************************************************

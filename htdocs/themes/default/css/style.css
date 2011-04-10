@@ -21,7 +21,36 @@ body {
 
 /**WRAPPER**/
 .wrapper{
-    margin: 30px auto 0 auto;
+    margin: 0px auto 0px auto;
+}
+
+.wrapper .top-header {
+    height: 30px;		
+}
+
+.wrapper .top-header .whistle-apps ul {
+    position: relative;
+    float: right;
+    width: 500px;
+    list-style: none;
+    height: 30px;
+    text-align: right;
+}
+
+.wrapper .top-header .whistle-apps ul li {
+    display: inline;	
+}
+
+.wrapper .top-header .account-settings ul {
+    position: relative;
+    float: right;
+    width: 200px;	
+    height: 30px;
+    text-align: right;
+}
+
+.wrapper .top-header .account-settings ul li {
+    display: inline;
 }
 
 /**HEADER**/
@@ -32,123 +61,115 @@ body {
 }
 
 #logo {
-    position: relative;
-    float: left;
+    position: absolute;
+    top: 1;
+    left: 1;
     background-image: url(../img/logo.jpg);
     height: 32px;
     width: 190px;
+    z-index: 2;
 }
 
 /**NAV**/
 
 #ws-nav {
-    position: relative;
-    float: left;
-    width: 831px;
+    width: 100%;
+    height: 32px;
     background-image: url(../img/nav/nav_bak.jpg);
     background-repeat: repeat-x;
+    padding: 0px;
 }
 
+#ws-nav div.inner {
+    padding: 0px 0px 0px 190px;	
+}
 
-ul#topnav {
-    margin: 0; padding: 0;
+.winkstart-topnav {	
+    display: table-row;
+    height: 32px; 
+}
+
+.winkstart-topnav div {
+    display: table-cell;
     height: 32px;
-    border-left: 1px solid #7a7a7a;
-    float:left;
-    width: 650px;
-    list-style: none;
+    border-right: 1px solid #7a7a7a; 
 }
 
-ul#topnav li.top {
-	border-right: 1px solid #7a7a7a;
-}
-
-ul#topnav li {
-    float: left;
-    margin: 0; padding: 0;
-    position: relative;
-    height: 32px;
-}
-ul#topnav li a {
-    float: left; 
+.winkstart-topnav a {
     color: #fff;
-    display: block;
     position: relative;
-    padding: 0.7em 1em;
     text-decoration: none;
+    display: block;
+    padding: 8px 0px 0px 4px;
 }
-ul#topnav li:hover a, ul#topnav li a:hover { 
+
+.winkstart-topnav a:hover { 
     color: #00B0D9;     
 }
 
-ul#topnav li .sub {
-    position: absolute; 
-    top: 32px; 
-    left: 0;
-    background: #000;
-    padding: 20px 20px 20px;
-    float: left;
-    /*--Bottom right rounded corner--*/
-    -moz-border-radius-bottomright: 5px;
-    -khtml-border-radius-bottomright: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    /*--Bottom left rounded corner--*/
-    -moz-border-radius-bottomleft: 5px;
-    -khtml-border-radius-bottomleft: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    display: none;
-    z-index: 10000;
-}
-ul#topnav li .row {clear: both; float: left; width: 100%; margin-bottom: 10px;}
-ul#topnav li .sub ul{
-    list-style: none;
-    margin: 0; padding: 0;
-    width: 150px;
-    float: left;
-}
-ul#topnav .sub ul li {
+.winkstart-subnav {
     width: 100%;
-    color: #fff;
-}
-ul#topnav .sub ul li h2 {
-    padding: 0;  margin: 0;
-    font-size: 1.3em;
-    font-weight: normal;
-}
-ul#topnav .sub ul li h2 a {
-    padding: 5px 0;
-    background-image: none;
-    color: #e8e000;
-}
-ul#topnav .sub ul li a {
-    float: none; 
-    text-indent: 0; /*--Reset text indent--*/
-    height: auto;
+    height: 115px;
+    z-index: 2;
+    position: absolute;
+    top: 32;
+    left: 0;
+    margin: 0px;
     padding: 0px;
-    display: block;
-    text-decoration: none;
-    color: #fff;
-}
-ul#topnav .sub ul li a:hover {
-	color: #00B0D9;     
 }
 
+.subnav-row {
+    width: 100%;
+    padding: 0px 1px 0px 1px;
+    background: #000;
+}
+
+.inline-block {
+	display: table-cell;
+	border-right: 1px solid #7a7a7a;
+	height: 110px; 
+}
+
+.inline-block .left-outer {
+    border-left: 1px solid #7a7a7a;
+}
+
+.inline-block .right-outer {
+    border-right: none;
+}
+
+
+.inline-block a {
+    color: #fff;
+    text-decoration: none;	
+}
+
+.inline-block a:hover {
+	color: #00B0D9;  
+}
+
+.inline-block ul {
+	padding: 4px 0px 0px 4px;
+}
+
+.inline-block ul li {
+    list-style: none;
+}
 
 #bread-crumbs {
-    position: relative;
     float: left;
     width: 190px;
     height: 45px;
-    padding: 4px 0px 0px 4px;
 }
 #update-notification {
-    position: relative;
     float: left;
     width: 650px;
     height: 45px;
 }
 #live-notifications {
-    padding: 4px 0px 0px 4px;
+    float: left;
+    height: 45px;
+    width: 177px;
 }
 
 .main_content {
