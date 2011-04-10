@@ -1,57 +1,49 @@
-/*************************************
-----LEFT SIDE BAR MEDIA MANAGEMENT----
-**************************************/
-
-.devices_tabs {
-    background-color: #9D9D9D;
-    height: 130px;
-    margin: 54px 0 0 18px;
-    padding: 0 6px;
-    position: relative;
-    width: 788px;
-    z-index: 600;
+#deploy-view {
+	width: 100%;
 }
 
-
-.devices_list{
-    height: 490px;
-    border-bottom: 1px solid #8b8a8a;
-    filter:alpha(opacity=80);
-    -moz-opacity:0.8;
-    -khtml-opacity: 0.8;
-    opacity: 0.8;
+#deploy-form {
+	margin: 15px;
 }
 
-.devices_list ul{
-    background-color:#989898;
-    
+#deploy-form .field {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 20px;
 }
 
-.devices_list ul li{
-    height:27px;
-    line-height:27px;
-    border-bottom: 1px solid #E3E3E3;
-    border-top: 1px solid #8b8a8a;
-    list-style-type: none;
-    width: 190px;
-    
+#deploy-form .field .advanced {
+	display: block;
+	margin-top: 5px;
 }
 
-.devices_list ul li a{
-    float: left;
-    display:block;
-    color: #464747;
-    width: 150px;
-    height: 27px;
-    padding-left: 35px;
-    color: #474747;
-    text-decoration: none;
-    background-color:#989898;
-    border-right: 1px solid #7a7a7a;
-    
-    
+#deploy-servers-wrapper {
+	border: 1px solid;
 }
 
-.devices_list ul li a:hover{
-    background-color:#bebebe;
+#deploy-servers-wrapper legend {
+	margin-left: 15px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+#deploy-servers {
+	margin: 15px;
+}
+
+#deploy-servers .servers-header {
+	text-align: center;
+}
+
+#deploy-servers .servers-header .server-column {
+	border-right: 1px solid;
+}
+
+#deploy-servers .servers-header .server\.actions {
+	border-right: 0px;
+}
+
+.server-column {
+	display: inline-block;
+	width: 19.5%;
 }

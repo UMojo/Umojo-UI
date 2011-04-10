@@ -1,0 +1,11 @@
+<div id='server_${server.id}' class="server">
+	<span class="server-column server.name">${server.name}</span>
+	<span class="server-column server.ip">${server.ip}</span>
+	<span class="server-column server.distro">${server.distro}</span>
+	<span class="server-column server.roles">${server.roles}</span>
+	<span class="server-column server.actions">
+		{{each(i, action) server.actions}}
+			<a href="javascript:" name="${action}" class="action">${action}</a>
+		{{/each}}
+	</span>
+</div>

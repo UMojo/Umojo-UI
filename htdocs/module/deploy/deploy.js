@@ -4,12 +4,13 @@ winkstart.module('deploy', {
 		],
 				
 		templates: {
-			deploy: 'deploy.html'
+			deploy: 'deploy.html',
+			form: 'tmpl/form.html',
+			server: 'tmpl/server.html'
 		},
 		
 		subscribe: {
 			'deploy.activate' : 'activate',
-			'deploy.list-panel-click' : 'viewDevices'
 		},
 		resources: {
 			"deploy.list": {url: CROSSBAR_REST_API_ENDPOINT + '/deploy', dataType: 'json', type: 'GET'},        
@@ -28,10 +29,37 @@ winkstart.module('deploy', {
 			var THIS = this;
 			$('#ws-content').empty();
         			
-			this.templates.deploy.tmpl({}).appendTo( $('#ws-content') );
-        		winkstart.registerResources(this.config.resources);
+			THIS.templates.deploy.tmpl({}).appendTo( $('#ws-content') );
+			THIS.templates.form.tmpl({}).appendTo( $('#deploy-form') );
+        		winkstart.registerResources(THIS.config.resources);
          	
-			winkstart.publish('layout.updateLoadedModule', {label: 'Deploy', module: this.__module});         	
+			winkstart.publish('layout.updateLoadedModule', {label: 'Deployment Tool - v0.02', module: THIS.__module});         	
+
+			$('#deploy-form .field .submit').click( function(){ THIS.deploy(); } );
+		},
+		deploy: function() {
+			var THIS = this;
+
+			THIS.add_server();
+		},
+		add_server: function(clear_form) {
+			var THIS = this,
+			    new_server = {
+			    			server: {
+								id: 1,
+								name: $('#deploy-form .name .data').val(),
+								ip: $('#deploy-form .ip .data').val(),
+					   	     		distro: $('#deploy-form .distro .data').val(),
+					   	     		roles: 'Vermilion',
+					   	     		actions: ['Edit', 'Delete'] 
+							} 
+					 };
+			
+			if(!clear_form) {
+				$('#deploy-form .field .data').val('');
+			}
+
+			THIS.templates.server.tmpl(new_server).appendTo( $('#deploy-servers .servers') );
 		}
 	}
 );
