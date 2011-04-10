@@ -84,7 +84,6 @@ winkstart.module('account', {
 	            //Build us some searchable list panel
 	            $(".listpanel").listpanel(options);
             });
-         	
 		}
 	}
 );
