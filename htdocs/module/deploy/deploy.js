@@ -35,13 +35,16 @@ winkstart.module('deploy', {
          	
 			winkstart.publish('layout.updateLoadedModule', {label: 'Deployment Tool - v0.02', module: THIS.__module});         	
 
-			$('#deploy-form .field .submit').click( function(){ THIS.deploy(); } );
+			$('#deploy-form .submit .button').click( function(){ THIS.deploy(); } );
+			$('#deploy-form .advanced .action').click( function(){ THIS.toggle_advanced_menu(); } );
 		},
+
 		deploy: function() {
 			var THIS = this;
 
 			THIS.add_server();
 		},
+
 		add_server: function(clear_form) {
 			var THIS = this,
 			    new_server = {
@@ -60,6 +63,12 @@ winkstart.module('deploy', {
 			}
 
 			THIS.templates.server.tmpl(new_server).appendTo( $('#deploy-servers .servers') );
+		},
+
+		toggle_advanced_menu: function() {
+			var THIS = this;
+
+			$('#deploy-form .advanced .menu').slideToggle();
 		}
 	}
 );

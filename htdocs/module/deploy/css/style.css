@@ -3,6 +3,7 @@
 }
 
 #deploy-form {
+	text-align: center;
 	margin: 15px;
 }
 
@@ -12,9 +13,29 @@
 	margin-right: 20px;
 }
 
-#deploy-form .field .advanced {
-	display: block;
+#deploy-form .submit {
+	margin-right: 0px;
+}
+
+#deploy-form .advanced-wrapper {
+	text-align: right;
 	margin-top: 5px;
+	height: 20px;
+}
+
+#deploy-form .advanced-wrapper .advanced {
+	margin-right: 18px;
+}
+
+#deploy-form .advanced-wrapper .advanced .menu {
+	display: none;
+	text-align: left;
+	border: 1px solid #FFFFFF;
+	background: #838383;
+	position: relative;
+	width: 200px;
+	height: 100px;
+	z-index: 100;
 }
 
 #deploy-servers-wrapper {
@@ -36,7 +57,7 @@
 }
 
 #deploy-servers .servers-header .server-column {
-	border-right: 1px solid;
+	border-right: 1px solid #FFFFFF;
 }
 
 #deploy-servers .servers-header .server\.actions {
