@@ -110,5 +110,4 @@
 		});
 	});
 
-})(	window.winkstart = window.winkstart || {},
-	window.amplify = window.amplify || {});
+})(	window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {});

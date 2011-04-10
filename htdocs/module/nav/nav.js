@@ -5,6 +5,7 @@ winkstart.module('nav', {
 		],
 				
 		templates: {
+			nav: 'nav.html',
 			item: 'item.html',
 			subItem: 'subItem.html'
 		},
@@ -13,90 +14,52 @@ winkstart.module('nav', {
 			'nav.add'    : 'add',
 			'nav.remove' : 'remove'
 		}
+		
 	},
 	function(args) {
-		this.navEl = $('<ul id="topnav"></ul>').appendTo(args.parent);
+		
+		this.templates.nav.tmpl({}).appendTo( $('#ws-nav') );
+		
+		var show = function() {
+			var menu = $('#ws-nav');
+			menu.find(".actions").slideDown();
+		}
+		  
+		var hide = function () { 
+			var menu = $('#ws-nav');
+			menu.find(".actions").slideUp();
+		}
+		 
+		$('#ws-nav').hoverIntent({
+			sensitivity: 1, // number = sensitivity threshold (must be 1 or higher)
+			interval: 50,   // number = milliseconds for onMouseOver polling interval
+			over: show,     // function = onMouseOver callback (required)
+			timeout: 300,   // number = milliseconds delay before onMouseOut
+			out: hide       // function = onMouseOut callback (required)
+		});
+
 		var THIS = this;
-		this.navEl.delegate('[data-action]', 'click', function() {
-			// This is hacking
+		
+		// Set up the Module Click handlers
+		$('.subnav-row div div ul').delegate('[data-action]', 'click', function() {
 			var params = { module: $(this).attr('data-module') };
 			THIS[$(this).attr('data-action')].call(THIS, params);
+			hide();
 			return false;
 		});
 	},
 	{	
-		reg: function(){
-			
-			function megaHoverOver(){
-				$(this).find(".sub").stop().fadeTo('fast', 1).show();
-					
-				//Calculate width of all ul's
-				(function($) { 
-					jQuery.fn.calcSubWidth = function() {
-						rowWidth = 0;
-						//Calculate row
-						$(this).find("ul").each(function() {					
-							rowWidth += $(this).width(); 
-						});	
-					};
-				})(jQuery); 
-				
-				if ( $(this).find(".row").length > 0 ) { //If row exists...
-					var biggestRow = 0;	
-					//Calculate each row
-					$(this).find(".row").each(function() {							   
-						$(this).calcSubWidth();
-						//Find biggest row
-						if(rowWidth > biggestRow) {
-							biggestRow = rowWidth;
-						}
-					});
-					//Set width
-					$(this).find(".sub").css({'width' :biggestRow});
-					$(this).find(".row:last").css({'margin':'0'});
-					
-				} else { //If row does not exist...
-					
-					$(this).calcSubWidth();
-					//Set Width
-					$(this).find(".sub").css({'width' : rowWidth});
-					
-				}
-			}
-			
-			function megaHoverOut(){ 
-			  $(this).find(".sub").stop().fadeTo('fast', 0, function() {
-				  $(this).hide(); 
-			  });
-			}
-		
-		
-			var config = {    
-				 sensitivity: 2, // number = sensitivity threshold (must be 1 or higher)    
-				 interval: 100, // number = milliseconds for onMouseOver polling interval    
-				 over: megaHoverOver, // function = onMouseOver callback (REQUIRED)    
-				 timeout: 500, // number = milliseconds delay before onMouseOut    
-				 out: megaHoverOut // function = onMouseOut callback (REQUIRED)    
-			};
-		
-			$("ul#topnav li .sub").css({'opacity':'0'});
-			$("ul#topnav li").hoverIntent(config);
-
-		},
 		add: function(data) {
-			var item = $.extend({ module: '', label: '', sub: []}, data || {});
 			
-			if(item.sub.length > 0){
-				this.templates.subItem.tmpl(item).appendTo(this.navEl);
-			} else {
-				this.templates.item.tmpl(item).appendTo(this.navEl);
-			}
+			var item = $.extend({nav_category: 'category-1', module: '', label: '', sub: []}, data || {});
 			
-			this.reg();
+			var list_node = $('#'+item.nav_category).find('ul');			
+			this.templates.item.tmpl(item).appendTo(list_node);
 		},
 		
 		activate: function(data) {
 			winkstart.publish( data.module + '.activate', { target: $('#ws-content') });
+			//this.templates.account.tmpl({}).appendTo( $('#ws-content') );
 		}
 	}
 );

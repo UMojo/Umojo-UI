@@ -17,32 +17,7 @@ winkstart.module('media', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { 
-			module: this.__module, 
-			label: 'MEDIA', 
-			sub: [
-				{
-					title: 'Sub Nav 1',
-					links: [
-						{ module: this.__module, label: 'Devices'},
-						{ module: this.__module, label: 'Ring Group'},
-						{ module: this.__module, label: 'Call Flow'},
-						{ module: this.__module, label: 'Conferences'},
-						{ module: this.__module, label: 'Feature Codes'}
-					]
-				},
-				{
-					title: 'Sub Nav 1',
-					links: [
-						{ module: this.__module, label: 'Devices'},
-						{ module: this.__module, label: 'Ring Group'},
-						{ module: this.__module, label: 'Call Flow'},
-						{ module: this.__module, label: 'Conferences'},
-						{ module: this.__module, label: 'Feature Codes'}
-					]
-				}
-			]
-		});
+		winkstart.publish('nav.add', { module: this.__module, label: 'Media Manager', nav_category: 'category-3'});
 	},
 	{	
 		viewMedia: function(media_data){
