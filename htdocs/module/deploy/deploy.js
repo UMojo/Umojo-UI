@@ -18,11 +18,6 @@ winkstart.module('deploy', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { 
-			module: this.__module, 
-			label: 'DEPLOY', 
-			sub: []
-		});
 	},
 	{	
 		activate: function(data) {
