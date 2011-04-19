@@ -56,7 +56,17 @@
 	text-align: center;
 }
 
+#deploy-servers .servers {
+	text-align: center;
+}
+
+#deploy-servers .server-column {
+	display: inline-block;
+	width: 19.5%;
+}
+
 #deploy-servers .servers-header .server-column {
+	font-weight: bold;
 	border-right: 1px solid #FFFFFF;
 }
 
@@ -64,7 +74,16 @@
 	border-right: 0px;
 }
 
-.server-column {
-	display: inline-block;
-	width: 19.5%;
+#deploy-servers .servers .server-column {
+	text-align: left;
+	margin-right: 1px;
+}
+
+#deploy-servers .servers .server\.actions {
+	text-align: center;
+	margin-right: 0px;
+}
+
+#deploy-servers .servers .server-column .data {
+	margin-left: 10px;
 }

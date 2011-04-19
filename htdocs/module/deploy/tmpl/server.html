@@ -1,11 +1,14 @@
-<div id='server_${server.id}' class="server">
-	<span class="server-column server.name">${server.name}</span>
-	<span class="server-column server.ip">${server.ip}</span>
-	<span class="server-column server.distro">${server.distro}</span>
-	<span class="server-column server.roles">${server.roles}</span>
-	<span class="server-column server.actions">
-		{{each(i, action) server.actions}}
-			<a href="javascript:" name="${action}" class="action">${action}</a>
-		{{/each}}
-	</span>
+<div>
+	<div id='server_${server.id}' class="server">
+		<span class="server-column server.name"><span class="data">${server.name}</span></span>
+		<span class="server-column server.ip"><span class="data">${server.ip}i</span></span>
+		<span class="server-column server.distro"><span class="data">${server.distro}</span></span>
+		<span class="server-column server.roles"><span class="data">${server.roles}</span></span>
+		<span class="server-column server.actions">
+			{{each(i, action) server.actions}}
+				{{if i}} | {{/if}}
+				<a href="javascript:" name="${action}" class="action">${action}</a>
+			{{/each}}
+		</span>
+	</div>
 </div>

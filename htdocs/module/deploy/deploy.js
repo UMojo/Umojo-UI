@@ -32,6 +32,11 @@ winkstart.module('deploy', {
 
 			$('#deploy-form .submit .button').click( function(){ THIS.deploy(); } );
 			$('#deploy-form .advanced .action').click( function(){ THIS.toggle_advanced_menu(); } );
+			$('#deploy-servers .server .action').live('click', function(){ 
+				if($(this).attr('name') == 'Delete') {
+					THIS.delete_server($(this).parents('.server'));
+				}
+			});
 		},
 
 		deploy: function() {
@@ -58,6 +63,12 @@ winkstart.module('deploy', {
 			}
 
 			THIS.templates.server.tmpl(new_server).appendTo( $('#deploy-servers .servers') );
+		},
+
+		delete_server: function($server) {
+			var THIS = this;
+
+			$server.remove();
 		},
 
 		toggle_advanced_menu: function() {
