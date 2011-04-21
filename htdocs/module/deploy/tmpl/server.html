@@ -4,11 +4,6 @@
 		<span class="server-column server.ip"><span class="data">${server.ip}i</span></span>
 		<span class="server-column server.distro"><span class="data">${server.distro}</span></span>
 		<span class="server-column server.roles"><span class="data">${server.roles}</span></span>
-		<span class="server-column server.actions">
-			{{each(i, action) server.actions}}
-				{{if i}} | {{/if}}
-				<a href="javascript:" name="${action}" class="action">${action}</a>
-			{{/each}}
-		</span>
+		<span class="server-column server.actions">${server.status}</span>
 	</div>
 </div>

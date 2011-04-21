@@ -6,6 +6,7 @@ winkstart.module('deploy', {
 		templates: {
 			deploy: 'deploy.html',
 			form: 'tmpl/form.html',
+			advform: 'tmpl/advform.html',
 			server: 'tmpl/server.html'
 		},
 		
@@ -13,8 +14,8 @@ winkstart.module('deploy', {
 			'deploy.activate' : 'activate',
 		},
 		resources: {
-			"deploy.list": {url: CROSSBAR_REST_API_ENDPOINT + '/deploy', dataType: 'json', type: 'GET'},        
-			"deploy.get": {url: CROSSBAR_REST_API_ENDPOINT + '/deploy/{id}', dataType: 'json', type: 'GET'}        
+			"deploy.list": {url: CROSSBAR_REST_API_ENDPOINT + '/servers', dataType: 'json', type: 'GET'},        
+			"deploy.get": {url: CROSSBAR_REST_API_ENDPOINT + '/servers/{id}', dataType: 'json', type: 'GET'}        
 		}
 	},
 	function(args) {
@@ -26,6 +27,7 @@ winkstart.module('deploy', {
         			
 			THIS.templates.deploy.tmpl({}).appendTo( $('#ws-content') );
 			THIS.templates.form.tmpl({}).appendTo( $('#deploy-form') );
+			THIS.templates.advform.tmpl({}).appendTo( $('#deploy-form .advanced .menu') );
         		winkstart.registerResources(THIS.config.resources);
          	
 			winkstart.publish('layout.updateLoadedModule', {label: 'Deployment Tool - v0.02', module: THIS.__module});         	

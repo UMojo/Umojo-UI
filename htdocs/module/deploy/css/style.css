@@ -7,6 +7,10 @@
 	margin: 15px;
 }
 
+#deploy-form label {
+	font-weight: bold;
+}
+
 #deploy-form .field {
 	display: inline-block;
 	vertical-align: top;
@@ -33,9 +37,18 @@
 	border: 1px solid #FFFFFF;
 	background: #838383;
 	position: relative;
-	width: 200px;
-	height: 100px;
+	/*width: 200px;
+	height: 100px;*/
 	z-index: 100;
+}
+
+#deploy-form .advanced .field {
+	margin: 5px;
+	vertical-align: middle;
+}
+
+#deploy-form .advanced .field .checkbox-field {
+	display: block;
 }
 
 #deploy-servers-wrapper {
@@ -70,7 +83,7 @@
 	border-right: 1px solid #FFFFFF;
 }
 
-#deploy-servers .servers-header .server\.actions {
+#deploy-servers .servers-header .server\.status {
 	border-right: 0px;
 }
 
@@ -79,7 +92,7 @@
 	margin-right: 1px;
 }
 
-#deploy-servers .servers .server\.actions {
+#deploy-servers .servers .server\.status {
 	text-align: center;
 	margin-right: 0px;
 }
