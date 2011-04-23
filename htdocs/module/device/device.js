@@ -74,11 +74,7 @@ winkstart.module('device', {
 					return 'dfdsfdsds';	
 				}
 				
-				THIS.templates.editDevice.tmpl(form_data, {
-					getLanguages: function(){
-						return 'fdfdfds';
-					}
-				}).appendTo( $('#device-view') );
+				THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
 				
 				winkstart.cleanForm();
 			

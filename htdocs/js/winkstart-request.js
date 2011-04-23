@@ -13,7 +13,6 @@
 				dataType: resource.dataType,
 				type: resource.httpMethod,
 				accepts: "application/json",
-				contentType: "application/json",
 				beforeSend: function(jqXHR, settings){
 					jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken());		
 				}
@@ -61,6 +60,7 @@
 	winkstart.putJSON = function(resource_name, params, callback){
 		var norm_params = (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params );
 		norm_params.verb = 'put';
+		norm_params.json_string = JSON.stringify(norm_params);
 		
 		amplify.request( resource_name, norm_params, function( data, xhr ) {
 			callback(data, xhr);
