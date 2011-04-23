@@ -28,13 +28,14 @@
             publisher: function(){},
             notifyMethod: ''
         },
+        
         _create: function() {
-        	
         	this.id = this.element.attr("id");
-            this.element.hide();
-            
-            
-            /*
+        },
+        
+        _init: function(){
+        	this.element.empty();
+        	/*
 				<div class="list_panel">
 	            	<div class="add_flow"><a class="plus_btn" href="#"></a><p>NEW $ENTITY</p></div>
 	                
@@ -60,7 +61,7 @@
 				</div>
              */
             
-            this.pane_wrapper = $('<div class="left_side_bar"></div>').insertAfter(this.element);
+            this.pane_wrapper = $('<div class="left_side_bar"></div>').appendTo(this.element);
             
             this.flow_div = $('<div class="add_flow"><a class="plus_btn" href="#"></a><p>'+ this.options.new_entity_label +'</p></div>').appendTo(this.pane_wrapper);
             
@@ -96,12 +97,17 @@
             $(function(){
                 $('.list-panel-anchor').jScrollPane();
             });
-           
         },
+        
         destroy: function() {
-            this.element.show();
-            this.pane_wrapper.remove();
-
+            this.element
+				.removeClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-valuemin" )
+				.removeAttr( "aria-valuemax" )
+				.removeAttr( "aria-valuenow" );
+	
+			this.pane_wrapper.remove();
             $.Widget.prototype.destroy.apply(this, arguments);
         },
         

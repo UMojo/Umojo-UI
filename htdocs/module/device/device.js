@@ -38,6 +38,7 @@ winkstart.module('device', {
 		
 		createDevice: function(){
 			$('#device-view').empty();
+			var THIS = this;
 			
 			this.templates.createDevice.tmpl({}).appendTo( $('#device-view') );
 			winkstart.cleanForm();
@@ -56,7 +57,9 @@ winkstart.module('device', {
 				put_data.data = formData;
 				
 				winkstart.putJSON('device.create', put_data, function (json, xhr) {
-					winkstart.log(json);	
+					THIS.buildListView();
+					THIS.viewDevice({id: json.id});	
+					
 				});
 				
 				return false;
@@ -96,6 +99,7 @@ winkstart.module('device', {
 					post_data.device_id = device_id;
 					
 					winkstart.postJSON('device.update', post_data, function (json, xhr) {
+						THIS.buildListView();
 						THIS.viewDevice({id: device_id});	
 					});
 					
@@ -121,17 +125,23 @@ winkstart.module('device', {
          		}
          	});
          	
-         	winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+         	THIS.buildListView();
+		},
+		
+		buildListView: function(){
+			var THIS = this;
+			
+			winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
 
-         		//List Data that would be sent back from server
-            	function map_crossbar_data(crossbar_data){
-            		var new_list = [];
-            		_.each(crossbar_data, function(elem){
-            			new_list.push({id: elem.id, title: elem.name});
-            		});
-            		return new_list;
-            	};
-            	            	
+	     		//List Data that would be sent back from server
+	        	function map_crossbar_data(crossbar_data){
+	        		var new_list = [];
+	        		_.each(crossbar_data, function(elem){
+	        			new_list.push({id: elem.id, title: elem.name});
+	        		});
+	        		return new_list;
+	        	};
+	        	            	
 				var options = {};
 	            options.label = 'Device Module';
 	            options.identifier = 'device-module-listview';
@@ -141,9 +151,10 @@ winkstart.module('device', {
 	            options.notifyMethod = 'device.list-panel-click';
 	            options.notifyCreateMethod = 'device.create-device';
 	
-	            //Build us some searchable list panel
-	            $(".listpanel").listpanel(options);
-            });
+	            $("#device-listpanel").empty();
+	            $("#device-listpanel").listpanel(options);
+	            
+	        });	
 		}
 	}
 );
