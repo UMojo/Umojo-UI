@@ -14,8 +14,7 @@ winkstart.module('account', {
 		},
 		
 		resources: {
-			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts', dataType: 'json', httpMethod: 'GET'},        
-			"accounts.get": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}', dataType: 'json', httpMethod: 'GET'}        
+			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/children', dataType: 'json', httpMethod: 'GET'}        
 		}
 	},
 	function(args) {
@@ -37,9 +36,11 @@ winkstart.module('account', {
          	
          	winkstart.publish('layout.updateLoadedModule', {label: 'Account Management', module: this.__module});
          	
-         	winkstart.getJSON('accounts.list', {crossbar: true}, function (json) {
+         	winkstart.getJSON('accounts.list', {crossbar: true, id: MASTER_ACCOUNT_ID}, function (json, xhr) {
             	//List Data that would be sent back from server
 	            
+            	var headers = xhr.getAllResponseHeaders();
+            	
             	function map_crossbar_data(crossbar_data){
             		var new_list = [];
             		_.each(crossbar_data, function(elem){

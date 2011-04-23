@@ -81,9 +81,10 @@
             
             // init lists
             this._populateLists(this.options.data);
-
+            
             //set up click events
-            this._registerClickEvents(this.listContainer.find('li'));
+            this._registerViewEvents(this.listContainer.find('li'));
+            this._registerAddEvents(this.flow_div.find('.plus_btn'));
 
             // set up livesearch
             if (this.options.searchable) {
@@ -165,12 +166,20 @@
             */
         },
 
-        _registerClickEvents: function(elements) {
+        _registerViewEvents: function(elements) {
             var self = this;
         	elements.click(function(){
             	self.options.publisher(self.options.notifyMethod, $.data(this, 'data'));
                 return false;
             });
+        },
+        
+        _registerAddEvents: function(elements) {
+        	var self = this;
+        	elements.click(function(){
+        		self.options.publisher(self.options.notifyCreateMethod, {});
+        		return false;
+        	});
         },
         
         _registerSearchEvents: function(input) {

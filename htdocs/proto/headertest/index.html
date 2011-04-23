@@ -13,27 +13,24 @@
 <script src="/js/amplify/amplify.js" type="text/javascript"></script>
 <script src="/js/amplify/amplify.request.js" type="text/javascript"></script>
 <script src="/js/winkstart-request.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 
-	var resources =  {
-        "test.get": {url: 'http://ben.winkstart/proto/jsonp/server.php', dataType: 'json', httpMethod: 'GET'},        
-        "test.post": {url: 'http://ben.winkstart/proto/jsonp/server.php', dataType: 'json', httpMethod: 'POST'}        
+    var resources =  {
+        "test": {url: '/proto/headertest/server2.php', dataType: 'json', httpMethod: 'GET'}        
     };
     
     winkstart.registerResources(resources);
     
-    winkstart.getJSON('test.get', {}, function (json, xhr) {
-        console.log('GET Test');
+    winkstart.getJSON('test', {}, function (json) {
+        console.log('Header Redirect Test');
         console.log(json);
     });
     
-    winkstart.postJSON('test.post', {}, function (json, xhr) {
-        console.log('POST Test');
-        console.log(json);
-    });
-	
-    </script>
+</script>
+
 </head>
+
 <body>
 
 </body>

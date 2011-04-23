@@ -51,7 +51,7 @@ winkstart.module('nav', {
 	{	
 		add: function(data) {
 			
-			var item = $.extend({nav_category: 'category-1', module: '', label: '', sub: []}, data || {});
+			var item = $.extend({nav_category: 'category-1', module: '', label: ''}, data || {});
 			
 			var list_node = $('#'+item.nav_category).find('ul');			
 			this.templates.item.tmpl(item).appendTo(list_node);

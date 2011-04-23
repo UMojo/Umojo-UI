@@ -13,7 +13,6 @@
 			$.each(this.config.templates, function(name, url) {
 				completed++;
 				$.get('module/' + THIS.__module + '/' + url, function(template) {
-					console.log('Loaded template ' + name + ' at ' + url);
 					completed--;
 					THIS.templates[name] = $(template);
 				}, 'html');
@@ -23,7 +22,6 @@
 			$.each(this.config.requires, function(k, module) {
 				completed++;
 				amplify.module.load(module, function() {
-					console.log('Loaded module: ' + module);
 					completed--;
 				});
 			});
@@ -35,9 +33,7 @@
 				}
 				css = 'module/' + THIS.__module + '/' + css;
 				//completed++;
-				console.log('Loading css: ' + css);
 				$('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
-					console.log('CSS Loaded');
 					//completed--;
 				}).appendTo('head');
 			});
@@ -57,7 +53,6 @@
 		}, 3000);
 		
 		(function() {
-			console.log('completed: ' + completed);
 			if ( completed == 0 ) {
 				if ( $.isFunction(callback) ) {
 					callback();
@@ -75,13 +70,16 @@
 		
 		// Create an instance of the core module
 		this.init(function() {
-			console.log('Core loaded, loading layout');
 			
 			// First thing we're going to do is go through is load our layout
 			winkstart.module.load('layout', function() {
 				this.init({ parent: $('body') }, function() {
-					console.log('Layout initialized');
 					
+					//Bootstrap some form data
+					$.getJSON('endpoint/form/data.json', function(data){
+						amplify.store('form_data', data);
+					});
+
 					winkstart.module.load('account', function() {
 						this.init();
 					});
@@ -101,6 +99,18 @@
 					winkstart.module.load('provisioner', function() {
 	                    this.init();
                     });
+					
+					winkstart.module.load('device', function() {
+						this.init();
+					});
+
+					winkstart.module.load('autoattendant', function() {
+						this.init();
+					});
+
+					winkstart.module.load('resource', function() {
+						this.init();
+					});
                     
 					winkstart.module.load('callflow', function() {
 	                    this.init();

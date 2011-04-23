@@ -1,0 +1,17 @@
+{
+    "modules": {
+        "device": {
+            "actions": {
+                "editDevice": {
+                    "media": {
+                        "codecs": [
+                            "PCMU",
+                            "TEST",
+                            "TEST2" 
+                        ] 
+                    } 
+                } 
+            } 
+        } 
+    }
+}

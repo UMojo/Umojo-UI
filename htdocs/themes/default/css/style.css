@@ -176,6 +176,9 @@ body {
     float: left;
     width: 832px;
 }
+.inner {
+    padding: 10px;	
+}
 
 /*******************************
 ----REMOVE & SAVE BUTTONS-----

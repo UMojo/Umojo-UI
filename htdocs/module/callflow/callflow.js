@@ -1,45 +1,55 @@
 winkstart.module('callflow',
    {
-      css: [
-         'css/style.css',
-         'css/callflow.css'
-      ],
+		css: [
+			'css/style.css',
+			'css/callflow.css'
+		],
 
-      templates: {
-         callflow: 'tmpl/callflow.html',
-         branch: 'tmpl/branch.html',
-         tools: 'tmpl/tools.html',
-         root: 'tmpl/root.html',
-         node: 'tmpl/node.html',
-         iframe: 'tmpl/iframe.html'
-      },
+		templates: {
+			callflow: 'tmpl/callflow.html',
+			branch: 'tmpl/branch.html',
+			tools: 'tmpl/tools.html',
+			root: 'tmpl/root.html',
+			node: 'tmpl/node.html',
+			iframe: 'tmpl/iframe.html'
+		},
 
-      elements: {
-         flow: '#ws_cf_flow',
-         tools: '#ws_cf_tools',
-         save: '#ws_cf_save',
-         buf: '#ws_cf_buf'
-      },
+		elements: {
+			flow: '#ws_cf_flow',
+			tools: '#ws_cf_tools',
+			save: '#ws_cf_save',
+			buf: '#ws_cf_buf'
+		},
 
-      json: { // uris to json data
-          actions: 'module/callflow/actions.json',
-          categories: 'module/callflow/categories.json'
-      },
+		json: { // uris to json data
+			actions: 'module/callflow/actions.json',
+			categories: 'module/callflow/categories.json'
+		},
+      
+		resources: {
+			"callflow.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/callflows', dataType: 'json', httpMethod: 'GET'}        
+		},
 
-      popup: 'module/callflow/app/',
+		popup: 'module/callflow/app/',
 
-      subscribe: {
+		subscribe: {
          'callflow.activate' : 'activate'
-      }
-   },
-   function (args) {
-      winkstart.publish('nav.add', { module: this.__module, label: 'Callflow Manager', nav_category: 'category-3'});
-   },
-   {
-      activate: function (args) {
-         var THIS = this, count = 1,
-             tryRun = function ( ) { count--; if (count == 0) THIS._activate(args); };
-         count++;
+		}
+	},
+	function (args) {
+		winkstart.publish('nav.add', { module: this.__module, label: 'Callflow Manager', nav_category: 'category-3'});
+	},
+	{
+		activate: function (args) {
+        
+			winkstart.registerResources(this.config.resources);
+	   	
+			var THIS = this, count = 1,
+				tryRun = function ( ) { count--; if (count == 0) THIS._activate(args); };
+			count++;
+         
+         
+         
          $.getJSON(this.config.json.actions, function (data) {
             var popups = { };
             for (var i in data) {
@@ -52,6 +62,9 @@ winkstart.module('callflow',
             THIS.actions = data;
             tryRun();
          });
+         
+         
+         
          count++;
          $.getJSON(this.config.json.categories, function (data) {
             THIS.categories = data;
@@ -95,7 +108,8 @@ winkstart.module('callflow',
             this.children = new Array();
             this.data = {};                 // data caried by the node
 
-            // returns a list of potential child actions that can be added to the branch
+            // returns a list of potential child actions that can be added to
+			// the branch
             this.potentialChildren = function () {
                var list = [];
 
@@ -192,7 +206,7 @@ winkstart.module('callflow',
 
 
 
-// FLOW /////////////////////////////////////////////////////////////////
+// FLOW // ///////////////////////////////////////////////////////////////
       _renderFlow: function () {
          var THIS = this;
          this._formatFlow();
@@ -279,7 +293,7 @@ winkstart.module('callflow',
       },
 
 
-// TOOL BAR /////////////////////////////////////////////////////////////
+// TOOL BAR // ///////////////////////////////////////////////////////////
       _renderTools: function () {
          var THIS = this;
          var buf = $(this.config.elements.buf);
@@ -297,7 +311,7 @@ winkstart.module('callflow',
             }
          });
 
-//         tools.find('.category').click();
+// tools.find('.category').click();
 
          tools.find('.tool').hover(function () {$(this).addClass('active');}, function () {$(this).removeClass('active');})
 
@@ -328,7 +342,7 @@ winkstart.module('callflow',
          return tools;
       },
 
-// DESTINATION POINTS ///////////////////////////////////////
+// DESTINATION POINTS // /////////////////////////////////////
       _enableDestinations: function (el) {
          var THIS = this;
 
@@ -367,7 +381,7 @@ winkstart.module('callflow',
 
          alert(JSON.stringify(cf));
 
-         //POSTING THE DATA SHOULD BE HERE....
+         // POSTING THE DATA SHOULD BE HERE....
       },
 
 /*****************************************************************************

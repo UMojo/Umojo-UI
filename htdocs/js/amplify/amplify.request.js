@@ -74,9 +74,10 @@ amplify.request.types.ajax = function( defnSettings ) {
 		ajaxSettings = {
 			url: url,
 			type: defnSettings.type,
-			data: data,
-			headers: defnSettings.headers,
+			data: (jQuery.inArray(data, 'json_string') ? data.json_string : data ),
+			contentType: defnSettings.contentType,
 			dataType: defnSettings.dataType,
+			beforeSend: ($.isFunction(defnSettings.beforeSend) ? defnSettings.beforeSend : function(){}), 
 			success: settings.success,
 			error: settings.error
 		};

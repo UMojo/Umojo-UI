@@ -691,7 +691,6 @@ amplify.module = function(module, config, construct, methods) {
 				$.extend(base, module.methods);
 				if ( amplify.module.constructor ) {
 					amplify.module.constructor.call(base, args, function() {
-						console.log('Calling module construct: ' + m);
 						module.construct.call(base, args);
 						if ( $.isFunction(callback) ) {
 							callback();
@@ -701,11 +700,8 @@ amplify.module = function(module, config, construct, methods) {
 				return base;
 			} else {
 				var _c = arguments.callee, _t = this, _a = arguments;
-				console.log('Loading module: ' + m);
 				amplify.module.load(m, function() {
-					console.log('Module ' + m + ' loaded...');
 					if ( !modules[m] ) {
-						console.log('Module ' + m + ' failed to load');
 					} else {
 						_c.apply(_t, _a);
 					}
