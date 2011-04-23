@@ -108,14 +108,14 @@ body {
 }
 
 .winkstart-subnav {
-    width: 100%;
+    width: 1020px;
     height: 115px;
     z-index: 2;
     position: absolute;
     top: 32;
     left: 0;
     margin: 0px;
-    padding: 0px;
+    padding: 1px;
 }
 
 .subnav-row {
