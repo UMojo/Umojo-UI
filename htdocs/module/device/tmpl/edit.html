@@ -8,7 +8,7 @@
                 <ul class="controls">
                     <li>
                         <label for="name">Name</label>
-                        <input id="name" name="base.name" type="text" value="${data.name}" />
+                        <input id="name" name="name" type="text" value="${data.name}" />
                     </li>
                     <li>
                         <label for="status">Status</label>
@@ -71,7 +71,6 @@
                     
 					{{each form_lookup_data.media.codecs}}
 					<li>
-					${$item.getLanguages()}
 					<label for="media_codecs">${this}</label>
 					<input type="checkbox" name="media.codecs[]" id="media_codecs" value="${this}" />
 					</li>
