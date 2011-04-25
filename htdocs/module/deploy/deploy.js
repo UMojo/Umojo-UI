@@ -111,7 +111,6 @@ winkstart.module('deploy', {
 							}
 						},
 						error: function(reply) {
-							console.log(reply);
 							if(typeof on_error == 'function') {
 								on_error(reply);
 							}
