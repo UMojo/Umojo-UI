@@ -18,15 +18,24 @@
 }
 
 #deploy-form .submit {
-	margin-left: 22px;
 	margin-right: 0px;
 }
 
 #deploy-form .advanced-wrapper {
 	text-align: right;
 	margin-top: 5px;
-	margin-right: 20px;
 	height: 20px;
+}
+
+#deploy-form .advanced-wrapper .field {
+	margin: 0px;
+}
+
+#deploy-form .advanced-wrapper .trashcan {
+	float: left;
+}
+
+#deploy-form .advanced-wrapper .advanced {
 }
 
 #deploy-form .advanced-wrapper .advanced .menu {
@@ -97,4 +106,18 @@
 
 #deploy-servers .servers .server-column .data {
 	margin-left: 10px;
+}
+
+#deploy-servers .servers .ui-draggable-dragging {
+	text-align: left;
+	width: 650px;
+	border: 1px solid #FFFFFF;
+}
+
+#deploy-servers .servers .ui-draggable-dragging .server-column {
+	width: 19%;
+}
+
+#deploy-servers .servers .ui-draggable-dragging .server\.status {
+	text-align: right;
 }
