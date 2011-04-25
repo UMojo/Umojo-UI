@@ -162,7 +162,7 @@ winkstart.module('deploy', {
 			    server = {	hostname: THIS.get_input('hostname'),
 					ip: THIS.get_input('ip'),
 					operating_system: THIS.get_input('operating_system'),
-					roles: /*THIS.get_input('roles')*/['role[clientx]', 'role[allinone]'] };
+					roles: /*THIS.get_input('roles')*/['role[allinone]'] };
 
 			if(clear_form) {
 				$('#deploy-form .field .data').val('');
