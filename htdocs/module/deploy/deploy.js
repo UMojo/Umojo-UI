@@ -154,7 +154,7 @@ winkstart.module('deploy', {
 			var THIS = this,
 			    stuff = THIS.cb_envelope('PUT', server);
 
-			THIS.cb_request(stuff, 'servers/' + server.id + '/deploy', on_success, on_error);
+			THIS.cb_request(stuff, 'servers/' + server.id + '/deployment', on_success, on_error);
 		},
 
 		winkstart_submit_action: function(clear_form) {
