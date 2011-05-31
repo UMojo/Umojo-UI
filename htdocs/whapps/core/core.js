@@ -1,5 +1,5 @@
 // This is the server module
-winkstart.module('core', {
+winkstart.module('core', 'core', {
 	},
 	function() {
 		

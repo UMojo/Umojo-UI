@@ -1,4 +1,4 @@
-winkstart.module('nav', {
+winkstart.module('core', 'nav', {
 		// There's only a single css file (this maps to nav.css)
 		css: [
 			'nav.css'

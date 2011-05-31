@@ -12,7 +12,7 @@
 			this.templates = {};
 			$.each(this.config.templates, function(name, url) {
 				completed++;
-				$.get('whapps/' + THIS.__module + '/' + url, function(template) {
+				$.get('whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url, function(template) {
 					completed--;
 					THIS.templates[name] = $(template);
 				}, 'html');
@@ -20,8 +20,9 @@
 		}
 		if ( this.config.requires ) {
 			$.each(this.config.requires, function(k, module) {
+                                winkstart.log('Loading require' + k + module);
 				completed++;
-				amplify.module.load(module, function() {
+				amplify.module.loadPlugin(k, module, function() {
 					completed--;
 				});
 			});
@@ -31,7 +32,7 @@
 				if ( css === true ) {
 					THIS.__module + '.css';
 				}
-				css = 'whapps/' + THIS.__module + '/' + css;
+				css = 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + css;
 				//completed++;
 				$('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
 					//completed--;

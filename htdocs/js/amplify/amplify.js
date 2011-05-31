@@ -661,6 +661,7 @@ amplify.route.watch = function() {
 (function( amplify, $, undefined ) {
 var modules = {};
 amplify.module = function(whapp, module, config, construct, methods) {
+        winkstart.log('Loading WhApp ' + whapp + ' module ' + module);
 	var m = module.toLowerCase();
         var w = whapp.toLowerCase();
 
@@ -690,7 +691,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
 				}
 				
 				// Clone the config
-				var base = { __module: module.module, config: {} };
+				var base = { __module: module.module, __whapp: w, config: {} };
 				$.extend(base.config, module.config);
 				$.extend(base, module.methods);
 				if ( amplify.module.constructor ) {
@@ -704,7 +705,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
 				return base;
 			} else {
 				var _c = arguments.callee, _t = this, _a = arguments;
-				amplify.module.load(w, m, function() {
+				amplify.module.loadPlugin(w, m, function() {
 					if ( !modules[w][m] ) {
 					} else {
 						_c.apply(_t, _a);
