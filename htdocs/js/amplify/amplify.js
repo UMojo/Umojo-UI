@@ -660,13 +660,17 @@ amplify.route.watch = function() {
  */
 (function( amplify, $, undefined ) {
 var modules = {};
-amplify.module = function(module, config, construct, methods) {
+amplify.module = function(whapp, module, config, construct, methods) {
 	var m = module.toLowerCase();
+        var w = whapp.toLowerCase();
 
 	// The module is being defined
 	if ( arguments.length > 1 ) {
-		if ( !modules[m] ) {
-			modules[m] = {
+            if (!modules[w]) {
+                modules[w] = {};
+            }
+		if ( !modules[w][m] ) {
+			modules[w][m] = {
 				module:    module,
 				config:    config,
 				construct: construct,
@@ -677,8 +681,8 @@ amplify.module = function(module, config, construct, methods) {
 	
 	return {
 		init: function(args, callback) {
-			if ( modules[m] ) { 
-				var module = modules[m];
+			if ( modules[w][m] ) {
+				var module = modules[w][m];
 				
 				if ( $.isFunction(args) && !callback ) {
 					callback = args;
@@ -700,8 +704,8 @@ amplify.module = function(module, config, construct, methods) {
 				return base;
 			} else {
 				var _c = arguments.callee, _t = this, _a = arguments;
-				amplify.module.load(m, function() {
-					if ( !modules[m] ) {
+				amplify.module.load(w, m, function() {
+					if ( !modules[w][m] ) {
 					} else {
 						_c.apply(_t, _a);
 					}
@@ -712,11 +716,21 @@ amplify.module = function(module, config, construct, methods) {
 	};
 };
 
-amplify.module.load = function(module, callback) {
-	//$LAB.script('module/' + module + '/' + module + '.js?_=' + (new Date()))
-	$LAB.script('module/' + module + '/' + module + '.js')
+amplify.module.load = function(whapp, callback) {
+    // Cache buster
+	$LAB.script('whapps/' + whapp + '/' + whapp + '.js?_=' + (new Date()))
+	//$LAB.script('whapps/' + whapp + '/' + whapp + '.js')
 		.wait(function() {
-			callback.call( amplify.module(module) );
+			callback.call( amplify.module(whapp, whapp) );
+		});
+};
+
+amplify.module.loadPlugin = function(whapp, module, callback) {
+    // Cache buster
+	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
+	//$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js')
+		.wait(function() {
+			callback.call( amplify.module(whapp, module) );
 		});
 };
 

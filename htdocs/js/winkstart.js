@@ -12,7 +12,7 @@
 			this.templates = {};
 			$.each(this.config.templates, function(name, url) {
 				completed++;
-				$.get('whapp/' + THIS.__module + '/' + url, function(template) {
+				$.get('whapps/' + THIS.__module + '/' + url, function(template) {
 					completed--;
 					THIS.templates[name] = $(template);
 				}, 'html');
@@ -31,7 +31,7 @@
 				if ( css === true ) {
 					THIS.__module + '.css';
 				}
-				css = 'whapp/' + THIS.__module + '/' + css;
+				css = 'whapps/' + THIS.__module + '/' + css;
 				//completed++;
 				$('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
 					//completed--;
@@ -72,11 +72,11 @@
 		this.init(function() {
 			
 			// First thing we're going to do is go through is load our layout
-			winkstart.module.load('layout', function() {
+			winkstart.module.loadPlugin('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					
 					//Bootstrap some form data
-					$.getJSON('endpoint/form/data.json', function(data){
+/*					$.getJSON('endpoint/form/data.json', function(data){
 						amplify.store('form_data', data);
 					});
 
@@ -118,7 +118,7 @@
 
 					winkstart.module.load('deploy', function() {
 	            				this.init();
-                    			});
+                    			});*/
 				});
 			});
 		});
