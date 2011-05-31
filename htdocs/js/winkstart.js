@@ -12,7 +12,7 @@
 			this.templates = {};
 			$.each(this.config.templates, function(name, url) {
 				completed++;
-				$.get('module/' + THIS.__module + '/' + url, function(template) {
+				$.get('whapp/' + THIS.__module + '/' + url, function(template) {
 					completed--;
 					THIS.templates[name] = $(template);
 				}, 'html');
@@ -31,7 +31,7 @@
 				if ( css === true ) {
 					THIS.__module + '.css';
 				}
-				css = 'module/' + THIS.__module + '/' + css;
+				css = 'whapp/' + THIS.__module + '/' + css;
 				//completed++;
 				$('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
 					//completed--;
