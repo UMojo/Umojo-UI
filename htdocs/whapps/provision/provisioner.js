@@ -1,4 +1,4 @@
-winkstart.module('provisioner', {
+winkstart.module('provision', 'provision', {
       css: [
          'css/window.css',
          'css/visual.css'
@@ -18,7 +18,7 @@ winkstart.module('provisioner', {
 /*For temporary select hack*/
          select      : 'tmpl/select.html',
 /**/
-         default     : 'tmpl/default.html'
+         //default     : 'tmpl/default.html'
       },
 
       elements: {
@@ -39,6 +39,9 @@ winkstart.module('provisioner', {
       }
    },
    function (args) {
+       // Loaded - add to nav bar
+        winkstart.publish('appnav.add', { 'name' : 'provision' });
+
       winkstart.publish('nav.add', { module: this.__module, label: 'Provisioner', nav_category: 'category-3'});
    },
    {

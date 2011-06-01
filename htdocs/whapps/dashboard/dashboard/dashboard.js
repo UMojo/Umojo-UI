@@ -1,4 +1,4 @@
-winkstart.module('dashboard', {
+winkstart.module('dashboard', 'dashboard', {
 		templates: {
 			dashboard: 'dashboard.html'
 		},
@@ -8,6 +8,9 @@ winkstart.module('dashboard', {
 		}
 	},
 	function(args) {
+            // Loaded - add to nav bar
+            winkstart.publish('appnav.add', { 'name' : 'dashboard' });
+
 		winkstart.publish('nav.add', { module: this.__module, label: 'Dashboard', nav_category: 'category-3'});
 	},
 	{	

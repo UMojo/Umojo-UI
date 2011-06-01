@@ -1,5 +1,5 @@
 // This is the server module
-winkstart.module('server', {
+winkstart.module('system', 'server', {
 		/*
 		css: ['server.css'],
 		

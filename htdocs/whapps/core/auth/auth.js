@@ -1,4 +1,4 @@
-winkstart.module('auth', {
+winkstart.module('core', 'auth', {
 		session: {
 			authenticated: false,
 			username: '',

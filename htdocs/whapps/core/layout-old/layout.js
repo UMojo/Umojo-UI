@@ -1,4 +1,4 @@
-winkstart.module('layout', {
+winkstart.module('core', 'layout', {
 		css: [
 		      'layout.css'
 		],

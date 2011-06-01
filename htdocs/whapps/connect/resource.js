@@ -1,4 +1,4 @@
-winkstart.module('resource', {
+winkstart.module('connect', 'resource', {
 		css: [
 			'css/style.css'
 		],
