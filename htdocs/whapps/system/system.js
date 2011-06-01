@@ -1,4 +1,4 @@
-winkstart.module('deploy', {
+winkstart.module('systems', 'systems', {
 		css: [
 			'css/style.css'
 		],

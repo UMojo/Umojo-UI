@@ -9,5 +9,8 @@ winkstart.module('voip', 'voip', {
                     this.init();
                 });
         });
+
+        // Loaded - add to nav bar
+        winkstart.publish('appnav.add', 'voip');
     }
 );
