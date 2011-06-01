@@ -718,20 +718,32 @@ amplify.module = function(whapp, module, config, construct, methods) {
 
 amplify.module.load = function(whapp, callback) {
     // Cache buster
+    if (amplify.cache == false) {
 	$LAB.script('whapps/' + whapp + '/' + whapp + '.js?_=' + (new Date()))
-	//$LAB.script('whapps/' + whapp + '/' + whapp + '.js')
 		.wait(function() {
 			callback.call( amplify.module(whapp, whapp) );
 		});
+    } else {
+	$LAB.script('whapps/' + whapp + '/' + whapp + '.js')
+		.wait(function() {
+			callback.call( amplify.module(whapp, whapp) );
+		});
+    }
 };
 
 amplify.module.loadPlugin = function(whapp, module, callback) {
     // Cache buster
+    if (amplify.cache == false) {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
-	//$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js')
 		.wait(function() {
 			callback.call( amplify.module(whapp, module) );
 		});
+    } else {
+	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js')
+		.wait(function() {
+			callback.call( amplify.module(whapp, module) );
+		});
+    }
 };
 
 // This is the method that may be overloaded to change the way in which the module is 
