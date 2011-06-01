@@ -1,10 +1,8 @@
 <div>
         <ul>
-            <li><a href="#">Phone Manager</a></li>
-            <li><a href="#">VoIP Services</a></li>
-            <li><a href="#">System Manager</a></li>
-            <li><a href="#">Connectivity</a> </li>
-            <li><a href="#">Dashboard</a></li>
+            {{each(i, module) modules}}
+                <li><a href="#">${module.name}</a></li>
+            {{/each}}
 
 <!-- TODO: REPLACE WITH LOADED WHIPPS -->
         </ul>

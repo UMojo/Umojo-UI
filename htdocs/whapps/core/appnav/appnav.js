@@ -18,7 +18,7 @@ winkstart.module('core', 'appnav', {
 	},
 	function(args) {
 
-		this.templates.appnav.tmpl({}).appendTo( $('div.header .main_nav') );
+		this.templates.appnav.tmpl({ "modules" : winkstart.modules }).appendTo( $('div.header .main_nav') );
 		
 /*		var show = function() {
 			var menu = $('div.header .main_nav');
@@ -51,10 +51,10 @@ winkstart.module('core', 'appnav', {
 	{	
 		add: function(data) {
 			
-			var item = $.extend({nav_category: 'category-1', module: '', label: ''}, data || {});
+			//var item = $.extend({nav_category: 'category-1', module: '', label: ''}, data || {});
 			
-			var list_node = $('#'+item.nav_category).find('ul');			
-			this.templates.item.tmpl(item).appendTo(list_node);
+			//var list_node = $('#'+item.nav_category).find('ul');
+			//this.templates.item.tmpl(item).appendTo(list_node);
 		},
 		
 		activate: function(data) {
