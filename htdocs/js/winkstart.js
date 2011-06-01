@@ -70,7 +70,7 @@
 		// Currently core doesn't do anything, it will
 		
 		// Create an instance of the core module
-		this.init(function() {});
+		this.init();
 
                 // Load any other modules requested
                 $.each(winkstart.modules, function(k, v) {
@@ -87,22 +87,6 @@
 					$.getJSON('endpoint/form/data.json', function(data){
 						amplify.store('form_data', data);
 					});
-
-					winkstart.module.load('dashboard', function() {
-						this.init();
-					});
-                    
-					winkstart.module.load('provisioner', function() {
-	                    			this.init();
-                    			});
-					
-					winkstart.module.load('resource', function() {
-						this.init();
-					});
-                    
-					winkstart.module.load('deploy', function() {
-	            				this.init();
-                    			});
 				});
 			});
 		});*/
