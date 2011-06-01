@@ -31,7 +31,7 @@ winkstart.module('core', 'layout', {
 		// END HACK
 		
 		// Attach our nav
-		winkstart.module('core', 'nav').init({ parent: this.elements.nav});
+		//winkstart.module('core', 'appnav').init({ parent: this.elements.nav});
 		
 		// TODO: This is a hack to hide the PBX nav for the time being
 		$('.whistle-apps li').live('click', function() {

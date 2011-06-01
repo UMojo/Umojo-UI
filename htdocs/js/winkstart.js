@@ -69,18 +69,32 @@
 	winkstart.module.load('core', function() {
 		// Currently core doesn't do anything, it will
 		
-		// Create an instance of the core module
-		this.init();
+                // First thing we're going to do is go through is load our layout
+                winkstart.module.loadPlugin('core', 'layout', function() {
+                        this.init({ parent: $('body') }, function() {
+                        });
+                });
 
+                // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
+                winkstart.module.loadPlugin('core', 'appnav', function() {
+                        this.init({ parent: $('body') }, function() {
+                        });
+                });
+
+
+		// Create an instance of the core module
+		this.init(function() {
                     // Load any other modules requested (only after core is initialized)
                     $.each(winkstart.modules, function(k, v) {
                         winkstart.log('Would load ' + k + ' from URL ' + v);
                         winkstart.module.load(k, function() {
-                            console.log('Init running');
                             this.init();
+                            console.log('Init running for ' + k);
                         })
                     })
 
+
+                });
 /*			winkstart.module.loadPlugin('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					
