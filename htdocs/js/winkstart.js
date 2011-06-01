@@ -71,7 +71,7 @@
 		
 		// Create an instance of the core module
 		this.init(function() {
-                    // First thing we're going to do is go through is load our layout
+/*                    // First thing we're going to do is go through is load our layout
                     winkstart.module.loadPlugin('core', 'layout', function() {
                             this.init({ parent: $('body') }, function() {
                             });
@@ -81,15 +81,17 @@
                     winkstart.module.loadPlugin('core', 'appnav', function() {
                             this.init({ parent: $('body') }, function() {
                             });
-                    });
+                    });*/
 
+                    // Now move onto apps
+                    console.log('Loading apps...');
 
-                    // Load any other modules requested (only after core is initialized)
+                    // Load any other apps requested (only after core is initialized)
                     $.each(winkstart.modules, function(k, v) {
                         winkstart.log('Would load ' + k + ' from URL ' + v);
                         winkstart.module.load(k, function() {
                             this.init();
-                            console.log('Init running for ' + k);
+                            console.log('Init running for app ' + k);
                         })
                     })
 

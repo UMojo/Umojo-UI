@@ -718,7 +718,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
 
 amplify.module.load = function(whapp, callback) {
     // Cache buster
-    if (amplify.cache == false) {
+    if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + whapp + '.js?_=' + (new Date()))
 		.wait(function() {
 			callback.call( amplify.module(whapp, whapp) );
@@ -733,7 +733,7 @@ amplify.module.load = function(whapp, callback) {
 
 amplify.module.loadPlugin = function(whapp, module, callback) {
     // Cache buster
-    if (amplify.cache == false) {
+    if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
 		.wait(function() {
 			callback.call( amplify.module(whapp, module) );
