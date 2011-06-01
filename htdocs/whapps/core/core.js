@@ -7,5 +7,10 @@ winkstart.module('core', 'core', {
                     this.init({ parent: $('body') }, function() {
                     });
             });
+
+            winkstart.module.loadPlugin('core', 'appnav', function() {
+                    this.init({ parent: $('body') }, function() {
+                    });
+            });
 	}
     );

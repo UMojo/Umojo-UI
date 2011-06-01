@@ -1,36 +1,36 @@
-winkstart.module('nav', {
+winkstart.module('core', 'appnav', {
 		// There's only a single css file (this maps to appnav.css)
 		css: [
 			'appnav.css'
 		],
 				
 		templates: {
-			nav: 'appnav.html',
-			item: 'item.html',
-			subItem: 'subItem.html'
+			appnav: 'appnav.html',
+			item: 'item.html'
+//			subItem: 'subItem.html'
 		},
 		
 		subscribe: {
-			'nav.add'    : 'add',
-			'nav.remove' : 'remove'
+			'appnav.add'    : 'add',
+			'appnav.remove' : 'remove'
 		}
 		
 	},
 	function(args) {
+
+		this.templates.appnav.tmpl({}).appendTo( $('div.header .main_nav') );
 		
-		this.templates.nav.tmpl({}).appendTo( $('#ws-nav') );
-		
-		var show = function() {
-			var menu = $('#ws-nav');
+/*		var show = function() {
+			var menu = $('div.header .main_nav');
 			menu.find(".actions").slideDown();
 		}
 		  
 		var hide = function () { 
-			var menu = $('#ws-nav');
+			var menu = $('div.header .main_nav');
 			menu.find(".actions").slideUp();
 		}
 		 
-		$('#ws-nav').hoverIntent({
+		$('div.header .main_nav').hoverIntent({
 			sensitivity: 1, // number = sensitivity threshold (must be 1 or higher)
 			interval: 50,   // number = milliseconds for onMouseOver polling interval
 			over: show,     // function = onMouseOver callback (required)
@@ -46,7 +46,7 @@ winkstart.module('nav', {
 			THIS[$(this).attr('data-action')].call(THIS, params);
 			hide();
 			return false;
-		});
+		});*/
 	},
 	{	
 		add: function(data) {
