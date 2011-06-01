@@ -4,14 +4,16 @@ winkstart.module('voip', 'voip', {
     function() {
         var modules = ['account', 'media', 'device', 'autoattendant', 'callflow'];
 
+        // Loaded - add to nav bar
+        winkstart.publish('appnav.add', { 'name' : 'voip' });
+
         $.each(modules, function(k, v) {
-                console.log('init ' + v);
                 winkstart.module.loadPlugin('voip', v, function() {
-                    this.init();
+                    this.init(function() {
+                        winkstart.log('Initialized ' + v);
+                    });
                 });
         });
 
-        // Loaded - add to nav bar
-        //winkstart.publish('appnav.add', 'voip');
     }
 );

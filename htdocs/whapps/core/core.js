@@ -2,7 +2,7 @@
 winkstart.module('core', 'core', {
     },
     function(args) {
-/*        // First thing we're going to do is go through is load our layout
+        // First thing we're going to do is go through is load our layout
         winkstart.module.loadPlugin('core', 'layout', function() {
                 this.init({ parent: $('body') }, function() {
                 });
@@ -12,10 +12,6 @@ winkstart.module('core', 'core', {
         winkstart.module.loadPlugin('core', 'appnav', function() {
                 this.init({ parent: $('body') }, function() {
                 });
-        });*/
-
-
-        // Loaded - add to nav bar
-        winkstart.publish('appnav.add', 'voip');
+        });
     }
 );

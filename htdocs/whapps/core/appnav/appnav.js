@@ -16,25 +16,27 @@ winkstart.module('core', 'appnav', {
 		
 	},
 	function(args) {
-
 		this.templates.appnav.tmpl({}).appendTo( $('div.header .main_nav') );
 		
 		var THIS = this;
 		
 		// Set up the Module Click handlers
-		$('div.header .main_nav ul li').delegate('a', 'click', function() {
+/*		$('div.header .main_nav ul li').delegate('a', 'click', function() {
                         console.log('click detected.');
                         winkstart.publish ( $(this).attr('module-name') + '.activate', { target: $('#ws-content') });
-/*			var params = { module: $(this).attr('data-module') };
-			THIS[$(this).attr('data-action')].call(THIS, params);*/
+			var params = { module: $(this).attr('data-module') };
+			THIS[$(this).attr('data-action')].call(THIS, params);
 			return false;
-		});
+		});*/
+                console.log('Initialized application nav bar.');
+
 	},
 	{	
-		add: function(name) {
-			
+		add: function(args) {
+                        console.log('Adding navigation item ' + args.name);
+
 			var list_node = $('div.header .main_nav').find('ul');
-			this.templates.item.tmpl({ "name" : name, "module" : winkstart.modules[name] }).appendTo(list_node);
+			this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.modules[args.name] }).appendTo(list_node);
 		},
 		
 		activate: function(data) {
