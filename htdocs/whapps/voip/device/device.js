@@ -131,8 +131,8 @@ winkstart.module('voip', 'device', {
 		buildListView: function(){
 			var THIS = this;
 			
-			winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
-
+			//winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+				
 	     		//List Data that would be sent back from server
 	        	function map_crossbar_data(crossbar_data){
 	        		var new_list = [];
@@ -142,11 +142,21 @@ winkstart.module('voip', 'device', {
 	        		return new_list;
 	        	};
 	        	            	
+	        	var json = [
+	        	            {id: '1234', title: 'D1234'},
+	        	            {id: '1235', title: 'D1235'},
+	        	            {id: '1236', title: 'D1236'},
+	        	            {id: '1237', title: 'D1237'},
+	        	            {id: '1238', title: 'D1238'}
+	        	           ]
+	        	
+	        	
 				var options = {};
 	            options.label = 'Device Module';
 	            options.identifier = 'device-module-listview';
 	            options.new_entity_label = 'Device';
-	            options.data = map_crossbar_data(json.data);
+	            //options.data = map_crossbar_data(json.data);
+	            options.data = json;
 	            options.publisher = winkstart.publish;
 	            options.notifyMethod = 'device.list-panel-click';
 	            options.notifyCreateMethod = 'device.create-device';
@@ -154,7 +164,7 @@ winkstart.module('voip', 'device', {
 	            $("#device-listpanel").empty();
 	            $("#device-listpanel").listpanel(options);
 	            
-	        });	
+	       //});	
 		}
 	}
 );
