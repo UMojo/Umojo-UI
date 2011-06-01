@@ -1,5 +1,8 @@
 // This is the VoIP Services base application
 winkstart.module('voip', 'voip', {
+        subscribe: {
+            'voip.activate' : 'activate'
+        }
     },
     function() {
         // Loaded - add to nav bar

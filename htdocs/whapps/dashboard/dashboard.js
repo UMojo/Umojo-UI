@@ -1,9 +1,14 @@
 // This is the server module
 winkstart.module('dashboard', 'dashboard', {
+        subscribe: {
+            'dashboard.activate' : 'activate'
+        }
     },
     function() {
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'dashboard' });
+        winkstart.publish('appnav.add', {
+            'name' : 'dashboard'
+        });
     },
     {
         activate: function() {
@@ -17,7 +22,7 @@ winkstart.module('dashboard', 'dashboard', {
                     });
                 });
             });
-       }
+        }
 
     }
 );

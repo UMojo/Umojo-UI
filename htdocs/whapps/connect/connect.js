@@ -1,5 +1,8 @@
 // This is the server module
 winkstart.module('connect', 'connect', {
+        subscribe: {
+            'connect.activate' : 'activate'
+        }
     },
     function() {
         // Loaded - add to nav bar
