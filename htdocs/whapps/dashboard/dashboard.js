@@ -1,22 +1,23 @@
 // This is the server module
-winkstart.module('connect', 'connect', {
+winkstart.module('dashboard', 'dashboard', {
     },
     function() {
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'connect' });
+        winkstart.publish('appnav.add', { 'name' : 'dashboard' });
     },
     {
         activate: function() {
             // TODO: Make this dynamic.
-            var modules = ['sipservice', 'gtalk' ];
+            var modules = ['monitor' ];
 
             $.each(modules, function(k, v) {
-                winkstart.module.loadPlugin('connect', v, function() {
+                winkstart.module.loadPlugin('dashboard', v, function() {
                     this.init(function() {
-                        winkstart.log('Connect: Initialized ' + v);
+                        winkstart.log('Dashboard: Initialized ' + v);
                     });
                 });
             });
        }
+
     }
 );

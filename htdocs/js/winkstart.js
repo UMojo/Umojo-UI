@@ -67,35 +67,9 @@
 		
 	// Bootstrap the app: Start by loading the core module
 	winkstart.module.load('core', function() {
-		// Currently core doesn't do anything, it will
-		
-		// Create an instance of the core module
-		this.init(function() {
-                    // First thing we're going to do is go through is load our layout
-                    winkstart.module.loadPlugin('core', 'layout', function() {
-                            this.init({ parent: $('body') }, function() {
-                            });
-                    });
-
-                    // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
-                    winkstart.module.loadPlugin('core', 'appnav', function() {
-                            this.init({ parent: $('body') }, function() {
-                                // Now move onto apps
-                                console.log('Loading apps...');
-
-                                // Load any other apps requested (only after core is initialized)
-                                $.each(winkstart.modules, function(k, v) {
-                                    winkstart.log('Would load ' + k + ' from URL ' + v);
-                                    winkstart.module.load(k, function() {
-                                        this.init();
-                                        console.log('Init running for app ' + k);
-                                    })
-                                })
-
-                            });
-                    });
-
-                });
+		// Create an instance of the core module, which loads layouts and all whApps
+		this.init();
+                
 /*			winkstart.module.loadPlugin('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					

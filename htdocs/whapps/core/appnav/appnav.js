@@ -22,18 +22,18 @@ winkstart.module('core', 'appnav', {
 		
 		// Set up the Module Click handlers
 /*		$('div.header .main_nav ul li').delegate('a', 'click', function() {
-                        console.log('click detected.');
+                        winkstart.log('click detected.');
                         winkstart.publish ( $(this).attr('module-name') + '.activate', { target: $('#ws-content') });
 			var params = { module: $(this).attr('data-module') };
 			THIS[$(this).attr('data-action')].call(THIS, params);
 			return false;
 		});*/
-                console.log('Initialized application nav bar.');
+                winkstart.log('AppNav: Initialized application nav bar.');
 
 	},
 	{	
 		add: function(args) {
-                        console.log('Adding navigation item ' + args.name);
+                        winkstart.log('AppNav: Adding navigation item ' + args.name);
 
 			var list_node = $('div.header .main_nav').find('ul');
 			this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.modules[args.name] }).appendTo(list_node);

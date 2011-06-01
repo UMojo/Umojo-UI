@@ -45,7 +45,7 @@ winkstart.module('core', 'layout', {
 			}
 		});*/
 
-                console.log ('Initialized layout.');
+                winkstart.log ('Layout: Initialized layout.');
 	},
 	{	
 		attach: function() {
