@@ -1,4 +1,4 @@
-winkstart.module('callflow',
+winkstart.module('voip', 'callflow',
    {
 		css: [
 			'css/style.css',

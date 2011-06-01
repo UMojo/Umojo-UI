@@ -1,4 +1,4 @@
-winkstart.module('account', {
+winkstart.module('voip', 'account', {
 		css: [
 			'css/style.css'
 		],

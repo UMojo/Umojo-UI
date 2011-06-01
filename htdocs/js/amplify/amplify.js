@@ -661,7 +661,6 @@ amplify.route.watch = function() {
 (function( amplify, $, undefined ) {
 var modules = {};
 amplify.module = function(whapp, module, config, construct, methods) {
-        winkstart.log('Loading WhApp ' + whapp + ' module ' + module);
 	var m = module.toLowerCase();
         var w = whapp.toLowerCase();
 

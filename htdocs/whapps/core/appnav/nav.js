@@ -1,11 +1,11 @@
 winkstart.module('nav', {
-		// There's only a single css file (this maps to nav.css)
+		// There's only a single css file (this maps to appnav.css)
 		css: [
-			'nav.css'
+			'appnav.css'
 		],
 				
 		templates: {
-			nav: 'nav.html',
+			nav: 'appnav.html',
 			item: 'item.html',
 			subItem: 'subItem.html'
 		},

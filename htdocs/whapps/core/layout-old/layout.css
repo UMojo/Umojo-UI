@@ -1,0 +1,23 @@
+/**WRAPPER**/
+.wrapper{
+    width: 1024px;
+}
+
+/**HEADER**/
+.header {
+    height: 80px;
+}
+
+.header .top {
+    height: 32px;   
+}
+
+.header .bottom {
+    height: 45px;
+    width: 100%;
+}
+
+#bread-crumbs {}
+#update-notification {}
+#live-notifications {}
+

@@ -1,4 +1,4 @@
-winkstart.module('autoattendant', {
+winkstart.module('voip', 'autoattendant', {
 		css: [
 			'css/style.css'
 		],

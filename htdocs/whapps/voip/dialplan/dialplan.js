@@ -1,4 +1,4 @@
-winkstart.module('dialplan',
+winkstart.module('voip', 'dialplan',
    {
       css: [
       ],

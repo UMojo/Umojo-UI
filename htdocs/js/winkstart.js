@@ -20,7 +20,7 @@
 		}
 		if ( this.config.requires ) {
 			$.each(this.config.requires, function(k, module) {
-                                winkstart.log('Loading require' + k + module);
+                                winkstart.log('Loading dependency ' + k + ' ' + module);
 				completed++;
 				amplify.module.loadPlugin(k, module, function() {
 					completed--;
@@ -70,29 +70,24 @@
 		// Currently core doesn't do anything, it will
 		
 		// Create an instance of the core module
-		this.init(function() {
+		this.init(function() {});
+
+                // Load any other modules requested
+                $.each(winkstart.modules, function(k, v) {
+                    winkstart.log('Would load ' + k + ' from URL ' + v);
+                    winkstart.module.load(k, function() {
+                        this.init();
+                    })
+                })
 			
-			// First thing we're going to do is go through is load our layout
-			winkstart.module.loadPlugin('core', 'layout', function() {
+/*			winkstart.module.loadPlugin('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					
 					//Bootstrap some form data
-/*					$.getJSON('endpoint/form/data.json', function(data){
+					$.getJSON('endpoint/form/data.json', function(data){
 						amplify.store('form_data', data);
 					});
 
-					winkstart.module.load('account', function() {
-						this.init();
-					});
-					
-					winkstart.module.load('media', function() {
-						this.init();
-					});
-
-					winkstart.module.load('auth', function() {
-						this.init();
-					});
-					
 					winkstart.module.load('dashboard', function() {
 						this.init();
 					});
@@ -101,28 +96,16 @@
 	                    			this.init();
                     			});
 					
-					winkstart.module.load('device', function() {
-						this.init();
-					});
-
-					winkstart.module.load('autoattendant', function() {
-						this.init();
-					});
-
 					winkstart.module.load('resource', function() {
 						this.init();
 					});
                     
-					winkstart.module.load('callflow', function() {
-	            				this.init();
-                    			});
-
 					winkstart.module.load('deploy', function() {
 	            				this.init();
-                    			});*/
+                    			});
 				});
 			});
-		});
+		});*/
 	});
 
 })(	window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {});
