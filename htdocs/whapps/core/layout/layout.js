@@ -18,6 +18,8 @@ winkstart.module('core', 'layout', {
 		}
 	},
 	function(args) {
+                console.log ('got here!!!');
+
 		this.parent = args.parent || $('body');
 		
 		this.attach();
