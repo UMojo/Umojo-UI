@@ -1,5 +1,5 @@
 winkstart.module('core', 'layout', {
-		requires: {'core' : 'nav'},
+//		requires: {'core' : 'nav'},
 		css: [
 		      'layout.css',
                       'jquery.jscrollpane.css'

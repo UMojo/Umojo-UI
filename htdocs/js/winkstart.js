@@ -72,14 +72,15 @@
 		// Create an instance of the core module
 		this.init();
 
-                // Load any other modules requested
-                $.each(winkstart.modules, function(k, v) {
-                    winkstart.log('Would load ' + k + ' from URL ' + v);
-                    winkstart.module.load(k, function() {
-                        this.init();
+                    // Load any other modules requested (only after core is initialized)
+                    $.each(winkstart.modules, function(k, v) {
+                        winkstart.log('Would load ' + k + ' from URL ' + v);
+                        winkstart.module.load(k, function() {
+                            console.log('Init running');
+                            this.init();
+                        })
                     })
-                })
-			
+
 /*			winkstart.module.loadPlugin('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					

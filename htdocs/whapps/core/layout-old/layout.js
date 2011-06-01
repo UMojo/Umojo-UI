@@ -1,5 +1,4 @@
 winkstart.module('layout', {
-		requires: ['nav'],
 		css: [
 		      'layout.css'
 		],
