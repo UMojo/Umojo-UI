@@ -24,7 +24,7 @@ winkstart.module('voip', 'device', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Device Manager', nav_category: 'category-2'});
+		winkstart.publish('nav.add', { module: this.__module, label: 'Device Manager' });
 	},
 	{	
 		viewDevice: function(device_data){

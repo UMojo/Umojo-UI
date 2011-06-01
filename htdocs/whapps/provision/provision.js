@@ -9,11 +9,18 @@ winkstart.module('provision', 'provision', {
         winkstart.publish('appnav.add', { 'name' : 'provision' });
     },
     {
-        activate: function() {
-            // TODO: Make this dynamic.
-            var modules = ['provisioner' ];
+        initialized :   false,
+        modules :       ['provisioner'],
 
-            $.each(modules, function(k, v) {
+        activate: function() {
+            if (this.initialized) {
+                return;
+            }
+
+            // We only initialize once
+            this.initialized = true;
+
+            $.each(this.modules, function(k, v) {
                 winkstart.module.loadPlugin('provision', v, function() {
                     this.init(function() {
                         winkstart.log('Provision: Initialized ' + v);

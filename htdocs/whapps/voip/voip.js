@@ -1,5 +1,9 @@
 // This is the VoIP Services base application
 winkstart.module('voip', 'voip', {
+        templates: {
+                voip: 'voip.html'
+        },
+        
         subscribe: {
             'voip.activate' : 'activate'
         }
@@ -9,17 +13,39 @@ winkstart.module('voip', 'voip', {
         winkstart.publish('appnav.add', { 'name' : 'voip' });
     },
     {
+        initialized :   false,
+        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow'],
+        
         activate: function() {
-            // TODO: Make this dynamic.
-            var modules = ['account', 'media', 'device', 'autoattendant', 'callflow'];
+            var THIS = this;
+            
+            if (!this.initialized) {
+                // We only initialize once
+                this.initialized = true;
 
-            $.each(modules, function(k, v) {
-                winkstart.module.loadPlugin('voip', v, function() {
+                winkstart.module.loadPlugin('voip', 'nav', function() {
                     this.init(function() {
-                        winkstart.log('VoIP: Initialized ' + v);
+                        winkstart.log('VoIP: Initialized Top Navigation');
                     });
                 });
-            });
-       }
+
+                $.each(this.modules, function(k, v) {
+                    winkstart.module.loadPlugin('voip', v, function() {
+                        this.init(function() {
+                            winkstart.log('VoIP: Initialized ' + v);
+                        });
+                    });
+                });
+            }   // End initialization of modules
+
+            // Display the navbar
+            $('#ws-content').empty();
+            THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+
+            //winkstart.registerResources(this.config.resources);
+
+            //winkstart.publish('layout.updateLoadedModule', {label: 'Device Management', module: this.__module});
+
+        }
     }
 );

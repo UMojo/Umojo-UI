@@ -1,4 +1,4 @@
-// This is the server module
+// This is the connectivity management module (VoIP connectivity services like SIP and Google Voice)
 winkstart.module('connect', 'connect', {
         subscribe: {
             'connect.activate' : 'activate'
@@ -9,17 +9,24 @@ winkstart.module('connect', 'connect', {
         winkstart.publish('appnav.add', { 'name' : 'connect' });
     },
     {
-        activate: function() {
-            // TODO: Make this dynamic.
-            var modules = ['sipservice', 'gtalk' ];
+        initialized :   false,
+        modules :       ['sipservice', 'gtalk'],
 
-            $.each(modules, function(k, v) {
+        activate: function() {
+            if (this.initialized) {
+                return;
+            }
+
+            // We only initialize once
+            this.initialized = true;
+
+            $.each(this.modules, function(k, v) {
                 winkstart.module.loadPlugin('connect', v, function() {
                     this.init(function() {
                         winkstart.log('Connect: Initialized ' + v);
                     });
                 });
             });
-       }
+        }
     }
 );

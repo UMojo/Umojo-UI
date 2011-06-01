@@ -1,4 +1,4 @@
-// This is the server module
+// This is the core module. It is responsible for loading all a base layout, a base navigation bar and any registered whApps
 winkstart.module('core', 'core', {
     },
     function(args) {

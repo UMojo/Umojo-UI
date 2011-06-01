@@ -9,17 +9,24 @@ winkstart.module('system', 'system', {
         winkstart.publish('appnav.add', { 'name' : 'system' });
     },
     {
+        initialized :   false,
+        modules :       ['deploy', 'server', 'monitor' ],
+        
         activate: function() {
-            // TODO: Make this dynamic.
-            var modules = ['deploy', 'server', 'monitor' ];
+            if (this.initialized) {
+                return;
+            }
 
-            $.each(modules, function(k, v) {
+            // We only initialize once
+            this.initialized = true;
+
+            $.each(this.modules, function(k, v) {
                 winkstart.module.loadPlugin('system', v, function() {
                     this.init(function() {
                         winkstart.log('System: Initialized ' + v);
                     });
                 });
             });
-       }
+        }
     }
 );

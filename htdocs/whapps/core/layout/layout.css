@@ -143,8 +143,6 @@ ul.universal_nav li a.logout {
 }
 
 .sub_nav_container {
-	width: 605px;
-	margin: auto;
 	height: 32px;
 	border-right-width: 1px;
 	border-left-width: 1px;
@@ -152,25 +150,29 @@ ul.universal_nav li a.logout {
 	border-left-style: solid;
 	border-right-color: #5a5a5a;
 	border-left-color: #5a5a5a;	
-	
+	text-align:center;
+        width:99%;
+        margin: auto;
 }
 
-ul.sub_nav {
-	display: block;
-	width: 430px;
+.sub_nav {
 	height: 32px;
 	margin: auto;
-	list-style: none;
-	line-height: 32px;
-	text-align:center;
+	display: block;
+        width: 1px;
 }
 
-ul.sub_nav li {
+.sub_nav ul {
+	list-style: none;
+	line-height: 32px;
+}
+
+.sub_nav ul li {
 	position: relative;
 	float: left;
 }
 
-ul.sub_nav li a {
+.sub_nav ul li a {
 	position: relative;
 	padding: 0 15px;
 	margin: 0 15px;
