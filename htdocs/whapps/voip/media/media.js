@@ -6,6 +6,10 @@ winkstart.module('voip', 'media', {
 		templates: {
 			media: 'media.html'
 		},
+
+                js: [
+                    'media.js'
+                ],
 		
 		subscribe: {
 			'media.activate' : 'activate',

@@ -221,6 +221,8 @@ function(args) {
 	
         $("#device-listpanel").empty();
         $("#device-listpanel").listpanel(options);
+
+        statusbar('warning', 'blah blah blah');
 	            
     //});
     }
