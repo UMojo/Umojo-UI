@@ -20,7 +20,7 @@ winkstart.module('core', 'core', {
                                 this.init();
                                 winkstart.log('WhApps: Initializing ' + k);
                             })
-                        })
+                        });
 
                         winkstart.log('WhApps: Finished Loading WhApps');
                     });

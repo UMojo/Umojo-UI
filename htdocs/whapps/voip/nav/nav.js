@@ -68,7 +68,7 @@ winkstart.module('voip', 'nav', {
 		},
 
                 clear: function(data) {
-
+                    $('.sub_nav').empty();
                 },
 		
 		activate: function(data) {

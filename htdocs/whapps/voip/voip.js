@@ -19,28 +19,28 @@ winkstart.module('voip', 'voip', {
         activate: function() {
             var THIS = this;
             
-            if (!this.initialized) {
+            if (!THIS.initialized) {
                 // We only initialize once
-                this.initialized = true;
+                THIS.initialized = true;
 
                 winkstart.module.loadPlugin('voip', 'nav', function() {
                     this.init(function() {
                         winkstart.log('VoIP: Initialized Top Navigation');
-                    });
-                });
-
-                $.each(this.modules, function(k, v) {
-                    winkstart.module.loadPlugin('voip', v, function() {
-                        this.init(function() {
-                            winkstart.log('VoIP: Initialized ' + v);
+                        $.each(THIS.modules, function(k, v) {
+                            winkstart.module.loadPlugin('voip', v, function() {
+                                this.init(function() {
+                                    winkstart.log('VoIP: Initialized ' + v);
+                                });
+                            });
                         });
                     });
                 });
-            }   // End initialization of modules
 
-            // Display the navbar
-            $('#ws-content').empty();
-            THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+                // Display the navbar
+                $('#ws-content').empty();
+                THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+
+            }   // End initialization of modules
 
             //winkstart.registerResources(this.config.resources);
 
