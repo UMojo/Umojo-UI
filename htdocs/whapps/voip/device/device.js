@@ -50,6 +50,12 @@ function(args) {
         console.log('Got here.', device_data);
         $('#device-view').empty();
         var THIS = this;
+
+        winkstart.publish('notify', {
+            level: 'debug',
+            msg: 'Editing Device ' + device_data.id
+        });
+
         winkstart.getJSON('device.get', {
             crossbar: true,
             account_id: MASTER_ACCOUNT_ID,
@@ -95,6 +101,7 @@ function(args) {
     editDevice: function(device_id){
         $('#device-view').empty();
         var THIS = this;
+
         winkstart.getJSON('device.get', {
             crossbar: true,
             account_id: MASTER_ACCOUNT_ID,

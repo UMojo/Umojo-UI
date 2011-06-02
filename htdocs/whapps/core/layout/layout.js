@@ -2,7 +2,7 @@ winkstart.module('core', 'layout', {
 //		requires: {'core' : 'nav'},
 		css: [
 		      'layout.css',
-                      'jquery.jscrollpane.css'
+              'jquery.jscrollpane.css'
 		],
 		
 		templates: {
@@ -10,7 +10,8 @@ winkstart.module('core', 'layout', {
 		},
 		
 		subscribe: {
-			'layout.updateLoadedModule'    : 'updateModule'
+			'layout.updateLoadedModule'    : 'updateModule',
+			'notify'    : 'notify'
 		},
 		
 		elements: {
@@ -50,8 +51,30 @@ winkstart.module('core', 'layout', {
 	{	
 		attach: function() {
 			this.templates.layout.tmpl().appendTo( this.parent );
+            
+            // We need to hide this by defualt but keep our display: inline-block in the css
+            $('#ws-notification-bar').hide();
 		},
-		
+
+        notify: function(data) {
+            if(!data.level && !data.msg) {
+                return false;
+            }
+            
+            switch(data.level) {
+                case 'debug':
+                    $('#ws-notification-bar')
+                        .slideUp(function() {
+                            $('#ws-notification-bar .ws-notification-bar-content').html(data.msg);
+                        })
+                        .delay(200)
+                        .slideDown(200)
+                        .delay(1500)
+                        .slideUp(200);
+                    break;
+            }
+        },
+
 		updateModule: function(data){
 			$('#bread-crumbs').empty().html(data.label);
 		}

@@ -139,7 +139,7 @@ ul.universal_nav li a.logout {
 	width: 100%;
 	background-image: url(images/subnav_bg.jpg);
 	background-repeat: repeat-x;
-	height: 79px;	
+	height: 32px;	
 }
 
 .sub_nav_container {
@@ -237,11 +237,30 @@ ul.sub_nav li a:active {
 	border: none !important;
 }
 
-.notification_bar {
+.ws-notification-area {
 	width: 1026px;
-	background-color: #696969;
-	height: 47px;	
+	/*background-color: #696969;
+	height: 47px;*/	
 	margin: auto;
+    text-align: center
+}
+
+#ws-notification-bar {
+    display: inline-block;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 400px;
+    padding: 10px;
+    position: relative;
+    z-index: 1000;
+    background-color: #444444;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.ws-notification-bar-content {
+    
 }
 
 p.breadcrumb {
