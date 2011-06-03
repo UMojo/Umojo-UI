@@ -51,10 +51,10 @@ function(args) {
         $('#device-view').empty();
         var THIS = this;
 
-        winkstart.publish('notify', {
+        /*winkstart.publish('notify', {
             level: 'debug',
             msg: 'Editing Device ' + device_data.id
-        });
+        });*/
 
         winkstart.getJSON('device.get', {
             crossbar: true,
@@ -228,9 +228,7 @@ function(args) {
 	
         $("#device-listpanel").empty();
         $("#device-listpanel").listpanel(options);
-
-        statusbar('warning', 'blah blah blah');
-	            
+        
     //});
     }
 }
