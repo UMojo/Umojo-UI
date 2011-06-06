@@ -72,6 +72,10 @@ function(args) {
 			
         this.templates.createDevice.tmpl({}).appendTo( $('#device-view') );
         winkstart.cleanForm();
+
+        $("ul.settings1").tabs("div.pane > div");
+        $("ul.settings2").tabs("div.advanced_pane > div");
+
 			
         $('#device-form').submit(function() {
             var formData = form2object('device-form');
@@ -191,27 +195,27 @@ function(args) {
         var json = [
         {
             id: '1234',
-            title: 'D1234'
+            title: 'Cubicle A'
         },
 
         {
             id: '1235',
-            title: 'D1235'
+            title: 'Cubicle B'
         },
 
         {
             id: '1236',
-            title: 'D1236'
+            title: 'Cubicle C'
         },
 
         {
             id: '1237',
-            title: 'D1237'
+            title: 'Lobby Phone'
         },
 
         {
             id: '1238',
-            title: 'D1238'
+            title: 'Reception'
         }
         ]
 	        	

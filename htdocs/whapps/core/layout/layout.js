@@ -1,12 +1,14 @@
 winkstart.module('core', 'layout', {
 //		requires: {'core' : 'nav'},
 		css: [
-		      'layout.css',
-              'jquery.jscrollpane.css'
+		      'css/layout.css',
+                      'css/jquery.jscrollpane.css',
+                      'css/tabs.css',
+                      'css/icons.css'
 		],
 		
 		templates: {
-			layout: 'layout.html'
+			layout: 'tmpl/layout.html'
 		},
 		
 		subscribe: {

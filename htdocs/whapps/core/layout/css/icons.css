@@ -1,0 +1,53 @@
+/* 
+    Document   : icons
+    Created on : Jun 6, 2011, 7:19:19 AM
+    Author     : dman
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.icon {
+    display: block;
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-top: -1px;
+    padding-right: 6px;
+/*    padding-left: 32px;
+    padding-right: 5px;*/
+    background-image: url(../images/icons.png);
+    background-repeat: no-repeat;
+}
+
+.icon.phone {
+    background-position: -512px -160px;
+}
+.current .icon.phone {
+    background-position: -1536px -1184px;
+}
+
+.icon.sip {
+    background-position: -704px -160px;
+}
+.current .icon.sip {
+    background-position: -1728px -1184px;
+}
+
+.icon.audio {
+    background-position: -320px -288px;
+}
+.current .icon.audio {
+    background-position: -1344px -1312px;
+}
+
+.icon.video {
+    background-position: -96px -384px;
+}
+.current .icon.video {
+    background-position: -1120px -1408px;
+}
+
+/* 352, 320
+96, 384 */
+
+/* blue = 1024 over (32 x 16 x 2), 1024 down (32 x 16 x 2) */
