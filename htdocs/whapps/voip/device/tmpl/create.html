@@ -91,8 +91,9 @@
                 <ul class="advanced_tabs settings2">
                     <li><a href="#"><span  class="icon phone"/>Caller ID</a></li>
                     <li><a href="#"><span  class="icon sip"/>SIP Settings</a></li>
-                    <li><a href="#"><span class="icon audio"/>Audio Handling</a></li>
-                    <li><a href="#"><span class="icon video"/>Video Handling</a></li>
+                    <li><a href="#"><span class="icon audio"/>Audio</a></li>
+                    <li><a href="#"><span class="icon video"/>Video</a></li>
+                    <li><a href="#"><span class="icon fax"/>Fax</a></li>
                 </ul>
 
                 <div class="clear"></div>
@@ -137,7 +138,7 @@
 
                 <div id="SIP Settings">
                     <fieldset>
-                        <legend>Sip Settings</legend>
+                        <legend>SIP Settings</legend>
                         <ul class="controls">
                             <li>
                                 <label for="sip_realm">Realm / Domain Name:</label>
@@ -256,6 +257,26 @@
                     </fieldset>
 
                     <div class="clear"></div>
+                </div>
+
+                <div id="fax_settings">
+                    <fieldset>
+                        <legend>Fax Support</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="media_codecs">T.38</label>
+                                <select name="media.codecs[]">
+                                    <option>Auto-Detect</option>
+                                    <option>Always Force</option>
+                                    <option>Disabled</option>
+                                </select>
+                                <span>(Requires a T.38 Capable Device)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    
+                    <div class="clear"></div>
+
                 </div>
 
             </div>

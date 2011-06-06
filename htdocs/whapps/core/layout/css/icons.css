@@ -47,7 +47,12 @@
     background-position: -1120px -1408px;
 }
 
-/* 352, 320
-96, 384 */
+.icon.fax {
+    background-position: -512px -352px;
+}
+.current .icon.fax {
+    background-position: -1536px -1376px;
+}
+
 
 /* blue = 1024 over (32 x 16 x 2), 1024 down (32 x 16 x 2) */
