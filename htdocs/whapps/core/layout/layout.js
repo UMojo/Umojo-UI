@@ -71,7 +71,7 @@ winkstart.module('core', 'layout', {
                         })
                         .delay(200)
                         .slideDown(200)
-                        .delay(1500)
+                        .delay(2000)
                         .slideUp(200);
                     break;
             }

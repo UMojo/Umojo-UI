@@ -1,21 +1,26 @@
 winkstart.module('voip', 'device', {
+    /* What CSS stylesheets do you want automatically loaded? */
     css: [
     'css/style.css'
     ],
-				
+
+    /* What HTML templates will we be using? */
     templates: {
         device: 'tmpl/device.html',
         viewDevice: 'tmpl/view.html',
         editDevice: 'tmpl/edit.html',
         createDevice: 'tmpl/create.html'
     },
-		
+
+    /* What events do we listen for, in the browser? */
     subscribe: {
         'device.activate' : 'activate',
         'device.list-panel-click' : 'viewDevice',
         'device.create-device' : 'createDevice',
         'device.edit-device' : 'editDevice'
     },
+    
+    /* What API URLs are we going to be calling? Variables are in { }s */
     resources: {
         "device.list": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
@@ -39,6 +44,7 @@ winkstart.module('voip', 'device', {
         }
     }
 },
+/* Bootstrap routine - run when the module is first loaded */
 function(args) {
     winkstart.publish('nav.add', {
         module: this.__module,
@@ -106,56 +112,74 @@ function(args) {
         $('#device-view').empty();
         var THIS = this;
 
+        /* Grab JSON data from server for device_id */
         winkstart.getJSON('device.get', {
             crossbar: true,
             account_id: MASTER_ACCOUNT_ID,
             device_id: device_id
-        }, function (json, xhr) {
-				
-            var form_data = json;
-            form_data.form_lookup_data = winkstart.getModuleFormLookupData('device', 'editDevice');
-            form_data.isChecked = function(){
-                return 'dfdsfdsds';
-            }
-				
-            THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
-				
-            winkstart.cleanForm();
-			
-            $('#device-form').submit(function(event) {
-					
-                event.preventDefault();
-					
-                var formData = form2object('device-form');
-					
-                //Handle Checkboxes
-                if(!jQuery.inArray(formData.media, 'codecs')){
-                    formData.media.codecs = [];
+            },
+
+            /* On Grab JSON success, run this function */
+            function (json, xhr) {
+
+                /* Take JSON and populate the form fields */
+                var form_data = json;
+                form_data.form_lookup_data = winkstart.getModuleFormLookupData('device', 'editDevice');
+                form_data.isChecked = function(){
                 }
-					
-                var post_data = {};
-                post_data.crossbar = true;
-                post_data.account_id = MASTER_ACCOUNT_ID;
-                post_data.data = formData;
-                post_data.device_id = device_id;
-					
-                winkstart.postJSON('device.update', post_data, function (json, xhr) {
-                    THIS.buildListView();
-                    THIS.viewDevice({
-                        id: device_id
+
+                /* Paint the template with HTML of form fields onto the page */
+                THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
+
+                winkstart.cleanForm();
+
+                /* Listen for the submit event (i.e. they click "save") */
+                $('#device-form').submit(function(event) {
+                    /* Save the data after they've clicked save */
+
+                    /* Ignore the normal behavior of a submit button and do our stuff instead */
+                    event.preventDefault();
+
+                    /* Grab all the form field data */
+                    var formData = form2object('device-form');
+
+                    //Handle Checkboxes
+                    if(!jQuery.inArray(formData.media, 'codecs')){
+                        formData.media.codecs = [];
+                    }
+
+                    /* Construct the JSON we're going to send */
+                    var post_data = {};
+                    post_data.crossbar = true;
+                    post_data.account_id = MASTER_ACCOUNT_ID;
+                    post_data.data = formData;
+                    post_data.device_id = device_id;
+
+                    /* Actually send the JSON data to the server */
+                    winkstart.postJSON('device.update', post_data, function (json, xhr) {
+                        THIS.buildListView();
+                        THIS.viewDevice({
+                            id: device_id
+                        });
                     });
-                });
 					
-                return false;
-            });
-        });
+                    return false;
+                });
+            } // End JSON Success routine
+
+        );
     },
-		
+
+    /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+     * if appropriate. You should also attach to any default click items you want to respond to when people click
+     * on them. Also register resources.
+     */
     activate: function(data) {
         $('#ws-content').empty();
         var THIS = this;
         this.templates.device.tmpl({}).appendTo( $('#ws-content') );
 
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('layout.updateLoadedModule', {
@@ -168,13 +192,17 @@ function(args) {
                 console.log('Got here');
                 var target = evt.currentTarget;
                 var device_id = target.getAttribute('rel');
-                THIS.editDevice(device_id);
+                winkstart.publish('device.edit-device', { 'device_id' : device_id});
+//                THIS.editDevice(device_id);
             }
         });
 
         THIS.buildListView();
     },
-		
+
+    /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
+     * and populating into our standardized data list "thing".
+     */
     buildListView: function(){
         var THIS = this;
 			

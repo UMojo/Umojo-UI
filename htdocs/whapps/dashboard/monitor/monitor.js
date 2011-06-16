@@ -8,9 +8,17 @@ winkstart.module('dashboard', 'monitor', {
 		}
 	},
 	function(args) {
-            winkstart.publish('nav.add', { module: this.__module, label: 'monitor', nav_category: 'category-3'});
+            winkstart.publish('nav.add', {module: this.__module, label: 'monitor', nav_category: 'category-3'});
 	},
-	{	
+	{
+                checkServerStatus: function() {
+
+                    var on_success = function() {
+
+                    };
+
+                    winkstart.getJSON(some_url, some_params, on_success);
+                },
 		activate: function(args) {
 			$(args.target).empty();
 			
