@@ -77,6 +77,7 @@ amplify.request.types.ajax = function( defnSettings ) {
 			data: (jQuery.inArray(data, 'json_string') ? data.json_string : data ),
 			contentType: defnSettings.contentType,
 			dataType: defnSettings.dataType,
+            cache: false, // Without this, things suck
 			beforeSend: ($.isFunction(defnSettings.beforeSend) ? defnSettings.beforeSend : function(){}), 
 			success: settings.success,
 			error: settings.error

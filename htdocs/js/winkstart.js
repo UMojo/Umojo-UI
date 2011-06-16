@@ -12,7 +12,8 @@
 			this.templates = {};
 			$.each(this.config.templates, function(name, url) {
 				completed++;
-				$.get('whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url, function(template) {
+                // Make sure you set cache = false, or things really suck
+				$.get('whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url, {cache: false}, function(template) {
 					completed--;
 					THIS.templates[name] = $(template);
 				}, 'html');
