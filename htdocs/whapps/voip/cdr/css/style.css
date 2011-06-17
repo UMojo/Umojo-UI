@@ -5,6 +5,24 @@
 
 /* DO NOT USE IDs FOR CSS! CLASSES ONLY! */
 
-.list-skeleton {
+.list-cdr {
     cursor: pointer;
 }
+
+.cdr_list div {
+	float: left;
+	width: 160px;
+}
+
+.cdr_list .id {
+	display: none;
+}
+
+.cdr_list .callee_name {
+	display: none;
+}
+
+.cdr_list .caller_name {
+	display: none;
+}
+

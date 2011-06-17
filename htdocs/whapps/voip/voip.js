@@ -14,7 +14,7 @@ winkstart.module('voip', 'voip', {
     },
     {
         initialized :   false,
-        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'cdr', 'starview'],
+        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'cdr'],
         
         activate: function() {
             var THIS = this;
