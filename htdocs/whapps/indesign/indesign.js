@@ -1,20 +1,20 @@
 // This is the VoIP Services base application
-winkstart.module('voip', 'voip', {
-        templates: {
-                voip: 'voip.html'
-        },
+winkstart.module('indesign', 'indesign', {
+/*        templates: {
+                indesign: 'empty.html'
+        },*/
         
         subscribe: {
-            'voip.activate' : 'activate'
+            'indesign.activate' : 'activate'
         }
     },
     function() {
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'voip' });
+        winkstart.publish('appnav.add', { 'name' : 'indesign' });
     },
     {
         initialized :   false,
-        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'cdr', 'starview'],
+        modules :       ['deploy_mgr', 'monitor'],     // <-- ADD YOUR IN-PROGRESS MODULES HERE!!!
         
         activate: function() {
             var THIS = this;
@@ -25,11 +25,11 @@ winkstart.module('voip', 'voip', {
 
                 winkstart.module.loadPlugin('voip', 'nav', function() {
                     this.init(function() {
-                        winkstart.log('VoIP: Initialized Top Navigation');
+                        winkstart.log('In-Design: Initialized Top Navigation');
                         $.each(THIS.modules, function(k, v) {
-                            winkstart.module.loadPlugin('voip', v, function() {
+                            winkstart.module.loadPlugin('indesign', v, function() {
                                 this.init(function() {
-                                    winkstart.log('VoIP: Initialized ' + v);
+                                    winkstart.log('In-Design: Initialized ' + v);
                                 });
                             });
                         });
@@ -38,7 +38,7 @@ winkstart.module('voip', 'voip', {
 
                 // Display the navbar
                 $('#ws-content').empty();
-                THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+//                THIS.templates.indesign.tmpl({}).appendTo( $('#ws-content') );
 
             }   // End initialization of modules
 
