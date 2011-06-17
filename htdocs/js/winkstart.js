@@ -13,10 +13,13 @@
 			$.each(this.config.templates, function(name, url) {
 				completed++;
                 // Make sure you set cache = false, or things really suck
-				$.get('whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url, {cache: false}, function(template) {
-					completed--;
-					THIS.templates[name] = $(template);
-				}, 'html');
+				$.ajax({
+                    url: 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url,
+                    cache: false,
+                    success: function(template) {
+					    completed--;
+					    THIS.templates[name] = $(template);
+				    }});
 			});
 		}
 		if ( this.config.requires ) {
