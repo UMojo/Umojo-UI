@@ -21,7 +21,7 @@ winkstart.module('voip', 'cdr',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "cdr.list": {
-                url: '',
+                url: 'http://pbx.2600hz.com/get_cdr.php?key={account}',
                 dataType: 'json',
                 httpMethod: 'GET'
             }
@@ -60,17 +60,25 @@ winkstart.module('voip', 'cdr',
                 {
                     /*crossbar: true,
                     account_id: MASTER_ACCOUNT_ID,*/
-                    username : "2600pbx"
+                    account : "urban"
                 },
 
                 /* What to do on successfully getting JSON */
                 function (json, xhr) {
                     /* Do something with the results */
+			/* Clear old results */
+			$('#ws-content').empty();
+
 			// Grab doc.Call-Direction, doc.Call-ID, doc.Callee-ID-Name, doc.Callee-ID-Number, doc.Caller-ID-Name, doc.Caller-ID-Number, doc.Custom-Channel-Vars, doc.
-                }
+		console.log(json);
+		console.log(json.rows[0].doc['From-Uri'],  json.rows[0].doc['To-Uri']);
+
+		             /*<div>{data.doc['From-Uri']}</div> */
+            THIS.templates.results.tmpl({data:json.rows}).appendTo( $('#ws-content') );
+		}
             );
 
-        },
+       },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
