@@ -9,6 +9,7 @@ winkstart.module('voip', 'device', {
         device: 'tmpl/device.html',
         viewDevice: 'tmpl/view.html',
         editDevice: 'tmpl/edit.html',
+        editDeviceNew: 'tmpl/edit_new.html',
         createDevice: 'tmpl/create.html'
     },
 
@@ -35,12 +36,17 @@ winkstart.module('voip', 'device', {
         "device.create": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
             dataType: 'json',
-            httpMethod: 'POST'
+            httpMethod: 'PUT'
         },
         "device.update": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
             dataType: 'json',
             httpMethod: 'POST'
+        },
+        "device.delete": {
+            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
+            dataType: 'json',
+            httpMethod: 'DELETE'
         }
     }
 },
@@ -68,7 +74,6 @@ function(args) {
             device_id: device_data.id
             }, function (json, xhr) {
             THIS.templates.viewDevice.tmpl(json).appendTo( $('#device-view') );
-        //$('#code').html(JSON.stringify(json));
         });
     },
 		
@@ -81,9 +86,8 @@ function(args) {
 
         $("ul.settings1").tabs("div.pane > div");
         $("ul.settings2").tabs("div.advanced_pane > div");
-
 			
-        $('#device-form').submit(function() {
+        $('.device-save').click(function() {
             var formData = form2object('device-form');
 				
             //Handle Checkboxes
@@ -100,15 +104,14 @@ function(args) {
                 THIS.buildListView();
                 THIS.viewDevice({
                     id: json.id
-                    });
-					
+				});
             });
 				
             return false;
         });
     },
 		
-    editDevice: function(device_id){
+    editDevice: function(data){
         $('#device-view').empty();
         var THIS = this;
 
@@ -116,7 +119,7 @@ function(args) {
         winkstart.getJSON('device.get', {
             crossbar: true,
             account_id: MASTER_ACCOUNT_ID,
-            device_id: device_id
+            device_id: data.device_id
             },
 
             /* On Grab JSON success, run this function */
@@ -127,11 +130,14 @@ function(args) {
                 form_data.form_lookup_data = winkstart.getModuleFormLookupData('device', 'editDevice');
                 form_data.isChecked = function(){
                 }
-
+				
                 /* Paint the template with HTML of form fields onto the page */
-                THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
+                THIS.templates.editDeviceNew.tmpl(form_data).appendTo( $('#device-view') );
 
                 winkstart.cleanForm();
+                
+				$("ul.settings1").tabs("div.pane > div");
+        		$("ul.settings2").tabs("div.advanced_pane > div");
 
                 /* Listen for the submit event (i.e. they click "save") */
                 $('#device-form').submit(function(event) {
@@ -193,7 +199,6 @@ function(args) {
                 var target = evt.currentTarget;
                 var device_id = target.getAttribute('rel');
                 winkstart.publish('device.edit-device', { 'device_id' : device_id});
-//                THIS.editDevice(device_id);
             }
         });
 
@@ -206,62 +211,35 @@ function(args) {
     buildListView: function(){
         var THIS = this;
 			
-        //winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+        winkstart.getJSON('device.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
 				
-        //List Data that would be sent back from server
-        function map_crossbar_data(crossbar_data){
-            var new_list = [];
-            _.each(crossbar_data, function(elem){
-                new_list.push({
-                    id: elem.id,
-                    title: elem.name
-                    });
-            });
-            return new_list;
-        };
-	        	            	
-        var json = [
-        {
-            id: '1234',
-            title: 'Cubicle A'
-        },
-
-        {
-            id: '1235',
-            title: 'Cubicle B'
-        },
-
-        {
-            id: '1236',
-            title: 'Cubicle C'
-        },
-
-        {
-            id: '1237',
-            title: 'Lobby Phone'
-        },
-
-        {
-            id: '1238',
-            title: 'Reception'
-        }
-        ]
-	        	
-	        	
-        var options = {};
-        options.label = 'Device Module';
-        options.identifier = 'device-module-listview';
-        options.new_entity_label = 'Device';
-        //options.data = map_crossbar_data(json.data);
-        options.data = json;
-        options.publisher = winkstart.publish;
-        options.notifyMethod = 'device.list-panel-click';
-        options.notifyCreateMethod = 'device.create-device';
-	
-        $("#device-listpanel").empty();
-        $("#device-listpanel").listpanel(options);
+	        //List Data that would be sent back from server
+	        function map_crossbar_data(crossbar_data){
+	            var new_list = [];
+	            if(crossbar_data.length > 0) {
+		            _.each(crossbar_data, function(elem){
+		                new_list.push({
+		                    id: elem.id,
+		                    title: elem.name
+						});
+		            });
+	            }
+	            return new_list;
+	        };
+		        	
+	        var options = {};
+	        options.label = 'Device Module';
+	        options.identifier = 'device-module-listview';
+	        options.new_entity_label = 'Device';
+	        options.data = map_crossbar_data(json.data);
+	        options.publisher = winkstart.publish;
+	        options.notifyMethod = 'device.list-panel-click';
+	        options.notifyCreateMethod = 'device.create-device';
+		
+	        $("#device-listpanel").empty();
+	        $("#device-listpanel").listpanel(options);
         
-    //});
+    	});
     }
 }
 );
