@@ -16,9 +16,18 @@ winkstart.module('voip', 'device', {
     /* What events do we listen for, in the browser? */
     subscribe: {
         'device.activate' : 'activate',
-        'device.list-panel-click' : 'viewDevice',
+        'device.list-panel-click' : 'editDevice',
         'device.create-device' : 'createDevice',
         'device.edit-device' : 'editDevice'
+    },
+    
+    formData: {
+		users: [{value: '-- Select --'}, {value:'Eric Francis'}, {value: 'Mark Windsor'}, {value:'Jeff Jonson'}],
+		status_types: [{value: 'Enabled'}, {value:'Disabled'}],
+		auth_methods: [{value: 'Password'}, {value:'IP Address'}],
+		invite_formats: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
+		bypass_media_types: [{value: 'Automatic'}, {value:'Never'}, {value:'Always'}],
+		media_codecs: [{value: 'Auto-Detect'}, {value:'Always Force'}, {value:'Disabled'}]
     },
     
     /* What API URLs are we going to be calling? Variables are in { }s */
@@ -81,7 +90,12 @@ function(args) {
         $('#device-view').empty();
         var THIS = this;
 			
-        this.templates.createDevice.tmpl({}).appendTo( $('#device-view') );
+        var form_data = {};
+	    form_data.field_data = THIS.config.formData;
+	    form_data.isChecked = function(){
+	    }
+        
+        this.templates.createDevice.tmpl(form_data).appendTo( $('#device-view') );
         winkstart.cleanForm();
 
         $("ul.settings1").tabs("div.pane > div");
@@ -114,23 +128,24 @@ function(args) {
     editDevice: function(data){
         $('#device-view').empty();
         var THIS = this;
-
+		var device_id = data.id;
         /* Grab JSON data from server for device_id */
         winkstart.getJSON('device.get', {
-            crossbar: true,
-            account_id: MASTER_ACCOUNT_ID,
-            device_id: data.device_id
+            	crossbar: true,
+            	account_id: MASTER_ACCOUNT_ID,
+            	device_id: device_id
             },
 
             /* On Grab JSON success, run this function */
             function (json, xhr) {
-
-                /* Take JSON and populate the form fields */
-                var form_data = json;
-                form_data.form_lookup_data = winkstart.getModuleFormLookupData('device', 'editDevice');
-                form_data.isChecked = function(){
-                }
 				
+				/* Take JSON and populate the form fields */
+                
+            	var form_data = json;
+                form_data.field_data = THIS.config.formData;
+                
+                console.log(form_data);
+                
                 /* Paint the template with HTML of form fields onto the page */
                 THIS.templates.editDeviceNew.tmpl(form_data).appendTo( $('#device-view') );
 
@@ -140,7 +155,7 @@ function(args) {
         		$("ul.settings2").tabs("div.advanced_pane > div");
 
                 /* Listen for the submit event (i.e. they click "save") */
-                $('#device-form').submit(function(event) {
+                $('.device-save').click(function(event) {
                     /* Save the data after they've clicked save */
 
                     /* Ignore the normal behavior of a submit button and do our stuff instead */
@@ -148,11 +163,6 @@ function(args) {
 
                     /* Grab all the form field data */
                     var formData = form2object('device-form');
-
-                    //Handle Checkboxes
-                    if(!jQuery.inArray(formData.media, 'codecs')){
-                        formData.media.codecs = [];
-                    }
 
                     /* Construct the JSON we're going to send */
                     var post_data = {};
@@ -184,6 +194,8 @@ function(args) {
         $('#ws-content').empty();
         var THIS = this;
         this.templates.device.tmpl({}).appendTo( $('#ws-content') );
+        
+        winkstart.loadFormHelper('forms');
 
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);

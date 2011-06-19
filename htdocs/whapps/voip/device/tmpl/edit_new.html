@@ -10,34 +10,30 @@
             </ul>
 
             <div class="clear"></div>
-
+            
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
                         <ul class="controls">
                             <li>
                                 <label for="name">Device Nickname:</label>
-                                <input id="name" name="name" type="text" value="Cubicle C" />
+                                <input id="name" name="name" type="text" value="${data.name}" />
                                 <span class="tip_inline">(i.e. Phone in Cubicle C)</span>
                             </li>
                             <li>
                                 <label for="user">Belongs To:</label>
                                 <select name="user" id="user">
-                                    <option>-- Select --</option>
-                                    <option>Eric Francis</option>
-                                    <option>Mark Windsor</option>
-                                    <option>Jeff Jonson</option>
+                                    {{tmpl(field_data.users, {selectedVal: data.user }) "#optionList"}}
                                 </select>
                             </li>
                             <li>
-                                <label for="mac">Device MAC Address:</label>
-                                <input id="mac" name="mac" type="text" value="" />
+                                <label for="mac_address">Device MAC Address:</label>
+                                <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
                             </li>
                             <li>
                                 <label for="status">Status:</label>
                                 <select name="status" id="status">
-                                    <option>Enabled</option>
-                                    <option>Disabled</option>
+                                    {{tmpl(field_data.status_types, {selectedVal: data.status }) "#optionList"}}
                                 </select>
                             </li>
                         </ul>
@@ -99,8 +95,6 @@
                 <div class="clear"></div>
             </div>
 
-
-
             <div class="advanced_pane">
 
                 <div id="caller_id">
@@ -109,11 +103,11 @@
                         <ul class="controls">
                             <li>
                                 <label for="caller-id-name">Caller ID Name:</label>
-                                <input id="caller-id-name" name="caller-id.internal.name" type="text"  value="John Smith" />
+                                <input id="caller-id-name" name="caller-id.internal.name" type="text"  value="${data['caller-id'].internal.name}" />
                             </li>
                             <li>
                                 <label for="caller-id-number">Caller ID Number:</label>
-                                <input id="caller-id-number" name="caller-id.internal.number" type="text"  value="+14158867900" />
+                                <input id="caller-id-number" name="caller-id.internal.number" type="text"  value="${data['caller-id'].internal.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -123,11 +117,11 @@
                         <ul class="controls">
                             <li>
                                 <label for="caller-id-name">Caller ID Name:</label>
-                                <input id="caller-id-name" name="caller-id.internal.name" type="text"  value="John Smith" />
+                                <input id="caller-id-name" name="caller-id.external.name" type="text"  value="${data['caller-id'].external.name}" />
                             </li>
                             <li>
                                 <label for="caller-id-number">Caller ID Number:</label>
-                                <input id="caller-id-number" name="caller-id.internal.number" type="text"  value="+14158867900" />
+                                <input id="caller-id-number" name="caller-id.external.number" type="text"  value="${data['caller-id'].external.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -142,34 +136,31 @@
                         <ul class="controls">
                             <li>
                                 <label for="sip_realm">Realm / Domain Name:</label>
-                                <input id="sip_realm" name="sip.realm" type="text"  value="dev.andersonkarl.net" />
+                                <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
                             </li>
                             <li>
                                 <label for="sip_method">Authentication Method:</label>
-                                <select name="sip.method">
-                                    <option>Password</option>
-                                    <option>IP Address</option>
+                                <select name="sip.method" id="sip.method">
+                                    {{tmpl(field_data.auth_methods, {selectedVal: data.sip.method }) "#optionList"}}
                                 </select>
                             </li>
                             <li>
                                 <label for="sip_username">Username:</label>
-                                <input id="sip_username" name="sip.username" type="text"  value="apple_peach" />
+                                <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
                             </li>
                             <li>
                                 <label for="sip_password">Password:</label>
-                                <input id="sip_password" name="sip.password" type="text"  value="x09m1x2!" />
+                                <input id="sip_password" name="sip.password" type="text"  value="${data.sip.password}" />
                             </li>
                             <li>
                                 <label for="sip_invite-format">Invite Format:</label>
-                                <select name="sip.invite-format">
-                                    <option>Username</option>
-                                    <option>NPANXXXXXX</option>
-                                    <option>E. 164</option>
+                                <select name="sip.invite-format" id="sip_invite-format">
+                                    {{tmpl(field_data.invite_formats, {selectedVal: data.sip['invite-format'] }) "#optionList"}}
                                 </select>
                             </li>
                             <li>
                                 <label for="sip_expire-seconds">Expire Seconds:</label>
-                                <input id="sip_expire-seconds" name="sip.expire-seconds" type="text"  value="300" />
+                                <input id="sip_expire-seconds" name="sip.expire-seconds" type="text"  value="${data.sip['expire-seconds']}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -184,10 +175,8 @@
                         <ul class="controls">
                             <li>
                                 <label for="media_bypass-media">Peer to Peer Audio</label>
-                                <select name="media.bypass_media">
-                                    <option>Automatic</option>
-                                    <option>Never</option>
-                                    <option>Always</option>
+                                <select name="media.bypass_media" id="sip_invite-format">
+                                    {{tmpl(field_data.bypass_media_types, {selectedVal: data.media.bypass_media }) "#optionList"}}
                                 </select>
                             </li>
                         </ul>
@@ -198,37 +187,37 @@
                         <ul class="controls">
                             <li>
                                 <label for="media_codecs">G729</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="G729" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G729" checked />
                                 <span>8kbps (Requires License)</span>
                             </li>
                             <li>
                                 <label for="media_codecs">G711u / PCMU</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="PCMU" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="PCMU" checked />
                                 <span>64kbps (North America)</span>
                             </li>
                             <li>
                                 <label for="media_codecs">G711a / PCMA</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="PCMA" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="PCMA" checked />
                                 <span>64kbps (Elsewhere)</span>
                             </li>
                             <li>
                                 <label for="media_codecs">G722 (HD) @ 16kHz</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="G722_16" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G722_16" checked />
                                 <span>48kbps</span>
                             </li>
                             <li>
                                 <label for="media_codecs">G722.1 (HD) @ 32kHz</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="G722_32" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G722_32" checked />
                                 <span>56kbps</span>
                             </li>
                             <li>
                                 <label for="media_codecs">Siren (HD) @ 48kHz</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="CELT_48" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="CELT_48" checked />
                                 <span>48kbps</span>
                             </li>
                             <li>
                                 <label for="media_codecs">Siren (HD) @ 64kHz</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="CELT_64" checked />
+                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="CELT_64" checked />
                                 <span>64kbps</span>
                             </li>
                         </ul>
@@ -242,16 +231,16 @@
                         <legend>Video Codecs</legend>
                         <ul class="controls">
                             <li>
-                                <label for="media_codecs">H261</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="H261" checked />
+                                <label for="media_codecs_h261">H261</label>
+                                <input id="media_codecs_h261" name="media.video.codecs[]" type="checkbox" value="H261" checked />
                             </li>
                             <li>
                                 <label for="media_codecs">H263</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="H263" checked />
+                                <input id="media_codecs" name="media.video.codecs[]" type="checkbox" value="H263" checked />
                             </li>
                             <li>
                                 <label for="media_codecs">H264</label>
-                                <input id="media_codecs" name="media.codecs[]" type="checkbox" value="H264" checked />
+                                <input id="media_codecs" name="media.video.codecs[]" type="checkbox" value="H264" checked />
                             </li>
                         </ul>
                     </fieldset>
@@ -265,10 +254,8 @@
                         <ul class="controls">
                             <li>
                                 <label for="media_codecs">T.38</label>
-                                <select name="media.codecs[]">
-                                    <option>Auto-Detect</option>
-                                    <option>Always Force</option>
-                                    <option>Disabled</option>
+                                <select name="media.fax.codecs" id="media_fax_codecs">
+                                    {{tmpl(field_data.media_codecs, {selectedVal: data.media.fax_media_codec }) "#optionList"}}
                                 </select>
                                 <span>(Requires a T.38 Capable Device)</span>
                             </li>
@@ -281,10 +268,10 @@
 
             </div>
 
-    <ul class="button right">
-        <li><a href="#">Save</a></li>
-        <li><a href="#">Cancel</a></li>
-    </ul>
+        <ul class="button right">
+            <li><a class="device-save" href="#">Save</a></li>
+            <li><a class="device-cancel" href="#">Cancel</a></li>
+        </ul>
             
         </form>
     </div>
