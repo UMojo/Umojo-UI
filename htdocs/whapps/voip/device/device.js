@@ -27,7 +27,21 @@ winkstart.module('voip', 'device', {
 		auth_methods: [{value: 'Password'}, {value:'IP Address'}],
 		invite_formats: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
 		bypass_media_types: [{value: 'Automatic'}, {value:'Never'}, {value:'Always'}],
-		media_codecs: [{value: 'Auto-Detect'}, {value:'Always Force'}, {value:'Disabled'}]
+		media_audio_codecs: [
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G729', value: 'G729', caption: '8kbps (Requires License)'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: '64kbps (North America)'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: '64kbps (Elsewhere)'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: '48kbps'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: '56kbps'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: '56kbps'},
+			{field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: '64kbps'}
+		],
+		media_video_codecs: [
+			{field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H261', value: 'H261', caption: 'H261'},
+			{field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H263', value: 'H263', caption: 'H263'},
+			{field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H264', value: 'H264', caption: 'H264'}
+		],
+		media_fax_codecs: [{value: 'Auto-Detect'}, {value:'Always Force'}, {value:'Disabled'}]
     },
     
     /* What API URLs are we going to be calling? Variables are in { }s */
@@ -92,8 +106,6 @@ function(args) {
 			
         var form_data = {};
 	    form_data.field_data = THIS.config.formData;
-	    form_data.isChecked = function(){
-	    }
         
         this.templates.createDevice.tmpl(form_data).appendTo( $('#device-view') );
         winkstart.cleanForm();
@@ -142,6 +154,16 @@ function(args) {
 				/* Take JSON and populate the form fields */
                 
             	var form_data = json;
+            	
+            	if(undefined == form_data.data.media.audio){
+            		form_data.data.media.audio = {};
+            		form_data.data.media.audio.codecs = [];
+            	}
+            	if(undefined == form_data.data.media.video){
+            		form_data.data.media.video = {};
+            		form_data.data.media.video.codecs = [];            		
+            	}
+            	
                 form_data.field_data = THIS.config.formData;
                 
                 console.log(form_data);
