@@ -261,3 +261,7 @@ a.save_btn {
 	font-size: 18px; font-family: TitilliumText22LBold, sans-serif;
 
 }
+
+.dialog {
+    display:none;
+}

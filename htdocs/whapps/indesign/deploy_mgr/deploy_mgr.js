@@ -8,16 +8,26 @@ winkstart.module('indesign', 'deploy_mgr',
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/index.html',
+            serverinfo: 'tmpl/serverinfo.html',
+            newserver: 'tmpl/newserver.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'deploy_mgr.activate' : 'activate'
+            'deploy_mgr.activate' : 'activate',
+            'deploy_mgr.requestServer' : 'requestServer',
+            'deploy_mgr.addServer' : 'addServer',
+            'deploy_mgr.deleteServer' : 'deleteServer',
+            'deploy_mgr.updateServer' : 'updateServer',
+            'deploy_mgr.statusServer' : 'statusServer',
+            'deploy_mgr.refresh' : 'refresh',
+            'deploy_mgr.toggleServer' : 'toggleServer'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
+            'deploy_mgr.addserver' : { url : CROSSBAR_REST_API_ENDPOINT, httpMethod : 'POST', dataType : 'json' }
         }
     }, // End module resource definitions
 
@@ -27,7 +37,7 @@ winkstart.module('indesign', 'deploy_mgr',
     function(args) {
         winkstart.publish('nav.add', {
             module: this.__module,
-            label: 'DEPLOY MGR'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Server Manager'
         });
     }, // End initialization routine
 
@@ -35,6 +45,28 @@ winkstart.module('indesign', 'deploy_mgr',
 
     /* Define the functions for this module */
     {
+        requestServer: function() {
+            var THIS = this;
+          
+            THIS.templates.serverinfo.tmpl().appendTo('.cluster_pane');
+            $('#serverinfo input.save_btn').click(function() {
+                data = form2object('serverinfo');
+                console.log(data);
+                winkstart.publish('deploy_mgr.addServer', data);
+            })
+        },
+        
+        addServer: function(serverData) {
+            var THIS = this;
+            
+            // Do API request via POST
+/*            winkstart.postJSON('deploy_mgr.addserver', serverData, function() {
+                // If successful, draw new server on screen
+  */              
+                THIS.templates.newserver.tmpl(serverData).appendTo('.cluster_pane');
+/*            });*/
+            
+        },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
@@ -52,9 +84,13 @@ winkstart.module('indesign', 'deploy_mgr',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'DEPLOY TEST',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Server Manager',
                 module: this.__module
             });
+
+            $('.cluster_pane a.add_server').click(function() {
+                winkstart.publish('deploy_mgr.requestServer');
+            })
         }
     } // End function definitions
 
