@@ -18,7 +18,6 @@
 	winkstart.loadFormHelper = function(name) {
 		var url = 'js/tmpl_snippets/'  + name + '.html';
 		$.get(url, function(data) {
-			console.log(data);
 			$('body').append(data);
 		});
 	};

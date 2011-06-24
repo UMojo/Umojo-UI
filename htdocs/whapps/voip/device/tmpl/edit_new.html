@@ -185,41 +185,7 @@
                     <fieldset>
                         <legend>Audio Codecs</legend>
                         <ul class="controls">
-                            <li>
-                                <label for="media_codecs">G729</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G729" checked />
-                                <span>8kbps (Requires License)</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">G711u / PCMU</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="PCMU" checked />
-                                <span>64kbps (North America)</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">G711a / PCMA</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="PCMA" checked />
-                                <span>64kbps (Elsewhere)</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">G722 (HD) @ 16kHz</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G722_16" checked />
-                                <span>48kbps</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">G722.1 (HD) @ 32kHz</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="G722_32" checked />
-                                <span>56kbps</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">Siren (HD) @ 48kHz</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="CELT_48" checked />
-                                <span>48kbps</span>
-                            </li>
-                            <li>
-                                <label for="media_codecs">Siren (HD) @ 64kHz</label>
-                                <input id="media_codecs" name="media.audio.codecs[]" type="checkbox" value="CELT_64" checked />
-                                <span>64kbps</span>
-                            </li>
+                            {{tmpl(field_data.media_audio_codecs, {selectedValues: data.media.audio.codecs }) "#checkboxList"}}
                         </ul>
                     </fieldset>
 
@@ -230,18 +196,7 @@
                     <fieldset>
                         <legend>Video Codecs</legend>
                         <ul class="controls">
-                            <li>
-                                <label for="media_codecs_h261">H261</label>
-                                <input id="media_codecs_h261" name="media.video.codecs[]" type="checkbox" value="H261" checked />
-                            </li>
-                            <li>
-                                <label for="media_codecs">H263</label>
-                                <input id="media_codecs" name="media.video.codecs[]" type="checkbox" value="H263" checked />
-                            </li>
-                            <li>
-                                <label for="media_codecs">H264</label>
-                                <input id="media_codecs" name="media.video.codecs[]" type="checkbox" value="H264" checked />
-                            </li>
+                            {{tmpl(field_data.media_video_codecs, {selectedValues: data.media.video.codecs }) "#checkboxList"}}
                         </ul>
                     </fieldset>
 
@@ -255,7 +210,7 @@
                             <li>
                                 <label for="media_codecs">T.38</label>
                                 <select name="media.fax.codecs" id="media_fax_codecs">
-                                    {{tmpl(field_data.media_codecs, {selectedVal: data.media.fax_media_codec }) "#optionList"}}
+                                    {{tmpl(field_data.media_fax_codecs, {selectedVal: data.media.fax_media_codec }) "#optionList"}}
                                 </select>
                                 <span>(Requires a T.38 Capable Device)</span>
                             </li>

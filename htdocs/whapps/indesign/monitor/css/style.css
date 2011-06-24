@@ -474,7 +474,7 @@ ul.monitor_navs li a {
 	background-position: 0 0;
 	text-indent: -9999px;
 	float: left;
-	margin-top: 2px;
+        margin-top: 1px;
 }
 
 ul.monitor_navs li a:hover {
@@ -721,4 +721,75 @@ ul.monitor_navs li .percent_circle {
     width:25px;
     height:28px;
     float:left;
+}
+
+.dns_icon {  
+    background-image: url(../img/dns_icon.png);
+    margin: -2px 0 0 19px;
+    width:29px;
+    height:19px;
+    float:left;
+}
+
+.media_server_icon {
+    background-image: url(../img/media_server_icon.png);
+    margin: -5px 0 0 14px;
+    width: 23px;
+    height: 24px;
+    float: left;
+}
+
+.call_manager_icon {
+    background-image: url(../img/call_manager_icon.png);
+    margin: -6px 0 0 12px;
+    width: 26px;
+    height: 27px;
+    float: left;
+}
+
+.messaging_bus_icon {
+    background-image: url(../img/messaging_bus_icon.png);
+    margin: -4px 0 0 5px;
+    width: 26px;
+    height: 24px;
+    float: left;
+}
+
+.whapps_icon {
+    background-image: url(../img/whapps_icon.png);
+    margin: -5px 0 0 74px;
+    width: 24px;
+    height: 27px;
+    float: left;
+}
+
+.database_icon {
+    background-image: url(../img/database_icon.png);
+    margin: -5px 0 0 27px;
+    width: 22px;
+    height: 25px;
+    float: left;
+}
+
+.content_monitor_lg {
+    width: 1266px;
+    margin: 0 auto 0 -110px;
+}
+
+.dns_box_icon {
+    background-image: url(../img/dns_box.png);
+    width: 83px;
+    height: 59px;
+}
+
+.example_icon {
+    background-image: url(../img/example_icon.png);
+}
+
+.example_icon2 {
+    background-image: url(../img/example_icon2.png);
+}
+
+.example_icon3 {
+    background-image: url(../img/example_icon3.png);
 }
