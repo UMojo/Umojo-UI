@@ -23,15 +23,10 @@ winkstart.module('voip', 'voip', {
                 // We only initialize once
                 THIS.initialized = true;
 
-                winkstart.module.loadPlugin('voip', 'nav', function() {
-                    this.init(function() {
-                        winkstart.log('VoIP: Initialized Top Navigation');
-                        $.each(THIS.modules, function(k, v) {
-                            winkstart.module.loadPlugin('voip', v, function() {
-                                this.init(function() {
-                                    winkstart.log('VoIP: Initialized ' + v);
-                                });
-                            });
+                $.each(THIS.modules, function(k, v) {
+                    winkstart.module.loadPlugin('voip', v, function() {
+                        this.init(function() {
+                            winkstart.log('VoIP: Initialized ' + v);
                         });
                     });
                 });
