@@ -172,6 +172,8 @@ function(args) {
                 THIS.templates.editDeviceNew.tmpl(form_data).appendTo( $('#device-view') );
 
                 winkstart.cleanForm();
+
+                winkstart.validate.add($('#name'), /^\w+$/);
                 
 				$("ul.settings1").tabs("div.pane > div");
         		$("ul.settings2").tabs("div.advanced_pane > div");
