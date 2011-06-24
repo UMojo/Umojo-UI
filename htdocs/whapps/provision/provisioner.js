@@ -42,7 +42,7 @@ winkstart.module('provision', 'provision', {
        // Loaded - add to nav bar
         winkstart.publish('appnav.add', { 'name' : 'provision' });
 
-      winkstart.publish('nav.add', { module: this.__module, label: 'Provisioner', nav_category: 'category-3'});
+      winkstart.publish('subnav.add', { module: this.__module, label: 'Provisioner', nav_category: 'category-3'});
    },
    {
 /*****************************************************************************

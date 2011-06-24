@@ -9,7 +9,7 @@ winkstart.module('core', 'core', {
                 // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
                 winkstart.module.loadPlugin('core', 'appnav', function() {
                     this.init({ parent: $('body') }, function() {
-                        winkstart.module.loadPlugin('core', 'nav', function() {
+                        winkstart.module.loadPlugin('core', 'subnav', function() {
                             this.init({ parent: $('body') }, function() {
                                 // Now move onto apps
                                 winkstart.log('WhApps: Loading WhApps...');

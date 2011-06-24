@@ -23,15 +23,11 @@ winkstart.module('indesign', 'indesign', {
                 // We only initialize once
                 THIS.initialized = true;
 
-                winkstart.module.loadPlugin('voip', 'nav', function() {
-                    this.init(function() {
-                        winkstart.log('In-Design: Initialized Top Navigation');
-                        $.each(THIS.modules, function(k, v) {
-                            winkstart.module.loadPlugin('indesign', v, function() {
-                                this.init(function() {
-                                    winkstart.log('In-Design: Initialized ' + v);
-                                });
-                            });
+                winkstart.log('In-Design: Initialized Top Navigation');
+                $.each(THIS.modules, function(k, v) {
+                    winkstart.module.loadPlugin('indesign', v, function() {
+                        this.init(function() {
+                            winkstart.log('In-Design: Initialized ' + v);
                         });
                     });
                 });

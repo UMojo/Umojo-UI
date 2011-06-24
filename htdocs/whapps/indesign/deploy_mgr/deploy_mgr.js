@@ -35,7 +35,7 @@ winkstart.module('indesign', 'deploy_mgr',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('nav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Server Manager'
         });
