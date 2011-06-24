@@ -9,9 +9,13 @@
                 options = {};
             }
 
-            options.sDom = '<f>t<ip>';
+            if(options.sDom == undefined) {
+                options.sDom = '<f>t<ip>';
+            }
 
-            options.sPaginationType = 'full_numbers';
+            if(options.sPaginationType == undefined) {
+                options.sPaginationType = 'full_numbers';
+            }
 
             if(typeof data == 'object') {
                 options.aaData = data;
