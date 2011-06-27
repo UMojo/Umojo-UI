@@ -42,18 +42,20 @@ winkstart.module('indesign', 'deploy_mgr',
     }, // End initialization routine
 
 
-
     /* Define the functions for this module */
     {
+        server_count : 0,
+        
         requestServer: function() {
             var THIS = this;
-          
-            THIS.templates.serverinfo.tmpl().appendTo('.cluster_pane');
+            
+            THIS.templates.serverinfo.tmpl().dialog();
             $('#serverinfo input.save_btn').click(function() {
                 data = form2object('serverinfo');
                 console.log(data);
                 winkstart.publish('deploy_mgr.addServer', data);
             })
+            
         },
         
         addServer: function(serverData) {
@@ -63,10 +65,27 @@ winkstart.module('indesign', 'deploy_mgr',
 /*            winkstart.postJSON('deploy_mgr.addserver', serverData, function() {
                 // If successful, draw new server on screen
   */              
+                THIS.server_count++;
+                serverData.server_id = THIS.server_count;
                 THIS.templates.newserver.tmpl(serverData).appendTo('.cluster_pane');
 /*            });*/
             
         },
+
+        deleteServer: function(serverData) {
+            var THIS = this;
+            $('div.server[server_id='+serverData+']').remove();
+            console.log('delete');
+        },
+        
+        updateServer: function(serverData) {
+            var THIS = this;
+        },
+        
+        statusServer: function(serverData) {
+            var THIS = this;            
+        },
+
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
@@ -90,8 +109,12 @@ winkstart.module('indesign', 'deploy_mgr',
 
             $('.cluster_pane a.add_server').click(function() {
                 winkstart.publish('deploy_mgr.requestServer');
-            })
+            });
+            
+            $('.cluster_pane a.cancel_btn').live('click', function() {
+                console.log('event');
+                winkstart.publish('deploy_mgr.deleteServer', $(this).parents('div.server').attr('server_id'));
+            });
         }
     } // End function definitions
-
 );  // End module
