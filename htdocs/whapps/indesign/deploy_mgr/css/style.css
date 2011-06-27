@@ -20,26 +20,27 @@
             filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#6b6b6b', EndColorStr='#444444'); /* IE6‚ÄìIE9 */
 }
 
-ul.deployment_nav {
+.deployment_nav_container ul.deployment_nav {
 	list-style: none;
 	line-height: 25px;
 	margin-left: 7px;
 }
 
-ul.deployment_nav li {
+.deployment_nav_container ul.deployment_nav li {
 	float: left;
 }
 
-ul.deployment_nav li a{
+.deployment_nav_container ul.deployment_nav li a{
 	display: block;
 	padding: 0 13px;
+        line-height: 24px;
 }
 
-ul.deployment_nav li a:active{
+.deployment_nav_container ul.deployment_nav li a:active{
 	color: #323232;
 }
 
-ul.deployment_nav li a.current{
+.deployment_nav_container ul.deployment_nav li a.current{
 	background-color: #929292;
 	color: #323232;
 	font-weight: bold;
@@ -173,7 +174,7 @@ a.remove_btn {
 	line-height: 27px;
 	display: block;
 	right: 119px;
-	bottom: -14px;
+	bottom: -44px;
 }
 
 a.save_btn {
@@ -186,7 +187,7 @@ a.save_btn {
 	line-height: 27px;
 	display: block;
 	right: 34px;
-	bottom: -14px;
+	bottom: -44px;
 }
 
 .heading{

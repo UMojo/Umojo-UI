@@ -27,7 +27,7 @@ winkstart.module('indesign', 'deploy_mgr',
     function(args) {
         winkstart.publish('nav.add', {
             module: this.__module,
-            label: 'DEPLOY MGR'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Deploy Manager'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,7 +52,7 @@ winkstart.module('indesign', 'deploy_mgr',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'DEPLOY TEST',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Deploy Manager',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }
