@@ -58,7 +58,7 @@ winkstart.module('core', 'auth', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Login', nav_category: 'category-1'});
+		winkstart.publish('subnav.add', { module: this.__module, label: 'Login', nav_category: 'category-1'});
 	},
 	{	activate: function(args) {
 			$(args.target).empty();

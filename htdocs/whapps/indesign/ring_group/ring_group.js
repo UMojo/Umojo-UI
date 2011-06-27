@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'monitor',
+winkstart.module('indesign', 'ring_group', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -13,7 +13,7 @@ winkstart.module('indesign', 'monitor',
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'monitor.activate' : 'activate'
+            'ring_group.activate' : 'activate'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -25,9 +25,9 @@ winkstart.module('indesign', 'monitor',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('subnav.add', {
+        winkstart.publish('nav.add', {
             module: this.__module,
-            label: 'Monitor!'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Ring Group'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,7 +52,7 @@ winkstart.module('indesign', 'monitor',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Monitor!',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Ring Group',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }

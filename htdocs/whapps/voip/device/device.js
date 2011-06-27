@@ -75,7 +75,7 @@ winkstart.module('voip', 'device', {
 },
 /* Bootstrap routine - run when the module is first loaded */
 function(args) {
-    winkstart.publish('nav.add', {
+    winkstart.publish('subnav.add', {
         module: this.__module,
         label: 'Device Manager'
     });
