@@ -17,7 +17,7 @@ winkstart.module('voip', 'autoattendant', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Auto Attendant', nav_category: 'category-4'});
+		winkstart.publish('subnav.add', { module: this.__module, label: 'Auto Attendant', nav_category: 'category-4'});
 	},
 	{	
 		viewDevice: function(device_data){

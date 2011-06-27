@@ -25,7 +25,7 @@ winkstart.module('indesign', 'skeleton',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('nav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Skeleton'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });

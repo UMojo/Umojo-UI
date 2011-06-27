@@ -18,7 +18,7 @@ winkstart.module('voip', 'account', {
 		}
 	},
 	function(args) {
-		winkstart.publish('nav.add', { module: this.__module, label: 'Account Manager', nav_category: 'category-1'});
+		winkstart.publish('subnav.add', { module: this.__module, label: 'Account Manager', nav_category: 'category-1'});
 	},
 	{
 		viewAccount: function(account_data){

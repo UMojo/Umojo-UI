@@ -20,7 +20,7 @@ winkstart.module('system', 'server', {
 		}
 	},
 	function() {
-		winkstart.publish('nav.add', { 
+		winkstart.publish('subnav.add', { 
 			module: this.__module, 
 			label: 'SERVERS'
 		});

@@ -32,7 +32,7 @@ winkstart.module('voip', 'skeleton',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('nav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Skeleton'
         });
