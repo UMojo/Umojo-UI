@@ -1,5 +1,8 @@
 // This is the VoIP Services base application
 winkstart.module('voip', 'voip', {
+        css: {
+                voip: 'voip.css'
+        },
         templates: {
                 voip: 'voip.html'
         },
@@ -14,7 +17,7 @@ winkstart.module('voip', 'voip', {
     },
     {
         initialized :   false,
-        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'cdr'],
+        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'conference', 'user'],
         
         activate: function() {
             var THIS = this;

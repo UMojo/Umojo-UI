@@ -20,7 +20,7 @@ fieldset fieldset label.error {
     width: 200px !important;
 }
 .text, .button, .group, .control, .submit, textarea, select {
-    width: 200px !important;
+    width: 200px;
 }
 form {
     clear: both;

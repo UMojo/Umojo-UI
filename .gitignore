@@ -1,2 +1,4 @@
 *.esproj
 *.cache
+test/
+

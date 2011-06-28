@@ -1,84 +1,240 @@
 <div>
     <div class="inner">
-        <h1>Edit Device</h1>
-        <form id="device-form" action="" method="post">
+        <form id="device-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Device</h1>
+            {{else}}
+                <h1>Create Device</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+                <li><a href="#">Setup Instructions</a></li>
+                <li><a href="#">Troubleshooting</a></li>
+            </ul>
+
+            <div class="clear"></div>
             
-            <fieldset style="border:none">
-                <legend>Base Settings</legend>
-                <ul class="controls">
-                    <li>
-                        <label for="name">Name</label>
-                        <input id="name" name="name" type="text" value="${data.name}" />
-                    </li>
-                    <li>
-                        <label for="status">Status</label>
-                        <input id="status" name="status" type="text" value="${data.status}" />
-                    </li>
-                </ul>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Sip Settings</legend>
-                <ul class="controls">
-                    <li>
-                        <label for="sip_realm">Sip Realm</label>
-                        <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
-                    </li>
-                    <li>
-                        <label for="sip_method">Sip Method</label>
-                        <input id="sip_method" name="sip.method" type="text"  value="${data.sip.method}" />
-                    </li>
-                    <li>
-                        <label for="sip_username">Sip Username</label>
-                        <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
-                    </li>
-                    <li>
-                        <label for="sip_password">Sip Password</label>
-                        <input id="sip_password" name="sip.password" type="text"  value="${data.sip.password}" />
-                    </li>
-                    <li>
-                        <label for="sip_invite-format">Sip Invite Format</label>
-                        <input id="sip_invite-format" name="sip.invite-format" type="text"  value="${data.sip['invite-format']}" />
-                    </li>
-                    <li>
-                        <label for="sip_expire-seconds">Sip Expire Seconds</label>
-                        <input id="sip_expire-seconds" name="sip.expire-seconds" type="text"  value="${data.sip['expire-seconds']}" />
-                    </li>
-                </ul>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Caller ID Settings</legend>
-                <ul class="controls">
-                    <li>
-                        <label for="caller-id-type">Caller Id Type</label>
-                        <input id="caller-id-type" name="caller-id.type" type="text"  value="${data['caller-id'].type}" />
-                    </li>
-                    <li>
-                        <label for="caller-id-number">Caller Id Number</label>
-                        <input id="caller-id-number" name="caller-id.number" type="text"  value="${data['caller-id'].number}" />
-                    </li>
-                </ul>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Media Settings</legend>
-                <ul class="controls">
-                    <li>
-                        <label for="media_bypass-media">Bypass Media</label>
-                        <input id="media_bypass-media" name="media.bypass-media" type="text"  value="${data.media['bypass-media']}" />
-                    </li>
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="name">Device Nickname:</label>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                                <span class="tip_inline">(i.e. Phone in Cubicle C)</span>
+                            </li>
+                            <li>
+                                <label for="user">Belongs To:</label>
+                                <select name="user" id="user">
+                                    {{tmpl(field_data.users, {selectedVal: data.user }) "#optionList"}}
+                                </select>
+                            </li>
+                            <li>
+                                <label for="mac_address">Device MAC Address:</label>
+                                <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
+                            </li>
+                            <li>
+                                <label for="status">Status:</label>
+                                <select name="status" id="status">
+                                    {{tmpl(field_data.status_types, {selectedVal: data.status }) "#optionList"}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+
+
+                <div id="setup_instructions">
+                    To setup your phone, simply plug it in to the internet. You can configure features on your phone by dialing *97.
+                    <br/>
+                    <br/>
+                    If you need support, please contact customer service at (800) 222-0182.
+                    <br/>
+
+                    <div class="clear"></div>
+                </div> <!-- end setup instructions -->
+
+                
+                <div id="troubleshooting">
+                    Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
+                    <ul class="button">
+                        <li>
+                            <a href="#">Ring Phone</a>
+                        </li>
+                    </ul>
+
+                    <div class="clear"></div>
+
+                    <br/>
+                    <br/>
                     
-					{{each form_lookup_data.media.codecs}}
-					<li>
-					<label for="media_codecs">${this}</label>
-					<input type="checkbox" name="media.codecs[]" id="media_codecs" value="${this}" />
-					</li>
-					{{/each}}
+                    If you are having problems with your phone or wish to upgrade it's firmware, you can reboot the phone.
+                    <ul class="button">
+                        <li>
+                            <a href="#">Reboot</a>
+                        </li>
+                    </ul>
+
+                    <div class="clear"></div>
+                </div> <!-- end troubleshooting -->
+            </div>
+
+            <div class="clear"></div>
+
+
+            <div class="advanced_settings_box">
+                <h2>Advanced Settings</h2>
+
+                <ul class="advanced_tabs settings2">
+                    <li><a href="#"><span  class="icon phone"/>Caller ID</a></li>
+                    <li><a href="#"><span  class="icon sip"/>SIP Settings</a></li>
+                    <li><a href="#"><span class="icon audio"/>Audio</a></li>
+                    <li><a href="#"><span class="icon video"/>Video</a></li>
+                    <li><a href="#"><span class="icon fax"/>Fax</a></li>
                 </ul>
-            </fieldset>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="advanced_pane">
+
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller-id-name-internal">Caller ID Name:</label>
+                                <input id="caller-id-name-internal" name="caller-id.internal.name" type="text"  value="${data['caller-id'].internal.name}" />
+                            </li>
+                            <li>
+                                <label for="caller-id-number-internal">Caller ID Number:</label>
+                                <input id="caller-id-number-internal" name="caller-id.internal.number" type="text"  value="${data['caller-id'].internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller-id-name-external">Caller ID Name:</label>
+                                <input id="caller-id-name-external" name="caller-id.external.name" type="text"  value="${data['caller-id'].external.name}" />
+                            </li>
+                            <li>
+                                <label for="caller-id-number-external">Caller ID Number:</label>
+                                <input id="caller-id-number-external" name="caller-id.external.number" type="text"  value="${data['caller-id'].external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="SIP Settings">
+                    <fieldset>
+                        <legend>SIP Settings</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="sip_realm">Realm / Domain Name:</label>
+                                <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
+                            </li>
+                            <li>
+                                <label for="sip_method">Authentication Method:</label>
+                                <select name="sip.method" id="sip.method">
+                                    {{tmpl(field_data.auth_methods, {selectedVal: data.sip.method }) "#optionList"}}
+                                </select>
+                            </li>
+                            <li>
+                                <label for="sip_username">Username:</label>
+                                <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
+                            </li>
+                            <li>
+                                <label for="sip_password">Password:</label>
+                                <input id="sip_password" name="sip.password" type="text"  value="${data.sip.password}" />
+                            </li>
+                            <li>
+                                <label for="sip_invite-format">Invite Format:</label>
+                                <select name="sip.invite-format" id="sip_invite-format">
+                                    {{tmpl(field_data.invite_formats, {selectedVal: data.sip['invite-format'] }) "#optionList"}}
+                                </select>
+                            </li>
+                            <li>
+                                <label for="sip_expire-seconds">Expire Seconds:</label>
+                                <input id="sip_expire-seconds" name="sip.expire-seconds" type="text"  value="${data.sip['expire-seconds']}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="audio_settings">
+                    <fieldset>
+                        <legend>Optimization</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="media_bypass-media">Peer to Peer Audio</label>
+                                <select name="media.bypass_media" id="sip_invite-format">
+                                    {{tmpl(field_data.bypass_media_types, {selectedVal: data.media.bypass_media }) "#optionList"}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Audio Codecs</legend>
+                        <ul class="controls">
+                            {{tmpl(field_data.media_audio_codecs, {selectedValues: data.media.audio.codecs }) "#checkboxList"}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div id="audio_settings">
+                    <fieldset>
+                        <legend>Video Codecs</legend>
+                        <ul class="controls">
+                            {{tmpl(field_data.media_video_codecs, {selectedValues: data.media.video.codecs }) "#checkboxList"}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div id="fax_settings">
+                    <fieldset>
+                        <legend>Fax Support</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="media_codecs">T.38</label>
+                                <select name="media.fax.codecs" id="media_fax_codecs">
+                                    {{tmpl(field_data.media_fax_codecs, {selectedVal: data.media.fax_media_codec }) "#optionList"}}
+                                </select>
+                                <span>(Requires a T.38 Capable Device)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    
+                    <div class="clear"></div>
+
+                </div>
+
+            </div>
+
+        <ul class="button right devices">
+            <li><a class="device-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="device-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="device-cancel" href="#">Cancel</a></li>
+        </ul>
             
-            <input type="submit" value="Save" />
         </form>
     </div>
 </div>
