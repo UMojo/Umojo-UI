@@ -1,5 +1,8 @@
 // This is the VoIP Services base application
 winkstart.module('voip', 'voip', {
+        css: {
+                voip: 'voip.css'
+        },
         templates: {
                 voip: 'voip.html'
         },

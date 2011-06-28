@@ -46,10 +46,15 @@
         		var AUTH_TOKEN = 'abef516f933f5dbc3c662b65cd3b548e';
         		winkstart.debug = true;
                         amplify.cache = false;
+                        api_key = '';
                         winkstart.modules = {
                             'indesign'    : { 'url' : 'indesign/', 'label' : 'In Design' },
 /*                            'provision'   : { 'url' : 'provision/', 'label' : 'Phone Manager' },*/
-                            'voip'        : { 'url' : 'voip/', 'label' : 'VoIP Services' },
+                            'voip'        : {
+                                'url' : 'voip/',
+                                'label' : 'VoIP Services',
+                                'auth_token' : ''
+                            },
                             'system'      : { 'url' : 'system/', 'label' : 'Deploy Manager' },
                             'connect'     : { 'url' : 'connect/', 'label' : 'Connectivity' },
                             'dashboard'   : { 'url' : 'dashboard/', 'label' : 'Dashboard' }

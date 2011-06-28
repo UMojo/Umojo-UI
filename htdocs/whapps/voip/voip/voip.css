@@ -1,0 +1,20 @@
+/* 
+    Document   : voip
+    Created on : Jun 23, 2011, 9:24:17 PM
+    Author     : dman
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+.quick_access {
+    text-align: center;
+}
+
+.quick_access .welcome h1 {
+    line-height: 40px;
+}
+
+.quick_access .subtitle {
+    font-size: 16px;
+}
