@@ -36,6 +36,19 @@ winkstart.module('voip', 'device',
                     media_fax_codecs: [{value: 'Auto-Detect'}, {value:'Always Force'}, {value:'Disabled'}]
         },
 
+        validation : [
+                { name : '#name', regex : /^\w+$/ },
+                { name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/ },
+                { name : '#caller-id-name-internal', regex : /^.*$/ },
+                { name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/ },
+                { name : '#caller-id-name-external', regex : /^.*$/ },
+                { name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/ },
+                { name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/ },
+                { name : '#sip_username', regex : /^[^\s]+$/ },
+                { name : '#sip_password', regex : /^[^\s]+$/ },
+                { name : '#sip_expire-seconds', regex : /^[0-9]+$/ }
+        ],
+
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "device.list": {
@@ -75,23 +88,10 @@ winkstart.module('voip', 'device',
     },
 
     {
-        validation : [
-                { name : '#name', regex : /^\w+$/ },
-                { name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/ },
-                { name : '#caller-id-name-internal', regex : /^.*$/ },
-                { name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/ },
-                { name : '#caller-id-name-external', regex : /^.*$/ },
-                { name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/ },
-                { name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/ },
-                { name : '#sip_username', regex : /^[^\s]+$/ },
-                { name : '#sip_password', regex : /^[^\s]+$/ },
-                { name : '#sip_expire-seconds', regex : /^[0-9]+$/ }
-        ],
-
         validateForm: function(state) {
             var THIS = this;
             
-            $(THIS.validation).each(function(k, v) {
+            $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
                 } else if (state == 'save') {
@@ -116,20 +116,19 @@ winkstart.module('voip', 'device',
                 /* Is this a create or edit? See if there's a known ID */
                 if (device_id) {
                     /* EDIT */
-
                     rest_data.device_id = device_id;
-                    winkstart.putJSON('device.create', rest_data, function (json, xhr) {
+                    winkstart.postJSON('device.update', rest_data, function (json, xhr) {
+                        /* Refresh the list and the edit content */
                         THIS.buildListView();
                         THIS.editDevice({
-                            id: json.id
+                            id: device_id
                         });
                     });
                 } else {
                     /* CREATE */
 
                     /* Actually send the JSON data to the server */
-                    winkstart.postJSON('device.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
+                    winkstart.putJSON('device.create', rest_data, function (json, xhr) {
                         THIS.buildListView();
                         THIS.editDevice({
                             id: json.id
@@ -146,7 +145,7 @@ winkstart.module('voip', 'device',
          */
         renderDevice: function(form_data){
             var THIS = this;
-            var device_id = form_data.id;
+            var device_id = form_data.data.id;
             
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
