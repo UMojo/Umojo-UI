@@ -1,5 +1,9 @@
 winkstart.module('voip', 'device',
     {
+        css: [
+            'css/device.css'
+        ],
+
         /* What HTML templates will we be using? */
         templates: {
             device: 'tmpl/device.html',
@@ -37,16 +41,16 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-                { name : '#name', regex : /^\w+$/ },
-                { name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/ },
-                { name : '#caller-id-name-internal', regex : /^.*$/ },
-                { name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/ },
-                { name : '#caller-id-name-external', regex : /^.*$/ },
-                { name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/ },
-                { name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/ },
-                { name : '#sip_username', regex : /^[^\s]+$/ },
-                { name : '#sip_password', regex : /^[^\s]+$/ },
-                { name : '#sip_expire-seconds', regex : /^[0-9]+$/ }
+                {name : '#name', regex : /^\w+$/},
+                {name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/},
+                {name : '#caller-id-name-internal', regex : /^.*$/},
+                {name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/},
+                {name : '#caller-id-name-external', regex : /^.*$/},
+                {name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/},
+                {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
+                {name : '#sip_username', regex : /^[^\s]+$/},
+                {name : '#sip_password', regex : /^[^\s]+$/},
+                {name : '#sip_expire-seconds', regex : /^[0-9]+$/}
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -119,7 +123,7 @@ winkstart.module('voip', 'device',
                     rest_data.device_id = device_id;
                     winkstart.postJSON('device.update', rest_data, function (json, xhr) {
                         /* Refresh the list and the edit content */
-                        THIS.buildListView();
+                        THIS.renderList();
                         THIS.editDevice({
                             id: device_id
                         });
@@ -129,49 +133,15 @@ winkstart.module('voip', 'device',
 
                     /* Actually send the JSON data to the server */
                     winkstart.putJSON('device.create', rest_data, function (json, xhr) {
-                        THIS.buildListView();
+                        THIS.renderList();
                         THIS.editDevice({
-                            id: json.id
+                            id: json.data.id
                         });
                     });
                 }
             } else {
                 alert('Please correct errors that you have on the form.');
             }
-        },
-
-        /**
-         * Draw device fields/template and populate data, add validation. Works for both create & edit
-         */
-        renderDevice: function(form_data){
-            var THIS = this;
-            var device_id = form_data.data.id;
-            
-            /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
-
-            winkstart.cleanForm();
-
-            /* Initialize form field validation */
-            THIS.validateForm();
-
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-
-            /* Listen for the submit event (i.e. they click "save") */
-            $('.device-save').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                /* Grab all the form field data */
-                var form_data = form2object('device-form');
-
-                THIS.saveDevice(device_id, form_data);
-
-                return false;
-            });
         },
 
         /*
@@ -182,8 +152,8 @@ winkstart.module('voip', 'device',
             var THIS = this;
             var form_data = {
                 data : {
-                    'caller-id' : { external : {}, internal : {} },
-                    media : { audio : { codecs : [] }, video : { codecs : [] } },
+                    'caller-id' : {external : {}, internal : {}},
+                    media : {audio : {codecs : []}, video : {codecs : []}},
                     sip : {}
                 }
             };
@@ -210,42 +180,80 @@ winkstart.module('voip', 'device',
             
         },
 
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
-        activate: function(data) {
-            $('#ws-content').empty();
+        deleteDevice: function(device_id) {
             var THIS = this;
-            this.templates.device.tmpl({}).appendTo( $('#ws-content') );
+            
+            var rest_data = {
+                crossbar: true,
+                account_id: MASTER_ACCOUNT_ID,
+                device_id: device_id
+            };
 
-            winkstart.loadFormHelper('forms');
+            /* Actually send the JSON data to the server */
+            winkstart.deleteJSON('device.delete', rest_data, function (json, xhr) {
+                THIS.renderList();
+                $('#device-view').empty();
+            });
+        },
 
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
+        /**
+         * Draw device fields/template and populate data, add validation. Works for both create & edit
+         */
+        renderDevice: function(form_data){
+            var THIS = this;
+            var device_id = form_data.data.id;
 
-            winkstart.publish('layout.updateLoadedModule', {
-                label: 'Device Management',
-                module: this.__module
+            /* Paint the template with HTML of form fields onto the page */
+            THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
+
+            winkstart.cleanForm();
+
+            /* Initialize form field validation */
+            THIS.validateForm();
+
+            $("ul.settings1").tabs("div.pane > div");
+            $("ul.settings2").tabs("div.advanced_pane > div");
+
+            /* Listen for the submit event (i.e. they click "save") */
+            $('.device-save').click(function(event) {
+                /* Save the data after they've clicked save */
+
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
+
+                /* Grab all the form field data */
+                var form_data = form2object('device-form');
+
+                THIS.saveDevice(device_id, form_data);
+
+                return false;
             });
 
-            $('.edit-device').live({
-                click: function(evt){
-                    var target = evt.currentTarget;
-                    var device_id = target.getAttribute('rel');
-                    winkstart.publish('device.edit-device', {
-                        'device_id' : device_id
-                    });
-                }
+            $('.device-cancel').click(function(event) {
+                event.preventDefault();
+
+                /* Cheat - just delete the main content area. Nothing else needs doing really */
+                $('#device-view').empty();
+
+                return false;
             });
 
-            THIS.buildListView();
+            $('.device-delete').click(function(event) {
+                /* Save the data after they've clicked save */
+
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
+
+                THIS.deleteDevice(device_id);
+
+                return false;
+            });
         },
 
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
          * and populating into our standardized data list "thing".
          */
-        buildListView: function(){
+        renderList: function(){
             var THIS = this;
 
             winkstart.getJSON('device.list', {
@@ -280,6 +288,38 @@ winkstart.module('voip', 'device',
                 $("#device-listpanel").listpanel(options);
 
             });
+        },
+
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+         * if appropriate. You should also attach to any default click items you want to respond to when people click
+         * on them. Also register resources.
+         */
+        activate: function(data) {
+            $('#ws-content').empty();
+            var THIS = this;
+            this.templates.device.tmpl({}).appendTo( $('#ws-content') );
+
+            winkstart.loadFormHelper('forms');
+
+            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+            winkstart.registerResources(this.config.resources);
+
+            winkstart.publish('layout.updateLoadedModule', {
+                label: 'Device Management',
+                module: this.__module
+            });
+
+            $('.edit-device').live({
+                click: function(evt){
+                    var target = evt.currentTarget;
+                    var device_id = target.getAttribute('rel');
+                    winkstart.publish('device.edit-device', {
+                        'device_id' : device_id
+                    });
+                }
+            });
+
+            THIS.renderList();
         }
     }
 );

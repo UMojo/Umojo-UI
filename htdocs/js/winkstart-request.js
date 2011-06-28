@@ -16,10 +16,10 @@
 					verb = 'POST';
 					break;
 				case 'PUT':
-					verb = 'POST';
+					verb = 'PUT';
 					break;
 				case 'DELETE':
-					verb = 'POST';
+					verb = 'DELETE';
 					break;
 			}
 			

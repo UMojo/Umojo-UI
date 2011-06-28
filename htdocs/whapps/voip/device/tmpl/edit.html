@@ -227,8 +227,11 @@
 
             </div>
 
-        <ul class="button right">
+        <ul class="button right devices">
             <li><a class="device-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="device-delete" href="#">Delete</a></li>
+            {{/if}}
             <li><a class="device-cancel" href="#">Cancel</a></li>
         </ul>
             
