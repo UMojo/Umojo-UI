@@ -16,6 +16,18 @@
                                 .addClass('valid');
                 }
             });
+        },
+        save: function($element, regex) {
+            if($element.val().match(regex) == null) {
+                $element.parents('.validated')
+                                .removeClass('valid')
+                                .addClass('invalid');
+            }
+            else {
+                $element.parents('.validated')
+                        .removeClass('invalid')
+                        .addClass('valid');
+            }
         }
     }
 

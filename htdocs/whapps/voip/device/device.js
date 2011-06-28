@@ -1,10 +1,5 @@
 winkstart.module('voip', 'device',
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             device: 'tmpl/device.html',
@@ -80,53 +75,86 @@ winkstart.module('voip', 'device',
     },
 
     {
-        createDevice: function(){
-            $('#device-view').empty();
+        validation : [
+                { name : '#name', regex : /^\w+$/ },
+                { name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/ },
+                { name : '#caller-id-name-internal', regex : /^.*$/ },
+                { name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/ },
+                { name : '#caller-id-name-external', regex : /^.*$/ },
+                { name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/ },
+                { name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/ },
+                { name : '#sip_username', regex : /^[^\s]+$/ },
+                { name : '#sip_password', regex : /^[^\s]+$/ },
+                { name : '#sip_expire-seconds', regex : /^[0-9]+$/ }
+        ],
+
+        validateForm: function(state) {
             var THIS = this;
-
-            var form_data = {};
-            form_data.field_data = THIS.config.formData;
-
-            this.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
-            winkstart.cleanForm();
-
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-
-            $('.device-save').click(function() {
-                var formData = form2object('device-form');
-
-                //Handle Checkboxes
-                if(!jQuery.inArray(formData.media, 'codecs')){
-                    formData.media.codecs = [];
+            
+            $(THIS.validation).each(function(k, v) {
+                if(state == undefined) {
+                    winkstart.validate.add($(v.name), v.regex);
+                } else if (state == 'save') {
+                    winkstart.validate.save($(v.name), v.regex);
                 }
-
-                var put_data = {};
-                put_data.crossbar = true;
-                put_data.account_id = MASTER_ACCOUNT_ID;
-                put_data.data = formData;
-
-                winkstart.putJSON('device.create', put_data, function (json, xhr) {
-                    THIS.buildListView();
-                    THIS.editDevice({
-                        id: json.id
-                    });
-                });
-
-                return false;
             });
         },
 
-        drawScreen: function(form_data){
+        saveDevice: function(device_id, form_data) {
             var THIS = this;
-            console.log(form_data);
+
+            /* Check validation before saving */
+            THIS.validateForm('save');
+
+            if(!$('.invalid').size()) {
+                /* Construct the JSON we're going to send */
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.data = form_data;
+
+                /* Is this a create or edit? See if there's a known ID */
+                if (device_id) {
+                    /* EDIT */
+
+                    rest_data.device_id = device_id;
+                    winkstart.putJSON('device.create', rest_data, function (json, xhr) {
+                        THIS.buildListView();
+                        THIS.editDevice({
+                            id: json.id
+                        });
+                    });
+                } else {
+                    /* CREATE */
+
+                    /* Actually send the JSON data to the server */
+                    winkstart.postJSON('device.update', rest_data, function (json, xhr) {
+                        /* Refresh the list and the edit content */
+                        THIS.buildListView();
+                        THIS.editDevice({
+                            id: json.id
+                        });
+                    });
+                }
+            } else {
+                alert('Please correct errors that you have on the form.');
+            }
+        },
+
+        /**
+         * Draw device fields/template and populate data, add validation. Works for both create & edit
+         */
+        renderDevice: function(form_data){
+            var THIS = this;
+            var device_id = form_data.id;
             
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
 
             winkstart.cleanForm();
 
-            winkstart.validate.add($('#name'), /^\w+$/);
+            /* Initialize form field validation */
+            THIS.validateForm();
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
@@ -141,33 +169,23 @@ winkstart.module('voip', 'device',
                 /* Grab all the form field data */
                 var form_data = form2object('device-form');
 
-                /* Construct the JSON we're going to send */
-                var post_data = {};
-                post_data.crossbar = true;
-                post_data.account_id = MASTER_ACCOUNT_ID;
-                post_data.data = form_data;
-                post_data.device_id = device_id;
-
-                /* Actually send the JSON data to the server */
-                winkstart.postJSON('device.update', post_data, function (json, xhr) {
-                    /* Refresh the list and the edit content */
-                    THIS.buildListView();
-                    THIS.editDevice({
-                        id: json.id
-                    });
-                });
+                THIS.saveDevice(device_id, form_data);
 
                 return false;
             });
         },
 
+        /*
+         * Create/Edit device properties (don't pass an ID field to cause a create instead of an edit)
+         */
         editDevice: function(data){
             $('#device-view').empty();
             var THIS = this;
             var form_data = {
                 data : {
                     'caller-id' : { external : {}, internal : {} },
-                    media : { audio : { codecs : [] }, video : { codecs : [] } }
+                    media : { audio : { codecs : [] }, video : { codecs : [] } },
+                    sip : {}
                 }
             };
             
@@ -175,20 +193,20 @@ winkstart.module('voip', 'device',
 
 
             if (data && data.id) {
-                /* Grab JSON data from server for device_id */
+                /* This is an existing device - Grab JSON data from server for device_id */
                 winkstart.getJSON('device.get', {
                     crossbar: true,
                     account_id: MASTER_ACCOUNT_ID,
                     device_id: data.id
                 }, function(json, xhr) {
-                    console.log(form_data);
-                    /* Take JSON and merge with default/empty fields */
+                    /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
 
-                    THIS.drawScreen(form_data);
+                    THIS.renderDevice(form_data);
                 });
             } else {
-                THIS.drawScreen(form_data);
+                /* This is a new device - pass along empty params */
+                THIS.renderDevice(form_data);
             }
             
         },
@@ -236,7 +254,7 @@ winkstart.module('voip', 'device',
                 account_id: MASTER_ACCOUNT_ID
             }, function (json, xhr) {
 
-                //List Data that would be sent back from server
+                // List Data that would be sent back from server
                 function map_crossbar_data(crossbar_data){
                     var new_list = [];
                     if(crossbar_data.length > 0) {
@@ -248,7 +266,7 @@ winkstart.module('voip', 'device',
                         });
                     }
                     return new_list;
-                };
+                }
 
                 var options = {};
                 options.label = 'Device Module';
