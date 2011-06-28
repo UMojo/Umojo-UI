@@ -1,0 +1,96 @@
+<div>
+    <div class="inner">
+        <form id="user-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit User</h1>
+            {{else}}
+                <h1>Create User</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="first_name">First Name:</label>
+                                <input id="first_name" name="first_name" type="text" value="${data.first_name}" />
+                                <span class="tip_inline">(i.e. First Name)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="last_name">Last Name:</label>
+                                <input id="last_name" name="last_name" type="text" value="${data.last_name}" />
+                                <span class="tip_inline">(i.e. Last Name)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="email">Email Address:</label>
+                                <input id="email" name="email" type="text" value="${data.email}" />
+                                <span class="tip_inline">(i.e. user@2600hz.com)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="username">Username:</label>
+                                <input id="username" name="username " type="text" value="${data.username}" />
+                                <span class="tip_inline">(i.e. JoeSchmoe)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+
+            </div>
+
+            <div class="clear"></div>
+
+
+            <div class="advanced_settings_box">
+                <h2>Advanced Settings</h2>
+
+                <ul class="advanced_tabs settings2">
+                    <li><a href="#"><span  class="icon phone"/>Something</a></li>
+                </ul>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="advanced_pane">
+
+                <div id="something">
+
+                    <div class="clear"></div>
+
+                </div>
+
+            </div>
+
+        <ul class="button right users">
+            <li><a class="user-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="user-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="user-cancel" href="#">Cancel</a></li>
+        </ul>
+            
+        </form>
+    </div>
+</div>

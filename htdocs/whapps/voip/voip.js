@@ -17,7 +17,7 @@ winkstart.module('voip', 'voip', {
     },
     {
         initialized :   false,
-        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'conference'],
+        modules :       ['account', 'media', 'device', 'autoattendant', 'callflow', 'conference', 'user'],
         
         activate: function() {
             var THIS = this;
