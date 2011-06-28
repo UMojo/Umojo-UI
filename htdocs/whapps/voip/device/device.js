@@ -99,7 +99,32 @@ function(args) {
             THIS.templates.viewDevice.tmpl(json).appendTo( $('#device-view') );
         });
     },
-		
+	 validateForm: function(state) {
+        if(state==undefined) {
+            winkstart.validate.add($('#name'), /^\w+$/);
+            winkstart.validate.add($('#mac_address'), /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/);
+            winkstart.validate.add($('#caller-id-name-internal'), /^.+$/);
+            winkstart.validate.add($('#caller-id-number-internal'), /^[\+]?[0-9]+$/);
+            winkstart.validate.add($('#caller-id-name-external'), /^.+$/);
+            winkstart.validate.add($('#caller-id-number-external'), /^[\+]?[0-9]+$/);
+            winkstart.validate.add($('#sip_realm'), /^[0-9A-Za-z\-\.\:]+$/);
+            winkstart.validate.add($('#sip_username'), /^[^\s]+$/);
+            winkstart.validate.add($('#sip_password'), /^[^\s]+$/);
+            winkstart.validate.add($('#sip_expire-seconds'), /^[0-9]+$/);
+        }
+        else if(state=='save') {
+            winkstart.validate.save($('#name'), /^\w+$/);
+            winkstart.validate.save($('#mac_address'), /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/);
+            winkstart.validate.save($('#caller-id-name-internal'), /^.+$/);
+            winkstart.validate.save($('#caller-id-number-internal'), /^[\+]?[0-9]+$/);
+            winkstart.validate.save($('#caller-id-name-external'), /^.+$/);
+            winkstart.validate.save($('#caller-id-number-external'), /^[\+]?[0-9]+$/);
+            winkstart.validate.save($('#sip_realm'), /^[0-9A-Za-z\-\.\:]+$/);
+            winkstart.validate.save($('#sip_username'), /^[^\s]+$/);
+            winkstart.validate.save($('#sip_password'), /^[^\s]+$/);
+            winkstart.validate.save($('#sip_expire-seconds'), /^[0-9]+$/);
+        }
+    },
     createDevice: function(){
         $('#device-view').empty();
         var THIS = this;
@@ -109,34 +134,44 @@ function(args) {
         
         this.templates.createDevice.tmpl(form_data).appendTo( $('#device-view') );
         winkstart.cleanForm();
-
+        
+        this.validateForm();
+    
         $("ul.settings1").tabs("div.pane > div");
         $("ul.settings2").tabs("div.advanced_pane > div");
 			
         $('.device-save').click(function() {
             var formData = form2object('device-form');
-				
+            	
             //Handle Checkboxes
             if(!jQuery.inArray(formData.media, 'codecs')){
                 formData.media.codecs = [];
             }
-				
+		    		
             var put_data = {};
             put_data.crossbar = true;
             put_data.account_id = MASTER_ACCOUNT_ID;
             put_data.data = formData;
-				
-            winkstart.putJSON('device.create', put_data, function (json, xhr) {
-                THIS.buildListView();
-                THIS.viewDevice({
-                    id: json.id
-				});
-            });
+			
+            /* Check validation before saving */
+            THIS.validateForm('save');
+
+            /* If there is no invalid property, save it */
+            if(!$('.invalid').size()) {
+                winkstart.putJSON('device.create', put_data, function (json, xhr) {
+                    THIS.buildListView();
+                    THIS.viewDevice({
+                        id: json.id
+				    });
+                });
+            } 
+            else {
+                alert('Please correct errors that you have on the form.');
+            }
 				
             return false;
         });
     },
-		
     editDevice: function(data){
         $('#device-view').empty();
         var THIS = this;
@@ -173,7 +208,7 @@ function(args) {
 
                 winkstart.cleanForm();
 
-                winkstart.validate.add($('#name'), /^\w+$/);
+                THIS.validateForm();
                 
 				$("ul.settings1").tabs("div.pane > div");
         		$("ul.settings2").tabs("div.advanced_pane > div");
@@ -184,7 +219,7 @@ function(args) {
 
                     /* Ignore the normal behavior of a submit button and do our stuff instead */
                     event.preventDefault();
-
+                        
                     /* Grab all the form field data */
                     var formData = form2object('device-form');
 
@@ -194,15 +229,19 @@ function(args) {
                     post_data.account_id = MASTER_ACCOUNT_ID;
                     post_data.data = formData;
                     post_data.device_id = device_id;
+                    
+                    /* Check validation before saving */
+                    THIS.validateForm('save');
 
-                    /* Actually send the JSON data to the server */
-                    winkstart.postJSON('device.update', post_data, function (json, xhr) {
-                        THIS.buildListView();
-                        THIS.viewDevice({
-                            id: device_id
-                        });
-                    });
-					
+                    if(!$('.invalid').size()) {
+                        /* Actually send the JSON data to the server */
+                        winkstart.postJSON('device.update', post_data, function (json, xhr) {
+                            THIS.buildListView();
+                            THIS.viewDevice({
+                                id: device_id
+                            });
+                        }) ;
+                    } else alert('Please correct errors that you have on the form.'); 
                     return false;
                 });
             } // End JSON Success routine
