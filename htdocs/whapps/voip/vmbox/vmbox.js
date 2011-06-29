@@ -242,7 +242,7 @@ winkstart.module('voip', 'vmbox',
                         _.each(crossbar_data, function(elem){
                             new_list.push({
                                 id: elem.id,
-                                title: elem.mailbox
+                                title: elem.name
                             });
                         });
                     }
