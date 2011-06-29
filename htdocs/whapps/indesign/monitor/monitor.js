@@ -27,7 +27,7 @@ winkstart.module('indesign', 'monitor',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Monitor!'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Cluster Monitor'
         });
     }, // End initialization routine
 
@@ -35,6 +35,39 @@ winkstart.module('indesign', 'monitor',
 
     /* Define the functions for this module */
     {
+
+        /*
+         * Display DNS servers
+         */
+        refreshDNS: function() {
+
+        },
+
+        refreshCallDirector: function() {
+
+        },
+
+        refreshMediaServer: function() {
+
+        },
+
+        refreshCallManager: function() {
+
+        },
+
+        refreshMessagingBus: function() {
+
+        },
+
+        refreshWhApps: function() {
+
+        },
+
+        refreshDatabase: function() {
+
+        },
+
+        
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
