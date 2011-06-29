@@ -13,9 +13,11 @@ winkstart.module('dashboard', 'dashboard', {
         modules :       ['monitor' ],
             
         activate: function() {
-            if (this.initialized) {
+            /*if (this.initialized) {
                 return;
-            }
+            }*/
+
+            winkstart.publish('subnav.clear');
 
             // We only initialize once
             this.initialized = true;

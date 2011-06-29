@@ -1,19 +1,19 @@
-winkstart.module('indesign', 'trunkstore', 
+winkstart.module('connect', 'sipservice', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/trunkstore.css'
+            'css/sipservice.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/trunkstore.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/sipservice.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'trunkstore.activate' : 'activate'
+            'sipservice.activate' : 'activate'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -27,7 +27,7 @@ winkstart.module('indesign', 'trunkstore',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Trunkstore Home'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'SIP Services'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,7 +52,7 @@ winkstart.module('indesign', 'trunkstore',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Trunkstore Home',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }

@@ -24,7 +24,9 @@ winkstart.module('voip', 'voip', {
             
             if (!THIS.initialized) {
                 // We only initialize once
-                THIS.initialized = true;
+                //THIS.initialized = true;
+
+                winkstart.publish('subnav.clear');
 
                 $.each(THIS.modules, function(k, v) {
                     winkstart.module.loadPlugin('voip', v, function() {

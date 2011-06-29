@@ -11,7 +11,7 @@ winkstart.module('core', 'subnav', {
         
         subscribe: {
             'subnav.add'    : 'add',
-            'subnav.remove' : 'remove'
+            'subnav.clear' : 'clear'
         }
     },
 
@@ -43,12 +43,13 @@ winkstart.module('core', 'subnav', {
             this.templates.item.tmpl(data).appendTo(navbar_list);
 
             // Increase size of navbar
-            var element_width = $('li', navbar_list).width() + 30;
+            var element_width = $('li', navbar_list).width() + 45;
             winkstart.log('VoIP Nav: ' + navbar.width(), 'Element: ' + element_width);
             navbar.width(navbar.width() + element_width);
         },
 
         clear: function(data) {
-            $('.sub_nav').empty();
+            $('.sub_nav ul').empty();
+            $('.sub_nav').width(0);
         }
 });

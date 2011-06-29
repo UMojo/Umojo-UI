@@ -14,7 +14,7 @@ winkstart.module('indesign', 'indesign', {
     },
     {
         initialized :   false,
-        modules :       ['deploy_mgr', 'monitor', 'ring_group', 'media_mgr', 'trunkstore'],     // <-- ADD YOUR IN-PROGRESS MODULES HERE!!!
+        modules :       ['ring_group', 'media_mgr'],     // <-- ADD YOUR IN-PROGRESS MODULES HERE!!!
         
         activate: function() {
             var THIS = this;

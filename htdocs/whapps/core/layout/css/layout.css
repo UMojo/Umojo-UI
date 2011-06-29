@@ -376,8 +376,8 @@ a.status5{
 **************************************/
 
 .content_container {
-	width: 1026px;
-	margin: auto;
+	width: 98%;
+	margin: 0;
 	height: 400px;
 }
 

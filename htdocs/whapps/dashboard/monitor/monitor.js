@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'monitor',
+winkstart.module('dashboard', 'monitor',
     /* Start module resource definitions */
     {
         css: [

@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'deploy_mgr',
+winkstart.module('cluster', 'deploy_mgr',
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -37,7 +37,7 @@ winkstart.module('indesign', 'deploy_mgr',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Server Manager'
+            label: 'Server Mngr'
         });
     }, // End initialization routine
 

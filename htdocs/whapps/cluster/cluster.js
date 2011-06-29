@@ -10,12 +10,14 @@ winkstart.module('cluster', 'cluster', {
     },
     {
         initialized :   false,
-        modules :       ['deploy', 'server', 'deploy_mgr' ],
+        modules :       ['server', 'deploy_mgr' ],
         
         activate: function() {
-            if (this.initialized) {
+            /*if (this.initialized) {
                 return;
-            }
+            }*/
+
+            winkstart.publish('subnav.clear');
 
             // We only initialize once
             this.initialized = true;
