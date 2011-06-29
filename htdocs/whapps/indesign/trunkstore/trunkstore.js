@@ -13,7 +13,7 @@ winkstart.module('indesign', 'trunkstore',
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'skeleton.activate' : 'activate'
+            'trunkstore.activate' : 'activate'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
