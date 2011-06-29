@@ -1,16 +1,16 @@
 // This is the server module
-winkstart.module('system', 'system', {
+winkstart.module('cluster', 'cluster', {
         subscribe: {
-            'system.activate' : 'activate'
+            'cluster.activate' : 'activate'
         }
     },
     function() {
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'system' });
+        winkstart.publish('appnav.add', { 'name' : 'cluster' });
     },
     {
         initialized :   false,
-        modules :       ['deploy', 'server', 'monitor' ],
+        modules :       ['deploy', 'server', 'deploy_mgr' ],
         
         activate: function() {
             if (this.initialized) {
@@ -21,9 +21,9 @@ winkstart.module('system', 'system', {
             this.initialized = true;
 
             $.each(this.modules, function(k, v) {
-                winkstart.module.loadPlugin('system', v, function() {
+                winkstart.module.loadPlugin('cluster', v, function() {
                     this.init(function() {
-                        winkstart.log('System: Initialized ' + v);
+                        winkstart.log('Cluster: Initialized ' + v);
                     });
                 });
             });
