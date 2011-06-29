@@ -1,0 +1,116 @@
+<div>
+    <div class="inner">
+        <form id="vmbox-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Voicemail Box</h1>
+            {{else}}
+                <h1>Create Voicemail Box</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="mailbox">Voicemail Box Number:</label>
+                                <input id="mailbox" name="mailbox" type="text" value="${data.mailbox}" />
+                            </li>
+                            <li>
+                                <label for="pin">PIN number:</label>
+                                <input id="pin" name="pin" type="text" value="${data.pin}" />
+                            </li>
+                            <li>
+                                <label for="timezone">Timezone:</label>
+                                <select name="timezone" id="timezone">
+                                    {{each field_data.timezones}}
+                                    {{if data.timezone == value}}
+                                    <option value="${value}" selected="selected">${text}</option>
+                                    {{else}}
+                                    <option value="${value}">${text}</option>
+                                    {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="advanced_settings_box">
+                <h2>Advanced Settings</h2>
+
+                <ul class="advanced_tabs settings2">
+                    <li><a href="#"><span  class="icon sip"/>Options</a></li>
+                </ul>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="advanced_pane">
+
+                <div id="options">
+                    <fieldset>
+                        <legend>Options</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="require_pin">Require PIN?</label>
+                                {{if data.require_pin}}
+                                <input id="require_pin" name="require_pin" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="require_pin" name="require_pin" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="check_if_owner">Check for VM Box Owner?</label>
+                                {{if data.check_if_owner}}
+                                <input id="check_if_owner" name="check_if_owner" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="check_if_owner" name="check_if_owner" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="skip_greeting">Skip Greeting?</label>
+                                {{if data.skip_greeting}}
+                                <input id="skip_greeting" name="skip_greeting" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="skip_greeting" name="skip_greeting" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="skip_instructions">Skip Instructions?</label>
+                                {{if data.skip_instructions}}
+                                <input id="skip_instructions" name="skip_instructions" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="skip_instructions" name="skip_instructions" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+            </div>
+
+        <ul class="button right vmboxes">
+            <li><a class="vmbox-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="vmbox-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="vmbox-cancel" href="#">Cancel</a></li>
+        </ul>
+            
+        </form>
+    </div>
+</div>
