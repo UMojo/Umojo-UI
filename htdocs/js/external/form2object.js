@@ -146,8 +146,13 @@
 			{
 				if (fieldNode.checked)
 				{
-					return fieldNode.value;
+					//return fieldNode.value;
+                    return true;
 				}
+                else
+                {
+                    return false;
+                }
 			}
 			else
 			{
