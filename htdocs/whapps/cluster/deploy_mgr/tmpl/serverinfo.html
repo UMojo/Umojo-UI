@@ -1,15 +1,30 @@
 <div>
-    <form id="serverinfo">
-        Server Name: <input type="text" name="servername" />
-        
-        Password: <input type="text" name="password" />
-        
-        Username: <input type="text" name="username" />
-        
-        Private Key: <input type="text" name="privatekey" />
-        
-        <input class="save_btn" type="button" value="Add Server" />
-        
-        
-    </form>
+    <div>
+        <form id="serverinfo">
+            Server Name: <input type="text" name="servername" /><br/>
+
+            Username: <input type="text" name="username" /><br/>
+
+            Password: <input type="password" name="password" /><br/>
+
+            Private Key: <input type="text" name="privatekey" /><br/>
+
+            <br/>
+            
+            Services:<br/>
+            <input type="checkbox"/> Call Director - OpenSIPs<br/>
+            <input type="checkbox"/> Media Server - FreeSWITCH<br/>
+            <input type="checkbox"/> Call Manager - eCallManager Controller<br/>
+            <input type="checkbox"/> Messaging Bus - RabbitMQ<br/>
+            <input type="checkbox"/> App Server - WhApps Controller<br/>
+            <input type="checkbox"/> Database Server - CouchDB<br/>
+
+            <div>
+            <ul class="button right devices">
+                <li><a class="device-save save_btn" href="#">Spin Up</a></li>
+            </ul>
+            </div>
+
+        </form>
+    </div>
 </div>
