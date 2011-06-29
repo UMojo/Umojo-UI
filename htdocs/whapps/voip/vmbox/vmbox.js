@@ -73,7 +73,6 @@ winkstart.module('voip', 'vmbox',
 
     {
         validateForm: function(state) {
-            console.log('validate');
             var THIS = this;
             
             $(THIS.config.validation).each(function(k, v) {
@@ -86,7 +85,6 @@ winkstart.module('voip', 'vmbox',
         },
 
         saveVmbox: function(vmbox_id, form_data) {
-            console.log('saveVmbox');
             var THIS = this;
 
             /* Check validation before saving */
@@ -130,7 +128,6 @@ winkstart.module('voip', 'vmbox',
          * Create/Edit vmbox properties (don't pass an ID field to cause a create instead of an edit)
          */
         editVmbox: function(data){
-            console.log('editVmbox');
             $('#vmbox-view').empty();
             var THIS = this;
             var form_data = {
@@ -159,7 +156,6 @@ winkstart.module('voip', 'vmbox',
         },
 
         deleteVmbox: function(vmbox_id) {
-            console.log('deleteVmbox');
             var THIS = this;
             
             var rest_data = {
@@ -179,11 +175,9 @@ winkstart.module('voip', 'vmbox',
          * Draw vmbox fields/template and populate data, add validation. Works for both create & edit
          */
         renderVmbox: function(form_data){
-            console.log('renderVmbox');
             var THIS = this;
             var vmbox_id = form_data.data.id;
             
-            console.log(form_data);
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editVmbox.tmpl(form_data).appendTo( $('#vmbox-view') );
 
