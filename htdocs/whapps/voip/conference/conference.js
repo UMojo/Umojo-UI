@@ -64,6 +64,20 @@ function(args) {
             winkstart.validate.save($('#moderator_pins'), /^[0-9]+$/);
         }
     },
+    deleteConference: function(conference_id){
+        var THIS = this;
+    
+        var rest_data = {
+            crossbar: true,
+            account_id: MASTER_ACCOUNT_ID,
+            conference_id: conference_id
+        }
+        
+        winkstart.deleteJSON('conference.delete', rest_data, function (json, xhr) {
+            THIS.buildListView();
+            $('#conference-view').empty();
+        });
+    },
     createConference: function(){
         $('#conference-view').empty();
         var THIS = this;
@@ -138,9 +152,14 @@ function(args) {
 				$("ul.settings1").tabs("div.pane > div");
         		$("ul.settings2").tabs("div.advanced_pane > div");
                 
-                /*$('.conference-cancel').click(function(event) {
-                    winkstart.postJSON('conference.delete', post_data, function() {}); 
-                });*/
+                $('.conference-delete').click(function(event) {
+                    THIS.deleteConference(conference_id);
+
+                    return false;
+                });
+                $('.conference-cancel').click(function(event) {
+                    $('#conference-view').empty();
+                });
 
                 $('.conference-save').click(function(event) {
                     var formData = {
@@ -254,9 +273,9 @@ function(args) {
 	        };
 		        	
 	        var options = {};
-	        options.label = 'Conferences';
+	        options.label = 'Conference';
 	        options.identifier = 'conference-module-listview';
-	        options.new_entity_label = 'Conferences';
+	        options.new_entity_label = 'Conference';
 	        options.data = map_crossbar_data(json.data);
 	        options.publisher = winkstart.publish;
 	        options.notifyMethod = 'conference.list-panel-click';
