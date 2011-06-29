@@ -1,25 +1,28 @@
 winkstart.module('indesign', 'monitor',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
         css: [
             'css/monitor.css'
         ],
 
-        /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/monitor.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/index.html',
+            dns: 'tmpl/dns.html',
+            call_director: 'tmpl/call_director.html',
+            media_server: 'tmpl/media_server.html',
+            call_manager: 'tmpl/call_manager.html',
+            messaging_bus: 'tmpl/messaging_bus.html',
+            whapps: 'tmpl/whapps.html',
+            database: 'tmpl/database.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
             'monitor.activate' : 'activate'
         },
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
         }
-    }, // End module resource definitions
+    }, // End module config definitions
 
 
 
@@ -40,31 +43,45 @@ winkstart.module('indesign', 'monitor',
          * Display DNS servers
          */
         refreshDNS: function() {
+            var THIS = this;
 
+            THIS.templates.dns.tmpl().appendTo( $('#dns') );
         },
 
         refreshCallDirector: function() {
+            var THIS = this;
 
+            THIS.templates.call_director.tmpl().appendTo( $('.call_director') );
         },
 
         refreshMediaServer: function() {
+            var THIS = this;
 
+            THIS.templates.media_server.tmpl().appendTo( $('.media_server') );
         },
 
         refreshCallManager: function() {
+            var THIS = this;
 
+            THIS.templates.call_manager.tmpl().appendTo( $('.call_manager') );
         },
 
         refreshMessagingBus: function() {
+            var THIS = this;
 
+            THIS.templates.messaging_bus.tmpl().appendTo( $('.messaging_bus') );
         },
 
         refreshWhApps: function() {
+            var THIS = this;
 
+            THIS.templates.whapps.tmpl().appendTo( $('.whapps') );
         },
 
         refreshDatabase: function() {
+            var THIS = this;
 
+            THIS.templates.database.tmpl().appendTo( $('.database') );
         },
 
         
@@ -85,9 +102,18 @@ winkstart.module('indesign', 'monitor',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Monitor',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Cluster Monitor',
                 module: this.__module
             });
+
+            THIS.refreshDNS();
+            THIS.refreshCallDirector();
+            THIS.refreshMediaServer();
+            THIS.refreshCallManager();
+            THIS.refreshMessagingBus();
+            THIS.refreshWhApps();
+            THIS.refreshDatabase();
+
         }
     } // End function definitions
 

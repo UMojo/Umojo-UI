@@ -7,9 +7,9 @@
 **************************************/
 
 .deployment_nav_container {
-	width: 941px;
+	width: 90%;
 	height: 25px;
-	margin: 13px auto 0;
+	margin: 13px 40px 0;
 	background-color: #6b6b6b;
   	background-image: -webkit-gradient(linear, left top, left bottom, from(#6b6b6b), to(#444444)); /* Saf4+, Chrome */
   	background-image: -webkit-linear-gradient(top, #6b6b6b, #444444); /* Chrome 10+, Saf5.1+ */
@@ -64,7 +64,7 @@ a.plus:hover {
 }
 
 .cluster_container {
-	width: 946px;
+	width: 90%;
 	float: left;
 	margin-left: 19px;
 	padding: 41px 20px;

@@ -354,7 +354,7 @@ ul.monitor_navs li .percent_circle {
 
 .content_monitor_lg {
     width: 1266px;
-    margin: 0 auto 0 -110px;
+    margin: 0 auto 0 0px;
 }
 
 .dns_box_icon {
