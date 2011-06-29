@@ -3,12 +3,12 @@ winkstart.module('indesign', 'ring_group',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/style.css'
+            'css/ring_group.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/ring_group.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
         },
 
         /* What events do we listen for, in the browser? */
@@ -25,7 +25,7 @@ winkstart.module('indesign', 'ring_group',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('nav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Ring Group'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
@@ -55,6 +55,19 @@ winkstart.module('indesign', 'ring_group',
                 label: 'Ring Group',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
+            
+            
+            $('.group_list').jScrollPane();
+            $('.list_container').jScrollPane();
+            $("ul.advanced_tabs").tabs("div.advanced_pane > div");
+
+            $(".list_container li").click(function(){
+                $clicked = $(this);
+                $clicked.css("background-color","#0097bb");
+                // reset the other buttons to default style
+                $clicked.siblings(".list_container li").css("background-color","#808080");         	
+            });			
+			
         }
     } // End function definitions
 

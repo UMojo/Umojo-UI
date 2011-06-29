@@ -3,12 +3,12 @@ winkstart.module('indesign', 'monitor',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/style.css'
+            'css/monitor.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/monitor.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
         },
 
         /* What events do we listen for, in the browser? */
@@ -27,7 +27,7 @@ winkstart.module('indesign', 'monitor',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Monitor!'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Monitor'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,7 +52,7 @@ winkstart.module('indesign', 'monitor',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Monitor!',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Monitor',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }

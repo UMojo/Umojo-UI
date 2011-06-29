@@ -174,7 +174,7 @@ a.remove_btn {
 	line-height: 27px;
 	display: block;
 	right: 119px;
-	bottom: -44px;
+        bottom: -44px
 }
 
 a.save_btn {
@@ -258,7 +258,7 @@ a.save_btn {
 	line-height: 20px;
 }
 
-.step p::first-line {
+.step p:first-line {
 	font-size: 18px; font-family: TitilliumText22LBold, sans-serif;
 
 }
