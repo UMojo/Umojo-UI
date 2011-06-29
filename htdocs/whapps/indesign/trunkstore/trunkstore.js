@@ -1,19 +1,19 @@
-winkstart.module('indesign', 'deploy_mgr',
+winkstart.module('indesign', 'trunkstore', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/style.css'
+            'css/trunkstore.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/trunkstore.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'deploy_mgr.activate' : 'activate'
+            'trunkstore.activate' : 'activate'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -25,9 +25,9 @@ winkstart.module('indesign', 'deploy_mgr',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('nav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Deploy Manager'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Trunkstore Home'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,7 +52,7 @@ winkstart.module('indesign', 'deploy_mgr',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Deploy Manager',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Trunkstore Home',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }

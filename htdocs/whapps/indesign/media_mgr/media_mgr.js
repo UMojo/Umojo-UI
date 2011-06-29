@@ -1,19 +1,19 @@
-winkstart.module('indesign', 'ring_group', 
+winkstart.module('indesign', 'media_mgr', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/ring_group.css'
+            'css/media_mgr.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/ring_group.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/media_mgr.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'ring_group.activate' : 'activate'
+            'media_mgr.activate' : 'activate'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -27,7 +27,7 @@ winkstart.module('indesign', 'ring_group',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Ring Group'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Media Manager'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -52,22 +52,23 @@ winkstart.module('indesign', 'ring_group',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Ring Group',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'Media Manager',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
             
-            
-            $('.group_list').jScrollPane();
-            $('.list_container').jScrollPane();
-            $("ul.advanced_tabs").tabs("div.advanced_pane > div");
-
-            $(".list_container li").click(function(){
-                $clicked = $(this);
-                $clicked.css("background-color","#0097bb");
-                // reset the other buttons to default style
-                $clicked.siblings(".list_container li").css("background-color","#808080");         	
-            });			
-			
+            $('.media_list').jScrollPane();
+				$(".media_tabs").tabs("div.media_pane > div");
+				$("ul.advanced_tabs").tabs("div.advanced_pane > div");
+				
+			    $("div.buttons").click(function(){
+            	
+            		$clicked = $(this);
+            		$clicked.animate({top:"40px"}, 300 );
+            	// reset the other buttons to default style
+            		$clicked.siblings(".buttons").animate({top:"0"}, 300 );
+            	
+        });
+        
         }
     } // End function definitions
 

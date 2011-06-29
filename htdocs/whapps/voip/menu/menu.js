@@ -1,62 +1,56 @@
-winkstart.module('voip', 'vmbox',
+winkstart.module('voip', 'menu',
     {
         css: [
-            'css/vmbox.css'
+            'css/menu.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            vmbox: 'tmpl/vmbox.html',
-            editVmbox: 'tmpl/edit.html'
+            menu: 'tmpl/menu.html',
+            editMenu: 'tmpl/edit.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'vmbox.activate' : 'activate',
-            'vmbox.list-panel-click' : 'editVmbox',
-            'vmbox.edit-vmbox' : 'editVmbox'
-        },
-
-        formData: {
-                    timezones: [{text: 'GMT', value: 'Africa/Ouagadougou'}, {text:'GMT+1 (ECT)', value: 'Europe/Brussels'}, {text: 'GMT+2 (EET)', value: 'Europe/Minsk'},
-                                {text: 'GMT+3 (EAT)', value: 'Asia/Bahrain'},{text: 'GMT+3:30 (MET)', value: 'Asia/Tehran'},{text: 'GMT+4 (NET)', value: 'Indian/Mauritius'},{text: 'GMT+5 (PLT)', value: 'Asia/Aqtobe'}, 
-                                {text: 'GMT+5:30 (IST)', value: 'Asia/Kolkata'},{text: 'GMT+6 (BST)', value: 'Indian/Chagos'},{text: 'GMT+7 (VST)', value: 'Asia/Jakarta'},{text: 'GMT+8 (CTT)', value: 'Asia/Brunei'}, 
-                                {text: 'GMT+9 (JST)', value: 'Asia/Tokyo'},{text: 'GMT+9:30 (ACT)', value: 'Australia/Adelaide'},{text: 'GMT+10 (AET)', value: 'Asia/Yakutsk'},{text: 'GMT+11 (SST)', value: 'Pacific/Ponape'}, 
-                                {text: 'GMT+12 (NST)', value: 'Pacific/Fiji'},{text: 'GMT-11 (MIT)', value: 'Pacific/Midway'},{text: 'GMT-10 (HST)', value: 'Pacific/Rarotonga'},{text: 'GMT-9 (AST)', value: 'Pacific/Gambier'}, 
-                                {text: 'GMT-8 (PST)', value: 'America/Whitehorse'},{text: 'GMT-7 (PNT)', value: 'America/Edmonton'},{text: 'GMT-6 (CST)', value: 'America/Swift_Current'},{text: 'GMT-5 (EST)', value: 'America/Thunder_Bay'}, 
-                                {text: 'GMT-4 (PRT)', value: 'America/La_Paz'},{text: 'GMT-3:30 (CNT)', value: 'America/St_Johns'},{text: 'GMT-3 (AGT)', value: 'America/Sao_Paulo'},{text: 'GMT-2', value: 'America/Noronha'},{text: 'GMT-1 (CAT)', value: 'Atlantic/Cape_Verde'}
-                               ],
+            'menu.activate' : 'activate',
+            'menu.list-panel-click' : 'editMenu',
+            'menu.edit-menu' : 'editMenu'
         },
 
         validation : [
-                {name : '#mailbox', regex : /^[0-9]+$/},
-                {name : '#pin', regex : /^[0-9]+$/},
+                {name : '#name', regex: /^.*/},
+                {name : '#retries', regex : /^[0-9]+$/},
+                {name : '#record_pin', regex : /^[0-9]+$/},
+                {name : '#timeout', regex : /^[0-9]+$/},
+                {name : '#max_extension_length', regex : /^[0-9]+$/},
+                {name : '#hunt_allow', regex : /^.*$/},
+                {name : '#hunt_deny', regex : /^.*$/},
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "vmbox.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
+            "menu.list": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
                 dataType: 'json',
                 httpMethod: 'GET'
             },
-            "vmbox.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+            "menu.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
                 dataType: 'json',
                 httpMethod: 'GET'
             },
-            "vmbox.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
+            "menu.create": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
                 dataType: 'json',
                 httpMethod: 'PUT'
             },
-            "vmbox.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+            "menu.update": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
                 dataType: 'json',
                 httpMethod: 'POST'
             },
-            "vmbox.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+            "menu.delete": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
                 dataType: 'json',
                 httpMethod: 'DELETE'
             }
@@ -67,7 +61,7 @@ winkstart.module('voip', 'vmbox',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Voicemail Boxes'
+            label: 'Menus'
         });
     },
 
@@ -84,7 +78,7 @@ winkstart.module('voip', 'vmbox',
             });
         },
 
-        saveVmbox: function(vmbox_id, form_data) {
+        saveMenu: function(menu_id, form_data) {
             var THIS = this;
 
             /* Check validation before saving */
@@ -98,23 +92,23 @@ winkstart.module('voip', 'vmbox',
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
-                if (vmbox_id) {
+                if (menu_id) {
                     /* EDIT */
-                    rest_data.vmbox_id = vmbox_id;
-                    winkstart.postJSON('vmbox.update', rest_data, function (json, xhr) {
+                    rest_data.menu_id = menu_id;
+                    winkstart.postJSON('menu.update', rest_data, function (json, xhr) {
                         /* Refresh the list and the edit content */
                         THIS.renderList();
-                        THIS.editVmbox({
-                            id: vmbox_id
+                        THIS.editMenu({
+                            id: menu_id
                         });
                     });
                 } else {
                     /* CREATE */
 
                     /* Actually send the JSON data to the server */
-                    winkstart.putJSON('vmbox.create', rest_data, function (json, xhr) {
+                    winkstart.putJSON('menu.create', rest_data, function (json, xhr) {
                         THIS.renderList();
-                        THIS.editVmbox({
+                        THIS.editMenu({
                             id: json.data.id
                         });
                     });
@@ -125,61 +119,61 @@ winkstart.module('voip', 'vmbox',
         },
 
         /*
-         * Create/Edit vmbox properties (don't pass an ID field to cause a create instead of an edit)
+         * Create/Edit menu properties (don't pass an ID field to cause a create instead of an edit)
          */
-        editVmbox: function(data){
-            $('#vmbox-view').empty();
+        editMenu: function(data){
+            $('#menu-view').empty();
             var THIS = this;
             var form_data = {
                 data: {},   
-                field_data: THIS.config.formData,
+                field_data: {},
                 value: {}
             };
 
             if (data && data.id) {
-                /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
-                winkstart.getJSON('vmbox.get', {
+                /* This is an existing menu - Grab JSON data from server for menu_id */
+                winkstart.getJSON('menu.get', {
                     crossbar: true,
                     account_id: MASTER_ACCOUNT_ID,
-                    vmbox_id: data.id
+                    menu_id: data.id
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
 
-                    THIS.renderVmbox(form_data);
+                    THIS.renderMenu(form_data);
                 });
             } else {
-                /* This is a new vmbox - pass along empty params */
-                THIS.renderVmbox(form_data);
+                /* This is a new menu - pass along empty params */
+                THIS.renderMenu(form_data);
             }
             
         },
 
-        deleteVmbox: function(vmbox_id) {
+        deleteMenu: function(menu_id) {
             var THIS = this;
             
             var rest_data = {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID,
-                vmbox_id: vmbox_id
+                menu_id: menu_id
             };
 
             /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('vmbox.delete', rest_data, function (json, xhr) {
+            winkstart.deleteJSON('menu.delete', rest_data, function (json, xhr) {
                 THIS.renderList();
-                $('#vmbox-view').empty();
+                $('#menu-view').empty();
             });
         },
 
         /**
-         * Draw vmbox fields/template and populate data, add validation. Works for both create & edit
+         * Draw menu fields/template and populate data, add validation. Works for both create & edit
          */
-        renderVmbox: function(form_data){
+        renderMenu: function(form_data){
             var THIS = this;
-            var vmbox_id = form_data.data.id;
-            
+            var menu_id = form_data.data.id;
+            console.log(form_data);    
             /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editVmbox.tmpl(form_data).appendTo( $('#vmbox-view') );
+            THIS.templates.editMenu.tmpl(form_data).appendTo( $('#menu-view') );
 
             winkstart.cleanForm();
 
@@ -190,35 +184,35 @@ winkstart.module('voip', 'vmbox',
             $("ul.settings2").tabs("div.advanced_pane > div");
 
             /* Listen for the submit event (i.e. they click "save") */
-            $('.vmbox-save').click(function(event) {
+            $('.menu-save').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
 
                 /* Grab all the form field data */
-                var form_data = form2object('vmbox-form');
-                THIS.saveVmbox(vmbox_id, form_data);
+                var form_data = form2object('menu-form');
+                THIS.saveMenu(menu_id, form_data);
 
                 return false;
             });
 
-            $('.vmbox-cancel').click(function(event) {
+            $('.menu-cancel').click(function(event) {
                 event.preventDefault();
 
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
-                $('#vmbox-view').empty();
+                $('#menu-view').empty();
 
                 return false;
             });
 
-            $('.vmbox-delete').click(function(event) {
+            $('.menu-delete').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
 
-                THIS.deleteVmbox(vmbox_id);
+                THIS.deleteMenu(menu_id);
 
                 return false;
             });
@@ -230,7 +224,7 @@ winkstart.module('voip', 'vmbox',
         renderList: function(){
             var THIS = this;
 
-            winkstart.getJSON('vmbox.list', {
+            winkstart.getJSON('menu.list', {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID
             }, function (json, xhr) {
@@ -250,16 +244,16 @@ winkstart.module('voip', 'vmbox',
                 }
 
                 var options = {};
-                options.label = 'Voicemail Boxes Module';
-                options.identifier = 'vmbox-module-listview';
-                options.new_entity_label = 'Voicemail Box';
+                options.label = 'Menu Module';
+                options.identifier = 'menu-module-listview';
+                options.new_entity_label = 'Menu';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
-                options.notifyMethod = 'vmbox.list-panel-click';
-                options.notifyCreateMethod = 'vmbox.edit-vmbox';  /* Edit with no ID = Create */
+                options.notifyMethod = 'menu.list-panel-click';
+                options.notifyCreateMethod = 'menu.edit-menu';  /* Edit with no ID = Create */
 
-                $("#vmbox-listpanel").empty();
-                $("#vmbox-listpanel").listpanel(options);
+                $("#menu-listpanel").empty();
+                $("#menu-listpanel").listpanel(options);
 
             });
         },
@@ -271,7 +265,7 @@ winkstart.module('voip', 'vmbox',
         activate: function(data) {
             $('#ws-content').empty();
             var THIS = this;
-            this.templates.vmbox.tmpl({}).appendTo( $('#ws-content') );
+            this.templates.menu.tmpl({}).appendTo( $('#ws-content') );
 
             winkstart.loadFormHelper('forms');
 
@@ -279,16 +273,16 @@ winkstart.module('voip', 'vmbox',
             winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'Voicemail Boxes Management',
+                label: 'Menus Management',
                 module: this.__module
             });
 
-            $('.edit-vmbox').live({
+            $('.edit-menu').live({
                 click: function(evt){
                     var target = evt.currentTarget;
                     var vmbox_id = target.getAttribute('rel');
-                    winkstart.publish('vmbox.edit-vmbox', {
-                        'vmbox_id' : vmbox_id
+                    winkstart.publish('menu.edit-menu', {
+                        'menu_id' : menu_id
                     });
                 }
             });
