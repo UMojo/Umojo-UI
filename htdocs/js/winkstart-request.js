@@ -28,6 +28,7 @@
 				decoder: function(response){
 					response.success( response.data, response.xhr);
 				},
+                contentType: 'application/json',
 				dataType: resource.dataType,
 				type: verb,
 				accepts: "application/json",
