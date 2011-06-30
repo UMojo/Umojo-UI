@@ -1,0 +1,52 @@
+<div>
+    <div class="inner">
+        <form id="media-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Media</h1>
+            {{else}}
+                <h1>Create Media</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="display_name">Name:</label>
+                                <input id="display_name" name="display_name" type="text" value="${data.display_name}" />
+                            </li>
+                            <li>
+                                <label for="streamable">Streamable:</label>
+                                {{if data.streamable}}
+                                <input id="streamable" name="streamable" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="streamable" name="streamable" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+            </div>
+
+            <div class="clear"></div>
+
+
+            <ul class="button right media">
+                <li><a class="media-save" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="media-delete" href="#">Delete</a></li>
+                {{/if}}
+                <li><a class="media-cancel" href="#">Cancel</a></li>
+            </ul>
+            
+        </form>
+    </div>
+</div>
