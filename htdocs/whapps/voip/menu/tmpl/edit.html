@@ -9,6 +9,7 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
+                <li><a href="#">Menu Prompt</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -21,27 +22,22 @@
                                 <label for="name">Name:</label>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li> 
-                            <li>
-                                <label for="retries">Number of allowed retries:</label>
-                                <input id="retries" name="retries" type="text" value="${data.retries}" />
-                            </li>
-                            <li>
-                                <label for="timeout">Timeout:</label>
-                                <input id="timeout" name="timeout" type="text" value="${data.timeout}" />
-                            </li>
-                            <li>
-                                <label for="max_extension_length">Max dialed numbers:</label>
-                                <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
-                            </li>
-                            <li>
-                                <label for="record_pin">Record PIN:</label>
-                                <input id="record_pin" name="record_pin" type="text" value="${data.record_pin}" />
-                            </li>
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
                 </div> <!-- end basic settings -->
+
+                <div id="menu_prompt">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="record_pin">Prompt Record PIN:</label>
+                                <input id="record_pin" name="record_pin" type="text" value="${data.record_pin}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                </div>
             </div>
 
             <div class="clear"></div>
@@ -50,7 +46,8 @@
                 <h2>Advanced Settings</h2>
 
                 <ul class="advanced_tabs settings2">
-                    <li><a href="#"><span  class="icon sip"/>Options</a></li>
+                    <li><a href="#"><span  class="icon sip"/>Extension Dialing</a></li>
+                    <li><a href="#">Options</a></li>
                 </ul>
 
                 <div class="clear"></div>
@@ -58,17 +55,21 @@
 
             <div class="advanced_pane">
 
-                <div id="options">
+                <div id="dialing">
                     <fieldset>
                         <legend>Hunting</legend>
                         <ul class="controls">
                             <li>
-                                <label for="hunt">Allow caller to dial numbers?</label>
+                                <label for="hunt">Allow caller to dial extensions?</label>
                                 {{if data.hunt}}
                                 <input id="hunt" name="hunt" type="checkbox" checked="checked" />
                                 {{else}}
                                 <input id="hunt" name="hunt" type="checkbox"/>
                                 {{/if}}
+                            </li>
+                            <li>
+                                <label for="max_extension_length">Extension Number Length:</label>
+                                <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
                             </li>
                             <li>
                                 <label for="hunt_allow">Whitelist of numbers (regex)</label>
@@ -82,7 +83,24 @@
                     </fieldset>
 
                     <div class="clear"></div>
+                </div>
+                
+                <div id="options">
+                    <fieldset>
+                        <legend>Menu Options</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="retries">Number of retries on misdial:</label>
+                                <input id="retries" name="retries" type="text" value="${data.retries}" />
+                            </li>
+                            <li>
+                                <label for="timeout">Timeout for dialing:</label>
+                                <input id="timeout" name="timeout" type="text" value="${data.timeout}" />
+                            </li>
+                        </ul>
+                    </fieldset>
 
+                    <div class="clear"></div>
                 </div>
 
             </div>

@@ -101,8 +101,10 @@ function(args) {
                 name: $('#conference_name').val(),
                 member_pins: { 0: $('#member_pins').val() },
                 moderator_pins: { 0: $('#moderator_pins').val() },
+                member_play_name: $('#join-play-name-members').attr("checked"),
                 member_join_deaf: $('#join-deaf-members').attr("checked"),
                 member_join_muted: $('#join-muted-members').attr("checked"),
+                moderator_play_name: $('#join-play-name-moderators').attr("checked"),
                 moderator_join_deaf: $('#join-deaf-moderators').attr("checked"),
                 moderator_join_muted: $('#join-muted-moderators').attr("checked")
             }
@@ -149,8 +151,8 @@ function(args) {
 
                 THIS.validateForm();
                 
-				$("ul.settings1").tabs("div.pane > div");
-        		$("ul.settings2").tabs("div.advanced_pane > div");
+		$("ul.settings1").tabs("div.pane > div");
+        	$("ul.settings2").tabs("div.advanced_pane > div");
                 
                 $('.conference-delete').click(function(event) {
                     THIS.deleteConference(conference_id);
@@ -166,8 +168,10 @@ function(args) {
                         name: $('#conference_name').val(),
                         member_pins: { 0: $('#member_pins').val() },
                         moderator_pins: { 0: $('#moderator_pins').val() },
+                        member_play_name: $('#join-play-name-members').attr("checked"),
                         member_join_deaf: $('#join-deaf-members').attr("checked"),
                         member_join_muted: $('#join-muted-members').attr("checked"),
+                        moderator_play_name: $('#join-play-name-moderators').attr("checked"),
                         moderator_join_deaf: $('#join-deaf-moderators').attr("checked"),
                         moderator_join_muted: $('#join-muted-moderators').attr("checked")
                     }
