@@ -6,20 +6,20 @@
 		for(var key in resources){
 			var resource = resources[key];
 			
-			var verb = 'GET';
+			var httpMethod = 'GET';
 			
-			switch(resource.httpMethod.toUpperCase()){
+			switch(resource.verb.toUpperCase()){
 				case 'GET':
-					verb = 'GET';
+					httpMethod = 'GET';
 					break;
 				case 'POST':
-					verb = 'POST';
+					httpMethod = 'POST';
 					break;
 				case 'PUT':
-					verb = 'PUT';
+				    httpMethod = 'POST';
 					break;
 				case 'DELETE':
-					verb = 'DELETE';
+					httpMethod = 'POST';
 					break;
 			}
 			
@@ -28,9 +28,9 @@
 				decoder: function(response){
 					response.success( response.data, response.xhr);
 				},
-                contentType: 'application/json',
-				dataType: resource.dataType,
-				type: verb,
+                contentType: resources.contentType,
+				/* dataType: resource.dataType, --- Use the intellegent selector*/ 
+				type: httpMethod,
 				accepts: "application/json",
 				beforeSend: function(jqXHR, settings){
 					jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken());		
