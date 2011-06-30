@@ -37,7 +37,7 @@ winkstart.module('voip', 'callflow',
 		}
 	},
 	function (args) {
-		winkstart.publish('subnav.add', { module: this.__module, label: 'Callflow Manager', nav_category: 'category-3'});
+		winkstart.publish('subnav.add', { module: this.__module, label: 'Callflows', nav_category: 'category-3'});
 	},
 	{
 		activate: function (args) {

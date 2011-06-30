@@ -74,7 +74,7 @@ winkstart.module('voip', 'user',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'User Manager'
+            label: 'Users'
         });
     },
 
