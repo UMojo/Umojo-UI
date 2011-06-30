@@ -25,10 +25,12 @@ winkstart.module('connect', 'sipservice',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('subnav.add', {
+        /*winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'SIP Services'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
-        });
+            label: 'SIP Services'
+        });*/
+
+        winkstart.publish('sipservice.activate');
     }, // End initialization routine
 
 
