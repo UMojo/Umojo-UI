@@ -1,0 +1,16 @@
+<div>
+    {{if server.state=='active'}}
+    <div class="${type}_box">
+    {{/if}}
+    {{if server.state=='warning'}}
+    <div class="${type}_box box_caution">
+    {{/if}}
+    {{if server.state=='error'}}
+    <div class="${type}_box box_error">
+    {{/if}}
+        <h3>${server.hostname}</h3>
+        <div class="location">${server.location}</div>
+        <div class="provider">${server.provider}</div>
+        <div class=" clear"></div>
+    </div>
+</div>

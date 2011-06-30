@@ -7,14 +7,10 @@ winkstart.module('dashboard', 'monitor',
 
         templates: {
             index: 'tmpl/index.html',
+            server: 'tmpl/server.html',
             arrows: 'tmpl/arrows.html',
             dns: 'tmpl/dns.html',
-            call_director: 'tmpl/call_director.html',
-            media_server: 'tmpl/media_server.html',
-            call_manager: 'tmpl/call_manager.html',
-            messaging_bus: 'tmpl/messaging_bus.html',
-            whapps: 'tmpl/whapps.html',
-            database: 'tmpl/database.html'
+            whapps: 'tmpl/whapps.html'
         },
 
         subscribe: {
@@ -54,36 +50,167 @@ winkstart.module('dashboard', 'monitor',
 
             servers = [
                 {
-                    hostname : 'opensips001.clusterA.2600hz.com',
-                    provider : 'Amazon EC2',
+                    hostname : 'opensips001.clusterA.',
+                    provider : 'Racksapce',
                     location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'opensips002.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'opensips001.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                },
+                {
+                    hostname : 'opensips002.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
                     state : 'active'
                 }
             ];
 
-            THIS.templates.call_director.tmpl( servers ).appendTo( $('#call_director') );
-            THIS.templates.arrows.tmpl( { more_items : true } ).appendTo( $('#call_director_arrows') );
-            THIS.templates.arrows.tmpl( { more_items : true } ).appendTo( $('#call_director_arrows') );
-            THIS.templates.arrows.tmpl( { more_items : true } ).appendTo( $('#call_director_arrows') );
+            $(servers).each(function(k, v) {
+                THIS.templates.server.tmpl( { type : 'call_director', server : v } ).appendTo( $('#call_director') );
+                THIS.templates.arrows.tmpl( { more_items : !(k == servers.length - 1) } ).appendTo( $('#call_director_arrows') );
+            });
         },
 
         refreshMediaServer: function() {
             var THIS = this;
 
-            THIS.templates.media_server.tmpl().appendTo( $('#media_server') );
-            THIS.templates.arrows.tmpl().appendTo( $('#media_server_arrows') );
+
+            servers = [
+                {
+                    hostname : 'fs001.clusterA.',
+                    provider : 'Racksapce',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs002.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs003.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs004.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs001.clusterB.',
+                    provider : 'Rackspace',
+                    location : 'Chicago',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs002.clusterB.',
+                    provider : 'Rackspace',
+                    location : 'Chicago',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs003.clusterB.',
+                    provider : 'Rackspace',
+                    location : 'Chicago',
+                    state : 'active'
+                },
+                {
+                    hostname : 'fs004.clusterB.',
+                    provider : 'Rackspace',
+                    location : 'Chicago',
+                    state : 'active'
+                }
+            ];
+
+            $(servers).each(function(k, v) {
+                THIS.templates.server.tmpl( { type : 'media_server', server : v } ).appendTo( $('#media_server') );
+                THIS.templates.arrows.tmpl( { more_items : !(k == servers.length - 1) } ).appendTo( $('#media_server_arrows') );
+            });
         },
 
         refreshCallManager: function() {
             var THIS = this;
 
-            THIS.templates.call_manager.tmpl().appendTo( $('#call_manager') );
+            servers = [
+                {
+                    hostname : 'whistle001.clusterA.',
+                    provider : 'Racksapce',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle002.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle001.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle002.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                }
+            ];
+
+            $(servers).each(function(k, v) {
+                THIS.templates.server.tmpl( { type : 'call_manager', server : v } ).appendTo( $('#call_manager') );
+                THIS.templates.arrows.tmpl( { more_items : !(k == servers.length - 1) } ).appendTo( $('#call_manager_arrows') );
+            });
         },
 
         refreshMessagingBus: function() {
             var THIS = this;
 
-            THIS.templates.messaging_bus.tmpl().appendTo( $('#messaging_bus') );
+            servers = [
+                {
+                    hostname : 'whistle001.clusterA.',
+                    provider : 'Racksapce',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle002.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle001.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                },
+                {
+                    hostname : 'whistle002.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                }
+            ];
+
+            $(servers).each(function(k, v) {
+                THIS.templates.server.tmpl( { type : 'messaging_bus', server : v } ).appendTo( $('#messaging_bus') );
+            });
         },
 
         refreshWhApps: function() {
@@ -95,7 +222,48 @@ winkstart.module('dashboard', 'monitor',
         refreshDatabase: function() {
             var THIS = this;
 
-            THIS.templates.database.tmpl().appendTo( $('#database') );
+            servers = [
+                {
+                    hostname : 'db001.clusterA.',
+                    provider : 'Racksapce',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'db002.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'db003.clusterA.',
+                    provider : 'Rackspace',
+                    location : 'Dallas',
+                    state : 'active'
+                },
+                {
+                    hostname : 'db001.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                },
+                {
+                    hostname : 'db002.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                },
+                {
+                    hostname : 'db003.clusterB.',
+                    provider : 'EC2 East',
+                    location : 'N. Virgina',
+                    state : 'active'
+                }
+            ];
+
+            $(servers).each(function(k, v) {
+                THIS.templates.server.tmpl( { type : 'database', server : v } ).appendTo( $('#database') );
+            });
         },
 
         
