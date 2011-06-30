@@ -12,6 +12,7 @@
 					response.success( response.data, response.xhr);
 				},
                 contentType: resource.contentType,
+                dataType: 'json',
 				type: resource.verb,
 				accepts: 'application/json',
 				beforeSend: function(jqXHR, settings){
