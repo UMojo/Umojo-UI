@@ -176,22 +176,22 @@ ul.universal_nav li a.logout {
 	border-right-style: solid;
 	border-left-style: solid;
 	border-right-color: #5a5a5a;
-	border-left-color: #5a5a5a;	
+	border-left-color: #5a5a5a;
 	text-align:center;
-        width:99%;
-        margin: auto;
+    margin-left: 190px;
+    margin-right: 250px;
 }
 
 .sub_nav {
 	height: 32px;
 	margin: auto;
-	display: block;
-        width: 1px;
 }
 
 .sub_nav ul {
 	list-style: none;
 	line-height: 32px;
+    height: 100%;
+    width: 100%;
 }
 
 .sub_nav ul li {
@@ -201,7 +201,6 @@ ul.universal_nav li a.logout {
 
 .sub_nav ul li a {
 	position: relative;
-	padding: 0 15px;
 	margin: 0 15px;
 	display: block;
 	height: 30px;

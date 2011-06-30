@@ -79,12 +79,25 @@ ul.monitor_navs li .percent_circle {
 .monitor_content {
 	width: 1266px;
 	margin: 23px auto 0;
+	color: #323232;
 }
 
 .monitor_content h3{
-	color: #323232;
-	line-height: 43px;
+	padding-bottom: 14px;
 }
+
+.monitor_content .location{
+    float: left;
+    font-size: 10px;
+    padding-left: 2px;
+}
+
+.monitor_content .provider{
+    float: right;
+    font-size: 10px;
+    padding-right: 2px;
+}
+
 .dns {
 	width: 129px;
 	border: #6c6c6c solid 1px;

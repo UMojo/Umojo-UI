@@ -87,7 +87,7 @@ winkstart.module('voip', 'device',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Device Manager'
+            label: 'Devices'
         });
     },
 

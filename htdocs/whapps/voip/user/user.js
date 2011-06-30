@@ -18,12 +18,26 @@ winkstart.module('voip', 'user',
         },
 
         formData: {
+                                timezones: [{text: 'GMT', value: 'Africa/Ouagadougou'}, {text:'GMT+1 (ECT)', value: 'Europe/Brussels'}, {text: 'GMT+2 (EET)', value: 'Europe/Minsk'},
+                                {text: 'GMT+3 (EAT)', value: 'Asia/Bahrain'},{text: 'GMT+3:30 (MET)', value: 'Asia/Tehran'},{text: 'GMT+4 (NET)', value: 'Indian/Mauritius'},{text: 'GMT+5 (PLT)', value: 'Asia/Aqtobe'},
+                                {text: 'GMT+5:30 (IST)', value: 'Asia/Kolkata'},{text: 'GMT+6 (BST)', value: 'Indian/Chagos'},{text: 'GMT+7 (VST)', value: 'Asia/Jakarta'},{text: 'GMT+8 (CTT)', value: 'Asia/Brunei'},
+                                {text: 'GMT+9 (JST)', value: 'Asia/Tokyo'},{text: 'GMT+9:30 (ACT)', value: 'Australia/Adelaide'},{text: 'GMT+10 (AET)', value: 'Asia/Yakutsk'},{text: 'GMT+11 (SST)', value: 'Pacific/Ponape'},
+                                {text: 'GMT+12 (NST)', value: 'Pacific/Fiji'},{text: 'GMT-11 (MIT)', value: 'Pacific/Midway'},{text: 'GMT-10 (HST)', value: 'Pacific/Rarotonga'},{text: 'GMT-9 (AST)', value: 'Pacific/Gambier'},
+                                {text: 'GMT-8 (PST)', value: 'America/Whitehorse'},{text: 'GMT-7 (PNT)', value: 'America/Edmonton'},{text: 'GMT-6 (CST)', value: 'America/Swift_Current'},{text: 'GMT-5 (EST)', value: 'America/Thunder_Bay'},
+                                {text: 'GMT-4 (PRT)', value: 'America/La_Paz'},{text: 'GMT-3:30 (CNT)', value: 'America/St_Johns'},{text: 'GMT-3 (AGT)', value: 'America/Sao_Paulo'},{text: 'GMT-2', value: 'America/Noronha'},{text: 'GMT-1 (CAT)', value: 'Atlantic/Cape_Verde'}
+                               ],
         },
 
         validation : [
                 {name : '#first_name', regex : /^\w+$/},
                 {name : '#last_name', regex : /^\w+$/},
-                {name : '#username', regex : /^\w+$/}
+                {name : '#username', regex : /^\w+$/},
+                {name : '#email', regex: /^([a-zA-Z0-9_\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
+                {name : '#caller_id_number_internal', regex: /^[\+]?[0-9]*$/},
+                {name : '#caller_id_name_internal', regex: /^.*$/},
+                {name : '#caller_id_number_external', regex: /^[\+]?[0-9]*$/},
+                {name : '#caller_id_name_external', regex: /^.*/},
+                {name : '#call_forward_number', regex: /^[\+]?[0-9]*$/}
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -60,7 +74,7 @@ winkstart.module('voip', 'user',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'User Manager'
+            label: 'Users'
         });
     },
 
@@ -125,6 +139,8 @@ winkstart.module('voip', 'user',
             var THIS = this;
             var form_data = {
                 data : {
+                    call_forward: {},
+                    caller_id: { internal: {}, external: {}}
                 }
             };
             
@@ -193,7 +209,6 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
-
                 THIS.saveUser(user_id, form_data);
 
                 return false;

@@ -35,10 +35,12 @@ winkstart.module('cluster', 'deploy_mgr',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('subnav.add', {
+        /*winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Server Mngr'
-        });
+            label: 'Server Manager'
+        });*/
+
+        winkstart.publish('deploy_mgr.activate');
     }, // End initialization routine
 
 
@@ -49,12 +51,15 @@ winkstart.module('cluster', 'deploy_mgr',
         requestServer: function() {
             var THIS = this;
             
-            THIS.templates.serverinfo.tmpl().dialog();
-            $('#serverinfo input.save_btn').click(function() {
+            $('#server_dialog').empty();
+            THIS.templates.serverinfo.tmpl().appendTo('#server_dialog');
+            $('#server_dialog').dialog('open');
+            $('#serverinfo a.save_btn').click(function() {
+                $('#server_dialog').dialog('close');
                 data = form2object('serverinfo');
                 console.log(data);
                 winkstart.publish('deploy_mgr.addServer', data);
-            })
+            });
             
         },
         
@@ -115,6 +120,8 @@ winkstart.module('cluster', 'deploy_mgr',
                 console.log('event');
                 winkstart.publish('deploy_mgr.deleteServer', $(this).parents('div.server').attr('server_id'));
             });
+
+            $('#server_dialog').dialog( { autoOpen : false } );
         }
     } // End function definitions
 );  // End module
