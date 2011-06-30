@@ -67,7 +67,9 @@
                 <h2>Advanced Settings</h2>
 
                 <ul class="advanced_tabs settings2">
-                    <li><a href="#"><span  class="icon phone"/>Something</a></li>
+                    <li><a href="#"><span  class="icon fax"/>Options</a></li>
+                    <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
+                    <li><a href="#"><span  class="icon phone"/>Call Forward</a></li>
                 </ul>
 
                 <div class="clear"></div>
@@ -75,7 +77,106 @@
 
             <div class="advanced_pane">
 
-                <div id="something">
+                <div id="options">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="verified">User has been verified?</label>
+                                {{if data.verified}}
+                                <input id="verified" name="verified" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="verified" name="verified" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                {{if data.vm_to_email_enabled}}
+                                <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="timezone">Timezone:</label>
+                                <select name="timezone" id="timezone">
+                                    {{each field_data.timezones}}
+                                    {{if data.timezone == value}}
+                                    <option value="${value}" selected="selected">${text}</option>
+                                    {{else}}
+                                    <option value="${value}">${text}</option>
+                                    {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset> 
+                    <div class="clear"></div>
+
+                </div>
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller_id_name_internal">Caller ID Name:</label>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <label for="caller_id_number_internal">Caller ID Number:</label>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller_id_name_external">Caller ID Name:</label>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <label for="caller_id_number_external">Caller ID Number:</label>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+                <div id="call_forward">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="call_forward.enabled">Is Call-Forward enabled?</label>
+                                {{if data.call_forward.enabled}}
+                                <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="call_forward_number">Number to redirect calls to:</label>
+                                <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
+                            </li>
+                            <li>
+                                <label for="require_keypress">Require Key Press?</label>
+                                {{if data.call_forward.require_keypress}}
+                                <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="call_forward_keep_caller_id">Keep Caller ID?</label>
+                                {{if data.call_forward.keep_caller_id}}
+                                <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
 
                     <div class="clear"></div>
 
