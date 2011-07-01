@@ -1,0 +1,113 @@
+<div>
+    <div class="inner">
+        <form id="account-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Account</h1>
+            {{else}}
+                <h1>Create Account</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="name">Name:</label>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <label for="realm">Realm (unique):</label>
+                                <input id="realm" name="realm" type="text" value="${data.realm}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="advanced_settings_box">
+                <h2>Advanced Settings</h2>
+
+                <ul class="advanced_tabs settings2">
+                    <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
+                    <li><a href="#"><span  class="icon sip"/>Voicemail-to-Email Template</a></li>
+                </ul>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="advanced_pane">
+
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller_id_name_internal">Caller ID Name:</label>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <label for="caller_id_number_internal">Caller ID Number:</label>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller_id_name_external">Caller ID Name:</label>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <label for="caller_id_number_external">Caller ID Number:</label>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="vm_to_email">
+                    <fieldset>
+                        <legend>Template fields</legend>
+                        <ul class="controls">
+                            <li>
+                                <label for="vm_to_email_support_number">Support Number:</label>
+                                <input id="vm_to_email_support_number" name="vm_to_email.support_number" type="text"  value="${data.vm_to_email.support_number}" />
+                            </li>
+                            <li>
+                                <label for="vm_to_email_support_email">Support Email</label>
+                                <input id="vm_to_email_support_email" name="vm_to_email.support_email" type="text"  value="${data.vm_to_email.support_email}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+            </div>
+
+        <ul class="button right accounts">
+            <li><a class="account-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="account-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="account-cancel" href="#">Cancel</a></li>
+        </ul>
+            
+        </form>
+    </div>
+</div>
