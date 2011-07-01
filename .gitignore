@@ -1,4 +1,5 @@
 *.esproj
 *.cache
 test/
+nbproject/
 
