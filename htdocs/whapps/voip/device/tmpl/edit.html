@@ -25,9 +25,15 @@
                                 <span class="tip_inline">(i.e. Phone in Cubicle C)</span>
                             </li>
                             <li>
-                                <label for="user">Belongs To:</label>
-                                <select name="user" id="user">
-                                    {{tmpl(field_data.users, {selectedVal: data.user }) "#optionList"}}
+                                <label for="owner_id">Belongs To:</label>
+                                <select name="owner_id" id="owner_id">
+                                {{each field_data.users}}
+                                    {{if data.owner_id == owner_id}}
+                                    <option value="${owner_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${owner_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}} 
                                 </select>
                             </li>
                             <li>
@@ -106,12 +112,12 @@
                         <legend>In-House Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller-id-name-internal">Caller ID Name:</label>
-                                <input id="caller-id-name-internal" name="caller-id.internal.name" type="text"  value="${data['caller-id'].internal.name}" />
+                                <label for="caller_id_name_internal">Caller ID Name:</label>
+                                <input id="caller_id_name_internal" name="caller_id.emergency.name" type="text"  value="${data.caller_id.emergency.name}" />
                             </li>
                             <li>
-                                <label for="caller-id-number-internal">Caller ID Number:</label>
-                                <input id="caller-id-number-internal" name="caller-id.internal.number" type="text"  value="${data['caller-id'].internal.number}" />
+                                <label for="caller_id_number_internal">Caller ID Number:</label>
+                                <input id="caller_id_number_internal" name="caller_id.emergency.number" type="text"  value="${data.caller_id.emergency.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -120,12 +126,12 @@
                         <legend>Outbound Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller-id-name-external">Caller ID Name:</label>
-                                <input id="caller-id-name-external" name="caller-id.external.name" type="text"  value="${data['caller-id'].external.name}" />
+                                <label for="caller_id_name_external">Caller ID Name:</label>
+                                <input id="caller_id_name_external" name="caller_id.default.name" type="text"  value="${data.caller_id.default.name}" />
                             </li>
                             <li>
-                                <label for="caller-id-number-external">Caller ID Number:</label>
-                                <input id="caller-id-number-external" name="caller-id.external.number" type="text"  value="${data['caller-id'].external.number}" />
+                                <label for="caller_id_number_external">Caller ID Number:</label>
+                                <input id="caller_id_number_external" name="caller_id.default.number" type="text"  value="${data.caller_id.default.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -157,14 +163,14 @@
                                 <input id="sip_password" name="sip.password" type="text"  value="${data.sip.password}" />
                             </li>
                             <li>
-                                <label for="sip_invite-format">Invite Format:</label>
-                                <select name="sip.invite-format" id="sip_invite-format">
-                                    {{tmpl(field_data.invite_formats, {selectedVal: data.sip['invite-format'] }) "#optionList"}}
+                                <label for="sip_invite_format">Invite Format:</label>
+                                <select name="sip.invite_format" id="sip_invite_format">
+                                    {{tmpl(field_data.invite_formats, {selectedVal: data.sip.invite_format }) "#optionList"}}
                                 </select>
                             </li>
                             <li>
-                                <label for="sip_expire-seconds">Expire Seconds:</label>
-                                <input id="sip_expire-seconds" name="sip.expire-seconds" type="text"  value="${data.sip['expire-seconds']}" />
+                                <label for="sip_expire_seconds">Expire Seconds:</label>
+                                <input id="sip_expire_seconds" name="sip.expire_seconds" type="text"  value="${data.sip.expire_seconds}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -214,7 +220,7 @@
                             <li>
                                 <label for="media_codecs">T.38</label>
                                 <select name="media.fax.codecs" id="media_fax_codecs">
-                                    {{tmpl(field_data.media_fax_codecs, {selectedVal: data.media.fax_media_codec }) "#optionList"}}
+                                    {{tmpl(field_data.media_fax_codecs, {selectedVal: data.media.fax.codecs }) "#optionList"}}
                                 </select>
                                 <span>(Requires a T.38 Capable Device)</span>
                             </li>
