@@ -55,13 +55,13 @@ winkstart.module('dashboard', 'monitor',
                     hostname : 'opensips001.clusterA.',
                     provider : 'Racksapce',
                     location : 'Dallas',
-                    state : 'active'
+                    state : 'error'
                 },
                 {
                     hostname : 'opensips002.clusterA.',
                     provider : 'Rackspace',
                     location : 'Dallas',
-                    state : 'active'
+                    state : 'warning'
                 },
                 {
                     hostname : 'opensips001.clusterB.',
@@ -290,6 +290,7 @@ winkstart.module('dashboard', 'monitor',
                 module: this.__module
             });
 
+            // JSON request to get current status
             THIS.refreshDNS();
             THIS.refreshCallDirector();
             THIS.refreshMediaServer();
