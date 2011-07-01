@@ -22,8 +22,8 @@ winkstart.module('voip', 'cdr',
         resources: {
             "cdr.list": {
                 url: 'http://pbx.2600hz.com/get_cdr.php?key={account}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     }, // End module resource definitions

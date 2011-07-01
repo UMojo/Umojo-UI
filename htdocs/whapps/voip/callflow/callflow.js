@@ -27,7 +27,7 @@ winkstart.module('voip', 'callflow',
 		},
       
 		resources: {
-			"callflow.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/callflows', dataType: 'json', httpMethod: 'GET'}        
+			"callflow.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/callflows', contentType: 'application/json', verb: 'GET'}        
 		},
 
 		popup: 'module/callflow/app/',

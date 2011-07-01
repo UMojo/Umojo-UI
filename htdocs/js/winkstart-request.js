@@ -6,32 +6,15 @@
 		for(var key in resources){
 			var resource = resources[key];
 			
-			var verb = 'GET';
-			
-			switch(resource.httpMethod.toUpperCase()){
-				case 'GET':
-					verb = 'GET';
-					break;
-				case 'POST':
-					verb = 'POST';
-					break;
-				case 'PUT':
-					verb = 'PUT';
-					break;
-				case 'DELETE':
-					verb = 'DELETE';
-					break;
-			}
-			
 			amplify.request.define( key, "ajax", {
 				url: resource.url,
 				decoder: function(response){
 					response.success( response.data, response.xhr);
 				},
-                contentType: 'application/json',
-				dataType: resource.dataType,
-				type: verb,
-				accepts: "application/json",
+                contentType: resource.contentType,
+                dataType: 'json',
+				type: resource.verb,
+				accepts: 'application/json',
 				beforeSend: function(jqXHR, settings){
 					jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken());		
 				}

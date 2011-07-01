@@ -37,28 +37,28 @@ winkstart.module('voip', 'vmbox',
         resources: {
             "vmbox.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "vmbox.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "vmbox.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
-                dataType: 'json',
-                httpMethod: 'PUT'
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             "vmbox.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
-                dataType: 'json',
-                httpMethod: 'POST'
+                contentType: 'application/json',
+                verb: 'POST'
             },
             "vmbox.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
-                dataType: 'json',
-                httpMethod: 'DELETE'
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },

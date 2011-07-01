@@ -18,3 +18,11 @@
 .quick_access .subtitle {
     font-size: 16px;
 }
+
+.quick_access .options div {
+    float: left;
+    position: relative;
+    width: 33%;
+    height: 150px;
+    text-align: center;
+}

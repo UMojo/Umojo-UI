@@ -5,6 +5,7 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
+                <li><a href="#">Conference Viewer</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -17,7 +18,11 @@
                                 <label for="conference_name">Conference Name:</label>
                                 <input id="conference_name" name="conference_name" type="text" value="${data.name}"/>
                             </li>
-                             <li>
+                            <li>
+                                <label for="conference_owner">Conference Owner:</label>
+                                <input id="conference_owner" name="conference_owner" type="text" value="${data.conference_owner}"/>
+                            </li>
+                            <li>
                                 <label for="member_pins">Members PIN:</label>
                                 <input id="member_pins" name="member_pins" type="text" value="${data.member_pins[0]}"/>
                             </li>
@@ -39,6 +44,7 @@
 
                 <ul class="advanced_tabs settings2">
                     <li><a href="#"><span  class="icon sip"/>Options</a></li>
+                    <li><a href="#">Conference Controls</a></li>
                 </ul>
 
                 <div class="clear"></div>
@@ -51,7 +57,15 @@
                         <legend>Moderators</legend>
                         <ul class="controls">
                             <li>
-                                <label for="join-muted-moderators">Should moderators join the conference muted?</label>
+                                <label for="join-play-name-moderators">Play name upon entry?</label>
+                                {{if data.moderator_play_name }}
+                                <input id="join-play-name-moderators" name="join-play-name" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="join-play-name-moderators" name="join-play-name" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="join-muted-moderators">Join the conference muted?</label>
                                 {{if data.moderator_join_muted }}
                                 <input id="join-muted-moderators" name="join-muted-moderators" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -59,7 +73,7 @@
                                 {{/if}} 
                             </li>
                             <li>
-                                <label for="join-deaf-moderators">Should moderators join the conference deaf?</label>
+                                <label for="join-deaf-moderators">Join the conference deaf?</label>
                                 {{if data.moderator_join_deaf }}
                                 <input id="join-deaf-moderators" name="join-deaf-moderators" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -73,7 +87,15 @@
                         <legend>Members</legend>
                         <ul class="controls">
                             <li>
-                                <label for="join-muted-members">Should members join the conference muted?</label>
+                                <label for="join-play-name-members">Play name upon entry?</label>
+                                {{if data.moderator_play_name }}
+                                <input id="join-play-name-members" name="join-play-name" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="join-play-name-members" name="join-play-name" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="join-muted-members">Join the conference muted?</label>
                                 {{if data.member_join_muted }}
                                 <input id="join-muted-members" name="join-muted-members" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -81,7 +103,7 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="join-deaf-members">Should members join the conference deaf?</label>
+                                <label for="join-deaf-members">Join the conference deaf?</label>
                                 {{if data.member_join_deaf }}
                                 <input id="join-deaf-members" name="join-deaf-members" type="checkbox" checked="checked"/>        
                                 {{else}}

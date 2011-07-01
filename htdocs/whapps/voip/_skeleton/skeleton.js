@@ -22,8 +22,8 @@ winkstart.module('voip', 'skeleton',
         resources: {
             "skeleton.list": {
                 url: 'http://www.mysite.com/get_json.php?somevar={some_value}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     }, // End module resource definitions

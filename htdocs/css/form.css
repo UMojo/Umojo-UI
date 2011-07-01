@@ -1,6 +1,3 @@
-form {
-    width: 550px !important;
-}
 fieldset.submit {
     padding-left: 190px !important;
 }
@@ -25,7 +22,6 @@ fieldset fieldset label.error {
 form {
     clear: both;
     margin-bottom: 25px;
-    width: 550px;
 }
 
 fieldset {
