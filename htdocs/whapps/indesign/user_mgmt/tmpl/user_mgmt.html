@@ -103,7 +103,8 @@
             <div class="cluster_container">
                 
                 <div class="cluster_pane">
-                    <div class="cluster"><!--START CLUSTER-->
+                    
+                    <div class="cluster"><!--START GENERAL INFO-->
                         <div class="user_column">
                             <div class="userinfo_icon"></div><h3>User Info</h3>
                             <form name="form" method="post" action="#">
@@ -112,7 +113,7 @@
                                 <label>Email</label><input type="text" name="email" id="" />
                                 <label>Email Verification</label><input type="checkbox">
                                 <label>Password</label><input type="text" name="password" id="" />
-                                <label></label><a href="#">auto-generate</a>
+                                <label></label><a href="#" style="margin-left: 15px">auto-generate</a>
                                 <label>Timezone</label>
                                     <select name="" class="select">
                                         <option value="1">PST/PDT</option>
@@ -137,15 +138,78 @@
                                 <label></label><input type="checkbox"><label class="label_right">GTalk</label>
                             </form>  
                         </div><!--end user_column-->
-                    </div><!--END CLUSTER-->
+                    </div><!--END GENERAL INFO-->
                     
-                    <div class="cluster">
-                        TEST
+                    <div class="cluster"><!--START EQUIPMENT-->
+                        <!--Note: Generated table goes here.-->
+                        <div class="mockup_table"></div>
+                       
+                        <div class="add_equip">
+                            <a class="plus_btn equip" href="#"></a>
+                            <p>Add Equipment</p>
+                        </div>                        
+                        <p class="bottom_right">* Using Default Caller ID from the General Tab</p>
+                    </div><!--END EQUIPMENT-->
+
+                    <div class="cluster"><!--START PHONE NUMBERS-->
+                        <!--Note: Generated table goes here.-->
+                        <div class="phonenumber_table"></div>
+                        
+                        <div class="add_equip">
+                            <a class="plus_btn equip" href="#"></a>
+                            <p>Add a New Way to Reach This User</p>
+                        </div>       
+                    </div><!--END PHONE NUMBERS-->
+
+                    <div class="cluster"><!--START PERMISSION-->
                     </div>
-                
+                    
+                    <div class="cluster"><!--START TROUBLESHOOTING-->
+                        <div class="troubleshooting_left">
+                            <h4>Connection Problem</h4><div class="phone_icon"></div>
+                            <a href="#">What should I do if my calls drop?</a>
+                            <a href="#">Can't make/receive calls</a>
+                            <a href="#">Feature X isn't working</a>
+                        </div>
+                        <div class="troubleshooting_mid">
+                            <h4>Audio Problem</h4><div class="audio_icon"></div>
+                            <a href="">The other person can't hear my voice</a>
+                            <a href="">I can't hear the other person's voice</a>
+                            <a href="">We can hear each other but the quality is poor</a>
+                        </div>
+                        <div class="troubleshooting_right">
+                            <h4>DTMF Problem</h4><div class="dtmf_icon"></div>
+                            <a href="">Touchtone doesn't work properly</a>
+                        </div>
+                        
+                        <hr class="troubleshooting">
+                        
+                        <div class="user_column">
+                            <h4>Open Support Issues</h4><div class="question_icon"></div><br>
+                            <a href="#">#7272 - Whining about something</a>
+                            <a href="#">#7272 - Whining about something</a>
+                            <a href="#">#7272 - Whining about something</a>
+                        </div><!--end user_column-->
+                        <div class="user_column">
+                            <h4>Closed Support Issues</h4>
+                            <a href="#">#7272 - Whining about something</a>
+                            <a href="#">#7272 - Whining about something</a>
+                        </div><!--end user_column-->
+                        <a href="#" class="user_button">Create New Support Issue</a>
+                    </div><!--END TROUBLESHOOTING-->
+                    
+                    
                 </div><!--end cluster_pane-->
                 
+               
+                    
             </div><!--end cluster_container-->
+            
+            <div class="clear"></div>
+            <ul class="remove_save_btn">
+                <li><a href="#">Remove</a></li>
+                <li><a href="#">Save</a></li>
+            </ul>
             
         </div><!end main_content-->
         

@@ -67,10 +67,10 @@
 }
 
 .cluster_container input {
-    border: 1px solid #424242;
-    border-radius: 5px 5px 5px 5px;
+    border: 1px solid #929292;
+    border-radius: 3px 3px 3px 3px;
     float: left;
-    margin: 0 0 5px 15px;
+    margin: 0 0 10px 15px;
     font-size: 11px;
     padding: 3px 2px;
     color: #929292;
@@ -82,10 +82,15 @@
 
 .cluster_container a {
     float: left;
-    margin: 2px 0 5px 15px;
+    margin: 2px 0 5px 0;
     color: #424242;
     text-decoration: underline;
+    clear: both;
 }
+
+/*.cluster_container a:hover {
+    color: #05ADDC;
+}*/
 
 .select {
     /*background: url("../images/bar.png") no-repeat scroll 0 0 transparent;*/
@@ -108,12 +113,12 @@ select.styled {
     width: 200px;
 }
 
-.user_column {
+.cluster_container .user_column {
     width: 370px;
     float: left;
 }
 
-input[type="checkbox"] {
+.cluster_container input[type="checkbox"] {
     margin-top: 5px;
 }
 
@@ -125,15 +130,16 @@ input[type="checkbox"] {
 }
 
 .userinfo_icon {
-    background: url(../images/Icons_32x32_Gradient.png) repeat scroll -769px -357px transparent;
+    background: url(../images/Icons_32x32_Gradient.png) -769px -357px transparent;
     width: 32px;
     height: 32px;
     float: left;
     margin: -9px 0 10px 50px;
 }
 
+/*****ICONS******/
 .setting_icon {
-    background: url(../images/Icons_32x32_Gradient.png) repeat scroll -482px -131px transparent;
+    background: url(../images/Icons_32x32_Gradient.png) -482px -131px transparent;
     width: 32px;
     height: 32px;
     float: left;
@@ -141,9 +147,127 @@ input[type="checkbox"] {
 }
 
 .user_icon {
-    background: url(../images/Icons_32x32_Gradient.png) repeat scroll -483px -197px transparent;
+    background: url(../images/Icons_32x32_Gradient.png) -483px -197px transparent;
     width: 32px;
     height: 32px;
     float: left;
     margin: 26px 0 0 38px;
+}
+
+.phone_icon {
+    background: url(../images/Icons_16x16_DaekGrey.png) -192px -83px transparent;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 3px 0 0 4px;
+}
+
+.audio_icon {
+    background: url(../images/Icons_16x16_DaekGrey.png) -132px -147px transparent;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 3px 0 0 5px;
+}
+
+.dtmf_icon {
+    background: url(../images/Icons_16x16_DaekGrey.png) -322px -82px transparent;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 2px 0 0 5px;
+}
+
+.question_icon {
+    background: url(../images/Icons_16x16_DaekGrey.png) -64px -18px transparent;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 1px 0 0 5px;
+}
+
+/*****EQUIPMENT******/
+.cluster_container .add_equip {
+    margin-top: 20px;
+    float: left;
+}
+
+.content .equip {
+    margin: 0 5px 0 0;
+}
+
+.cluster_container .add_equip p {
+    line-height: 24px;
+    color: #424242;
+    width: 250px;
+}
+
+.cluster_container .bottom_right {
+    margin-top: 24px;
+    text-align: right;
+    color: #424242;
+}
+
+.mockup_table {
+    background-image: url(../images/equipment.png);
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-position: top center;
+    width: 755px;
+    height: 190px;
+}
+
+/*****PHONE NUMBERS******/
+.phonenumber_table {
+    background: url(../images/phone_nbr.png) no-repeat top center;
+    width: 745px;
+    height: 197px;
+}
+
+/*****TROUBLESHOOTING******/
+.cluster_container .troubleshooting_left {
+    width: 239px;
+    float: left;
+    margin-bottom: 20px;
+}
+
+.cluster_container .troubleshooting_mid {
+    width: 239px;
+    float: left;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.cluster_container .troubleshooting_right {
+    width: 240px;
+    float: left;
+    margin-bottom: 20px;
+}
+
+.cluster_container h4 {
+    font: bold 14px/20px Helvetica, Arial, sans-serif;
+    float: left;
+    color: #424242;
+    margin-bottom: 10px;
+}
+
+.cluster_container hr.troubleshooting {
+    clear: both;
+    height: 0;
+    margin: 0 0 20px 0;
+}
+
+.cluster_container a.user_button {
+    padding: 6px 30px;
+    border-radius: 3px;
+    background-color: #D9DADC;
+    background-image: -moz-linear-gradient(#D9DADC, #B8B9B9);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D1D1D1), to(#B8B9B9));
+    background-image: -webkit-linear-gradient(#D1D1D1, #B8B9B9); 
+    background-image: -o-linear-gradient(#D1D1D1, #B8B9B9);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#D1D1D1, endColorstr=#B8B9B9);
+    -moz-box-shadow: 2px 3px #424242;
+    -webkit-box-shadow: 2px 3px #424242;
+    box-shadow: 2px 3px #424242;
+    margin-top: 25px;
 }
