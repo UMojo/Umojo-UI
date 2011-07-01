@@ -195,6 +195,25 @@ winkstart.module('voip', 'device',
                 $('#device-view').empty();
             });
         },
+        cleanFormData: function(form_data) {
+            var audioCodecs = [];
+            var videoCodecs = [];
+            $.each(form_data.media.audio.codecs, function(index, obj) {
+                if(obj)
+                {
+                    audioCodecs.push(obj);
+                }
+            });
+            $.each(form_data.media.video.codecs, function(index, obj) {
+                if(obj)
+                {
+                    videoCodecs.push(obj);
+                }
+            });
+            form_data.media.audio.codecs = audioCodecs;
+            form_data.media.video.codecs = videoCodecs;
+            return form_data;
+        },
 
         /**
          * Draw device fields/template and populate data, add validation. Works for both create & edit
@@ -223,6 +242,8 @@ winkstart.module('voip', 'device',
 
                 /* Grab all the form field data */
                 var form_data = form2object('device-form');
+                
+                form_data = THIS.cleanFormData(form_data); 
 
                 THIS.saveDevice(device_id, form_data);
 
