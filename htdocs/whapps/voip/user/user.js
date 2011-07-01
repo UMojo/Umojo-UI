@@ -44,28 +44,28 @@ winkstart.module('voip', 'user',
         resources: {
             "user.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "user.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "user.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
-                dataType: 'json',
-                httpMethod: 'PUT'
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             "user.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
-                dataType: 'json',
-                httpMethod: 'POST'
+                contentType: 'application/json',
+                verb: 'POST'
             },
             "user.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
-                dataType: 'json',
-                httpMethod: 'DELETE'
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },

@@ -20,28 +20,28 @@ winkstart.module('voip', 'conference', {
     resources: {
         "conference.list": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences',
-            dataType: 'json',
-            httpMethod: 'GET'
+            contentType: 'application/json',
+            verb: 'GET'
         },
         "conference.get": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            dataType: 'json',
-            httpMethod: 'GET'
+            contentType: 'json',
+            verb: 'GET'
         },
         "conference.create": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences',
-            dataType: 'json',
-            httpMethod: 'PUT'
+            contentType: 'json',
+            verb: 'PUT'
         },
         "conference.update": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            dataType: 'json',
-            httpMethod: 'POST'
+            contentType: 'json',
+            verb: 'POST'
         },
         "conference.delete": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            dataType: 'json',
-            httpMethod: 'DELETE'
+            contentType: 'json',
+            verb: 'DELETE'
         }
     }
 },

@@ -57,28 +57,28 @@ winkstart.module('voip', 'device',
         resources: {
             "device.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "device.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "device.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
-                dataType: 'json',
-                httpMethod: 'PUT'
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             "device.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
-                dataType: 'json',
-                httpMethod: 'POST'
+                contentType: 'application/json',
+                verb: 'POST'
             },
             "device.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
-                dataType: 'json',
-                httpMethod: 'DELETE'
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },

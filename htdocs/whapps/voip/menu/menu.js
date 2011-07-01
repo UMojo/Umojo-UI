@@ -31,28 +31,28 @@ winkstart.module('voip', 'menu',
         resources: {
             "menu.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "menu.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "menu.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
-                dataType: 'json',
-                httpMethod: 'PUT'
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             "menu.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
-                dataType: 'json',
-                httpMethod: 'POST'
+                contentType: 'application/json',
+                verb: 'POST'
             },
             "menu.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
-                dataType: 'json',
-                httpMethod: 'DELETE'
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },

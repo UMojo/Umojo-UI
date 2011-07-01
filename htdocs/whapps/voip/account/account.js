@@ -14,7 +14,7 @@ winkstart.module('voip', 'account', {
 		},
 		
 		resources: {
-			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/children', dataType: 'json', httpMethod: 'GET'}        
+			"accounts.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/children', contentType: 'application/json', verb: 'GET'}        
 		}
 	},
 	function(args) {
