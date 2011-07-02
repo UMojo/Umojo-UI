@@ -3,12 +3,17 @@ winkstart.module('connect', 'sipservice',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/sipservice.css'
+            'css/sipservice.css',
+            'css/style.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/sipservice.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            main: 'tmpl/main.html',
+            main_dids : 'tmpl/main_dids.html',
+            main_servers : 'tmpl/main_servers.html',
+            main_services : 'tmpl/main_services.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -48,7 +53,11 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
 
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+            //THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+            THIS.templates.main.tmpl().appendTo( $('#ws-content') );
+            THIS.templates.main_dids.tmpl().appendTo ( $('#my_numbers') );
+            THIS.templates.main_services.tmpl( { account : { credits : {} } } ).appendTo ( $('#my_services') );
+            THIS.templates.main_servers.tmpl( { servers : {} } ).appendTo ( $('#my_servers') );
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);

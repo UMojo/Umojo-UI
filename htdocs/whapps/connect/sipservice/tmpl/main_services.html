@@ -1,0 +1,41 @@
+<div>
+    <div class="title">My Paid Services</div>
+    <div class="info" style="background-repeat: repeat-y; ">
+        <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">credits</span>
+
+        <span id="addCredsSpan"><a href="#" id="add_prepay_button" class="button_small button">Add Credit</a></span>
+        <!--        	<div style="float: left; font-size: smaller; margin: 10px 0px 0px 2em;" >For per-minute and inbound toll-free calls</div> -->
+    </div>
+    <div class="info" style="clear:both;">
+        <span class="trunk_num">${account.trunks}</span><span class="trunk_detail">Flat Rate Trunks <span style="margin-left: 2.5em;"><img src="/images/plus.png" style="height: 1.5em; cursor:pointer; margin-left: 0.5em;" onclick="setTrunkPrompt(1);" /> <img src="/images/minus.png" style="height: 1.5em; margin-left: 0.5em; cursor:pointer;" onclick="setTrunkPrompt(1);"/></span><br/>
+            <!--        	<div style="float: left; font-size: smaller; margin: 10px 0px 0px 2em;" >For unlimited calling to US 48 states</div> -->
+    </div>
+
+    <div class="info">
+        <span class="e_num">${account.e911count}</span><span class="e_detail">E911 enabled numbers</span>
+    </div>
+
+    {{if account.billing }}
+    <div class="info">
+        <span class="e_detail">Default card: <span class="cc_number">${acct.account.billing.cards[0]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
+    </div>
+
+    {{else}}
+    <div class="info">
+
+        <span class="e_detail no_cc_warning">&nbsp;<span id="my_account_bottom" style="cursor:pointer; color:#2585A5;" class="">No Credit Card On File!</span> [align this correctly][turn off 'if false']</span>
+    </div>
+    {{/if}}
+
+    <div class="addl">
+
+        {{if account.billing }}
+        <span class="cc_back">Backup card: <span class="cc_number">acct.account.billing.cards[1]['num']</span> <span class="edit"><a href="#">[edit]</a></span></span>
+        {{/if}}
+    </div>
+
+    <ul class="buttons">
+        <li><a class="history" href="#">View Order History</a></li>
+        <li><a class="account" href="#">View Call Log</a></li>
+    </ul>
+</div>

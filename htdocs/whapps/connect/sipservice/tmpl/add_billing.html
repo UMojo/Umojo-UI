@@ -1,0 +1,53 @@
+<%init>
+
+if ($ARGS{add_billing}) {
+
+my @ds=split(' ', $ARGS{add_billing});
+my $errs=[];
+my $errs_cb='';
+for my $do (@ds ) {
+	my $userd=TS::getUserInfo($db, $errs, { userID => $do });
+	$m->out($do . ' ---------> ' . $userd->{account}->{billing_id}); $m->flush_buffer;
+	next if $userd->{account}->{billing_id};
+#	$m->out(' WOULD POST' . $userd->{account}->{billing_id}); $m->flush_buffer;
+#	next;
+				my $post_json=JSON::XS::encode_json({
+					"first_name" => $userd->{first_name},
+					"last_name" => $userd->{last_name},
+					"company" => $userd->{company},
+					"phone" => $userd->{phone},
+					"email" => $userd->{email}
+					});
+use LWP;
+			my $ua = LWP::UserAgent->new;
+			
+			my $req = HTTP::Request->new(
+					POST => 'http://portal.2600hz.com/api/newaccount.php', 
+					Content_Type => 'application/x-www-form-urlencoded', 
+					Content => [ key => '2600_key',   json => $post_json ]
+					);
+		     my $return_from_billing;
+			my $uar = $ua->request($req);
+			 if ($uar->is_success) {
+
+				eval {$return_from_billing = JSON::XS::decode_json($uar->content)};
+				#push(@$errs, {msg=> $ua->request($req)->content, type => 'info'});
+		      }
+		      unless ($return_from_billing->{success}) {
+		      					 push( @$errs, { msg => 'Can not created new user.  Try again.  ' . $return_from_billing->{message}  , type => 'error'  , cb => $errs_cb} ); 
+		      					 return;
+		      }
+
+					my $billing_id = $return_from_billing->{customer_id};
+						$userd->{account}->{billing_id}||=$billing_id;
+					my $cv1 = $db->save_doc($userd, TS::db_opts())->recv;
+
+		}							
+}
+</%init>
+<form method="post">
+Add Billing to userIDs separated by spaces:
+<textarea name="add_billing">
+</textarea>
+<input type="submit" />
+</form>

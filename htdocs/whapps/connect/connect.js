@@ -10,7 +10,7 @@ winkstart.module('connect', 'connect', {
     },
     {
         initialized :   false,
-        modules :       ['sipservice', 'gtalk'],
+        modules :       ['sipservice'],
 
         activate: function() {
             if (this.initialized) {
