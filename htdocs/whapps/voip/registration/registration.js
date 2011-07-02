@@ -61,12 +61,12 @@ winkstart.module('voip', 'registration',
         
             this.templates.registration.tmpl({}).appendTo( $('#ws-content') );
             
-            winkstart.getJSON('registration.list', {crossbar: true, account_id: '04152ed2b428922e99ac66f3a71b0215'}, function(reply) {
+            winkstart.getJSON('registration.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(reply) {
                 THIS.setup_table();
                 $.each(reply.data, function() {
                     var registration_id = this.id;
 
-                    winkstart.getJSON('registration.read',{crossbar: true, account_id: '04152ed2b428922e99ac66f3a71b0215', registration_id: registration_id}, function(reply) {
+                    winkstart.getJSON('registration.read',{crossbar: true, account_id: MASTER_ACCOUNT_ID, registration_id: registration_id}, function(reply) {
                         if(reply.data == undefined) {
                             return false;
                         }
