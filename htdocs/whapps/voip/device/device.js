@@ -18,7 +18,6 @@ winkstart.module('voip', 'device',
         },
 
         formData: {
-                    users: [{value: '-- Select --'}, {value:'Eric Francis'}, {value: 'Mark Windsor'}, {value:'Jeff Jonson'}],
                     status_types: [{value: 'Enabled'}, {value:'Disabled'}],
                     auth_methods: [{value: 'Password'}, {value:'IP Address'}],
                     invite_formats: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
@@ -42,15 +41,15 @@ winkstart.module('voip', 'device',
 
         validation : [
                 {name : '#name', regex : /^\w+$/},
-                {name : '#mac_address', regex : /^[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}$/},
-                {name : '#caller-id-name-internal', regex : /^.*$/},
-                {name : '#caller-id-number-internal', regex : /^[\+]?[0-9]*$/},
-                {name : '#caller-id-name-external', regex : /^.*$/},
-                {name : '#caller-id-number-external', regex : /^[\+]?[0-9]*$/},
+                {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
+                {name : '#caller_id_name_internal', regex : /^.*$/},
+                {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
+                {name : '#caller_id_name_external', regex : /^.*$/},
+                {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
                 {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
                 {name : '#sip_username', regex : /^[^\s]+$/},
                 {name : '#sip_password', regex : /^[^\s]+$/},
-                {name : '#sip_expire-seconds', regex : /^[0-9]+$/}
+                {name : '#sip_expire_seconds', regex : /^[0-9]+$/}
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -79,7 +78,12 @@ winkstart.module('voip', 'device',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
-            }
+            },
+            "user.list": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+                contentType: 'application/json',
+                verb: 'GET'
+            }         
         }
     },
 
@@ -152,16 +156,27 @@ winkstart.module('voip', 'device',
             var THIS = this;
             var form_data = {
                 data : {
-                    'caller-id' : {external : {}, internal : {}},
-                    media : {audio : {codecs : []}, video : {codecs : []}},
+                    caller_id : {default : {}, emergency : {}},
+                    media : {audio : {codecs : []}, video : {codecs : []}, fax: {codecs: []}},
                     sip : {}
                 }
             };
             
             form_data.field_data = THIS.config.formData;
-
-
-            if (data && data.id) {
+            form_data.field_data.users = [];
+            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+                    var listUsers = []; 
+                    if(json.data.length > 0) {
+                        _.each(json.data, function(elem){
+                            var title = elem.first_name + ' ' + elem.last_name;
+                            listUsers.push({
+                                owner_id: elem.id,
+                                title: title
+                            });
+                        });
+                        form_data.field_data.users = listUsers;
+                }
+                if (data && data.id) {
                 /* This is an existing device - Grab JSON data from server for device_id */
                 winkstart.getJSON('device.get', {
                     crossbar: true,
@@ -170,13 +185,16 @@ winkstart.module('voip', 'device',
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
-
+                    console.log(form_data);
                     THIS.renderDevice(form_data);
                 });
-            } else {
+                } else {
                 /* This is a new device - pass along empty params */
+                //console.log(form_data);
                 THIS.renderDevice(form_data);
-            }
+                }                
+
+            });
             
         },
 
