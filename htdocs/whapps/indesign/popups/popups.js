@@ -8,7 +8,23 @@ winkstart.module('indesign', 'popups',
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/login.html'        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+            index: 'tmpl/login.html', 
+            thankyou: 'tmpl/thankyou.html',
+            service_loc: 'tmpl/service_loc.html',
+            service_limits: 'tmpl/service_limits.html',
+            register: 'tmpl/register.html',
+            port_number: 'tmpl/port_number.html',
+            order_his: 'tmpl/order_his.html',
+            monitoring: 'tmpl/monitoring.html',
+            fraud: 'tmpl/fraud.html',
+            failover: 'tmpl/failover.html',
+            caller_id: 'tmpl/caller_id.html',
+            authentication: 'tmpl/authentication.html',
+            add_trunks: 'tmpl/add_trunks.html',
+            add_server: 'tmpl/add_server.html',
+            add_numbers: 'tmpl/add_numbers.html',
+            add_credits: 'tmpl/add_credits.html',
+            add_billing: 'tmpl/add_billing.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -27,7 +43,7 @@ winkstart.module('indesign', 'popups',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Login'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
+            label: 'Pop Up Form'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });
     }, // End initialization routine
 
@@ -46,7 +62,7 @@ winkstart.module('indesign', 'popups',
             $('#ws-content').empty();
 
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+            THIS.templates.add_numbers.tmpl().appendTo( $('#ws-content') );
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);

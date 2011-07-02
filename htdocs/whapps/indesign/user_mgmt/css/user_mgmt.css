@@ -62,8 +62,9 @@
     text-align: right;
     width: 150px; 
     margin-top: 3px;
-    font-size: 12px;
     color: #424242;
+    font-weight: bold;
+    letter-spacing: 0.02em;    
 }
 
 .cluster_container input {
@@ -82,22 +83,25 @@
 
 .cluster_container a {
     float: left;
-    margin: 2px 0 5px 0;
+    margin: 2px 0 10px 0;
     color: #424242;
-    text-decoration: underline;
     clear: both;
 }
 
-/*.cluster_container a:hover {
-    color: #05ADDC;
-}*/
+.cluster_container a:hover {
+    color: #fff;
+}
+
+.underline {
+    text-decoration: underline;
+}
 
 .select {
     /*background: url("../images/bar.png") no-repeat scroll 0 0 transparent;*/
     font: 12px/21px arial,sans-serif;
     letter-spacing: 1px;
     overflow: hidden;
-    padding: 4px 10px 0 8px;
+    padding: 1px 10px 0 8px;
     width: 155px;
     height: 21px;
     margin-left: 15px;
@@ -113,9 +117,17 @@ select.styled {
     width: 200px;
 }
 
-.cluster_container .user_column {
-    width: 370px;
+.cluster_container .user_column_l {
+    width: 365px;
     float: left;
+    border-right: 2px ridge #B8B9B9;
+    padding-right: 5px;
+}
+
+.cluster_container .user_column_r {
+    width: 355px;
+    float: left;
+    padding-left: 20px
 }
 
 .cluster_container input[type="checkbox"] {
@@ -154,8 +166,8 @@ select.styled {
     margin: 26px 0 0 38px;
 }
 
-.phone_icon {
-    background: url(../images/Icons_16x16_DaekGrey.png) -192px -83px transparent;
+.connection_icon {
+    background: url(../images/Icons_16x16_White.png) -192px -83px transparent;
     width: 16px;
     height: 16px;
     float: left;
@@ -163,7 +175,7 @@ select.styled {
 }
 
 .audio_icon {
-    background: url(../images/Icons_16x16_DaekGrey.png) -132px -147px transparent;
+    background: url(../images/Icons_16x16_White.png) -132px -147px transparent;
     width: 16px;
     height: 16px;
     float: left;
@@ -171,7 +183,7 @@ select.styled {
 }
 
 .dtmf_icon {
-    background: url(../images/Icons_16x16_DaekGrey.png) -322px -82px transparent;
+    background: url(../images/Icons_16x16_White.png) -322px -82px transparent;
     width: 16px;
     height: 16px;
     float: left;
@@ -179,7 +191,7 @@ select.styled {
 }
 
 .question_icon {
-    background: url(../images/Icons_16x16_DaekGrey.png) -64px -18px transparent;
+    background: url(../images/Icons_16x16_White.png) -64px -18px transparent;
     width: 16px;
     height: 16px;
     float: left;
@@ -226,28 +238,31 @@ select.styled {
 
 /*****TROUBLESHOOTING******/
 .cluster_container .troubleshooting_left {
-    width: 239px;
+    width: 227px;
     float: left;
     margin-bottom: 20px;
 }
 
 .cluster_container .troubleshooting_mid {
-    width: 239px;
+    width: 227px;
     float: left;
     margin-bottom: 20px;
-    padding: 0 15px;
+    padding: 0 20px;
+    border-left: 2px ridge #B8B9B9;
+    border-right: 2px ridge #B8B9B9;
 }
 
 .cluster_container .troubleshooting_right {
-    width: 240px;
+    width: 227px;
     float: left;
     margin-bottom: 20px;
+    padding-left: 20px;
 }
 
 .cluster_container h4 {
     font: bold 14px/20px Helvetica, Arial, sans-serif;
     float: left;
-    color: #424242;
+    color: #fff;
     margin-bottom: 10px;
 }
 
@@ -255,6 +270,7 @@ select.styled {
     clear: both;
     height: 0;
     margin: 0 0 20px 0;
+    /*border-bottom: 1px ridge #fff;*/
 }
 
 .cluster_container a.user_button {
@@ -270,4 +286,14 @@ select.styled {
     -webkit-box-shadow: 2px 3px #424242;
     box-shadow: 2px 3px #424242;
     margin-top: 25px;
+    text-decoration: none;
+}
+
+.cluster_container a.user_button:hover {
+    background-color: #05AFDC;
+    background-image: -moz-linear-gradient(#05d3ec, #05AFDC);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#05d3ec), to(#05AFDC));
+    background-image: -webkit-linear-gradient(#05d3ec, #05AFDC); 
+    background-image: -o-linear-gradient(#05d3ec, #05AFDC);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#05d3ec, endColorstr=#05AFDC);
 }
