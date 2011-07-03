@@ -55,7 +55,7 @@
     background-image: url(../images/icons_32x32_yellow.png);
 }
 
-/* Icon choices */
+/************** ICONS ************/
 .icon.phone {
     background-position: -512px -160px;
 }
@@ -74,4 +74,60 @@
 
 .icon.fax {
     background-position: -512px -352px;
+}
+
+.icon.account {
+	background-position: 0 -357px;
+}
+
+.icon.cc {
+	background-position: -577px -357px;
+}
+
+.icon.billing {
+	background-position: -769px -357px;
+}
+
+.icon.location {
+	background-position: -32px -260px;
+}
+
+.icon.limit {
+	background-position: -830px -290px;
+}
+
+.icon.charge {
+	background-position: -192px -356px;
+}
+
+.icon.monitoring {
+	background-position: -321px -419px;
+}
+
+.icon.robot {
+	background-position: -736px -387px;
+}
+
+.icon.rightarrow {
+	background-position: -860px -2px;
+}
+
+.icon.cart {
+	background-position: -700px -292px;
+}
+
+.icon.authentication {
+	background-position: 0 -290px;
+}
+
+.icon.recharge {
+	background-position: -473px 0;
+}
+
+.icon.dollar {
+	background-position: -960px -419px;
+}
+
+.icon.search {
+	background-position: -895px -424px;
 }

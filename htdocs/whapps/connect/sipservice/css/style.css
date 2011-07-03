@@ -179,7 +179,7 @@ span.ip_list_ip { display:block; z-index:5;}
     padding: 0;
 }
 
-#0server_area .server .sip .area  .title.ip_list:hover {
+#server_area .server .sip .area  .title.ip_list:hover {
     display: block;
     position: fixed;
     /*top: .9em;
@@ -324,7 +324,7 @@ span.ip_list_ip { display:block; z-index:5;}
 
 /* jQuery UI 2600hz edits */
 
-.ui-dialog { position: absolute; padding: .2em; width: 300px; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
+.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
 .ui-dialog .ui-dialog-titlebar { background: #2280a2;  position: relative; background-image: url(/../images/ui-dialog-title-bar-bkgd.png); height: 22px; }
 .ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;} 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }

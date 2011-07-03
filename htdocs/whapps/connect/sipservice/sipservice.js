@@ -178,7 +178,7 @@ winkstart.module('connect', 'sipservice',
         addCredit: function() {
             var THIS = this;
 
-            var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {} );
+            var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
 
             $('#dialog a.ctr_btn', dialogDiv).click(function() {
                 winkstart.publish('sipservice.addCredits', {

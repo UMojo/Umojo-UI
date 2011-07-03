@@ -34,6 +34,10 @@
             }
         }
 
+        if (!options.width) {
+            options.width = 'auto';
+        }
+
         $(newDiv).dialog(options);
 
         return $(newDiv);       // Return the new div as an object, so that the caller can destroy it when they're ready.'
