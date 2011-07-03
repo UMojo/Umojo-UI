@@ -18,7 +18,17 @@ winkstart.module('connect', 'sipservice',
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'sipservice.activate' : 'activate'
+            'sipservice.activate' : 'activate',
+            'sipservice.chooseNumber' : 'chooseNumber',
+            'sipservice.addNumber' : 'addNumber',
+            'sipservice.cancelNumber' : 'cancelNumber',
+            'sipservice.addCredit' : 'addCredit',
+            'sipservice.changeTrunks' : 'changeTrunks',
+            'sipservice.setE911' : 'setE911',
+            'sipservice.toggleFax' : 'toggleFax',
+            'sipservice.refreshDIDs' : 'refreshDIDs',
+            'sipservice.refreshServices' : 'refreshServices',
+            'sipservice.refreshServers' : 'refreshServers'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
