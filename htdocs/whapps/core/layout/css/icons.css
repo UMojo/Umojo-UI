@@ -1,9 +1,14 @@
 /* 
     Document   : icons
     Created on : Jun 6, 2011, 7:19:19 AM
-    Author     : dman
+    Author     : Darren Schreiber
     Description:
-        Purpose of the stylesheet follows.
+        This stylesheet allows you to load a single image map and specify an icon type and color to have it appear.
+
+        Examples include
+        <div class="icon phone" />      <-- Show a picture of a phone -->
+        <div class="icon phone current" />      <-- Show a picture of a phone, as current selection (typically blue) -->
+        <div class="icon darkgrey phone" />     <-- Show a picture of a phone and explicitly force it to appear in dark grey -->
 */
 
 .icon {
@@ -13,46 +18,60 @@
     height: 32px;
     margin-top: -1px;
     padding-right: 6px;
-/*    padding-left: 32px;
-    padding-right: 5px;*/
-    background-image: url(../images/icons.png);
+    background-image: url(../images/icons_32x32_gradient.png); /* This is the default - darkgrey */
     background-repeat: no-repeat;
 }
 
+/* Color overrides */
+.current {
+    background-image: url(../images/icons_32x32_blue.png); /* Default for current is blue */
+}
+
+.icon.blue {
+    background-image: url(../images/icons_32x32_blue.png);
+}
+
+.icon.darkgrey {
+    background-image: url(../images/icons_32x32_darkgrey.png);
+}
+
+.icon.green {
+    background-image: url(../images/icons_32x32_green.png);
+}
+
+.icon.lightgrey {
+    background-image: url(../images/icons_32x32_lightgrey.png);
+}
+
+.icon.red {
+    background-image: url(../images/icons_32x32_red.png);
+}
+
+.icon.white {
+    background-image: url(../images/icons_32x32_white.png);
+}
+
+.icon.yellow {
+    background-image: url(../images/icons_32x32_yellow.png);
+}
+
+/* Icon choices */
 .icon.phone {
     background-position: -512px -160px;
-}
-.current .icon.phone {
-    background-position: -1536px -1184px;
 }
 
 .icon.sip {
     background-position: -704px -160px;
 }
-.current .icon.sip {
-    background-position: -1728px -1184px;
-}
 
 .icon.audio {
     background-position: -320px -288px;
-}
-.current .icon.audio {
-    background-position: -1344px -1312px;
 }
 
 .icon.video {
     background-position: -96px -384px;
 }
-.current .icon.video {
-    background-position: -1120px -1408px;
-}
 
 .icon.fax {
     background-position: -512px -352px;
 }
-.current .icon.fax {
-    background-position: -1536px -1376px;
-}
-
-
-/* blue = 1024 over (32 x 16 x 2), 1024 down (32 x 16 x 2) */
