@@ -22,8 +22,7 @@ winkstart.module('connect', 'sipservice',
             order_history: 'tmpl/order_history.html',
             monitoring: 'tmpl/monitoring.html',
             edit_fraud: 'tmpl/edit_fraud.html',
-            failover: 'tmpl/failover.html',
-            caller_id: 'tmpl/caller_id.html',
+            failover: 'tmpl/edit_failover.html',
             edit_auth: 'tmpl/edit_auth.html',
             edit_trunks: 'tmpl/edit_trunks.html',
             edit_server: 'tmpl/edit_server.html',
@@ -178,16 +177,14 @@ winkstart.module('connect', 'sipservice',
 
         addCredit: function() {
             var THIS = this;
-            
-            $('#dialog').empty();
-            THIS.templates.add_credits.tmpl().appendTo('#dialog');
-            $('#dialog').dialog('open');
 
-            $('#dialog a.ctr_btn').click(function() {
+            var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {} );
+
+            $('#dialog a.ctr_btn', dialogDiv).click(function() {
                 winkstart.publish('sipservice.addCredits', {
                     credit_amount : 5,
                     success : function() {
-                        $('#dialog').dialog('close');
+                        dialogDiv.dialog('close');
                     }
                 });
             });
@@ -1108,7 +1105,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
 
             // Prepare the dialog box for use
-            $('#dialog').dialog({ autoOpen : false});
+            $('#dialog').dialog({autoOpen : false});
 
 
             /* Draw our base template into the window */
@@ -1137,6 +1134,10 @@ winkstart.module('connect', 'sipservice',
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
+            });
+
+            $('#ws-content #add_prepay_button').click(function() {
+                winkstart.publish('sipservice.addCredit');
             });
         }
     } // End function definitions
