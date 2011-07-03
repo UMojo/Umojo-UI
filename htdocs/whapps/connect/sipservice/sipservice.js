@@ -42,6 +42,23 @@ winkstart.module('connect', 'sipservice',
 
     /* Define the functions for this module */
     {
+        refreshDIDs: function(numbers) {
+            var THIS = this;
+
+            THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
+
+        },
+
+        refreshServices: function(services) {
+            var THIS = this;
+
+            THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
+        },
+
+        refreshServers: function(servers) {
+            THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
+        },
+
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
@@ -54,10 +71,19 @@ winkstart.module('connect', 'sipservice',
 
             /* Draw our base template into the window */
             //THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+
+            // Paint the main screen
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
-            THIS.templates.main_dids.tmpl().appendTo ( $('#my_numbers') );
-            THIS.templates.main_services.tmpl( { account : { credits : {} } } ).appendTo ( $('#my_services') );
-            THIS.templates.main_servers.tmpl( { servers : {} } ).appendTo ( $('#my_servers') );
+
+            var numbers = {
+                
+            };
+
+            THIS.refreshDIDs(numbers);
+
+            THIS.refreshServices({ account : { credits : {} } });
+            
+            THIS.refreshServers({});
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);

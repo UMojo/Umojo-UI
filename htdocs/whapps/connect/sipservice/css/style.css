@@ -1,44 +1,13 @@
 @charset "UTF-8";
 /* CSS Document */
 
-/* css reset */
-/*html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,
-dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {	margin: 0;	padding: 0;	border: 0;	outline: 0;	font-size: 100%;	vertical-align: baseline;	background: transparent; }
-ol, ul {list-style: none;}
-blockquote, q {	quotes: none;}
-blockquote:before, blockquote:after, q:before, q:after {	content: '';	content: none; }
-del {	text-decoration: line-through; }*/
-
-/* body */
-/*body { font-family: Arial, sans-serif; }*/
-
-/*header */
-#header { width:100%; background:url(../images/bg_header.jpg) top center #0a1e28; height:70px; }
-#header h1 { width:220px; height:51px; display:block; background:url(../images/2600hz_logo.png) top left; text-indent:-9999px; margin:0 0 0 25px; }
-
-/* mast */
-#mast { width:100%; min-width:740px; background:url(../images/bg_mast.jpg) repeat-x #2a2a2a; height:41px; }
-#mast h2 { float: left; font-size:18px; color:#ccc; font-weight:normal; background:url(../images/bg_my_services.png) no-repeat top left; display:block; width:127px; height:41px; margin:0 0 0 55px; text-indent:-9999px;  }
-#mast ul { float: right; }
-#mast ul li { float:left; height:41px; background:url(../images/bg_mast_list.png) top right no-repeat; margin-right:3px; }
-#mast ul .last { background-image:none; }
-#mast ul li a { font-size:12px; color:#ccc; display:block; height:28px; padding: 13px 20px 0 30px; text-decoration:none; }
-#mast ul li a:hover {text-decoration:underline; }
-#mast ul li .account { background: url(../images/bg_mast_account.jpg) top left no-repeat; }
-#mast ul li .toolbox { background: url(../images/bg_mast_toolbox.jpg) top left no-repeat; }
-#mast ul li .help { background: url(../images/bg_mast_help.jpg) top left no-repeat; }
-#mast ul li .logout { background: url(../images/bg_mast_logout.jpg) top left no-repeat; }
-/* added */
-#mast ul li .register { background: url(../images/bg_mast_account.jpg) top left no-repeat; }
-#mast ul li .login { background: url(../images/bg_mast_logout.jpg) top left no-repeat; }
-
 /* top menu */
-#top_menu { width:940px; margin:0px auto; height:39px; }
-#top_menu a { float:right; background:url(../images/button_add_server.jpg) top left no-repeat; display:block; width:99px; height:29px; text-indent:-9999px; margin: 5px 15px 0 0; }
-#top_menu a:hover { background-position:0 -29px; }
-#top_menu select { float:right; margin:10px 55px 0 5px; }
+#server_management { width:940px; margin:0px auto; height:39px; }
+#server_management a { float:right; background:url(../images/button_add_server.jpg) top left no-repeat; display:block; width:99px; height:29px; text-indent:-9999px; margin: 5px 15px 0 0; }
+#server_management a:hover { background-position:0 -29px; }
+#server_management select { float:right; margin:10px 55px 0 5px; }
 
-#container { width:940px; margin:0px auto; }
+#container { width:940px; margin:0px auto; background-color: #FFFFFF; margin-top: 12px; padding-top: 10px }
 
 #control_area { width:463px; float:left; }
 
@@ -158,28 +127,7 @@ span.ip_list_ip { display:block; z-index:5;}
 .info.errMsg { display:inline-block; vertical-align:middle; }
 
 .helpertext {font-size: smaller; color: gray;}
-/*
-.old-qq-upload-button {
-		-webkit-box-shadow: rgba(0, 0, 0, 0.496094) 0px 1px 3px;
-		background-color: #E33100;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.246094);
-		border-bottom-left-radius: 5px 5px;
-		border-bottom-right-radius: 5px 5px;
-		border-top-left-radius: 5px 5px;
-		border-top-right-radius: 5px 5px;
-		color: white;
-		cursor: pointer;
-		display: block;
-		font-weight: bold;
-		line-height: 1;
-		margin: 10px auto 0px;
-		padding: 5px 10px 6px;
-		position: relative;
-		text-align: center;
-		text-decoration: none;
-		text-shadow: rgba(0, 0, 0, 0.246094) 0px -1px 1px;
-}
-*/
+
 /* on/off */
 #my_servers .server .numbers a.misc {display:none;}
 #my_servers .server .title .status  {display:none;}
@@ -189,123 +137,116 @@ span.ip_list_ip { display:block; z-index:5;}
 
 
 /* scrollbars */
-
-						
-
-
 #all_numbers_list {
-		max-height: 15em;
-		overflow-y: hidden;
-		overflow-x: hidden;
-	}
+    max-height: 15em;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
 
 #all_numbers_list:hover {
-		max-height: 15em;
-		overflow-y: scroll;
-		overflow-x: hidden;
-	}
-	
-						
-						
-						
+    max-height: 15em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+
+
 /* jq vs trans CSS3 */
 /*
-#my_servers .server .sip .area  {
-    height:200px; 
-}
 */
 #my_servers .server .sip .area  a:link {
-color: blue;
-text-decoration: none;
--webkit-transition: color .25s ease-in 0s;
-transition: color .25s ease-out 0s; 
+    color: blue;
+    text-decoration: none;
+    -webkit-transition: color .25s ease-in 0s;
+    transition: color .25s ease-out 0s;
 }
 
 #my_servers .server .sip .area  a:hover {
-color: red;
--webkit-transition: color .25s ease-in .1s;
-transition: color .25s ease-out .1s; 
+    color: red;
+    -webkit-transition: color .25s ease-in .1s;
+    transition: color .25s ease-out .1s;
 }
 
 #my_servers .server .sip .area  a:active {
-color: green;
-transition: color .25s ease; 
+    color: green;
+    transition: color .25s ease;
 }
 
 #my_servers .server .sip .area   ul {
-list-style: none;
-margin: 0;
-padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 #0server_area .server .sip .area  .title.ip_list:hover {
-display: block;
-position: fixed;
-/*top: .9em;
-left: 0;
-*/
-padding: 10px;
-height: auto;
-width: 300px;
-border: 8px solid rgba(204,204,204,.5);
-cursor: pointer;
-background-color: rgba(255,255,255,.75);
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
-z-index: 5000;
+    display: block;
+    position: fixed;
+    /*top: .9em;
+    left: 0;
+    */
+    padding: 10px;
+    height: auto;
+    width: 300px;
+    border: 8px solid rgba(204,204,204,.5);
+    cursor: pointer;
+    background-color: rgba(255,255,255,.75);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    z-index: 5000;
 }
 
 #my_servers .server .sip .area   ul.title.ip_list  li {
-font-weight: normal;
-list-style: none;
+    font-weight: normal;
+    list-style: none;
 }
 
 #my_servers .server .sip .area   ul.title.ip_list  li a:link {
-font-weight: normal;
-list-style: none;
-font-size: 12px;
-margin-left: 0;
-padding-left: 0;
+    font-weight: normal;
+    list-style: none;
+    font-size: 12px;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 #my_servers .server .sip .area   ul.title.ip_list ul li {
-font-weight: normal;
-padding: 5px 0;
-margin:0;
-border-top: 1px solid rgb(204,204,204);
-background-color: rgb(255,255,255);
--webkit-transition: background-color .5s ease; 
-transition: background-color .2s ease; 
+    font-weight: normal;
+    padding: 5px 0;
+    margin:0;
+    border-top: 1px solid rgb(204,204,204);
+    background-color: rgb(255,255,255);
+    -webkit-transition: background-color .5s ease;
+    transition: background-color .2s ease;
 }
 
 #0server_area .server .sip .area   .menu_ip_list {
-display: block;
-position: relative;
-height: 0;
-overflow: hidden;
-/*width: 100px;*/
-opacity: 0;
--webkit-transition: opacity .25s linear 0s, height .25s ease-out .1s;
-transition: opacity .25s linear 0s, height .25s ease-out .1s;  
+    display: block;
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    /*width: 100px;*/
+    opacity: 0;
+    -webkit-transition: opacity .25s linear 0s, height .25s ease-out .1s;
+    transition: opacity .25s linear 0s, height .25s ease-out .1s;
 }
 
 #my_servers .server .sip .area   ul.title.ip_list ul li:hover {
-background-color: rgb(234,234,234);
--webkit-transition: background-color .5s ease; 
-transition: background-color .2s ease; 
+    background-color: rgb(234,234,234);
+    -webkit-transition: background-color .5s ease;
+    transition: background-color .2s ease;
 }
 
 
 #0server_area .server .sip .area   ul.title.ip_list:hover>.menu_ip_list {
-height: 140px;
-opacity: 1;
--webkit-transition: opacity .25s linear 0s,  height .25s linear 0s;
-transition: opacity .25s linear 0s,  height .25s linear 0s; 
+    height: 140px;
+    opacity: 1;
+    -webkit-transition: opacity .25s linear 0s,  height .25s linear 0s;
+    transition: opacity .25s linear 0s,  height .25s linear 0s;
 }
 
 
- .remove_auth_IP {content: url(/../images/error-icon_sm.png); max-width: 1.5em; vertical-align: text-top;}
+.remove_auth_IP {content: url(/../images/error-icon_sm.png); max-width: 1.5em; vertical-align: text-top;}
 
 .shortInt {width: 3em; max-width: 4em;}
 
@@ -315,68 +256,68 @@ transition: opacity .25s linear 0s,  height .25s linear 0s;
 /* dialog stuff */
 #dialog-overlay {
 
-	/* set it to fill the whil screen */
-	width:100%; 
-	height:100%;
-	
-	/* transparency for different browsers */
-	filter:alpha(opacity=50); 
-	-moz-opacity:0.5; 
-	-khtml-opacity: 0.5; 
-	opacity: 0.5; 
-	background:#000; 
+    /* set it to fill the whil screen */
+    width:100%;
+    height:100%;
 
-	/* make sure it appear behind the dialog box but above everything else */
-	position:absolute; 
-	top:0; left:0; 
-	z-index:3000; 
+    /* transparency for different browsers */
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    background:#000;
 
-	/* hide it by default */
-	display:none;
+    /* make sure it appear behind the dialog box but above everything else */
+    position:absolute;
+    top:0; left:0;
+    z-index:3000;
+
+    /* hide it by default */
+    display:none;
 }
 
 
 #dialog-box {
-	
-	/* css3 drop shadow */
-	-webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-	
-	/* css3 border radius */
-	-moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-	
-	background:#eee;
-	/* styling of the dialog box, i have a fixed dimension for this demo */ 
- 	width:528px; 
-	
-	/* make sure it has the highest z-index */
-	position:absolute; 
-	z-index:5000; 
 
-	/* hide it by default */
-	display:none;
+    /* css3 drop shadow */
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+
+    /* css3 border radius */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+
+    background:#eee;
+    /* styling of the dialog box, i have a fixed dimension for this demo */
+    width:528px;
+
+    /* make sure it has the highest z-index */
+    position:absolute;
+    z-index:5000;
+
+    /* hide it by default */
+    display:none;
 }
 
 #dialog-box .dialog-content {
-	/* style the content */
-	text-align:left; 
-	padding:10px; 
-	margin:13px;
-	color:#666; 
-	font-family:arial;
-	font-size:11px; 
+    /* style the content */
+    text-align:left;
+    padding:10px;
+    margin:13px;
+    color:#666;
+    font-family:arial;
+    font-size:11px;
 }
 
 /* extra styling */
 #dialog-box .dialog-content p {
-	font-weight:700; margin:0;
+    font-weight:700; margin:0;
 }
 
 #dialog-box .dialog-content ul {
-	margin:10px 0 10px 20px; 
-	padding:0; 
-	height:50px;
+    margin:10px 0 10px 20px;
+    padding:0;
+    height:50px;
 }
 
 
@@ -405,31 +346,31 @@ transition: opacity .25s linear 0s,  height .25s linear 0s;
 
 
 .ui-dialog a.button {
-	/* styles for button */
-	margin:10px auto 0 auto;
-	text-align:center;
-	background-color: #e33100;
-	display: block;
-	padding: 5px 10px 6px;
-	color: #fff;
-	text-decoration: none;
-	font-weight: bold;
-	line-height: 1;
-	
-	/* css3 implementation :) */
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-	border-bottom: 1px solid rgba(0,0,0,0.25);
-	position: relative;
-	cursor: pointer;
-	
+    /* styles for button */
+    margin:10px auto 0 auto;
+    text-align:center;
+    background-color: #e33100;
+    display: block;
+    padding: 5px 10px 6px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+
+    /* css3 implementation :) */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+
 }
 
 .ui-dialog a.button:hover {
-	background-color: #c33100;	
+    background-color: #c33100;
 }
 
 
@@ -437,36 +378,36 @@ transition: opacity .25s linear 0s,  height .25s linear 0s;
 /* same for non jq-ui */
 
 a.button_small {
-	margin: 0.25em 2.25em 0.25em 1em;
-	font-size:smaller;
+    margin: 0.25em 2.25em 0.25em 1em;
+    font-size:smaller;
 }
 
- a.button {
-	/* styles for button */
-	margin:10px auto 0 auto;
-	text-align:center;
-	background-color: #e33100;
-	display: block;
-	padding: 5px 10px 6px;
-	color: #fff;
-	text-decoration: none;
-	font-weight: bold;
-	line-height: 1;
-	
-	/* css3 implementation :) */
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-	border-bottom: 1px solid rgba(0,0,0,0.25);
-	position: relative;
-	cursor: pointer;
-	
+a.button {
+    /* styles for button */
+    margin:10px auto 0 auto;
+    text-align:center;
+    background-color: #e33100;
+    display: block;
+    padding: 5px 10px 6px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+
+    /* css3 implementation :) */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+
 }
 
- a.button:hover {
-	background-color: #c33100;	
+a.button:hover {
+    background-color: #c33100;
 }
 
 
@@ -478,7 +419,7 @@ a.button_small {
 
 body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em; border-radius: .5em; -moz-border-radius: .5em; -webkit-border-radius: .5em; background: #859ED4; font-weight: bold; cursor: pointer; color: black;}
 
-		.ui-state-highlight {background-color: red;}
+.ui-state-highlight {background-color: red;}
 
 
 
@@ -492,30 +433,19 @@ body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em;
 .ui-dialog a.button.info:hover {background-color: #0152CA;}
 .ui-dialog input.button.info:hover {background-color: #0152CA;}
 #control_area #my_numbers .numbers .did-status {display: none;
-max-width: 12em;
-overflow-x: hidden;
-text-overflow: ellipsis;
-white-space:nowrap;
-color: #999;
-float: left;
-margin: 10px 0px 0px 20px;
+                                                max-width: 12em;
+                                                overflow-x: hidden;
+                                                text-overflow: ellipsis;
+                                                white-space:nowrap;
+                                                color: #999;
+                                                float: left;
+                                                margin: 10px 0px 0px 20px;
 
 }
 #control_area #my_numbers .numbers:hover .did-status {
-display: inline;
+    display: inline;
 }
 /* =================== END jQuery UI 2600hz Edits =================== */
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* for CC area */
@@ -528,19 +458,14 @@ tr.ccRow td { padding-right: 1.2em; font-size: smaller;}
 
 
 
-
-
-
-
-
 form.filterform {
-			float: right;
-			margin-left: 2em;
-			padding: 0.25em 1.0em 0.1em 0.5em;
-			}
-			
+    float: right;
+    margin-left: 2em;
+    padding: 0.25em 1.0em 0.1em 0.5em;
+}
+
 form.filterform input.filterinput	{
-	max-width: 100px;
+    max-width: 100px;
 }
 
 
@@ -557,12 +482,12 @@ padding: 2px 0.45em;
 }
 */
 input[type="search"] {
-border: 2px inset;
-border-bottom-left-radius: 0.8em 0.8em;
-border-bottom-right-radius: 0.8em 0.8em;
-border-top-left-radius: 0.8em 0.8em;
-border-top-right-radius: 0.8em 0.8em;
-padding: 0px .8em;
+    border: 2px inset;
+    border-bottom-left-radius: 0.8em 0.8em;
+    border-bottom-right-radius: 0.8em 0.8em;
+    border-top-left-radius: 0.8em 0.8em;
+    border-top-right-radius: 0.8em 0.8em;
+    padding: 0px .8em;
 
 }
 
@@ -576,27 +501,25 @@ padding: 0px .8em;
 #be_sure_about_cc { font-weight: bold; color: #646464; padding: 0.25em 10%; }
 
 
-<style title="turnoffs">
 #diagnostics_toolbox.toolbox { display:none; }
 #loading {font-size: large; padding: 2em; background: black; border-radius: 1em; color:white; position: absolute; top:50%; left:50%; z-index:8000; opacity: 0.75;}
 #span_ajax_loader {
-					margin-left: 1em;
-					vertical-align: middle;
-				}
+    margin-left: 1em;
+    vertical-align: middle;
+}
 #loading_click_to_close {
-	color: #245AAA;
-	display: none;
-	font-weight: bold;
-	text-align: center;}
+    color: #245AAA;
+    display: none;
+    font-weight: bold;
+    text-align: center;}
 #loading:hover #loading_click_to_close {display: block; 	cursor:pointer;}
 input[type="search"] {
-border: 2px inset;
-border-bottom-left-radius: 0.8em 0.8em;
-border-bottom-right-radius: 0.8em 0.8em;
-border-top-left-radius: 0.8em 0.8em;
-border-top-right-radius: 0.8em 0.8em;
--moz-border-radius: 0.8em;
-padding: 0px .8em;
+    border: 2px inset;
+    border-bottom-left-radius: 0.8em 0.8em;
+    border-bottom-right-radius: 0.8em 0.8em;
+    border-top-left-radius: 0.8em 0.8em;
+    border-top-right-radius: 0.8em 0.8em;
+    -moz-border-radius: 0.8em;
+    padding: 0px .8em;
 
 }
-</style>
