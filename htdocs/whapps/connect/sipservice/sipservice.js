@@ -101,6 +101,8 @@ winkstart.module('connect', 'sipservice',
         },
 
         refreshServers: function(servers) {
+            var THIS = this;
+            
             THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
         },
 
@@ -113,7 +115,7 @@ winkstart.module('connect', 'sipservice',
                 data: {
                     key: key,
                     json: JSON.stringify(frm.serializeObject())
-                    },
+                },
                 dataType: "json",
                 async:false,
                 success: function(msg){
@@ -137,7 +139,7 @@ winkstart.module('connect', 'sipservice',
                     json: JSON.stringify({
                         token: tid
                     })
-                    },
+                },
                 dataType: "json",
                 async:false,
                 success: function(msg){
@@ -161,7 +163,7 @@ winkstart.module('connect', 'sipservice',
                     json: JSON.stringify({
                         promo_code: pc
                     })
-                    },
+                },
                 dataType: "json",
                 async:false,
                 success: function(msg){
@@ -174,23 +176,38 @@ winkstart.module('connect', 'sipservice',
             );
         },
 
-        showAddCreditsPrompt: function() {
-            popup($('#tmpl_add_prepay').tmpl( {} ) , {
+        addCredit: function() {
+            var THIS = this;
+            
+            $('#dialog').empty();
+            THIS.templates.add_credits.tmpl().appendTo('#dialog');
+            $('#dialog').dialog('open');
+
+            $('#dialog a.ctr_btn').click(function() {
+                winkstart.publish('sipservice.addCredits', {
+                    credit_amount : 5,
+                    success : function() {
+                        $('#dialog').dialog('close');
+                    }
+                });
+            });
+
+            /*popup($('#tmpl_add_prepay').tmpl( {} ) , {
                 title: 'Add Credits'
-            }	);
+            }	);*/
         },
 
-        addCredits: function(buyCreds) {
+        addCredits: function(data) {
             $.ajax({
                 url: "/api/addPrepayCredits",
                 global: true,
                 type: "POST",
                 data: ({
-                    key: key,
+                    key: data.key,
                     json: JSON.stringify({
-                        addCredits: buyCreds
+                        addCredits: data.credit_amount
                     })
-                    }),
+                }),
                 dataType: "json",
                 async:true,
                 success: function(msg){
@@ -219,7 +236,7 @@ winkstart.module('connect', 'sipservice',
                         DID:did,
                         server: srv
                     })
-                    }),
+                }),
                 dataType: "json",
                 async:false,
                 success: function(msg){
@@ -242,7 +259,7 @@ winkstart.module('connect', 'sipservice',
                 data: ({
                     key: key,
                     json: JSON.stringify(did)
-                    }),
+                }),
                 dataType: "json",
                 async:true,
                 success: function(msg){
@@ -268,7 +285,7 @@ winkstart.module('connect', 'sipservice',
                         json: JSON.stringify({
                             DID:did
                         })
-                        }),
+                    }),
                     dataType: "json",
                     async:true,
                     success: function(msg){
@@ -301,7 +318,7 @@ winkstart.module('connect', 'sipservice',
                     json: JSON.stringify({
                         DIDs:dids
                     })
-                    }),
+                }),
                 dataType: "json",
                 async:false,
                 success: function(msg){
@@ -324,6 +341,253 @@ winkstart.module('connect', 'sipservice',
             return addedDIDs;
         },
 
+        searchAvailDIDs: function(NPA, NXX) {
+            // must use toString()
+            if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
+                if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
+                    $('#sad_LoadingTime').slideDown();
+                    var gJ = $.getJSON('/api/searchNPA', {
+                        key: key,
+                        json: JSON.stringify({
+                            NPA: NPA
+                        })
+                    }, function(jdata) {
+                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        $('#sad_LoadingTime').hide();
+                    });
+                    return gJ;
+
+                } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
+                    var gJ = $.getJSON('/api/searchNPANXX', {
+                        key: key,
+                        json: JSON.stringify({
+                            NPA: NPA,
+                            NXX: NXX
+                        })
+                    }, function(jdata) {
+                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                    });
+                    return gJ;
+
+                } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
+                    $('#sad_LoadingTime').slideDown();
+                    var gJ = $.getJSON('/api/searchNPA', {
+                        key: key,
+                        json: JSON.stringify({
+                            NPA: NPA
+                        })
+                    }, function(jdata) {
+                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        $('#sad_LoadingTime').hide();
+                    });
+
+                    return gJ;
+                } else {
+                    return false;
+                }
+
+            }
+            else {
+                return false;
+            }
+        },
+
+
+        purchaseDIDs: function(DIDs) {
+            var rCost= 0;
+            var oCost= 0;
+            var buyThese = new Array();
+            $.each(DIDs, function(index, elm) {
+                rCost+=$(elm).dataset('recurringCost') *1;
+                oCost+=$(elm).dataset('oneTimeCost') * 1;
+                buyThese.push( $(elm).dataset());
+            //			console.log($(elm).dataset('did'));
+            });
+
+
+            var enoughCredits=checkCredits( oCost );
+            var purchasedDIDs=new Array();
+            if (enoughCredits) {
+                purchasedDIDs=addDIDs(buyThese);
+
+            } else {
+                msgAlert('Not enough credits to add these DIDs');
+                return false;
+            }
+
+            return purchasedDIDs;
+        },
+
+        setE911: function(e911) {
+            $.ajax({
+                url: "/api/setE911",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify({
+                        "e911_info": e911.e911_info,
+                        "did":e911.did,
+                        "serverid":e911.serverid
+                    })
+                }),
+                dataType: "json",
+                async:false,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                    }
+                    //TODO: redraw this DID
+                    redraw(msg.data);
+
+                }
+            }
+            );
+
+
+        },
+
+        setFailOver: function(info) {
+            $.ajax({
+                url: "/api/setFailOver",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify({
+                        did:info.did.did,
+                        serverid:info.did.serverid,
+                        failover: info.uri
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                    }
+                    //TODO: redraw this DID
+                    redraw(msg.data);
+
+                }
+            }
+            );
+        },
+
+        setCID: function(info){
+
+            $.ajax({
+                url: "/api/setCID",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify(info)
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                    }
+                    redraw(msg.data);
+
+                //TODO: redraw this DID
+                }
+            }
+            );
+
+        },
+
+
+        LNP_s1: function(frm) {
+            $.ajax({
+                url: "/api/requestPortDID",
+                global: true,
+                type: "POST",
+                data: {
+                    key: key,
+                    json: JSON.stringify(frm.serializeObject())
+                },
+                dataType: "json",
+                async:false,
+                success: function(msg){
+
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                    }
+                    else {
+                        LNPPrompt_s2(msg.data);
+                    }
+
+
+                // trigger custom event 'numberAdded'
+
+                //TODO: redraw servers and allDIDs
+                //TOD: update credits
+                // MUST update acct
+
+                }
+            }
+            );
+
+        },
+
+
+        portDID: function() {
+
+        },
+
+
+        searchNPA: function(nbr, cb) {
+            //			$.getJSON('/api/searchNPA', function(data) {
+            //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
+
+            $.ajax({
+                url: "/api/searchNPA",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify(nbr)
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    redraw(msg.data);
+
+                }
+            }
+            );
+
+        },
+
+
+        searchNPANXX: function(nbr, cb) {
+            $.getJSON('/api/searchNPANXX', function(data) {
+                $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
+            });
+            $.ajax({
+                url: "/api/searchNPANXX",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify(nbr)
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    redraw(msg.data);
+
+                }
+            }
+            );
+
+        },
+
+
+
         /**********************
          * Recurring Services *
          **********************/
@@ -338,7 +602,7 @@ winkstart.module('connect', 'sipservice',
                         json: JSON.stringify({
                             addTrunks: 1
                         })
-                        }),
+                    }),
                     dataType: "json",
                     async:true,
                     success: function(msg){
@@ -378,7 +642,7 @@ winkstart.module('connect', 'sipservice',
                         json: JSON.stringify({
                             setTrunks: trunks
                         })
-                        }),
+                    }),
                     dataType: "json",
                     async:false,
                     success: function(msg){
@@ -412,7 +676,7 @@ winkstart.module('connect', 'sipservice',
                     json: JSON.stringify({
                         delTrunks: trunks
                     })
-                    }),
+                }),
                 dataType: "json",
                 async:true,
                 success: function(msg){
@@ -430,7 +694,9 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-
+        /*********************
+         * Server Management *
+         *********************/
         addServer: function(srv) {
 
             $.ajax({
@@ -491,252 +757,6 @@ winkstart.module('connect', 'sipservice',
 
 
 
-        searchAvailDIDs: function(NPA, NXX) {
-            // must use toString()
-            if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
-                if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
-                    $('#sad_LoadingTime').slideDown();
-                    var gJ = $.getJSON('/api/searchNPA', {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                        }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
-                        $('#sad_LoadingTime').hide();
-                    });
-                    return gJ;
-
-                } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
-                    var gJ = $.getJSON('/api/searchNPANXX', {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA,
-                            NXX: NXX
-                        })
-                        }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
-                    });
-                    return gJ;
-
-                } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
-                    $('#sad_LoadingTime').slideDown();
-                    var gJ = $.getJSON('/api/searchNPA', {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                        }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
-                        $('#sad_LoadingTime').hide();
-                    });
-
-                    return gJ;
-                } else {
-                    return false;
-                }
-
-            }
-            else {
-                return false;
-            }
-        },
-
-
-        purchaseDIDs: function(DIDs) {
-            var rCost= 0;
-            var oCost= 0;
-            var buyThese = new Array();
-            $.each(DIDs, function(index, elm) {
-                rCost+=$(elm).dataset('recurringCost') *1;
-                oCost+=$(elm).dataset('oneTimeCost') * 1;
-                buyThese.push( $(elm).dataset());
-            //			console.log($(elm).dataset('did'));
-            });
-
-
-            var enoughCredits=checkCredits( oCost );
-            var purchasedDIDs=new Array();
-            if (enoughCredits) {
-                purchasedDIDs=addDIDs(buyThese);
-
-            } else {
-                msgAlert('Not enough credits to add these DIDs');
-                return false;
-            }
-
-            return purchasedDIDs;
-        },
-
-        setE911: function(e911) {
-            $.ajax({
-                url: "/api/setE911",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify({
-                        "e911_info": e911.e911_info,
-                        "did":e911.did,
-                        "serverid":e911.serverid
-                        })
-                    }),
-                dataType: "json",
-                async:false,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                    }
-                    //TODO: redraw this DID
-                    redraw(msg.data);
-
-                }
-            }
-            );
-
-
-        },
-
-        setFailOver: function(info) {
-            $.ajax({
-                url: "/api/setFailOver",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify({
-                        did:info.did.did,
-                        serverid:info.did.serverid,
-                        failover: info.uri
-                        })
-                    }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                    }
-                    //TODO: redraw this DID
-                    redraw(msg.data);
-
-                }
-            }
-            );
-        },
-
-        setCID: function(info){
-
-            $.ajax({
-                url: "/api/setCID",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify(info)
-                    }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                    }
-                    redraw(msg.data);
-
-                //TODO: redraw this DID
-                }
-            }
-            );
-
-        },
-
-
-        LNP_s1: function(frm) {
-            $.ajax({
-                url: "/api/requestPortDID",
-                global: true,
-                type: "POST",
-                data: {
-                    key: key,
-                    json: JSON.stringify(frm.serializeObject())
-                    },
-                dataType: "json",
-                async:false,
-                success: function(msg){
-
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                    }
-                    else {
-                        LNPPrompt_s2(msg.data);
-                    }
-
-
-                // trigger custom event 'numberAdded'
-
-                //TODO: redraw servers and allDIDs
-                //TOD: update credits
-                // MUST update acct
-
-                }
-            }
-            );
-
-        },
-
-
-        portDID: function() {
-
-        },
-
-
-        searchNPA: function(nbr, cb) {
-            //			$.getJSON('/api/searchNPA', function(data) {
-            //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-
-            $.ajax({
-                url: "/api/searchNPA",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify(nbr)
-                    }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    redraw(msg.data);
-
-                }
-            }
-            );
-
-        },
-
-
-        searchNPANXX: function(nbr, cb) {
-            $.getJSON('/api/searchNPANXX', function(data) {
-                $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
-            });
-            $.ajax({
-                url: "/api/searchNPANXX",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify(nbr)
-                    }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    redraw(msg.data);
-
-                }
-            }
-            );
-
-        },
-
-
         setServerDefaults: function(nsd) {
 
             $.ajax({
@@ -746,7 +766,7 @@ winkstart.module('connect', 'sipservice',
                 data: ({
                     key: key,
                     json: JSON.stringify(nsd)
-                    }),
+                }),
                 dataType: "json",
                 async:true,
                 success: function(msg){
@@ -801,266 +821,266 @@ winkstart.module('connect', 'sipservice',
             }), {
                 title: 'Set E911'
             }	);
-        $('#e911_update_form').submit(function() {
-            setE911({
-                'e911_info': $('#e911_update_form').serializeObject(),
-                'did': $('#e911_button').dataset('did'),
-                'serverid': $('#e911_button').dataset('serverid')
+            $('#e911_update_form').submit(function() {
+                setE911({
+                    'e911_info': $('#e911_update_form').serializeObject(),
+                    'did': $('#e911_button').dataset('did'),
+                    'serverid': $('#e911_button').dataset('serverid')
+                });
+                return false;
             });
-            return false;
-        });
-    },
-
-    miscPrompt: function() {
-
-    },
-
-    modifySRVDefaultsPrompt: function(info) {
-        //	console.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
-        popup($('#tmpl_modSRVDefs_prompt').tmpl( {
-            s: info.serverid,
-            srv: acct.servers[info.serverid],
-            'fa':info.fa || {}
-        }) , {
-            title: 'Modify Server Defaults for '  + acct.servers[info.serverid].server_name
-            }	);
-
-    $('#modSRV_button').click(function() {
-        setServerDefaults($('#srvDefs_update_form').serializeObject());
-    });
-},
-
-
-searchDIDsPrompt: function() {
-    popup($('#tmpl_searchDIDs_prompt').tmpl({}));
-//TODO:  display "Add Credits" if it goes negative
-},
-
-LNPPrompt: function(args) {
-    if (typeof args != 'object') {
-        args= new Object();
-    }
-    popup($('#tmpl_LNP_prompt').tmpl(args));
-    $('#lnpRDate').datepicker({
-        autoSize: true ,
-        dateFormat: 'yy-mm-dd',
-        defaultDate: '+7',
-        maxDate: '+3m +1w',
-        minDate: '+1w'
-    });
-},
-
-LNPPrompt_s2: function(lnp_f) {
-
-    var lnp_did = lnp_f.serializeObject();
-
-    $.ajax({
-        url: "/api/getLNPData",
-        global: true,
-        type: "POST",
-        data: ({
-            key: key,
-            json: JSON.stringify(lnp_did)
-            }),
-        dataType: "json",
-        async:true,
-        success: function(msg){
-
-            if (typeof msg == 'object' && msg.data) {
-                var trackData=msg.data;
-                if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
-                    popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
-                    createUploader($('#lnp_s2_uploader')[0], '/api/uploadLNP', {
-                        key: key,
-                        did:trackData.lnp.did,
-                        tracking:trackData.lnp.tracking
-                        }, function(a,b,c,d) {
-                        display_errs([{
-                            msg: "Upload successful.  You'll be notified with updates on the porting status.",
-                            type: 'info'
-                        }]);
-                    });
-                } else {
-                    display_errs([{
-                        msg: "Could not confirm porting information.  Try again.",
-                        type: 'error'
-                    }], "Bad Port Tracking Data");
-                }
-            }
-        }
-    }
-    );
-
-},
-
-
-
-addServerPrompt: function(info) {
-    if (! info) {
-        info = new Object();
-    }
-    popup($('#tmpl_add_server').tmpl({
-        'fa':info.fa || {}
-    }), {
-        title: 'Add Server'
-    });
-$('#addSRV_button').click(function() {
-    addServer($('#add_server_form').serializeObject());
-});
-},
-
-
-removeSIPAuthIP: function(aip) {
-    $.ajax({
-        url: "/api/removeSIPAuthIP",
-        global: true,
-        type: "POST",
-        data: ({
-            key: key,
-            json: JSON.stringify(aip)
-            }),
-        dataType: "json",
-        async:true,
-        success: function(msg){
-            // redraw server or at lease IP list
-            if (msg && msg.errs && msg.errs[0]) {
-                display_errs(msg.errs);
-            }
-            redraw(msg.data);
-        }
-    }
-    );
-
-
-},
-
-
-showMyAccountPrompt: function(opts) {
-    if (typeof opts != 'object') {
-        opts = new Object();
-    }
-    var gJ = $.getJSON('/api/getCreditCards', {
-        key: key,
-        json: JSON.stringify({})
-        }, function(jdata) {
-        jdata.tmplOpts = typeof opts.tmplOpts == 'object' ? opts.tmplOpts : {} ;
-        jdata.fa = typeof opts.fa == 'object' ? opts.fa : {} ;
-        //console.log(JSON.stringify(jdata));
-        popup($('#tmpl_display_acct_info').tmpl(jdata), {
-            title: 'Account Billing Information'
-        });
-    });
-    return gJ;
-},
-
-
-delServerPrompt: function(sinfo) {
-    popup($('#tmpl_del_server').tmpl(sinfo), {
-        title: 'Remove Server - ' + acct.servers[sinfo.serverid].server_name
-    });
-},
-
-// credit mgmt
-updatePreAuth: function(){
-    var newItems = $('.inCart');
-    rCost=0;
-    oCost=0;
-    $.each(newItems, function(index, elm) {
-
-        if ( isNaN( parseInt( $(elm).dataset('qty') ) ) ) {
-            rCost+=$(elm).dataset('recurringCost') *1;
-            oCost+=$(elm).dataset('oneTimeCost') * 1;
-        } else {
-            rCost+=$(elm).dataset('recurringCost') * $(elm).dataset('qty');
-            oCost+=$(elm).dataset('oneTimeCost') * $(elm).dataset('qty');
-        }
-    });
-
-    return {
-        rCost: rCost,
-        oCost: oCost
-    };
-},
-
-checkCredits: function(bill) {
-    return true; // not doing pre-paid
-    if(acct.account.credits.prepay > bill) {
-        return acct.account.credits.prepay - bill;
-    } else {
-        return false;
-    }
-},
-
-
-msgAlert: function(msg) {
-    alert(msg);
-},
-
-
-
-display_errs: function (errs, title, cb, data) {
-    popup($('#tmpl_display_errs').tmpl({
-        errs:errs,
-        cb: cb
-    }), {
-        title: title || "Messages"
-        });
-//setTimeout("eval(" + cb + ")", 1200);
-},
-
-
-
-
-
-
-// JS additions:
-
-createUploader: function(elm, act, args, cb){
-    var uploader = new qq.FileUploader({
-        allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
-        sizeLimit: 10000000,
-        minSizeLimit: 20000,
-
-        onComplete: function(id, fileName, responseJSON){
-            cb(id, fileName, responseJSON);
         },
 
-        element: elm,
-        action: act,
-        params: args
-    });
-},
+        miscPrompt: function() {
+
+        },
+
+        modifySRVDefaultsPrompt: function(info) {
+            //	console.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
+            popup($('#tmpl_modSRVDefs_prompt').tmpl( {
+                s: info.serverid,
+                srv: acct.servers[info.serverid],
+                'fa':info.fa || {}
+            }) , {
+                title: 'Modify Server Defaults for '  + acct.servers[info.serverid].server_name
+            }	);
+
+            $('#modSRV_button').click(function() {
+                setServerDefaults($('#srvDefs_update_form').serializeObject());
+            });
+        },
+
+
+        searchDIDsPrompt: function() {
+            popup($('#tmpl_searchDIDs_prompt').tmpl({}));
+        //TODO:  display "Add Credits" if it goes negative
+        },
+
+        LNPPrompt: function(args) {
+            if (typeof args != 'object') {
+                args= new Object();
+            }
+            popup($('#tmpl_LNP_prompt').tmpl(args));
+            $('#lnpRDate').datepicker({
+                autoSize: true ,
+                dateFormat: 'yy-mm-dd',
+                defaultDate: '+7',
+                maxDate: '+3m +1w',
+                minDate: '+1w'
+            });
+        },
+
+        LNPPrompt_s2: function(lnp_f) {
+
+            var lnp_did = lnp_f.serializeObject();
+
+            $.ajax({
+                url: "/api/getLNPData",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify(lnp_did)
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+
+                    if (typeof msg == 'object' && msg.data) {
+                        var trackData=msg.data;
+                        if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
+                            popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
+                            createUploader($('#lnp_s2_uploader')[0], '/api/uploadLNP', {
+                                key: key,
+                                did:trackData.lnp.did,
+                                tracking:trackData.lnp.tracking
+                            }, function(a,b,c,d) {
+                                display_errs([{
+                                    msg: "Upload successful.  You'll be notified with updates on the porting status.",
+                                    type: 'info'
+                                }]);
+                            });
+                        } else {
+                            display_errs([{
+                                msg: "Could not confirm porting information.  Try again.",
+                                type: 'error'
+                            }], "Bad Port Tracking Data");
+                        }
+                    }
+                }
+            }
+            );
+
+        },
 
 
 
-updateDIDQtyCosts: function(did, qty) {
-    if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
-        $('#fd_' + did).dataset('qty',  parseInt( qty ));
-        return parseInt( qty );
-    }
-    return -1;
-},
+        addServerPrompt: function(info) {
+            if (! info) {
+                info = new Object();
+            }
+            popup($('#tmpl_add_server').tmpl({
+                'fa':info.fa || {}
+            }), {
+                title: 'Add Server'
+            });
+            $('#addSRV_button').click(function() {
+                addServer($('#add_server_form').serializeObject());
+            });
+        },
+
+
+        removeSIPAuthIP: function(aip) {
+            $.ajax({
+                url: "/api/removeSIPAuthIP",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: key,
+                    json: JSON.stringify(aip)
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    // redraw server or at lease IP list
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+
+
+        },
+
+
+        showMyAccountPrompt: function(opts) {
+            if (typeof opts != 'object') {
+                opts = new Object();
+            }
+            var gJ = $.getJSON('/api/getCreditCards', {
+                key: key,
+                json: JSON.stringify({})
+            }, function(jdata) {
+                jdata.tmplOpts = typeof opts.tmplOpts == 'object' ? opts.tmplOpts : {} ;
+                jdata.fa = typeof opts.fa == 'object' ? opts.fa : {} ;
+                //console.log(JSON.stringify(jdata));
+                popup($('#tmpl_display_acct_info').tmpl(jdata), {
+                    title: 'Account Billing Information'
+                });
+            });
+            return gJ;
+        },
+
+
+        delServerPrompt: function(sinfo) {
+            popup($('#tmpl_del_server').tmpl(sinfo), {
+                title: 'Remove Server - ' + acct.servers[sinfo.serverid].server_name
+            });
+        },
+
+        // credit mgmt
+        updatePreAuth: function(){
+            var newItems = $('.inCart');
+            rCost=0;
+            oCost=0;
+            $.each(newItems, function(index, elm) {
+
+                if ( isNaN( parseInt( $(elm).dataset('qty') ) ) ) {
+                    rCost+=$(elm).dataset('recurringCost') *1;
+                    oCost+=$(elm).dataset('oneTimeCost') * 1;
+                } else {
+                    rCost+=$(elm).dataset('recurringCost') * $(elm).dataset('qty');
+                    oCost+=$(elm).dataset('oneTimeCost') * $(elm).dataset('qty');
+                }
+            });
+
+            return {
+                rCost: rCost,
+                oCost: oCost
+            };
+        },
+
+        checkCredits: function(bill) {
+            return true; // not doing pre-paid
+            if(acct.account.credits.prepay > bill) {
+                return acct.account.credits.prepay - bill;
+            } else {
+                return false;
+            }
+        },
+
+
+        msgAlert: function(msg) {
+            alert(msg);
+        },
+
+
+
+        display_errs: function (errs, title, cb, data) {
+            popup($('#tmpl_display_errs').tmpl({
+                errs:errs,
+                cb: cb
+            }), {
+                title: title || "Messages"
+            });
+        //setTimeout("eval(" + cb + ")", 1200);
+        },
 
 
 
 
-search_numbers_list: function (elm, list) {
 
-    var filter = $(elm).val();
-    if(filter) {
-        // this finds all links in a list that contain the input,
-        // and hide the ones not containing the input while showing the ones that do
-        $(list).find("span.number:not(:Contains(" + filter + "))").parent().slideUp();
-        $(list).find("span.number:Contains(" + filter + ")").parent().slideDown();
-    } else {
-        $(list).find("div").slideDown();
-    }
-    return false;
-},
 
-/* WHAT IS THIS? */
+        // JS additions:
 
-/*
+        createUploader: function(elm, act, args, cb){
+            var uploader = new qq.FileUploader({
+                allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
+                sizeLimit: 10000000,
+                minSizeLimit: 20000,
+
+                onComplete: function(id, fileName, responseJSON){
+                    cb(id, fileName, responseJSON);
+                },
+
+                element: elm,
+                action: act,
+                params: args
+            });
+        },
+
+
+
+        updateDIDQtyCosts: function(did, qty) {
+            if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
+                $('#fd_' + did).dataset('qty',  parseInt( qty ));
+                return parseInt( qty );
+            }
+            return -1;
+        },
+
+
+
+
+        search_numbers_list: function (elm, list) {
+
+            var filter = $(elm).val();
+            if(filter) {
+                // this finds all links in a list that contain the input,
+                // and hide the ones not containing the input while showing the ones that do
+                $(list).find("span.number:not(:Contains(" + filter + "))").parent().slideUp();
+                $(list).find("span.number:Contains(" + filter + ")").parent().slideDown();
+            } else {
+                $(list).find("div").slideDown();
+            }
+            return false;
+        },
+
+        /* WHAT IS THIS? */
+
+        /*
     // for the filter
     (function ($) {
         // custom css expression for a case-insensitive contains()
@@ -1078,43 +1098,47 @@ search_numbers_list: function (elm, list) {
 
 
 
-/* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
      * if appropriate. You should also attach to any default click items you want to respond to when people click
      * on them. Also register resources.
      */
-activate: function(data) {
-    var THIS = this;
-    /* Clear out the center part of the window - get ready to put our own content in there */
-    $('#ws-content').empty();
+        activate: function(data) {
+            var THIS = this;
+            /* Clear out the center part of the window - get ready to put our own content in there */
+            $('#ws-content').empty();
 
-    /* Draw our base template into the window */
-    //THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+            // Prepare the dialog box for use
+            $('#dialog').dialog({ autoOpen : false});
 
-    // Paint the main screen
-    THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
-    var numbers = {
+            /* Draw our base template into the window */
+            //THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+
+            // Paint the main screen
+            THIS.templates.main.tmpl().appendTo( $('#ws-content') );
+
+            var numbers = {
                 
-    };
+            };
 
-    THIS.refreshDIDs(numbers);
+            THIS.refreshDIDs(numbers);
 
-    THIS.refreshServices({
-        account : {
-            credits : {}
-    }
-    });
+            THIS.refreshServices({
+                account : {
+                    credits : {}
+                }
+            });
             
-THIS.refreshServers({});
+            THIS.refreshServers({});
 
-/* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-winkstart.registerResources(this.config.resources);
+            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+            winkstart.registerResources(this.config.resources);
 
-winkstart.publish('layout.updateLoadedModule', {
-    label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
-    module: this.__module
-});
-}
-} // End function definitions
+            winkstart.publish('layout.updateLoadedModule', {
+                label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                module: this.__module
+            });
+        }
+    } // End function definitions
 
-);  // End module
+    );  // End module
