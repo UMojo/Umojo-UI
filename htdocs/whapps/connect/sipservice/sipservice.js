@@ -5,6 +5,7 @@ winkstart.module('connect', 'sipservice',
         css: [
         'css/sipservice.css',
         'css/style.css',
+        'css/custom_popups.css',
         'css/popups.css'
         ],
 
@@ -59,6 +60,9 @@ winkstart.module('connect', 'sipservice',
             'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
 
 
+            // Trunk Management
+            'sipservice.editTrunks': 'editTrunks',
+
             /* */
             'sipservice.refreshDIDs' : 'refreshDIDs',
             'sipservice.refreshServices' : 'refreshServices',
@@ -86,6 +90,12 @@ winkstart.module('connect', 'sipservice',
 
     /* Define the functions for this module */
     {
+        addNumber: function(args) {
+            var THIS = this;
+
+            THIS.templates.edit_numbers.tmpl({}).dialog({title: 'Edit Numbers'});
+        },
+
         refreshDIDs: function(numbers) {
             var THIS = this;
 
@@ -178,7 +188,8 @@ winkstart.module('connect', 'sipservice',
         addCredit: function() {
             var THIS = this;
 
-            var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
+            //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
+            var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({title: 'Add Credits'});
 
             $('#dialog a.ctr_btn', dialogDiv).click(function() {
                 winkstart.publish('sipservice.addCredits', {
@@ -621,10 +632,10 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-        setTrunkPrompt: function(args) {
-            popup($('#tmpl_set_trunk_qty').tmpl( {} ) , {
-                title: 'Set Trunks'
-            }	);
+        editTrunks: function(args) {
+            var THIS = this;
+
+            THIS.templates.edit_trunks.tmpl({}).dialog({title: 'Edit Trunks'});
         },
 
 
@@ -1105,7 +1116,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
 
             // Prepare the dialog box for use
-            $('#dialog').dialog({autoOpen : false});
+            //$('#dialog').dialog({autoOpen : false});
 
 
             /* Draw our base template into the window */
@@ -1131,13 +1142,22 @@ winkstart.module('connect', 'sipservice',
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);
 
+            // This is where we define our click listeners (NOT INLINE IN THE HTML) 
+            $('#ws-content #add_prepay_button').click(function() {
+                winkstart.publish('sipservice.addCredit');
+            });
+
+            $('.trunk_detail img').click(function() {
+                winkstart.publish('sipservice.editTrunks');
+            });
+
+            $('#tmp_add_number').click(function() {
+                winkstart.publish('sipservice.addNumber');
+            });
+
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
-            });
-
-            $('#ws-content #add_prepay_button').click(function() {
-                winkstart.publish('sipservice.addCredit');
             });
         }
     } // End function definitions
