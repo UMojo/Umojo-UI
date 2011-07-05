@@ -1,397 +1,277 @@
 winkstart.module('voip', 'callflow',
-   {
-		css: [
-			'css/style.css',
-			'css/callflow.css'
-		],
+    {
+        css: [
+            'css/callflow.css'
+        ],
 
-		templates: {
-			callflow: 'tmpl/callflow.html',
-			branch: 'tmpl/branch.html',
-			tools: 'tmpl/tools.html',
-			root: 'tmpl/root.html',
-			node: 'tmpl/node.html',
-			iframe: 'tmpl/iframe.html'
-		},
+        /* What HTML templates will we be using? */
+        templates: {
+            callflow: 'tmpl/callflow.html',
+            editCallflow: 'tmpl/edit.html'
+        },
 
-		elements: {
-			flow: '#ws_cf_flow',
-			tools: '#ws_cf_tools',
-			save: '#ws_cf_save',
-			buf: '#ws_cf_buf'
-		},
+        /* What events do we listen for, in the browser? */
+        subscribe: {
+            'callflow.activate' : 'activate',
+            'callflow.list-panel-click' : 'editCallflow',
+            'callflow.edit-callflow' : 'editCallflow'
+        },
 
-		json: { // uris to json data
-			actions: 'module/callflow/actions.json',
-			categories: 'module/callflow/categories.json'
-		},
-      
-		resources: {
-			"callflow.list": {url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{id}/callflows', contentType: 'application/json', verb: 'GET'}        
-		},
-
-		popup: 'module/callflow/app/',
-
-		subscribe: {
-         'callflow.activate' : 'activate'
-		}
-	},
-	function (args) {
-		winkstart.publish('subnav.add', { module: this.__module, label: 'Callflows', nav_category: 'category-3'});
-	},
-	{
-		activate: function (args) {
-        
-			winkstart.registerResources(this.config.resources);
-	   	
-			var THIS = this, count = 1,
-				tryRun = function ( ) { count--; if (count == 0) THIS._activate(args); };
-			count++;
-         
-         
-         
-         $.getJSON(this.config.json.actions, function (data) {
-            var popups = { };
-            for (var i in data) {
-               var popup = data[i].popup;
-               if (popup && !popups[popup]) {
-                  popups[popup] = popup; count++;
-                  winkstart.module.load(popup, function() { this.init(); tryRun(); });
-               }
+        /* What API URLs are we going to be calling? Variables are in { }s */
+        resources: {
+            "callflow.list": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "callflow.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "callflow.create": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            "callflow.update": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            "callflow.delete": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
-            THIS.actions = data;
-            tryRun();
-         });
-         
-         
-         
-         count++;
-         $.getJSON(this.config.json.categories, function (data) {
-            THIS.categories = data;
-            tryRun();
-         });
-         tryRun();
-      },
+        }
+    },
 
-      _activate: function (args) {
-         var THIS = this
+    /* Bootstrap routine - run when the module is first loaded */
+    function(args) {
+        winkstart.publish('subnav.add', {
+            module: this.__module,
+            label: 'Callflows'
+        });
+    },
 
-         args.target.empty();
-         this.templates.callflow.tmpl(this.config.elements).appendTo( args.target );
+    {
+        saveCallflow: function(callflow_id, form_data) {
+            var THIS = this;
 
-         this.renderTools();
-         this._resetFlow();
-         this.renderFlow();
-         
-         winkstart.publish('layout.updateLoadedModule', {label: 'Callflow Management', module: this.__module});
-         $(this.config.elements.save).click(function () { THIS.save(); }).hover(function () { $(this).addClass('active'); }, function () { $(this).removeClass('active'); });
-      },
+            /* Check validation before saving */
+            THIS.validateForm('save');
 
-      renderFlow: function () {
-         var target = $(this.config.elements.flow).empty();
-         target.append(this._renderFlow());
-      },
+            if(!$('.invalid').size()) {
+                /* Construct the JSON we're going to send */
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.data = form_data;
 
-      renderTools: function () {
-         var target = $(this.config.elements.tools).empty();
-         target.append(this._renderTools());
-      },
+                /* Is this a create or edit? See if there's a known ID */
+                if (callflow_id) {
+                    /* EDIT */
+                    rest_data.callflow_id = callflow_id;
+                    winkstart.postJSON('callflow.update', rest_data, function (json, xhr) {
+                        /* Refresh the list and the edit content */
+                        THIS.renderList();
+                        THIS.editCallflow({
+                            id: callflow_id
+                        });
+                    });
+                } else {
+                    /* CREATE */
 
-      // Create a new branch node for the flow
-      branch: function (actionName) {
-         var THIS = this;
-
-         function branch (actionName) {
-            this.id = -1;                   // id for direct access
-            this.actionName = actionName;
-            this.parent = null;
-            this.children = new Array();
-            this.data = {};                 // data caried by the node
-
-            // returns a list of potential child actions that can be added to
-			// the branch
-            this.potentialChildren = function () {
-               var list = [];
-
-               for (var i in THIS.actions) if (THIS.actions[i].isUsable) list[THIS.actions[i].name] = THIS.actions[i].name;
-
-               for (var i in THIS.actions[this.actionName].rules) {
-                  var rule = THIS.actions[this.actionName].rules[i];
-
-                  switch (rule.type) {
-                     case 'quantity': {
-                        if (this.children.length >= rule.maxSize) list = [];
-                     } break;
-                     // ADD MORE RULE PROCESSING HERE ////////////////////
-                  }
-               }
-
-               return list;
+                    /* Actually send the JSON data to the server */
+                    winkstart.putJSON('callflow.create', rest_data, function (json, xhr) {
+                        THIS.renderList();
+                        THIS.editCallflow({
+                            id: json.data.id
+                        });
+                    });
+                }
+            } else {
+                alert('Please correct errors that you have on the form.');
             }
+        },
 
-            this.contains = function (branch) {
-               var toCheck = branch;
-               while(toCheck.parent) if (this.id == toCheck.id) return true; else toCheck = toCheck.parent;
-               return false;
+        /*
+         * Create/Edit callflow properties (don't pass an ID field to cause a create instead of an edit)
+         */
+        editCallflow: function(data){
+            $('#callflow-view').empty();
+            var THIS = this;
+            var form_data = {
+                data : {
+                    'caller-id' : {external : {}, internal : {}},
+                    media : {audio : {codecs : []}, video : {codecs : []}},
+                    sip : {}
+                }
+            };
+            
+            form_data.field_data = THIS.config.formData;
+
+
+            if (data && data.id) {
+                /* This is an existing callflow - Grab JSON data from server for callflow_id */
+                winkstart.getJSON('callflow.get', {
+                    crossbar: true,
+                    account_id: MASTER_ACCOUNT_ID,
+                    callflow_id: data.id
+                }, function(json, xhr) {
+                    /* On success, take JSON and merge with default/empty fields */
+                    $.extend(true, form_data, json);
+
+                    THIS.renderCallflow(form_data);
+                });
+            } else {
+                /* This is a new callflow - pass along empty params */
+                THIS.renderCallflow(form_data);
             }
+            
+        },
 
-            this.removeChild = function (branch) {
-               var children = new Array();
-               for (var i in this.children) if (this.children[i].id != branch.id) children.push(this.children[i]);
-               this.children = children;
-            }
+        deleteCallflow: function(callflow_id) {
+            var THIS = this;
+            
+            var rest_data = {
+                crossbar: true,
+                account_id: MASTER_ACCOUNT_ID,
+                callflow_id: callflow_id
+            };
 
-            this.addChild = function (branch) {
-               if (!(branch.actionName in this.potentialChildren())) return false;
-               if (branch.contains(this)) return false;
-               if (branch.parent) branch.parent.removeChild(branch);
-               branch.parent = this;
-               this.children.push(branch);
-               return true;
-            }
+            /* Actually send the JSON data to the server */
+            winkstart.deleteJSON('callflow.delete', rest_data, function (json, xhr) {
+                THIS.renderList();
+                $('#callflow-view').empty();
+            });
+        },
 
-            this.index = function (index) {
-               this.id = index;
-               for (var i in this.children) index = this.children[i].index(index+1);
-               return index;
-            }
+        /**
+         * Draw callflow fields/template and populate data, add validation. Works for both create & edit
+         */
+        renderCallflow: function(form_data){
+            var THIS = this;
+            var callflow_id = form_data.data.id;
 
-            this.nodes = function () {
-               var nodes = new Array();
-               nodes[this.id] = this;
-               for (var i in this.children) {
-                  var buf = this.children[i].nodes();
-                  for (var j in buf) nodes[j] = buf[j];
-               }
-               return nodes;
-            }
+            /* Paint the template with HTML of form fields onto the page */
+            THIS.templates.editCallflow.tmpl(form_data).appendTo( $('#callflow-view') );
 
-            this.serialize = function () {
-               var json = THIS._clone(this.data);
-               json.children = {};
-               for (var i in this.children) json.children[i] = (this.children[i].serialize());
-               return json;
-            }
-         }
+            winkstart.cleanForm();
 
-         return new branch(actionName);
-      },
+            /* Initialize form field validation */
+            THIS.validateForm();
 
-      count: function (obj) {
-         var count = 0;
-         for (var i in obj) count++;
-         return count;
-      },
+            $("ul.settings1").tabs("div.pane > div");
+            $("ul.settings2").tabs("div.advanced_pane > div");
 
-// A set of actions: modules/apps tied together with rules, restricting dependencies between the actions
-      root: { name : 'root', rules : [ {type : 'quantity', maxSize : 1} ], isUsable : false},
+            /* Listen for the submit event (i.e. they click "save") */
+            $('.callflow-save').click(function(event) {
+                /* Save the data after they've clicked save */
 
-      actions: { root : this.root },
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
 
-// Action categories
-      categories: { },
+                /* Grab all the form field data */
+                var form_data = form2object('callflow-form');
 
-      flow: { },
+                THIS.saveCallflow(callflow_id, form_data);
 
-      _resetFlow: function () {
-         this.flow = {};
-         this.flow.root = this.branch('root');    // head of the flow tree
-         this._formatFlow();
-      },
-
-      _formatFlow: function () {
-         this.flow.root.index(0);
-         this.flow.nodes = this.flow.root.nodes();
-      },
-
-
-
-// FLOW // ///////////////////////////////////////////////////////////////
-      _renderFlow: function () {
-         var THIS = this;
-         this._formatFlow();
-
-         var layout = this._renderBranch(this.flow.root);
-
-         layout.find('.node').hover(function () { $(this).addClass('over'); }, function () { $(this).removeClass('over'); });
-
-         layout.find('.node').each(function () {
-            var node;
-            if ($(this).hasClass('root')) {
-               $(this).removeClass('icons_black root');
-               node = THIS.templates.root.tmpl(THIS.flow.nodes[$(this).attr('id')]);
-            }
-            else {
-               node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
-            }
-            $(this).append(node);
-
-            $(this).droppable({
-               drop: function (event, ui) {
-                  var target = THIS.flow.nodes[$(this).attr('id')];
-                  if (ui.draggable.hasClass('action')) {
-                     var action = ui.draggable.attr('name'),
-                         branch = THIS.branch(action);
-                     if (target.addChild(branch)) {
-                        var popup = THIS.actions[action].popup;
-                        if (popup) winkstart.publish(popup+'.popup', target.children[target.children.length-1]);
-                        THIS.renderFlow();
-                     }
-                  }
-                  if (ui.draggable.hasClass('node')) {
-                     var branch = THIS.flow.nodes[ui.draggable.attr('id')];
-                     if (target.addChild(branch)) { ui.draggable.remove(); THIS.renderFlow(); }
-                  }
-               }
+                return false;
             });
 
-            // dragging the whole branch
-            $(this).draggable({
-               start: function () {
-                  THIS._enableDestinations($(this));
+            $('.callflow-cancel').click(function(event) {
+                event.preventDefault();
 
-                  var children = $(this).next();
-                  var t = children.offset().top - $(this).offset().top;
-                  var l = children.offset().left - $(this).offset().left;
-                  $(this).attr('t', t); $(this).attr('l', l);
-               },
-               drag: function () {
-                  var children = $(this).next();
-                  var t = $(this).position().top + parseInt($(this).attr('t'));
-                  var l = $(this).position().left + parseInt($(this).attr('l'));
-                  children.offset({ top: t, left: l });
-               },
-               stop: function () {
-                  THIS._disableDestinations();
-                  THIS.renderFlow();
-               }
+                /* Cheat - just delete the main content area. Nothing else needs doing really */
+                $('#callflow-view').empty();
+
+                return false;
             });
-         });
 
-         layout.find('.delete').click(function() {
-            var node = THIS.flow.nodes[$(this).attr('id')];
-            if (node.parent) {
-               node.parent.removeChild(node);
-               THIS.renderFlow();
-            }
-         });
+            $('.callflow-delete').click(function(event) {
+                /* Save the data after they've clicked save */
 
-         layout.find('.edit').click(function() {
-            var node = THIS.flow.nodes[$(this).attr('id')],
-                popup = THIS.actions[node.actionName].popup;
-            if (popup) winkstart.publish(popup+'.popup', node);
-         });
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
 
-         return layout;
-      },
+                THIS.deleteCallflow(callflow_id);
 
-      _renderBranch: function (branch) {
-         var flow = this.templates.branch.tmpl(branch);
-         var children = flow.find('.children');
-         for (var i in branch.children) children.append(this._renderBranch(branch.children[i]));
-         return flow;
-      },
-
-
-// TOOL BAR // ///////////////////////////////////////////////////////////
-      _renderTools: function () {
-         var THIS = this;
-         var buf = $(this.config.elements.buf);
-         var tools = this.templates.tools.tmpl({categories: this.categories});
-
-         tools.find('.category').click(function () {
-            $(this).toggleClass('voicemail_apps');
-            $(this).children().toggleClass('open');
-            var current = $(this);
-            while(current.next().hasClass('tool') ||
-                  current.next().hasClass('app_list_nav') ||
-                  current.next().hasClass('clear')) {
-               current = current.next();
-               current.toggle();
-            }
-         });
-
-// tools.find('.category').click();
-
-         tools.find('.tool').hover(function () {$(this).addClass('active');}, function () {$(this).removeClass('active');})
-
-         function action (el) {
-            el.draggable({
-               start: function () {
-                  THIS._enableDestinations($(this));
-
-                  var clone = $(this).clone();
-                  action(clone);
-                  clone.addClass('inactive');
-                  clone.insertBefore($(this));
-
-                  $(this).addClass('active');
-               },
-               drag: function () {
-               },
-               stop: function () {
-                  THIS._disableDestinations();
-                  $(this).prev().removeClass('inactive');
-                  $(this).remove();
-               }
+                return false;
             });
-         }
+        },
 
-         tools.find('.action').each(function () { action($(this)); });
+        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
+         * and populating into our standardized data list "thing".
+         */
+        renderList: function(){
+            var THIS = this;
 
-         return tools;
-      },
+            winkstart.getJSON('callflow.list', {
+                crossbar: true,
+                account_id: MASTER_ACCOUNT_ID
+            }, function (json, xhr) {
 
-// DESTINATION POINTS // /////////////////////////////////////
-      _enableDestinations: function (el) {
-         var THIS = this;
+                // List Data that would be sent back from server
+                function map_crossbar_data(crossbar_data){
+                    var new_list = [];
+                    if(crossbar_data.length > 0) {
+                        _.each(crossbar_data, function(elem){
+                            new_list.push({
+                                id: elem.id,
+                                title: elem.id
+                            });
+                        });
+                    }
+                    return new_list;
+                }
 
-         $('.node').each(function () {
-            var activate = true;
-            var target = THIS.flow.nodes[$(this).attr('id')];
-            if (el.attr('name') in target.potentialChildren()) {
-               if (el.hasClass('node') && THIS.flow.nodes[el.attr('id')].contains(target)) {
-                  activate = false;
-               }
-            }
-            else activate = false;
-            if (activate) $(this).addClass('active');
-            else {
-               $(this).addClass('inactive');
-               $(this).droppable('disable');
-            }
-         });
-      },
+                var options = {};
+                options.label = 'Callflow Module';
+                options.identifier = 'callflow-module-listview';
+                options.new_entity_label = 'Callflow';
+                options.data = map_crossbar_data(json.data);
+                options.publisher = winkstart.publish;
+                options.notifyMethod = 'callflow.list-panel-click';
+                options.notifyCreateMethod = 'callflow.edit-callflow';  /* Edit with no ID = Create */
 
-      _disableDestinations: function () {
-         $('.node').each(function () {
-            $(this).removeClass('active');
-            $(this).removeClass('inactive');
-            $(this).droppable('enable');
-         });
-         $('.tool').removeClass('active');
-      },
+                $("#callflow-listpanel").empty();
+                $("#callflow-listpanel").listpanel(options);
 
-      save: function () {
-         var flow = this.flow.root;
-             cf = {
-            numbers : 'some number list',
-            flow : flow.children.length > 0 ? flow.children[0].serialize() : { }
-         }
+            });
+        },
 
-         alert(JSON.stringify(cf));
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+         * if appropriate. You should also attach to any default click items you want to respond to when people click
+         * on them. Also register resources.
+         */
+        activate: function(data) {
+            $('#ws-content').empty();
+            var THIS = this;
+            this.templates.callflow.tmpl({}).appendTo( $('#ws-content') );
 
-         // POSTING THE DATA SHOULD BE HERE....
-      },
+            winkstart.loadFormHelper('forms');
 
-/*****************************************************************************
- *  Deep object cloning  ***
- *****************************************************************************/
-      _clone: function (obj) {
-         if (obj == null || typeof(obj) != 'object') return obj;
-         var o = new obj.constructor(); 
-         for (var key in obj) o[key] = this._clone(obj[key]);
-         return o;
-      }
-   }
+            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+            winkstart.registerResources(this.config.resources);
+
+            winkstart.publish('layout.updateLoadedModule', {
+                label: 'Callflow Management',
+                module: this.__module
+            });
+
+            $('.edit-callflow').live({
+                click: function(evt){
+                    var target = evt.currentTarget;
+                    var callflow_id = target.getAttribute('rel');
+                    winkstart.publish('callflow.edit-callflow', {
+                        'callflow_id' : callflow_id
+                    });
+                }
+            });
+
+            THIS.renderList();
+        }
+    }
 );

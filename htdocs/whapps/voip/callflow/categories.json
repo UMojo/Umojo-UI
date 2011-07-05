@@ -1,4 +1,0 @@
-{
-   "basic" : ["answer","conference","hangup","menu","voicemail"],
-   "dialplan": ["answer", "hangup", "tone"]
-}

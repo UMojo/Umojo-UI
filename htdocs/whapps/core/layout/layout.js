@@ -2,7 +2,6 @@ winkstart.module('core', 'layout', {
         //		requires: {'core' : 'nav'},
         css: [
         'css/layout.css',
-        'css/jquery.jscrollpane.css',
         'css/tabs.css',
         'css/icons.css'
         ],
