@@ -23,7 +23,7 @@ winkstart.module('voip', 'vmbox',
                                 {text: 'GMT+5:30 (IST)', value: 'Asia/Kolkata'},{text: 'GMT+6 (BST)', value: 'Indian/Chagos'},{text: 'GMT+7 (VST)', value: 'Asia/Jakarta'},{text: 'GMT+8 (CTT)', value: 'Asia/Brunei'}, 
                                 {text: 'GMT+9 (JST)', value: 'Asia/Tokyo'},{text: 'GMT+9:30 (ACT)', value: 'Australia/Adelaide'},{text: 'GMT+10 (AET)', value: 'Asia/Yakutsk'},{text: 'GMT+11 (SST)', value: 'Pacific/Ponape'}, 
                                 {text: 'GMT+12 (NST)', value: 'Pacific/Fiji'},{text: 'GMT-11 (MIT)', value: 'Pacific/Midway'},{text: 'GMT-10 (HST)', value: 'Pacific/Rarotonga'},{text: 'GMT-9 (AST)', value: 'Pacific/Gambier'}, 
-                                {text: 'GMT-8 (PST)', value: 'America/Whitehorse'},{text: 'GMT-7 (PNT)', value: 'America/Edmonton'},{text: 'GMT-6 (CST)', value: 'America/Swift_Current'},{text: 'GMT-5 (EST)', value: 'America/Thunder_Bay'}, 
+                                {text: 'GMT-8 (PST)', value: 'America/Whitehorse'},{text: 'GMT-7 (MST)', value: 'America/Edmonton'},{text: 'GMT-6 (CST)', value: 'America/Swift_Current'},{text: 'GMT-5 (EST)', value: 'America/Thunder_Bay'}, 
                                 {text: 'GMT-4 (PRT)', value: 'America/La_Paz'},{text: 'GMT-3:30 (CNT)', value: 'America/St_Johns'},{text: 'GMT-3 (AGT)', value: 'America/Sao_Paulo'},{text: 'GMT-2', value: 'America/Noronha'},{text: 'GMT-1 (CAT)', value: 'Atlantic/Cape_Verde'}
                                ],
         },

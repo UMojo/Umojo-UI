@@ -1,0 +1,63 @@
+<div>
+    {{each(s,srv) servers}}
+    <div class="server">
+        <div class="title">
+            <a class="remove_server" data-serverid="${s}" href="#" title="Remove Server - ${server_name}" style="display:none; vertical-align: middle; float: left; max-width: 1.5em;"><img src="/images/error-icon_sm.png" style="max-width: 1.5em; vertical-align: middle;"></a>
+            <span class="name">${server_name}</span>
+            {{if monitor }}
+            <span class="status">Monitoring is <span class="state-${monitor.monitor_enabled}">{{if monitor.monitor_enabled}}On{{else}}Off{{/if}}</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
+            {{else}}
+            <span class="status">Monitoring is <span class="state-false">Off</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
+            {{/if}}
+        </div>
+        <div class="sip">
+            {{if auth.auth_method == "IP"}}
+            <div class="area ip_auth_area">
+
+                <ul class="title ip_list"><li>Authorized IPs:</li>
+                    <ul class="info menu_ip_list">
+                        {{each(i, ip) auth.auth_ip}}
+                        <li class="ip_list_ip">
+                            <a class="remove_auth_IP" data-serverid="${s}" data-removeip="${ip}" href="#"><img src="/images/error-icon_sm.png" class="remove_auth_IP" /></a>${ip}
+                        </li>
+                        {{/each}}
+                    </ul>
+                </ul>
+            </div>
+            {{else}}
+            <div class="area">
+                <span class="title">SIP Username</span>
+                <span class="info">${auth.auth_user}</span>
+            </div>
+            <div class="area">
+                <span class="title">SIP Password</span>
+                <span class="info">${auth.auth_password}</span>
+            </div>
+            {{/if}}
+            <div class="area">
+                <span class="title">SIP Gateway</span>
+                <span class="info">${account.auth_realm}</span>
+            </div>
+        </div>
+        <p>Phone Numbers For This Server:</p>
+        <div class="did_list">
+            {{each(i,DID) DIDs}}
+            <div class="numbers">
+                <span class="number" data-did="${i}" data-serverid="${s}">${i}</span>
+                <a href="#" class="failover active" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
+                <a href="#" class="cid active"  data-serverid="${s}" data-cnam="${DID.caller_id.cid_name}" title="${DID.caller_id.cid_name}" data-did="${i}">CID</a>
+                <a href="#" class="e911 active"  data-serverid="${s}"  data-did="${i}" title="${DID.e911_info.Address}">e911</a>
+                <a href="#" class="misc"  data-serverid="${s}" data-did="${i}">misc</a>
+                <a href="#" class="unassign"  data-serverid="${s}" data-did="${i}">Unassign</a>
+
+            </div>
+            {{/each}}
+        </div>
+        <div class="drop_area" id="s_drop_${s}" data-serverid="${s}">Drag-n-Drop Numbers Here</div>
+        <div class="behavior"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Modify Default Behaviors</a> (Fail-over #, Caller ID, etc.)</div>
+    </div>
+    {{/each}}
+    {{if servers }}
+        <div id="add_a_server_first">After adding DIDs, add a server to assign them to by clicking above</div>
+    {{/if}}
+</div>

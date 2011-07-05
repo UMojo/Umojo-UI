@@ -144,11 +144,14 @@
 		{
 			if (fieldNode.type.toLowerCase() == 'radio' || fieldNode.type.toLowerCase() == 'checkbox')
 			{
-				if (fieldNode.checked)
+				if (fieldNode.checked && fieldNode.value != "on")
 				{
-					//return fieldNode.value;
-                    return true;
+					return fieldNode.value;
 				}
+                else if(fieldNode.checked)
+                {
+                    return true;
+                }
                 else
                 {
                     return false;
