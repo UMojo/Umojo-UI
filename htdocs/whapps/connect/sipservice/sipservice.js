@@ -59,6 +59,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.addServer' : 'addServer',           // Add a server
             'sipservice.deleteServer' : 'deleteServer',     // Delete a server
             'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
+            'sipservice.editFailover' : 'editFailover',
 
 
             // Trunk Management
@@ -101,18 +102,6 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
         },
-        
-        portNumber: function(args) {
-            var THIS = this;
-
-            THIS.templates.port_number.tmpl({}).dialog({
-                title: 'Port Number',
-                width: 800,
-                height: 350,
-                position: 'center'
-            });
-        },
-        
 
         refreshDIDs: function(numbers) {
             var THIS = this;
@@ -818,7 +807,17 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
+        
+        editFailover: function() {
+            var THIS = this;
 
+            var dialogDiv = THIS.templates.failover.tmpl({}).dialog({
+                title: 'Edit Failover',
+                position: 'center',
+                height: 440,
+                width: 520
+            });
+        },
 
         //prompts
 
@@ -1188,13 +1187,13 @@ winkstart.module('connect', 'sipservice',
             $('#tmp_edit_billing').click(function() {
                 winkstart.publish('sipservice.editBilling');
             });
-
-            $('#tmp_port_number').click(function() {
-                winkstart.publish('sipservice.portNumber');
-            });
             
+            $('#tmp_edit_failover').click(function() {
+                winkstart.publish('sipservice.editFailover');
+            });
+
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'SIP Services',             
+                label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
         }

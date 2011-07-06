@@ -5,3 +5,10 @@
 #edit_billing .note_box clear span {
     font-size: 12px;
 }
+
+/* Edit Failover */
+
+#edit_failover form input[type='text'] {
+    float:right;
+}
+
