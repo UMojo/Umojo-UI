@@ -51,6 +51,7 @@ winkstart.module('connect', 'sipservice',
 
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
+            'sipservice.postCredit' : 'postCredit',
             'sipservice.changeRecurring' : 'changeRecurring',
             'sipservice.editBilling' : 'editBilling',
 
@@ -237,17 +238,18 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
 
-            $('#dialog a.ctr_btn', dialogDiv).click(function() {
-                winkstart.publish('sipservice.addCredits', {
+            $(dialogDiv).find('.ctr_btn').click(function() {
+                winkstart.publish('sipservice.postCredit', {
                     credit_amount : 5,
                     success : function() {
                         dialogDiv.dialog('close');
                     }
                 });
+               
             });
         },
 
-        addCredits: function(data) {
+        postCredit: function(data) {
             $.ajax({
                 url: "/api/addPrepayCredits",
                 global: true,
@@ -261,7 +263,6 @@ winkstart.module('connect', 'sipservice',
                 dataType: "json",
                 async:true,
                 success: function(msg){
-
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs);
                     }

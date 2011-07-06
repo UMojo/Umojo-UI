@@ -1,5 +1,16 @@
 /* Put custom css here */
 
+/* Credit popup */
+
+
+#edit_credit p span{
+    font-size: 12px;
+}
+
+#edit_credit form span{
+    font-weight:normal
+}
+
 /* Credit card popup */
 
 #edit_billing .note_box clear span {

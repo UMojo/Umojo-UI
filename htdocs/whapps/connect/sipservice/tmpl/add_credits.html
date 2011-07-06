@@ -1,6 +1,6 @@
 <div>
 
-    <div class="popup add_credits">
+    <div id="edit_credit" class="popup add_credits">
         <div class="stylized myform">
             <h3>Choose Credit Amount:</h3><div class="icon dollar blue"></div>
             <form name="form" method="post">
@@ -47,17 +47,17 @@
         </div>
 
         <div class="popup_content">
-            <p class="note_box"><span style="font-size: 12px;">Pay as you go credits will be used for international and per-minute billing.</span><br><br>
+            <p class="note_box"><span>Pay as you go credits will be used for international and per-minute billing.</span><br><br>
                 Credits are separate from monthly recurring charges such as flat-rate circuits, DIDs and E911 charges.</p>
         </div>
 
         <form name="form" method="post" action="#">
             <h3>Automatic Recharge:</h3><div class="icon recharge blue"></div>
             <div class="box1">
-                <input type="radio" value="" id="" name="radio" /> <label for="On"><span style="font-weight:normal">On</span></label>
+                <input type="radio" value="" id="" name="radio" /> <label for="On"><span>On</span></label>
             </div>
             <div class="box2">
-                <input type="radio" value="" id="" name="radio" /> <label for="Off 1"><span style="font-weight:normal">Off</span></label></h3>
+                <input type="radio" value="" id="" name="radio" /> <label for="Off 1"><span>Off</span></label></h3>
             </div>
         </form>
 
@@ -87,13 +87,15 @@
         </div>
 
         <form name="form" method="post" action="#">
-            <h3 style="line-height:21px">Choose Billing Account:</h3><div class="icon cart blue"></div>
-            <span class="select">Credit Card Number</span>
+            <h3>Choose Billing Account:</h3><div class="icon cart blue"></div>
+            <!--<span class="select">Credit Card Number</span>-->
             <select name="" class="styled">
+                <option value="" disabled="disabled">Credit Card Number</option>
                 <option value="1">************2917</option>
                 <option value="2">************4583</option>
                 <option value="2">************7086</option>
             </select>
+            
         </form>
         <br>
         <div class="popup_content">
