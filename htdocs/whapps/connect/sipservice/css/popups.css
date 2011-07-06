@@ -407,9 +407,11 @@
 }
 
 .box1 p, .box2 p, .box3 p, .box4 p, .box5 p, .box6 p {
-    float: left;
-    padding: 0;
-    margin: 0;
+    text-align: left;
+    padding: 0 20px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 18px;
 }
 
 .box1 input[type="radio"], .box2 input[type="radio"], .box3 input[type="radio"], .box4 input[type="radio"], .box5 input[type="radio"], .box6 input[type="radio"] {

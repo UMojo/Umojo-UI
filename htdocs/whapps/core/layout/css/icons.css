@@ -114,6 +114,7 @@
 
 .icon.cart {
 	background-position: -700px -292px;
+    margin: -6px 15px 10px -15px;
 }
 
 .icon.authentication {
@@ -122,10 +123,12 @@
 
 .icon.recharge {
 	background-position: -473px 0;
+    margin: -12px 15px 10px -15px;
 }
 
 .icon.dollar {
 	background-position: -960px -419px;
+    margin: -12px 15px 10px -15px;
 }
 
 .icon.search {
