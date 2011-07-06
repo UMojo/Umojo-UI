@@ -113,6 +113,17 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
         },
+        
+        configureCnam: function(args) {
+            var THIS = this;
+
+            THIS.templates.edit_cnam.tmpl({}).dialog({
+                title: 'Edit Caller Id',
+                width: 660,
+                height: 220,
+                position: 'center'
+            });
+        },
 
         refreshDIDs: function(numbers) {
             var THIS = this;
@@ -1205,6 +1216,10 @@ winkstart.module('connect', 'sipservice',
             
             $('#tmp_edit_portNumber').click(function() {
                 winkstart.publish('sipservice.portNumber');
+            });
+            
+             $('#tmp_edit_cnam').click(function() {
+                winkstart.publish('sipservice.configureCnam');
             });
 
             winkstart.publish('layout.updateLoadedModule', {
