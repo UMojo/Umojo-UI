@@ -55,6 +55,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.postCredit' : 'postCredit',
             'sipservice.changeRecurring' : 'changeRecurring',
             'sipservice.editBilling' : 'editBilling',
+            'sipservice.postBilling' : 'postBilling',
 
             /* Server Management */
             'sipservice.getServers' : 'getServers',         // Get server list
@@ -106,7 +107,6 @@ winkstart.module('connect', 'sipservice',
             });
             
             $(dialogDiv).find('.ctr_btn').click(function() {
-                alert('TEST');
                 winkstart.publish('sipservice.postNumber', {
                     number : 4159086655,
                     success : function() {
@@ -261,7 +261,46 @@ winkstart.module('connect', 'sipservice',
                 height: 1000,
                 width: 500
             });
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postBilling', {
+                    card_number : 8969756879,
+                    car_name: 'John Doe',
+                    address: '123, Some Street NoWhereCity Ca',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
         },
+        
+        postBilling: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        card_number: data.card_number,
+                        car_name: data.car_name,
+                        address: data.address
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
+        
+        
 
         addCredit: function() {
             var THIS = this;
@@ -285,29 +324,7 @@ winkstart.module('connect', 'sipservice',
             });
         },
 
-        postCredit: function(data) {
-            $.ajax({
-                url: "/api/addPrepayCredits",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: data.key,
-                    json: JSON.stringify({
-                        addCredits: data.credit_amount,
-                        creditCard: data.creditCard
-                    })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
-                }
-            }
-            );
-        },
+        
 
 
         /******************
@@ -715,7 +732,9 @@ winkstart.module('connect', 'sipservice',
         editTrunks: function(args) {
             var THIS = this;
 
-            THIS.templates.edit_trunks.tmpl({}).dialog({title: 'Edit Trunks'});
+            THIS.templates.edit_trunks.tmpl({}).dialog({
+                title: 'Edit Trunks'
+            });
         },
 
 
@@ -1256,7 +1275,7 @@ winkstart.module('connect', 'sipservice',
                 winkstart.publish('sipservice.portNumber');
             });
 
-             $('#tmp_edit_cnam').click(function() {
+            $('#tmp_edit_cnam').click(function() {
                 winkstart.publish('sipservice.configureCnam');
             });
 
