@@ -52,6 +52,7 @@ winkstart.module('connect', 'sipservice',
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
             'sipservice.changeRecurring' : 'changeRecurring',
+            'sipservice.editBilling' : 'editBilling',
 
             /* Server Management */
             'sipservice.getServers' : 'getServers',         // Get server list
@@ -183,6 +184,18 @@ winkstart.module('connect', 'sipservice',
                 }
             }
             );
+        },
+        
+        editBilling: function() {
+            var THIS = this;
+
+            //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
+            var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
+                title: 'Edit Billing',
+                position: 'center',
+                height: 1000,
+                width: 500
+            });
         },
 
         addCredit: function() {
@@ -1153,6 +1166,10 @@ winkstart.module('connect', 'sipservice',
 
             $('#tmp_add_number').click(function() {
                 winkstart.publish('sipservice.addNumber');
+            });
+            
+            $('#tmp_edit_billing').click(function() {
+                winkstart.publish('sipservice.editBilling');
             });
 
             winkstart.publish('layout.updateLoadedModule', {

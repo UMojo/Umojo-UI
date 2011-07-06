@@ -1,1 +1,7 @@
 /* Put custom css here */
+
+/* Credit card popup */
+
+#edit_billing .note_box clear span {
+    font-size: 12px;
+}
