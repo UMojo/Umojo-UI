@@ -241,6 +241,7 @@ winkstart.module('connect', 'sipservice',
             $(dialogDiv).find('.ctr_btn').click(function() {
                 winkstart.publish('sipservice.postCredit', {
                     credit_amount : 5,
+                    creditCard: 73928372930,
                     success : function() {
                         dialogDiv.dialog('close');
                     }
@@ -257,7 +258,8 @@ winkstart.module('connect', 'sipservice',
                 data: ({
                     key: data.key,
                     json: JSON.stringify({
-                        addCredits: data.credit_amount
+                        addCredits: data.credit_amount,
+                        creditCard: data.creditCard
                     })
                 }),
                 dataType: "json",
