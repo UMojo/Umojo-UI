@@ -6,8 +6,6 @@ winkstart.module('voip', 'conference', {
     templates: {
         conference: 'tmpl/conference.html',
         editConference: 'tmpl/edit.html',
-        createConference: 'tmpl/create.html',
-        viewConference: 'tmpl/view.html'
     },
 
     subscribe: {
@@ -15,6 +13,9 @@ winkstart.module('voip', 'conference', {
         'conference.list-panel-click' : 'editConference',
         'conference.create-conference' : 'createConference',
         'conference.edit-conference' : 'editConference'
+    },
+
+    formData: {
     },
     
     resources: {
@@ -25,25 +26,35 @@ winkstart.module('voip', 'conference', {
         },
         "conference.get": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'json',
+            contentType: 'application/json',
             verb: 'GET'
         },
         "conference.create": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences',
-            contentType: 'json',
+            contentType: 'application/json',
             verb: 'PUT'
         },
         "conference.update": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'json',
+            contentType: 'application/json',
             verb: 'POST'
         },
         "conference.delete": {
             url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'json',
+            contentType: 'application/json',
             verb: 'DELETE'
+        },
+        "user.list": {
+            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+            contentType: 'application/json',
+            verb: 'GET'
         }
-    }
+    },
+    validation: [
+        {name: '#name', regex: /^.*$/},
+        {name: '#member_pins', regex: /^[0-9]+$/},
+        {name: '#moderator_pins', regex: /^[0-9]+$/}
+    ],
 },
 function(args) {
     winkstart.publish('subnav.add', {
@@ -52,243 +63,233 @@ function(args) {
     });
 },
 {	
-	 validateForm: function(state) {
-        if(state==undefined) {
-            winkstart.validate.add($('#conference_name'), /^[^\s][\w\s]*$/);
-            winkstart.validate.add($('#member_pins'), /^[0-9]+$/);
-            winkstart.validate.add($('#moderator_pins'), /^[0-9]+$/);
-        }
-        else if(state=='save') {
-            winkstart.validate.save($('#conference_name'), /^[^\s][\w\s]*$/);
-            winkstart.validate.save($('#member_pins'), /^[0-9]+$/);
-            winkstart.validate.save($('#moderator_pins'), /^[0-9]+$/);
-        }
-    },
-    deleteConference: function(conference_id){
+    validateForm: function(state) {
         var THIS = this;
-    
-        var rest_data = {
-            crossbar: true,
-            account_id: MASTER_ACCOUNT_ID,
-            conference_id: conference_id
-        }
-        
-        winkstart.deleteJSON('conference.delete', rest_data, function (json, xhr) {
-            THIS.buildListView();
-            $('#conference-view').empty();
+
+        $(THIS.config.validation).each(function(k, v) {
+            if(state == undefined) {
+               winkstart.validate.add($(v.name), v.regex);
+            } else if (state == 'save') {
+               winkstart.validate.save($(v.name), v.regex);
+            }
         });
     },
-    createConference: function(){
-        $('#conference-view').empty();
-        var THIS = this;
-			
-        var form_data = {};
-	    form_data.field_data = THIS.config.formData;
-        
-        this.templates.createConference.tmpl(form_data).appendTo( $('#conference-view') );
-        winkstart.cleanForm();
-        
-        this.validateForm();
-    
-        $("ul.settings1").tabs("div.pane > div");
-        $("ul.settings2").tabs("div.advanced_pane > div");
-			
-        $('.conference-save').click(function() {
-            var put_data = {};
-            put_data.crossbar = true;
-            put_data.account_id = MASTER_ACCOUNT_ID;
-            var formData = {
-                name: $('#conference_name').val(),
-                member_pins: { 0: $('#member_pins').val() },
-                moderator_pins: { 0: $('#moderator_pins').val() },
-                member_play_name: $('#join-play-name-members').attr("checked"),
-                member_join_deaf: $('#join-deaf-members').attr("checked"),
-                member_join_muted: $('#join-muted-members').attr("checked"),
-                moderator_play_name: $('#join-play-name-moderators').attr("checked"),
-                moderator_join_deaf: $('#join-deaf-moderators').attr("checked"),
-                moderator_join_muted: $('#join-muted-moderators').attr("checked")
-            }
-            put_data.data = formData;
-			
+    saveConference: function(conference_id, form_data) {
+            var THIS = this;
+
             /* Check validation before saving */
             THIS.validateForm('save');
 
-            /* If there is no invalid property, save it */
             if(!$('.invalid').size()) {
-                winkstart.putJSON('conference.create', put_data, function (json, xhr) {
-                    THIS.viewConference({
-                        id: json.data.id
+                /* Construct the JSON we're going to send */
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.data = form_data;
+
+                /* Is this a create or edit? See if there's a known ID */
+                if (conference_id) {
+                    /* EDIT */
+                    rest_data.conference_id = conference_id;
+                    winkstart.postJSON('conference.update', rest_data, function (json, xhr) {
+                        /* Refresh the list and the edit content */
+                        THIS.renderList();
+                        THIS.editConference({
+                            id: conference_id
+                        });
                     });
-                    THIS.buildListView();
-                });
-            } 
-            else {
+                } else {
+                    /* CREATE */
+
+                    /* Actually send the JSON data to the server */
+                    winkstart.putJSON('conference.create', rest_data, function (json, xhr) {
+                        THIS.renderList();
+                        THIS.editConference({
+                            id: json.data.id
+                        });
+                    });
+                }
+            } else {
                 alert('Please correct errors that you have on the form.');
             }
-				
-            return false;
-        });
-    },
-    editConference: function(data){
-        $('#conference-view').empty();
-        var THIS = this;
-		var conference_id = data.id;
-        winkstart.getJSON('conference.get', {
-            	crossbar: true,
-            	account_id: MASTER_ACCOUNT_ID,
-            	conference_id: conference_id
-            },
+        },
+        /*
+         * Create/Edit conference properties (don't pass an ID field to cause a create instead of an edit)
+         */
+        editConference: function(data){
+            $('#conference-view').empty();
+            var THIS = this;
+            var form_data = {
+                data: {member_pins: [], moderator_pins: []},
+            };
 
-            function (json, xhr) {
-				
-            	var form_data = json;
-            	
-                THIS.templates.editConference.tmpl(form_data).appendTo( $('#conference-view') );
-
-                winkstart.cleanForm();
-
-                console.log(form_data);
-
-                THIS.validateForm();
-                
-		$("ul.settings1").tabs("div.pane > div");
-        	$("ul.settings2").tabs("div.advanced_pane > div");
-                
-                $('.conference-delete').click(function(event) {
-                    THIS.deleteConference(conference_id);
-
-                    return false;
-                });
-                $('.conference-cancel').click(function(event) {
-                    $('#conference-view').empty();
-                });
-
-                $('.conference-save').click(function(event) {
-                    var formData = {
-                        name: $('#conference_name').val(),
-                        member_pins: { 0: $('#member_pins').val() },
-                        moderator_pins: { 0: $('#moderator_pins').val() },
-                        member_play_name: $('#join-play-name-members').attr("checked"),
-                        member_join_deaf: $('#join-deaf-members').attr("checked"),
-                        member_join_muted: $('#join-muted-members').attr("checked"),
-                        moderator_play_name: $('#join-play-name-moderators').attr("checked"),
-                        moderator_join_deaf: $('#join-deaf-moderators').attr("checked"),
-                        moderator_join_muted: $('#join-muted-moderators').attr("checked")
-                    }
-                    
-                    var post_data = {};
-                    post_data.crossbar = true;
-                    post_data.account_id = MASTER_ACCOUNT_ID;
-                    post_data.data = formData;
-                    post_data.conference_id = conference_id;
-                    
-                    /* Check validation before saving */
-                    THIS.validateForm('save');
-
-                    if(!$('.invalid').size()) {
-                        winkstart.postJSON('conference.update', post_data, function (json, xhr) {
-                            THIS.viewConference({
-                                 id: json.data.id
+            form_data.field_data = THIS.config.formData;
+            form_data.field_data.users = [];
+            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+                    var listUsers = [];
+                    if(json.data.length > 0) {
+                        _.each(json.data, function(elem){
+                            var title = elem.first_name + ' ' + elem.last_name;
+                            listUsers.push({
+                                owner_id: elem.id,
+                                title: title
                             });
-                            THIS.buildListView();
-                        }) ;
-                    } else alert('Please correct errors that you have on the form.'); 
-                    return false;
+                        });
+                        form_data.field_data.users = listUsers;
+                }
+                if (data && data.id) {
+                /* This is an existing conference - Grab JSON data from server for conference_id */
+                winkstart.getJSON('conference.get', {
+                    crossbar: true,
+                    account_id: MASTER_ACCOUNT_ID,
+                    conference_id: data.id
+                }, function(json, xhr) {
+                    /* On success, take JSON and merge with default/empty fields */
+                    $.extend(true, form_data, json);
+                    THIS.renderConference(form_data);
                 });
-            } 
-        );
-    },
-    viewConference: function(data) {
-        $('#conference-view').empty();
-        var THIS = this;
-        var conference_id = data.id;
-        console.log(conference_id);
-        /* Grab JSON data from server for conference_id */
-        winkstart.getJSON('conference.get', {
+                } else {
+                /* This is a new conference - pass along empty params */
+                THIS.renderConference(form_data);
+                }
+
+            });
+
+        },
+         deleteConference: function(conference_id) {
+            var THIS = this;
+
+            var rest_data = {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID,
                 conference_id: conference_id
-            },
+            };
 
-            /* On Grab JSON success, run this function */
-            function (json, xhr) {
-
-                /* Take JSON and populate the form fields */
-
-                var form_data = json;
-
-                /* Paint the template with HTML of form fields onto the page */
-                THIS.templates.viewConference.tmpl(form_data).appendTo( $('#conference-view') );
-
-                winkstart.cleanForm();
+            /* Actually send the JSON data to the server */
+            winkstart.deleteJSON('conference.delete', rest_data, function (json, xhr) {
+                THIS.renderList();
+                $('#conference-view').empty();
             });
         },
-    /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-     * if appropriate. You should also attach to any default click items you want to respond to when people click
-     * on them. Also register resources.
-     */
-    activate: function(data) {
-        $('#ws-content').empty();
-        var THIS = this;
-        this.templates.conference.tmpl({}).appendTo( $('#ws-content') );
-        
-        winkstart.loadFormHelper('forms');
+        renderConference: function(form_data){
+            var THIS = this;
+            var conference_id = form_data.data.id;
 
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
+            /* Paint the template with HTML of form fields onto the page */
+            THIS.templates.editConference.tmpl(form_data).appendTo( $('#conference-view') );
 
-        winkstart.publish('layout.updateLoadedModule', {
-            label: 'Conferences',
-            module: this.__module
+            winkstart.cleanForm();
+
+            /* Initialize form field validation */
+            THIS.validateForm();
+
+            $("ul.settings1").tabs("div.pane > div");
+            $("ul.settings2").tabs("div.advanced_pane > div");
+
+            /* Listen for the submit event (i.e. they click "save") */
+            $('.conference-save').click(function(event) {
+                /* Save the data after they've clicked save */
+
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
+
+                /* Grab all the form field data */
+                var form_data = form2object('conference-form');
+
+                THIS.saveConference(conference_id, form_data);
+
+                return false;
             });
 
-        $('.edit-conference').live({
-            click: function(evt){
-                console.log('Got here');
-                var target = evt.currentTarget;
-                var conference_id = target.getAttribute('rel');
-                winkstart.publish('conference.edit-conference', { 'conference_id' : conference_id});
-            }
-        });
+            $('.conference-cancel').click(function(event) {
+                event.preventDefault();
 
-        THIS.buildListView();
-    },
+                /* Cheat - just delete the main content area. Nothing else needs doing really */
+                $('#conference-view').empty();
 
-    /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-     * and populating into our standardized data list "thing".
-     */
-    buildListView: function(){
-        var THIS = this;
-			
-        winkstart.getJSON('conference.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
-				
-	        //List Data that would be sent back from server
-	        function map_crossbar_data(crossbar_data){
-	            var new_list = [];
-	            if(crossbar_data.length > 0) {
-		            _.each(crossbar_data, function(elem){
-		                new_list.push({
-		                    id: elem.id,
-		                    title: elem.name
-						});
-		            });
-	            }
-	            return new_list;
-	        };
-		        	
-	        var options = {};
-	        options.label = 'Conference';
-	        options.identifier = 'conference-module-listview';
-	        options.new_entity_label = 'Conference';
-	        options.data = map_crossbar_data(json.data);
-	        options.publisher = winkstart.publish;
-	        options.notifyMethod = 'conference.list-panel-click';
-	        options.notifyCreateMethod = 'conference.create-conference';
-		
-	        $("#conference-listpanel").empty();
-	        $("#conference-listpanel").listpanel(options);
-        
-    	});
+                return false;
+            });
+
+            $('.conference-delete').click(function(event) {
+                /* Save the data after they've clicked save */
+
+                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                event.preventDefault();
+
+                THIS.deleteConference(conference_id);
+
+                return false;
+            });
+        },
+        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
+         * and populating into our standardized data list "thing".
+         */
+        renderList: function(){
+            var THIS = this;
+
+            winkstart.getJSON('conference.list', {
+                crossbar: true,
+                account_id: MASTER_ACCOUNT_ID
+            }, function (json, xhr) {
+
+                // List Data that would be sent back from server
+                function map_crossbar_data(crossbar_data){
+                    var new_list = [];
+                    if(crossbar_data.length > 0) {
+                        _.each(crossbar_data, function(elem){
+                            new_list.push({
+                                id: elem.id,
+                                title: elem.name
+                            });
+                        });
+                    }
+                    return new_list;
+                }
+
+                var options = {};
+                options.label = 'Conference Module';
+                options.identifier = 'conference-module-listview';
+                options.new_entity_label = 'Conference';
+                options.data = map_crossbar_data(json.data);
+                options.publisher = winkstart.publish;
+                options.notifyMethod = 'conference.list-panel-click';
+                options.notifyCreateMethod = 'conference.edit-conference';  /* Edit with no ID = Create */
+
+                $("#conference-listpanel").empty();
+                $("#conference-listpanel").listpanel(options);
+
+            });
+        },
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+         * if appropriate. You should also attach to any default click items you want to respond to when people click
+         * on them. Also register resources.
+         */
+        activate: function(data) {
+            $('#ws-content').empty();
+            var THIS = this;
+            this.templates.conference.tmpl({}).appendTo( $('#ws-content') );
+
+            winkstart.loadFormHelper('forms');
+
+            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+            winkstart.registerResources(this.config.resources);
+
+            winkstart.publish('layout.updateLoadedModule', {
+                label: 'Conference Management',
+                module: this.__module
+            });
+
+            $('.edit-conference').live({
+                click: function(evt){
+                    var target = evt.currentTarget;
+                    var conference_id = target.getAttribute('rel');
+                    winkstart.publish('conference.edit-conference', {
+                        'conference_id' : conference_id
+                    });
+                }
+            });
+
+            THIS.renderList();
+        }
     }
-}
 );

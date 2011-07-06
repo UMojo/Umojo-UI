@@ -1,0 +1,39 @@
+<div>
+    <fieldset>
+        <legend>Gateway</legend>
+        <ul class="controls">
+            <li>
+                <label for="gateways_server">Server</label>
+                <input id="gateways_server" name="gateways[${index}].server" type="text" value="${data.server}" />
+            </li>
+            <li>
+                <label for="gateways_realm">Realm</label>
+                <input id="gateways_realm" name="gateways[${index}].realm" type="text" value="${data.realm}" />
+            </li>
+            <li>
+                <label for="gateways_username">Username</label>
+                <input id="gateways_username" name="gateways[${index}].username" type="text" value="${data.username}" />
+            </li>
+            <li>
+                <label for="gateways_password">Password</label>
+                <input id="gateways_password" name="gateways[${index}].password" type="text" value="${data.password}" />
+            </li>
+            <li>
+                <label for="gateways_invite_format">Invite Format</label>
+                <select name="gateways[${index}].invite_format" id="gateways_invite_format">
+                    {{tmpl(field_data.invite_format, {selectedVal: data.invite_format }) "#optionList"}}
+                </select>
+            </li>
+            <li>
+                <label for="gateway_prefix">Prefix</label>
+                <input id="gateways_prefix" name="gateways[${index}].prefix" type="text" value="${data.prefix}" />
+            </li>
+            <li>
+                <label for="gateway_suffix">Suffix</label>
+                <input id="gateways_suffix" name="gateways[${index}].suffix" type="text" value="${data.suffix}" />
+            </li>
+        </ul>
+    </fieldset>
+
+    <div class="clear"></div>
+</div>

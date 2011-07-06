@@ -15,20 +15,28 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="conference_name">Conference Name:</label>
-                                <input id="conference_name" name="conference_name" type="text" value="${data.name}"/>
+                                <label for="name">Conference Name:</label>
+                                <input id="name" name="name" type="text" value="${data.name}"/>
                             </li>
                             <li>
-                                <label for="conference_owner">Conference Owner:</label>
-                                <input id="conference_owner" name="conference_owner" type="text" value="${data.conference_owner}"/>
+                                <label for="owner_id">Belongs To:</label>
+                                <select name="owner_id" id="owner_id">
+                                {{each field_data.users}}
+                                    {{if data.owner_id == owner_id}}
+                                    <option value="${owner_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${owner_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
                             </li>
                             <li>
                                 <label for="member_pins">Members PIN:</label>
-                                <input id="member_pins" name="member_pins" type="text" value="${data.member_pins[0]}"/>
+                                <input id="member_pins" name="member_pins[0]" type="text" value="${data.member_pins[0]}"/>
                             </li>
                             <li>
                                 <label for="moderator_pins">Moderators PIN:</label>
-                                <input id="moderator_pins" name="moderator_pins" type="text" value="${data.moderator_pins[0]}"/>
+                                <input id="moderator_pins" name="moderator_pins[0]" type="text" value="${data.moderator_pins[0]}"/>
                             </li>
                         </ul>
                     </fieldset>
@@ -57,27 +65,27 @@
                         <legend>Moderators</legend>
                         <ul class="controls">
                             <li>
-                                <label for="join-play-name-moderators">Play name upon entry?</label>
+                                <label for="moderator_play_name">Play name upon entry?</label>
                                 {{if data.moderator_play_name }}
-                                <input id="join-play-name-moderators" name="join-play-name" type="checkbox" checked="checked"/>
+                                <input id="moderator_play_name" name="moderator_play_name" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="join-play-name-moderators" name="join-play-name" type="checkbox"/>
+                                <input id="moderator_play_name" name="moderator_play_name" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="join-muted-moderators">Join the conference muted?</label>
+                                <label for="moderator_join_muted">Join the conference muted?</label>
                                 {{if data.moderator_join_muted }}
-                                <input id="join-muted-moderators" name="join-muted-moderators" type="checkbox" checked="checked"/>
+                                <input id="moderator_join_muted" name="moderator_join_muted" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="join-muted-moderators" name="join-muted-moderators" type="checkbox"/>
+                                <input id="moderator_join_muted" name="moderator_join_muted" type="checkbox"/>
                                 {{/if}} 
                             </li>
                             <li>
-                                <label for="join-deaf-moderators">Join the conference deaf?</label>
+                                <label for="moderator_join_deaf">Join the conference deaf?</label>
                                 {{if data.moderator_join_deaf }}
-                                <input id="join-deaf-moderators" name="join-deaf-moderators" type="checkbox" checked="checked"/>
+                                <input id="moderator_join_deaf" name="moderator_join_deaf" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="join-deaf-moderators" name="join-deaf-moderators" type="checkbox"/>
+                                <input id="moderator_join_deaf" name="moderator_join_deaf" type="checkbox"/>
                                 {{/if}}
                             </li>
                         </ul>
@@ -87,27 +95,27 @@
                         <legend>Members</legend>
                         <ul class="controls">
                             <li>
-                                <label for="join-play-name-members">Play name upon entry?</label>
-                                {{if data.moderator_play_name }}
-                                <input id="join-play-name-members" name="join-play-name" type="checkbox" checked="checked"/>
+                                <label for="member_play_name">Play name upon entry?</label>
+                                {{if data.member_play_name }}
+                                <input id="member_play_name" name="member_play_name" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="join-play-name-members" name="join-play-name" type="checkbox"/>
+                                <input id="member_play_name" name="member_play_name" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="join-muted-members">Join the conference muted?</label>
+                                <label for="member_join_muted">Join the conference muted?</label>
                                 {{if data.member_join_muted }}
-                                <input id="join-muted-members" name="join-muted-members" type="checkbox" checked="checked"/>
+                                <input id="member_join_muted" name="member_join_muted" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="join-muted-members" name="join-muted-members" type="checkbox"/>
+                                <input id="member_join_muted" name="member_join_muted" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="join-deaf-members">Join the conference deaf?</label>
+                                <label for="member_join_deaf">Join the conference deaf?</label>
                                 {{if data.member_join_deaf }}
-                                <input id="join-deaf-members" name="join-deaf-members" type="checkbox" checked="checked"/>        
+                                <input id="member_join_deaf" name="member_join_deaf" type="checkbox" checked="checked"/>        
                                 {{else}}
-                                <input id="join-deaf-members" name="join-deaf-members" type="checkbox"/>        
+                                <input id="member_join_deaf" name="member_join_deaf" type="checkbox"/>        
                                 {{/if}}
                             </li>
                         </ul>
@@ -120,9 +128,9 @@
             </div>
 
         <ul class="button right conferences">
-            <li><a class="conference-cancel" href="#">Cancel</a></li>
-            <li><a class="conference-delete" href="#">Delete</a></li>
             <li><a class="conference-save" href="#">Save</a></li>
+            <li><a class="conference-delete" href="#">Delete</a></li>
+            <li><a class="conference-cancel" href="#">Cancel</a></li>
         </ul>
             
         </form>
