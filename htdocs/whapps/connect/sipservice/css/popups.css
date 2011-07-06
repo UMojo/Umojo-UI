@@ -50,6 +50,10 @@
     margin-bottom: 20px;
 }
 
+.btn_wrapper {
+    text-align: center;
+}
+
 .popup a.register_btn {
     background: url("../images/regular_btn.png") no-repeat;
     /*bottom: -10px;*/

@@ -21,15 +21,7 @@
     clear: both;
 }
 
-#edit_billing .submit_btn_wrapper {
-    text-align: center;
-}
-
 /* Edit Failover */
-
-#edit_failover .submit_btn_wrapper {
-    text-align: center;
-}
 
 #edit_failover input {
     width: 100px;
