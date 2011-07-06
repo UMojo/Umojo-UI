@@ -12,6 +12,15 @@
     float:right;
 }
 
+/* Edit Cnam */
+
 #edit_cnam p {
     font-weight:normal;
+}
+
+/* Edit Server */
+
+#edit_server .form p {
+    float:left; 
+    margin: 5px -20px 20px 5px;
 }

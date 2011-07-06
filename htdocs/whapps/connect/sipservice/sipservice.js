@@ -57,6 +57,7 @@ winkstart.module('connect', 'sipservice',
             /* Server Management */
             'sipservice.getServers' : 'getServers',         // Get server list
             'sipservice.addServer' : 'addServer',           // Add a server
+            'sipservice.addServerPrompt' : 'addServerPrompt',
             'sipservice.deleteServer' : 'deleteServer',     // Delete a server
             'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
             'sipservice.editFailover' : 'editFailover',
@@ -972,19 +973,14 @@ winkstart.module('connect', 'sipservice',
 
         },
 
+        addServerPrompt: function() {
+            var THIS = this;
 
-
-        addServerPrompt: function(info) {
-            if (! info) {
-                info = new Object();
-            }
-            popup($('#tmpl_add_server').tmpl({
-                'fa':info.fa || {}
-            }), {
-                title: 'Add Server'
-            });
-            $('#addSRV_button').click(function() {
-                addServer($('#add_server_form').serializeObject());
+            var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
+                title: 'Add Server',
+                position: 'center',
+                height: 700,
+                width: 550
             });
         },
 
@@ -1192,6 +1188,10 @@ winkstart.module('connect', 'sipservice',
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);
+            
+            $('#t_m_add_server').click(function() {
+                winkstart.publish('sipservice.addServerPrompt');
+            });
 
             // This is where we define our click listeners (NOT INLINE IN THE HTML) 
             $('#ws-content #add_prepay_button').click(function() {
@@ -1217,7 +1217,7 @@ winkstart.module('connect', 'sipservice',
             $('#tmp_edit_portNumber').click(function() {
                 winkstart.publish('sipservice.portNumber');
             });
-            
+
              $('#tmp_edit_cnam').click(function() {
                 winkstart.publish('sipservice.configureCnam');
             });
