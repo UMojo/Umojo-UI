@@ -17,10 +17,22 @@
     font-size: 12px;
 }
 
+#edit_billing h3 {
+    clear: both;
+}
+
+#edit_billing .submit_btn_wrapper {
+    text-align: center;
+}
+
 /* Edit Failover */
 
-#edit_failover form input[type='text'] {
-    float:right;
+#edit_failover .submit_btn_wrapper {
+    text-align: center;
+}
+
+#edit_failover input {
+    width: 100px;
 }
 
 /* Edit Cnam */

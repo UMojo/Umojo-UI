@@ -25,7 +25,7 @@
     margin: 0 20px 9px;
     clear: both;
     letter-spacing: 0.05em;
-    float: left;
+    /*float: left;*/
 }
 
 .popup p {
@@ -123,7 +123,7 @@
 .popup .inline>label.failover {
     /*text-align: right;*/
     /*width: 180px;*/
-    float: left;
+    /*float: left;*/
 }
 
 
@@ -180,7 +180,7 @@
     background-image: url("../images/cancel_btn.png");
     background-position: 0 0;
     display: block;
-    float: right;
+    /*float: right;*/
     height: 15px;
     width: 15px;
     margin: -28px 5px 0 0;
@@ -213,14 +213,13 @@
 .myform label {
     display: block;
     text-align: right;
-    width: 140px;
-    float: left;
-    margin-top: 8px;
+    /*width: 140px;/*
+    /*float: left;*/
     clear: both;
 }
 
 .myform input {
-    float: left;
+    /*float: left;*/
     font-size: 12px;
     padding: 4px 2px;
     border: solid 1px #09f;
