@@ -93,7 +93,12 @@ winkstart.module('connect', 'sipservice',
         addNumber: function(args) {
             var THIS = this;
 
-            THIS.templates.edit_numbers.tmpl({}).dialog({title: 'Edit Numbers'});
+            THIS.templates.edit_numbers.tmpl({}).dialog({
+                title: 'Edit Numbers',
+                width: 800,
+                height: 350,
+                position: 'center'
+            });
         },
 
         refreshDIDs: function(numbers) {
