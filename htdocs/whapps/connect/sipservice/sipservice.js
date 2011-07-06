@@ -101,6 +101,18 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
         },
+        
+        portNumber: function(args) {
+            var THIS = this;
+
+            THIS.templates.port_number.tmpl({}).dialog({
+                title: 'Port Number',
+                width: 800,
+                height: 350,
+                position: 'center'
+            });
+        },
+        
 
         refreshDIDs: function(numbers) {
             var THIS = this;
@@ -1173,9 +1185,17 @@ winkstart.module('connect', 'sipservice',
                 winkstart.publish('sipservice.addNumber');
             });
             
+<<<<<<< Updated upstream
             $('#tmp_edit_billing').click(function() {
                 winkstart.publish('sipservice.editBilling');
             });
+=======
+            $('#tmp_port_number').click(function() {
+                winkstart.publish('sipservice.portNumber');
+            });
+            
+            
+>>>>>>> Stashed changes
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
