@@ -2,7 +2,6 @@
 
 /* Credit popup */
 
-
 #edit_credit p span{
     font-size: 12px;
 }
@@ -39,3 +38,5 @@
     float:left; 
     margin: 5px -20px 20px 5px;
 }
+
+/* Port Number */
