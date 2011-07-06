@@ -49,6 +49,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.portNumber' : 'portNumber',         // Submit a port request
             'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
             'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
+            'sipservice.postCnam' : 'postCnam',
 
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
@@ -64,6 +65,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.deleteServer' : 'deleteServer',     // Delete a server
             'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
             'sipservice.editFailover' : 'editFailover',
+            'sipservice.postFailover' : 'postFailover',
 
 
             // Trunk Management
@@ -154,12 +156,46 @@ winkstart.module('connect', 'sipservice',
         configureCnam: function(args) {
             var THIS = this;
 
-            THIS.templates.edit_cnam.tmpl({}).dialog({
+            var dialogDiv = THIS.templates.edit_cnam.tmpl({}).dialog({
                 title: 'Edit Caller Id',
                 width: 660,
                 height: 220,
                 position: 'center'
             });
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postCnam', {
+                    caller_id : 500,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+            
+        },
+        
+        postCnam: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        caller_id: data.caller_id
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
         },
 
         refreshDIDs: function(numbers) {
@@ -897,6 +933,39 @@ winkstart.module('connect', 'sipservice',
                 height: 440,
                 width: 520
             });
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postFailover', {
+                    number : 4159086655,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+        
+        postFailover: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
         },
 
         //prompts
