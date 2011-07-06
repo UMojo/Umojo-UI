@@ -102,6 +102,17 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
         },
+        
+        portNumber: function(args) {
+            var THIS = this;
+
+            THIS.templates.port_number.tmpl({}).dialog({
+                title: 'Edit Port Number',
+                width: 800,
+                height: 350,
+                position: 'center'
+            });
+        },
 
         refreshDIDs: function(numbers) {
             var THIS = this;
@@ -1190,6 +1201,10 @@ winkstart.module('connect', 'sipservice',
             
             $('#tmp_edit_failover').click(function() {
                 winkstart.publish('sipservice.editFailover');
+            });
+            
+            $('#tmp_edit_portNumber').click(function() {
+                winkstart.publish('sipservice.portNumber');
             });
 
             winkstart.publish('layout.updateLoadedModule', {
