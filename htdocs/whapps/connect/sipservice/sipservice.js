@@ -41,6 +41,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
             'sipservice.findNumber' : 'findNumber',         // Find new numbers
             'sipservice.addNumber' : 'addNumber',           // Buy/add a number to this account
+            'sipservice.postNumber': 'postNumber',
             'sipservice.cancelNumber' : 'cancelNumber',     // Cancel a number from the account
             'sipservice.mapNumber' : 'mapNumber',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
             'sipservice.updateNumber' : 'updateNumber',     // Update features / settings for a number
@@ -97,12 +98,46 @@ winkstart.module('connect', 'sipservice',
         addNumber: function(args) {
             var THIS = this;
 
-            THIS.templates.edit_numbers.tmpl({}).dialog({
+            var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
                 title: 'Edit Numbers',
                 width: 800,
                 height: 350,
                 position: 'center'
             });
+            
+            $(dialogDiv).find('.ctr_btn').click(function() {
+                alert('TEST');
+                winkstart.publish('sipservice.postNumber', {
+                    number : 4159086655,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+        
+        postNumber: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
         },
         
         portNumber: function(args) {
