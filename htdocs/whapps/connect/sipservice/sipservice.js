@@ -188,8 +188,12 @@ winkstart.module('connect', 'sipservice',
         addCredit: function() {
             var THIS = this;
 
-            //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
-            var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({title: 'Add Credits'});
+            var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({
+                title: 'Add Credits',
+                width: 662,
+                height: 600,
+                position: 'center'
+            });
 
             $('#dialog a.ctr_btn', dialogDiv).click(function() {
                 winkstart.publish('sipservice.addCredits', {
@@ -199,10 +203,6 @@ winkstart.module('connect', 'sipservice',
                     }
                 });
             });
-
-            /*popup($('#tmpl_add_prepay').tmpl( {} ) , {
-                title: 'Add Credits'
-            }	);*/
         },
 
         addCredits: function(data) {
