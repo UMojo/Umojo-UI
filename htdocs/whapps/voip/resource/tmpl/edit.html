@@ -1,0 +1,102 @@
+<div>
+    <div class="inner">
+        <form id="resource-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Resource</h1>
+            {{else}}
+                <h1>Create Resource</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="name">Name:</label>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <label for="weight_cost">Weight Cost:</label>
+                                <input id="weight_cost" name="weight_cost" type="text" value="${data.weight_cost}" />
+                            </li>
+                            <li>
+                                <label for="rules">Rules:</label>
+                                <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
+                            </li>
+                            <li>
+                                <label for="flags">Flags:</label>
+                                <input id="flags" name="flags[0]" type="text" value="${data.flags[0]}" />
+                            </li>
+                            <li>
+                                <label for="enabled">Enabled</label>
+                                {{if data.enabled}}
+                                <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="enabled" name="enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="advanced_settings_box">
+                <h2>Advanced Settings</h2>
+
+                <ul class="advanced_tabs settings2">
+                    <li><a href="#"><span  class="icon sip"/>Gateways</a></li>
+                    <li><a href="#"><span  class="icon audio"/>Gateways Codecs</a></li>
+                    <li><a href="#"><span  class="icon sip"/>Caller-ID Options</a></li>
+                </ul>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="advanced_pane">
+
+                <div id="gateways">
+                </div>
+                <div id="audio_settings">
+                    <fieldset>
+                        <legend>Audio Codecs</legend>
+                        <ul class="controls">
+                            {{tmpl(field_data.codecs, {selectedValues: data.gateways[0].codecs }) "#checkboxList"}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> 
+                <div id="caller_id_options">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="caller_id_options_type">Type</label>
+                                <input id="caller_id_options_type" name="caller_id_options.type" type="text" value="${data.caller_id_options.type}"/> 
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+        <ul class="button right resources">
+            <li><a class="resource-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="resource-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="resource-cancel" href="#">Cancel</a></li>
+        </ul>
+            
+        </form>
+    </div>
+</div>
