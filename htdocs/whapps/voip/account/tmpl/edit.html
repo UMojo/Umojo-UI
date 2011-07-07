@@ -101,6 +101,9 @@
             </div>
 
         <ul class="button right accounts">
+            {{if data.id}}
+                <li><a class="account-switch" href="#">Use account</a></li>
+            {{/if}}
             <li><a class="account-save" href="#">Save</a></li>
             {{if data.id}}
                 <li><a class="account-delete" href="#">Delete</a></li>

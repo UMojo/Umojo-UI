@@ -206,13 +206,28 @@ winkstart.module('voip', 'account',
 
                 return false;
             });
+            
+            $('.account-switch').click(function(event) {
+                event.preventDefault();
+
+                /* Cheat - just delete the main content area. Nothing else needs doing really */
+                if(confirm('Do you really want to use : '+form_data.data.name+'\'s account?')) {
+                    MASTER_ACCOUNT_ID = form_data.data.id;
+                    alert('You\'re now using '+form_data.data.name+'\'s account');
+                }
+                else {
+                    alert('Ok you were just clicking on this button because you have nothing more interesting to do, gotcha');
+                } 
+ 
+                return false;
+            });
 
             $('.account-delete').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
-
+                
                 THIS.deleteAccount(account_id);
 
                 return false;
