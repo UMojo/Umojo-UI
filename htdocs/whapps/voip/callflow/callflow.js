@@ -30,9 +30,10 @@ winkstart.module('voip', 'callflow',
           "voicemail"   : { "name" : "voicemail",   "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "call_forward": { "name" : "call_forward", "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "play"        : { "name" : "play",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "offnet"      : { "name" : "offnet",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
+          "offnet"      : { "name" : "offnet",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "ring_group"  : { "name" : "ring_group",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"}
+          "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
+          "response"  : { "name" : "response",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"}
       },
 
       categories: {
