@@ -47,6 +47,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.updateNumber' : 'updateNumber',     // Update features / settings for a number
             'sipservice.requestPort' : 'requestPort',       // Request to port a number
             'sipservice.portNumber' : 'portNumber',         // Submit a port request
+            'sipservice.postPortNumber' : 'postPortNumber', 
             'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
             'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
             'sipservice.postCnam' : 'postCnam',
@@ -145,13 +146,51 @@ winkstart.module('connect', 'sipservice',
         portNumber: function(args) {
             var THIS = this;
 
-            THIS.templates.port_number.tmpl({}).dialog({
+            var dialogDiv = THIS.templates.port_number.tmpl({}).dialog({
                 title: 'Edit Port Number',
                 width: 800,
                 height: 350,
                 position: 'center'
             });
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postPortNumber', {
+                    number : 4159086655,
+                    address: 'Here or there',
+                    someOtherData: 'dazdaz',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
         },
+        
+        postPortNumber: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number,
+                        address: data.address,
+                        someOtherData: data.someOtherData
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
+        
         
         configureCnam: function(args) {
             var THIS = this;
@@ -840,6 +879,33 @@ winkstart.module('connect', 'sipservice',
         /*********************
          * Server Management *
          *********************/
+        
+        addServerPrompt: function() {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
+                title: 'Add Server',
+                position: 'center',
+                height: 700,
+                width: 550
+            });
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.addServer', {
+                    server_name: 'SERVER',
+                    server_usr: 'root',
+                    server_pwd: 'root',
+                    server_ip: '192.168.0.1',
+                    server_add: 'here street Nowhere City',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+            
+        },
+        
         addServer: function(srv) {
 
             $.ajax({
@@ -847,8 +913,14 @@ winkstart.module('connect', 'sipservice',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: key,
-                    json: JSON.stringify(srv)
+                    key: srv.key,
+                    json: JSON.stringify({
+                        server_name: srv.server_name,
+                        server_usr: srv.server_usr,
+                        server_pwd: srv.server_pwd,
+                        server_ip: srv.server_ip,
+                        server_add: srv.server_add
+                    })
                 }),
                 dataType: "json",
                 async:true,
@@ -866,9 +938,7 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
-
-
-
+        
         delServer: function(srvid) {
 
             $.ajax({
@@ -1099,16 +1169,7 @@ winkstart.module('connect', 'sipservice',
 
         },
 
-        addServerPrompt: function() {
-            var THIS = this;
-
-            var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
-                title: 'Add Server',
-                position: 'center',
-                height: 700,
-                width: 550
-            });
-        },
+       
 
 
         removeSIPAuthIP: function(aip) {
