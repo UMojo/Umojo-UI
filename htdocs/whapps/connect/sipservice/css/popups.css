@@ -217,16 +217,17 @@
 .myform label {
     display: block;
     text-align: right;
-    /*width: 140px;/*
-    /*float: left;*/
+    width: 140px;
+    float: left;
+    margin-top: 8px;
     clear: both;
 }
 
 .myform input {
-    /*float: left;*/
+    float: left;
     font-size: 12px;
     padding: 4px 2px;
-    border: solid 1px #09f;
+    border: solid 1px #09F;
     width: 200px;
     margin: 2px 0 5px 10px;
     -webkit-border-radius: 5px;

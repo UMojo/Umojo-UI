@@ -1,22 +1,27 @@
 <div>
-
     <div class="popup container_resize">
         <div class="resize">
             <div class="stylized myform">
-                <p class="note_box">Please enter the city name to find related numbers.<br> If you prefer, you can specify the area code and up to 3 numbers of the local prefix.<br><br>For Toll Free number please enter 800, 888, 877, 866, 855 in the area code.<br><br>If a number has not been used before, only the first 6 numbers will be displayed.</p>
+                <p class="note_box">
+                    Please enter the city name to find related numbers.<br />
+                    If you prefer, you can specify the area code and up to 3 numbers of the local prefix.<br /><br />
+                    For Toll Free number please enter 800, 888, 877, 866, 855 in the area code.<br /><br />
+                    If a number has not been used before, only the first 6 numbers will be displayed.
+                </p>
                 <form name="form" method="post" action="#">
-                    <label>City</label><input type="text" name="name" id="name" />
-                    <label style="margin: 0 0 5px 110px">OR</label>
-                    <label>Area Code</label><input type="text" name="" id="" class="field_last" />
+                    <label for="name">City</label>
+                    <input type="text" name="name" id="name" />
+                    <label>OR</label>
+                    <label for="areacode">Area Code</label>
+                    <input type="text" name="areacode" id="areacode" class="field_last" />
                 </form>
                 <a class="ctr_btn clear" href="#">Search</a>
 
-                <h3>Results</h3><div class="search_icon"></div>
+                <h3>Results</h3>
+                <div class="search_icon"></div>
                 <br><br>
-                <div class="table1"></div><br>
-
+                <div class="table1"></div><br />
                 <p>Pick next number available in:</p>
-
                 <div class="table2"></div>
 
                 <p class="note_box">Each number you select will be added to your monthly invoice.</p>
@@ -24,5 +29,4 @@
             </div>
         </div>
     </div>
-
 </div>
