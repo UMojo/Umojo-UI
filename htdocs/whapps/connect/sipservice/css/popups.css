@@ -100,7 +100,8 @@
     clear: none;
     text-align: left;
     margin-left: 10px;
-    /*width: 300px;*/
+    margin-top: 4px;
+    width: 300px;
 }
 
 .popup .stack {
@@ -112,7 +113,7 @@
     clear: none;
     text-align: left;
     margin-left: 10px;
-    margin-top: -12px;
+    margin-top: -15px;
 }
 
 .popup .stack input[type="radio"] {
@@ -125,9 +126,7 @@
 }
 
 .popup .inline>label.failover {
-    /*text-align: right;*/
-    /*width: 180px;*/
-    /*float: left;*/
+    width: auto;
 }
 
 
@@ -285,7 +284,7 @@
 .popup .popup_content {
     padding: 0 10px;
     margin: 0 auto;
-    width: 500px;
+    width: 75%;
     clear: both;
 }
 

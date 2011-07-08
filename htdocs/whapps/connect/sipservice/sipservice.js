@@ -104,8 +104,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
                 title: 'Add/Search Numbers',
-                width: 800,
-                height: 350,
+                width: 535,
+                height: 565,
                 position: 'center'
             });
             
@@ -148,8 +148,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.port_number.tmpl({}).dialog({
                 title: 'Edit Port Number',
-                width: 800,
-                height: 350,
+                width: 650,
+                height: 750,
                 position: 'center'
             });
             
@@ -197,8 +197,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.edit_cnam.tmpl({}).dialog({
                 title: 'Edit Caller Id',
-                width: 660,
-                height: 220,
+                width: 580,
+                height: 250,
                 position: 'center'
             });
             
@@ -333,8 +333,8 @@ winkstart.module('connect', 'sipservice',
             var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
                 title: 'Edit Billing',
                 position: 'center',
-                height: 1000,
-                width: 500
+                height: 700,
+                width: 620
             });
             
             $(dialogDiv).find('.submit_btn').click(function() {
@@ -1000,7 +1000,7 @@ winkstart.module('connect', 'sipservice',
             var dialogDiv = THIS.templates.failover.tmpl({}).dialog({
                 title: 'Edit Failover',
                 position: 'center',
-                height: 440,
+                height: 360,
                 width: 520
             });
             

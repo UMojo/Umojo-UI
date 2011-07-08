@@ -10,42 +10,6 @@
     font-weight:normal
 }
 
-/* Credit card popup */
-
-#edit_billing .note_box clear span {
-    font-size: 12px;
-}
-
-#edit_billing h3 {
-    clear: both;
-}
-
-/* Edit Failover */
-
-#edit_failover .cancel {
-    display: none;
-}
-
-#edit_failover input {
-    width: auto;
-}
-
-#edit_failover span {
-    display: inline-block;
-    width: 180px;
-    margin-left: 5px;
-}
-
-#edit_failover .lg {
-    width: 425px;
-    padding: 1px 10px;
-}
-
-#edit_failover .inline {
-    height: 30px;
-    margin: 0 auto;
-}
-
 /* Edit Cnam */
 
 #edit_cnam p {
@@ -59,25 +23,8 @@
     margin: 5px -20px 20px 5px;
 }
 
-#edit_server h3 {
-    clear: both;
-    text-align: center;
-}
+/*Edit Number*/
 
-/* Port Number */
-
-#port_number input[type='checkbox'] {
-    width: 20px;
-    margin-left: 100px;
-}
-
-#port_number label {
-    padding-top: 4px;
-}
-
-#port_number .speclabel {
-    margin-left: 120px;
-    margin-top: 0;
-    margin-bottom: 0;
-    clear: none;
+#edit_number .or {
+    margin: 0 0 5px 110px;
 }
