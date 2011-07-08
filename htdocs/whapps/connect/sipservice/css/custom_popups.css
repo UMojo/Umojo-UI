@@ -22,8 +22,28 @@
 
 /* Edit Failover */
 
+#edit_failover .cancel {
+    display: none;
+}
+
 #edit_failover input {
-    width: 100px;
+    width: auto;
+}
+
+#edit_failover span {
+    display: inline-block;
+    width: 180px;
+    margin-left: 5px;
+}
+
+#edit_failover .lg {
+    width: 425px;
+    padding: 1px 10px;
+}
+
+#edit_failover .inline {
+    height: 30px;
+    margin: 0 auto;
 }
 
 /* Edit Cnam */
@@ -42,4 +62,22 @@
 #edit_server h3 {
     clear: both;
     text-align: center;
+}
+
+/* Port Number */
+
+#port_number input[type='checkbox'] {
+    width: 20px;
+    margin-left: 100px;
+}
+
+#port_number label {
+    padding-top: 4px;
+}
+
+#port_number .speclabel {
+    margin-left: 120px;
+    margin-top: 0;
+    margin-bottom: 0;
+    clear: none;
 }
