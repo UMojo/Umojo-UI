@@ -382,8 +382,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({
                 title: 'Add Credits',
-                width: 662,
-                height: 600,
+                width: 680,
+                height: 620,
                 position: 'center'
             });
 

@@ -25,7 +25,7 @@
     margin: 0 20px 9px;
     clear: both;
     letter-spacing: 0.05em;
-    /*float: left;*/
+    float: left;
 }
 
 .popup p {
@@ -48,6 +48,7 @@
     text-align: center;
     width: 81px;
     margin-bottom: 20px;
+    color: white;
 }
 
 .btn_wrapper {
@@ -78,6 +79,7 @@
     text-align: center;
     margin: 0 auto;
     margin-bottom: 20px;
+    color: white;
 }
 
 .popup .form {
@@ -126,7 +128,7 @@
 }
 
 .popup .inline>label.failover {
-    width: auto;
+    width: 174px;
 }
 
 
@@ -260,7 +262,7 @@
     color: #424242;
 }
 
-.popup a.popup_link:hover {
+.popup a.popup_link:hover, .ctr_btn:hover, a.submit_btn:hover {
     color: #05AFDC;
 }
 
