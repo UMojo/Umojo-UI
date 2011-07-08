@@ -11,6 +11,11 @@
     margin: 5px -20px 20px 5px;
 }
 
+#edit_server .lbl_server {
+   width: auto; 
+}
+
+
 /*Edit Number*/
 
 #edit_number .or {

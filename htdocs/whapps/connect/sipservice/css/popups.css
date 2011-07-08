@@ -317,7 +317,7 @@
 
 .popup .popup_cright {
     float: right;
-    width: 165px;
+    width: auto;
     text-align: center;
 }
 
