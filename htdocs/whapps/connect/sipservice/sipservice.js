@@ -103,7 +103,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
-                title: 'Edit Numbers',
+                title: 'Add/Search Numbers',
                 width: 800,
                 height: 350,
                 position: 'center'
