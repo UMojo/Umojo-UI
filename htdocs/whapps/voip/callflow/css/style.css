@@ -53,7 +53,7 @@
 #ws_callflow .callflow .app_btn { clear: both; display: block; height: 56px; width: 112px;}
 
 #ws_callflow .callflow .app_menu { background: url(images/icons_black/menu.png) no-repeat; }
-#ws_callflow .callflow .app_device { background: url(images/icons_black/answer.png) no-repeat; }
+#ws_callflow .callflow .app_answer { background: url(images/icons_black/answer.png) no-repeat; }
 #ws_callflow .callflow .app_play_tone { background: url(images/icons_black/play_tone.png) no-repeat; }
 #ws_callflow .callflow .app_voicemail { background: url(images/icons_black/voicemail.png) no-repeat; }
 #ws_callflow .callflow .app_auto_attendent { background: url(images/icons_black/auto_attendent.png) no-repeat; }
@@ -74,7 +74,7 @@
 #ws_callflow .callflow .icons_white.app_sm { width: 45px; height: 37px; margin: 4px; display: inline-block; margin-top: 16px;}
 
 #ws_callflow .callflow .icons_white.menu { background: url(images/icons_white/dial.png) no-repeat;}
-#ws_callflow .callflow .icons_white.device { background: url(images/icons_white/answer.png) no-repeat;}
+#ws_callflow .callflow .icons_white.device { background: url(images/icons_white/ring_device.png) no-repeat;}
 #ws_callflow .callflow .icons_white.playtone { background: url(images/icons_white/play_tone.png) no-repeat;}
 #ws_callflow .callflow .icons_white.voicemail { background: url(images/icons_white/voicemail.png) no-repeat;}
 #ws_callflow .callflow .icons_white.autoattendent { background: url(images/icons_white/auto_attendant.png) no-repeat;}
@@ -106,7 +106,11 @@
 #ws_callflow .callflow #icicons_whiteons_black .check_time { background: url(images/icons_white/check_time_of_day.png) no-repeat;}
 
 #ws_callflow .callflow .icons_black.menu { background: url(images/icons_black/menu.png) no-repeat; }
-#ws_callflow .callflow .icons_black.device { background: url(images/icons_black/answer.png) no-repeat; }
+#ws_callflow .callflow .icons_black.device { background: url(images/icons_black/ring_device.png) no-repeat; }
+#ws_callflow .callflow .icons_black.temporal_route { background: url(images/icons_black/check_time_of_day.png) no-repeat; }
+#ws_callflow .callflow .icons_black.offnet { background: url(images/icons_black/dial.png) no-repeat; }
+#ws_callflow .callflow .icons_black.call_forward { background: url(images/icons_black/transfer.png) no-repeat; }
+#ws_callflow .callflow .icons_black.play { background: url(images/icons_black/play_audio.png) no-repeat; }
 #ws_callflow .callflow .icons_black.playtone { background: url(images/icons_black/play_tone.png) no-repeat; }
 #ws_callflow .callflow .icons_black.voicemail { background: url(images/icons_black/voicemail.png) no-repeat; }
 #ws_callflow .callflow .icons_black.autoattendent { background: url(images/icons_black/auto_attendent.png) no-repeat; }
@@ -132,6 +136,7 @@
 #ws_callflow .callflow .icons_black.receivefax { background: url(images/icons_black/receive_fax.png) no-repeat; }
 #ws_callflow .callflow .icons_black.sendfax { background: url(images/icons_black/send_fax.png) no-repeat; }
 #ws_callflow .callflow .icons_black.runmacro { background: url(images/icons_black/run_macro.png) no-repeat; }
+#ws_callflow .callflow .icons_black.response { background: url(images/icons_black/run_macro.png) no-repeat; }
 #ws_callflow .callflow .icons_black.checkvariable { background: url(images/icons_black/check_variable.png) no-repeat; }
 #ws_callflow .callflow .icons_black.setvariable { background: url(images/icons_black/set_variable.png) no-repeat; }
 #ws_callflow .callflow .icons_black.setringback { background: url(images/icons_black/set_ringback.png) no-repeat; }
