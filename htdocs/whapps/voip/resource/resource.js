@@ -78,7 +78,8 @@ winkstart.module('voip', 'resource',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Resources'
+            label: 'Resources',
+            icon: 'resource'
         });
     },
 

@@ -62,7 +62,8 @@ winkstart.module('voip', 'callflow',
    function (args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Callflows'
+            label: 'Callflows',
+            icon: 'callflow'
         });
    },
    {

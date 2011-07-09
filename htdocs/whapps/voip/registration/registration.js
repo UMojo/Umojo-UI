@@ -41,7 +41,8 @@ winkstart.module('voip', 'registration',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Registrations'
+            label: 'Registrations',
+            icon: 'registration'
         });
     },
 

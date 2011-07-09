@@ -59,7 +59,8 @@ winkstart.module('voip', 'conference', {
 function(args) {
     winkstart.publish('subnav.add', {
         module: this.__module,
-        label: 'Conferences'
+        label: 'Conferences',
+        icon: 'conference'
     });
 },
 {	

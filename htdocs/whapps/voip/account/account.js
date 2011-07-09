@@ -65,7 +65,8 @@ winkstart.module('voip', 'account',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Accounts'
+            label: 'Accounts',
+            icon: 'account'
         });
     },
 

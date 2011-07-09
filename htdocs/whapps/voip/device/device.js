@@ -91,7 +91,8 @@ winkstart.module('voip', 'device',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Devices'
+            label: 'Devices',
+            icon: 'device'
         });
     },
 
