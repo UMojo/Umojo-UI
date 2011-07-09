@@ -1,4 +1,12 @@
-#ws_callflow #ws_cf_flow { width: 800px; overflow-x: auto; min-height: 400px; padding-top: 20px; text-align: center; }
+#callflow-view {
+    width: 80%;
+}
+
+#ws_callflow {
+    width: 100%;
+}
+
+#ws_callflow #ws_cf_flow { width: 80%; overflow-x: auto; min-height: 400px; padding-top: 20px; text-align: center; }
 #ws_callflow .control_bar { text-align: center; height: 50px; padding: 10px; }
 
 #ws_callflow .save { display: inline-block; text-align: center; border: solid 1px; width: 70px; padding: 6px; }

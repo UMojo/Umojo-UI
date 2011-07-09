@@ -85,6 +85,10 @@ winkstart.module('voip', 'callflow',
          THIS.renderTools();
 
          $(this.config.elements.save).click(function () { THIS.save(); }).hover(function () { $(this).addClass('active'); }, function () { $(this).removeClass('active'); });
+
+         $('.edit').live('click', function() {
+            $('<div>Loading you protoss!</div>').dialog();
+         });
       },
 
       editCallflow: function(data) {
@@ -99,6 +103,7 @@ winkstart.module('voip', 'callflow',
          }, function(json) {
             THIS._resetFlow();
             THIS.flow.root = THIS.buildFlow(json.data.flow, THIS.flow.root, 0);
+            THIS.flow.numbers = json.data.numbers;
             //console.log(THIS.flow.root);
             THIS.renderFlow();
          });
@@ -108,6 +113,7 @@ winkstart.module('voip', 'callflow',
          var THIS = this,
              branch = THIS.branch(json.module);
 
+         branch.data.data = json.data;
          branch.id = ++id;
          console.log('Recursing.... ' + json.module);
 
@@ -204,6 +210,7 @@ winkstart.module('voip', 'callflow',
 
             this.serialize = function () {
                var json = THIS._clone(this.data);
+               json.module = this.actionName;
                json.children = {};
                for (var i in this.children) json.children[i] = (this.children[i].serialize());
                return json;
@@ -255,7 +262,7 @@ winkstart.module('voip', 'callflow',
             var node;
             if ($(this).hasClass('root')) {
                $(this).removeClass('icons_black root');
-               node = THIS.templates.root.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+               node = THIS.templates.root.tmpl({numbers: THIS.flow.numbers.toString()});
             }
             else {
                node = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
@@ -411,7 +418,7 @@ winkstart.module('voip', 'callflow',
       save: function () {
          var flow = this.flow.root;
              cf = {
-            numbers : 'some number list',
+            numbers : this.flow.numbers,
             flow : flow.children.length > 0 ? flow.children[0].serialize() : { }
          }
 
@@ -446,7 +453,7 @@ winkstart.module('voip', 'callflow',
                     _.each(crossbar_data, function(elem){
                         new_list.push({
                             id: elem.id,
-                            title: elem.id
+                            title: elem.numbers.toString()
                         });
                     });
                 }

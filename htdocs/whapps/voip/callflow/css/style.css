@@ -37,7 +37,7 @@
 #ws_callflow .callflow #add_new_number .add_number { float: right; font-size: 12px; padding: 18px 35px 0 0;}
 
 #ws_callflow .callflow .root { background: url(images/bg_callFlow_num.png) no-repeat; width: 239px; height: 152px;}
-#ws_callflow .callflow .root h2 { padding: 5px 0 10px; text-align: center;}
+#ws_callflow .callflow .root h2 { padding: 10px 0 12px; text-align: center;}
 #ws_callflow .callflow .root .number_list { height: 86px; margin: auto; overflow: auto; width: 180px;}
 #ws_callflow .callflow .root .number_list ul { padding-left: 10px;}
 #ws_callflow .callflow .root .number_list ul li { font-size: 12px; padding: 5px 0;}
