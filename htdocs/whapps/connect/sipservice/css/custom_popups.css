@@ -1,0 +1,29 @@
+/* Edit Cnam */
+
+#edit_cnam p {
+    font-weight:normal;
+}
+
+/* Edit Server */
+
+#edit_server .form p {
+    float:left; 
+    margin: 5px -20px 20px 5px;
+}
+
+#edit_server .lbl_server {
+   width: auto; 
+}
+
+
+/*Edit Number*/
+
+#edit_number .or {
+    margin: 0 0 5px 110px;
+}
+
+
+#edit_billing .lbl_fill {
+    
+    margin-top: 2px;
+}

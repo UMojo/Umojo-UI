@@ -9,7 +9,7 @@
 
 .popup .resize {
     background-color: #F9F9F9;
-    border: 4px solid #A6A6A6;
+    /*border: 4px solid #A6A6A6;*/
 }
 
 .popup h2 {
@@ -48,6 +48,11 @@
     text-align: center;
     width: 81px;
     margin-bottom: 20px;
+    color: white;
+}
+
+.btn_wrapper {
+    text-align: center;
 }
 
 .popup a.register_btn {
@@ -74,6 +79,7 @@
     text-align: center;
     margin: 0 auto;
     margin-bottom: 20px;
+    color: white;
 }
 
 .popup .form {
@@ -96,7 +102,8 @@
     clear: none;
     text-align: left;
     margin-left: 10px;
-    /*width: 300px;*/
+    margin-top: 4px;
+    width: 300px;
 }
 
 .popup .stack {
@@ -108,7 +115,7 @@
     clear: none;
     text-align: left;
     margin-left: 10px;
-    margin-top: -12px;
+    margin-top: -15px;
 }
 
 .popup .stack input[type="radio"] {
@@ -121,9 +128,7 @@
 }
 
 .popup .inline>label.failover {
-    /*text-align: right;*/
-    /*width: 180px;*/
-    float: left;
+    width: 174px;
 }
 
 
@@ -180,7 +185,7 @@
     background-image: url("../images/cancel_btn.png");
     background-position: 0 0;
     display: block;
-    float: right;
+    /*float: right;*/
     height: 15px;
     width: 15px;
     margin: -28px 5px 0 0;
@@ -223,7 +228,7 @@
     float: left;
     font-size: 12px;
     padding: 4px 2px;
-    border: solid 1px #09f;
+    border: solid 1px #09F;
     width: 200px;
     margin: 2px 0 5px 10px;
     -webkit-border-radius: 5px;
@@ -257,7 +262,7 @@
     color: #424242;
 }
 
-.popup a.popup_link:hover {
+.popup a.popup_link:hover, .ctr_btn:hover, a.submit_btn:hover {
     color: #05AFDC;
 }
 
@@ -281,7 +286,7 @@
 .popup .popup_content {
     padding: 0 10px;
     margin: 0 auto;
-    width: 500px;
+    width: 75%;
     clear: both;
 }
 
@@ -293,7 +298,7 @@
 .popup p.note_box {
     background-color: #E7E7E7;
     padding: 15px 10px;
-    font-size: 10px;
+    font-size: 12px;
     line-height:15px;
     margin-bottom: 20px;
 }
@@ -312,7 +317,7 @@
 
 .popup .popup_cright {
     float: right;
-    width: 165px;
+    width: auto;
     text-align: center;
 }
 
@@ -407,9 +412,11 @@
 }
 
 .box1 p, .box2 p, .box3 p, .box4 p, .box5 p, .box6 p {
-    float: left;
-    padding: 0;
-    margin: 0;
+    text-align: left;
+    padding: 0 20px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 18px;
 }
 
 .box1 input[type="radio"], .box2 input[type="radio"], .box3 input[type="radio"], .box4 input[type="radio"], .box5 input[type="radio"], .box6 input[type="radio"] {

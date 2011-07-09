@@ -77,57 +77,141 @@
 }
 
 .icon.account {
-	background-position: 0 -357px;
+    background-position: 0 -357px;
 }
 
 .icon.cc {
-	background-position: -577px -357px;
+    background-position: -577px -357px;
 }
 
 .icon.billing {
-	background-position: -769px -357px;
+    background-position: -769px -357px;
 }
 
 .icon.location {
-	background-position: -32px -260px;
+    background-position: -32px -260px;
 }
 
 .icon.limit {
-	background-position: -830px -290px;
+    background-position: -830px -290px;
 }
 
 .icon.charge {
-	background-position: -192px -356px;
+    background-position: -192px -356px;
 }
 
 .icon.monitoring {
-	background-position: -321px -419px;
+    background-position: -321px -419px;
 }
 
 .icon.robot {
-	background-position: -736px -387px;
+    background-position: -736px -387px;
 }
 
 .icon.rightarrow {
-	background-position: -860px -2px;
+    background-position: -860px -2px;
 }
 
 .icon.cart {
-	background-position: -700px -292px;
+    background-position: -700px -292px;
+    margin: -6px 15px 10px -15px;
 }
 
 .icon.authentication {
-	background-position: 0 -290px;
+    background-position: 0 -290px;
 }
 
 .icon.recharge {
-	background-position: -473px 0;
+    background-position: -473px 0;
+    margin: -12px 15px 10px -15px;
 }
 
 .icon.dollar {
-	background-position: -960px -419px;
+    background-position: -960px -419px;
+    margin: -12px 15px 10px -15px;
 }
 
 .icon.search {
-	background-position: -895px -424px;
+    background-position: -895px -424px;
+}
+
+.account_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: 0 -357px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -7px 15px 10px -20px;
+}
+
+.cc_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -577px -357px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -7px 15px 10px -15px;
+}
+
+.billing_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -769px -357px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -10px 15px 10px -15px;
+}
+
+.authentication_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: 0 -290px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -12px 15px 10px -15px;
+}
+
+.location_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -32px -260px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -10px 15px 10px -20px;
+}
+
+.limit_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -830px -290px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -12px 15px 10px -18px;
+}
+
+.monitoring_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -321px -419px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -10px 15px 10px -15px;
+}
+
+.robot_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -736px -387px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -10px 15px 10px -15px;
+}
+
+.search_icon {
+    background: url(../images/Icons_32x32_Blue.png);
+    background-position: -895px -424px;
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin: -6px 15px 10px -15px;
 }

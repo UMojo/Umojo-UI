@@ -5,6 +5,7 @@ winkstart.module('connect', 'sipservice',
         css: [
         'css/sipservice.css',
         'css/style.css',
+        'css/custom_popups.css',
         'css/popups.css'
         ],
 
@@ -40,29 +41,44 @@ winkstart.module('connect', 'sipservice',
             'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
             'sipservice.findNumber' : 'findNumber',         // Find new numbers
             'sipservice.addNumber' : 'addNumber',           // Buy/add a number to this account
+            'sipservice.postNumber': 'postNumber',
             'sipservice.cancelNumber' : 'cancelNumber',     // Cancel a number from the account
             'sipservice.mapNumber' : 'mapNumber',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
             'sipservice.updateNumber' : 'updateNumber',     // Update features / settings for a number
             'sipservice.requestPort' : 'requestPort',       // Request to port a number
             'sipservice.portNumber' : 'portNumber',         // Submit a port request
+            'sipservice.postPortNumber' : 'postPortNumber', 
             'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
             'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
+            'sipservice.postCnam' : 'postCnam',
 
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
+            'sipservice.postCredit' : 'postCredit',
             'sipservice.changeRecurring' : 'changeRecurring',
+            'sipservice.editBilling' : 'editBilling',
+            'sipservice.postBilling' : 'postBilling',
 
             /* Server Management */
             'sipservice.getServers' : 'getServers',         // Get server list
             'sipservice.addServer' : 'addServer',           // Add a server
+            'sipservice.addServerPrompt' : 'addServerPrompt',
             'sipservice.deleteServer' : 'deleteServer',     // Delete a server
             'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
+            'sipservice.editFailover' : 'editFailover',
+            'sipservice.postFailover' : 'postFailover',
 
+
+            // Trunk Management
+            'sipservice.editTrunks': 'editTrunks',
 
             /* */
             'sipservice.refreshDIDs' : 'refreshDIDs',
             'sipservice.refreshServices' : 'refreshServices',
-            'sipservice.refreshServers' : 'refreshServers'
+            'sipservice.refreshServers' : 'refreshServers',
+            
+            'sipservice.input_css' : 'input_css'
+            
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -86,6 +102,151 @@ winkstart.module('connect', 'sipservice',
 
     /* Define the functions for this module */
     {
+        addNumber: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
+                title: 'Add/Search Numbers',
+                width: 535,
+                height: 565,
+                position: 'center'
+            });
+            
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.ctr_btn').click(function() {
+                winkstart.publish('sipservice.postNumber', {
+                    number : 4159086655,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+        
+        postNumber: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
+        
+        portNumber: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.port_number.tmpl({}).dialog({
+                title: 'Edit Port Number',
+                width: 650,
+                height: 750,
+                position: 'center'
+            });
+            
+            $(".datepicker").datepicker();
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postPortNumber', {
+                    number : 4159086655,
+                    address: 'Here or there',
+                    someOtherData: 'dazdaz',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+        
+        postPortNumber: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number,
+                        address: data.address,
+                        someOtherData: data.someOtherData
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
+        
+        
+        configureCnam: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.edit_cnam.tmpl({}).dialog({
+                title: 'Edit Caller Id',
+                width: 580,
+                height: 250,
+                position: 'center'
+            });
+            
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postCnam', {
+                    caller_id : 500,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+            
+        },
+        
+        postCnam: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        caller_id: data.caller_id
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
+
         refreshDIDs: function(numbers) {
             var THIS = this;
 
@@ -174,41 +335,49 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
-
-        addCredit: function() {
+        
+        editBilling: function() {
             var THIS = this;
 
-            var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
-
-            $('#dialog a.ctr_btn', dialogDiv).click(function() {
-                winkstart.publish('sipservice.addCredits', {
-                    credit_amount : 5,
+            //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
+            var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
+                title: 'Add Billing Account',
+                position: 'center',
+                height: 700,
+                width: 620
+            });
+            
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postBilling', {
+                    card_number : 8969756879,
+                    car_name: 'John Doe',
+                    address: '123, Some Street NoWhereCity Ca',
                     success : function() {
                         dialogDiv.dialog('close');
                     }
                 });
+               
             });
-
-            /*popup($('#tmpl_add_prepay').tmpl( {} ) , {
-                title: 'Add Credits'
-            }	);*/
         },
-
-        addCredits: function(data) {
+        
+        postBilling: function(data) {
             $.ajax({
-                url: "/api/addPrepayCredits",
+                url: "#",
                 global: true,
                 type: "POST",
                 data: ({
                     key: data.key,
                     json: JSON.stringify({
-                        addCredits: data.credit_amount
+                        card_number: data.card_number,
+                        car_name: data.car_name,
+                        address: data.address
                     })
                 }),
                 dataType: "json",
                 async:true,
                 success: function(msg){
-
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs);
                     }
@@ -217,6 +386,34 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
+        
+        
+
+        addCredit: function() {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({
+                title: 'Add Credits',
+                width: 680,
+                height: 620,
+                position: 'center'
+            });
+
+            winkstart.publish('sipservice.input_css');
+
+            $(dialogDiv).find('.ctr_btn').click(function() {
+                winkstart.publish('sipservice.postCredit', {
+                    credit_amount : 5,
+                    creditCard: 73928372930,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+
+        
 
 
         /******************
@@ -621,10 +818,12 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-        setTrunkPrompt: function(args) {
-            popup($('#tmpl_set_trunk_qty').tmpl( {} ) , {
-                title: 'Set Trunks'
-            }	);
+        editTrunks: function(args) {
+            var THIS = this;
+
+            THIS.templates.edit_trunks.tmpl({}).dialog({
+                title: 'Edit Trunks'
+            });
         },
 
 
@@ -694,6 +893,35 @@ winkstart.module('connect', 'sipservice',
         /*********************
          * Server Management *
          *********************/
+        
+        addServerPrompt: function() {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
+                title: 'Add Server',
+                position: 'center',
+                height: 700,
+                width: 550
+            });
+            
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.addServer', {
+                    server_name: 'SERVER',
+                    server_usr: 'root',
+                    server_pwd: 'root',
+                    server_ip: '192.168.0.1',
+                    server_add: 'here street Nowhere City',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+            
+        },
+        
         addServer: function(srv) {
 
             $.ajax({
@@ -701,8 +929,14 @@ winkstart.module('connect', 'sipservice',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: key,
-                    json: JSON.stringify(srv)
+                    key: srv.key,
+                    json: JSON.stringify({
+                        server_name: srv.server_name,
+                        server_usr: srv.server_usr,
+                        server_pwd: srv.server_pwd,
+                        server_ip: srv.server_ip,
+                        server_add: srv.server_add
+                    })
                 }),
                 dataType: "json",
                 async:true,
@@ -720,9 +954,7 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
-
-
-
+        
         delServer: function(srvid) {
 
             $.ajax({
@@ -777,7 +1009,52 @@ winkstart.module('connect', 'sipservice',
             }
             );
         },
+        
+        editFailover: function() {
+            var THIS = this;
 
+            var dialogDiv = THIS.templates.failover.tmpl({}).dialog({
+                title: 'Edit Failover',
+                position: 'center',
+                height: 360,
+                width: 520
+            });
+            
+            winkstart.publish('sipservice.input_css');
+            
+            $(dialogDiv).find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.postFailover', {
+                    number : 4159086655,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
+        
+        postFailover: function(data) {
+            $.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    key: data.key,
+                    json: JSON.stringify({
+                        number: data.number
+                    })
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );
+        },
 
         //prompts
 
@@ -910,21 +1187,7 @@ winkstart.module('connect', 'sipservice',
 
         },
 
-
-
-        addServerPrompt: function(info) {
-            if (! info) {
-                info = new Object();
-            }
-            popup($('#tmpl_add_server').tmpl({
-                'fa':info.fa || {}
-            }), {
-                title: 'Add Server'
-            });
-            $('#addSRV_button').click(function() {
-                addServer($('#add_server_form').serializeObject());
-            });
-        },
+       
 
 
         removeSIPAuthIP: function(aip) {
@@ -1074,6 +1337,26 @@ winkstart.module('connect', 'sipservice',
             }
             return false;
         },
+        
+        input_css:function(){
+            $('input[type="text"]').addClass("idleField");
+            $('input[type="text"]').focus(function() {
+                $(this).removeClass("idleField").addClass("focusField");
+                if (this.value == this.defaultValue){
+                    this.value = '';
+                }
+                if(this.value != this.defaultValue){
+                    this.select();
+                }
+            });
+            $('input[type="text"]').blur(function() {
+                $(this).removeClass("focusField").addClass("idleField");
+                if ($.trim(this.value) == ''){
+                    this.value = (this.defaultValue ? this.defaultValue : '');
+                }
+            });
+            
+        },
 
         /* WHAT IS THIS? */
 
@@ -1105,7 +1388,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
 
             // Prepare the dialog box for use
-            $('#dialog').dialog({autoOpen : false});
+            //$('#dialog').dialog({autoOpen : false});
 
 
             /* Draw our base template into the window */
@@ -1130,15 +1413,45 @@ winkstart.module('connect', 'sipservice',
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);
+            
+            $('#t_m_add_server').click(function() {
+                winkstart.publish('sipservice.addServerPrompt');
+            });
+
+            // This is where we define our click listeners (NOT INLINE IN THE HTML) 
+            $('#ws-content #add_prepay_button').click(function() {
+                winkstart.publish('sipservice.addCredit');
+            });
+
+            $('.trunk_detail img').click(function() {
+                winkstart.publish('sipservice.editTrunks');
+            });
+
+            $('#tmp_add_number').click(function() {
+                winkstart.publish('sipservice.addNumber');
+            });
+            
+            $('#tmp_edit_billing').click(function() {
+                winkstart.publish('sipservice.editBilling');
+            });
+            
+            $('#tmp_edit_failover').click(function() {
+                winkstart.publish('sipservice.editFailover');
+            });
+            
+            $('#tmp_edit_portNumber').click(function() {
+                winkstart.publish('sipservice.portNumber');
+            });
+
+            $('#tmp_edit_cnam').click(function() {
+                winkstart.publish('sipservice.configureCnam');
+            });
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
-
-            $('#ws-content #add_prepay_button').click(function() {
-                winkstart.publish('sipservice.addCredit');
-            });
+            
         }
     } // End function definitions
 
