@@ -206,6 +206,7 @@ winkstart.module('voip', 'registration',
         ];
         
         winkstart.table.create('registration', $('#registration-grid'), columns);
+        $('#registration-grid_filter input[type=text]').first().focus();
     },
     }
 );

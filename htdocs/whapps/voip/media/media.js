@@ -180,6 +180,7 @@ winkstart.module('voip', 'media',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
+            $("#display_name").focus();
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.media-save').click(function(event) {

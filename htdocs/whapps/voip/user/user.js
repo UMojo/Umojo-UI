@@ -200,6 +200,7 @@ winkstart.module('voip', 'user',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
+            $("#first_name").focus();
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.user-save').click(function(event) {

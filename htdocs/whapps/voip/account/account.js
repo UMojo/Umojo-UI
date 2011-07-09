@@ -176,7 +176,6 @@ winkstart.module('voip', 'account',
             
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editAccount.tmpl(form_data).appendTo( $('#account-view') );
-
             winkstart.cleanForm();
 
             /* Initialize form field validation */
@@ -184,6 +183,7 @@ winkstart.module('voip', 'account',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
+            $('#name').focus();
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.account-save').click(function(event) {

@@ -189,6 +189,7 @@ winkstart.module('voip', 'vmbox',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
+            $("#name").focus();
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.vmbox-save').click(function(event) {
