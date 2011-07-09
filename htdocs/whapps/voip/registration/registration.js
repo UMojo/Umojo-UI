@@ -41,19 +41,12 @@ winkstart.module('voip', 'registration',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Registrations'
+            label: 'Registrations',
+            icon: 'registration'
         });
     },
 
     {
-        windowOpen: function(data) {
-            var stringToDisplay = ' ';
-            stringToDisplay += data.id + ' ';        
-            stringToDisplay += data['App-name'] + ' ';        
-            stringToDisplay += data['From-User'] + ' ';       
-            alert(stringToDisplay); 
-        },
-
          /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
          * on them. Also register resources.
@@ -185,7 +178,7 @@ winkstart.module('voip', 'registration',
                         stringToDisplay += '\\nDate: ' + humanDate;
                         stringToDisplay += '\\nTime: ' + humanTime;
 
-                        winkstart.table.registration.fnAddData([reply.data.username, humanDate, humanTime, stringToDisplay]);
+                        winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
                     });
                 });
             });
@@ -200,6 +193,8 @@ winkstart.module('voip', 'registration',
         var THIS = this;
         var columns = [
             { 'sTitle': 'Username' },
+            { 'sTitle': 'IP' },
+            { 'sTitle': 'Port' },
             { 'sTitle': 'Date' },
             { 'sTitle': 'Time' },
             { 'sTitle': 'Details',

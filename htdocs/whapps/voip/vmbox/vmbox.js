@@ -67,7 +67,8 @@ winkstart.module('voip', 'vmbox',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Voicemail Boxes'
+            label: 'Voicemail Boxes',
+            icon: 'vmbox'
         });
     },
 

@@ -195,14 +195,12 @@ ul.universal_nav li a.logout {
 }
 
 .sub_nav ul li {
-	position: relative;
 	float: left;
 }
 
 .sub_nav ul li a {
-	position: relative;
-	margin: 0 15px;
-	display: block;
+	margin: 0px 15px 0px 0px;
+	display: inline-block;
 	height: 30px;
 	z-index: 500;
 	line-height: 30px;

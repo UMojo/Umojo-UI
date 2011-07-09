@@ -25,12 +25,12 @@ winkstart.module('core', 'subnav', {
                 winkstart.log('Click on subnav: Calling ', module_name + '.deactivate');
                 winkstart.publish(module_name + '.deactivate', {});
             }
-
             winkstart.log('Click on subnav: Calling ', $(this).attr('module-name') + '.activate');
 
             winkstart.publish($(this).attr('module-name') + '.activate', {});
 
             $('.sub_nav li').removeClass('selected');
+            $(this).addClass('selected');
             return false;
         });
     },

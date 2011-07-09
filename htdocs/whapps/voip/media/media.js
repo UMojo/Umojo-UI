@@ -58,7 +58,8 @@ winkstart.module('voip', 'media',
     function(args) {
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Media'
+            label: 'Media',
+            icon: 'media'
         });
     },
 

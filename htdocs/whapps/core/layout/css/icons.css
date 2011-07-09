@@ -12,14 +12,14 @@
 */
 
 .icon {
-    display: block;
-    float: left;
+    display: inline-block;
     width: 32px;
     height: 32px;
     margin-top: -1px;
     padding-right: 6px;
     background-image: url(../images/icons_32x32_gradient.png); /* This is the default - darkgrey */
     background-repeat: no-repeat;
+    vertical-align: middle;
 }
 
 /* Color overrides */
@@ -54,6 +54,48 @@
 .icon.yellow {
     background-image: url(../images/icons_32x32_yellow.png);
 }
+/************** ICONS SUBNAV *****/
+
+.icon.account {
+	background-position: 0 -357px;
+}
+
+.icon.callflow {
+    background-position: -160px -5px;
+}
+
+.icon.conference {
+    background-position: -320px -165px;
+}
+
+.icon.device {
+    background-position: -512px -165px;
+}
+
+.icon.media {
+    background-position: -320px -293px;
+}
+
+.icon.menu {
+    background-position: -640px -165px;
+}
+
+.icon.registration {
+    background-position: -576px -229px;
+}
+
+.icon.resource {
+    background-position: 0 -229px ;
+}
+
+.icon.user {
+    background-position: -544px -197px;
+}
+
+.icon.vmbox {
+    background-position: -896px -165px;
+}
+
 
 /************** ICONS ************/
 .icon.phone {
@@ -76,12 +118,12 @@
     background-position: -512px -352px;
 }
 
-.icon.account {
-    background-position: 0 -357px;
-}
-
 .icon.cc {
     background-position: -577px -357px;
+}
+
+.icon.cdr {
+	background-position: -192px -224px;
 }
 
 .icon.billing {
