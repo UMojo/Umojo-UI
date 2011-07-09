@@ -75,7 +75,10 @@ winkstart.module('connect', 'sipservice',
             /* */
             'sipservice.refreshDIDs' : 'refreshDIDs',
             'sipservice.refreshServices' : 'refreshServices',
-            'sipservice.refreshServers' : 'refreshServers'
+            'sipservice.refreshServers' : 'refreshServers',
+            
+            'sipservice.input_css' : 'input_css'
+            
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -331,11 +334,13 @@ winkstart.module('connect', 'sipservice',
 
             //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
             var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
-                title: 'Edit Billing',
+                title: 'Add Billing Account',
                 position: 'center',
                 height: 700,
                 width: 620
             });
+            
+            winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postBilling', {
@@ -1319,6 +1324,26 @@ winkstart.module('connect', 'sipservice',
             }
             return false;
         },
+        
+        input_css:function(){
+            $('input[type="text"]').addClass("idleField");
+            $('input[type="text"]').focus(function() {
+                $(this).removeClass("idleField").addClass("focusField");
+                if (this.value == this.defaultValue){
+                    this.value = '';
+                }
+                if(this.value != this.defaultValue){
+                    this.select();
+                }
+            });
+            $('input[type="text"]').blur(function() {
+                $(this).removeClass("focusField").addClass("idleField");
+                if ($.trim(this.value) == ''){
+                    this.value = (this.defaultValue ? this.defaultValue : '');
+                }
+            });
+            
+        },
 
         /* WHAT IS THIS? */
 
@@ -1413,6 +1438,7 @@ winkstart.module('connect', 'sipservice',
                 label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
+            
         }
     } // End function definitions
 
