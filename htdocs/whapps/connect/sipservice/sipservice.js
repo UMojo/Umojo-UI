@@ -112,6 +112,8 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
             
+            winkstart.publish('sipservice.input_css');
+            
             $(dialogDiv).find('.ctr_btn').click(function() {
                 winkstart.publish('sipservice.postNumber', {
                     number : 4159086655,
@@ -157,6 +159,7 @@ winkstart.module('connect', 'sipservice',
             });
             
             $(".datepicker").datepicker();
+            winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postPortNumber', {
@@ -206,6 +209,8 @@ winkstart.module('connect', 'sipservice',
                 height: 250,
                 position: 'center'
             });
+            
+            winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postCnam', {
@@ -393,6 +398,8 @@ winkstart.module('connect', 'sipservice',
                 height: 620,
                 position: 'center'
             });
+
+            winkstart.publish('sipservice.input_css');
 
             $(dialogDiv).find('.ctr_btn').click(function() {
                 winkstart.publish('sipservice.postCredit', {
@@ -897,6 +904,8 @@ winkstart.module('connect', 'sipservice',
                 width: 550
             });
             
+            winkstart.publish('sipservice.input_css');
+            
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.addServer', {
                     server_name: 'SERVER',
@@ -1010,6 +1019,8 @@ winkstart.module('connect', 'sipservice',
                 height: 360,
                 width: 520
             });
+            
+            winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postFailover', {
