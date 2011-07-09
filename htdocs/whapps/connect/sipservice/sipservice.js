@@ -156,6 +156,8 @@ winkstart.module('connect', 'sipservice',
                 position: 'center'
             });
             
+            $(".datepicker").datepicker();
+            
             $(dialogDiv).find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postPortNumber', {
                     number : 4159086655,
