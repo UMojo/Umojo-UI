@@ -99,23 +99,23 @@
 
 /************** ICONS ************/
 .icon.phone {
-    background-position: -512px -160px;
+    background-position: -512px -165px;
 }
 
 .icon.sip {
-    background-position: -704px -160px;
+    background-position: -704px -165px;
 }
 
 .icon.audio {
-    background-position: -320px -288px;
+    background-position: -320px -293px;
 }
 
 .icon.video {
-    background-position: -96px -384px;
+    background-position: -96px -389px;
 }
 
 .icon.fax {
-    background-position: -512px -352px;
+    background-position: -512px -357px;
 }
 
 .icon.cc {
@@ -123,7 +123,7 @@
 }
 
 .icon.cdr {
-	background-position: -192px -224px;
+	background-position: -192px -229px;
 }
 
 .icon.billing {
