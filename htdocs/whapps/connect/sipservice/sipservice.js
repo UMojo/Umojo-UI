@@ -1504,7 +1504,9 @@ winkstart.module('connect', 'sipservice',
                                    },
                                    "estimated_completion": "2011-07-30",
                                    "tracking": "2525"
-                               }
+                               },
+                               "caller_id" : {},
+                               "e911_info" : {}
                            }
                        },
                        "monitor": {
@@ -1547,14 +1549,24 @@ winkstart.module('connect', 'sipservice',
                        },
                        "DIDs": {
                            "+14152000098": {
+                               "caller_id" : {},
+                               "e911_info" : {}
                            },
                            "+14152000052": {
+                               "caller_id" : {},
+                               "e911_info" : {}
                            },
                            "+18888730012": {
+                               "caller_id" : {},
+                               "e911_info" : {}
                            },
                            "+14152000053": {
+                               "caller_id" : {},
+                               "e911_info" : {}
                            },
                            "+14152000054": {
+                               "caller_id" : {},
+                               "e911_info" : {}
                            }
                        },
                        "monitor": {
