@@ -419,8 +419,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.edit_auth.tmpl({}).dialog({
                 title: 'Edit Auth',
-                width: 680,
-                height: 620,
+                width: 500,
+                height: 500,
                 position: 'center'
             });
 
