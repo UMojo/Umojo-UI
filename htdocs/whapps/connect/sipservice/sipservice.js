@@ -128,7 +128,7 @@ winkstart.module('connect', 'sipservice',
             var dialogDiv = THIS.templates.recover_password.tmpl({}).dialog({
                 title: 'Recover Password',
                 width: 535,
-                height: 565,
+                height: 200,
                 position: 'center'
             });
             
