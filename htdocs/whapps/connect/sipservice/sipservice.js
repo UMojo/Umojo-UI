@@ -30,6 +30,8 @@ winkstart.module('connect', 'sipservice',
             edit_numbers: 'tmpl/edit_numbers.html',
             add_credits: 'tmpl/add_credits.html',
             edit_billing: 'tmpl/edit_billing.html',
+            recover_password: 'tmpl/recover_password.html',
+            login: 'tmpl/login.html',
             edit_cnam: 'tmpl/edit_cnam.html'
         },
 
@@ -78,6 +80,10 @@ winkstart.module('connect', 'sipservice',
             'sipservice.refreshServers' : 'refreshServers',
             'sipservice.editAuth' : 'editAuth',
             
+            'sipservice.login' : 'login',
+            'sipservice.recover_password' : 'recover_password',
+            
+            
             'sipservice.input_css' : 'input_css'
             
         },
@@ -103,6 +109,32 @@ winkstart.module('connect', 'sipservice',
 
     /* Define the functions for this module */
     {
+        login: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.login.tmpl({}).dialog({
+                title: 'Login',
+                width: 535,
+                height: 565,
+                position: 'center'
+            });
+            
+            winkstart.publish('sipservice.input_css');
+        },
+        
+        recover_password: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.recover_password.tmpl({}).dialog({
+                title: 'Recover Password',
+                width: 535,
+                height: 565,
+                position: 'center'
+            });
+            
+            winkstart.publish('sipservice.input_css');
+        },
+        
         addNumber: function(args) {
             var THIS = this;
 
@@ -1471,6 +1503,14 @@ winkstart.module('connect', 'sipservice',
             
             $('#tmp_edit_auth').click(function() {
                 winkstart.publish('sipservice.editAuth');
+            });
+            
+            $('#tmp_login').click(function() {
+                winkstart.publish('sipservice.login');
+            });
+            
+            $('#tmp_recover_password').click(function() {
+                winkstart.publish('sipservice.recover_password');
             });
 
             winkstart.publish('layout.updateLoadedModule', {
