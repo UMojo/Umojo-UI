@@ -1504,9 +1504,7 @@ winkstart.module('connect', 'sipservice',
                                    },
                                    "estimated_completion": "2011-07-30",
                                    "tracking": "2525"
-                               },
-                               "caller_id" : {},
-                               "e911_info" : {}
+                               }
                            }
                        },
                        "monitor": {
@@ -1540,33 +1538,26 @@ winkstart.module('connect', 'sipservice',
                            },
                            "max_trunks": false,
                            "inbound_format": "NPANXXXXXX",
-                           "failover": {
-                               "type": "",
-                               "uri": ""
-                           },
                            "international": true,
                            "enabled": true
                        },
                        "DIDs": {
                            "+14152000098": {
-                               "caller_id" : {},
-                               "e911_info" : {}
                            },
                            "+14152000052": {
-                               "caller_id" : {},
-                               "e911_info" : {}
                            },
                            "+18888730012": {
-                               "caller_id" : {},
+                               "caller_id" : {
+                                   'cid_name' : 'test'
+                               },
                                "e911_info" : {}
                            },
                            "+14152000053": {
-                               "caller_id" : {},
-                               "e911_info" : {}
+                               "failover": {
+                                   "e164" : "+14158867902"
+                               }
                            },
                            "+14152000054": {
-                               "caller_id" : {},
-                               "e911_info" : {}
                            }
                        },
                        "monitor": {
@@ -1605,7 +1596,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             winkstart.log('Refreshing Services...');
-            //THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
+            THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
         },
 
         refreshServers: function(servers) {

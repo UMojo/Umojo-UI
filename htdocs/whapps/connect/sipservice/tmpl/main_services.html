@@ -17,7 +17,7 @@
 
     {{if account.billing }}
     <div class="info">
-        <span class="e_detail">Default card: <span class="cc_number">${acct.account.billing.cards[0]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
+        <span class="e_detail">Default card: <span class="cc_number">${account.billing.cards[0]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
     </div>
 
     {{else}}
@@ -29,8 +29,8 @@
 
     <div class="addl">
 
-        {{if account.billing }}
-        <span class="cc_back">Backup card: <span class="cc_number">acct.account.billing.cards[1]['num']</span> <span class="edit"><a href="#">[edit]</a></span></span>
+        {{if account.billing and account.billing.cards[1] }}
+        <span class="cc_back">Backup card: <span class="cc_number">${account.billing.cards[1]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
         {{/if}}
     </div>
 
