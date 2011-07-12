@@ -114,8 +114,8 @@ winkstart.module('connect', 'sipservice',
 
             var dialogDiv = THIS.templates.login.tmpl({}).dialog({
                 title: 'Login',
-                width: 535,
-                height: 565,
+                width: 540,
+                height: 320,
                 position: 'center'
             });
             
