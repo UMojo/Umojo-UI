@@ -102,7 +102,7 @@
     color: #474747;
     text-decoration: none;
     background-color:#989898;
-    border-right: 1px solid #7a7a7a;
+    /*border-right: 1px solid #7a7a7a;*/
 }
 
 .list-panel-anchor ul li a:hover{
