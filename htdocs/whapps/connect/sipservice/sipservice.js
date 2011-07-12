@@ -76,6 +76,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.refreshDIDs' : 'refreshDIDs',
             'sipservice.refreshServices' : 'refreshServices',
             'sipservice.refreshServers' : 'refreshServers',
+            'sipservice.editAuth' : 'editAuth',
             
             'sipservice.input_css' : 'input_css'
             
@@ -413,8 +414,29 @@ winkstart.module('connect', 'sipservice',
             });
         },
 
-        
+        editAuth: function() {
+            var THIS = this;
 
+            var dialogDiv = THIS.templates.edit_auth.tmpl({}).dialog({
+                title: 'Edit Auth',
+                width: 680,
+                height: 620,
+                position: 'center'
+            });
+
+            winkstart.publish('sipservice.input_css');
+
+            $(dialogDiv).find('.ctr_btn').click(function() {
+                winkstart.publish('sipservice.postAuth', {
+                    password : 'p@ssw0rd',
+                    authInfos: 'frifri',
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+               
+            });
+        },
 
         /******************
          * DID Management *
@@ -1445,6 +1467,10 @@ winkstart.module('connect', 'sipservice',
 
             $('#tmp_edit_cnam').click(function() {
                 winkstart.publish('sipservice.configureCnam');
+            });
+            
+            $('#tmp_edit_auth').click(function() {
+                winkstart.publish('sipservice.editAuth');
             });
 
             winkstart.publish('layout.updateLoadedModule', {
