@@ -78,6 +78,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.refreshDIDs' : 'refreshDIDs',
             'sipservice.refreshServices' : 'refreshServices',
             'sipservice.refreshServers' : 'refreshServers',
+            'sipservice.refreshScreen' : 'refreshScreen',
             'sipservice.editAuth' : 'editAuth',
             
             'sipservice.login' : 'login',
@@ -102,6 +103,7 @@ winkstart.module('connect', 'sipservice',
             label: 'SIP Services'
         });*/
 
+        // Only one option for now - go ahead and open it up!
         winkstart.publish('sipservice.activate');
     }, // End initialization routine
 
@@ -278,25 +280,6 @@ winkstart.module('connect', 'sipservice',
                 }
             }
             );
-        },
-
-        refreshDIDs: function(numbers) {
-            var THIS = this;
-
-            THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
-
-        },
-
-        refreshServices: function(services) {
-            var THIS = this;
-
-            THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
-        },
-
-        refreshServers: function(servers) {
-            var THIS = this;
-            
-            THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
         },
 
         addCreditCard: function(frm) {
@@ -1432,47 +1415,226 @@ winkstart.module('connect', 'sipservice',
 
 
 
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-     * if appropriate. You should also attach to any default click items you want to respond to when people click
-     * on them. Also register resources.
-     */
-        activate: function(data) {
-            var THIS = this;
-            /* Clear out the center part of the window - get ready to put our own content in there */
-            $('#ws-content').empty();
-
-            // Prepare the dialog box for use
-            //$('#dialog').dialog({autoOpen : false});
-
-
-            /* Draw our base template into the window */
-            //THIS.templates.index.tmpl().appendTo( $('#ws-content') );
-
-            // Paint the main screen
-            THIS.templates.main.tmpl().appendTo( $('#ws-content') );
-
-            var numbers = {
-                
+        retrieveAccount: function(account_id) {
+            // TODO: Remove after testing
+            var data = {
+               "_id": account_id,
+               "options": {
+               },
+               "type": "sys_info",
+               "account": {
+                   "credits": {
+                       "prepay": "10.00"
+                   },
+                   "billing_id": "2946255",
+                   "primary": "test@secret.com",
+                   "auth_realm": "tester.sip.2600hz.com",
+                   "users": [],
+                   "trunks": "3",
+                   "inbound_trunks" : "2",
+                   "billing": {
+                       "success": true,
+                       "cards": [
+                           {
+                               "exp": "12/2011",
+                               "num": "549100******0012",
+                               "card_name": "Eric  Samson",
+                               "default": true,
+                               "token": "9rpyq"
+                           }
+                       ]
+                   }
+                }
             };
 
-            THIS.refreshDIDs(numbers);
+            return data;
 
-            THIS.refreshServices({
-                account : {
-                    credits : {}
-                }
+        },
+        
+        retrieveServers: function(account_id) {
+            var data = {
+                "DIDs_Unassigned": {
+                },
+                "servers": [
+                   {
+                       "auth": {
+                           "auth_password": "ij89f209d23",
+                           "auth_user": "blahblah",
+                           "auth_method": "Password"
+                       },
+                       "permissions": {
+                           "users": [
+                           ]
+                       },
+                       "options": {
+                           "caller_id": {
+                               "cid_name": "",
+                               "cid_number": ""
+                           },
+                           "e911_info": {
+                               "ZIP": "12110",
+                               "Address": "300 Lakeshore Drive",
+                               "City": "Albany",
+                               "State": "NY"
+                           },
+                           "max_trunks": 5,
+                           "inbound_format": "E.164",
+                           "failover": null,
+                           "international": false,
+                           "enabled": true
+                       },
+                       "DIDs": {
+                           "+18554382700": {
+                               "provider": "ic",
+                               "lnp": {
+                                   "did": "8554382700",
+                                   "status": "pending",
+                                   "original_data": {
+                                       "service_type": "residential",
+                                       "did": "8554382700",
+                                       "customer_address2": "",
+                                       "customer_city": "Albany",
+                                       "auth_date": "2011-05-21",
+                                       "customer_address": "300 Lakeshore Drive",
+                                       "customer_zip": "10101",
+                                       "requested_completion": "2011-07-30",
+                                       "customer_state": "NY",
+                                       "customer_name": "Wilma Flinstone",
+                                       "auth_name": "Wilma Flinstone"
+                                   },
+                                   "estimated_completion": "2011-07-30",
+                                   "tracking": "2525"
+                               }
+                           }
+                       },
+                       "monitor": {
+                           "monitor_enabled": false
+                       },
+                       "server_name": "Some Box"
+                   },
+
+                   {
+                       "auth": {
+                           "auth_ip": [
+                           ],
+                           "auth_password": "n9n8989j9",
+                           "auth_user": "userX",
+                           "auth_method": "Password"
+                       },
+                       "permissions": {
+                           "users": [
+                           ]
+                       },
+                       "options": {
+                           "caller_id": {
+                               "cid_number": "",
+                               "cid_name": ""
+                           },
+                           "e911_info": {
+                               "ZIP": "",
+                               "Address": "",
+                               "City": "",
+                               "State": ""
+                           },
+                           "max_trunks": false,
+                           "inbound_format": "NPANXXXXXX",
+                           "failover": {
+                               "type": "",
+                               "uri": ""
+                           },
+                           "international": true,
+                           "enabled": true
+                       },
+                       "DIDs": {
+                           "+14152000098": {
+                           },
+                           "+14152000052": {
+                           },
+                           "+18888730012": {
+                           },
+                           "+14152000053": {
+                           },
+                           "+14152000054": {
+                           }
+                       },
+                       "monitor": {
+                       },
+                       "server_name": "clientX.switchfreedom.com"
+                   }
+               ]
+            };
+
+            return data;
+
+        },
+
+        listDIDs: function(servers) {
+            var THIS = this;
+
+            // Combine all DIDs from all servers
+            var DIDs = {};
+
+            $(servers).each(function(k, v) {
+                $.extend(THIS.DIDs, v.DIDs);
             });
-            
-            THIS.refreshServers({});
 
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
+            return DIDs;
+        },
+
+        refreshDIDs: function(numbers) {
+            var THIS = this;
+
+            winkstart.log('Refreshing DIDs...');
+            THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
+
+        },
+
+        refreshServices: function(services) {
+            var THIS = this;
+
+            winkstart.log('Refreshing Services...');
+            //THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
+        },
+
+        refreshServers: function(servers) {
+            var THIS = this;
+
+            winkstart.log('Refreshing Servers...');
+            THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
+        },
+
+
+        refreshScreen: function() {
+            var THIS = this;
+
+            // TODO: Remove hard-coded crap after testing, turn hardcoded stuff into fixtures
+            var account_id = 'test';
             
+            var account = THIS.retrieveAccount(account_id);
+            winkstart.publish('sipservice.refreshServices', account);
+
+            var servers = THIS.retrieveServers(account_id);
+            winkstart.publish('sipservice.refreshServers', servers);
+
+            var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
+            winkstart.publish('sipservice.refreshDIDs', DIDs);
+        },
+
+        mainMenu: function() {
+            var THIS = this;
+
+            // Paint the main screen
+            $('#ws-content').empty();
+            THIS.templates.main.tmpl().appendTo( $('#ws-content') );
+
+            // Populate account data
+            winkstart.publish('sipservice.refreshScreen');
+
             $('#t_m_add_server').click(function() {
                 winkstart.publish('sipservice.addServerPrompt');
             });
 
-            // This is where we define our click listeners (NOT INLINE IN THE HTML) 
+            // This is where we define our click listeners (NOT INLINE IN THE HTML)
             $('#ws-content #add_prepay_button').click(function() {
                 winkstart.publish('sipservice.addCredit');
             });
@@ -1484,15 +1646,15 @@ winkstart.module('connect', 'sipservice',
             $('#tmp_add_number').click(function() {
                 winkstart.publish('sipservice.addNumber');
             });
-            
+
             $('#tmp_edit_billing').click(function() {
                 winkstart.publish('sipservice.editBilling');
             });
-            
+
             $('#tmp_edit_failover').click(function() {
                 winkstart.publish('sipservice.editFailover');
             });
-            
+
             $('#tmp_edit_portNumber').click(function() {
                 winkstart.publish('sipservice.portNumber');
             });
@@ -1500,25 +1662,47 @@ winkstart.module('connect', 'sipservice',
             $('#tmp_edit_cnam').click(function() {
                 winkstart.publish('sipservice.configureCnam');
             });
-            
+
             $('#tmp_edit_auth').click(function() {
                 winkstart.publish('sipservice.editAuth');
             });
-            
+
             $('#tmp_login').click(function() {
                 winkstart.publish('sipservice.login');
             });
-            
+
             $('#tmp_recover_password').click(function() {
                 winkstart.publish('sipservice.recover_password');
             });
 
+        },
+
+
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+         * if appropriate. You should also attach to any default click items you want to respond to when people click
+         * on them. Also register resources.
+         */
+        activate: function() {
+            var THIS = this;
+            /* Clear out the center part of the window - get ready to put our own content in there */
+            $('#ws-content').empty();
+
+            /* Draw our base template into the window */
+            THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+
+            $('#ws-content a#signup_button').click(function() {
+                THIS.mainMenu();
+            });
+
+            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+            winkstart.registerResources(this.config.resources);
+            
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'SIP Services',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
+                label: 'SIP Services',
                 module: this.__module
             });
             
         }
     } // End function definitions
 
-    );  // End module
+);  // End module
