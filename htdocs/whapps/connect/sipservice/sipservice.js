@@ -1621,6 +1621,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             winkstart.log('Refreshing DIDs...');
+            console.log(numbers);
             THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
 
         },
@@ -1665,6 +1666,31 @@ winkstart.module('connect', 'sipservice',
 
             // Populate account data
             winkstart.publish('sipservice.refreshScreen');
+
+            // Make things draggable
+            $("#ws-content .number").draggable(
+                    {cursor: 'pointer',
+                     opacity: 0.35 ,
+                     revert: true,
+                     scope: 'moveDID',
+                      appendTo: 'body',
+                      helper: 'clone'
+
+                    }
+            );
+
+            $("#ws-content .drop_area").droppable({
+                    drop: function(event, ui) {
+                            tmp_ui=ui;
+                            tmp_md_this=this;
+                            setTimeout("moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset())", 1);
+                    },
+                    accept: '.number' ,
+                    activeClass: 'ui-state-highlight',
+                    activate: function(event, ui) { ; },
+                    scope: 'moveDID'
+            });
+
 
             $('#t_m_add_server').click(function() {
                 winkstart.publish('sipservice.addServerPrompt');
