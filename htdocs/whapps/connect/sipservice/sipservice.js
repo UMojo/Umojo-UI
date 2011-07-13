@@ -484,7 +484,38 @@ winkstart.module('connect', 'sipservice',
          * DID Management *
          ******************/
         moveDID: function(did, srv) {
+            var THIS = this;
+            srv = srv.serverid;
+            did = did.did;
+            
             console.log('DID ', did, ' srv', srv);
+
+            // Is this an unassigned DID?
+            if (THIS.account.DIDs_Unassigned[did]) {
+                // Yes! Assign it
+                THIS.account.servers[srv].DIDs[did] = THIS.account.DIDs_Unassigned[did];
+
+                // Remove old DID
+                delete(THIS.account.DIDs_Unassigned[did]);
+            } else {
+                // Nope, already mapped. Need to move it
+                var did_data = {};
+
+                // Look for this DID on any other server. If it's there, remove it
+                $.each(THIS.account.servers, function(k, v) {
+                    if (THIS.account.servers[k].DIDs[did]) {
+                        did_data = THIS.account.servers[k].DIDs[did];
+
+                        // Remove from the old server
+                        delete(THIS.account.servers[k].DIDs[did]);
+                    }
+                });
+
+                // Add whatever we found to the new server
+                THIS.account.servers[srv].DIDs[did] = did_data;
+            }
+
+
             return;
             $.ajax({
                 url: "/api/moveDID",
@@ -1446,9 +1477,7 @@ winkstart.module('connect', 'sipservice',
 
         retrieveAccount: function(account_id) {
             var data = {
-               "_id": account_id,
-               "options": {
-               },
+               "name": account_id,
                "type": "sys_info",
                "account": {
                    "credits": {
@@ -1641,6 +1670,19 @@ winkstart.module('connect', 'sipservice',
             winkstart.log('Refreshing DIDs...');
             $('#my_numbers').empty();
             THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
+
+            // Make numbers draggable
+            $("#ws-content .number").draggable(
+                    {cursor: 'pointer',
+                     opacity: 0.35 ,
+                     revert: true,
+                     scope: 'moveDID',
+                      appendTo: 'body',
+                      helper: 'clone',
+                      revert : 'invalid'
+
+                    }
+            );
         },
 
         refreshServices: function(account) {
@@ -1657,21 +1699,39 @@ winkstart.module('connect', 'sipservice',
             winkstart.log('Refreshing Servers...');
             $('#my_servers').empty();
             THIS.templates.main_servers.tmpl( account  ).appendTo ( $('#my_servers') );
+            
+            // Define areas where numbers can be dropped and what to do when they are dropped
+            $("#ws-content .drop_area").droppable({
+                    drop: function(event, ui) {
+                            tmp_ui=ui;
+                            tmp_md_this=this;
+                            THIS.moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset());
+                            setTimeout("winkstart.publish('sipservice.refreshScreen')", 1);
+                    },
+                    accept: '.number' ,
+                    activeClass: 'ui-state-highlight',
+                    activate: function(event, ui) { ; },
+                    scope: 'moveDID'
+            });
         },
 
         refreshScreen: function() {
             var THIS = this;
 
-            // TODO: Remove hard-coded crap after testing, turn hardcoded stuff into fixtures
-            var account_id = 'test';
-            
-            THIS.account = THIS.retrieveAccount(account_id);
             winkstart.publish('sipservice.refreshServices', THIS.account);
 
             winkstart.publish('sipservice.refreshServers', THIS.account);
 
             //var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
             winkstart.publish('sipservice.refreshDIDs', THIS.account);
+
+        },
+
+        loadAccount: function(account_id) {
+            var THIS = this;
+            
+            THIS.account = THIS.retrieveAccount(account_id);
+            
         },
 
         mainMenu: function() {
@@ -1681,34 +1741,10 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
+            THIS.loadAccount('test');
+
             // Populate account data
             winkstart.publish('sipservice.refreshScreen');
-
-            // Make things draggable
-            $("#ws-content .number").draggable(
-                    {cursor: 'pointer',
-                     opacity: 0.35 ,
-                     revert: true,
-                     scope: 'moveDID',
-                      appendTo: 'body',
-                      helper: 'clone',
-                      revert : 'invalid'
-
-                    }
-            );
-
-            // Define areas where numbers can be dropped and what to do when they are dropped
-            $("#ws-content .drop_area").droppable({
-                    drop: function(event, ui) {
-                            tmp_ui=ui;
-                            tmp_md_this=this;
-                            THIS.moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset());
-                    },
-                    accept: '.number' ,
-                    activeClass: 'ui-state-highlight',
-                    activate: function(event, ui) { ; },
-                    scope: 'moveDID'
-            });
 
             // Wire the "Add Server" button
             $('#t_m_add_server').click(function() {
