@@ -173,27 +173,31 @@ winkstart.module('voip', 'menu',
             var THIS = this;
             var menu_id = form_data.data.id;
             console.log(form_data);    
-            /* Paint the template with HTML of form fields onto the page */
+            //Hack to display time in seconds for the user.
+            form_data.data.timeout = form_data.data.timeout / 1000;
+            // Paint the template with HTML of form fields onto the page 
             THIS.templates.editMenu.tmpl(form_data).appendTo( $('#menu-view') );
 
             winkstart.cleanForm();
 
-            /* Initialize form field validation */
+            // Initialize form field validation 
             THIS.validateForm();
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
             $("#name").focus();
 
-            /* Listen for the submit event (i.e. they click "save") */
+            // Listen for the submit event (i.e. they click "save") 
             $('.menu-save').click(function(event) {
-                /* Save the data after they've clicked save */
+                // Save the data after they've clicked save 
 
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                // Ignore the normal behavior of a submit button and do our stuff instead 
                 event.preventDefault();
 
-                /* Grab all the form field data */
+                // Grab all the form field data 
                 var form_data = form2object('menu-form');
+                // Hack to put timeout in ms in database.
+                form_data.timeout = form_data.timeout * 1000;
                 THIS.saveMenu(menu_id, form_data);
 
                 return false;
@@ -202,16 +206,16 @@ winkstart.module('voip', 'menu',
             $('.menu-cancel').click(function(event) {
                 event.preventDefault();
 
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
+                // Cheat - just delete the main content area. Nothing else needs doing really 
                 $('#menu-view').empty();
 
                 return false;
             });
 
             $('.menu-delete').click(function(event) {
-                /* Save the data after they've clicked save */
+                // Save the data after they've clicked save 
 
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
+                // Ignore the normal behavior of a submit button and do our stuff instead 
                 event.preventDefault();
 
                 THIS.deleteMenu(menu_id);
