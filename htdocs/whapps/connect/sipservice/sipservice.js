@@ -1060,10 +1060,10 @@ winkstart.module('connect', 'sipservice',
                 auth: {
                     auth_password: srv.server_pwd,
                     auth_user: srv.server_usr,
-                    auth_method: 'Password'
+                    auth_method: 'password'
                 },
                 options: {
-                    inbound_format: 'E.164',
+                    inbound_format: 'e.164',
                     enabled: true
                 },
                 DIDs: {},
