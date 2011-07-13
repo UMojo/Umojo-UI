@@ -5,7 +5,7 @@
         {{each(s,srv) servers}}
         {{each(i,DID) DIDs}}
         <div class="numbers">
-            <span class="number" data-did="${i}" id="DIDs_${i}">${i}</span><span class="amount">$1.00</span><span class="did-status">${srv.server_name}</span><a class="cancelDID" data-DID="${i}" href="#">Cancel</a>
+            <span class="number" data-did="${i}" id="DIDs_${i}">${i}</span><span class="amount">$1.00</span><span class="did-status">${srv.server_name}</span>
         </div>
         {{/each}}
         {{/each}}
