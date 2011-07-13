@@ -1541,7 +1541,7 @@ winkstart.module('connect', 'sipservice',
 
             THIS.listAccounts(function(data) {
                 var dialogDiv = THIS.templates.switch_user.tmpl({accounts: data}).dialog({
-                    title: 'Switch User',
+                    title: 'Switch Account',
                     position: 'center',
                     height: 300,
                     width: 450
