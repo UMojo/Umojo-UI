@@ -1498,6 +1498,12 @@ winkstart.module('connect', 'sipservice',
 
 
 
+        listAccounts: function(callback) {
+            winkstart.getJSON('sipservice.list', {}, function(data) {
+                console.log(data.data);     // Account list, [ { id : 'name', name : 'some text' ... }, ... ]
+                callback(data.data);
+            });
+        },
 
         loadAccount: function(account_id, callback) {
             winkstart.getJSON('sipservice.get', { account_id : account_id}, function(data) {
