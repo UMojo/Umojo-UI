@@ -1514,6 +1514,31 @@ winkstart.module('connect', 'sipservice',
             return true;
         },
 
+        newAccount : function(args) {
+            var data = {
+               "name": args.account_id,
+               "account": {
+                   "credits": {
+                       "prepay": "0.00"
+                   },
+                   "auth_realm": args.realm,
+                   "trunks": "0",
+                   "inbound_trunks" : "0"
+                },
+                "DIDs_Unassigned": {
+                },
+                "servers": [
+               ]
+            };
+
+            winkstart.putJSON('sipservice.create', { data : data }, function(response) {
+                console.log(response);
+                THIS.account = response.data;
+                THIS.refreshScreen();
+            })
+
+        },
+
         updateAccount: function() {
             var THIS = this;
             
