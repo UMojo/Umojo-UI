@@ -35,13 +35,15 @@ winkstart.module('connect', 'sipservice',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_circuits: 'tmpl/edit_circuits.html',
             switch_user: 'tmpl/switch_user.html',
-            add_number_tmp: 'tmpl/add_number_tmp.html'
+            add_number_tmp: 'tmpl/add_number_tmp.html',
+            add_user: 'tmpl/add_user.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
             'sipservice.switchUser' : 'switchUser',
+            'sipservice.addUser' : 'addUser',
             'sipservice.switchUserForreal' : 'switchUserForreal',
 
             /* DID Provisioning */
@@ -1559,9 +1561,32 @@ winkstart.module('connect', 'sipservice',
                     });
 
                 });             
+                dialogDiv.find('.btn_wrapper #add').click(function() {
+                    winkstart.publish('sipservice.addUser');
+                    dialogDiv.dialog('close');
+                });
             });
         },
+        addUser: function() {
+            var THIS = this;
 
+            var dialogDiv = THIS.templates.add_user.tmpl({}).dialog({
+                title: 'Add User',
+                position: 'center',
+                height: 300,
+                width: 450
+            });
+
+            winkstart.publish('sipservice.input_css');
+        
+            dialogDiv.find('.submit_btn').click(function() {
+                winkstart.publish('sipservice.newAccount', {
+                        account_id: dialogDiv.find('#name').val(),
+                        realm: dialogDiv.find('#realm').val()
+                });
+                dialogDiv.dialog('close');
+            });             
+        },
         switchUserForreal: function(data) {
             var THIS = this;
             THIS.loadAccount(data.account_id, data.success); 
