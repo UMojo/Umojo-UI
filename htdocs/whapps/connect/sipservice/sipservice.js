@@ -482,6 +482,8 @@ winkstart.module('connect', 'sipservice',
          * DID Management *
          ******************/
         moveDID: function(did, srv) {
+            console.log('DID ', did, ' srv', srv);
+            return;
             $.ajax({
                 url: "/api/moveDID",
                 global: true,
@@ -1610,9 +1612,13 @@ winkstart.module('connect', 'sipservice',
             // Combine all DIDs from all servers
             var DIDs = {};
 
-            $(servers).each(function(k, v) {
-                $.extend(THIS.DIDs, v.DIDs);
+            $(servers.servers).each(function(k, v) {
+                console.log(v);
+                $.extend(DIDs, v.DIDs);
+                console.log(DIDs);
             });
+
+            console.log(DIDs);
 
             return DIDs;
         },
@@ -1621,9 +1627,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             winkstart.log('Refreshing DIDs...');
-            console.log(numbers);
             THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
-
         },
 
         refreshServices: function(services) {
@@ -1640,7 +1644,6 @@ winkstart.module('connect', 'sipservice',
             THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
         },
 
-
         refreshScreen: function() {
             var THIS = this;
 
@@ -1653,7 +1656,7 @@ winkstart.module('connect', 'sipservice',
             var servers = THIS.retrieveServers(account_id);
             winkstart.publish('sipservice.refreshServers', servers);
 
-            var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
+            //var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
             winkstart.publish('sipservice.refreshDIDs', servers);
         },
 
@@ -1674,16 +1677,18 @@ winkstart.module('connect', 'sipservice',
                      revert: true,
                      scope: 'moveDID',
                       appendTo: 'body',
-                      helper: 'clone'
+                      helper: 'clone',
+                      revert : 'invalid'
 
                     }
             );
 
+            // Define areas where numbers can be dropped and what to do when they are dropped
             $("#ws-content .drop_area").droppable({
                     drop: function(event, ui) {
                             tmp_ui=ui;
                             tmp_md_this=this;
-                            setTimeout("moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset())", 1);
+                            THIS.moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset());
                     },
                     accept: '.number' ,
                     activeClass: 'ui-state-highlight',
@@ -1691,10 +1696,38 @@ winkstart.module('connect', 'sipservice',
                     scope: 'moveDID'
             });
 
-
+            // Wire the "Add Server" button
             $('#t_m_add_server').click(function() {
                 winkstart.publish('sipservice.addServerPrompt');
             });
+
+            // Wire up the numbers box
+            $("#server_area").delegate(".unassign", "click", function(){
+                moveDID($(this).dataset(), null); $(this).hide();
+            });
+
+            $("#server_area").delegate(".failover", "click", function(){
+                failoverPrompt($(this).dataset(), null);
+            });
+
+            /*$("#server_area").delegate(".cid", "click", function(){
+                cidPrompt($(this).dataset(), null);
+            });
+
+            $("#server_area").delegate(".e911", "click", function(){
+                e911Prompt($(this).dataset(), null);
+            });*/
+
+            $("#server_area").delegate(".misc", "click", function(){
+                miscPrompt($(this).dataset(), null);
+            });
+
+            $("#server_area").delegate(".modifyServerDefaults", "click", function(){
+                modifySRVDefaultsPrompt($(this).dataset(), null);
+            });
+            
+            $('#my_numbers').delegate('.add', "click", function(){searchDIDsPrompt();});
+
 
             // This is where we define our click listeners (NOT INLINE IN THE HTML)
             $('#ws-content #add_prepay_button').click(function() {
