@@ -38,14 +38,31 @@ winkstart.module('core', 'subnav', {
     {   
         add: function(data) {
             // Deal with silly centering which fails randomly
+            var THIS = this;
             var navbar = $('.sub_nav');
             var navbar_list = $('ul', navbar);
-            this.templates.item.tmpl(data).appendTo(navbar_list);
-
-            /*// Increase size of navbar
-            var element_width = $('li', navbar_list).width() + 45;
-            winkstart.log('VoIP Nav: ' + navbar.width(), 'Element: ' + element_width);
-            navbar.width(navbar.width() + element_width);*/
+            var module_name = new String(data.module);
+            var listModules = navbar_list.find('li');
+            
+            if(listModules.length == 0) {
+                this.templates.item.tmpl(data).appendTo(navbar_list);
+            }
+            else {
+                $.each(listModules, function(k, v) {
+                    var currentModule = new String(listModules[k].attributes['module-name'].value);
+                    var compare = ((module_name == currentModule) ? 0 : ((module_name > currentModule) ? 1 : -1));
+                    if(k == listModules.length - 1 && compare > 0) {
+                        THIS.templates.item.tmpl(data).appendTo(navbar_list);
+                        console.log(data.module + 'appended');
+                        return false;
+                    } 
+                    else if(compare < 0){
+                        THIS.templates.item.tmpl(data).insertBefore(listModules[k]);
+                        console.log(data.module + 'insertBefore');
+                        return false;
+                    }
+                });
+            }
         },
 
         clear: function(data) {
