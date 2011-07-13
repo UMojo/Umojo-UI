@@ -33,7 +33,7 @@ winkstart.module('connect', 'sipservice',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
             edit_cnam: 'tmpl/edit_cnam.html',
-            edit_circuits: 'tmpl/edit_circuits.html'
+            edit_circuits: 'tmpl/edit_circuits.html',
         },
 
         /* What events do we listen for, in the browser? */
@@ -54,6 +54,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
             'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
             'sipservice.postCnam' : 'postCnam',
+            'sipservice.unassignDID' : 'unassignDID',
 
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
@@ -542,6 +543,18 @@ winkstart.module('connect', 'sipservice',
                 // Add whatever we found to the new server
                 THIS.account.servers[srv].DIDs[did] = did_data;
             }
+        },
+        unassignDID: function(data) {
+            var THIS = this;
+            var did = data.did;
+            var serverid = data.serverid;
+            delete(THIS.account.servers[serverid].DIDs[did]);
+            console.log(THIS.account);
+            if(THIS.account.DIDs_Unassigned == undefined) {
+                THIS.account.DIDs_Unassigned = {};
+            }
+            THIS.account.DIDs_Unassigned[did] = true;
+            THIS.refreshScreen();
         },
 
         delDID: function(did) {
@@ -1730,6 +1743,11 @@ winkstart.module('connect', 'sipservice',
 
                 $('#tmp_recover_password').click(function() {
                     winkstart.publish('sipservice.recover_password');
+                });
+
+                $('.unassign').live('click', function() {
+                    data = $(this).dataset();
+                    winkstart.publish('sipservice.unassignDID', data);
                 });
             });
         },
