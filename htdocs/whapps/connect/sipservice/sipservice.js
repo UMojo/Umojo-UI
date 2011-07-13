@@ -83,6 +83,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.refreshServers' : 'refreshServers',
             'sipservice.refreshScreen' : 'refreshScreen',
             'sipservice.updateAccount' : 'updateAccount',
+            'sipservice.newAccount' : 'newAccount',
             'sipservice.editAuth' : 'editAuth',
             
             'sipservice.login' : 'login',
@@ -1528,6 +1529,8 @@ winkstart.module('connect', 'sipservice',
         },
 
         newAccount : function(args) {
+            var THIS = this;
+            
             var data = {
                "name": args.account_id,
                "account": {
@@ -1672,7 +1675,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
-            THIS.loadAccount('Donohoo_Trunk', function(account) {
+            THIS.loadAccount('testing2', function(account) {
                 console.log(account);
                 THIS.account = account;
 
