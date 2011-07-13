@@ -214,16 +214,16 @@ winkstart.module('voip', 'resource',
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
                     $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").toggle("slow");
+                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
                     });
                 }
                 else {
                     $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").toggle(function(event) {
+                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
                         $(".advanced_pane").slideToggle();
                     });
                 }
-            });            
+            });
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.resource-save').click(function(event) {

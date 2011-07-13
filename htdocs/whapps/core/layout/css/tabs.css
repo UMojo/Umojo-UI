@@ -87,6 +87,7 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 .advanced_tabs_wrapper {
     display: inline-block;
     width: 658px;
+    height: 30px;
 }
 
 ul.advanced_tabs {
