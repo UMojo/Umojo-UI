@@ -16,9 +16,10 @@ fieldset fieldset label.error {
     margin-left: 180px !important;
     width: 200px !important;
 }
-.text, .button, .group, .control, .submit, textarea, select {
+/*.text, .button, .group, .control, .submit, textarea, select {
     width: 200px;
-}
+}*/
+
 form {
     clear: both;
     margin-bottom: 25px;

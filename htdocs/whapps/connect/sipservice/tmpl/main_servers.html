@@ -69,7 +69,8 @@
         <div class="behavior"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Modify Default Behaviors</a> (Fail-over #, Caller ID, etc.)</div>
     </div>
     {{/each}}
-    {{if servers }}
-        <div id="add_a_server_first">After adding DIDs, add a server to assign them to by clicking above</div>
+
+    {{if !servers }}
+        <div id="add_a_server_first" style="text-align:center">Route Phone Calls to a Phone System.<br/><br/>Click "Add Server" above</div>
     {{/if}}
 </div>

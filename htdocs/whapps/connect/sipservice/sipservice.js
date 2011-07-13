@@ -98,10 +98,35 @@ winkstart.module('connect', 'sipservice',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        /*winkstart.publish('subnav.add', {
+        winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'SIP Services'
-        });*/
+            label: 'Legal',
+            icon: 'legal'
+        });
+
+        winkstart.publish('subnav.add', {
+            module: this.__module,
+            label: 'Support',
+            icon: 'support'
+        });
+
+        winkstart.publish('subnav.add', {
+            module: this.__module,
+            label: 'Rates',
+            icon: 'price_tag'
+        });
+
+        winkstart.publish('subnav.add', {
+            module: this.__module,
+            label: 'How to Use',
+            icon: 'book'
+        });
+
+        winkstart.publish('subnav.add', {
+            module: this.__module,
+            label: 'SIP Services',
+            icon: 'active_phone'
+        });
 
         // Only one option for now - go ahead and open it up!
         winkstart.publish('sipservice.activate');
@@ -1441,6 +1466,13 @@ winkstart.module('connect', 'sipservice',
                                "card_name": "Eric  Samson",
                                "default": true,
                                "token": "9rpyq"
+                           },
+                           {
+                               "exp": "12/2011",
+                               "num": "549100******0012",
+                               "card_name": "Eric  Samson",
+                               "default": true,
+                               "token": "9rpyq"
                            }
                        ]
                    }
@@ -1454,6 +1486,7 @@ winkstart.module('connect', 'sipservice',
         retrieveServers: function(account_id) {
             var data = {
                 "DIDs_Unassigned": {
+                    "+14158867900" : {}
                 },
                 "servers": [
                    {
@@ -1620,7 +1653,7 @@ winkstart.module('connect', 'sipservice',
             winkstart.publish('sipservice.refreshServers', servers);
 
             var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
-            winkstart.publish('sipservice.refreshDIDs', DIDs);
+            winkstart.publish('sipservice.refreshDIDs', servers);
         },
 
         mainMenu: function() {

@@ -57,7 +57,7 @@
 /************** ICONS SUBNAV *****/
 
 .icon.account {
-	background-position: 0 -357px;
+    background-position: 0 -357px;
 }
 
 .icon.callflow {
@@ -99,7 +99,31 @@
 
 /************** ICONS ************/
 .icon.phone {
-    background-position: -512px -165px;
+    background-position: -512px -163px;
+}
+
+.icon.active_phone {
+    background-position: -192px -163px;
+}
+
+.icon.legal {
+    background-position: -736px -323px;
+}
+
+.icon.help {
+    background-position: -608px -195px;
+}
+
+.icon.book {
+    background-position: -320px -355px;
+}
+
+.icon.support {
+    background-position: -416px -195px;
+}
+
+.icon.price_tag {
+    background-position: -416px -259px;
 }
 
 .icon.sip {
@@ -123,7 +147,7 @@
 }
 
 .icon.cdr {
-	background-position: -192px -229px;
+    background-position: -192px -229px;
 }
 
 .icon.billing {
@@ -156,7 +180,7 @@
 
 .icon.cart {
     background-position: -700px -292px;
-    margin: -6px 15px 10px -15px;
+/*    margin: -6px 15px 10px -15px;*/
 }
 
 .icon.authentication {
@@ -165,7 +189,7 @@
 
 .icon.recharge {
     background-position: -473px 0;
-    margin: -12px 15px 10px -15px;
+/*    margin: -12px 15px 10px -15px;*/
 }
 
 .icon.dollar {
@@ -175,6 +199,10 @@
 
 .icon.search {
     background-position: -895px -424px;
+}
+
+.icon.question {
+    background-position: -131px -40px;
 }
 
 .account_icon {

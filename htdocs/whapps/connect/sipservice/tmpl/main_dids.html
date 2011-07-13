@@ -5,9 +5,8 @@
         {{each(s,srv) servers}}
         {{each(i,DID) DIDs}}
         <div class="numbers">
-            <span class="number" data-did="${i}" id="aDIDs_${i}">${i}</span><span class="amount">$1.00</span><span class="did-status">${srv.server_name}</span><a class="cancelDID" data-DID="${i}" href="#">Cancel</a>
+            <span class="number" data-did="${i}" id="DIDs_${i}">${i}</span><span class="amount">$1.00</span><span class="did-status">${srv.server_name}</span><a class="cancelDID" data-DID="${i}" href="#">Cancel</a>
         </div>
-        ${count_all_dids(1, false)}
         {{/each}}
         {{/each}}
 
@@ -24,7 +23,7 @@
         {{/if}}
 
 
-        {{if did_count }}
+        {{if !did_count }}
         <div class="numbers" >&nbsp;</div>
         <div class="numbers" style="padding: 0px 3em 0px 2em;">
             <span style="margin: 10px 3em 5px 2em; font-weight:bold;">Add or Import DIDs using the tabs below</span>

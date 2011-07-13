@@ -1,23 +1,32 @@
 <div>
     <div class="title">My Paid Services</div>
+    <div class="info" style="clear:both;">
+        <span class="trunk_num">${account.trunks}</span>
+        <span class="trunk_detail">Two-Way Trunks</span>
+
+        <span class="trunk_num">${account.inbound_trunks}</span>
+        <span class="trunk_detail">Inbound Trunks</span>
+        
+        <span id="addCredsSpan"><a href="#" id="add_prepay_button" class="button_small button">Modify</a></span>
+    </div>
     <div class="info" style="background-repeat: repeat-y; ">
-        <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">credits</span>
+        <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">per-minute credit</span>
 
         <span id="addCredsSpan"><a href="#" id="add_prepay_button" class="button_small button">Add Credit</a></span>
         <!--        	<div style="float: left; font-size: smaller; margin: 10px 0px 0px 2em;" >For per-minute and inbound toll-free calls</div> -->
     </div>
-    <div class="info" style="clear:both;">
-        <span class="trunk_num">${account.trunks}</span><span class="trunk_detail">Flat Rate Trunks <span style="margin-left: 2.5em;"><img src="/images/plus.png" style="height: 1.5em; cursor:pointer; margin-left: 0.5em;" /> <img src="/images/minus.png" style="height: 1.5em; margin-left: 0.5em; cursor:pointer;" /></span><br/>
-            <!--        	<div style="float: left; font-size: smaller; margin: 10px 0px 0px 2em;" >For unlimited calling to US 48 states</div> -->
-    </div>
 
     <div class="info">
-        <span class="e_num">${account.e911count}</span><span class="e_detail">E911 enabled numbers</span>
+        <span class="e_num">${account.e911count}</span><span class="e_detail">E911 Numbers</span>
     </div>
 
     {{if account.billing }}
     <div class="info">
-        <span class="e_detail">Default card: <span class="cc_number">${account.billing.cards[0]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
+        <span class="e_num"></span>
+        <span class="e_detail">
+            <span class="cc_number">${account.billing.cards.length}</span> credit cards on file
+            <span class="edit"><a href="#">[edit]</a></span>
+        </span>
     </div>
 
     {{else}}
@@ -27,13 +36,8 @@
     </div>
     {{/if}}
 
-    <div class="addl">
+    <div class="addl" style="background-position:0px -40px; height:30px">
 
-        {{if account.billing }}
-        {{if account.billing.cards[1] }}
-        <span class="cc_back">Backup card: <span class="cc_number">${account.billing.cards[1]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
-        {{/if}}
-        {{/if}}
     </div>
 
     <ul class="buttons">
