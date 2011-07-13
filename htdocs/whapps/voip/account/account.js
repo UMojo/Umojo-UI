@@ -192,12 +192,12 @@ winkstart.module('voip', 'account',
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
                     $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").toggle("slow");
+                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
                     });
                 }
                 else {
                     $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").toggle(function(event) {
+                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
                         $(".advanced_pane").slideToggle();
                     });
                 }

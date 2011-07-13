@@ -194,17 +194,17 @@ winkstart.module('voip', 'vmbox',
 
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
-
-            $("#advanced_settings_link").click(function(event) {
+            
+            $("#advanced_settings_link").click(function(event) { 
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
                     $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").toggle("slow");
+                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
                     });
                 }
-                else { 
+                else {
                     $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").toggle(function(event) {
+                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
                         $(".advanced_pane").slideToggle();
                     });
                 }
