@@ -57,6 +57,7 @@ winkstart.module('connect', 'sipservice',
             'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
             'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
             'sipservice.postCnam' : 'postCnam',
+            'sipservice.unassignDID' : 'unassignDID',
 
             /* Credit Management */
             'sipservice.addCredit' : 'addCredit',
@@ -545,6 +546,18 @@ winkstart.module('connect', 'sipservice',
                 // Add whatever we found to the new server
                 THIS.account.servers[srv].DIDs[did] = did_data;
             }
+        },
+        unassignDID: function(data) {
+            var THIS = this;
+            var did = data.did;
+            var serverid = data.serverid;
+            delete(THIS.account.servers[serverid].DIDs[did]);
+            console.log(THIS.account);
+            if(THIS.account.DIDs_Unassigned == undefined) {
+                THIS.account.DIDs_Unassigned = {};
+            }
+            THIS.account.DIDs_Unassigned[did] = true;
+            THIS.refreshScreen();
         },
 
         delDID: function(did) {
@@ -1546,6 +1559,31 @@ winkstart.module('connect', 'sipservice',
             return true;
         },
 
+        newAccount : function(args) {
+            var data = {
+               "name": args.account_id,
+               "account": {
+                   "credits": {
+                       "prepay": "0.00"
+                   },
+                   "auth_realm": args.realm,
+                   "trunks": "0",
+                   "inbound_trunks" : "0"
+                },
+                "DIDs_Unassigned": {
+                },
+                "servers": [
+               ]
+            };
+
+            winkstart.putJSON('sipservice.create', { data : data }, function(response) {
+                console.log(response);
+                THIS.account = response.data;
+                THIS.refreshScreen();
+            })
+
+        },
+
         updateAccount: function() {
             var THIS = this;
             
@@ -1741,6 +1779,11 @@ winkstart.module('connect', 'sipservice',
 
                 $('#tmp_recover_password').click(function() {
                     winkstart.publish('sipservice.recover_password');
+                });
+
+                $('.unassign').live('click', function() {
+                    data = $(this).dataset();
+                    winkstart.publish('sipservice.unassignDID', data);
                 });
             });
         },
