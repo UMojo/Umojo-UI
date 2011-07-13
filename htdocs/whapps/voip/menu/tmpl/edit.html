@@ -9,7 +9,6 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
-                <li><a href="#">Menu Prompt</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -22,24 +21,27 @@
                                 <label for="name">Name:</label>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li> 
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div> <!-- end basic settings -->
-
-                <div id="menu_prompt">
-                    <fieldset>
-                        <ul class="controls">
                             <li>
                                 <label for="record_pin">Prompt Record PIN:</label>
                                 <input id="record_pin" name="record_pin" type="text" value="${data.record_pin}" />
+                            </li>
+                            <li>
+                                <label for="hunt">Allow caller to dial extensions?</label>
+                                {{if data.hunt}}
+                                <input id="hunt" name="hunt" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="hunt" name="hunt" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <label for="max_extension_length">Extension Number Length:</label>
+                                <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
                             </li>
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
-                </div>
+                </div> <!-- end basic settings -->
 
             </div>
 
@@ -62,18 +64,6 @@
                     <fieldset>
                         <legend>Hunting</legend>
                         <ul class="controls">
-                            <li>
-                                <label for="hunt">Allow caller to dial extensions?</label>
-                                {{if data.hunt}}
-                                <input id="hunt" name="hunt" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="hunt" name="hunt" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <label for="max_extension_length">Extension Number Length:</label>
-                                <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
-                            </li>
                             <li>
                                 <label for="hunt_allow">Whitelist of numbers (regex)</label>
                                 <input id="hunt_allow" name="hunt_allow" type="text" value="${data.hunt_allow}" />
