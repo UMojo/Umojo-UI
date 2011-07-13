@@ -1675,7 +1675,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
-            THIS.loadAccount('testing2', function(account) {
+            THIS.loadAccount('Donohoo_Trunk', function(account) {
                 console.log(account);
                 THIS.account = account;
 

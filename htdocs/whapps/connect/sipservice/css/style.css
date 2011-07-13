@@ -347,7 +347,7 @@ span.ip_list_ip { display:block; z-index:5;}
 
 .ui-dialog a.button {
     /* styles for button */
-    margin:10px auto 0 auto;
+    margin:10px 10px 0 auto;
     text-align:center;
     background-color: #e33100;
     display: block;
