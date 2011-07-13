@@ -1443,7 +1443,6 @@ winkstart.module('connect', 'sipservice',
 
 
         retrieveAccount: function(account_id) {
-            // TODO: Remove after testing
             var data = {
                "_id": account_id,
                "options": {
@@ -1478,17 +1477,10 @@ winkstart.module('connect', 'sipservice',
                            }
                        ]
                    }
-                }
-            };
-
-            return data;
-
-        },
-        
-        retrieveServers: function(account_id) {
-            var data = {
+                },
                 "DIDs_Unassigned": {
-                    "+14158867900" : {}
+                    "+14158867900" : {},
+                    "+14158867901" : {}
                 },
                 "servers": [
                    {
@@ -1623,25 +1615,43 @@ winkstart.module('connect', 'sipservice',
             return DIDs;
         },
 
-        refreshDIDs: function(numbers) {
+        refreshDIDs: function(account) {
             var THIS = this;
+            var tmp = account;
+
+            tmp.unassigned = 0;
+            tmp.totalDIDs = 0;
+            if (tmp.DIDs_Unassigned) {
+                $.each(tmp.DIDs_Unassigned, function() {
+                    tmp.unassigned++;
+                    tmp.totalDIDs++;
+                });
+            };
+
+            $.each(tmp.servers, function(k, v) {
+                if (v.DIDs) {
+                    $.each(v.DIDs, function(i, j) {
+                        tmp.totalDIDs++;
+                    });
+                }
+            });
 
             winkstart.log('Refreshing DIDs...');
-            THIS.templates.main_dids.tmpl(numbers).appendTo ( $('#my_numbers') );
+            THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
         },
 
-        refreshServices: function(services) {
+        refreshServices: function(account) {
             var THIS = this;
 
             winkstart.log('Refreshing Services...');
-            THIS.templates.main_services.tmpl( services ).appendTo ( $('#my_services') );
+            THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
         },
 
-        refreshServers: function(servers) {
+        refreshServers: function(account) {
             var THIS = this;
 
             winkstart.log('Refreshing Servers...');
-            THIS.templates.main_servers.tmpl( servers  ).appendTo ( $('#my_servers') );
+            THIS.templates.main_servers.tmpl( account  ).appendTo ( $('#my_servers') );
         },
 
         refreshScreen: function() {
@@ -1653,11 +1663,10 @@ winkstart.module('connect', 'sipservice',
             var account = THIS.retrieveAccount(account_id);
             winkstart.publish('sipservice.refreshServices', account);
 
-            var servers = THIS.retrieveServers(account_id);
-            winkstart.publish('sipservice.refreshServers', servers);
+            winkstart.publish('sipservice.refreshServers', account);
 
             //var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
-            winkstart.publish('sipservice.refreshDIDs', servers);
+            winkstart.publish('sipservice.refreshDIDs', account);
         },
 
         mainMenu: function() {
