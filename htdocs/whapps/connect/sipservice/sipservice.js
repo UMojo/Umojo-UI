@@ -970,30 +970,50 @@ winkstart.module('connect', 'sipservice',
             var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
                 title: 'Add Server',
                 position: 'center',
-                height: 700,
-                width: 550
+                height: 312,
+                width: 546
             });
-            
+
             winkstart.publish('sipservice.input_css');
             
-            $(dialogDiv).find('.submit_btn').click(function() {
-                winkstart.publish('sipservice.addServer', {
-                    server_name: 'SERVER',
-                    server_usr: 'root',
-                    server_pwd: 'root',
-                    server_ip: '192.168.0.1',
-                    server_add: 'here street Nowhere City',
-                    success : function() {
-                        dialogDiv.dialog('close');
+            dialogDiv.find('.submit_btn').click(function() {
+                var $THIS = dialogDiv,
+                    data = {
+                    server_name: $THIS.find('#name').val(),
+                    server_usr: $THIS.find('#username').val(),
+                    server_pwd: $THIS.find('#password').val(),
+                    success: function() {
+                        $THIS.dialog('close');
                     }
-                });
-               
+                }
+                winkstart.publish('sipservice.addServer', data);
             });
             
         },
         
         addServer: function(srv) {
+            var THIS = this;
 
+            console.log(THIS.account);
+
+            THIS.account.servers.push({
+                auth: {
+                    auth_password: srv.server_pwd,
+                    auth_user: srv.server_usr,
+                    auth_method: 'Password'
+                },
+                options: {
+                    inbound_format: 'E.164',
+                    enabled: true
+                },
+                DIDs: {},
+                server_name: srv.server_name
+            });
+
+            THIS.refreshScreen();
+            srv.success();
+            console.log(THIS.account);
+            /* For now...
             $.ajax({
                 url: "/api/addServer",
                 global: true,
@@ -1022,7 +1042,7 @@ winkstart.module('connect', 'sipservice',
 
                 }
             }
-            );
+            );*/
         },
         
         delServer: function(srvid) {
@@ -1080,10 +1100,10 @@ winkstart.module('connect', 'sipservice',
             );
         },
         
-        editFailover: function() {
+        editFailover: function(number) {
             var THIS = this;
 
-            var dialogDiv = THIS.templates.failover.tmpl({}).dialog({
+            var dialogDiv = THIS.templates.failover.tmpl({failover: number.failover}).dialog({
                 title: 'Edit Failover',
                 position: 'center',
                 height: 360,
@@ -1092,9 +1112,10 @@ winkstart.module('connect', 'sipservice',
             
             winkstart.publish('sipservice.input_css');
             
-            $(dialogDiv).find('.submit_btn').click(function() {
+            dialogDiv.find('.submit_btn').click(function() {
                 winkstart.publish('sipservice.postFailover', {
-                    number : 4159086655,
+                    number : dialogDiv.find('#failover_number').val(),
+                    parent: number,
                     success : function() {
                         dialogDiv.dialog('close');
                     }
@@ -1104,7 +1125,15 @@ winkstart.module('connect', 'sipservice',
         },
         
         postFailover: function(data) {
-            $.ajax({
+            var THIS = this;
+
+            THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
+                e164: data.number
+            }
+
+            THIS.refreshScreen();
+            data.success();
+            /*$.ajax({
                 url: "#",
                 global: true,
                 type: "POST",
@@ -1123,7 +1152,7 @@ winkstart.module('connect', 'sipservice',
                     redraw(msg.data);
                 }
             }
-            );
+            );*/
         },
 
         //prompts
@@ -1257,9 +1286,6 @@ winkstart.module('connect', 'sipservice',
 
         },
 
-       
-
-
         removeSIPAuthIP: function(aip) {
             $.ajax({
                 url: "/api/removeSIPAuthIP",
@@ -1283,7 +1309,6 @@ winkstart.module('connect', 'sipservice',
 
 
         },
-
 
         showMyAccountPrompt: function(opts) {
             if (typeof opts != 'object') {
@@ -1725,7 +1750,7 @@ winkstart.module('connect', 'sipservice',
             winkstart.publish('sipservice.refreshScreen');
 
             // Wire the "Add Server" button
-            $('#t_m_add_server').click(function() {
+            $('#add_server').click(function() {
                 winkstart.publish('sipservice.addServerPrompt');
             });
 
@@ -1734,8 +1759,8 @@ winkstart.module('connect', 'sipservice',
                 moveDID($(this).dataset(), null); $(this).hide();
             });
 
-            $("#server_area").delegate(".failover", "click", function(){
-                failoverPrompt($(this).dataset(), null);
+            $("#my_servers").delegate(".failover", "click", function(){
+                winkstart.publish('sipservice.editFailover', $(this).dataset());
             });
 
             /*$("#server_area").delegate(".cid", "click", function(){
@@ -1776,10 +1801,6 @@ winkstart.module('connect', 'sipservice',
 
             $('#tmp_edit_billing').click(function() {
                 winkstart.publish('sipservice.editBilling');
-            });
-
-            $('#tmp_edit_failover').click(function() {
-                winkstart.publish('sipservice.editFailover');
             });
 
             $('#tmp_edit_portNumber').click(function() {

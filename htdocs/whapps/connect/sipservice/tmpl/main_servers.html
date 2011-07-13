@@ -42,7 +42,7 @@
                 <span class="number" data-did="${i}" data-serverid="${s}">${i}</span>
 
                 {{if DID.failover}}
-                <a href="#" class="failover active" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
+                <a href="#" class="failover active" data-serverid="${s}" data-did="${i}" data-failover="${DID.failover.e164}">Failover #</a>
                 {{else}}
                 <a href="#" class="failover" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
                 {{/if}}
