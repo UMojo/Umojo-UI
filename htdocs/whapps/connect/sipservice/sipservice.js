@@ -233,7 +233,7 @@ winkstart.module('connect', 'sipservice',
                 }
                 THIS.account.DIDs_Unassigned[did] = {};
                 dialogDiv.dialog('close');
-                THIS.refreshScreen();
+                THIS.updateAccount();
             });
             
         },
@@ -575,7 +575,7 @@ winkstart.module('connect', 'sipservice',
                 THIS.account.DIDs_Unassigned = {};
             }
             THIS.account.DIDs_Unassigned[did] = {};
-            THIS.refreshScreen();
+            THIS.updateAccount();
         },
 
         delDID: function(did) {
@@ -952,7 +952,7 @@ winkstart.module('connect', 'sipservice',
                 THIS.account.account.trunks = dialogDiv.find('#trunks').val();
                 THIS.account.account.inbound_trunks = dialogDiv.find('#inbound_trunks').val();
                 dialogDiv.dialog('close');
-                THIS.refreshScreen();
+                THIS.updateAccount();
             });
             
         },
@@ -1070,8 +1070,8 @@ winkstart.module('connect', 'sipservice',
                 server_name: srv.server_name
             });
 
-            THIS.refreshScreen();
             srv.success();
+            THIS.updateAccount();
             console.log(THIS.account);
             /* For now...
             $.ajax({
@@ -1191,8 +1191,8 @@ winkstart.module('connect', 'sipservice',
                 e164: data.number
             }
 
-            THIS.refreshScreen();
             data.success();
+            THIS.updateAccount();
             /*$.ajax({
                 url: "#",
                 global: true,
