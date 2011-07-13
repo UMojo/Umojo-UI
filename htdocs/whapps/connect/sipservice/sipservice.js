@@ -91,7 +91,7 @@ winkstart.module('connect', 'sipservice',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-    }
+        }
     }, // End module resource definitions
 
 
@@ -136,6 +136,8 @@ winkstart.module('connect', 'sipservice',
 
     /* Define the functions for this module */
     {
+        account : {},
+
         login: function(args) {
             var THIS = this;
 
@@ -1637,6 +1639,7 @@ winkstart.module('connect', 'sipservice',
             });
 
             winkstart.log('Refreshing DIDs...');
+            $('#my_numbers').empty();
             THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
         },
 
@@ -1644,6 +1647,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             winkstart.log('Refreshing Services...');
+            $('#my_services').empty();
             THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
         },
 
@@ -1651,6 +1655,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
 
             winkstart.log('Refreshing Servers...');
+            $('#my_servers').empty();
             THIS.templates.main_servers.tmpl( account  ).appendTo ( $('#my_servers') );
         },
 
@@ -1660,13 +1665,13 @@ winkstart.module('connect', 'sipservice',
             // TODO: Remove hard-coded crap after testing, turn hardcoded stuff into fixtures
             var account_id = 'test';
             
-            var account = THIS.retrieveAccount(account_id);
-            winkstart.publish('sipservice.refreshServices', account);
+            THIS.account = THIS.retrieveAccount(account_id);
+            winkstart.publish('sipservice.refreshServices', THIS.account);
 
-            winkstart.publish('sipservice.refreshServers', account);
+            winkstart.publish('sipservice.refreshServers', THIS.account);
 
             //var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
-            winkstart.publish('sipservice.refreshDIDs', account);
+            winkstart.publish('sipservice.refreshDIDs', THIS.account);
         },
 
         mainMenu: function() {
