@@ -514,55 +514,12 @@ winkstart.module('connect', 'sipservice',
                 // Add whatever we found to the new server
                 THIS.account.servers[srv].DIDs[did] = did_data;
             }
-
-
-            return;
-            $.ajax({
-                url: "/api/moveDID",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify({
-                        DID:did,
-                        server: srv
-                    })
-                }),
-                dataType: "json",
-                async:false,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
-
-                //TODO: redraw servers and allDIDs
-                }
-            }
-            );
         },
 
         delDID: function(did) {
-            $.ajax({
-                url: "/api/delDID",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify(did)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs, 'Error');
-                    }
-                    redraw(msg.data);
+            var THIS = this;
 
-                //TODO: redraw servers and allDIDs
-                }
-            }
-            );
+            delete(THIS.account.DIDs_Unassigned[did.did]);
         },
 
         addDID: function(dids) {
@@ -1683,6 +1640,11 @@ winkstart.module('connect', 'sipservice',
 
                     }
             );
+
+            $("#ws-content #control_area").delegate(".cancelDID", "click", function(){
+                THIS.delDID($(this).dataset(), null);
+                setTimeout("winkstart.publish('sipservice.refreshScreen')", 1);
+            });
         },
 
         refreshServices: function(account) {
