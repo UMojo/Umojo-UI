@@ -34,11 +34,14 @@ winkstart.module('connect', 'sipservice',
             login: 'tmpl/login.html',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_circuits: 'tmpl/edit_circuits.html',
+            switch_user: 'tmpl/switch_user.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
+            'sipservice.switchUser' : 'switchUser',
+            'sipservice.switchUserForreal' : 'switchUserForreal',
 
             /* DID Provisioning */
             'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
@@ -1508,15 +1511,44 @@ winkstart.module('connect', 'sipservice',
 
     }(jQuery));
 
-*/
-
-
-
+*/      
         listAccounts: function(callback) {
             winkstart.getJSON('sipservice.list', {}, function(data) {
                 console.log(data.data);     // Account list, [ { id : 'name', name : 'some text' ... }, ... ]
                 callback(data.data);
             });
+        },
+
+        switchUser: function() {
+            var THIS = this;
+
+            THIS.listAccounts(function(data) {
+                var dialogDiv = THIS.templates.switch_user.tmpl({accounts: data}).dialog({
+                    title: 'Switch User',
+                    position: 'center',
+                    height: 300,
+                    width: 450
+                });
+
+                winkstart.publish('sipservice.input_css');
+            
+                dialogDiv.find('.btn_wrapper #switch').click(function() {
+                    winkstart.publish('sipservice.switchUserForreal', {
+                        account_id: dialogDiv.find('#account').val(),
+                        success : function(data) {
+                            THIS.account = data; 
+                            THIS.refreshScreen();
+                            dialogDiv.dialog('close');
+                        }
+                    });
+
+                });             
+            });
+        },
+
+        switchUserForreal: function(data) {
+            var THIS = this;
+            THIS.loadAccount(data.account_id, data.success); 
         },
 
         loadAccount: function(account_id, callback) {
@@ -1681,6 +1713,10 @@ winkstart.module('connect', 'sipservice',
 
                 // Populate account data
                 winkstart.publish('sipservice.refreshScreen');
+
+                $('.universal_nav .my_account').click(function() {
+                    winkstart.publish('sipservice.switchUser');
+                });
 
                 // Wire the "Add Server" button
                 $('#add_server').click(function() {
