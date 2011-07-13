@@ -68,9 +68,10 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 .advanced_settings_box {
 	background-image:
 		url(../images/tabs/advacnce_settings_box.png);
-	width: 800px;
+/*	width: 800px;*/
 	height: 30px;
 	margin: 12px 0 0 18px;
+    display: inline-block;
 }
 
 .advanced_settings_box h2 {
@@ -78,8 +79,14 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 	line-height: 30px;
 	padding-left: 18px;
 	float: left;
-	display: block;
-        margin: 0;
+	display: block; 
+    width: 124px;
+    margin: 0;
+}
+
+.advanced_tabs_wrapper {
+    display: inline-block;
+    width: 658px;
 }
 
 ul.advanced_tabs {
