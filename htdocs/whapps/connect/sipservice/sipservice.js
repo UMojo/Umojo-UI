@@ -1424,7 +1424,7 @@ winkstart.module('connect', 'sipservice',
                "type": "sys_info",
                "account": {
                    "credits": {
-                       "prepay": "10.00"
+                       "prepay": "12.00"
                    },
                    "billing_id": "2946255",
                    "primary": "test@secret.com",

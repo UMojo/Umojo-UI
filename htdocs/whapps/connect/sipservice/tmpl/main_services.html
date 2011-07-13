@@ -29,8 +29,10 @@
 
     <div class="addl">
 
-        {{if account.billing and account.billing.cards[1] }}
+        {{if account.billing }}
+        {{if account.billing.cards[1] }}
         <span class="cc_back">Backup card: <span class="cc_number">${account.billing.cards[1]['num']}</span> <span class="edit"><a href="#">[edit]</a></span></span>
+        {{/if}}
         {{/if}}
     </div>
 
