@@ -34,7 +34,8 @@ winkstart.module('connect', 'sipservice',
             login: 'tmpl/login.html',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_circuits: 'tmpl/edit_circuits.html',
-            switch_user: 'tmpl/switch_user.html'
+            switch_user: 'tmpl/switch_user.html',
+            add_number_tmp: 'tmpl/add_number_tmp.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -200,7 +201,7 @@ winkstart.module('connect', 'sipservice',
         addNumber: function(args) {
             var THIS = this;
 
-            var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
+            /*var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
                 title: 'Add/Search Numbers',
                 width: 535,
                 height: 565,
@@ -217,7 +218,22 @@ winkstart.module('connect', 'sipservice',
                     }
                 });
                
+            });*/
+            
+            var dialogDiv = THIS.templates.add_number_tmp.tmpl().dialog({
+                title: 'Add New Number'
             });
+
+            dialogDiv.find('#add_number_button').click(function() {
+                var did = dialogDiv.find('#number').val();
+                if(THIS.account.DIDs_Unassigned == undefined) {
+                    THIS.account.DIDs_Unassigned = {};
+                }
+                THIS.account.DIDs_Unassigned[did] = {};
+                dialogDiv.dialog('close');
+                THIS.refreshScreen();
+            });
+            
         },
         
         postNumber: function(data) {
@@ -557,7 +573,7 @@ winkstart.module('connect', 'sipservice',
             if(THIS.account.DIDs_Unassigned == undefined) {
                 THIS.account.DIDs_Unassigned = {};
             }
-            THIS.account.DIDs_Unassigned[did] = true;
+            THIS.account.DIDs_Unassigned[did] = {};
             THIS.refreshScreen();
         },
 
@@ -1787,6 +1803,10 @@ winkstart.module('connect', 'sipservice',
                 $('.unassign').live('click', function() {
                     data = $(this).dataset();
                     winkstart.publish('sipservice.unassignDID', data);
+                });
+
+                $('.add_new_number').live('click', function() {
+                    winkstart.publish('sipservice.addNumber');
                 });
             });
         },
