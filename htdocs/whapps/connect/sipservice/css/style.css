@@ -73,7 +73,7 @@
 #my_servers .server .sip { height:59px; width:425px; background:url(../images/bg_server_sip.jpg) top left no-repeat; font-size:12px; }
 #my_servers .server .sip .area { width:100px; margin:0 0 0 20px; float:left; }
 #my_servers .server .sip .area .title { display:block; width:100px; margin:6px 0 0 0; background:none; color:#2585a5; font-weight:bold; height:27px; }
-#my_servers .server .sip .area .info { display:block; width:145px;  max-width: 125px; overflow-x: hidden; text-overflow:ellipsis;}
+#my_servers .server .sip .area .info { display:block; width:145px;  max-width: 125px; overflow-x: hidden; text-overflow:ellipsis; font-size:12px; }
 #my_servers .server .sip .area:hover .info  { display:block; width:145px;  max-width: 345px; overflow-x: visible; z-index: 55; font-weight:bold ;   }
 #my_servers .server .sip .area:hover +.area .info  { visibility: hidden;  }
 
