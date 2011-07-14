@@ -1830,7 +1830,7 @@ winkstart.module('connect', 'sipservice',
                     winkstart.publish('sipservice.unassignDID', data);
                 });
 
-                $('.add_new_number').live('click', function() {
+                $('.add').live('click', function() {
                     winkstart.publish('sipservice.addNumber');
                 });
             });
