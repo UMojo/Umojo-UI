@@ -129,7 +129,7 @@ winkstart.module('voip', 'account',
             $('#account-view').empty();
             var THIS = this;
             var form_data = {
-                data: { caller_id: { internal: {}, external: {}}, vm_to_email: {}},   
+                data: { name: "Username's account", realm: "myrealm.pbx.com", caller_id: { internal: { number: "+11111111111", name: "Friendly Name" }, external: {number: "+22222222222", name: "Friendly Name"}}, vm_to_email: {support_number: "+11111111111", support_email: "support@company.com"}},   
                 field_data: THIS.config.formData,
                 value: {}
             };

@@ -40,7 +40,7 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-                {name : '#name', regex : /^\w+$/},
+                {name : '#name', regex : /^[a-zA-Z0-9\s_]+$/},
                 {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
                 {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
@@ -148,18 +148,33 @@ winkstart.module('voip', 'device',
                 alert('Please correct errors that you have on the form.');
             }
         },
-
+        //Function to generate random usernames and passwords        
+        generateRandomString: function(pLength){
+            var chars = "0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz";
+            var sRandomString = "";
+            for (var i=0; i<pLength; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                sRandomString += chars.substring(rnum,rnum+1);
+            }
+            return sRandomString;
+        },
         /*
          * Create/Edit device properties (don't pass an ID field to cause a create instead of an edit)
          */
         editDevice: function(data){
             $('#device-view').empty();
             var THIS = this;
+
+            var generatedPassword = THIS.generateRandomString(12); 
+            var generatedUsername = "user_" + THIS.generateRandomString(6); 
+
             var form_data = {
                 data : {
-                    caller_id : {default : {}, emergency : {}},
+                    name: "Device Name",
+                    mac_address: "12:34:56:78:9A:BC",
+                    caller_id : {default : { name: "Friendly Name", number: "+000000000000"}, emergency : {name: "Friendly Name", number: "+111111111111"}},
                     media : {audio : {codecs : []}, video : {codecs : []}, fax: {codecs: []}},
-                    sip : {}
+                    sip : { realm: "myserver.com", username: generatedUsername, password: generatedPassword, expire_seconds: "30"}
                 }
             };
             

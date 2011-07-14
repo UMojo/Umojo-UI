@@ -1173,6 +1173,7 @@ winkstart.module('connect', 'sipservice',
             winkstart.publish('sipservice.input_css');
             
             dialogDiv.find('.submit_btn').click(function() {
+                console.log(dialogDiv);
                 winkstart.publish('sipservice.postFailover', {
                     number : dialogDiv.find('#failover_number').val(),
                     parent: number,
@@ -1186,9 +1187,13 @@ winkstart.module('connect', 'sipservice',
         
         postFailover: function(data) {
             var THIS = this;
-
-            THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
-                e164: data.number
+            console.log(data);
+            if(data.number == '') {
+                delete  THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover;
+            } else {
+                THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
+                    e164: data.number
+                };
             }
 
             data.success();
@@ -1493,7 +1498,7 @@ winkstart.module('connect', 'sipservice',
             return false;
         },
         
-        input_css:function(){
+        /*input_css:function(){
             $('input[type="text"]').addClass("idleField");
             $('input[type="text"]').focus(function() {
                 $(this).removeClass("idleField").addClass("focusField");
@@ -1511,7 +1516,7 @@ winkstart.module('connect', 'sipservice',
                 }
             });
             
-        },
+        },*/
 
         /* WHAT IS THIS? */
 
