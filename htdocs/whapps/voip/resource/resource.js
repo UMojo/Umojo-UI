@@ -144,7 +144,7 @@ winkstart.module('voip', 'resource',
             $('#resource-view').empty();
             var THIS = this;
             var form_data = {
-                data: {gateways: [{ codecs: {}}], rules: [], caller_id_options: {}, flags: []},   
+                data: {name: "Resource Name", weight_cost: "12", gateways: [{ server: "mygateway.server.com", realm: "myrealm.com", username: "Username", password: "Password", prefix: "+1",  codecs: {}}], rules: [], caller_id_options: {}, flags: ["CallerId"]},   
                 field_data: THIS.config.formData,
                 value: {}
             };

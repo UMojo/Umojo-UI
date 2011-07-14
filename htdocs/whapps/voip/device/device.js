@@ -157,9 +157,11 @@ winkstart.module('voip', 'device',
             var THIS = this;
             var form_data = {
                 data : {
-                    caller_id : {default : {}, emergency : {}},
+                    name: "Device_name",
+                    mac_address: "12:34:56:78:9A:BC",
+                    caller_id : {default : { name: "Friendly Name", number: "+000000000000"}, emergency : {name: "Friendly Name", number: "+111111111111"}},
                     media : {audio : {codecs : []}, video : {codecs : []}, fax: {codecs: []}},
-                    sip : {}
+                    sip : { realm: "myserver.com", username: "sip_username", password: "sip_password", expire_seconds: "30"}
                 }
             };
             
