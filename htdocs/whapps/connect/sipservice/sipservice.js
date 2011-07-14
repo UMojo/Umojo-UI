@@ -539,7 +539,7 @@ winkstart.module('connect', 'sipservice',
             srv = srv.serverid;
             did = did.did;
             
-            console.log('DID ', did, ' srv', srv);
+            winkstart.log('DID ', did, ' srv', srv);
 
             // Is this an unassigned DID?
             if (THIS.account.DIDs_Unassigned && THIS.account.DIDs_Unassigned[did]) {
@@ -711,7 +711,7 @@ winkstart.module('connect', 'sipservice',
                 rCost+=$(elm).dataset('recurringCost') *1;
                 oCost+=$(elm).dataset('oneTimeCost') * 1;
                 buyThese.push( $(elm).dataset());
-            //			console.log($(elm).dataset('did'));
+            //			winkstart.log($(elm).dataset('did'));
             });
 
 
@@ -1054,7 +1054,7 @@ winkstart.module('connect', 'sipservice',
         addServer: function(srv) {
             var THIS = this;
 
-            console.log(THIS.account);
+            winkstart.log(THIS.account);
 
             THIS.account.servers.push({
                 auth: {
@@ -1072,7 +1072,7 @@ winkstart.module('connect', 'sipservice',
 
             srv.success();
             THIS.updateAccount();
-            console.log(THIS.account);
+            winkstart.log(THIS.account);
             /* For now...
             $.ajax({
                 url: "/api/addServer",
@@ -1269,7 +1269,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         modifySRVDefaultsPrompt: function(info) {
-            //	console.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
+            //	winkstart.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
             popup($('#tmpl_modSRVDefs_prompt').tmpl( {
                 s: info.serverid,
                 srv: acct.servers[info.serverid],
@@ -1380,7 +1380,7 @@ winkstart.module('connect', 'sipservice',
             }, function(jdata) {
                 jdata.tmplOpts = typeof opts.tmplOpts == 'object' ? opts.tmplOpts : {} ;
                 jdata.fa = typeof opts.fa == 'object' ? opts.fa : {} ;
-                //console.log(JSON.stringify(jdata));
+                //winkstart.log(JSON.stringify(jdata));
                 popup($('#tmpl_display_acct_info').tmpl(jdata), {
                     title: 'Account Billing Information'
                 });
@@ -1531,7 +1531,7 @@ winkstart.module('connect', 'sipservice',
 */      
         listAccounts: function(callback) {
             winkstart.getJSON('sipservice.list', {}, function(data) {
-                console.log(data.data);     // Account list, [ { id : 'name', name : 'some text' ... }, ... ]
+                winkstart.log(data.data);     // Account list, [ { id : 'name', name : 'some text' ... }, ... ]
                 callback(data.data);
             });
         },
@@ -1593,7 +1593,7 @@ winkstart.module('connect', 'sipservice',
 
         loadAccount: function(account_id, callback) {
             winkstart.getJSON('sipservice.get', { account_id : account_id}, function(data) {
-                console.log(data.data);
+                winkstart.log(data.data);
                 callback(data.data);
             });
 
@@ -1620,7 +1620,7 @@ winkstart.module('connect', 'sipservice',
             };
 
             winkstart.putJSON('sipservice.create', { data : data }, function(response) {
-                console.log(response);
+                winkstart.log(response);
                 THIS.account = response.data;
                 THIS.refreshScreen();
             })
@@ -1631,7 +1631,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
             
             winkstart.postJSON('sipservice.update', { account_id : THIS.account.id, data : THIS.account }, function(data) {
-                console.log(data);
+                winkstart.log(data);
                 THIS.account = data.data;
                 THIS.refreshScreen();
             });
@@ -1644,12 +1644,12 @@ winkstart.module('connect', 'sipservice',
             var DIDs = {};
 
             $(servers.servers).each(function(k, v) {
-                console.log(v);
+                winkstart.log(v);
                 $.extend(DIDs, v.DIDs);
-                console.log(DIDs);
+                winkstart.log(DIDs);
             });
 
-            console.log(DIDs);
+            winkstart.log(DIDs);
 
             return DIDs;
         },
@@ -1748,7 +1748,7 @@ winkstart.module('connect', 'sipservice',
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
             THIS.loadAccount('Donohoo_Trunk', function(account) {
-                console.log(account);
+                winkstart.log(account);
                 THIS.account = account;
 
                 // Populate account data
