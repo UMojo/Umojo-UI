@@ -571,7 +571,6 @@ winkstart.module('connect', 'sipservice',
             var did = data.did;
             var serverid = data.serverid;
             delete(THIS.account.servers[serverid].DIDs[did]);
-            console.log(THIS.account);
             if(THIS.account.DIDs_Unassigned == undefined) {
                 THIS.account.DIDs_Unassigned = {};
             }
