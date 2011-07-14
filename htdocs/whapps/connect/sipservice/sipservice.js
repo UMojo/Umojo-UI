@@ -32,7 +32,8 @@ winkstart.module('connect', 'sipservice',
             edit_billing: 'tmpl/edit_billing.html',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
-            edit_cnam: 'tmpl/edit_cnam.html'
+            edit_cnam: 'tmpl/edit_cnam.html',
+            edit_circuits: 'tmpl/edit_circuits.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -73,6 +74,7 @@ winkstart.module('connect', 'sipservice',
 
             // Trunk Management
             'sipservice.editTrunks': 'editTrunks',
+            'sipservice.editCircuits': 'editCircuits',
 
             /* */
             'sipservice.refreshDIDs' : 'refreshDIDs',
@@ -880,6 +882,20 @@ winkstart.module('connect', 'sipservice',
             });
         },
 
+        editCircuits: function(args) {
+            var THIS = this;
+            var dialogDiv = THIS.templates.edit_circuits.tmpl(THIS).dialog({
+                title: 'Edit Circuits'
+            });
+
+            dialogDiv.find('#update_trunks_button').click(function() {
+                THIS.account.account.trunks = dialogDiv.find('#trunks').val();
+                THIS.account.account.inbound_trunks = dialogDiv.find('#inbound_trunks').val();
+                dialogDiv.dialog('close');
+                THIS.refreshScreen();
+            });
+            
+        },
 
         setTrunks: function(trunks) {
             if ( 'not from prepay' || checkCredits(25) ) {
@@ -1750,6 +1766,10 @@ winkstart.module('connect', 'sipservice',
                 winkstart.publish('sipservice.editTrunks');
             });
 
+            $('#modify_circuits').live('click', function() {
+                winkstart.publish('sipservice.editCircuits');
+            });
+
             $('#tmp_add_number').click(function() {
                 winkstart.publish('sipservice.addNumber');
             });
@@ -1769,7 +1789,7 @@ winkstart.module('connect', 'sipservice',
             $('#tmp_edit_cnam').click(function() {
                 winkstart.publish('sipservice.configureCnam');
             });
-
+            
             $('#tmp_edit_auth').click(function() {
                 winkstart.publish('sipservice.editAuth');
             });
