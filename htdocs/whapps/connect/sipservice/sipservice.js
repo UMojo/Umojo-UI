@@ -3,9 +3,7 @@ winkstart.module('connect', 'sipservice',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-        'css/sipservice.css',
         'css/style.css',
-        'css/custom_popups.css',
         'css/popups.css'
         ],
 
