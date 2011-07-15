@@ -40,7 +40,7 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-                {name : '#name', regex : /^[a-zA-Z0-9\s]+$/},
+                {name : '#name', regex : /^[a-zA-Z0-9\s_]+$/},
                 {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
                 {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
@@ -170,7 +170,7 @@ winkstart.module('voip', 'device',
 
             var form_data = {
                 data : {
-                    name: "Device_name",
+                    name: "Device Name",
                     mac_address: "12:34:56:78:9A:BC",
                     caller_id : {default : { name: "Friendly Name", number: "+000000000000"}, emergency : {name: "Friendly Name", number: "+111111111111"}},
                     media : {audio : {codecs : []}, video : {codecs : []}, fax: {codecs: []}},
