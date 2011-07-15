@@ -944,8 +944,8 @@ winkstart.module('connect', 'sipservice',
 
         editCircuits: function(args) {
             var THIS = this;
-            var dialogDiv = THIS.templates.edit_circuits.tmpl(THIS).dialog({
-                title: 'Edit Circuits'
+            winkstart.popup(THIS.templates.edit_circuits.tmpl(THIS), {
+                title: 'Edit Trunks / Circuits'
             });
 
             dialogDiv.find('#update_trunks_button').click(function() {
@@ -1597,7 +1597,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         loadAccount: function(account_id, callback) {
-            winkstart.getJSON('sipservice.get', { account_id : account_id}, function(data) {
+            winkstart.getJSON('sipservice.get', {account_id : account_id}, function(data) {
                 winkstart.log(data.data);
                 callback(data.data);
             });
@@ -1624,7 +1624,7 @@ winkstart.module('connect', 'sipservice',
                ]
             };
 
-            winkstart.putJSON('sipservice.create', { data : data }, function(response) {
+            winkstart.putJSON('sipservice.create', {data : data}, function(response) {
                 winkstart.log(response);
                 THIS.account = response.data;
                 THIS.refreshScreen();
@@ -1635,7 +1635,7 @@ winkstart.module('connect', 'sipservice',
         updateAccount: function() {
             var THIS = this;
             
-            winkstart.postJSON('sipservice.update', { account_id : THIS.account.id, data : THIS.account }, function(data) {
+            winkstart.postJSON('sipservice.update', {account_id : THIS.account.id, data : THIS.account}, function(data) {
                 winkstart.log(data);
                 THIS.account = data.data;
                 THIS.refreshScreen();
