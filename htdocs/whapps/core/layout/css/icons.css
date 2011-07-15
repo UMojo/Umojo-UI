@@ -54,45 +54,46 @@
 .icon.yellow {
     background-image: url(../images/icons_32x32_yellow.png);
 }
+
 /************** ICONS SUBNAV *****/
 
-.icon.account {
+.icon.account { /* 0, 11 */
     background-position: 0 -357px;
 }
 
-.icon.callflow {
+.icon.callflow { /* 5, 0 */
     background-position: -160px -5px;
 }
 
-.icon.conference {
+.icon.conference { /* 10, 5 */
     background-position: -320px -165px;
 }
 
-.icon.device {
+.icon.device { /* 16, 5 */
     background-position: -512px -165px;
 }
 
-.icon.media {
+.icon.media { /* 10, 9 */
     background-position: -320px -293px;
 }
 
-.icon.menu {
+.icon.menu { /* 20, 5 */
     background-position: -640px -165px;
 }
 
-.icon.registration {
+.icon.registration { /* 18, 7 */
     background-position: -576px -229px;
 }
 
-.icon.resource {
+.icon.resource { /* 0, 7 */
     background-position: 0 -229px ;
 }
 
-.icon.user {
+.icon.user { /* 17, 6 */
     background-position: -544px -197px;
 }
 
-.icon.vmbox {
+.icon.vmbox { /* 30, 5 */
     background-position: -960px -165px;
 }
 
