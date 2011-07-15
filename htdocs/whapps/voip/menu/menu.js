@@ -126,7 +126,7 @@ winkstart.module('voip', 'menu',
             $('#menu-view').empty();
             var THIS = this;
             var form_data = {
-                data: { retries: "3", timeout: "10000", record_pin: "123", name: "Menu Name", max_extension_length: "4"},   
+                data: { retries: "3", timeout: "10000" },   
                 field_data: {},
                 value: {}
             };

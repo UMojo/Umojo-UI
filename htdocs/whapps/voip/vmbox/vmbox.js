@@ -132,7 +132,7 @@ winkstart.module('voip', 'vmbox',
             $('#vmbox-view').empty();
             var THIS = this;
             var form_data = {
-                data: { name: "My Voicemail", mailbox: "0000", pin: "1234"},   
+                data: { require_pin: "true"},   
                 field_data: THIS.config.formData,
                 value: {}
             };

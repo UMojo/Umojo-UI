@@ -157,7 +157,7 @@ winkstart.module('voip', 'resource',
             var generatedPassword = THIS.generateRandomString(12);
 
             var form_data = {
-                data: {name: "Resource Name", weight_cost: "12", gateways: [{ server: "mygateway.server.com", realm: "myrealm.com", username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: {}}], rules: [], caller_id_options: {}, flags: ["CallerId"]},   
+                data: { weight_cost: "100", gateways: [{ username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: {}, flags: []},   
                 field_data: THIS.config.formData,
                 value: {}
             };
