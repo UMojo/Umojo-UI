@@ -136,15 +136,28 @@ winkstart.module('voip', 'resource',
                 alert('Please correct errors that you have on the form.');
             }
         },
-
+        //Function to generate random usernames and passwords
+        generateRandomString: function(pLength){
+            var chars = "0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz";
+            var sRandomString = "";
+            for (var i=0; i<pLength; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                sRandomString += chars.substring(rnum,rnum+1);
+            }
+            return sRandomString;
+        },
         /*
          * Create/Edit resource properties (don't pass an ID field to cause a create instead of an edit)
          */
         editResource: function(data){
             $('#resource-view').empty();
             var THIS = this;
+
+            var generatedUsername = "user_" + THIS.generateRandomString(6);
+            var generatedPassword = THIS.generateRandomString(12);
+
             var form_data = {
-                data: {name: "Resource Name", weight_cost: "12", gateways: [{ server: "mygateway.server.com", realm: "myrealm.com", username: "Username", password: "Password", prefix: "+1",  codecs: {}}], rules: [], caller_id_options: {}, flags: ["CallerId"]},   
+                data: {name: "Resource Name", weight_cost: "12", gateways: [{ server: "mygateway.server.com", realm: "myrealm.com", username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: {}}], rules: [], caller_id_options: {}, flags: ["CallerId"]},   
                 field_data: THIS.config.formData,
                 value: {}
             };
