@@ -124,7 +124,272 @@ winkstart.module('connect', 'sipservice',
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
-            }
+            },
+            
+            
+            
+            "sipservice.billing.put": {
+                url: 'https://store.2600hz.com/v1/billing.put',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            "sipservice.billing.get": {
+                url: 'https://store.2600hz.com/v1/billing.get',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "sipservice.billing.delete": {
+                url: 'https://store.2600hz.com/v1/billing.put',
+                contentType: 'application/json',
+                verb: 'DELETE'
+            },
+            
+            
+            
+            
+
+            "sipservice.circuits.get": {
+                url: 'https://store.2600hz.com/v1/circuits.get',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "sipservice.circuits.post": {
+                url: 'https://store.2600hz.com/v1/circuits.post',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            
+            
+            
+            
+            "sipservice.endpoints.put": {
+                url: 'https://store.2600hz.com/v1/endpoints.put',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            "sipservice.endpoints.get": {
+                url: 'https://store.2600hz.com/v1/endpoints.get',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "sipservice.endpoints.post": {
+                url: 'https://store.2600hz.com/v1/endpoints.post',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            "sipservice.endpoints.delete": {
+                url: 'https://store.2600hz.com/v1/endpoints.put',
+                contentType: 'application/json',
+                verb: 'DELETE'
+            },
+
+
+
+
+	"sipservice.addUser": {
+                url: 'https://store.2600hz.com/v1/addUser',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.editUser": {
+                url: 'https://store.2600hz.com/v1/editUser',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.getUser": {
+                url: 'https://store.2600hz.com/v1/getUser',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.checkIfExists": {
+                url: 'https://store.2600hz.com/v1/checkIfExists',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+
+	"sipservice.getUserAuth": {
+                url: 'https://store.2600hz.com/v1/getUserAuth',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+
+
+
+
+
+
+
+	"sipservice.searchNPANXX": {
+                url: 'https://store.2600hz.com/v1/searchNPANXX',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.searchNPA": {
+                url: 'https://store.2600hz.com/v1/searchNPA',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+	"sipservice.searchAvailDIDs": {
+                url: 'https://store.2600hz.com/v1/searchAvailDIDs',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+	"sipservice.requestPortDID": {
+                url: 'https://store.2600hz.com/v1/requestPortDID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+
+	"sipservice.getLNPData": {
+                url: 'https://store.2600hz.com/v1/getLNPData',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+
+
+	"sipservice.numbers.addDID": {
+                url: 'https://store.2600hz.com/v1/addDID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.addDIDs": {
+                url: 'https://store.2600hz.com/v1/addDIDs',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.moveDID": {
+                url: 'https://store.2600hz.com/v1/moveDID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.delDID": {
+                url: 'https://store.2600hz.com/v1/delDID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.setE911": {
+                url: 'https://store.2600hz.com/v1/setE911',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.setFailOver": {
+                url: 'https://store.2600hz.com/v1/setFailOver',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.numbers.setCID": {
+                url: 'https://store.2600hz.com/v1/setCID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+		"sipservice.get_idoc": {
+                url: 'https://store.2600hz.com/v1/get_idoc',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+	"sipservice.addServer": {
+                url: 'https://store.2600hz.com/v1/addServer',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.delServer": {
+                url: 'https://store.2600hz.com/v1/delServer',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+	"sipservice.setServerDefaults": {
+                url: 'https://store.2600hz.com/v1/setServerDefaults',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.removeSIPAuthIP": {
+                url: 'https://store.2600hz.com/v1/removeSIPAuthIP',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+	"sipservice.server.setSIPAuth": {
+                url: 'https://store.2600hz.com/v1/setSIPAuth',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	"sipservice.createTicket": {
+                url: 'https://store.2600hz.com/v1/createTicket',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
     }, // End module resource definitions
 
