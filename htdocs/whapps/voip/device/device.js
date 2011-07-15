@@ -83,7 +83,12 @@ winkstart.module('voip', 'device',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
-            }         
+            },
+            "account.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            }
         }
     },
 
@@ -167,21 +172,22 @@ winkstart.module('voip', 'device',
 
             var generatedPassword = THIS.generateRandomString(12); 
             var generatedUsername = "user_" + THIS.generateRandomString(6); 
-
-            var form_data = {
-                data : {
-                    name: "Device Name",
-                    mac_address: "12:34:56:78:9A:BC",
-                    caller_id : {default : { name: "Friendly Name", number: "+000000000000"}, emergency : {name: "Friendly Name", number: "+111111111111"}},
-                    media : {audio : {codecs : []}, video : {codecs : []}, fax: {codecs: []}},
-                    sip : { realm: "myserver.com", username: generatedUsername, password: generatedPassword, expire_seconds: "30"}
-                }
-            };
             
-            form_data.field_data = THIS.config.formData;
-            form_data.field_data.users = [];
-            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
-                    var listUsers = []; 
+            winkstart.getJSON('account.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(json, xhr) {
+                console.log(json.data.realm);
+                var form_data = {
+                    data : {
+                        mac_address: "12:34:56:78:9A:BC",
+                        caller_id : {default : { }, emergency : { }},
+                        media : {audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
+                        sip : { realm: json.data.realm, username: generatedUsername, password: generatedPassword, expire_seconds: "360"}
+                    }
+                };
+
+                form_data.field_data = THIS.config.formData;
+                form_data.field_data.users = [];
+                winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+                    var listUsers = [];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
                             var title = elem.first_name + ' ' + elem.last_name;
@@ -191,27 +197,26 @@ winkstart.module('voip', 'device',
                             });
                         });
                         form_data.field_data.users = listUsers;
-                }
-                if (data && data.id) {
-                /* This is an existing device - Grab JSON data from server for device_id */
-                winkstart.getJSON('device.get', {
-                    crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
-                    device_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
-                    console.log(form_data);
-                    THIS.renderDevice(form_data);
-                });
-                } else {
-                /* This is a new device - pass along empty params */
-                //console.log(form_data);
-                THIS.renderDevice(form_data);
-                }                
+                    }
+                    if (data && data.id) {
+                    /* This is an existing device - Grab JSON data from server for device_id */
+                        winkstart.getJSON('device.get', {
+                            crossbar: true,
+                            account_id: MASTER_ACCOUNT_ID,
+                            device_id: data.id
+                            }, function(json, xhr) {
+                                /* On success, take JSON and merge with default/empty fields */
+                                $.extend(true, form_data, json);
+                                THIS.renderDevice(form_data);
+                        });
+                    } else {
+                        /* This is a new device - pass along empty params */
+                        THIS.renderDevice(form_data);
+                    }
 
+                });
             });
-            
+
         },
 
         deleteDevice: function(device_id) {

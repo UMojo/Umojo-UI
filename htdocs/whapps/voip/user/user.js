@@ -140,12 +140,8 @@ winkstart.module('voip', 'user',
             var THIS = this;
             var form_data = {
                 data : {
-                    first_name: "My First Name",
-                    last_name: "My Last Name",
-                    email: "email@company.com", 
-                    username: "My Username",
                     call_forward: {},
-                    caller_id: { internal: { name: "Friendly Name", number: "+11111111111"}, external: { name: "Friendly Name", number: "+00000000000"}}
+                    caller_id: { internal: { }, external: { }}
                 }
             };
             
