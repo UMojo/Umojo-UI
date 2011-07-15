@@ -47,6 +47,18 @@
                 <a href="#" class="failover" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
                 {{/if}}
 
+                {{if DID.caller_id}}
+                <a href="#" class="cid active"  data-serverid="${s}" title="${DID.caller_id.cid_name}" data-did="${i}">CID</a>
+                {{else}}
+                <a href="#" class="cid" data-serverid="${s}" title="Click to Set Outbound Caller ID Name (CNAM)" data-did="${i}">CID</a>
+                {{/if}}
+
+                {{if DID.e911_info}}
+                <a href="#" class="e911 {{if DID.e911_info}}active{{/if}}"  data-serverid="${s}"  data-did="${i}" {{if DID.e911_info}}title="${DID.e911_info.Address}"{{/if}}>e911</a>
+                {{else}}
+                <a href="#" class="e911" data-serverid="${s}"  data-did="${i}">e911</a>
+                {{/if}}
+                
                 <a href="#" class="misc"  data-serverid="${s}" data-did="${i}">misc</a>
                 <a href="#" class="unassign"  data-serverid="${s}" data-did="${i}">Unassign</a>
 
@@ -54,7 +66,7 @@
             {{/each}}
         </div>
         <div class="drop_area" id="s_drop_${s}" data-serverid="${s}">Drag-n-Drop Numbers Here</div>
-        <!-- <div class="behavior"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Modify Default Behaviors</a> (Fail-over #, Caller ID, etc.)</div> -->
+        <div class="behavior"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Modify Default Behaviors</a> (Fail-over #, Caller ID, etc.)</div>
     </div>
     {{/each}}
 

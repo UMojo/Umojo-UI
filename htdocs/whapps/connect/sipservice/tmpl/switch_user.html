@@ -1,4 +1,4 @@
-<div>
+    <div>
     <div id="edit_server" class="popup container_resize">
         <div class="resize">
             <div class="stylized myform">
@@ -9,7 +9,7 @@
                     <label>Switch to acount: </label>
                     <select id="account">
                     {{each(i,account) accounts}}
-                        <option value="${account.id}">${account.name}</option>
+                        <option value="${account.id}">${account.name} (${account.id})</option>
                     {{/each}}
                     </select>
                 </form>   
