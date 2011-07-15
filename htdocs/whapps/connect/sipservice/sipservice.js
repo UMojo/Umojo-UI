@@ -33,7 +33,7 @@ winkstart.module('connect', 'sipservice',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
             edit_cnam: 'tmpl/edit_cnam.html',
-            edit_circuits: 'tmpl/edit_circuits.html',
+            edit_circuits: 'tmpl/edit_trunks.html',
             switch_user: 'tmpl/switch_user.html',
             add_number_tmp: 'tmpl/add_number_tmp.html',
             add_user: 'tmpl/add_user.html'
@@ -1752,7 +1752,6 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
             THIS.templates.main.tmpl().appendTo( $('#ws-content') );
 
-
             $('.universal_nav .my_account').click(function() {
                 winkstart.publish('sipservice.switchUser');
             });
@@ -1771,13 +1770,13 @@ winkstart.module('connect', 'sipservice',
                 winkstart.publish('sipservice.editFailover', $(this).dataset());
             });
 
-            /*$("#server_area").delegate(".cid", "click", function(){
+            $("#server_area").delegate(".cid", "click", function(){
                 cidPrompt($(this).dataset(), null);
             });
 
             $("#server_area").delegate(".e911", "click", function(){
                 e911Prompt($(this).dataset(), null);
-            });*/
+            });
 
             $("#server_area").delegate(".misc", "click", function(){
                 miscPrompt($(this).dataset(), null);
@@ -1842,14 +1841,7 @@ winkstart.module('connect', 'sipservice',
             var THIS = this;
             /* Clear out the center part of the window - get ready to put our own content in there */
             $('#ws-content').empty();
-
-            /* Draw our base template into the window */
-            THIS.templates.index.tmpl().appendTo( $('#ws-content') );
-
-            $('#ws-content a#signup_button').click(function() {
-                THIS.mainMenu();
-            });
-
+            
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
             winkstart.registerResources(this.config.resources);
             
@@ -1858,6 +1850,25 @@ winkstart.module('connect', 'sipservice',
                 module: this.__module
             });
             
+            // If user is already logged in, go ahead and show their trunks & stuff
+            if (winkstart.modules['connect'].auth_token) {
+                // Load user & show main page
+                THIS.loadAccount(winkstart.modules['connect'].auth_token, function(data) {
+                    THIS.account = data; 
+                    THIS.mainMenu();
+                    THIS.refreshScreen();
+                }); 
+            } else {
+                // Show landing page
+                
+                /* Draw our base template into the window */
+                THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+
+                $('#ws-content a#signup_button').click(function() {
+                    THIS.mainMenu();
+                });
+            }
+
         }
     } // End function definitions
 
