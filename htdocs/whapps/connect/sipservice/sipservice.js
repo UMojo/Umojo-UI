@@ -47,7 +47,7 @@ winkstart.module('connect', 'sipservice',
             /* DID Provisioning */
             'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
             'sipservice.findNumber' : 'findNumber',         // Find new numbers
-            'sipservice.addNumber' : 'addNumber',           // Buy/add a number to this account
+            'sipservice.addNumber' : 'addNumberPrompt',           // Buy/add a number to this account
             'sipservice.postNumber': 'postNumber',
             'sipservice.cancelNumber' : 'cancelNumber',     // Cancel a number from the account
             'sipservice.mapNumber' : 'mapNumber',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
@@ -129,17 +129,17 @@ winkstart.module('connect', 'sipservice',
             
             
             "sipservice.billing.put": {
-                url: 'https://store.2600hz.com/v1/billing.put',
+                url: 'https://store.2600hz.com/v1/billing',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "sipservice.billing.get": {
-                url: 'https://store.2600hz.com/v1/billing.get',
+                url: 'https://store.2600hz.com/v1/billing',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "sipservice.billing.delete": {
-                url: 'https://store.2600hz.com/v1/billing.put',
+                url: 'https://store.2600hz.com/v1/billing',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
@@ -149,12 +149,12 @@ winkstart.module('connect', 'sipservice',
             
 
             "sipservice.circuits.get": {
-                url: 'https://store.2600hz.com/v1/circuits.get',
+                url: 'https://store.2600hz.com/v1/circuits',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "sipservice.circuits.post": {
-                url: 'https://store.2600hz.com/v1/circuits.post',
+                url: 'https://store.2600hz.com/v1/circuits',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -163,22 +163,22 @@ winkstart.module('connect', 'sipservice',
             
             
             "sipservice.endpoints.put": {
-                url: 'https://store.2600hz.com/v1/endpoints.put',
+                url: 'https://store.2600hz.com/v1/endpoints',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "sipservice.endpoints.get": {
-                url: 'https://store.2600hz.com/v1/endpoints.get',
+                url: 'https://store.2600hz.com/v1/endpoints',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "sipservice.endpoints.post": {
-                url: 'https://store.2600hz.com/v1/endpoints.post',
+                url: 'https://store.2600hz.com/v1/endpoints',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "sipservice.endpoints.delete": {
-                url: 'https://store.2600hz.com/v1/endpoints.put',
+                url: 'https://store.2600hz.com/v1/endpoints',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
@@ -310,32 +310,32 @@ winkstart.module('connect', 'sipservice',
             },
 
 
-	"sipservice.addServer": {
+	"sipservice.server.add": {
                 url: 'https://store.2600hz.com/v1/addServer',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-	"sipservice.delServer": {
+	"sipservice.server.delete": {
                 url: 'https://store.2600hz.com/v1/delServer',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
-	"sipservice.setServerDefaults": {
+	"sipservice.server.setDefaults": {
                 url: 'https://store.2600hz.com/v1/setServerDefaults',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-	"sipservice.removeSIPAuthIP": {
+	"sipservice.server.auth.removeIP": {
                 url: 'https://store.2600hz.com/v1/removeSIPAuthIP',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-	"sipservice.server.setSIPAuth": {
+	"sipservice.server.auth.set": {
                 url: 'https://store.2600hz.com/v1/setSIPAuth',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -463,7 +463,7 @@ winkstart.module('connect', 'sipservice',
             winkstart.publish('sipservice.input_css');
         },
         
-        addNumber: function(args) {
+        addNumberPrompt: function(args) {
             var THIS = this;
 
             /*var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
@@ -601,96 +601,66 @@ winkstart.module('connect', 'sipservice',
         },
         
         postCnam: function(data) {
-            $.ajax({
-                url: "#",
-                global: true,
-                type: "POST",
-                data: ({
+        winkstart.postJSON('something', {
                     key: data.key,
                     json: JSON.stringify({
                         caller_id: data.caller_id
-                    })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                    }, function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs);
                     }
                     redraw(msg.data);
-                }
-            }
-            );
+                });
         },
 
         addCreditCard: function(frm) {
-
-            $.ajax({
-                url: "/api/addCreditCard",
-                global: true,
-                type: "POST",
-                data: {
+			winkstart.postJSON('sipservice.billing.put',
+				{
                     key: key,
                     json: JSON.stringify(frm.serializeObject())
-                },
-                dataType: "json",
-                async:false,
-                success: function(msg){
+                }, 
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
 
                 }
-            }
-            );
+			 )
         },
 
         delCreditCard: function(tid) {
-
-            $.ajax({
-                url: "/api/delCreditCard",
-                global: true,
-                type: "POST",
-                data: {
+			winkstart.postJSON('sipservice.billing.delete',
+				{
                     key: key,
                     json: JSON.stringify({
                         token: tid
                     })
-                },
-                dataType: "json",
-                async:false,
-                success: function(msg){
+                }, 
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
 
                 }
-            }
-            );
+			 );
         },
 
         addPromoCode: function(pc) {
 
-            $.ajax({
-                url: "/api/addPromoCode",
-                global: true,
-                type: "POST",
-                data: {
+			winkstart.postJSON('sipservice.billing.put',
+				{
                     key: key,
                     json: JSON.stringify({
                         promo_code: pc
                     })
-                },
-                dataType: "json",
-                async:false,
-                success: function(msg){
+                }, 
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
 
                 }
-            }
-            );
+			 );
         },
         
         editBilling: function() {
@@ -720,28 +690,23 @@ winkstart.module('connect', 'sipservice',
         },
         
         postBilling: function(data) {
-            $.ajax({
-                url: "#",
-                global: true,
-                type: "POST",
-                data: ({
+        
+			winkstart.postJSON('sipservice.billing.put',
+				{
                     key: data.key,
                     json: JSON.stringify({
                         card_number: data.card_number,
                         car_name: data.car_name,
                         address: data.address
-                    })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                    }, 
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
+                        display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                        redraw(msg.data)
                     }
-                    redraw(msg.data);
+
                 }
-            }
-            );
+			 );
         },
         
         
@@ -848,67 +813,52 @@ winkstart.module('connect', 'sipservice',
         },
 
         addDID: function(dids) {
-            if ( checkCredit() ) {
-                $.ajax({
-                    url: "/api/addDID",
-                    global: true,
-                    type: "POST",
-                    data: ({
+        
+        
+	winkstart.postJSON('sipservice.numbers.addDID',
+					{
                         key: key,
                         json: JSON.stringify({
                             DID:did
                         })
-                    }),
-                    dataType: "json",
-                    async:true,
-                    success: function(msg){
-                        // trigger custom event 'numberAdded'
+                    },
+					function(msg){
                         if (msg && msg.errs && msg.errs[0]) {
                             display_errs(msg.errs, "Error");
-                        }
-                        redraw(msg.data);
-
-                    //TODO: redraw servers and allDIDs
-                    //TOD: update credits
-                    }
-                }
-                );
-            } else {
+                        } else {
                 msgAlert('Not enough credits to add ' + did);
                 return false;
             }
+                        redraw(msg.data);
+                    }
+			);
         },
 
 
         addDIDs: function(dids) {
-
-            var addedDIDs = $.ajax({
-                url: "/api/addDIDs",
-                global: true,
-                type: "POST",
-                data: ({
+        	var addedDIDs;
+	winkstart.postJSON('sipservice.numbers.addDIDs',
+					{
                     key: key,
                     json: JSON.stringify({
                         DIDs:dids
                     })
-                }),
-                dataType: "json",
-                async:false,
-                success: function(msg){
+                },
+				function(msg){ addedDIDs=msg; // I do not know why... (2011-07-15)
                     if (typeof msg =="object") {
-                        // trigger custom event 'numberAdded'
                         $("body").trigger('addDIDs', msg.data);
-                        //TODO: redraw servers and allDIDs
-                        //TOD: update credits
                         if (msg && msg.errs && msg.errs[0]) {
                             display_errs(msg.errs);
                         }
-                        //TODO: redraw this DID
+                 
                         if (typeof msg.data == 'object' && typeof msg.data.acct == 'object') {
                             redraw(msg.data.acct); // note more than just acct is returned
                         }
                     }
                 }
+			);        
+        
+
             }
             );
             return addedDIDs;
@@ -919,7 +869,8 @@ winkstart.module('connect', 'sipservice',
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
                     $('#sad_LoadingTime').slideDown();
-                    var gJ = $.getJSON('/api/searchNPA', {
+                    winkstart.postJSON('sipservice.searchNPA',
+					 {
                         key: key,
                         json: JSON.stringify({
                             NPA: NPA
@@ -928,11 +879,10 @@ winkstart.module('connect', 'sipservice',
                         $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
                         $('#sad_LoadingTime').hide();
                     });
-                    return gJ;
 
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
-                    var gJ = $.getJSON('/api/searchNPANXX', {
-                        key: key,
+                    winkstart.postJSON('sipservice.searchNPANXX',
+					{	key: key,
                         json: JSON.stringify({
                             NPA: NPA,
                             NXX: NXX
@@ -940,11 +890,11 @@ winkstart.module('connect', 'sipservice',
                     }, function(jdata) {
                         $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
                     });
-                    return gJ;
 
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
-                    var gJ = $.getJSON('/api/searchNPA', {
+                    winkstart.postJSON('sipservice.searchNPA',
+                    {
                         key: key,
                         json: JSON.stringify({
                             NPA: NPA
@@ -954,7 +904,6 @@ winkstart.module('connect', 'sipservice',
                         $('#sad_LoadingTime').hide();
                     });
 
-                    return gJ;
                 } else {
                     return false;
                 }
@@ -992,116 +941,73 @@ winkstart.module('connect', 'sipservice',
         },
 
         setE911: function(e911) {
-            $.ajax({
-                url: "/api/setE911",
-                global: true,
-                type: "POST",
-                data: ({
+			winkstart.publish("sipservice.numbers.setE911",
+				{
                     key: key,
                     json: JSON.stringify({
                         "e911_info": e911.e911_info,
                         "did":e911.did,
                         "serverid":e911.serverid
                     })
-                }),
-                dataType: "json",
-                async:false,
-                success: function(msg){
+                },
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
-                    //TODO: redraw this DID
                     redraw(msg.data);
-
-                }
-            }
+				}
             );
-
-
         },
 
         setFailOver: function(info) {
-            $.ajax({
-                url: "/api/setFailOver",
-                global: true,
-                type: "POST",
-                data: ({
+			winkstart.publish("sipservice.numbers.setFailOver",
+				{
                     key: key,
                     json: JSON.stringify({
                         did:info.did.did,
                         serverid:info.did.serverid,
                         failover: info.uri
                     })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                },
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
-                    //TODO: redraw this DID
                     redraw(msg.data);
 
                 }
-            }
-            );
+               );
         },
 
         setCID: function(info){
-
-            $.ajax({
-                url: "/api/setCID",
-                global: true,
-                type: "POST",
-                data: ({
+        winkstart.publish("sipservice.numbers.setCID",
+  	      {
                     key: key,
                     json: JSON.stringify(info)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                },
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
                     redraw(msg.data);
-
-                //TODO: redraw this DID
                 }
-            }
             );
-
         },
 
-
         LNP_s1: function(frm) {
-            $.ajax({
-                url: "/api/requestPortDID",
-                global: true,
-                type: "POST",
-                data: {
+			winkstart.publish("sipservice.requestPortDID",
+				{
                     key: key,
                     json: JSON.stringify(frm.serializeObject())
                 },
-                dataType: "json",
-                async:false,
-                success: function(msg){
-
+				 function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
                     else {
                         LNPPrompt_s2(msg.data);
                     }
-
-
-                // trigger custom event 'numberAdded'
-
-                //TODO: redraw servers and allDIDs
-                //TOD: update credits
-                // MUST update acct
-
                 }
-            }
             );
 
         },
