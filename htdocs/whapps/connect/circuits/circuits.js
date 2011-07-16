@@ -1,11 +1,6 @@
 winkstart.module('connect', 'circuits',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             edit_trunks: 'tmpl/edit_trunks.html',
@@ -182,6 +177,9 @@ winkstart.module('connect', 'circuits',
         },
 
         activate: function(data) {
+            $('#my_services').delegate('#modify_circuits', 'click', function() {
+                winkstart.publish('sipservice.edit_circuits');
+            });
         }
     } // End function definitions
 

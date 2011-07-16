@@ -1,11 +1,6 @@
 winkstart.module('connect', 'fraud',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-            'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             edit_fraud: 'tmpl/edit_fraud.html'

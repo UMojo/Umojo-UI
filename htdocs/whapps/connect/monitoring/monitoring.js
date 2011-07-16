@@ -1,15 +1,8 @@
 winkstart.module('connect', 'monitoring',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-            'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
-            results: 'tmpl/results.html',
             monitoring: 'tmpl/monitoring.html'
         },
 

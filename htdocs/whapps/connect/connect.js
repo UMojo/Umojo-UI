@@ -10,7 +10,7 @@ winkstart.module('connect', 'connect', {
     },
     {
         initialized :   false,
-        modules :       ['sipservice'],
+        modules :       ['sipservice', 'admin', 'circuits', 'credits', 'endpoints', 'fraud', 'monitoring', 'numbers'],
 
         activate: function() {
             if (this.initialized) {

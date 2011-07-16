@@ -1,11 +1,6 @@
 winkstart.module('connect', 'admin',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             switch_user: 'tmpl/switch_user.html',
@@ -185,6 +180,10 @@ winkstart.module('connect', 'admin',
         },
 
         activate: function(data) {
+            /*$('.universal_nav .my_account').click(function() {
+                winkstart.publish('sipservice.switchUser');
+            });*/
+
         }
     } // End function definitions
 

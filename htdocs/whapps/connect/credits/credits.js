@@ -1,11 +1,6 @@
 winkstart.module('connect', 'credits',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             add_credits: 'tmpl/add_credits.html'
@@ -106,6 +101,10 @@ winkstart.module('connect', 'credits',
         },
 
         activate: function(data) {
+            // This is where we define our click listeners (NOT INLINE IN THE HTML)
+            $('#my_services').delegate('#add_prepay_button', 'click', function() {
+                winkstart.publish('sipservice.add_credits');
+            });
         }
     } // End function definitions
 

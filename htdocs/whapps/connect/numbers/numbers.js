@@ -15,11 +15,6 @@
 winkstart.module('connect', 'numbers',
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             port_number: 'tmpl/port_number.html',
@@ -883,6 +878,34 @@ winkstart.module('connect', 'numbers',
 
 
         activate: function(data) {
+            $('#my_numbers').delegate('.add', "click", function(){
+                    winkstart.publish('sipservice.add_number');
+            });
+
+            $('#tmp_add_number').click(function() {
+                winkstart.publish('sipservice.add_number');
+            });
+
+            $('#tmp_edit_port_number').click(function() {
+                winkstart.publish('sipservice.port_number');
+            });
+
+            /*$('#edit_cnam').click(function() {
+                winkstart.publish('sipservice.configure_cnam');
+            });
+
+            $('#tmp_edit_auth').click(function() {
+                winkstart.publish('sipservice.edit_auth');
+            });*/
+
+            $('.did_list .numbers .unassign').live('click', function() {
+                data = $(this).dataset();
+                winkstart.publish('sipservice.unassign_did', data);
+            });
+
+            $('.did_list .numbers .add').live('click', function() {
+                winkstart.publish('sipservice.addNumber');
+            });
         }
     } // End function definitions
 

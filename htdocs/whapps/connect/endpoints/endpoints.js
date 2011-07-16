@@ -1,11 +1,6 @@
 winkstart.module('connect', 'endpoints', 
     /* Start module resource definitions */
     {
-        /* What CSS stylesheets do you want automatically loaded? */
-        css: [
-        'css/style.css'
-        ],
-
         /* What HTML templates will we be using? */
         templates: {
             edit_auth: 'tmpl/edit_auth.html',
@@ -95,6 +90,12 @@ winkstart.module('connect', 'endpoints',
 
     /* Define the functions for this module */
     {
+        delServerPrompt: function(sinfo) {
+            popup($('#tmpl_del_server').tmpl(sinfo), {
+                title: 'Remove Server - ' + acct.servers[sinfo.serverid].server_name
+            });
+        },
+
         edit_auth: function() {
             var THIS = this;
 
@@ -285,6 +286,36 @@ winkstart.module('connect', 'endpoints',
         },
 
         activate: function(data) {
+            // Wire the "Add Server" button
+            $('#add_server').click(function() {
+                winkstart.publish('sipservice.add_server_prompt');
+            });
+
+            // Wire up the numbers box
+            $("#server_area").delegate(".unassign", "click", function(){
+                moveDID($(this).dataset(), null);$(this).hide();
+            });
+
+            $("#my_servers").delegate(".failover", "click", function(){
+                winkstart.publish('sipservice.edit_failover', $(this).dataset());
+            });
+
+            $("#server_area").delegate(".cid", "click", function(){
+                cidPrompt($(this).dataset(), null);
+            });
+
+            $("#server_area").delegate(".e911", "click", function(){
+                e911Prompt($(this).dataset(), null);
+            });
+
+            $("#server_area").delegate(".misc", "click", function(){
+                miscPrompt($(this).dataset(), null);
+            });
+
+            $("#server_area").delegate(".modifyServerDefaults", "click", function(){
+                modifySRVDefaultsPrompt($(this).dataset(), null);
+            });
+
         }
     } // End function definitions
 
