@@ -32,7 +32,7 @@ winkstart.module('connect', 'sipservice',
         edit_auth: 'tmpl/edit_auth.html',
         edit_trunks: 'tmpl/edit_trunks.html',
         edit_server: 'tmpl/edit_server.html',
-        add_numbers: 'tmpl/add_numbers.html',
+//        add_numbers: 'tmpl/add_numbers.html',
         add_credits: 'tmpl/add_credits.html',
         edit_billing: 'tmpl/edit_billing.html',
         recover_password: 'tmpl/recover_password.html',
@@ -68,7 +68,7 @@ winkstart.module('connect', 'sipservice',
         'sipservice.unassign_did' : 'unassign_did',
 
         /* Credit Management */
-        'sipservice.add_credit' : 'add_credit',
+        'sipservice.add_credits' : 'add_credits',
         'sipservice.post_credit' : 'post_credit',
         'sipservice.change_recurring' : 'change_recurring',
         'sipservice.edit_billing' : 'edit_billing',
@@ -85,8 +85,8 @@ winkstart.module('connect', 'sipservice',
 
 
         // Trunk Management
-        'sipservice.editTrunks': 'editTrunks',
-        'sipservice.editCircuits': 'editCircuits',
+        'sipservice.edit_trunks': 'edit_trunks',
+        'sipservice.edit_circuits': 'edit_circuits',
 
         /* */
         'sipservice.refresh_dids' : 'refresh_dids',
@@ -134,7 +134,8 @@ winkstart.module('connect', 'sipservice',
         },
             
             
-            
+
+        /* Billing */
         "sipservice.billing.put": {
             url: 'https://store.2600hz.com/v1/billing',
             contentType: 'application/json',
@@ -154,7 +155,7 @@ winkstart.module('connect', 'sipservice',
             
             
             
-
+        /* Circuit Management */
         "sipservice.circuits.get": {
             url: 'https://store.2600hz.com/v1/circuits',
             contentType: 'application/json',
@@ -168,7 +169,7 @@ winkstart.module('connect', 'sipservice',
             
             
             
-            
+        /* Endpoint Management */
         "sipservice.endpoints.put": {
             url: 'https://store.2600hz.com/v1/endpoints',
             contentType: 'application/json',
@@ -192,7 +193,7 @@ winkstart.module('connect', 'sipservice',
 
 
 
-
+        /* User Management */
 	"sipservice.addUser": {
             url: 'https://store.2600hz.com/v1/addUser',
             contentType: 'application/json',
@@ -230,7 +231,7 @@ winkstart.module('connect', 'sipservice',
 
 
 
-
+        /* Search DIDs */
 	"sipservice.searchNPANXX": {
             url: 'https://store.2600hz.com/v1/searchNPANXX',
             contentType: 'application/json',
@@ -267,7 +268,7 @@ winkstart.module('connect', 'sipservice',
 
 
 
-
+        /* DID Management */
 	"sipservice.numbers.addDID": {
             url: 'https://store.2600hz.com/v1/addDID',
             contentType: 'application/json',
@@ -352,51 +353,12 @@ winkstart.module('connect', 'sipservice',
 
 
 
-
-
-
-
-
-
-
-
-
+        /* Create Ticket */
 	"sipservice.createTicket": {
             url: 'https://store.2600hz.com/v1/createTicket',
             contentType: 'application/json',
             verb: 'PUT'
         }
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
     }
 }, // End module resource definitions
 
@@ -477,7 +439,7 @@ function(args) {
         
         
         
-    add_number_manual_prompt: function(args) {
+/*    add_number_manual_prompt: function(args) {
         var THIS = this;
 
 		var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
@@ -724,19 +686,14 @@ function(args) {
         
         
 
-        add_credit: function() {
+        add_credits: function() {
             var THIS = this;
 
-            var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({
-                title: 'Add Credits',
-                width: 680,
-                height: 620,
-                position: 'center'
+            dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {
+                title: 'Add Credits'
             });
 
-            winkstart.publish('sipservice.input_css');
-
-            $(dialogDiv).find('.ctr_btn').click(function() {
+            $('.ctr_btn', dialogDiv).click(function() {
                 winkstart.publish('sipservice.post_credit', {
                     credit_amount : 5,
                     creditCard: 73928372930,
@@ -857,7 +814,7 @@ function(args) {
                     DIDs:dids
                 })
             },
-            function(msg){ addedDIDs=msg; // I do not know why... (2011-07-15)
+            function(msg){addedDIDs=msg; // I do not know why... (2011-07-15)
                 if (typeof msg =="object") {
                     $("body").trigger('addDIDs', msg.data);
                     if (msg && msg.errs && msg.errs[0]) {
@@ -893,7 +850,7 @@ function(args) {
 
             } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
                 winkstart.postJSON('sipservice.searchNPANXX',
-                {	key: key,
+                {key: key,
                     json: JSON.stringify({
                         NPA: NPA,
                         NXX: NXX
@@ -1114,13 +1071,21 @@ function(args) {
         });
     },
 
-    editCircuits: function(args) {
+    edit_circuits: function(args) {
         var THIS = this;
         winkstart.popup(THIS.templates.edit_circuits.tmpl(THIS), {
             title: 'Edit Trunks / Circuits'
         });
 
-        dialogDiv.find('#update_trunks_button').click(function() {
+        $('#update_trunks_button', dialogDiv).click(function() {
+            // Grab data from form
+            var form_data = form2object('trunks');
+
+            // Show a billing confirmation screen. If they approve it, update the trunks
+            winkstart.publish('billing.confirm', { })
+
+
+            // Update trunk counts on the server
             THIS.account.account.trunks = dialogDiv.find('#trunks').val();
             THIS.account.account.inbound_trunks = dialogDiv.find('#inbound_trunks').val();
             dialogDiv.dialog('close');
@@ -1155,7 +1120,7 @@ function(args) {
     },
 
     delTrunk: function(trunks) {
-        console.log('no longer used?'); return;
+        console.log('no longer used?');return;
         if (acct.account.trunks < trunks) {
             msgAlert('Not enough trunks to remove!');
             return false;
@@ -1919,11 +1884,11 @@ function(args) {
 
 
         // This is where we define our click listeners (NOT INLINE IN THE HTML)
-        $('#ws-content #add_prepay_button').click(function() {
-            winkstart.publish('sipservice.add_credit');
+        $('#my_services').delegate('#add_prepay_button', 'click', function() {
+            winkstart.publish('sipservice.add_credits');
         });
 
-        $('#modify_circuits').live('click', function() {
+        $('#my_services').delegate('#modify_circuits', 'click', function() {
             winkstart.publish('sipservice.edit_circuits');
         });
 
