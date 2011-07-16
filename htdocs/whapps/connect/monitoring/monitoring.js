@@ -9,7 +9,8 @@ winkstart.module('connect', 'monitoring',
         /* What HTML templates will we be using? */
         templates: {
             index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
-            results: 'tmpl/results.html'
+            results: 'tmpl/results.html',
+            monitoring: 'tmpl/monitoring.html'
         },
 
         /* What events do we listen for, in the browser? */

@@ -3,24 +3,29 @@ winkstart.module('connect', 'credits',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/style.css'
+        'css/style.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
-            results: 'tmpl/results.html'
+            add_credits: 'tmpl/add_credits.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'credits.activate' : 'activate',
-            'sipservice.refresh' : 'refresh'
+            'sipservice.refresh' : 'refresh',
+            /* Credit Management */
+            'credits.add_credits' : 'add_credits',
+            'credits.post_credit' : 'post_credit',
+            'credits.change_recurring' : 'change_recurring',
+            'credits.edit_billing' : 'edit_billing',
+            'credits.post_billing' : 'post_billing'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-        }
+    }
     }, // End module resource definitions
 
 
@@ -35,6 +40,65 @@ winkstart.module('connect', 'credits',
 
     /* Define the functions for this module */
     {
+        add_credits: function() {
+            var THIS = this;
+
+            dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {
+                title: 'Add Credits'
+            });
+
+            $('.ctr_btn', dialogDiv).click(function() {
+                winkstart.publish('sipservice.post_credit', {
+                    credit_amount : 5,
+                    creditCard: 73928372930,
+                    success : function() {
+                        dialogDiv.dialog('close');
+                    }
+                });
+
+            });
+        },
+
+        // credit mgmt
+        updatePreAuth: function(){
+            var newItems = $('.inCart');
+            rCost=0;
+            oCost=0;
+            $.each(newItems, function(index, elm) {
+
+                if ( isNaN( parseInt( $(elm).dataset('qty') ) ) ) {
+                    rCost+=$(elm).dataset('recurringCost') *1;
+                    oCost+=$(elm).dataset('oneTimeCost') * 1;
+                } else {
+                    rCost+=$(elm).dataset('recurringCost') * $(elm).dataset('qty');
+                    oCost+=$(elm).dataset('oneTimeCost') * $(elm).dataset('qty');
+                }
+            });
+
+            return {
+                rCost: rCost,
+                oCost: oCost
+            };
+        },
+
+        checkCredits: function(bill) {
+            return true; // not doing pre-paid
+            if(acct.account.credits.prepay > bill) {
+                return acct.account.credits.prepay - bill;
+            } else {
+                return false;
+            }
+        },
+
+
+    refresh_services: function(account) {
+        var THIS = this;
+
+        winkstart.log('Refreshing Services...');
+        $('#my_services').empty();
+        THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
+    },
+
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
@@ -45,4 +109,4 @@ winkstart.module('connect', 'credits',
         }
     } // End function definitions
 
-);  // End module
+    );  // End module

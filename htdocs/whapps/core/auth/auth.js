@@ -16,12 +16,49 @@ winkstart.module('core', 'auth', {
 		},
 		
 		templates: {
-			login: 'login.html'
+			login: 'login.html',
+                        thankyou: 'tmpl/thankyou.html',
+                        edit_billing: 'tmpl/edit_billing.html',
+                        recover_password: 'tmpl/recover_password.html',
+                        login: 'tmpl/login.html'
 		},
 		
 		subscribe: {
 			'auth.activate' : 'activate'
 		},
+
+                resources: {
+                    /* User Management */
+                    "sipservice.addUser": {
+                        url: 'https://store.2600hz.com/v1/addUser',
+                        contentType: 'application/json',
+                        verb: 'POST'
+                    },
+
+                    "sipservice.editUser": {
+                        url: 'https://store.2600hz.com/v1/editUser',
+                        contentType: 'application/json',
+                        verb: 'POST'
+                    },
+
+                    "sipservice.getUser": {
+                        url: 'https://store.2600hz.com/v1/getUser',
+                        contentType: 'application/json',
+                        verb: 'POST'
+                    },
+
+                    "sipservice.checkIfExists": {
+                        url: 'https://store.2600hz.com/v1/checkIfExists',
+                        contentType: 'application/json',
+                        verb: 'GET'
+                    },
+
+                    "sipservice.getUserAuth": {
+                        url: 'https://store.2600hz.com/v1/getUserAuth',
+                        contentType: 'application/json',
+                        verb: 'POST'
+                    }
+                },
 		
 		// Called when modules are to initialize
 		init: function() {
@@ -41,6 +78,34 @@ winkstart.module('core', 'auth', {
 		},
 		*/
 		
+    login: function(args) {
+        var THIS = this;
+
+        var dialogDiv = THIS.templates.login.tmpl({}).dialog({
+            title: 'Login',
+            width: 540,
+            height: 320,
+            position: 'center'
+        });
+
+        winkstart.publish('sipservice.input_css');
+    },
+
+    recover_password: function(args) {
+        var THIS = this;
+
+        var dialogDiv = THIS.templates.recover_password.tmpl({}).dialog({
+            title: 'Recover Password',
+            width: 535,
+            height: 200,
+            position: 'center'
+        });
+
+        winkstart.publish('sipservice.input_css');
+    },
+
+
+
 		authenticate: function() {
 			// A few things need to be done here
 			// 1) If we're not authenticated, do so

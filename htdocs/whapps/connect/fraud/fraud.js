@@ -8,8 +8,7 @@ winkstart.module('connect', 'fraud',
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
-            results: 'tmpl/results.html'
+            edit_fraud: 'tmpl/edit_fraud.html'
         },
 
         /* What events do we listen for, in the browser? */
