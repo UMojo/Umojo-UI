@@ -75,7 +75,7 @@ winkstart.module('connect', 'credits',
 			redraw(msg.data);
 	      }
 	     );
-	   }
+	   },
 
         // credit mgmt
         updatePreAuth: function(){
