@@ -26,6 +26,10 @@
         var newDiv = $(document.createElement('div'));
         $(newDiv).html(content);
 
+        if (!options) {
+            options = {};
+        }
+
         if (!options.close) {
             // By default, don't long-live dialogs - kill them after they're closed. Normal default is just to hide them.
             options.close = function() {
