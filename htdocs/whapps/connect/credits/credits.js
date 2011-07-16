@@ -3,7 +3,7 @@ winkstart.module('connect', 'credits',
     {
         /* What HTML templates will we be using? */
         templates: {
-            add_credits: 'tmpl/add_credits.html'
+            add_credits_prompt: 'tmpl/add_credits_prompt.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -11,7 +11,7 @@ winkstart.module('connect', 'credits',
             'credits.activate' : 'activate',
             'sipservice.refresh' : 'refresh',
             /* Credit Management */
-            'credits.add_credits' : 'add_credits',
+            'credits.add_credits_prompt' : 'add_credits_prompt',
             'credits.post_credit' : 'post_credit',
             'credits.change_recurring' : 'change_recurring',
             'credits.edit_billing' : 'edit_billing',
@@ -20,6 +20,18 @@ winkstart.module('connect', 'credits',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
+              'credits.post': {
+                url: 'https://store.2600hz.com/v1/credits',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+              'credits.get': {
+                url: 'https://store.2600hz.com/v1/credits',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+        
     }
     }, // End module resource definitions
 
@@ -35,15 +47,15 @@ winkstart.module('connect', 'credits',
 
     /* Define the functions for this module */
     {
-        add_credits: function() {
+        add_credits_prompt: function() {
             var THIS = this;
 
-            dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {
+            dialogDiv = winkstart.popup(THIS.templates.add_credits_prompt.tmpl(), {
                 title: 'Add Credits'
             });
 
             $('.ctr_btn', dialogDiv).click(function() {
-                winkstart.publish('sipservice.post_credit', {
+                winkstart.publish('post_credit', {
                     credit_amount : 5,
                     creditCard: 73928372930,
                     success : function() {
@@ -53,6 +65,17 @@ winkstart.module('connect', 'credits',
 
             });
         },
+
+
+		post_credits: function(buyCreds) {
+		winstart.request('credits.post', 
+			{key: key, json: JSON.stringify({add_credits: buyCreds})},
+			function(msg){
+					if (msg && msg.errs && msg.errs[0]) {display_errs(msg.errs);}
+			redraw(msg.data);
+	      }
+	     );
+	   }
 
         // credit mgmt
         updatePreAuth: function(){
