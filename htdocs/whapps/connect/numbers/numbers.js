@@ -865,6 +865,23 @@ winkstart.module('connect', 'numbers',
             });
         },
 
+        createUploader: function(elm, act, args, cb){
+            var uploader = new qq.FileUploader({
+                allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
+                sizeLimit: 10000000,
+                minSizeLimit: 20000,
+
+                onComplete: function(id, fileName, responseJSON){
+                    cb(id, fileName, responseJSON);
+                },
+
+                element: elm,
+                action: act,
+                params: args
+            });
+        },
+
+
         activate: function(data) {
         }
     } // End function definitions

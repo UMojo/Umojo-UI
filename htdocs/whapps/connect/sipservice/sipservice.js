@@ -55,6 +55,8 @@ winkstart.module('connect', 'sipservice',
 
 /* Bootstrap routine - runs automatically when the module is first loaded */
 function(args) {
+
+    /* Paint the subnav */
     winkstart.publish('subnav.add', {
         module: 'sipservice.legal',
         label: 'Legal',
@@ -84,6 +86,9 @@ function(args) {
         label: 'SIP Services',
         icon: 'active_phone'
     });
+
+    /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+    winkstart.registerResources(this.config.resources);
 
     // Only one option for now - go ahead and open it up!
     winkstart.publish('subnav.activate', 'sipservice');
@@ -116,29 +121,6 @@ function(args) {
             title: title || "Messages"
         });
         //setTimeout("eval(" + cb + ")", 1200);
-    },
-
-
-
-
-
-
-    // JS additions:
-
-    createUploader: function(elm, act, args, cb){
-        var uploader = new qq.FileUploader({
-            allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
-            sizeLimit: 10000000,
-            minSizeLimit: 20000,
-
-            onComplete: function(id, fileName, responseJSON){
-                cb(id, fileName, responseJSON);
-            },
-
-            element: elm,
-            action: act,
-            params: args
-        });
     },
 
 
@@ -301,9 +283,6 @@ function(args) {
         var THIS = this;
         /* Clear out the center part of the window - get ready to put our own content in there */
         $('#ws-content').empty();
-            
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
             
         winkstart.publish('layout.updateLoadedModule', {
             label: 'SIP Services',
