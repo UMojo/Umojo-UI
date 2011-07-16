@@ -1018,31 +1018,22 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-        searchNPA: function(nbr, cb) {
+        not_used_anymore_?_searchNPA: function(nbr, cb) {
             //			$.getJSON('/api/searchNPA', function(data) {
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-
-            $.ajax({
-                url: "/api/searchNPA",
-                global: true,
-                type: "POST",
-                data: ({
+			winkstart.publish("sipservice.searchNPA",
+				{
                     key: key,
                     json: JSON.stringify(nbr)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                },
+                function(msg){
                     redraw(msg.data);
-
                 }
-            }
             );
-
         },
 
 
-        searchNPANXX: function(nbr, cb) {
+        not_used_anymore_?_searchNPANXX: function(nbr, cb) {
             $.getJSON('/api/searchNPANXX', function(data) {
                 $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
             });
@@ -1070,8 +1061,9 @@ winkstart.module('connect', 'sipservice',
         /**********************
          * Recurring Services *
          **********************/
-        addTrunk: function() {
+                not_used_anymore_?_addTrunk: function() {
             if ( 'not from prepay' || checkCredits(25) ) {
+            
                 $.ajax({
                     url: "/api/addTrunk",
                     global: true,
@@ -1103,7 +1095,7 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-        editTrunks: function(args) {
+                not_used_anymore_?_editTrunks: function(args) {
             var THIS = this;
 
             THIS.templates.edit_trunks.tmpl({}).dialog({
@@ -1128,19 +1120,14 @@ winkstart.module('connect', 'sipservice',
 
         setTrunks: function(trunks) {
             if ( 'not from prepay' || checkCredits(25) ) {
-                $.ajax({
-                    url: "/api/setTrunks",
-                    global: true,
-                    type: "POST",
-                    data: ({
+				winkstart.publish("sipservice.circuits.post",
+					{
                         key: key,
                         json: JSON.stringify({
                             setTrunks: trunks
                         })
-                    }),
-                    dataType: "json",
-                    async:false,
-                    success: function(msg){
+                    },
+                    function(msg){
                         if (msg && msg.errs && msg.errs[0]) {
                             display_errs(msg.errs);
                         }
@@ -1149,15 +1136,15 @@ winkstart.module('connect', 'sipservice',
                     //TODO: redraw servers and allDIDs
                     //TOD: update credits
                     }
-                }
-                );
-            } else {
+                    );
+	            } else {
                 msgAlert('Not able to set trunks: credits could not be applied');
                 return false;
             }
         },
 
         delTrunk: function(trunks) {
+        	console.log('no longer used?'); return;
             if (acct.account.trunks < trunks) {
                 msgAlert('Not enough trunks to remove!');
                 return false;
@@ -1275,57 +1262,37 @@ winkstart.module('connect', 'sipservice',
         },
         
         delServer: function(srvid) {
-
-            $.ajax({
-                url: "/api/delServer",
-                global: true,
-                type: "POST",
-                data: ({
+			winkstart.publish("sipservice.endpoints.delete",
+				{
                     key: key,
                     json: JSON.stringify({
                         serverid: srvid
                     })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    // check for errs
-                    // trigger custom event 'serverAdded'
-                    //TODO: redraw servers
-
+                },
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
                     redraw(msg.data);
-
                 }
-            }
             );
         },
 
 
 
         setServerDefaults: function(nsd) {
+			winkstart.publish("sipservice.server.setDefaults",
 
-            $.ajax({
-                url: "/api/setServerDefaults",
-                global: true,
-                type: "POST",
-                data: ({
+				{
                     key: key,
                     json: JSON.stringify(nsd)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
+                },
+                function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                     }
                     redraw(msg.data);
-
-
                 }
-            }
             );
         },
         
@@ -1480,24 +1447,17 @@ winkstart.module('connect', 'sipservice',
         LNPPrompt_s2: function(lnp_f) {
 
             var lnp_did = lnp_f.serializeObject();
-
-            $.ajax({
-                url: "/api/getLNPData",
-                global: true,
-                type: "POST",
-                data: ({
+			winkstart.publish("sipservice.getLNPData",
+				{
                     key: key,
                     json: JSON.stringify(lnp_did)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-
+                },
+				function(msg){
                     if (typeof msg == 'object' && msg.data) {
                         var trackData=msg.data;
                         if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
                             popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
-                            createUploader($('#lnp_s2_uploader')[0], '/api/uploadLNP', {
+                            createUploader($('#lnp_s2_uploader')[0], '/v1/uploadLNP', {
                                 key: key,
                                 did:trackData.lnp.did,
                                 tracking:trackData.lnp.tracking
@@ -1515,40 +1475,30 @@ winkstart.module('connect', 'sipservice',
                         }
                     }
                 }
-            }
             );
-
         },
 
         removeSIPAuthIP: function(aip) {
-            $.ajax({
-                url: "/api/removeSIPAuthIP",
-                global: true,
-                type: "POST",
-                data: ({
+        	winkstart.publish(	"sipservice.server.auth.removeIP",
+				{
                     key: key,
                     json: JSON.stringify(aip)
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    // redraw server or at lease IP list
+                },
+				function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs);
                     }
                     redraw(msg.data);
                 }
-            }
             );
-
-
         },
 
         showMyAccountPrompt: function(opts) {
             if (typeof opts != 'object') {
                 opts = new Object();
             }
-            var gJ = $.getJSON('/api/getCreditCards', {
+            winkstart.publish("sipservice.billing.get",
+             {
                 key: key,
                 json: JSON.stringify({})
             }, function(jdata) {
@@ -1559,9 +1509,7 @@ winkstart.module('connect', 'sipservice',
                     title: 'Account Billing Information'
                 });
             });
-            return gJ;
         },
-
 
         delServerPrompt: function(sinfo) {
             popup($('#tmpl_del_server').tmpl(sinfo), {
