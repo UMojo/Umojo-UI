@@ -47,7 +47,7 @@ winkstart.module('connect', 'sipservice',
         /* DID Provisioning */
         'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
         'sipservice.findNumber' : 'findNumber',         // Find new numbers
-        'sipservice.addNumber' : 'addNumberPrompt',           // Buy/add a number to this account
+        'sipservice.add_number' : 'add_number_prompt',           // Buy/add a number to this account
         'sipservice.postNumber': 'postNumber',
         'sipservice.cancelNumber' : 'cancelNumber',     // Cancel a number from the account
         'sipservice.mapNumber' : 'mapNumber',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
@@ -463,10 +463,17 @@ function(args) {
         winkstart.publish('sipservice.input_css');
     },
         
-    addNumberPrompt: function(args) {
+        
+        
+        add_number_prompt: function(args) {
+        var THIS = this;
+        
+        
+        
+    add_number_manual_prompt: function(args) {
         var THIS = this;
 
-        /*var dialogDiv = THIS.templates.edit_numbers.tmpl({}).dialog({
+		var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
                 title: 'Add/Search Numbers',
                 width: 535,
                 height: 565,
@@ -1913,7 +1920,7 @@ function(args) {
         });
 
         $('#tmp_add_number').click(function() {
-            winkstart.publish('sipservice.addNumber');
+            winkstart.publish('sipservice.add_number');
         });
 
         $('#tmp_edit_portNumber').click(function() {
@@ -1942,7 +1949,7 @@ function(args) {
         });
 
         $('.add').live('click', function() {
-            winkstart.publish('sipservice.addNumber');
+            winkstart.publish('sipservice.add_number');
         });
     },
 
