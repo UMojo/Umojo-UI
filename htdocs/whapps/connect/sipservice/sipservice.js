@@ -434,32 +434,34 @@ function(args) {
         
         
         
-        add_number_prompt: function(args) {
-        var THIS = this;
-        
-        
-        
-/*    add_number_manual_prompt: function(args) {
+    add_number_prompt: function(args) {
         var THIS = this;
 
-		var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
+            var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
                 title: 'Add/Search Numbers',
-                width: 535,
-                height: 565,
-                position: 'center'
             });
             
             winkstart.publish('sipservice.input_css');
+            $(dialogDiv).find('#sdid_npa').keyup(function() {
+	            if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {$('#sdid_nxx').hide('slow');} else {$('#sdid_nxx').show('slow');}
+            });
             
             $(dialogDiv).find('.ctr_btn').click(function() {
                 winkstart.publish('sipservice.post_number', {
+	                callback : args.callback,
                     number : 4159086655,
                     success : function() {
                         dialogDiv.dialog('close');
                     }
                 });
                
-            });*/
+            });
+            },
+        
+        
+    add_number_manual_prompt: function(args) {
+        var THIS = this;
+
             
         var dialogDiv = THIS.templates.add_number_manual.tmpl().dialog({
             title: 'Add New Number'
@@ -1402,7 +1404,10 @@ function(args) {
 
 
     searchDIDsPrompt: function() {
-        popup($('#tmpl_searchDIDs_prompt').tmpl({}));
+    THIS=this;
+        winkstart.popup(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
+        'title' : 'blah'
+        });
         //TODO:  display "Add Credits" if it goes negative
     },
 
@@ -1879,7 +1884,9 @@ function(args) {
             modifySRVDefaultsPrompt($(this).dataset(), null);
         });
 
-        $('#my_numbers').delegate('.add', "click", function(){searchDIDsPrompt();});
+        $('#my_numbers').delegate('.add', "click", function(){
+        	winkstart.publish('sipservice.add_number');
+        });
 
 
 
