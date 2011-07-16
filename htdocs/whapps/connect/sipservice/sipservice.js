@@ -601,7 +601,7 @@ winkstart.module('connect', 'sipservice',
         },
         
         postCnam: function(data) {
-        winkstart.postJSON('something', {
+        winkstart.postJSON('CREATE_CNAM_ONLY...', {
                     key: data.key,
                     json: JSON.stringify({
                         caller_id: data.caller_id
@@ -941,7 +941,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         setE911: function(e911) {
-			winkstart.publish("sipservice.numbers.setE911",
+			winkstart.postJSON("sipservice.numbers.setE911",
 				{
                     key: key,
                     json: JSON.stringify({
@@ -960,7 +960,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         setFailOver: function(info) {
-			winkstart.publish("sipservice.numbers.setFailOver",
+			winkstart.postJSON("sipservice.numbers.setFailOver",
 				{
                     key: key,
                     json: JSON.stringify({
@@ -980,7 +980,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         setCID: function(info){
-        winkstart.publish("sipservice.numbers.setCID",
+        winkstart.postJSON("sipservice.numbers.setCID",
   	      {
                     key: key,
                     json: JSON.stringify(info)
@@ -995,7 +995,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         LNP_s1: function(frm) {
-			winkstart.publish("sipservice.requestPortDID",
+			winkstart.putJSON("sipservice.requestPortDID",
 				{
                     key: key,
                     json: JSON.stringify(frm.serializeObject())
@@ -1021,7 +1021,7 @@ winkstart.module('connect', 'sipservice',
         not_used_anymore_?_searchNPA: function(nbr, cb) {
             //			$.getJSON('/api/searchNPA', function(data) {
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-			winkstart.publish("sipservice.searchNPA",
+			winkstart.getJSON("sipservice.searchNPA",
 				{
                     key: key,
                     json: JSON.stringify(nbr)
@@ -1120,7 +1120,7 @@ winkstart.module('connect', 'sipservice',
 
         setTrunks: function(trunks) {
             if ( 'not from prepay' || checkCredits(25) ) {
-				winkstart.publish("sipservice.circuits.post",
+				winkstart.postJSON("sipservice.circuits.post",
 					{
                         key: key,
                         json: JSON.stringify({
@@ -1262,7 +1262,7 @@ winkstart.module('connect', 'sipservice',
         },
         
         delServer: function(srvid) {
-			winkstart.publish("sipservice.endpoints.delete",
+			winkstart.deleteJSON("sipservice.endpoints.delete",
 				{
                     key: key,
                     json: JSON.stringify({
@@ -1281,7 +1281,7 @@ winkstart.module('connect', 'sipservice',
 
 
         setServerDefaults: function(nsd) {
-			winkstart.publish("sipservice.server.setDefaults",
+			winkstart.postJSON("sipservice.server.setDefaults",
 
 				{
                     key: key,
@@ -1310,7 +1310,7 @@ winkstart.module('connect', 'sipservice',
             
             dialogDiv.find('.submit_btn').click(function() {
                 console.log(dialogDiv);
-                winkstart.publish('sipservice.postFailover', {
+                winkstart.postJSON('sipservice.postFailover', {
                     number : dialogDiv.find('#failover_number').val(),
                     parent: number,
                     success : function() {
@@ -1447,7 +1447,7 @@ winkstart.module('connect', 'sipservice',
         LNPPrompt_s2: function(lnp_f) {
 
             var lnp_did = lnp_f.serializeObject();
-			winkstart.publish("sipservice.getLNPData",
+			winkstart.getJSON("sipservice.getLNPData",
 				{
                     key: key,
                     json: JSON.stringify(lnp_did)
@@ -1479,7 +1479,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         removeSIPAuthIP: function(aip) {
-        	winkstart.publish(	"sipservice.server.auth.removeIP",
+        	winkstart.deleteJSON(	"sipservice.server.auth.removeIP",
 				{
                     key: key,
                     json: JSON.stringify(aip)
@@ -1497,7 +1497,7 @@ winkstart.module('connect', 'sipservice',
             if (typeof opts != 'object') {
                 opts = new Object();
             }
-            winkstart.publish("sipservice.billing.get",
+            winkstart.getJSON("sipservice.billing.get",
              {
                 key: key,
                 json: JSON.stringify({})
@@ -1672,7 +1672,7 @@ winkstart.module('connect', 'sipservice',
                 winkstart.publish('sipservice.input_css');
             
                 dialogDiv.find('.btn_wrapper #switch').click(function() {
-                    winkstart.publish('sipservice.switchUserForreal', {
+                    winkstart.postJSON('sipservice.switchUserForreal', {
                         account_id: dialogDiv.find('#account').val(),
                         success : function(data) {
                             THIS.account = data; 
