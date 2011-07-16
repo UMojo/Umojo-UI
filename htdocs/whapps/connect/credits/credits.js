@@ -131,4 +131,4 @@ winkstart.module('connect', 'credits',
         }
     } // End function definitions
 
-    );  // End module
+);  // End module

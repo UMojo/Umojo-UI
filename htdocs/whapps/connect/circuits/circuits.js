@@ -10,8 +10,8 @@ winkstart.module('connect', 'circuits',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'circuits.activate' : 'activate',
-            'sipservice.refresh' : 'refresh',
-            'sipservice.edit_trunks': 'edit_trunks',
+            'circuits.refresh' : 'refresh',
+            'circuits.edit_trunks': 'edit_trunks',
             'sipservice.edit_circuits': 'edit_circuits'
         },
 
@@ -171,12 +171,14 @@ winkstart.module('connect', 'circuits',
 
 
         refresh: function() {
-            var THIS = this;
-            /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_circuits') );
+            var account = {};
+
+            $('#my_circuits').html(THIS.templates.circuits.tmpl(account));
         },
 
         activate: function(data) {
+            // Tie to DOM events we care about
+
             $('#my_services').delegate('#modify_circuits', 'click', function() {
                 winkstart.publish('sipservice.edit_circuits');
             });
