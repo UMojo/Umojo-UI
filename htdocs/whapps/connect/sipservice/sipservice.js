@@ -33,7 +33,7 @@ winkstart.module('connect', 'sipservice',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_circuits: 'tmpl/edit_trunks.html',
             switch_user: 'tmpl/switch_user.html',
-            add_number_tmp: 'tmpl/add_number_tmp.html',
+            add_number_manual: 'tmpl/add_number_manual.html',
             add_user: 'tmpl/add_user.html'
         },
 
@@ -485,7 +485,7 @@ winkstart.module('connect', 'sipservice',
                
             });*/
             
-            var dialogDiv = THIS.templates.add_number_tmp.tmpl().dialog({
+            var dialogDiv = THIS.templates.add_number_manual.tmpl().dialog({
                 title: 'Add New Number'
             });
 
