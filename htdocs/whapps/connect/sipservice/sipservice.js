@@ -9,14 +9,21 @@ winkstart.module('connect', 'sipservice',
 
     /* What HTML templates will we be using? */
     templates: {
-        index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
+
+        /* Main Page */
+        index: 'tmpl/index.html',
         main: 'tmpl/main.html',
         main_dids : 'tmpl/main_dids.html',
         main_servers : 'tmpl/main_servers.html',
         main_services : 'tmpl/main_services.html',
+
+        /* Recurring Services */
         thankyou: 'tmpl/thankyou.html',
+
         service_loc: 'tmpl/service_loc.html',
         service_limits: 'tmpl/service_limits.html',
+
+        /* Number Management */
         port_number: 'tmpl/port_number.html',
         order_history: 'tmpl/order_history.html',
         monitoring: 'tmpl/monitoring.html',
@@ -45,36 +52,36 @@ winkstart.module('connect', 'sipservice',
         'sipservice.switchUserForreal' : 'switchUserForreal',
 
         /* DID Provisioning */
-        'sipservice.getNumbers' : 'getNumbers',         // Get a list of DIDs for this account
-        'sipservice.findNumber' : 'findNumber',         // Find new numbers
+        'sipservice.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
+        'sipservice.find_number' : 'find_number',         // Find new numbers
         'sipservice.add_number' : 'add_number_prompt',           // Buy/add a number to this account
-        'sipservice.postNumber': 'postNumber',
-        'sipservice.cancelNumber' : 'cancelNumber',     // Cancel a number from the account
-        'sipservice.mapNumber' : 'mapNumber',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
-        'sipservice.updateNumber' : 'updateNumber',     // Update features / settings for a number
-        'sipservice.requestPort' : 'requestPort',       // Request to port a number
-        'sipservice.portNumber' : 'portNumber',         // Submit a port request
-        'sipservice.postPortNumber' : 'postPortNumber',
-        'sipservice.toggleFax' : 'toggleFax',           // Toggle Fax / T.38 support
-        'sipservice.configureCnam' : 'configureCnam',    // Configure CNAM
-        'sipservice.postCnam' : 'postCnam',
-        'sipservice.unassignDID' : 'unassignDID',
+        'sipservice.post_number': 'post_number',
+        'sipservice.cancel_number' : 'cancel_number',     // Cancel a number from the account
+        'sipservice.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
+        'sipservice.update_number' : 'update_number',     // Update features / settings for a number
+        'sipservice.request_port' : 'request_port',       // Request to port a number
+        'sipservice.port_number' : 'port_number',         // Submit a port request
+        'sipservice.post_port_number' : 'post_port_number',
+        'sipservice.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
+        'sipservice.configure_cnam' : 'configure_cnam',    // Configure CNAM
+        'sipservice.post_cnam' : 'post_cnam',
+        'sipservice.unassign_did' : 'unassign_did',
 
         /* Credit Management */
-        'sipservice.addCredit' : 'addCredit',
-        'sipservice.postCredit' : 'postCredit',
-        'sipservice.changeRecurring' : 'changeRecurring',
-        'sipservice.editBilling' : 'editBilling',
-        'sipservice.postBilling' : 'postBilling',
+        'sipservice.add_credit' : 'add_credit',
+        'sipservice.post_credit' : 'post_credit',
+        'sipservice.change_recurring' : 'change_recurring',
+        'sipservice.edit_billing' : 'edit_billing',
+        'sipservice.post_billing' : 'post_billing',
 
         /* Server Management */
         'sipservice.getServers' : 'getServers',         // Get server list
-        'sipservice.addServer' : 'addServer',           // Add a server
-        'sipservice.addServerPrompt' : 'addServerPrompt',
-        'sipservice.deleteServer' : 'deleteServer',     // Delete a server
-        'sipservice.updateServer' : 'updateServer',     // Update defaults/general server settings
-        'sipservice.editFailover' : 'editFailover',
-        'sipservice.postFailover' : 'postFailover',
+        'sipservice.add_server' : 'add_server',           // Add a server
+        'sipservice.add_server_prompt' : 'add_server_prompt',
+        'sipservice.delete_server' : 'delete_server',     // Delete a server
+        'sipservice.update_server' : 'update_server',     // Update defaults/general server settings
+        'sipservice.edit_failover' : 'edit_failover',
+        'sipservice.post_failover' : 'post_failover',
 
 
         // Trunk Management
@@ -82,13 +89,13 @@ winkstart.module('connect', 'sipservice',
         'sipservice.editCircuits': 'editCircuits',
 
         /* */
-        'sipservice.refreshDIDs' : 'refreshDIDs',
-        'sipservice.refreshServices' : 'refreshServices',
-        'sipservice.refreshServers' : 'refreshServers',
-        'sipservice.refreshScreen' : 'refreshScreen',
-        'sipservice.updateAccount' : 'updateAccount',
-        'sipservice.newAccount' : 'newAccount',
-        'sipservice.editAuth' : 'editAuth',
+        'sipservice.refresh_dids' : 'refresh_dids',
+        'sipservice.refresh_services' : 'refresh_services',
+        'sipservice.refresh_servers' : 'refresh_servers',
+        'sipservice.refresh_screen' : 'refresh_screen',
+        'sipservice.update_account' : 'update_account',
+        'sipservice.new_account' : 'new_account',
+        'sipservice.edit_auth' : 'edit_auth',
             
         'sipservice.login' : 'login',
         'sipservice.recover_password' : 'recover_password',
@@ -244,8 +251,8 @@ winkstart.module('connect', 'sipservice',
         },
 
 
-	"sipservice.requestPortDID": {
-            url: 'https://store.2600hz.com/v1/requestPortDID',
+	"sipservice.request_portDID": {
+            url: 'https://store.2600hz.com/v1/request_portDID',
             contentType: 'application/json',
             verb: 'POST'
         },
@@ -311,7 +318,7 @@ winkstart.module('connect', 'sipservice',
 
 
 	"sipservice.server.add": {
-            url: 'https://store.2600hz.com/v1/addServer',
+            url: 'https://store.2600hz.com/v1/add_server',
             contentType: 'application/json',
             verb: 'POST'
         },
@@ -483,7 +490,7 @@ function(args) {
             winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.ctr_btn').click(function() {
-                winkstart.publish('sipservice.postNumber', {
+                winkstart.publish('sipservice.post_number', {
                     number : 4159086655,
                     success : function() {
                         dialogDiv.dialog('close');
@@ -503,12 +510,12 @@ function(args) {
             }
             THIS.account.DIDs_Unassigned[did] = {};
             dialogDiv.dialog('close');
-            THIS.updateAccount();
+            THIS.update_account();
         });
             
     },
         
-    postNumber: function(data) {
+    post_number: function(data) {
         $.ajax({
             url: "#",
             global: true,
@@ -531,7 +538,7 @@ function(args) {
     );
     },
         
-    portNumber: function(args) {
+    port_number: function(args) {
         var THIS = this;
 
         var dialogDiv = THIS.templates.port_number.tmpl({}).dialog({
@@ -545,7 +552,7 @@ function(args) {
         winkstart.publish('sipservice.input_css');
             
         $(dialogDiv).find('.submit_btn').click(function() {
-            winkstart.publish('sipservice.postPortNumber', {
+            winkstart.publish('sipservice.post_port_number', {
                 number : 4159086655,
                 address: 'Here or there',
                 someOtherData: 'dazdaz',
@@ -557,7 +564,7 @@ function(args) {
         });
     },
         
-    postPortNumber: function(data) {
+    post_port_number: function(data) {
         $.ajax({
             url: "#",
             global: true,
@@ -583,7 +590,7 @@ function(args) {
     },
         
         
-    configureCnam: function(args) {
+    configure_cnam: function(args) {
         var THIS = this;
 
         var dialogDiv = THIS.templates.edit_cnam.tmpl({}).dialog({
@@ -596,7 +603,7 @@ function(args) {
         winkstart.publish('sipservice.input_css');
             
         $(dialogDiv).find('.submit_btn').click(function() {
-            winkstart.publish('sipservice.postCnam', {
+            winkstart.publish('sipservice.post_cnam', {
                 caller_id : 500,
                 success : function() {
                     dialogDiv.dialog('close');
@@ -607,7 +614,7 @@ function(args) {
             
     },
         
-    postCnam: function(data) {
+    post_cnam: function(data) {
         winkstart.postJSON('CREATE_CNAM_ONLY...', {
             key: data.key,
             json: JSON.stringify({
@@ -621,7 +628,7 @@ function(args) {
         });
     },
 
-        addCreditCard: function(frm) {
+        add_creditCard: function(frm) {
             winkstart.postJSON('sipservice.billing.put',
             {
                 key: key,
@@ -671,7 +678,7 @@ function(args) {
         );
         },
         
-        editBilling: function() {
+        edit_billing: function() {
             var THIS = this;
 
             //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
@@ -685,7 +692,7 @@ function(args) {
             winkstart.publish('sipservice.input_css');
             
             $(dialogDiv).find('.submit_btn').click(function() {
-                winkstart.publish('sipservice.postBilling', {
+                winkstart.publish('sipservice.post_billing', {
                     card_number : 8969756879,
                     car_name: 'John Doe',
                     address: '123, Some Street NoWhereCity Ca',
@@ -697,7 +704,7 @@ function(args) {
             });
         },
         
-        postBilling: function(data) {
+        post_billing: function(data) {
         
             winkstart.postJSON('sipservice.billing.put',
             {
@@ -717,7 +724,7 @@ function(args) {
         
         
 
-        addCredit: function() {
+        add_credit: function() {
             var THIS = this;
 
             var dialogDiv = THIS.templates.add_credits.tmpl({}).dialog({
@@ -730,7 +737,7 @@ function(args) {
             winkstart.publish('sipservice.input_css');
 
             $(dialogDiv).find('.ctr_btn').click(function() {
-                winkstart.publish('sipservice.postCredit', {
+                winkstart.publish('sipservice.post_credit', {
                     credit_amount : 5,
                     creditCard: 73928372930,
                     success : function() {
@@ -741,7 +748,7 @@ function(args) {
             });
         },
 
-        editAuth: function() {
+        edit_auth: function() {
             var THIS = this;
 
             var dialogDiv = THIS.templates.edit_auth.tmpl({}).dialog({
@@ -800,7 +807,7 @@ function(args) {
                 THIS.account.servers[srv].DIDs[did] = did_data;
             }
         },
-        unassignDID: function(data) {
+        unassign_did: function(data) {
             var THIS = this;
             var did = data.did;
             var serverid = data.serverid;
@@ -809,7 +816,7 @@ function(args) {
                 THIS.account.DIDs_Unassigned = {};
             }
             THIS.account.DIDs_Unassigned[did] = {};
-            THIS.updateAccount();
+            THIS.update_account();
         },
 
         delDID: function(did) {
@@ -999,7 +1006,7 @@ function(args) {
     },
 
     LNP_s1: function(frm) {
-        winkstart.putJSON("sipservice.requestPortDID",
+        winkstart.putJSON("sipservice.request_portDID",
         {
             key: key,
             json: JSON.stringify(frm.serializeObject())
@@ -1117,7 +1124,7 @@ function(args) {
             THIS.account.account.trunks = dialogDiv.find('#trunks').val();
             THIS.account.account.inbound_trunks = dialogDiv.find('#inbound_trunks').val();
             dialogDiv.dialog('close');
-            THIS.updateAccount();
+            THIS.update_account();
         });
             
     },
@@ -1184,7 +1191,7 @@ function(args) {
      * Server Management *
      *********************/
         
-    addServerPrompt: function() {
+    add_server_prompt: function() {
         var THIS = this;
 
         var dialogDiv = THIS.templates.edit_server.tmpl({}).dialog({
@@ -1206,12 +1213,12 @@ function(args) {
                     $THIS.dialog('close');
                 }
             }
-            winkstart.publish('sipservice.addServer', data);
+            winkstart.publish('sipservice.add_server', data);
         });
             
     },
         
-    addServer: function(srv) {
+    add_server: function(srv) {
         var THIS = this;
 
         winkstart.log(THIS.account);
@@ -1231,11 +1238,11 @@ function(args) {
         });
 
         srv.success();
-        THIS.updateAccount();
+        THIS.update_account();
         winkstart.log(THIS.account);
         /* For now...
             $.ajax({
-                url: "/api/addServer",
+                url: "/api/add_server",
                 global: true,
                 type: "POST",
                 data: ({
@@ -1300,7 +1307,7 @@ function(args) {
     );
     },
         
-    editFailover: function(number) {
+    edit_failover: function(number) {
         var THIS = this;
 
         var dialogDiv = THIS.templates.failover.tmpl({failover: number.failover}).dialog({
@@ -1314,7 +1321,7 @@ function(args) {
             
         dialogDiv.find('.submit_btn').click(function() {
             console.log(dialogDiv);
-            winkstart.postJSON('sipservice.postFailover', {
+            winkstart.postJSON('sipservice.post_failover', {
                 number : dialogDiv.find('#failover_number').val(),
                 parent: number,
                 success : function() {
@@ -1325,7 +1332,7 @@ function(args) {
         });
     },
         
-    postFailover: function(data) {
+    post_failover: function(data) {
         var THIS = this;
         console.log(data);
         if(data.number == '') {
@@ -1337,7 +1344,7 @@ function(args) {
         }
 
         data.success();
-        THIS.updateAccount();
+        THIS.update_account();
         /*$.ajax({
                 url: "#",
                 global: true,
@@ -1680,7 +1687,7 @@ function(args) {
                     account_id: dialogDiv.find('#account').val(),
                     success : function(data) {
                         THIS.account = data;
-                        THIS.refreshScreen();
+                        THIS.refresh_screen();
                         dialogDiv.dialog('close');
                     }
                 });
@@ -1705,7 +1712,7 @@ function(args) {
         winkstart.publish('sipservice.input_css');
         
         dialogDiv.find('.submit_btn').click(function() {
-            winkstart.publish('sipservice.newAccount', {
+            winkstart.publish('sipservice.new_account', {
                 account_id: dialogDiv.find('#name').val(),
                 realm: dialogDiv.find('#realm').val()
             });
@@ -1726,7 +1733,7 @@ function(args) {
         return true;
     },
 
-    newAccount : function(args) {
+    new_account : function(args) {
         var THIS = this;
             
         var data = {
@@ -1748,18 +1755,18 @@ function(args) {
         winkstart.putJSON('sipservice.create', {data : data}, function(response) {
             winkstart.log(response);
             THIS.account = response.data;
-            THIS.refreshScreen();
+            THIS.refresh_screen();
         })
 
     },
 
-    updateAccount: function() {
+    update_account: function() {
         var THIS = this;
             
         winkstart.postJSON('sipservice.update', {account_id : THIS.account.id, data : THIS.account}, function(data) {
             winkstart.log(data);
             THIS.account = data.data;
-            THIS.refreshScreen();
+            THIS.refresh_screen();
         });
     },
         
@@ -1780,7 +1787,7 @@ function(args) {
         return DIDs;
     },
 
-    refreshDIDs: function(account) {
+    refresh_dids: function(account) {
         var THIS = this;
         var tmp = account;
 
@@ -1820,11 +1827,11 @@ function(args) {
 
         $("#ws-content #control_area").delegate(".cancelDID", "click", function(){
             THIS.delDID($(this).dataset(), null);
-            setTimeout("winkstart.publish('sipservice.updateAccount')", 1);
+            setTimeout("winkstart.publish('sipservice.update_account')", 1);
         });
     },
 
-    refreshServices: function(account) {
+    refresh_services: function(account) {
         var THIS = this;
 
         winkstart.log('Refreshing Services...');
@@ -1832,7 +1839,7 @@ function(args) {
         THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
     },
 
-    refreshServers: function(account) {
+    refresh_servers: function(account) {
         var THIS = this;
 
         winkstart.log('Refreshing Servers...');
@@ -1845,7 +1852,7 @@ function(args) {
                 tmp_ui=ui;
                 tmp_md_this=this;
                 THIS.moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset());
-                setTimeout("winkstart.publish('sipservice.updateAccount')", 1);
+                setTimeout("winkstart.publish('sipservice.update_account')", 1);
             },
             accept: '.number' ,
             activeClass: 'ui-state-highlight',
@@ -1854,15 +1861,15 @@ function(args) {
         });
     },
 
-    refreshScreen: function() {
+    refresh_screen: function() {
         var THIS = this;
 
-        winkstart.publish('sipservice.refreshServices', THIS.account);
+        winkstart.publish('sipservice.refresh_services', THIS.account);
 
-        winkstart.publish('sipservice.refreshServers', THIS.account);
+        winkstart.publish('sipservice.refresh_servers', THIS.account);
 
         //var DIDs = THIS.listDIDs(servers);      // Combines all DIDs across all servers into a single list
-        winkstart.publish('sipservice.refreshDIDs', THIS.account);
+        winkstart.publish('sipservice.refresh_dids', THIS.account);
 
     },
 
@@ -1879,7 +1886,7 @@ function(args) {
 
         // Wire the "Add Server" button
         $('#add_server').click(function() {
-            winkstart.publish('sipservice.addServerPrompt');
+            winkstart.publish('sipservice.add_server_prompt');
         });
 
         // Wire up the numbers box
@@ -1888,7 +1895,7 @@ function(args) {
         });
 
         $("#my_servers").delegate(".failover", "click", function(){
-            winkstart.publish('sipservice.editFailover', $(this).dataset());
+            winkstart.publish('sipservice.edit_failover', $(this).dataset());
         });
 
         $("#server_area").delegate(".cid", "click", function(){
@@ -1910,46 +1917,39 @@ function(args) {
         $('#my_numbers').delegate('.add', "click", function(){searchDIDsPrompt();});
 
 
+
         // This is where we define our click listeners (NOT INLINE IN THE HTML)
         $('#ws-content #add_prepay_button').click(function() {
-            winkstart.publish('sipservice.addCredit');
+            winkstart.publish('sipservice.add_credit');
         });
 
         $('#modify_circuits').live('click', function() {
-            winkstart.publish('sipservice.editCircuits');
+            winkstart.publish('sipservice.edit_circuits');
         });
 
         $('#tmp_add_number').click(function() {
             winkstart.publish('sipservice.add_number');
         });
 
-        $('#tmp_edit_portNumber').click(function() {
-            winkstart.publish('sipservice.portNumber');
+        $('#tmp_edit_port_number').click(function() {
+            winkstart.publish('sipservice.port_number');
         });
 
-        $('#tmp_edit_cnam').click(function() {
-            winkstart.publish('sipservice.configureCnam');
+        /*$('#edit_cnam').click(function() {
+            winkstart.publish('sipservice.configure_cnam');
         });
 
         $('#tmp_edit_auth').click(function() {
-            winkstart.publish('sipservice.editAuth');
-        });
+            winkstart.publish('sipservice.edit_auth');
+        });*/
 
-        $('#tmp_login').click(function() {
-            winkstart.publish('sipservice.login');
-        });
-
-        $('#tmp_recover_password').click(function() {
-            winkstart.publish('sipservice.recover_password');
-        });
-
-        $('.unassign').live('click', function() {
+        $('.did_list .numbers .unassign').live('click', function() {
             data = $(this).dataset();
-            winkstart.publish('sipservice.unassignDID', data);
+            winkstart.publish('sipservice.unassign_did', data);
         });
 
-        $('.add').live('click', function() {
-            winkstart.publish('sipservice.add_number');
+        $('.did_list .numbers .add').live('click', function() {
+            winkstart.publish('sipservice.addNumber');
         });
     },
 
@@ -1977,7 +1977,7 @@ function(args) {
             THIS.loadAccount(winkstart.modules['connect'].auth_token, function(data) {
                 THIS.account = data;
                 THIS.mainMenu();
-                THIS.refreshScreen();
+                THIS.refresh_screen();
             });
         } else {
             // Show landing page
