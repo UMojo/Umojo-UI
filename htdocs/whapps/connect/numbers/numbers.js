@@ -1,3 +1,17 @@
+/**
+ * This module is for managing DIDs assigned to an account. Once loaded, the following DOM areas will be managed:
+ *
+ * Content Areas:
+ *   #numbers.assigned_numbers - A list of all numbers currently assigned numbers for this account (mapped & non-mapped)
+ *   #numbers.assigned_numbers_count - A count of how many numbers are assigned to this account total (mapped & non-mapped)
+ *   #numbers.active_numbers - A list of all numbers currently mapped/routed on this account
+ *   #numbers.active_numbers_count - A count of how many numbers are assigned to this account but not mapped/routed
+ *   #numbers.unused_numbers - A list of all numbers currently unused/available for mapping
+ *   #numbers.unused_numbers_count - A count of how many numbers are currently unused/available for mapping
+ *
+ * 
+ */
+
 winkstart.module('connect', 'numbers',
     /* Start module resource definitions */
     {

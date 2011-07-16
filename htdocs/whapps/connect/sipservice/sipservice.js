@@ -13,8 +13,8 @@ winkstart.module('connect', 'sipservice',
         /* Main Page */
         index: 'tmpl/index.html',
         main: 'tmpl/main.html',
-        main_dids : 'tmpl/main_dids.html',
-        main_servers : 'tmpl/main_servers.html',
+        /*main_dids : 'tmpl/main_dids.html',
+        main_servers : 'tmpl/main_servers.html',*/
         main_services : 'tmpl/main_services.html',
 
         /* Number Management */
@@ -24,11 +24,12 @@ winkstart.module('connect', 'sipservice',
     /* What events do we listen for, in the browser? */
     subscribe: {
         'sipservice.activate' : 'activate',
-        'sipservice.index' : 'index',
-        'sipservice.main_menu' : 'main_menu',
-        'sipservice.refresh_screen' : 'refresh_screen',
+
+        'sipservice.index' : 'index',                       // Splash screen
+        'sipservice.main_menu' : 'main_menu',               // Main menu, once logged in
+        'sipservice.refresh_screen' : 'refresh_screen',     // Refresh entire screen (should never be used theoretically)
             
-        'sipservice.input_css' : 'input_css'
+        'sipservice.input_css' : 'input_css'                // What is this?
             
     },
 
@@ -55,25 +56,25 @@ winkstart.module('connect', 'sipservice',
 /* Bootstrap routine - runs automatically when the module is first loaded */
 function(args) {
     winkstart.publish('subnav.add', {
-        module: this.__module,
+        module: 'sipservice.legal',
         label: 'Legal',
         icon: 'legal'
     });
 
     winkstart.publish('subnav.add', {
-        module: this.__module,
+        module: 'sipserivce.support',
         label: 'Support',
         icon: 'support'
     });
 
     winkstart.publish('subnav.add', {
-        module: this.__module,
+        module: 'sipservice.rates',
         label: 'Rates',
         icon: 'price_tag'
     });
 
     winkstart.publish('subnav.add', {
-        module: this.__module,
+        module: 'sipservice.howto',
         label: 'How to Use',
         icon: 'book'
     });
@@ -85,7 +86,8 @@ function(args) {
     });
 
     // Only one option for now - go ahead and open it up!
-    winkstart.publish('sipservice.activate');
+    winkstart.publish('subnav.activate', 'sipservice');
+
 }, // End initialization routine
 
 
