@@ -1,30 +1,27 @@
-winkstart.module('connect', 'circuits',
+winkstart.module('connect', 'channels',
     /* Start module resource definitions */
     {
         /* What HTML templates will we be using? */
         templates: {
-            edit_trunks: 'tmpl/edit_trunks.html',
-            edit_circuits: 'tmpl/edit_trunks.html'
+            edit_channels: 'tmpl/edit_channels.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'circuits.activate' : 'activate',
-            'circuits.refresh' : 'refresh',
-            'circuits.edit_trunks': 'edit_trunks',
-            'sipservice.edit_circuits': 'edit_circuits'
+            'channels.refresh' : 'refresh',
+            'channels.edit': 'edit'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             /* Circuit Management */
-            "circuits.get": {
-                url: 'https://store.2600hz.com/v1/circuits',
+            "channels.get": {
+                url: 'https://store.2600hz.com/v1/channels',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "circuits.post": {
-                url: 'https://store.2600hz.com/v1/circuits',
+            "channels.post": {
+                url: 'https://store.2600hz.com/v1/channels',
                 contentType: 'application/json',
                 verb: 'POST'
             }
@@ -37,15 +34,23 @@ winkstart.module('connect', 'circuits',
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
+
+        // Tie to DOM events
+        $('#ws-content').delegate('.channels.edit', 'click', function() {
+            winkstart.publish('channels.edit');
+        });
+
     }, // End initialization routine
 
 
 
     /* Define the functions for this module */
     {
-        /**********************
-     * Recurring Services *
-     **********************/
+        channels: {
+            twoway_channels : 3,
+            inbound_channels : 5
+        },
+
         not_used_anymore_addTrunk: function() {
             if ( 'not from prepay' || checkCredits(25) ) {
 
@@ -83,15 +88,15 @@ winkstart.module('connect', 'circuits',
         not_used_anymore_editTrunks: function(args) {
             var THIS = this;
 
-            THIS.templates.edit_trunks.tmpl({}).dialog({
+            THIS.templates.edit_channels.tmpl({}).dialog({
                 title: 'Edit Trunks'
             });
         },
 
-        edit_circuits: function(args) {
+        edit: function(args) {
             var THIS = this;
-            winkstart.popup(THIS.templates.edit_circuits.tmpl(THIS), {
-                title: 'Edit Trunks / Circuits'
+            winkstart.popup(THIS.templates.edit_channels.tmpl(this.channels), {
+                title: 'Edit Trunks / Channels'
             });
 
             $('#update_trunks_button', dialogDiv).click(function() {
@@ -113,7 +118,7 @@ winkstart.module('connect', 'circuits',
 
         setTrunks: function(trunks) {
             if ( 'not from prepay' || checkCredits(25) ) {
-                winkstart.postJSON("sipservice.circuits.post",
+                winkstart.postJSON("sipservice.channels.post",
                 {
                     key: key,
                     json: JSON.stringify({
@@ -136,53 +141,14 @@ winkstart.module('connect', 'circuits',
             }
         },
 
-        delTrunk: function(trunks) {
-            console.log('no longer used?');
-            return;
-            if (acct.account.trunks < trunks) {
-                msgAlert('Not enough trunks to remove!');
-                return false;
-            }
-            $.ajax({
-                url: "/api/delTrunk",
-                global: true,
-                type: "POST",
-                data: ({
-                    key: key,
-                    json: JSON.stringify({
-                        delTrunks: trunks
-                    })
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    acct=msg;
-                    //TODO: redraw trunks
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
 
-                }
+        refresh: function(dialog) {
+            // TODO - properly populate account
 
-            }
-            );
-        },
-
-
-        refresh: function() {
-            var account = {};
-
-            $('#my_circuits').html(THIS.templates.circuits.tmpl(account));
-        },
-
-        activate: function(data) {
-            // Tie to DOM events we care about
-
-            $('#my_services').delegate('#modify_circuits', 'click', function() {
-                winkstart.publish('sipservice.edit_circuits');
-            });
+            $('.channels.twoway', dialog).html(this.channels.twoway_channels);
+            $('.channels.inbound', dialog).html(this.channels.inbound_channels);
         }
+
     } // End function definitions
 
     );  // End module

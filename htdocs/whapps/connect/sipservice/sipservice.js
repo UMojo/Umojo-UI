@@ -20,8 +20,8 @@ winkstart.module('connect', 'sipservice',
             support : 'tmpl/support.html',
             apis : 'tmpl/apis.html',
 
-            /*main_dids : 'tmpl/main_dids.html',
-            main_servers : 'tmpl/main_servers.html',*/
+            main_dids : 'tmpl/main_dids.html',
+            main_servers : 'tmpl/main_servers.html',
             main_services : 'tmpl/main_services.html',
 
             /* Number Management */
@@ -118,25 +118,25 @@ winkstart.module('connect', 'sipservice',
     {
         refresh: function() {
             // Update the trunk count
-            winkstart.publish('circuits.refresh');
+            winkstart.publish('channels.refresh', $('#my_services'));
 
             // Update the credit amount
-            winkstart.publish('credits.refresh');
+            winkstart.publish('credits.refresh', $('#my_services'));
 
             // Update the endpoint list
-            winkstart.publish('endpoints.refresh');
+            winkstart.publish('endpoints.refresh', $('#my_services'));
 
             // Update any fraud settings & notices
-            winkstart.publish('fraud.refresh');
+            winkstart.publish('fraud.refresh', $('#my_services'));
 
             // Update any monitoring settings & notices
-            winkstart.publish('monitoring.refresh');
+            winkstart.publish('monitoring.refresh', $('#my_services'));
 
             // Update the list of numbers/DIDs
-            winkstart.publish('numbers.refresh');
+            winkstart.publish('numbers.refresh', $('#my_services'));
 
             // Update any admin pages/settings/etc.
-            winkstart.publish('admin.refresh');
+            winkstart.publish('admin.refresh', $('#my_services'));
         },
 
         legal: function() {
@@ -164,6 +164,8 @@ winkstart.module('connect', 'sipservice',
             // Paint the main screen
             $('#ws-content').empty();
             this.templates.main.tmpl().appendTo( $('#ws-content') );
+
+            $('#my_services').html(this.templates.main_services.tmpl());
         },
 
 

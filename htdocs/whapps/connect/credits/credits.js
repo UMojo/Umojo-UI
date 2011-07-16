@@ -115,6 +115,9 @@ winkstart.module('connect', 'credits',
         winkstart.log('Refreshing Services...');
         $('#my_services').empty();
         THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
+
+
+        // {parseFloat(account.credits.prepay).toFixed(2)}
     },
 
         refresh: function() {
