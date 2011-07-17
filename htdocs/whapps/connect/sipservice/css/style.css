@@ -41,9 +41,9 @@
 #control_area #my_services .info { background:url(../images/bg_trunk_li.jpg) top left no-repeat; width:423px; height:45px; color:#4e4d4d; padding-top:0em; }
 #control_area #my_services .info .amount { float:left; font-size:27px; margin:10px 0 0 30px; }
 #control_area #my_services .info .ppm { float:left; font-size:13px; font-weight:bold; margin:22px 0 0 10px; }
-#control_area #my_services .info .channel_num { float:left; font-size:27px; margin:10px 0 0 30px; }
-#control_area #my_services .info .channel_detail { float:left; font-size:12px; font-weight:bold; margin:10px 0 0 10px; }
-#control_area #my_services .info .channel_detail em {font-weight:normal; font-size:11px; }
+#control_area #my_services .info .channels.num { float:left; font-size:27px; margin:10px 0 0 30px; }
+#control_area #my_services .info .channels.detail { float:left; font-size:12px; font-weight:bold; margin:10px 0 0 10px; }
+#control_area #my_services .info .channels.detail em {font-weight:normal; font-size:11px; }
 #control_area #my_services .info .e_num { float:left; font-size:27px; margin:10px 0 0 30px; }
 #control_area #my_services .info .e_detail { float:left; font-size:12px; font-weight:bold; margin:24px 0 0 10px; }
 
