@@ -11,6 +11,12 @@ winkstart.module('core', 'core', {
                     this.init({ parent: $('body') }, function() {
                         winkstart.module.loadPlugin('core', 'subnav', function() {
                             this.init({ parent: $('body') }, function() {
+                                // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+                                winkstart.module.loadPlugin('core', 'myaccount', function() {
+                                    this.init();
+                                    winkstart.log('Core: Loaded My Account manager');
+                                });
+
                                 // Now move onto apps
                                 winkstart.log('WhApps: Loading WhApps...');
 

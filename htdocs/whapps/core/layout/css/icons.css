@@ -206,6 +206,10 @@
     background-position: -131px -40px;
 }
 
+.icon.puzzle {
+    background-position: -480px -451px;
+}
+
 .account_icon {
     background: url(../images/Icons_32x32_Blue.png);
     background-position: 0 -357px;

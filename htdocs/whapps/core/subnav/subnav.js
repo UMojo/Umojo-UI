@@ -10,8 +10,9 @@ winkstart.module('core', 'subnav', {
         },
         
         subscribe: {
-            'subnav.add'    : 'add',
-            'subnav.clear' : 'clear'
+            'subnav.add'        : 'add',
+            'subnav.activate'   : 'activate',
+            'subnav.clear'      : 'clear'
         }
     },
 
@@ -20,17 +21,7 @@ winkstart.module('core', 'subnav', {
         
         // Set up the Module Click handlers
         $('.sub_nav ul').delegate('li', 'click', function() {
-            if($('.sub_nav .selected').size()) {
-                var module_name = $('.sub_nav .selected').attr('module-name');
-                winkstart.log('Click on subnav: Calling ', module_name + '.deactivate');
-                winkstart.publish(module_name + '.deactivate', {});
-            }
-            winkstart.log('Click on subnav: Calling ', $(this).attr('module-name') + '.activate');
-
-            winkstart.publish($(this).attr('module-name') + '.activate', {});
-
-            $('.sub_nav li').removeClass('selected');
-            $(this).addClass('selected');
+            winkstart.publish('subnav.activate', $(this).attr('module-name'));
             return false;
         });
     },
@@ -53,16 +44,30 @@ winkstart.module('core', 'subnav', {
                     var compare = ((module_name == currentModule) ? 0 : ((module_name > currentModule) ? 1 : -1));
                     if(k == listModules.length - 1 && compare > 0) {
                         THIS.templates.item.tmpl(data).appendTo(navbar_list);
-                        console.log(data.module + 'appended');
+                        winkstart.log(data.module + ' appended');
                         return false;
                     } 
                     else if(compare < 0){
                         THIS.templates.item.tmpl(data).insertBefore(listModules[k]);
-                        console.log(data.module + 'insertBefore');
+                        winkstart.log(data.module + ' insertBefore');
                         return false;
                     }
                 });
             }
+        },
+
+        activate: function(module_name) {
+            if($('.sub_nav .selected').size()) {
+                var current_module = $('.sub_nav .selected').attr('module-name');
+                winkstart.log('Click on subnav: Calling ' + current_module + '.deactivate');
+                winkstart.publish(current_module + '.deactivate', {});
+            }
+            winkstart.log('Click on subnav: Calling ' + module_name + '.activate');
+
+            $('.sub_nav li').removeClass('selected');
+            $('.sub_nav li[module-name="' + module_name + '"]').addClass('selected');
+
+            winkstart.publish(module_name + '.activate', {});
         },
 
         clear: function(data) {

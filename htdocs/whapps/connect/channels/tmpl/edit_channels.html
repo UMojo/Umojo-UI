@@ -1,11 +1,11 @@
 <div>
     <div id="edit_trunks_popup" class="container_resize popup">
         <div class="resize">
-            <form name="form" method="post" action="#">
+            <form id="channels" method="post" action="#">
                 <div>
                     <label>Two-way Flat Rate Trunks:</label>
                     <div class="rightarrow_icon"></div>
-                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${account.account.trunks}" name="trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$30 = <span id="trunks_total">$</span> / month
+                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${twoway_channels}" name="trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$30 = <span id="trunks_total">$</span> / month
                 </div>
                 <div class="popup_content">
                     <p class="note_box"><span style="font-size: 14px;">Trunks will be charged monthly basis.</span><br><br>If you delete trunks mid-cycle you will be charged for the entire month.<br>
@@ -15,7 +15,7 @@
                 <div>
                     <label>Inbound Flat Rate Trunks:</label>
                     <div class="rightarrow_icon"></div>
-                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${account.account.inbound_trunks}"name="trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$4 = <span id="trunks_inbound_total">$</span> / month
+                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${inbound_channels}"name="inbound_trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$4 = <span id="trunks_inbound_total">$</span> / month
                 </div>
                 <div class="popup_content">
                     <p class="note_box"><span style="font-size: 14px;">Trunks will be charged monthly basis.</span><br><br>If you delete trunks mid-cycle you will be charged for the entire month.<br>
@@ -23,7 +23,7 @@
                 </div>
             </form>
 
-            <a class="ctr_btn" href="#">Review Order</a>
+            <a class="update_channels_button ctr_btn" href="#">Review Order</a>
 
         </div>
     </div>

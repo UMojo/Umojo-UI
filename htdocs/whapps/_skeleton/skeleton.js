@@ -1,4 +1,4 @@
-winkstart.module('voip', 'skeleton', 
+winkstart.module('skeleton', 'skeleton', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */

@@ -28,28 +28,28 @@ winkstart.module('voip', 'media',
         resources: {
             "media.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/media',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "media.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/media/{media_id}',
-                dataType: 'json',
-                httpMethod: 'GET'
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "media.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/media',
-                dataType: 'json',
-                httpMethod: 'PUT'
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             "media.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/media/{media_id}',
-                dataType: 'json',
-                httpMethod: 'POST'
+                contentType: 'application/json',
+                verb: 'POST'
             },
             "media.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/media/{media_id}',
-                dataType: 'json',
-                httpMethod: 'DELETE'
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },
@@ -87,35 +87,64 @@ winkstart.module('voip', 'media',
                 rest_data.crossbar = true;
                 rest_data.account_id = MASTER_ACCOUNT_ID;
                 rest_data.data = form_data;
-
+                
                 /* Is this a create or edit? See if there's a known ID */
                 if (media_id) {
                     /* EDIT */
                     rest_data.media_id = media_id;
-                    console.log(rest_data);
-                    winkstart.postJSON('media.update', rest_data, function (json, xhr) {
+                    winkstart.getJSON('media.get', {
+                        crossbar: true,
+                        account_id: MASTER_ACCOUNT_ID,
+                        media_id: media_id
+                    }, function(json, xhr) {
+                        if($('#upload_span').is(":visible") && $('#file').val() != ''){
+                            rest_data.data.description = rest_data.data.upload_media; 
+                        } else {
+                            rest_data.data.description = json.data.description;
+                        }
+                        delete rest_data.data.upload_media;
+                        winkstart.postJSON('media.update', rest_data, function (json, xhr) {
                         /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editMedia({
-                            id: media_id
+                        if($('#upload_span').is(':visible') && $('#file').val() != '') {
+                            THIS._hijackForm(json.data.id);
+                            $('#media-form').attr('action', CROSSBAR_REST_API_ENDPOINT + '/accounts/'+ MASTER_ACCOUNT_ID + '/media/'+ json.data.id +'/raw');
+                            $('#media-form').submit();
+                        } else {
+                            THIS.editMedia({
+                                id: media_id
+                            });
+                            THIS.renderList();
+                        }
                         });
                     });
                 } else {
                     /* CREATE */
                     /* Actually send the JSON data to the server */
                     winkstart.putJSON('media.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        console.log(json);
-                        THIS.editMedia({
-                            id: json.data.id
-                        });
+                        THIS._hijackForm(json.data.id);
+                        $('#media-form').attr('action', CROSSBAR_REST_API_ENDPOINT + '/accounts/'+ MASTER_ACCOUNT_ID + '/media/'+ json.data.id +'/raw');
+                        $('#media-form').submit();
                     });
                 }
             } else {
                 alert('Please correct errors that you have on the form.');
             }
         },
+        _hijackForm: function(media_id) {
+            var THIS = this;
+            $("#media-form").submit(function() {
+                //Mad hax
+                $('#media-form').attr('target', 'upload_target');
 
+                $("#upload_target").load(function() {
+                    THIS.editMedia({
+                        id: media_id
+                    });
+                    THIS.renderList();
+                });
+            });
+        },
+        
         /*
          * Create/Edit media properties (don't pass an ID field to cause a create instead of an edit)
          */
@@ -137,7 +166,6 @@ winkstart.module('voip', 'media',
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
-
                     THIS.renderMedia(form_data);
                 });
             } else {
@@ -182,15 +210,26 @@ winkstart.module('voip', 'media',
             $("ul.settings2").tabs("div.advanced_pane > div");
             $("#display_name").focus();
 
+            if(media_id != undefined) {
+                $('#upload_span').hide();
+            }
+
+            $('#change_link').click(function(event) {
+                $('#upload_span').show();
+                $('#player_file').hide();
+            });
+
             /* Listen for the submit event (i.e. they click "save") */
             $('.media-save').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
-
                 /* Grab all the form field data */
                 var form_data = form2object('media-form');
+                form_data.description = form_data.upload_media;
+                
+                //delete form_data.upload_media;
                 THIS.saveMedia(media_id, form_data);
 
                 return false;
@@ -275,7 +314,7 @@ winkstart.module('voip', 'media',
                 label: 'Media Management',
                 module: this.__module
             });
-
+            
             $('.edit-media').live({
                 click: function(evt){
                     var target = evt.currentTarget;
@@ -287,6 +326,7 @@ winkstart.module('voip', 'media',
             });
 
             THIS.renderList();
-        }
+        },
+        
     }
 );
