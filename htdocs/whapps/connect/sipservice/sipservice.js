@@ -31,6 +31,7 @@ winkstart.module('connect', 'sipservice',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
+            'load_account' : 'load_account',
 
             /* Sub nav HTML pages */
             'sipservice.legal.activate' : 'legal',
@@ -47,17 +48,14 @@ winkstart.module('connect', 'sipservice',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "sipservice.get_idoc": {
-                url: 'https://store.2600hz.com/v1/get_idoc',
-                contentType: 'application/json',
-                verb: 'POST'
+            "sipservice.get": {
+                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
+                verb: 'GET'
             },
-
 
             /* Create Ticket */
             "sipservice.createTicket": {
                 url: 'https://store.2600hz.com/v1/createTicket',
-                contentType: 'application/json',
                 verb: 'PUT'
             }
         }
@@ -113,30 +111,10 @@ winkstart.module('connect', 'sipservice',
     }, // End initialization routine
 
 
-
     /* Define the functions for this module */
     {
-        refresh: function() {
-            // Update the trunk count
-            winkstart.publish('channels.refresh', $('#my_services'));
-
-            // Update the credit amount
-            winkstart.publish('credits.refresh', $('#my_services'));
-
-            // Update the endpoint list
-            winkstart.publish('endpoints.refresh', $('#my_services'));
-
-            // Update any fraud settings & notices
-            winkstart.publish('fraud.refresh', $('#my_services'));
-
-            // Update any monitoring settings & notices
-            winkstart.publish('monitoring.refresh', $('#my_services'));
-
-            // Update the list of numbers/DIDs
-            winkstart.publish('numbers.refresh', $('#my_services'));
-
-            // Update any admin pages/settings/etc.
-            winkstart.publish('admin.refresh', $('#my_services'));
+        apis: function() {
+            $('#ws-content').html(this.templates.apis.tmpl());
         },
 
         legal: function() {
@@ -151,21 +129,31 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').html(this.templates.rates.tmpl());
         },
 
-        apis: function() {
-            $('#ws-content').html(this.templates.apis.tmpl());
-        },
-
         howto: function() {
             $('#ws-content').html(this.templates.howto.tmpl());
         },
 
+        refresh: function() {
+            $('#my_services').html(this.templates.main_services.tmpl(winkstart.modules['connect'].account));
+
+            $('#my_servers').html(this.templates.main_servers.tmpl(winkstart.modules['connect'].account));
+
+            $('#my_numbers').html(this.templates.main_dids.tmpl(winkstart.modules['connect'].account));
+        },
+
+        load_account : function(account_id){
+            var THIS = this;
+
+            winkstart.getJSON('sipservice.get', { account_id : account_id }, function(data, xhr) {
+                winkstart.modules['connect'].account = data.data;
+                THIS.refresh();
+            });
+        },
 
         main_menu: function() {
             // Paint the main screen
             $('#ws-content').empty();
             this.templates.main.tmpl().appendTo( $('#ws-content') );
-
-            $('#my_services').html(this.templates.main_services.tmpl());
         },
 
 
@@ -183,8 +171,8 @@ winkstart.module('connect', 'sipservice',
                 // Paint various sections on the page. Each individual section is responsible for loading it's own data and
                 // populating it's own area.
                 THIS.main_menu();
-            
-                THIS.refresh();
+
+                THIS.load_account('2600hz');
             } else {
                 // Show landing page
                 

@@ -177,7 +177,7 @@ amplify.request.addType( "ajax", function( args ) {
 					var env = $.extend({
 							statusName: "status",
 							statusIndicator: "success",
-							dataName: "data",
+							dataName: "data"
 						},
 						args.envelope);
 					return callback( json[env.dataName], json[env.statusName] == env.statusIndicator );

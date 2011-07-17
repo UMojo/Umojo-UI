@@ -1,19 +1,35 @@
 <div>
     <div class="title">My Paid Services</div>
     <div class="info" style="clear:both;">
-        <span class="channels number twoway"/>
+        <span class="channel_num">${account.trunks}</span>
         <span class="channel_detail">Two-Way Channels</span>
 
-        <span class="channels number inbound"/>
+        <span class="channel_num">${account.inbound_trunks}</span>
         <span class="channel_detail">Inbound Channels</span>
         
-        <span id="addCredsSpan"><a href="#" class="button_small button channels edit">Modify</a></span>
+        <span id="addCredsSpan"><a href="#" id="modify_circuits" class="button_small button">Modify</a></span>
     </div>
     <div class="info" style="background-repeat: repeat-y; ">
-        <span class="amount">&#36;</span><span class="ppm">per-minute credit</span>
+        <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">per-minute credit</span>
 
         <span id="addCredsSpan"><a href="#" id="add_prepay_button" class="button_small button">Add Credit</a></span>
     </div>
+
+    {{if account.billing }}
+    <div class="info">
+        <span class="e_num"></span>
+        <span class="e_detail">
+            <span class="cc_number">${account.billing.cards.length}</span> credit cards on file
+            <span class="edit"><a href="#">[edit]</a></span>
+        </span>
+    </div>
+
+    {{else}}
+    <div class="info">
+
+        <span class="e_detail no_cc_warning">&nbsp;<span id="my_account_bottom" style="cursor:pointer; color:#2585A5;" class="">No Credit Card On File!</span> [align this correctly][turn off 'if false']</span>
+    </div>
+    {{/if}}
 
     <div class="addl" style="background-position:0px -40px; height:30px">
 
