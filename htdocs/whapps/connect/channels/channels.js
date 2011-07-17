@@ -43,10 +43,28 @@ winkstart.module('connect', 'channels',
 
     /* Define the functions for this module */
     {
+        rates : { trunks : 30.00, inbound_trunks : 4.00 },
+
+        updateCosts: function(dialogDiv) {
+            var THIS = this;
+
+            $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
+            $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
+
+            $('#trunks_total', dialogDiv).html(THIS.rates.trunks * $('#trunks', dialogDiv).val());
+            $('#inbound_trunks_total', dialogDiv).html(THIS.rates.inbound_trunks * $('#inbound_trunks', dialogDiv).val());
+        },
+
         edit: function(args) {
             var THIS = this;
             dialogDiv = winkstart.popup(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
-                title: 'Edit Trunks / Channels'
+                title: 'Edit Flat-Rate Channels'
+            });
+
+            THIS.updateCosts(dialogDiv);
+
+            $('#trunks, #inbound_trunks', dialogDiv).bind('keyup change', function() {
+                THIS.updateCosts(dialogDiv);
             });
 
             $('.update_channels_button', dialogDiv).click(function() {

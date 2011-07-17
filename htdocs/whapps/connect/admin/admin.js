@@ -20,27 +20,27 @@ winkstart.module('connect', 'admin',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "sipservice.list": {
+            "sipservice.admin.list": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "sipservice.get": {
+            "sipservice.admin.get": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "sipservice.create": {
+            "sipservice.admin.create": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "sipservice.update": {
+            "sipservice.admin.update": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "sipservice.delete": {
+            "sipservice.admin.delete": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'

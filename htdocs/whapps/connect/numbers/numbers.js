@@ -27,7 +27,6 @@ winkstart.module('connect', 'numbers',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'numbers.activate' : 'activate',
-            'sipservice.refresh' : 'refresh',
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
             'numbers.add_number' : 'add_number_prompt',           // Buy/add a number to this account
@@ -47,27 +46,27 @@ winkstart.module('connect', 'numbers',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             /* Search DIDs */
-            "sipservice.searchNPANXX": {
+            "searchNPANXX": {
                 url: 'https://store.2600hz.com/v1/searchNPANXX',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.searchNPA": {
+            "searchNPA": {
                 url: 'https://store.2600hz.com/v1/searchNPA',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
-            "sipservice.searchAvailDIDs": {
+            "searchAvailDIDs": {
                 url: 'https://store.2600hz.com/v1/searchAvailDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
-            "sipservice.request_portDID": {
+            "request_portDID": {
                 url: 'https://store.2600hz.com/v1/request_portDID',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -75,7 +74,7 @@ winkstart.module('connect', 'numbers',
 
 
 
-            "sipservice.getLNPData": {
+            "getLNPData": {
                 url: 'https://store.2600hz.com/v1/getLNPData',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -84,43 +83,43 @@ winkstart.module('connect', 'numbers',
 
 
             /* DID Management */
-            "sipservice.numbers.addDID": {
+            "numbers.addDID": {
                 url: 'https://store.2600hz.com/v1/addDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.addDIDs": {
+            "numbers.addDIDs": {
                 url: 'https://store.2600hz.com/v1/addDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.moveDID": {
+            "numbers.moveDID": {
                 url: 'https://store.2600hz.com/v1/moveDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.delDID": {
+            "numbers.delDID": {
                 url: 'https://store.2600hz.com/v1/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setE911": {
+            "numbers.setE911": {
                 url: 'https://store.2600hz.com/v1/setE911',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setFailOver": {
+            "numbers.setFailOver": {
                 url: 'https://store.2600hz.com/v1/setFailOver',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setCID": {
+            "numbers.setCID": {
                 url: 'https://store.2600hz.com/v1/setCID',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -297,7 +296,7 @@ winkstart.module('connect', 'numbers',
         LNPPrompt_s2: function(lnp_f) {
 
             var lnp_did = lnp_f.serializeObject();
-            winkstart.getJSON("sipservice.getLNPData",
+            winkstart.getJSON("getLNPData",
             {
                 key: key,
                 json: JSON.stringify(lnp_did)
@@ -669,7 +668,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setE911: function(e911) {
-            winkstart.postJSON("sipservice.numbers.setE911",
+            winkstart.postJSON("numbers.setE911",
             {
                 key: key,
                 json: JSON.stringify({
@@ -688,7 +687,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setFailOver: function(info) {
-            winkstart.postJSON("sipservice.numbers.setFailOver",
+            winkstart.postJSON("numbers.setFailOver",
             {
                 key: key,
                 json: JSON.stringify({
@@ -708,7 +707,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setCID: function(info){
-            winkstart.postJSON("sipservice.numbers.setCID",
+            winkstart.postJSON("numbers.setCID",
             {
                 key: key,
                 json: JSON.stringify(info)
@@ -723,7 +722,7 @@ winkstart.module('connect', 'numbers',
         },
 
         LNP_s1: function(frm) {
-            winkstart.putJSON("sipservice.request_portDID",
+            winkstart.putJSON("request_portDID",
             {
                 key: key,
                 json: JSON.stringify(frm.serializeObject())
@@ -749,7 +748,7 @@ winkstart.module('connect', 'numbers',
         not_used_anymore_searchNPA: function(nbr, cb) {
             //			$.getJSON('/api/searchNPA', function(data) {
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-            winkstart.getJSON("sipservice.searchNPA",
+            winkstart.getJSON("searchNPA",
             {
                 key: key,
                 json: JSON.stringify(nbr)

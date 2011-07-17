@@ -2,29 +2,52 @@
     <div id="edit_trunks_popup" class="container_resize popup">
         <div class="resize">
             <form id="channels" method="post" action="#">
-                <div>
-                    <label>Two-way Flat Rate Trunks:</label>
-                    <div class="rightarrow_icon"></div>
-                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${account.trunks}" name="trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$30 = <span id="trunks_total">$</span> / month
-                </div>
                 <div class="popup_content">
-                    <p class="note_box"><span style="font-size: 14px;">Trunks will be charged monthly basis.</span><br><br>If you delete trunks mid-cycle you will be charged for the entire month.<br>
-                        If you add trunks mid-cycle you will be charged prorated from 09/31/2011.</p>
+                    <h2>Flat-Rate Services</h2>
+
+                    <div class="clear"/>
+
+                    <label class="inline">Two-way Flat Rate Channels:</label>
+                    <div class="rightarrow_icon"></div>
+                    <input id="trunks" class="idleField field_round center" type="text" value="${account.trunks}" name="trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$<span id="trunks_rate"/> = $<span id="trunks_total"></span> / month
+
+                    <p class="note_box">
+                        Each two-way channel allows a single inbound or outbound call to any US-48 phone number.
+                    </p>
                 </div>
 
-                <div>
-                    <label>Inbound Flat Rate Trunks:</label>
-                    <div class="rightarrow_icon"></div>
-                    <input id="TrunksNumber" class="idleField field_round" type="text" value="${account.inbound_trunks}"name="inbound_trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$4 = <span id="trunks_inbound_total">$</span> / month
-                </div>
                 <div class="popup_content">
-                    <p class="note_box"><span style="font-size: 14px;">Trunks will be charged monthly basis.</span><br><br>If you delete trunks mid-cycle you will be charged for the entire month.<br>
-                        If you add trunks mid-cycle you will be charged prorated from 09/31/2011.</p>
+                    <label class="inline">Inbound Flat Rate Channels:</label>
+                    <div class="rightarrow_icon"></div>
+                    <input id="inbound_trunks" class="idleField field_round center" type="text" value="${account.inbound_trunks}"name="inbound_trunks">&nbsp;&nbsp;x&nbsp;&nbsp;$<span id="inbound_trunks_rate"/> = $<span id="inbound_trunks_total"></span> / month
+                    <p class="note_box">
+                        Each inbound channel allows a single inbound call.<br/>
+                    </p>
+                </div>
+                    
+                <div class="popup_content">
+                    <label class="inline">Notify When Out of Channels</label>
+                    <input type="checkbox"/>
                 </div>
             </form>
 
-            <a class="update_channels_button ctr_btn" href="#">Review Order</a>
+            <div class="popup_content">
+                <h2>Terms & Conditions</h2>
+                <p class="note_box">
+                    There is no minimum committment or long-term contract.<br/>
+                    Changes made mid-month will be pro-rated.<br/>
+                    There are no refunds for reducing channels or for unused service.<br/>
+                    <b>Flat rate services are available for resale to PBX customers only.</b><br/>
+                    Flat rate services are not for use with call centers, LCR algorithms, telemarketing or dialer traffic.<br/>
+                    <br/>
+                    <input type="checkbox" name="tos_agreed"/> I understand these rules and the general <a href="#" class="tos_popup">Terms and Conditions</a>
+                </p>
 
+                <div>
+                    <a class="update_channels_button ctr_btn" href="#">Next -></a>
+                </div>
+                <div class="center">We'll review your order on the next page...</div>
+            </div>
         </div>
     </div>
 </div>

@@ -3,36 +3,33 @@ winkstart.module('connect', 'credits',
     {
         /* What HTML templates will we be using? */
         templates: {
-            add_credits_prompt: 'tmpl/add_credits_prompt.html'
+            add_credits: 'tmpl/add_credits.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'credits.activate' : 'activate',
-            'sipservice.refresh' : 'refresh',
             /* Credit Management */
             'credits.add_credits_prompt' : 'add_credits_prompt',
-            'credits.post_credit' : 'post_credit',
-            'credits.change_recurring' : 'change_recurring',
-            'credits.edit_billing' : 'edit_billing',
-            'credits.post_billing' : 'post_billing'
+            'credits.post' : 'post',
+            'credits.update' : 'update',
+            'credits.change_recurring' : 'change_recurring'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
               'credits.post': {
-                url: 'https://store.2600hz.com/v1/credits',
+                url: 'https://store.2600hz.com/v1/{account_id}/credits',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
               'credits.get': {
-                url: 'https://store.2600hz.com/v1/credits',
+                url: 'https://store.2600hz.com/v1/{account_id}/credits',
                 contentType: 'application/json',
                 verb: 'GET'
-            },
-        
-    }
+            }
+        }
     }, // End module resource definitions
 
 
@@ -47,10 +44,17 @@ winkstart.module('connect', 'credits',
 
     /* Define the functions for this module */
     {
+        update: function(dialogDiv) {
+            var THIS = this;
+
+            $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
+            $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
+        },
+
         add_credits_prompt: function() {
             var THIS = this;
 
-            dialogDiv = winkstart.popup(THIS.templates.add_credits_prompt.tmpl(), {
+            dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {
                 title: 'Add Credits'
             });
 

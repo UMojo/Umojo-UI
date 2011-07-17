@@ -49,7 +49,8 @@ winkstart.module('connect', 'sipservice',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
+                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+//                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
 
@@ -174,7 +175,8 @@ winkstart.module('connect', 'sipservice',
                 // populating it's own area.
                 THIS.main_menu();
 
-                THIS.load_account('2600hz');
+                console.log('got here.');
+                THIS.load_account('info_2600hz');
             } else {
                 // Show landing page
                 
