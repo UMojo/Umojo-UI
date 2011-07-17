@@ -21,7 +21,7 @@ winkstart.module('voip', 'media',
         },
 
         validation : [
-                {name : '#display_name', regex : /^.+$/},
+                {name : '#name', regex : /^.+$/},
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -208,7 +208,7 @@ winkstart.module('voip', 'media',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
-            $("#display_name").focus();
+            $("#name").focus();
 
             if(media_id != undefined) {
                 $('#upload_span').hide();
@@ -274,7 +274,7 @@ winkstart.module('voip', 'media',
                         _.each(crossbar_data, function(elem){
                             new_list.push({
                                 id: elem.id,
-                                title: elem.display_name
+                                title: elem.name
                             });
                         });
                     }
