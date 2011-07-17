@@ -103,7 +103,7 @@
 #ws_callflow .callflow .icons_white.checkvariable { background: url(images/icons_white/check_variable.png) no-repeat;}
 #ws_callflow .callflow .icons_white.setvariable { background: url(images/icons_white/set_variable.png) no-repeat;}
 #ws_callflow .callflow .icons_white.setringback { background: url(images/icons_white/set_ringback.png) no-repeat;}
-#ws_callflow .callflow #icicons_whiteons_black .check_time { background: url(images/icons_white/check_time_of_day.png) no-repeat;}
+#ws_callflow .callflow .icons_white.temporal_route { background: url(images/icons_white/set_time_of_day.png) no-repeat;}
 
 #ws_callflow .callflow .icons_black.menu { background: url(images/icons_black/menu.png) no-repeat; }
 #ws_callflow .callflow .icons_black.device { background: url(images/icons_black/ring_device.png) no-repeat; }
