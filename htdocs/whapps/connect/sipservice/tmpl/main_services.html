@@ -1,13 +1,13 @@
 <div>
     <div class="title">My Paid Services</div>
     <div class="info" style="clear:both;">
-        <span class="channel_num">${account.trunks}</span>
-        <span class="channel_detail">Two-Way Channels</span>
+        <span class="channels num">${account.trunks}</span>
+        <span class="channels detail">Two-Way Channels</span>
 
-        <span class="channel_num">${account.inbound_trunks}</span>
-        <span class="channel_detail">Inbound Channels</span>
+        <span class="channels num">${account.inbound_trunks}</span>
+        <span class="channels detail">Inbound Channels</span>
         
-        <span id="addCredsSpan"><a href="#" id="modify_circuits" class="button_small button">Modify</a></span>
+        <span id="addCredsSpan"><a href="#" id="edit_channels" class="button_small button channels edit">Modify</a></span>
     </div>
     <div class="info" style="background-repeat: repeat-y; ">
         <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">per-minute credit</span>

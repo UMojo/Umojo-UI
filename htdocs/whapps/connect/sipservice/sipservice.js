@@ -134,11 +134,13 @@ winkstart.module('connect', 'sipservice',
         },
 
         refresh: function() {
-            $('#my_services').html(this.templates.main_services.tmpl(winkstart.modules['connect'].account));
+            var account = winkstart.modules['connect'].account;
 
-            $('#my_servers').html(this.templates.main_servers.tmpl(winkstart.modules['connect'].account));
+            $('#my_services').html(this.templates.main_services.tmpl(account));
 
-            $('#my_numbers').html(this.templates.main_dids.tmpl(winkstart.modules['connect'].account));
+            $('#my_servers').html(this.templates.main_servers.tmpl(account));
+
+            $('#my_numbers').html(this.templates.main_dids.tmpl(account));
         },
 
         load_account : function(account_id){
