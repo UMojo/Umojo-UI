@@ -408,7 +408,7 @@ winkstart.module('connect', 'numbers',
                     var NXX = $('#sdid_nxx', dialogDiv).val();
 
                     winkstart.publish('numbers.search_npa_nxx', {
-                        data : { NPA: NPA, NXX: NXX },
+                        data : { 'NPA': NPA, 'NXX': NXX },
                         callback: function(results) {
                             console.log('Found these #s:', results);
 
