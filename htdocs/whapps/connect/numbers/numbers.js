@@ -21,7 +21,9 @@ winkstart.module('connect', 'numbers',
             failover: 'tmpl/edit_failover.html',
             edit_cnam: 'tmpl/edit_cnam.html',
             service_loc: 'tmpl/service_loc.html',
-            add_numbers: 'tmpl/add_numbers.html'
+            add_numbers: 'tmpl/add_numbers.html',
+            search_dids_results: 'tmpl/search_dids_results.html'
+            
         },
 
         /* What events do we listen for, in the browser? */
@@ -48,27 +50,27 @@ winkstart.module('connect', 'numbers',
         resources: {
             /* Search DIDs */
             "numbers.search_npa_nxx.get": {
-                url: 'https://store.2600hz.com/v1/searchNPANXX',
+                url: 'https://store.2600hz.com/v1/{account_id}/searchNPANXX',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.search_npa.get": {
-                url: 'https://store.2600hz.com/v1/searchNPA',
+                url: 'https://store.2600hz.com/v1/{account_id}/searchNPA',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
             "searchAvailDIDs": {
-                url: 'https://store.2600hz.com/v1/searchAvailDIDs',
+                url: 'https://store.2600hz.com/v1/{account_id}/searchAvailDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
             "request_portDID": {
-                url: 'https://store.2600hz.com/v1/request_portDID',
+                url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -76,7 +78,7 @@ winkstart.module('connect', 'numbers',
 
 
             "getLNPData": {
-                url: 'https://store.2600hz.com/v1/getLNPData',
+                url: 'https://store.2600hz.com/v1/{account_id}/getLNPData',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -85,43 +87,43 @@ winkstart.module('connect', 'numbers',
 
             /* DID Management */
             "numbers.addDID": {
-                url: 'https://store.2600hz.com/v1/addDID',
+                url: 'https://store.2600hz.com/v1/{account_id}/addDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.addDIDs": {
-                url: 'https://store.2600hz.com/v1/addDIDs',
+                url: 'https://store.2600hz.com/v1/{account_id}/addDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.moveDID": {
-                url: 'https://store.2600hz.com/v1/moveDID',
+                url: 'https://store.2600hz.com/v1/{account_id}/moveDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.delDID": {
-                url: 'https://store.2600hz.com/v1/delDID',
+                url: 'https://store.2600hz.com/v1/{account_id}/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.setE911": {
-                url: 'https://store.2600hz.com/v1/setE911',
+                url: 'https://store.2600hz.com/v1/{account_id}/setE911',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.setFailOver": {
-                url: 'https://store.2600hz.com/v1/setFailOver',
+                url: 'https://store.2600hz.com/v1/{account_id}/setFailOver',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.setCID": {
-                url: 'https://store.2600hz.com/v1/setCID',
+                url: 'https://store.2600hz.com/v1/{account_id}/setCID',
                 contentType: 'application/json',
                 verb: 'POST'
             }
@@ -401,24 +403,28 @@ winkstart.module('connect', 'numbers',
                 } else {
                     $('#sdid_nxx').show('slow');
                 }
+                });
                 
 
 
                 $('.ctr_btn', dialogDiv).click(function() {
                     var NPA = $('#sdid_npa', dialogDiv).val();
                     var NXX = $('#sdid_nxx', dialogDiv).val();
-
-                    winkstart.publish('numbers.search_npa_nxx', {
-                        data : { 'NPA': NPA, 'NXX': NXX, },
-                        callback: function(results) {
-                            console.log('Found these #s:', results);
+                    winkstart.publish('numbers.search_npa_nxx', 
+                    	{
+	                    	account_id: '2600hz',
+                        	data : { 'NPA': NPA, 'NXX': NXX },
+	                        callback: function(results) {
+	                            console.log('Found these #s:', results);
 
                             // Draw results on screen
-                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_results.tmpl(results));
+                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
                         }
-                    });
+                        }
+                        
+                    );
                 });
-            });
+
         },
 
 
@@ -644,6 +650,7 @@ winkstart.module('connect', 'numbers',
         // OTHER THEN A PLEASE WAIT BOX, NO "PAINTING" OF RESULTS COMES FROM THIS FUNCTION.
         // All results will be passed to args.callback(results) for display/processing
         search_npa_nxx: function(args) {
+        
             NPA = args.data.NPA;
             NXX = args.data.NXX;
 
@@ -652,9 +659,10 @@ winkstart.module('connect', 'numbers',
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa.get',
-                    {
-                        json: args.data
-                    },
+                     {
+                    	account_id: '2600hz',
+	                    data:args.data
+	                   },
                     function(jdata) {
                         // Remove please wait
                         $('#sad_LoadingTime').hide();
@@ -666,9 +674,9 @@ winkstart.module('connect', 'numbers',
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa_nxx.get',
-                    {
-                        json: args.data
-                    },
+                     {
+                     account_id: '2600hz',
+                     data:args.data},
                     function(jdata) {
                         // Remove please wait
                         $('#sad_LoadingTime').hide();
@@ -680,9 +688,9 @@ winkstart.module('connect', 'numbers',
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa.get',
-                    {
-                        json: args.data
-                    },
+                     {
+                    	account_id: '2600hz',
+                     data:args.data},
                     function(jdata) {
                         // Remove please wait
                         $('#sad_LoadingTime').hide();
