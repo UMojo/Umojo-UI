@@ -169,6 +169,7 @@
 #ws_callflow .tools ul { background: #6A6A6A;}
 /*#ws_callflow .tools ul li { background: #898989; border: 1px solid #6A6A6A; float: left; height: 94px; width: 94px;}*/
 #ws_callflow .tools .tool { background: #898989; border: 1px solid #6A6A6A; float: left; height: 75px; width: 90px;}
+#ws_callflow .tools .tool .action { z-index: 9000;}
 #ws_callflow .tools ul li a {}
 #ws_callflow .tools .app_list_nav { background: #bcbcbc; padding: 5px;}
 #ws_callflow .tools .app_list_nav p { text-align: center; font-size: 14px; float: left; padding: 0 45px;}
