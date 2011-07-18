@@ -1,0 +1,62 @@
+<div>
+    <div class="inner">
+        <form id="timeofday-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Time of Day</h1>
+            {{else}}
+                <h1>Create Time of Day</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="name">Name:</label>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <label for="days">Days:</label>
+                                {{each(i, day) field_data.days}}
+                                    ${day}
+                                    {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
+                                        <input class="days" name="days[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/>
+                                    {{else}}
+                                        <input class="days" name="days[]" type="checkbox" value="${day.toLowerCase()}"/>
+                                    {{/if}}
+                                {{/each}}
+                            </li>
+                            <li>
+                                <label for="time">Time:</label>
+                                <span class="time-wrapper">
+                                    <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
+                                </span>
+                            </li>
+                            <input type="hidden" id="cycle" name="cycle" value="${data.cycle}"/>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+
+        <ul class="button right timeofday">
+            <li><a class="timeofday-save" href="#">Save</a></li>
+            {{if data.id}}
+                <li><a class="timeofday-delete" href="#">Delete</a></li>
+            {{/if}}
+            <li><a class="timeofday-cancel" href="#">Cancel</a></li>
+        </ul>
+            
+        </form>
+    </div>
+</div>

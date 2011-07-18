@@ -1,0 +1,15 @@
+ul.button.timeofday {
+    margin-left: 570px;
+    width: 300px;
+}
+
+#timeofday-form .days {
+    margin-right: 12px;
+}
+
+#timeofday-form .time-wrapper {
+    display: inline-block;
+    width: 565px;
+    height: 50px;
+    margin-top: 10px;
+}
