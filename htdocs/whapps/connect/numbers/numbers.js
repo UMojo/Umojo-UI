@@ -391,7 +391,7 @@ winkstart.module('connect', 'numbers',
             var THIS = this;
 
             var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
-                title: 'Add/Search Numbers',
+                title: 'Add/Search Numbers'
             });
 
             winkstart.publish('sipservice.input_css');
@@ -403,14 +403,20 @@ winkstart.module('connect', 'numbers',
                 }
 
 
-				$('.ctr_btn', dialogDiv).click(function() {
-					var NPA = $('#sdid_npa', dialogDiv).val();
-					var NXX = $('#sdid_nxx', dialogDiv).val();
-				
-					winkstart.publish('numbers.search_npa_nxx', { data : { NPA: NPA, NXX: NXX } }, function(results) {
-						console.log('searched npa nxx');
-					});
-				});
+                $('.ctr_btn', dialogDiv).click(function() {
+                    var NPA = $('#sdid_npa', dialogDiv).val();
+                    var NXX = $('#sdid_nxx', dialogDiv).val();
+
+                    winkstart.publish('numbers.search_npa_nxx', {
+                        data : { NPA: NPA, NXX: NXX },
+                        callback: function(results) {
+                            console.log('Found these #s:', results);
+
+                            // Draw results on screen
+                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_results.tmpl(results));
+                        }
+                    });
+                });
             });
         },
 
@@ -632,7 +638,10 @@ winkstart.module('connect', 'numbers',
             return addedDIDs;
         },
 
-        search_npa_nxx: function(NPA, NXX) {
+        search_npa_nxx: function(args) {
+            NPA = args.NPA;
+            NXX = args.NXX;
+
             // must use toString()
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {

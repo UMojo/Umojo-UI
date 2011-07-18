@@ -60,7 +60,7 @@ winkstart.module('connect', 'channels',
             
         },
 
-        edit: function(args) {
+        edit: function() {
             var THIS = this;
             dialogDiv = winkstart.popup(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
@@ -91,11 +91,10 @@ winkstart.module('connect', 'channels',
                     );
                 };
 
-                // If a billing confirmation callback was passed in, utilize it and give it the callback to finish things up
-                if (args && args.confirm_billing) {
-                    $.extend(new_account, winkstart.modules['connect'].account, form_data);
-                    args.confirm_billing(new_account, save);
-                } else {
+                $.extend(new_account, winkstart.modules['connect'].account, form_data);
+                
+                // If an account change handler (such as a wizard or a billing confirmation callback) is registered, use it
+                if (!winkstart.publish('sipservice.change_handler', { 'account' : new_account, 'save' : save })) {
                     // Otherwise commit the change immediately
                     save();
                 }

@@ -31,7 +31,8 @@ winkstart.module('connect', 'sipservice',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
-            'load_account' : 'load_account',
+            'sipservice.confirm_billing' : 'confirm_billing',
+            'sipservice.load_account' : 'load_account',
 
             /* Sub nav HTML pages */
             'sipservice.legal.activate' : 'legal',
@@ -180,7 +181,6 @@ winkstart.module('connect', 'sipservice',
                 // populating it's own area.
                 THIS.main_menu();
 
-                console.log('got here.');
                 THIS.load_account('info_2600hz');
             } else {
                 // Show landing page
