@@ -57,6 +57,9 @@ winkstart.module('voip', 'conference', {
     ],
 },
 function(args) {
+    /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+    winkstart.registerResources(this.config.resources);
+
     winkstart.publish('subnav.add', {
         module: this.__module,
         label: 'Conferences',
@@ -290,9 +293,6 @@ function(args) {
             this.templates.conference.tmpl({}).appendTo( $('#ws-content') );
 
             winkstart.loadFormHelper('forms');
-
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Conference Management',

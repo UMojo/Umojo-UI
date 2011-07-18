@@ -94,6 +94,9 @@ winkstart.module('voip', 'device',
 
     /* Bootstrap routine - run when the module is first loaded */
     function(args) {
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+        winkstart.registerResources(this.config.resources);
+
         winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Devices',
@@ -379,9 +382,6 @@ winkstart.module('voip', 'device',
             this.templates.device.tmpl({}).appendTo( $('#ws-content') );
 
             winkstart.loadFormHelper('forms');
-
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Device Management',

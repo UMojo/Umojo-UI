@@ -94,6 +94,8 @@ winkstart.module('voip', 'callflow',
 
    },
    function (args) {
+        winkstart.registerResources(this.config.resources);
+
         winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Callflows',
@@ -103,8 +105,6 @@ winkstart.module('voip', 'callflow',
    {
       activate: function () {
          var THIS = this;
-
-         winkstart.registerResources(THIS.config.resources);
 
          $('#ws-content').empty();
          THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));

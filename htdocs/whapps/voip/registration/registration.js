@@ -39,6 +39,9 @@ winkstart.module('voip', 'registration',
 
     /* Bootstrap routine - run when the module is first loaded */
     function(args) {
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+        winkstart.registerResources(this.config.resources);
+        
         winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Registrations',
@@ -57,9 +60,6 @@ winkstart.module('voip', 'registration',
             
             winkstart.loadFormHelper('forms');
 
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
-        
             this.templates.registration.tmpl({}).appendTo( $('#ws-content') );
             
             //winkstart.getJSON('registration.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(reply) {
