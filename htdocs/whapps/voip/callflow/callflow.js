@@ -92,6 +92,11 @@ winkstart.module('voip', 'callflow',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'POST'
+            },
+            "callflow.delete": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
       }
 
@@ -330,11 +335,16 @@ winkstart.module('voip', 'callflow',
                     });
                });
 
+               node_html.find('.save').click(function() {
+                    THIS.save();
+               });
+
                node_html.find('.trash').click(function() {
-                    var temp = THIS.flow.id;
-                    THIS._resetFlow();
-                    THIS.renderFlow();
-                    THIS.flow.id = temp;
+                    winkstart.deleteJSON('callflow.delete', {account_id: MASTER_ACCOUNT_ID, callflow_id: THIS.flow.id}, function() {
+                        THIS.renderList();
+                        THIS._resetFlow();
+                        $(THIS.config.elements.flow).empty();
+                    });
                });
             }
             else {
@@ -655,6 +665,7 @@ winkstart.module('voip', 'callflow',
                 }, function(json) {
                     THIS.renderList();
                     THIS.editCallflow({id: json.data.id});
+                    alert('Callflow saved');
                 }
             );
          }
@@ -668,6 +679,7 @@ winkstart.module('voip', 'callflow',
                 }, function(json) {
                     THIS.renderList();
                     THIS.editCallflow({id: json.data.id});
+                    alert('Callflow created');
                 }
             );
          }
