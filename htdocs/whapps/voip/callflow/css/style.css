@@ -81,6 +81,7 @@
 #ws_callflow .callflow .icons_white.hangup { background: url(images/icons_white/hang_up.png) no-repeat;}
 #ws_callflow .callflow .icons_white.transfer { background: url(images/icons_white/transfer.png) no-repeat;}
 #ws_callflow .callflow .icons_white.playaudio { background: url(images/icons_white/play_audio.png) no-repeat;}
+#ws_callflow .callflow .icons_white.play { background: url(images/icons_white/play_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.recordcall { background: url(images/icons_white/record_call.png) no-repeat;}
 #ws_callflow .callflow .icons_white.recordaudio { background: url(images/icons_white/record_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.waitforsilence { background: url(images/icons_white/wait_for_silence.png) no-repeat;}
@@ -92,6 +93,7 @@
 #ws_callflow .callflow .icons_white.ringdevice { background: url(images/icons_white/ring_device.png) no-repeat;}
 #ws_callflow .callflow .icons_white.ring_group { background: url(images/icons_white/ring_group.png) no-repeat;}
 #ws_callflow .callflow .icons_white.dial { background: url(images/icons_white/dial.png) no-repeat;}
+#ws_callflow .callflow .icons_white.offnet { background: url(images/icons_white/dial.png) no-repeat;}
 #ws_callflow .callflow .icons_white.intercomcall { background: url(images/icons_white/intercom_call.png) no-repeat;}
 #ws_callflow .callflow .icons_white.changeringer { background: url(images/icons_white/change_ringer.png) no-repeat;}
 #ws_callflow .callflow .icons_white.sleep { background: url(images/icons_white/sleep.png) no-repeat;}

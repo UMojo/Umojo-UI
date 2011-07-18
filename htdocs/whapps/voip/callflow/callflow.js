@@ -35,13 +35,14 @@ winkstart.module('voip', 'callflow',
           "play"        : { "name" : "play",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "offnet"      : { "name" : "offnet",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "ring_group"  : { "name" : "ring_group",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
+          "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "response"  : { "name" : "response",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"}
       },
 
       type_map: {
          "device": "device",
          "menu": "menu",
+         "play": "media",
          "voicemail": "vmbox"
       },
 
@@ -62,7 +63,7 @@ winkstart.module('voip', 'callflow',
       },
 
       categories: {
-         "basic" : ["device","voicemail","menu", "temporal_route"]//,
+         "basic" : ["device","voicemail","menu","temporal_route","offnet","play"]//,
          //"dia:lplan": ["answer", "hangup", "tone"]
       },
 
@@ -186,7 +187,9 @@ winkstart.module('voip', 'callflow',
             // ----------------------------------------------
 
             this.id = -1;                   // id for direct access
-            this.actionName = actionName;
+            //Hack so that resources are treated as offnets
+            this.actionName = (actionName == 'resource') ? 'offnet' : actionName;
+            this.module = actionName;
             this.key = '_';
             this.parent = null;
             this.children = {};
@@ -258,7 +261,7 @@ winkstart.module('voip', 'callflow',
 
             this.serialize = function () {
                var json = THIS._clone(this.data);
-               json.module = this.actionName;
+               json.module = this.module;
                json.children = {};
                $.each(this.children, function() {
                     json.children[this.key] = this.serialize();
@@ -338,38 +341,106 @@ winkstart.module('voip', 'callflow',
                node_html = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
 
                node_html.find('.edit').click(function() {
-                    var node_name = node.actionName;
-                    winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
-                        var dialog, data = {
-                            objects: {
-                                type: node_name,
-                                items: json.data,
-                                selected: (node.data.data == undefined) ? 0 : node.data.data.id
+                    var node_name = node.actionName, general;
+
+                    general = function(other) {
+                        winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                            var dialog, data = {
+                                title: 'Select the ' + node_name,
+                                objects: {
+                                    type: node_name,
+                                    items: json.data,
+                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
+                                }
                             }
-                        }
-                        
-                        if(node.parent.actionName == 'menu') {
-                            data.options = {
-                                type: 'menu option',
-                                items: THIS.config.menu_options,
-                                selected: node.key
-                            };
-                        }
 
-                        dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+                            if(node.parent.actionName == 'menu') {
+                                data.options = {
+                                    type: 'menu option',
+                                    items: THIS.config.menu_options,
+                                    selected: node.key
+                                };
+                            }
 
-                        dialog.find('.submit_btn').click(function() {
+                            if(node.parent.actionName == 'temporal_route') {
+                                data.options = {
+                                    type: 'temporal rule',
+                                    items: other,
+                                    selected: node.key
+                                };
+                            }
+
+                            dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+
+                            dialog.find('.submit_btn').click(function() {
+                                if(node.data.data == undefined) {
+                                    node.data.data = {};
+                                }
+                                if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
+                                    node.key = $('#option-selector', dialog).val();
+                                }
+                                node.data.data.id = $('#object-selector', dialog).val();
+                                dialog.dialog('close');
+                                THIS.renderFlow();
+                            });
+                        });
+                    };
+
+                    if(node.parent.actionName == 'temporal_route') {
+                        winkstart.getJSON('timeofday.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                            var list = json.data,
+                                json_list = {};
+
+                            list.push({name: 'All other times (default action)', id:'_'});
+
+                            $.each(list, function() {
+                                json_list[this.id] = this.name;
+                            });
+                            general(json_list);
+                        });
+                    }
+                    else if(node_name == 'temporal_route') {
+                        var dialog = THIS.templates.edit_dialog.tmpl({
+                            title: 'Configure your time of day route',
+                            options: {
+                                type: 'Timezone',
+                                items: {
+                                    'America/Los_Angeles': 'PST'
+                                },
+                                selected: (node.data.data == undefined) ? 0 : node.data.data.timezone
+                            }
+                        }).dialog({width: 400});
+
+                        $('.submit_btn', dialog).click(function() {
                             if(node.data.data == undefined) {
                                 node.data.data = {};
                             }
-                            if(node.parent.actionName == 'menu') {
-                                node.key = $('#option-selector', dialog).val();
-                            }
-                            node.data.data.id = $('#object-selector', dialog).val();
+                            
+                            node.data.data.timezone = $('#option-selector', dialog).val();
                             dialog.dialog('close');
-                            THIS.renderFlow();
                         });
-                    });
+                    }
+                    else if(node_name == 'offnet') {
+                        var dialog = THIS.templates.edit_dialog.tmpl({
+                            title: 'Configure your offnet',
+                            options: {
+                                type: 'Resource type',
+                                items: {
+                                    resource: 'Local',
+                                    offnet: 'Global'
+                                },
+                                selected: node.module
+                            }
+                        }).dialog({width: 400});
+
+                        $('.submit_btn', dialog).click(function() {
+                            node.module = $('#option-selector', dialog).val();
+                            dialog.dialog('close');
+                        });
+                    }
+                    else {
+                        general();
+                    }
                });
             }
             $(this).append(node_html);
