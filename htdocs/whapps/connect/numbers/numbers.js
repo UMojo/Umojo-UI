@@ -50,13 +50,13 @@ winkstart.module('connect', 'numbers',
             "numbers.search_npa_nxx.get": {
                 url: 'https://store.2600hz.com/v1/searchNPANXX',
                 contentType: 'application/json',
-                verb: 'get'
+                verb: 'POST'
             },
 
             "numbers.search_npa.get": {
                 url: 'https://store.2600hz.com/v1/searchNPA',
                 contentType: 'application/json',
-                verb: 'GET'
+                verb: 'POST'
             },
 
 
@@ -408,8 +408,7 @@ winkstart.module('connect', 'numbers',
                     var NXX = $('#sdid_nxx', dialogDiv).val();
 
                     winkstart.publish('numbers.search_npa_nxx', {
-                        'NPA': NPA,
-                        'NXX': NXX,
+                        data : { 'NPA': NPA, 'NXX': NXX, },
                         callback: function(results) {
                             console.log('Found these #s:', results);
 
@@ -639,9 +638,13 @@ winkstart.module('connect', 'numbers',
             return addedDIDs;
         },
 
+        // This function takes args.data with a { NPA : ###, NXX : ### } as arguments and searches for available phone numbers.
+        //
+        // OTHER THEN A PLEASE WAIT BOX, NO "PAINTING" OF RESULTS COMES FROM THIS FUNCTION.
+        // All results will be passed to args.callback(results) for display/processing
         search_npa_nxx: function(args) {
-            NPA = args.NPA;
-            NXX = args.NXX;
+            NPA = args.data.NPA;
+            NXX = args.data.NXX;
 
             // must use toString()
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
@@ -649,37 +652,42 @@ winkstart.module('connect', 'numbers',
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa.get',
                     {
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
                         $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
+                    $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa_nxx.get',
                     {
-                        //key: key,
-                        json: JSON.stringify({
-                            NPA: NPA,
-                            NXX: NXX
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
+                        $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa.get',
                     {
-                        //key: key,
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
                         $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else {
