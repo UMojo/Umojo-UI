@@ -11,20 +11,20 @@ winkstart.module('connect', 'credits',
             'credits.activate' : 'activate',
             /* Credit Management */
             'credits.add_credits_prompt' : 'add_credits_prompt',
-            'credits.post' : 'post',
+            'credits.add_credits' : 'add_credits',
             'credits.update' : 'update',
             'credits.change_recurring' : 'change_recurring'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-              'credits.post': {
+            'credits.post': {
                 url: 'https://store.2600hz.com/v1/{account_id}/credits',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-              'credits.get': {
+            'credits.get': {
                 url: 'https://store.2600hz.com/v1/{account_id}/credits',
                 contentType: 'application/json',
                 verb: 'GET'
@@ -38,104 +38,88 @@ winkstart.module('connect', 'credits',
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
+
+        // Tie to DOM events
+        $('#my_services').delegate('#add_prepay_button', 'click', function() {
+            winkstart.publish('sipservice.add_credits');
+        });
     }, // End initialization routine
 
 
 
     /* Define the functions for this module */
     {
-        update: function(dialogDiv) {
+        show_estimate: function(dialogDiv) {
             var THIS = this;
 
             $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
             $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
+
+            $('#trunks_total', dialogDiv).html(THIS.rates.trunks * $('#trunks', dialogDiv).val());
+            $('#inbound_trunks_total', dialogDiv).html(THIS.rates.inbound_trunks * $('#inbound_trunks', dialogDiv).val());
         },
 
-        add_credits_prompt: function() {
+        promo: function(promoCode) {
+            // Lookup a promotion & display it, add it to the order if they submit
+
+        },
+
+        edit: function(args) {
             var THIS = this;
-
-            dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), {
-                title: 'Add Credits'
+            dialogDiv = winkstart.popup(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
+                title: 'Edit Flat-Rate Channels'
             });
 
-            $('.ctr_btn', dialogDiv).click(function() {
-                winkstart.publish('post_credit', {
-                    credit_amount : 5,
-                    creditCard: 73928372930,
-                    success : function() {
-                        dialogDiv.dialog('close');
-                    }
-                });
+            THIS.show_estimate(dialogDiv);
 
+            $('#trunks, #inbound_trunks', dialogDiv).bind('keyup change', function() {
+                THIS.show_estimate(dialogDiv);
             });
-        },
 
+            $('.update_channels_button', dialogDiv).click(function() {
+                // Grab data from form
+                var form_data = form2object('channels');
 
-		post_credits: function(buyCreds) {
-		winstart.request('credits.post', 
-			{key: key, json: JSON.stringify({add_credits: buyCreds})},
-			function(msg){
-					if (msg && msg.errs && msg.errs[0]) {display_errs(msg.errs);}
-			redraw(msg.data);
-	      }
-	     );
-	   },
+                // Build the save function here, for use with or without a billing confirmation screen (coming up)
+                var save = function() {
+                    winkstart.postJSON('channels.post', {
+                            data : form_data,
+                            account_id : '2600hz'
+                        },
+                        function(data, xhr) {
+                            // Check the response for errors
 
-        // credit mgmt
-        updatePreAuth: function(){
-            var newItems = $('.inCart');
-            rCost=0;
-            oCost=0;
-            $.each(newItems, function(index, elm) {
+                            // Close the dialog
+                            dialogDiv.dialog('close');
+                        }
+                    );
+                };
 
-                if ( isNaN( parseInt( $(elm).dataset('qty') ) ) ) {
-                    rCost+=$(elm).dataset('recurringCost') *1;
-                    oCost+=$(elm).dataset('oneTimeCost') * 1;
+                // If a billing confirmation callback was passed in, utilize it and give it the callback to finish things up
+                if (args && args.confirm_billing) {
+                    $.extend(new_account, winkstart.modules['connect'].account, form_data);
+                    args.confirm_billing(new_account, save);
                 } else {
-                    rCost+=$(elm).dataset('recurringCost') * $(elm).dataset('qty');
-                    oCost+=$(elm).dataset('oneTimeCost') * $(elm).dataset('qty');
+                    // Otherwise commit the change immediately
+                    save();
                 }
             });
-
-            return {
-                rCost: rCost,
-                oCost: oCost
-            };
         },
 
-        checkCredits: function(bill) {
-            return true; // not doing pre-paid
-            if(acct.account.credits.prepay > bill) {
-                return acct.account.credits.prepay - bill;
-            } else {
-                return false;
-            }
+        refresh: function(dialog) {
+            // TODO - properly populate account
+
+            $('.channels.twoway', dialog).html(this.channels.twoway_channels);
+            $('.channels.inbound', dialog).html(this.channels.inbound_channels);
         },
 
-
-    refresh_services: function(account) {
-        var THIS = this;
-
-        winkstart.log('Refreshing Services...');
-        $('#my_services').empty();
-        THIS.templates.main_services.tmpl( account ).appendTo ( $('#my_services') );
-
-
-        // {parseFloat(account.credits.prepay).toFixed(2)}
-    },
 
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
             THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_credits') );
-        },
-
-        activate: function(data) {
-            // This is where we define our click listeners (NOT INLINE IN THE HTML)
-            $('#my_services').delegate('#add_prepay_button', 'click', function() {
-                winkstart.publish('sipservice.add_credits');
-            });
         }
+
     } // End function definitions
 
-);  // End module
+    );  // End module

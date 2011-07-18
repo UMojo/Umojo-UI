@@ -7,7 +7,7 @@
 #server_management a#add_server:hover { background-position:0 -29px; }
 #server_management select { float:right; margin:10px 55px 0 5px; }
 
-#container { width:940px; margin:0px auto; background-color: #FFFFFF; margin-top: 12px; padding-top: 10px; padding-bottom: 10px }
+#container { width:940px; margin:0px auto; background-color: #FFFFFF; margin-top: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 8px 8px 8px 8px; }
 
 #control_area { width:463px; float:left; }
 
