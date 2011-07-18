@@ -409,7 +409,8 @@ winkstart.module('connect', 'numbers',
                     var NXX = $('#sdid_nxx', dialogDiv).val();
 
                     winkstart.publish('numbers.search_npa_nxx', {
-                        data : { 'NPA': NPA, 'NXX': NXX },
+                        'NPA': NPA,
+                        'NXX': NXX,
                         callback: function(results) {
                             console.log('Found these #s:', results);
 
@@ -660,7 +661,7 @@ winkstart.module('connect', 'numbers',
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
                     winkstart.postJSON('numbers.search_npa_nxx.get',
                     {
-                        key: key,
+                        //key: key,
                         json: JSON.stringify({
                             NPA: NPA,
                             NXX: NXX
@@ -673,7 +674,7 @@ winkstart.module('connect', 'numbers',
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa.get',
                     {
-                        key: key,
+                        //key: key,
                         json: JSON.stringify({
                             NPA: NPA
                         })
