@@ -29,7 +29,7 @@ winkstart.module('connect', 'numbers',
             'numbers.activate' : 'activate',
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
-            'numbers.add_number' : 'add_number_prompt',           // Buy/add a number to this account
+            'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
             'numbers.post_number': 'post_number',
             'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account
             'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
@@ -40,22 +40,23 @@ winkstart.module('connect', 'numbers',
             'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
             'numbers.configure_cnam' : 'configure_cnam',    // Configure CNAM
             'numbers.post_cnam' : 'post_cnam',
-            'numbers.unassign_did' : 'unassign_did'
+            'numbers.unassign_did' : 'unassign_did',
+            'numbers.search_npa_nxx': 'search_npa_nxx'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             /* Search DIDs */
-            "searchNPANXX": {
+            "numbers.search_npa_nxx.get": {
                 url: 'https://store.2600hz.com/v1/searchNPANXX',
                 contentType: 'application/json',
-                verb: 'POST'
+                verb: 'get'
             },
 
-            "searchNPA": {
+            "numbers.search_npa.get": {
                 url: 'https://store.2600hz.com/v1/searchNPA',
                 contentType: 'application/json',
-                verb: 'POST'
+                verb: 'GET'
             },
 
 
@@ -134,6 +135,48 @@ winkstart.module('connect', 'numbers',
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
+        
+        
+            $('#my_numbers').delegate('.add', "click", function(){
+                    winkstart.publish('numbers.add_number_prompt');
+            });
+
+            /*
+            $('#tmp_add_number').click(function() {
+                winkstart.publish('numbers.add_number_prompt');
+            });
+			*/
+            $('#tmp_edit_port_number').click(function() {
+                winkstart.publish('sipservice.port_number');
+            });
+
+            /*$('#edit_cnam').click(function() {
+                winkstart.publish('sipservice.configure_cnam');
+            });
+
+            $('#tmp_edit_auth').click(function() {
+                winkstart.publish('sipservice.edit_auth');
+            });*/
+
+            $('.did_list .numbers .unassign').live('click', function() {
+                data = $(this).dataset();
+                winkstart.publish('sipservice.unassign_did', data);
+            });
+
+            $('.did_list .numbers .add').live('click', function() {
+                winkstart.publish('sipservice.addNumber');
+            });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }, // End initialization routine
 
 
@@ -358,17 +401,16 @@ winkstart.module('connect', 'numbers',
                 } else {
                     $('#sdid_nxx').show('slow');
                 }
-            });
 
-            $(dialogDiv).find('.ctr_btn').click(function() {
-                winkstart.publish('sipservice.post_number', {
-                    callback : args.callback,
-                    number : 4159086655,
-                    success : function() {
-                        dialogDiv.dialog('close');
-                    }
-                });
 
+				$('.ctr_btn', dialogDiv).click(function() {
+					var NPA = $('#sdid_npa', dialogDiv).val();
+					var NXX = $('#sdid_nxx', dialogDiv).val();
+				
+					winkstart.publish('numbers.search_npa_nxx', { data : { NPA: NPA, NXX: NXX } }, function(results) {
+						console.log('searched npa nxx');
+					});
+				});
             });
         },
 
@@ -590,14 +632,13 @@ winkstart.module('connect', 'numbers',
             return addedDIDs;
         },
 
-        searchAvailDIDs: function(NPA, NXX) {
+        search_npa_nxx: function(NPA, NXX) {
             // must use toString()
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('sipservice.searchNPA',
+                    winkstart.postJSON('numbers.search_npa.get',
                     {
-                        key: key,
                         json: JSON.stringify({
                             NPA: NPA
                         })
@@ -607,7 +648,7 @@ winkstart.module('connect', 'numbers',
                     });
 
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
-                    winkstart.postJSON('sipservice.searchNPANXX',
+                    winkstart.postJSON('numbers.search_npa_nxx.get',
                     {
                         key: key,
                         json: JSON.stringify({
@@ -620,7 +661,7 @@ winkstart.module('connect', 'numbers',
 
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('sipservice.searchNPA',
+                    winkstart.postJSON('numbers.search_npa.get',
                     {
                         key: key,
                         json: JSON.stringify({
@@ -878,11 +919,11 @@ winkstart.module('connect', 'numbers',
 
         activate: function(data) {
             $('#my_numbers').delegate('.add', "click", function(){
-                    winkstart.publish('sipservice.add_number');
+                    winkstart.publish('numbers.add_number_prompt');
             });
 
             $('#tmp_add_number').click(function() {
-                winkstart.publish('sipservice.add_number');
+                winkstart.publish('numbers.add_number_prompt');
             });
 
             $('#tmp_edit_port_number').click(function() {
