@@ -40,7 +40,8 @@ winkstart.module('voip', 'callflow',
          "device": "device",
          "menu": "menu",
          "play": "media",
-         "voicemail": "vmbox"
+         "voicemail": "vmbox",
+         "conference": "conference"
       },
 
       menu_options: {
@@ -60,7 +61,7 @@ winkstart.module('voip', 'callflow',
       },
 
       categories: {
-         "basic" : ["device","voicemail","menu","temporal_route","offnet","play"]//,
+         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference"]//,
          //"dia:lplan": ["answer", "hangup", "tone"]
       },
 
@@ -368,6 +369,17 @@ winkstart.module('voip', 'callflow',
                                 }
                             };
                         }
+                        else if(node_name == 'conference') {
+                            json.data.push({id:'!', name: '*Conference Server*'});
+                            data = {
+                                title: 'Configure the conference',
+                                objects: {
+                                    type: node_name,
+                                    items: json.data,
+                                    selected: (node.data.data == undefined || node.data.data.id == undefined) ? '!' : node.data.data.id
+                                }
+                            };
+                        }
                         else {
                             data = {
                                 title: 'Select the ' + node_name,
@@ -397,6 +409,8 @@ winkstart.module('voip', 'callflow',
                         dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
 
                         dialog.find('.submit_btn').click(function() {
+                            var temp;
+
                             if(node.data.data == undefined) {
                                 node.data.data = {};
                             }
@@ -410,6 +424,16 @@ winkstart.module('voip', 'callflow',
                             }
                             else if(node_name == 'offnet') {
                                 node.module = $('#object-selector', dialog).val();
+                            }
+                            else if(node_name == 'conference') {
+                                temp = $('#object-selector', dialog).val();
+
+                                if(temp == '!') {
+                                    delete node.data.data.id;
+                                }
+                                else {
+                                    node.data.data.id = temp;
+                                }
                             }
                             else {
                                 node.data.data.id = $('#object-selector', dialog).val();
