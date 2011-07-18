@@ -29,9 +29,10 @@ winkstart.module('voip', 'callflow',
           "device"      : { "name" : "device",      "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "conference"  : { "name" : "conference",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "menu"        : { "name" : "menu",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
+          "callflow"    : { "name" : "callflow",    "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "voicemail"   : { "name" : "voicemail",   "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "play"        : { "name" : "play",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "offnet"      : { "name" : "offnet",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
+          "offnet"      : { "name" : "offnet",      "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "ring_group"  : { "name" : "ring_group",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
       },
@@ -41,6 +42,7 @@ winkstart.module('voip', 'callflow',
          "menu": "menu",
          "play": "media",
          "voicemail": "vmbox",
+         "callflow": "callflow",
          "conference": "conference"
       },
 
@@ -61,7 +63,7 @@ winkstart.module('voip', 'callflow',
       },
 
       categories: {
-         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference"]//,
+         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow"]//,
          //"dia:lplan": ["answer", "hangup", "tone"]
       },
 
@@ -371,12 +373,32 @@ winkstart.module('voip', 'callflow',
                         }
                         else if(node_name == 'conference') {
                             json.data.push({id:'!', name: '*Conference Server*'});
+
                             data = {
                                 title: 'Configure the conference',
                                 objects: {
                                     type: node_name,
                                     items: json.data,
                                     selected: (node.data.data == undefined || node.data.data.id == undefined) ? '!' : node.data.data.id
+                                }
+                            };
+                        }
+                        else if(node_name == 'callflow') {
+                            var list = [];
+                            $.each(json.data, function(i, val) {
+                                //Sanity Check! Don't reference the same callflow!
+                                if(this.id != THIS.flow.id) {
+                                    this.name = this.numbers.toString();
+                                    list.push(this);
+                                }
+                            });
+
+                            data = {
+                                title: 'Select the callflow',
+                                objects: {
+                                    type: node_name,
+                                    items: list,
+                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
                                 }
                             };
                         }

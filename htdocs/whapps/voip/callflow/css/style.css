@@ -24,7 +24,7 @@
 #ws_callflow #search #searchsubmit { float: left;}
 #ws_callflow #search #searchfield { background: url(images/search_mid.png) repeat-x; border: medium none; float: left; height: 20px; width: 120px;}
 
-#ws_callflow .callflow { float: left;}
+#ws_callflow > .callflow { float: left;}
 #ws_callflow .callflow.add_num {  width: 830px;}
 #ws_callflow .callflow.app_tree { width: 638px;}
 #ws_callflow .callflow #add_new_number { background: url(images/bg_add_number.png) no-repeat; width: 239px; height: 152px; margin: 100px auto 0;}
@@ -80,6 +80,7 @@
 #ws_callflow .callflow .icons_white.autoattendent { background: url(images/icons_white/auto_attendant.png) no-repeat;}
 #ws_callflow .callflow .icons_white.hangup { background: url(images/icons_white/hang_up.png) no-repeat;}
 #ws_callflow .callflow .icons_white.transfer { background: url(images/icons_white/transfer.png) no-repeat;}
+#ws_callflow .callflow .icons_white.callflow { background: url(images/icons_white/transfer.png) no-repeat;}
 #ws_callflow .callflow .icons_white.playaudio { background: url(images/icons_white/play_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.play { background: url(images/icons_white/play_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.recordcall { background: url(images/icons_white/record_call.png) no-repeat;}
@@ -118,6 +119,7 @@
 #ws_callflow .callflow .icons_black.autoattendent { background: url(images/icons_black/auto_attendent.png) no-repeat; }
 #ws_callflow .callflow .icons_black.hangup { background: url(images/icons_black/hang_up.png) no-repeat; }
 #ws_callflow .callflow .icons_black.transfer { background: url(images/icons_black/transfer.png) no-repeat; }
+#ws_callflow .callflow .icons_black.callflow { background: url(images/icons_black/transfer.png) no-repeat; }
 #ws_callflow .callflow .icons_black.playaudio { background: url(images/icons_black/play_audio.png) no-repeat; }
 #ws_callflow .callflow .icons_black.recordcall { background: url(images/icons_black/record_call.png) no-repeat; }
 #ws_callflow .callflow .icons_black.recordaudio { background: url(images/icons_black/record_audio.png) no-repeat; }
