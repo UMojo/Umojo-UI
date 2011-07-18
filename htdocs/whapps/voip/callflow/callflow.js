@@ -28,15 +28,12 @@ winkstart.module('voip', 'callflow',
           "root"        : { "name" : "root",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "false"},
           "device"      : { "name" : "device",      "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "conference"  : { "name" : "conference",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "hangup"      : { "name" : "hangup",      "rules" : [ {"type" : "quantity", "maxSize" : "0"} ], "isUsable" : "true"},
           "menu"        : { "name" : "menu",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "voicemail"   : { "name" : "voicemail",   "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "call_forward": { "name" : "call_forward", "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "play"        : { "name" : "play",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "offnet"      : { "name" : "offnet",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
           "ring_group"  : { "name" : "ring_group",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
           "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
-          "response"  : { "name" : "response",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"}
       },
 
       type_map: {
@@ -341,49 +338,97 @@ winkstart.module('voip', 'callflow',
                node_html = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
 
                node_html.find('.edit').click(function() {
-                    var node_name = node.actionName, general;
+                    var node_name = node.actionName, general, options;
 
-                    general = function(other) {
-                        winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
-                            var dialog, data = {
+                    general = function(json, other) {
+                        var dialog, data;
+                        
+                        if(node_name == 'temporal_route') {
+                            data = {
+                                title: 'Configure your time of day route',
+                                objects: {
+                                    type: 'Timezone',
+                                    items: [ 
+                                        {id: 'America/Los_Angeles', name: 'PST'}
+                                    ],
+                                    selected: (node.data.data == undefined) ? 0 : node.data.data.timezone
+                                }
+                            };
+                        }
+                        else if(node_name == 'offnet') {
+                            data = {
+                                title: 'Configure your offnet',
+                                objects: {
+                                    type: 'Resource type',
+                                    items: [
+                                        {id: 'resource', name: 'Local'},
+                                        {id: 'offnet', name: 'Global'}
+                                    ],
+                                    selected: node.module
+                                }
+                            };
+                        }
+                        else {
+                            data = {
                                 title: 'Select the ' + node_name,
                                 objects: {
                                     type: node_name,
                                     items: json.data,
                                     selected: (node.data.data == undefined) ? 0 : node.data.data.id
                                 }
+                            };
+                        }
+
+                        if(node.parent.actionName == 'menu') {
+                            data.options = {
+                                type: 'menu option',
+                                items: THIS.config.menu_options,
+                                selected: node.key
+                            };
+                        }
+                        else if(node.parent.actionName == 'temporal_route') {
+                            data.options = {
+                                type: 'temporal rule',
+                                items: other,
+                                selected: node.key
+                            };
+                        }
+
+                        dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+
+                        dialog.find('.submit_btn').click(function() {
+                            if(node.data.data == undefined) {
+                                node.data.data = {};
                             }
 
-                            if(node.parent.actionName == 'menu') {
-                                data.options = {
-                                    type: 'menu option',
-                                    items: THIS.config.menu_options,
-                                    selected: node.key
-                                };
+                            if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
+                                node.key = $('#option-selector', dialog).val();
                             }
 
-                            if(node.parent.actionName == 'temporal_route') {
-                                data.options = {
-                                    type: 'temporal rule',
-                                    items: other,
-                                    selected: node.key
-                                };
+                            if(node_name == 'temporal_route') {
+                                node.data.data.timezone = $('#object-selector', dialog).val();
                             }
-
-                            dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
-
-                            dialog.find('.submit_btn').click(function() {
-                                if(node.data.data == undefined) {
-                                    node.data.data = {};
-                                }
-                                if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
-                                    node.key = $('#option-selector', dialog).val();
-                                }
+                            else if(node_name == 'offnet') {
+                                node.module = $('#object-selector', dialog).val();
+                            }
+                            else {
                                 node.data.data.id = $('#object-selector', dialog).val();
-                                dialog.dialog('close');
-                                THIS.renderFlow();
-                            });
+                            }
+
+                            dialog.dialog('close');
+                            THIS.renderFlow();
                         });
+                    };
+
+                    test = function(other) {
+                        if(node_name == 'temporal_route' || node_name == 'offnet') {
+                            general({}, other);
+                        }
+                        else {
+                            winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                                general(json, other);
+                            });
+                        }
                     };
 
                     if(node.parent.actionName == 'temporal_route') {
@@ -396,50 +441,12 @@ winkstart.module('voip', 'callflow',
                             $.each(list, function() {
                                 json_list[this.id] = this.name;
                             });
-                            general(json_list);
-                        });
-                    }
-                    else if(node_name == 'temporal_route') {
-                        var dialog = THIS.templates.edit_dialog.tmpl({
-                            title: 'Configure your time of day route',
-                            options: {
-                                type: 'Timezone',
-                                items: {
-                                    'America/Los_Angeles': 'PST'
-                                },
-                                selected: (node.data.data == undefined) ? 0 : node.data.data.timezone
-                            }
-                        }).dialog({width: 400});
 
-                        $('.submit_btn', dialog).click(function() {
-                            if(node.data.data == undefined) {
-                                node.data.data = {};
-                            }
-                            
-                            node.data.data.timezone = $('#option-selector', dialog).val();
-                            dialog.dialog('close');
-                        });
-                    }
-                    else if(node_name == 'offnet') {
-                        var dialog = THIS.templates.edit_dialog.tmpl({
-                            title: 'Configure your offnet',
-                            options: {
-                                type: 'Resource type',
-                                items: {
-                                    resource: 'Local',
-                                    offnet: 'Global'
-                                },
-                                selected: node.module
-                            }
-                        }).dialog({width: 400});
-
-                        $('.submit_btn', dialog).click(function() {
-                            node.module = $('#option-selector', dialog).val();
-                            dialog.dialog('close');
+                            test(json_list);
                         });
                     }
                     else {
-                        general();
+                        test({});
                     }
                });
             }
