@@ -199,6 +199,10 @@ winkstart.module('voip', 'device',
                                 title: title
                             });
                         });
+                        
+                        form_data.field_data.users = listUsers;
+                    } else {
+                        listUsers.push({owner_id: '!', title: 'none'});
                         form_data.field_data.users = listUsers;
                     }
                     if (data && data.id) {
@@ -252,6 +256,9 @@ winkstart.module('voip', 'device',
                     videoCodecs.push(obj);
                 }
             });
+            if(form_data.owner_id == '!') {
+                form_data.field_data.users = null;
+            } 
             form_data.media.audio.codecs = audioCodecs;
             form_data.media.video.codecs = videoCodecs;
             return form_data;
@@ -264,6 +271,7 @@ winkstart.module('voip', 'device',
             var THIS = this;
             var device_id = form_data.data.id;
 
+            console.log(form_data);
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
 
