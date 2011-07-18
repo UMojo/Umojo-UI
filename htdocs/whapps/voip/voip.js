@@ -35,6 +35,7 @@ winkstart.module('voip', 'voip', {
                         });
                     });
                 });
+				
 
                 // Display the navbar
                 $('#ws-content').empty();

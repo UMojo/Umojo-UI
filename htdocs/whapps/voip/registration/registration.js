@@ -190,23 +190,27 @@ winkstart.module('voip', 'registration',
 
         },
         setup_table: function() {
-        var THIS = this;
-        var columns = [
-            { 'sTitle': 'Username' },
-            { 'sTitle': 'IP' },
-            { 'sTitle': 'Port' },
-            { 'sTitle': 'Date' },
-            { 'sTitle': 'Time' },
-            { 'sTitle': 'Details',
-                  'fnRender': function(obj) {
-                  console.log(obj);
-                  var reg_details = obj.aData[obj.iDataColumn];
-                  return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
-              }}
-        ];
-        
-        winkstart.table.create('registration', $('#registration-grid'), columns);
-        $('#registration-grid_filter input[type=text]').first().focus();
-    },
+			var THIS = this;
+			var columns = [
+				{'sTitle': 'Username'},
+				{'sTitle': 'IP'},
+				{'sTitle': 'Port'},
+				{'sTitle': 'Date'},
+				{'sTitle': 'Time'},
+				{'sTitle': 'Details',
+					  'fnRender': function(obj) {
+					  console.log(obj);
+					  var reg_details = obj.aData[obj.iDataColumn];
+					  return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
+				  }}
+			];
+
+			winkstart.table.create('registration', $('#registration-grid'), columns);
+			$('#registration-grid_filter input[type=text]').first().focus();
+			
+			$('.cancel-search').click(function(){
+				$('#registration-grid_filter input[type=text]').val('');
+			});
+		}
     }
 );

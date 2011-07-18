@@ -64,7 +64,7 @@
             this.pane_wrapper = $('<div class="left_side_bar"></div>').appendTo(this.element);
             
             this.flow_div = $('<div class="add_flow"><a class="plus_btn" href="#"></a><p>'+ this.options.new_entity_label +'</p></div>').appendTo(this.pane_wrapper);
-            
+			
             var search_html = '';
             search_html += '<div class="search_box">';
             search_html += '<div class="searchsubmit1"/>';
@@ -79,6 +79,10 @@
             this.list = $('<ul></ul>').appendTo(this.listContainer);
             
             var that = this;
+			
+			$('.searchsubmit2').click(function() {
+				$('.searchfield, .search').val('');
+			});
             
             // init lists
             this._populateLists(this.options.data);
