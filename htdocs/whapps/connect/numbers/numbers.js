@@ -401,6 +401,7 @@ winkstart.module('connect', 'numbers',
                 } else {
                     $('#sdid_nxx').show('slow');
                 }
+                
 
 
                 $('.ctr_btn', dialogDiv).click(function() {
