@@ -134,7 +134,8 @@ winkstart.module('voip', 'timeofday',
             var form_data = {
                 data : {
                     time_window_start: 0,
-                    time_window_stop: 0   
+                    time_window_stop: 0,
+                    cycle: 'weekly'
                 },
                 field_data: THIS.config.formData,
             };
