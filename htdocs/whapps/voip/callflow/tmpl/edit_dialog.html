@@ -1,0 +1,42 @@
+<div>
+    <div class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <h3>${title}</h3>
+                {{if objects}}
+                <form name="form" method="post" action="#">
+                    <label>${objects.type}: </label>
+                    <select id="object-selector">
+                    {{each(i,obj) objects.items}}
+                        {{if objects.selected == obj.id}}
+                            <option value="${obj.id}" SELECTED>${obj.name}</option>
+                        {{else}}
+                            <option value="${obj.id}">${obj.name}</option>
+                        {{/if}}
+                    {{/each}}
+                    </select>
+                </form>   
+                {{/if}}
+                {{if options}}
+                <form name="form" method="post" action="#">
+                    <label>${options.type}: </label>
+                    <select id="option-selector">
+                    {{each(key,opt) options.items}}
+                        {{if options.selected == key}}
+                            <option value="${key}" SELECTED>${opt}</option>
+                        {{else}}
+                            <option value="${key}">${opt}</option>
+                        {{/if}}
+                    {{/each}}
+                    </select>
+                </form>
+                {{/if}}
+                <form name="form" method="post" action="#">
+                    <div class="btn_wrapper">
+                        <a href="#" id="add" class="submit_btn ctr">Save</a><br>
+                    </div>
+                </form>    
+            </div>
+        </div>
+    </div>
+</div>

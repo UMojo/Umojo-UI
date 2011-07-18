@@ -4,13 +4,10 @@
 
 #ws_callflow {
     width: 100%;
+    margin-top: 30px;
 }
 
-#ws_callflow #ws_cf_flow { width: 80%; overflow-x: auto; min-height: 400px; padding-top: 20px; text-align: center; }
-#ws_callflow .control_bar { text-align: center; height: 50px; padding: 10px; }
-
-#ws_callflow .save { display: inline-block; text-align: center; border: solid 1px; width: 70px; padding: 6px; }
-#ws_callflow .save.active { background-color: #eee; }
+#ws_callflow #ws_cf_flow { width: 100%; overflow-x: auto; min-height: 400px; padding-top: 20px; margin-top: 10px; text-align: center; }
 
 #ws_callflow table.callflow { width: 100%; /*border: solid 1px;*/ }
 #ws_callflow table.callflow td { vertical-align: top; }
@@ -21,7 +18,6 @@
 #ws_callflow .node.active { background-color: #fff; }
 #ws_callflow .node.inactive { filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5; }
 #ws_callflow .children { display: block; white-space: pre; }
-
-#ws_callflow td.tools { width: 20%; }
+#ws_callflow td.tools { width: auto; margin-left: 30px; margin-top: 0px; }
 #ws_callflow .tool { text-align: center; vertical-align: middle; }
 #ws_callflow .tool .action.inactive { display: none; }

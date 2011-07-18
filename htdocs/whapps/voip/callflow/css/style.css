@@ -24,7 +24,7 @@
 #ws_callflow #search #searchsubmit { float: left;}
 #ws_callflow #search #searchfield { background: url(images/search_mid.png) repeat-x; border: medium none; float: left; height: 20px; width: 120px;}
 
-#ws_callflow .callflow { float: left;}
+#ws_callflow > .callflow { float: left;}
 #ws_callflow .callflow.add_num {  width: 830px;}
 #ws_callflow .callflow.app_tree { width: 638px;}
 #ws_callflow .callflow #add_new_number { background: url(images/bg_add_number.png) no-repeat; width: 239px; height: 152px; margin: 100px auto 0;}
@@ -43,13 +43,14 @@
 #ws_callflow .callflow .root .number_list ul li { font-size: 12px; padding: 5px 0;}
 #ws_callflow .callflow .root .add_number .btn_plus_sm { float: left; font-size: 12px; margin: 5px 0 0 5px; padding-left: 20px;}
 
-#ws_callflow .callflow .root .trash { background: url(images/trash.png) no-repeat; float: right; width: 12px; height: 16px; margin: 5px 12px 0; text-indent: -10000px;}
+#ws_callflow .callflow .root .trash { background: url(images/trash.png) no-repeat; float: right; width: 12px; height: 16px; margin: 5px 10px 0; text-indent: -10000px;}
+#ws_callflow .callflow .root .save { background: url(images/small_save.png) no-repeat; float: right; width: 16px; height: 16px; margin: 5px 0px 0; text-indent: -10000px;}
 
 /*.callflow .node { width: 112px; height: 84px; }*/
 #ws_callflow .callflow .node { display: inline-block; }
 #ws_callflow .callflow .node .delete { background: url(images/btn_delete.png) no-repeat; width: 6px; height: 6px; display: block; text-indent: -10000px; left: 5px; top: 5px; position: relative; float: left;}
 #ws_callflow .callflow .node .dragndrop { background: url(images/dragndrop.png) no-repeat 12px 5px; float: left; width: 95px; height: 15px; display: block;}
-#ws_callflow .callflow .node .edit { background: url(images/btn_edit.png) no-repeat; float: right; clear: both; width: 9px; height: 7px; display: block; margin-right: 5px;}
+#ws_callflow .callflow .node .edit { background: url(images/small_settings.png) no-repeat; float: right; clear: both; width: 16px; height: 16px; display: block; margin-right: 3px; margin-top: -5px;}
 #ws_callflow .callflow .app_btn { clear: both; display: block; height: 56px; width: 112px;}
 
 #ws_callflow .callflow .app_menu { background: url(images/icons_black/menu.png) no-repeat; }
@@ -80,7 +81,9 @@
 #ws_callflow .callflow .icons_white.autoattendent { background: url(images/icons_white/auto_attendant.png) no-repeat;}
 #ws_callflow .callflow .icons_white.hangup { background: url(images/icons_white/hang_up.png) no-repeat;}
 #ws_callflow .callflow .icons_white.transfer { background: url(images/icons_white/transfer.png) no-repeat;}
+#ws_callflow .callflow .icons_white.callflow { background: url(images/icons_white/transfer.png) no-repeat;}
 #ws_callflow .callflow .icons_white.playaudio { background: url(images/icons_white/play_audio.png) no-repeat;}
+#ws_callflow .callflow .icons_white.play { background: url(images/icons_white/play_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.recordcall { background: url(images/icons_white/record_call.png) no-repeat;}
 #ws_callflow .callflow .icons_white.recordaudio { background: url(images/icons_white/record_audio.png) no-repeat;}
 #ws_callflow .callflow .icons_white.waitforsilence { background: url(images/icons_white/wait_for_silence.png) no-repeat;}
@@ -92,6 +95,7 @@
 #ws_callflow .callflow .icons_white.ringdevice { background: url(images/icons_white/ring_device.png) no-repeat;}
 #ws_callflow .callflow .icons_white.ring_group { background: url(images/icons_white/ring_group.png) no-repeat;}
 #ws_callflow .callflow .icons_white.dial { background: url(images/icons_white/dial.png) no-repeat;}
+#ws_callflow .callflow .icons_white.offnet { background: url(images/icons_white/dial.png) no-repeat;}
 #ws_callflow .callflow .icons_white.intercomcall { background: url(images/icons_white/intercom_call.png) no-repeat;}
 #ws_callflow .callflow .icons_white.changeringer { background: url(images/icons_white/change_ringer.png) no-repeat;}
 #ws_callflow .callflow .icons_white.sleep { background: url(images/icons_white/sleep.png) no-repeat;}
@@ -103,7 +107,7 @@
 #ws_callflow .callflow .icons_white.checkvariable { background: url(images/icons_white/check_variable.png) no-repeat;}
 #ws_callflow .callflow .icons_white.setvariable { background: url(images/icons_white/set_variable.png) no-repeat;}
 #ws_callflow .callflow .icons_white.setringback { background: url(images/icons_white/set_ringback.png) no-repeat;}
-#ws_callflow .callflow #icicons_whiteons_black .check_time { background: url(images/icons_white/check_time_of_day.png) no-repeat;}
+#ws_callflow .callflow .icons_white.temporal_route { background: url(images/icons_white/set_time_of_day.png) no-repeat;}
 
 #ws_callflow .callflow .icons_black.menu { background: url(images/icons_black/menu.png) no-repeat; }
 #ws_callflow .callflow .icons_black.device { background: url(images/icons_black/ring_device.png) no-repeat; }
@@ -116,6 +120,7 @@
 #ws_callflow .callflow .icons_black.autoattendent { background: url(images/icons_black/auto_attendent.png) no-repeat; }
 #ws_callflow .callflow .icons_black.hangup { background: url(images/icons_black/hang_up.png) no-repeat; }
 #ws_callflow .callflow .icons_black.transfer { background: url(images/icons_black/transfer.png) no-repeat; }
+#ws_callflow .callflow .icons_black.callflow { background: url(images/icons_black/transfer.png) no-repeat; }
 #ws_callflow .callflow .icons_black.playaudio { background: url(images/icons_black/play_audio.png) no-repeat; }
 #ws_callflow .callflow .icons_black.recordcall { background: url(images/icons_black/record_call.png) no-repeat; }
 #ws_callflow .callflow .icons_black.recordaudio { background: url(images/icons_black/record_audio.png) no-repeat; }
@@ -142,12 +147,29 @@
 #ws_callflow .callflow .icons_black.setringback { background: url(images/icons_black/set_ringback.png) no-repeat; }
 #ws_callflow .callflow .icons_black.checktime { background: url(images/icons_black/check_time_of_day.png) no-repeat; }
 #ws_callflow .callflow .drag_here { background: url(images/drag_here.png) no-repeat; float: left; position: relative; top: 40px; left: 30px;}
-
 #ws_callflow .tools { background: #898989; float: left; min-width: 192px;}
-#ws_callflow .tools .open { background: url(images/bg_appList_cap.png) no-repeat; border-bottom: 1px solid #b1b1b1; font-size: 14px; padding: 30px 0 20px; text-align: center; }
+#ws_callflow .tools .category {
+    float: left;
+    width: 30px;
+    height: 75px;
+    border: 1px solid #6a6a6a;
+}
+#ws_callflow .tools .open {
+    position: relative;
+    top: 32px;
+    left: 0px;
+    font-size: 14px;
+    font-weight: bold;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
 #ws_callflow .tools ul { background: #6A6A6A;}
-//#ws_callflow .tools ul li { background: #898989; border: 1px solid #6A6A6A; float: left; height: 94px; width: 94px;}
-#ws_callflow .tools .tool { background: #898989; border: 1px solid #6A6A6A; float: left; height: 94px; width: 94px;}
+/*#ws_callflow .tools ul li { background: #898989; border: 1px solid #6A6A6A; float: left; height: 94px; width: 94px;}*/
+#ws_callflow .tools .tool { background: #898989; border: 1px solid #6A6A6A; float: left; height: 75px; width: 90px;}
+#ws_callflow .tools .tool .action { z-index: 9000;}
 #ws_callflow .tools ul li a {}
 #ws_callflow .tools .app_list_nav { background: #bcbcbc; padding: 5px;}
 #ws_callflow .tools .app_list_nav p { text-align: center; font-size: 14px; float: left; padding: 0 45px;}

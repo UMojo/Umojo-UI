@@ -1,69 +1,62 @@
-winkstart.module('voip', 'user',
+winkstart.module('voip', 'timeofday',
     {
         css: [
-            'css/user.css'
+            'css/timeofday.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
-            user: 'tmpl/user.html',
-            editUser: 'tmpl/edit.html'
+            timeofday: 'tmpl/timeofday.html',
+            editTimeofday: 'tmpl/edit.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'user.activate' : 'activate',
-            'user.list-panel-click' : 'editUser',
-            'user.edit-user' : 'editUser'
+            'timeofday.activate' : 'activate',
+            'timeofday.list-panel-click' : 'editTimeofday',
+            'timeofday.edit-timeofday' : 'editTimeofday'
         },
 
         formData: {
-                                timezones: [{text: 'GMT', value: 'Africa/Ouagadougou'}, {text:'GMT+1 (ECT)', value: 'Europe/Brussels'}, {text: 'GMT+2 (EET)', value: 'Europe/Minsk'},
-                                {text: 'GMT+3 (EAT)', value: 'Asia/Bahrain'},{text: 'GMT+3:30 (MET)', value: 'Asia/Tehran'},{text: 'GMT+4 (NET)', value: 'Indian/Mauritius'},{text: 'GMT+5 (PLT)', value: 'Asia/Aqtobe'},
-                                {text: 'GMT+5:30 (IST)', value: 'Asia/Kolkata'},{text: 'GMT+6 (BST)', value: 'Indian/Chagos'},{text: 'GMT+7 (VST)', value: 'Asia/Jakarta'},{text: 'GMT+8 (CTT)', value: 'Asia/Brunei'},
-                                {text: 'GMT+9 (JST)', value: 'Asia/Tokyo'},{text: 'GMT+9:30 (ACT)', value: 'Australia/Adelaide'},{text: 'GMT+10 (AET)', value: 'Asia/Yakutsk'},{text: 'GMT+11 (SST)', value: 'Pacific/Ponape'},
-                                {text: 'GMT+12 (NST)', value: 'Pacific/Fiji'},{text: 'GMT-11 (MIT)', value: 'Pacific/Midway'},{text: 'GMT-10 (HST)', value: 'Pacific/Rarotonga'},{text: 'GMT-9 (AST)', value: 'Pacific/Gambier'},
-                                {text: 'GMT-8 (PST)', value: 'America/Whitehorse'},{text: 'GMT-7 (MST)', value: 'America/Edmonton'},{text: 'GMT-6 (CST)', value: 'America/Swift_Current'},{text: 'GMT-5 (EST)', value: 'America/Thunder_Bay'},
-                                {text: 'GMT-4 (PRT)', value: 'America/La_Paz'},{text: 'GMT-3:30 (CNT)', value: 'America/St_Johns'},{text: 'GMT-3 (AGT)', value: 'America/Sao_Paulo'},{text: 'GMT-2', value: 'America/Noronha'},{text: 'GMT-1 (CAT)', value: 'Atlantic/Cape_Verde'}
-                               ],
+            days: [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ]
         },
 
         validation : [
-                {name : '#first_name', regex : /^[a-zA-Z\s\-]+$/},
-                {name : '#last_name', regex : /^[a-zA-Z\s\-]+$/},
-                {name : '#username', regex : /^\w+$/},
-                {name : '#email', regex: /^([a-zA-Z0-9_\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
-                {name : '#caller_id_number_internal', regex: /^[\+]?[0-9]*$/},
-                {name : '#caller_id_name_internal', regex: /^.*$/},
-                {name : '#caller_id_number_external', regex: /^[\+]?[0-9]*$/},
-                {name : '#caller_id_name_external', regex: /^.*/},
-                {name : '#call_forward_number', regex: /^[\+]?[0-9]*$/}
+            {name: '#name', regex: /^[a-zA-Z0-9\s_]+$/} 
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "user.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+            "timeofday.list": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/temporal_rules',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "user.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+            "timeofday.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "user.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+            "timeofday.create": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/temporal_rules',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "user.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+            "timeofday.update": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "user.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+            "timeofday.delete": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -77,8 +70,8 @@ winkstart.module('voip', 'user',
 
         winkstart.publish('subnav.add', {
             module: this.__module,
-            label: 'Users',
-            icon: 'user'
+            label: 'Time Of Day',
+            icon: 'timeofday'
         });
     },
 
@@ -95,7 +88,7 @@ winkstart.module('voip', 'user',
             });
         },
 
-        saveUser: function(user_id, form_data) {
+        saveTimeofday: function(timeofday_id, form_data) {
             var THIS = this;
 
             /* Check validation before saving */
@@ -109,23 +102,23 @@ winkstart.module('voip', 'user',
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
-                if (user_id) {
+                if (timeofday_id) {
                     /* EDIT */
-                    rest_data.user_id = user_id;
-                    winkstart.postJSON('user.update', rest_data, function (json, xhr) {
+                    rest_data.timeofday_id = timeofday_id;
+                    winkstart.postJSON('timeofday.update', rest_data, function (json, xhr) {
                         /* Refresh the list and the edit content */
                         THIS.renderList();
-                        THIS.editUser({
-                            id: user_id
+                        THIS.editTimeofday({
+                            id: timeofday_id
                         });
                     });
                 } else {
                     /* CREATE */
 
                     /* Actually send the JSON data to the server */
-                    winkstart.putJSON('user.create', rest_data, function (json, xhr) {
+                    winkstart.putJSON('timeofday.create', rest_data, function (json, xhr) {
                         THIS.renderList();
-                        THIS.editUser({
+                        THIS.editTimeofday({
                             id: json.data.id
                         });
                     });
@@ -134,67 +127,93 @@ winkstart.module('voip', 'user',
                 alert('Please correct errors that you have on the form.');
             }
         },
-
         /*
-         * Create/Edit user properties (don't pass an ID field to cause a create instead of an edit)
+         * Create/Edit timeofday properties (don't pass an ID field to cause a create instead of an edit)
          */
-        editUser: function(data){
-            $('#user-view').empty();
+        editTimeofday: function(data){
+            $('#timeofday-view').empty();
             var THIS = this;
+
             var form_data = {
                 data : {
-                    call_forward: {},
-                    caller_id: { internal: { }, external: { }}
-                }
+                    time_window_start: 0,
+                    time_window_stop: 0,
+                    cycle: 'weekly',
+                    wdays: []
+                },
+                field_data: THIS.config.formData
             };
-            
-            form_data.field_data = THIS.config.formData;
-
 
             if (data && data.id) {
-                /* This is an existing user - Grab JSON data from server for user_id */
-                winkstart.getJSON('user.get', {
+            /* This is an existing timeofday - Grab JSON data from server for timeofday_id */
+                winkstart.getJSON('timeofday.get', {
                     crossbar: true,
                     account_id: MASTER_ACCOUNT_ID,
-                    user_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
-
-                    THIS.renderUser(form_data);
+                    timeofday_id: data.id
+                    }, function(json, xhr) {
+                        $.extend(true, form_data, json);
+                        THIS.renderTimeofday(form_data);
                 });
             } else {
-                /* This is a new user - pass along empty params */
-                THIS.renderUser(form_data);
+                /* This is a new timeofday - pass along empty params */
+                THIS.renderTimeofday(form_data);
             }
-            
         },
 
-        deleteUser: function(user_id) {
+        deleteTimeofday: function(timeofday_id) {
             var THIS = this;
             
             var rest_data = {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID,
-                user_id: user_id
+                timeofday_id: timeofday_id
             };
 
             /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('user.delete', rest_data, function (json, xhr) {
+            winkstart.deleteJSON('timeofday.delete', rest_data, function (json, xhr) {
                 THIS.renderList();
-                $('#user-view').empty();
+                $('#timeofday-view').empty();
             });
+        },
+        cleanFormData: function(form_data) {
+            var wdays = [],
+                times = form_data.time.split(';');
+
+            $.each(form_data.days, function(i, val) {
+                if(val) {
+                    // Check for spelling ;)
+                    if(val == 'wednesday') {
+                        val = 'wensday';
+                    }
+                    wdays.push(val);
+                }
+            });
+
+            delete form_data.days;
+            form_data.wdays = wdays;
+
+            delete form_data.time;
+            form_data.time_window_start = times[0];
+            form_data.time_window_stop = times[1];
+            
+            return form_data;
         },
 
         /**
-         * Draw user fields/template and populate data, add validation. Works for both create & edit
+         * Draw timeofday fields/template and populate data, add validation. Works for both create & edit
          */
-        renderUser: function(form_data){
-            var THIS = this;
-            var user_id = form_data.data.id;
+        renderTimeofday: function(form_data){
+            var THIS = this,
+                timeofday_id = form_data.data.id,
+                wday;
+
+            // Check for spelling ;)
+            if((wday = $.inArray('wensday', form_data.data.wdays)) > -1) {
+                form_data.data.wdays[wday] = 'wednesday';
+            }
 
             /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editUser.tmpl(form_data).appendTo( $('#user-view') );
+            var form = THIS.templates.editTimeofday.tmpl(form_data).appendTo( $('#timeofday-view') );
 
             winkstart.cleanForm();
 
@@ -203,8 +222,8 @@ winkstart.module('voip', 'user',
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
-            $("#first_name").focus();
-            
+            $("#name").focus();
+
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
 
@@ -223,36 +242,64 @@ winkstart.module('voip', 'user',
                 }
             });
 
+            $("#time", form).slider({
+                from: 0,
+                to: 86400,
+                step: 900,
+                dimension: '',
+                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am', 
+                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am', 
+                        '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm',
+                        '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am'],
+                limits: false,
+                calculate: function(val) {
+                    var hours = Math.floor(val / 3600 ),
+                        mins = (val - hours * 3600) / 60,
+                        meridiem = (hours < 12) ? 'am' : 'pm';
+
+                    hours = hours % 12;                    
+
+                    if (hours == 0)
+                        hours = 12;
+
+                    return hours + ":" + (mins ? mins : '0' + mins)  + meridiem;
+                },
+                onstatechange: function () {}
+            });
+
             /* Listen for the submit event (i.e. they click "save") */
-            $('.user-save').click(function(event) {
+            $('.timeofday-save').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
 
                 /* Grab all the form field data */
-                var form_data = form2object('user-form');
-                THIS.saveUser(user_id, form_data);
+                var form_data = form2object('timeofday-form');
+                
+                form_data = THIS.cleanFormData(form_data); 
+
+                THIS.saveTimeofday(timeofday_id, form_data);
 
                 return false;
             });
 
-            $('.user-cancel').click(function(event) {
+            $('.timeofday-cancel').click(function(event) {
                 event.preventDefault();
 
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
-                $('#user-view').empty();
+                $('#timeofday-view').empty();
 
                 return false;
             });
 
-            $('.user-delete').click(function(event) {
+            $('.timeofday-delete').click(function(event) {
                 /* Save the data after they've clicked save */
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
 
-                THIS.deleteUser(user_id);
+                THIS.deleteTimeofday(timeofday_id);
 
                 return false;
             });
@@ -264,7 +311,7 @@ winkstart.module('voip', 'user',
         renderList: function(){
             var THIS = this;
 
-            winkstart.getJSON('user.list', {
+            winkstart.getJSON('timeofday.list', {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID
             }, function (json, xhr) {
@@ -274,18 +321,9 @@ winkstart.module('voip', 'user',
                     var new_list = [];
                     if(crossbar_data.length > 0) {
                         _.each(crossbar_data, function(elem){
-                            var title = elem.username;
-                            if (elem.first_name) {
-                                title += ' (' + elem.first_name;
-                                if (elem.last_name) {
-                                    title += ' ' + elem.last_name;
-                                }
-                                title += ')';
-                            }
-
                             new_list.push({
                                 id: elem.id,
-                                title: elem.username + ' (' + elem.first_name + ' ' + elem.last_name + ')'
+                                title: elem.name
                             });
                         });
                     }
@@ -293,16 +331,16 @@ winkstart.module('voip', 'user',
                 }
 
                 var options = {};
-                options.label = 'User Module';
-                options.identifier = 'user-module-listview';
-                options.new_entity_label = 'User';
+                options.label = 'Time of Day Module';
+                options.identifier = 'timeofday-module-listview';
+                options.new_entity_label = 'Time of Day';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
-                options.notifyMethod = 'user.list-panel-click';
-                options.notifyCreateMethod = 'user.edit-user';  /* Edit with no ID = Create */
+                options.notifyMethod = 'timeofday.list-panel-click';
+                options.notifyCreateMethod = 'timeofday.edit-timeofday';  /* Edit with no ID = Create */
 
-                $("#user-listpanel").empty();
-                $("#user-listpanel").listpanel(options);
+                $("#timeofday-listpanel").empty();
+                $("#timeofday-listpanel").listpanel(options);
 
             });
         },
@@ -314,21 +352,21 @@ winkstart.module('voip', 'user',
         activate: function(data) {
             $('#ws-content').empty();
             var THIS = this;
-            this.templates.user.tmpl({}).appendTo( $('#ws-content') );
+            this.templates.timeofday.tmpl({}).appendTo( $('#ws-content') );
 
             winkstart.loadFormHelper('forms');
 
             winkstart.publish('layout.updateLoadedModule', {
-                label: 'User Management',
+                label: 'Time of Day Route Management',
                 module: this.__module
             });
 
-            $('.edit-user').live({
+            $('.edit-timeofday').live({
                 click: function(evt){
                     var target = evt.currentTarget;
-                    var user_id = target.getAttribute('rel');
-                    winkstart.publish('user.edit-user', {
-                        'user_id' : user_id
+                    var timeofday_id = target.getAttribute('rel');
+                    winkstart.publish('timeofday.edit-timeofday', {
+                        'timeofday_id' : timeofday_id
                     });
                 }
             });

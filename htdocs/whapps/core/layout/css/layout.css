@@ -179,7 +179,7 @@ ul.universal_nav li a.logout {
 	border-left-color: #5a5a5a;
 	text-align:center;
     margin-left: 190px;
-    margin-right: 250px;
+    /*margin-right: 250px;*/
 }
 
 .sub_nav {
@@ -199,11 +199,12 @@ ul.universal_nav li a.logout {
 }
 
 .sub_nav ul li a {
-	margin: 0px 15px 0px 0px;
+	margin: 0px 12px 0px 0px;
 	display: inline-block;
 	height: 30px;
 	z-index: 500;
 	line-height: 30px;
+    font-size: 11px;
 }
 
 ul.sub_nav li a:active {
