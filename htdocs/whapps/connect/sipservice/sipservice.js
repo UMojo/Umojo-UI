@@ -31,7 +31,8 @@ winkstart.module('connect', 'sipservice',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
-            'load_account' : 'load_account',
+            'sipservice.confirm_billing' : 'confirm_billing',
+            'sipservice.load_account' : 'load_account',
 
             /* Sub nav HTML pages */
             'sipservice.legal.activate' : 'legal',
@@ -49,7 +50,8 @@ winkstart.module('connect', 'sipservice',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
+                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+//                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
 
@@ -158,6 +160,11 @@ winkstart.module('connect', 'sipservice',
             this.templates.main.tmpl().appendTo( $('#ws-content') );
         },
 
+        confirm_billing: function(args) {
+            alert('Confirming billing...');
+            
+        },
+
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
@@ -174,7 +181,7 @@ winkstart.module('connect', 'sipservice',
                 // populating it's own area.
                 THIS.main_menu();
 
-                THIS.load_account('2600hz');
+                THIS.load_account('info_2600hz');
             } else {
                 // Show landing page
                 

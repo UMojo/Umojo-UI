@@ -27,10 +27,9 @@ winkstart.module('connect', 'numbers',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'numbers.activate' : 'activate',
-            'sipservice.refresh' : 'refresh',
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
-            'numbers.add_number' : 'add_number_prompt',           // Buy/add a number to this account
+            'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
             'numbers.post_number': 'post_number',
             'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account
             'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
@@ -41,33 +40,34 @@ winkstart.module('connect', 'numbers',
             'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
             'numbers.configure_cnam' : 'configure_cnam',    // Configure CNAM
             'numbers.post_cnam' : 'post_cnam',
-            'numbers.unassign_did' : 'unassign_did'
+            'numbers.unassign_did' : 'unassign_did',
+            'numbers.search_npa_nxx': 'search_npa_nxx'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             /* Search DIDs */
-            "sipservice.searchNPANXX": {
+            "numbers.search_npa_nxx.get": {
                 url: 'https://store.2600hz.com/v1/searchNPANXX',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.searchNPA": {
+            "numbers.search_npa.get": {
                 url: 'https://store.2600hz.com/v1/searchNPA',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
-            "sipservice.searchAvailDIDs": {
+            "searchAvailDIDs": {
                 url: 'https://store.2600hz.com/v1/searchAvailDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
 
-            "sipservice.request_portDID": {
+            "request_portDID": {
                 url: 'https://store.2600hz.com/v1/request_portDID',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -75,7 +75,7 @@ winkstart.module('connect', 'numbers',
 
 
 
-            "sipservice.getLNPData": {
+            "getLNPData": {
                 url: 'https://store.2600hz.com/v1/getLNPData',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -84,43 +84,43 @@ winkstart.module('connect', 'numbers',
 
 
             /* DID Management */
-            "sipservice.numbers.addDID": {
+            "numbers.addDID": {
                 url: 'https://store.2600hz.com/v1/addDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.addDIDs": {
+            "numbers.addDIDs": {
                 url: 'https://store.2600hz.com/v1/addDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.moveDID": {
+            "numbers.moveDID": {
                 url: 'https://store.2600hz.com/v1/moveDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.delDID": {
+            "numbers.delDID": {
                 url: 'https://store.2600hz.com/v1/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setE911": {
+            "numbers.setE911": {
                 url: 'https://store.2600hz.com/v1/setE911',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setFailOver": {
+            "numbers.setFailOver": {
                 url: 'https://store.2600hz.com/v1/setFailOver',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "sipservice.numbers.setCID": {
+            "numbers.setCID": {
                 url: 'https://store.2600hz.com/v1/setCID',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -135,6 +135,48 @@ winkstart.module('connect', 'numbers',
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
+        
+        
+            $('#my_numbers').delegate('.add', "click", function(){
+                    winkstart.publish('numbers.add_number_prompt');
+            });
+
+            /*
+            $('#tmp_add_number').click(function() {
+                winkstart.publish('numbers.add_number_prompt');
+            });
+			*/
+            $('#tmp_edit_port_number').click(function() {
+                winkstart.publish('sipservice.port_number');
+            });
+
+            /*$('#edit_cnam').click(function() {
+                winkstart.publish('sipservice.configure_cnam');
+            });
+
+            $('#tmp_edit_auth').click(function() {
+                winkstart.publish('sipservice.edit_auth');
+            });*/
+
+            $('.did_list .numbers .unassign').live('click', function() {
+                data = $(this).dataset();
+                winkstart.publish('sipservice.unassign_did', data);
+            });
+
+            $('.did_list .numbers .add').live('click', function() {
+                winkstart.publish('sipservice.addNumber');
+            });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }, // End initialization routine
 
 
@@ -297,7 +339,7 @@ winkstart.module('connect', 'numbers',
         LNPPrompt_s2: function(lnp_f) {
 
             var lnp_did = lnp_f.serializeObject();
-            winkstart.getJSON("sipservice.getLNPData",
+            winkstart.getJSON("getLNPData",
             {
                 key: key,
                 json: JSON.stringify(lnp_did)
@@ -349,7 +391,7 @@ winkstart.module('connect', 'numbers',
             var THIS = this;
 
             var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
-                title: 'Add/Search Numbers',
+                title: 'Add/Search Numbers'
             });
 
             winkstart.publish('sipservice.input_css');
@@ -359,17 +401,22 @@ winkstart.module('connect', 'numbers',
                 } else {
                     $('#sdid_nxx').show('slow');
                 }
-            });
 
-            $(dialogDiv).find('.ctr_btn').click(function() {
-                winkstart.publish('sipservice.post_number', {
-                    callback : args.callback,
-                    number : 4159086655,
-                    success : function() {
-                        dialogDiv.dialog('close');
-                    }
+
+                $('.ctr_btn', dialogDiv).click(function() {
+                    var NPA = $('#sdid_npa', dialogDiv).val();
+                    var NXX = $('#sdid_nxx', dialogDiv).val();
+
+                    winkstart.publish('numbers.search_npa_nxx', {
+                        data : { 'NPA': NPA, 'NXX': NXX, },
+                        callback: function(results) {
+                            console.log('Found these #s:', results);
+
+                            // Draw results on screen
+                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_results.tmpl(results));
+                        }
+                    });
                 });
-
             });
         },
 
@@ -591,45 +638,56 @@ winkstart.module('connect', 'numbers',
             return addedDIDs;
         },
 
-        searchAvailDIDs: function(NPA, NXX) {
+        // This function takes args.data with a { NPA : ###, NXX : ### } as arguments and searches for available phone numbers.
+        //
+        // OTHER THEN A PLEASE WAIT BOX, NO "PAINTING" OF RESULTS COMES FROM THIS FUNCTION.
+        // All results will be passed to args.callback(results) for display/processing
+        search_npa_nxx: function(args) {
+            NPA = args.data.NPA;
+            NXX = args.data.NXX;
+
             // must use toString()
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('sipservice.searchNPA',
+                    winkstart.postJSON('numbers.search_npa.get',
                     {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
                         $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
-                    winkstart.postJSON('sipservice.searchNPANXX',
+                    $('#sad_LoadingTime').slideDown();
+                    winkstart.postJSON('numbers.search_npa_nxx.get',
                     {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA,
-                            NXX: NXX
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
+                        $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('sipservice.searchNPA',
+                    winkstart.postJSON('numbers.search_npa.get',
                     {
-                        key: key,
-                        json: JSON.stringify({
-                            NPA: NPA
-                        })
-                    }, function(jdata) {
-                        $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(jdata));
+                        json: args.data
+                    },
+                    function(jdata) {
+                        // Remove please wait
                         $('#sad_LoadingTime').hide();
+
+                        // Send results to the callback
+                        args.callback(jdata);
                     });
 
                 } else {
@@ -669,7 +727,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setE911: function(e911) {
-            winkstart.postJSON("sipservice.numbers.setE911",
+            winkstart.postJSON("numbers.setE911",
             {
                 key: key,
                 json: JSON.stringify({
@@ -688,7 +746,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setFailOver: function(info) {
-            winkstart.postJSON("sipservice.numbers.setFailOver",
+            winkstart.postJSON("numbers.setFailOver",
             {
                 key: key,
                 json: JSON.stringify({
@@ -708,7 +766,7 @@ winkstart.module('connect', 'numbers',
         },
 
         setCID: function(info){
-            winkstart.postJSON("sipservice.numbers.setCID",
+            winkstart.postJSON("numbers.setCID",
             {
                 key: key,
                 json: JSON.stringify(info)
@@ -723,7 +781,7 @@ winkstart.module('connect', 'numbers',
         },
 
         LNP_s1: function(frm) {
-            winkstart.putJSON("sipservice.request_portDID",
+            winkstart.putJSON("request_portDID",
             {
                 key: key,
                 json: JSON.stringify(frm.serializeObject())
@@ -749,7 +807,7 @@ winkstart.module('connect', 'numbers',
         not_used_anymore_searchNPA: function(nbr, cb) {
             //			$.getJSON('/api/searchNPA', function(data) {
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-            winkstart.getJSON("sipservice.searchNPA",
+            winkstart.getJSON("searchNPA",
             {
                 key: key,
                 json: JSON.stringify(nbr)
@@ -879,11 +937,11 @@ winkstart.module('connect', 'numbers',
 
         activate: function(data) {
             $('#my_numbers').delegate('.add', "click", function(){
-                    winkstart.publish('sipservice.add_number');
+                    winkstart.publish('numbers.add_number_prompt');
             });
 
             $('#tmp_add_number').click(function() {
-                winkstart.publish('sipservice.add_number');
+                winkstart.publish('numbers.add_number_prompt');
             });
 
             $('#tmp_edit_port_number').click(function() {

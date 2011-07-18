@@ -1,0 +1,47 @@
+<div>
+    <div id="edit_number" class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <p class="note_box">
+                    <!--
+                    Please enter the city name to find related numbers.<br />
+                    If you prefer, you can specify the area code and up to 3 numbers of the local prefix.<br /><br />
+                    -->
+                    You can specify the area code and up to 3 numbers of the local prefix.
+                    For Toll Free number please enter 800, 888, 877, 866, 855 in the area code.<br /><br />
+                    If a number has not been used before, only the first 6 numbers will be displayed.
+                </p>
+                <form name="form" method="post" action="#">
+                <!-- 
+                    <label for="name">City</label>
+                    <input type="text" name="name" id="name" />
+                    <label class="or">OR</label>
+
+                    <label for="areacode">Area Code</label>
+                    <input type="text" name="areacode" id="areacode" class="field_last" />
+                </form>
+                                     -->
+                                     <!--                      onkeyup=" if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {$('#sdid_nxx').hide('slow');} else {$('#sdid_nxx').show('slow');}"
+                     onclick="searchAvailDIDs($('#sdid_npa').val(), $('#sdid_nxx').val() ); return false;"
+ -->
+                     
+                <form id="sdidform" onsubmit="return false;">  <div><input type="text" id="sdid_npa" name="NPA" maxlength="3" pattern="^[2-9][0-8][0-9]$" style="width: 4em;" >   &nbsp;     <input id="sdid_nxx" type="text" name="NXX" maxlength="3" pattern="^[2-9]\d\d$" style="width: 4em; "> &nbsp; <span id="help_did_add_dids" class="help_bt">&nbsp;</span>            </div> </form>
+                
+                
+                <a class="ctr_btn clear" href="#">Search</a>
+
+                <h3>Results</h3>
+                <div id="foundDIDList"></div>
+                
+                <div class="search_icon"></div>
+                <br><br>
+                <div class="table1"></div><br />
+                <p>Pick next number available in:</p>
+                <div class="table2"></div>
+
+                <p class="note_box">Each number you select will be added to your monthly invoice.</p>
+                <a class="ctr_btn" href="#">Add</a>
+            </div>
+        </div>
+    </div>
+</div>

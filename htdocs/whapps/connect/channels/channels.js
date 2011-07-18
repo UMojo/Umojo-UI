@@ -43,36 +43,62 @@ winkstart.module('connect', 'channels',
 
     /* Define the functions for this module */
     {
-        edit: function(args) {
+        rates : { trunks : 30.00, inbound_trunks : 4.00 },
+
+        show_estimate: function(dialogDiv) {
+            var THIS = this;
+
+            $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
+            $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
+
+            $('#trunks_total', dialogDiv).html(THIS.rates.trunks * $('#trunks', dialogDiv).val());
+            $('#inbound_trunks_total', dialogDiv).html(THIS.rates.inbound_trunks * $('#inbound_trunks', dialogDiv).val());
+        },
+
+        promo: function(promoCode) {
+            // Lookup a promotion & display it, add it to the order if they submit
+            
+        },
+
+        edit: function() {
             var THIS = this;
             dialogDiv = winkstart.popup(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
-                title: 'Edit Trunks / Channels'
+                title: 'Edit Flat-Rate Channels'
+            });
+
+            THIS.show_estimate(dialogDiv);
+
+            $('#trunks, #inbound_trunks', dialogDiv).bind('keyup change', function() {
+                THIS.show_estimate(dialogDiv);
             });
 
             $('.update_channels_button', dialogDiv).click(function() {
                 // Grab data from form
                 var form_data = form2object('channels');
 
-                winkstart.postJSON('channels.post', {
-                        data : form_data,
-                        account_id : '2600hz'
-                    },
-                    function(data, xhr) {
-                        console.log(data);
-                    }
-                );
-                return true;
+                // Build the save function here, for use with or without a billing confirmation screen (coming up)
+                var save = function() {
+                    winkstart.postJSON('channels.post', {
+                            data : form_data,
+                            account_id : '2600hz'
+                        },
+                        function(data, xhr) {
+                            // Check the response for errors
 
-                // Show a billing confirmation screen. If they approve it, update the trunks
-                winkstart.publish('billing.confirm', { });
+                            // Close the dialog
+                            dialogDiv.dialog('close');
+                        }
+                    );
+                };
 
-                // Update trunk counts on the server
-                THIS.account.account.trunks = dialogDiv.find('#trunks').val();
-                THIS.account.account.inbound_trunks = dialogDiv.find('#inbound_trunks').val();
-                dialogDiv.dialog('close');
-                THIS.update_account();
+                $.extend(new_account, winkstart.modules['connect'].account, form_data);
+                
+                // If an account change handler (such as a wizard or a billing confirmation callback) is registered, use it
+                if (!winkstart.publish('sipservice.change_handler', { 'account' : new_account, 'save' : save })) {
+                    // Otherwise commit the change immediately
+                    save();
+                }
             });
-
         },
 
         refresh: function(dialog) {
