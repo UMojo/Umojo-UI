@@ -105,6 +105,7 @@ winkstart.module('voip', 'callflow',
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('subnav.add', {
+            whapp: 'voip',
             module: this.__module,
             label: 'Callflows',
             icon: 'callflow'

@@ -63,6 +63,7 @@ winkstart.module('voip', 'menu',
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('subnav.add', {
+            whapp: 'voip',
             module: this.__module,
             label: 'Menus',
             icon: 'menu'

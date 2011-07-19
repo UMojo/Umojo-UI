@@ -9,8 +9,9 @@ winkstart.module('core', 'core', {
                 // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
                 winkstart.module.loadPlugin('core', 'appnav', function() {
                     this.init({ parent: $('body') }, function() {
-                        winkstart.module.loadPlugin('core', 'subnav', function() {
-                            this.init({ parent: $('body') }, function() {
+                        // We don't use this sub nav any more
+                        //winkstart.module.loadPlugin('core', 'subnav', function() {
+                            //this.init({ parent: $('body') }, function() {
                                 // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
                                 winkstart.module.loadPlugin('core', 'myaccount', function() {
                                     this.init();
@@ -30,8 +31,8 @@ winkstart.module('core', 'core', {
                                 });
 
                                 winkstart.log('WhApps: Finished Loading WhApps');
-                            });
-                        });
+                            //});
+                        //});
                     });
                 });
             });

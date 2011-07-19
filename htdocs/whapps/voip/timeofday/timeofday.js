@@ -69,6 +69,7 @@ winkstart.module('voip', 'timeofday',
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('subnav.add', {
+            whapp: 'voip',
             module: this.__module,
             label: 'Time Of Day',
             icon: 'timeofday'

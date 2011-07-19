@@ -5,28 +5,28 @@ winkstart.module('core', 'appnav', {
         },
 
         templates: {
-            appnav: 'appnav.html',
-            item:   'item.html'
+            appnav:  'appnav.html',
+            item:    'item.html',
+            subitem: 'subitem.html'
         },
         
         subscribe: {
             'appnav.add'        : 'add',
             'appnav.activate'   : 'activate',
-            'appnav.remove'     : 'remove'
+            'appnav.remove'     : 'remove',
+            'subnav.add'        : 'sub_add'
         }
         
     },
 
-        /* Init */
+    /* Init */
     function() {
         var THIS = this;
         
         this.templates.appnav.tmpl({}).appendTo( $('div.header .main_nav') );
         
         // Set up the Module Click handlers
-        $('div.header .main_nav ul').delegate('li', 'click', function() {
-            $('div.header .main_nav ul a').removeClass('selected');
-            $(this).find('a').addClass('selected');
+        $('div.header .main_nav').delegate('li', 'click', function() {
             winkstart.publish('appnav.activate', $(this).attr('module-name'));
             return false;
         });
@@ -42,35 +42,51 @@ winkstart.module('core', 'appnav', {
 
             $('.dropdown', item).hide();
 
-            $('.main_nav li').hoverIntent({
+            $(item).hoverIntent({
                 sensitivity: 1,
                 interval: 40,
                 timeout: 300,
                 over: function() {
-                    $('.dropdown', $(this)).slideDown(100);
+                    if($(this).attr('menu') != 'false') {
+                        $('.dropdown', $(this)).slideDown(100);
+                    }
                 },
                 out: function() {
-                    $('.dropdown', $(this)).slideUp(100);
+                    if($(this).attr('menu') != 'false') {
+                        $('.dropdown', $(this)).slideUp(100);
+                    }
                 }
             });
 
-            $('.main_nav li').hover( 
+            $(item).hover( 
                 function() { 
-                    $('span', $(this)).addClass('blue');
+                    $('.whapp .icon', $(this)).addClass('blue');
                 }, 
                 function() { 
                     if(!($('a', $(this)).is('.selected'))) {
-                        $('span', $(this)).removeClass('blue');
+                        $('.whapp .icon', $(this)).removeClass('blue');
                     }
                 }
             );
             
-            $('.main_nav li').click( function() { 
-                $('.main_nav li span').removeClass('blue');
-                $('span', $(this)).addClass('blue');
+            $(item).click( function() { 
+                $('div.header .main_nav .whapp a').removeClass('selected');
+                $('.whapp a', $(this)).addClass('selected');
+                $('.main_nav li .whapp .icon').removeClass('blue');
+                $('.whapp .icon', $(this)).addClass('blue');
             });
 
             winkstart.log('AppNav: Adding navigation item ' + args.name);
+
+            // Set up the subnav click handler
+            $('.dropdown .content', item).delegate('.module', 'click', function() {
+                $('div.header .main_nav .whapp a').removeClass('selected');
+                $('.whapp a', $(this).parents('li')).addClass('selected');
+                $('.main_nav li .whapp .icon').removeClass('blue');
+                $('.whapp .icon', $(this).parents('li')).addClass('blue');
+                winkstart.publish($(this).attr('module-name') + '.activate');
+                return false;
+            });
         },
 
         activate: function(app_name) {
@@ -82,6 +98,37 @@ winkstart.module('core', 'appnav', {
 
         remove: function() {
             // TODO: Implement me
+        },
+
+        sub_add: function(data) {
+            var THIS = this,
+                whapp_name = new String(data.whapp),
+                whapp = $('.main_nav li[module-name="' + whapp_name + '"]'),
+                module_name = new String(data.module),
+                listModules = $('.module', whapp);
+
+            if(listModules.length == 0) {
+                this.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
+                whapp.attr('menu', 'true');
+            }
+            else {
+                $.each(listModules, function(k, v) {
+                    var currentModule = new String(listModules[k].attributes['module-name'].value),
+                        compare = ((module_name == currentModule) ? 0 : ((module_name > currentModule) ? 1 : -1));
+
+                    if(k == listModules.length - 1 && compare > 0) {
+                        THIS.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
+                        winkstart.log(data.module + ' appended');
+                        return false;
+                    }
+                    else if(compare < 0){
+                        THIS.templates.subitem.tmpl(data).insertBefore(listModules[k]);
+                        winkstart.log(data.module + ' insertBefore');
+                        return false;
+                    }
+                });
+            } 
         }
+
     }
 );

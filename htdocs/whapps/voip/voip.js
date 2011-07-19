@@ -12,8 +12,19 @@ winkstart.module('voip', 'voip', {
         }
     },
     function() {
+        var THIS = this;
+
         // Loaded - add to nav bar
         winkstart.publish('appnav.add', { 'name' : 'voip' });
+
+        // Load the modules
+        $.each(THIS.modules, function(k, v) {
+            winkstart.module.loadPlugin('voip', v, function() {
+                this.init(function() {
+                    winkstart.log('VoIP: Initialized ' + v);
+                });
+            });
+        });
     },
     {
         initialized :   false,
@@ -25,17 +36,6 @@ winkstart.module('voip', 'voip', {
             if (!THIS.initialized) {
                 // We only initialize once
                 //THIS.initialized = true;
-
-                winkstart.publish('subnav.clear');
-
-                $.each(THIS.modules, function(k, v) {
-                    winkstart.module.loadPlugin('voip', v, function() {
-                        this.init(function() {
-                            winkstart.log('VoIP: Initialized ' + v);
-                        });
-                    });
-                });
-				
 
                 // Display the navbar
                 $('#ws-content').empty();
