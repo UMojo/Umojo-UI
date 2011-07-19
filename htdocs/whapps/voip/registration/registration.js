@@ -1,13 +1,13 @@
 winkstart.module('voip', 'registration',
     {
         css: [
-            'css/registration.css'
+        'css/registration.css'
         ],
 
         /* What HTML templates will we be using? */
         templates: {
             registration: 'tmpl/registration.html'//,
-            //detailRegistration: 'tmpl/detailRegistration.html'
+        //detailRegistration: 'tmpl/detailRegistration.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -51,7 +51,7 @@ winkstart.module('voip', 'registration',
     },
 
     {
-         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
+        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
          * if appropriate. You should also attach to any default click items you want to respond to when people click
          * on them. Also register resources.
          */
@@ -63,14 +63,25 @@ winkstart.module('voip', 'registration',
 
             this.templates.registration.tmpl({}).appendTo( $('#ws-content') );
             
+            var num_rows = 0;
+            
             //winkstart.getJSON('registration.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(reply) {
-            winkstart.getJSON('registration.list', {crossbar: true, account_id: '04152ed2b428922e99ac66f3a71b0215'}, function(reply) {
+            winkstart.getJSON('registration.list', {
+                crossbar: true, 
+                account_id: '04152ed2b428922e99ac66f3a71b0215'
+            }, function(reply) {
                 THIS.setup_table();
                 $.each(reply.data, function() {
                     var registration_id = this.id;
+                    
+                    num_rows = num_rows+1;
 
                     //winkstart.getJSON('registration.read',{crossbar: true, account_id: MASTER_ACCOUNT_ID, registration_id: registration_id}, function(reply) {
-                    winkstart.getJSON('registration.read',{crossbar: true, account_id: '04152ed2b428922e99ac66f3a71b0215', registration_id: registration_id}, function(reply) {
+                    winkstart.getJSON('registration.read',{
+                        crossbar: true, 
+                        account_id: '04152ed2b428922e99ac66f3a71b0215', 
+                        registration_id: registration_id
+                    }, function(reply) {
                         if(reply.data == undefined) {
                             return false;
                         }
@@ -182,36 +193,60 @@ winkstart.module('voip', 'registration',
                         winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
                     });
                 });
+                
+                //Hack to hide pagination if number of rows < 10
+                if(num_rows < 10){
+                    $('body').find('.dataTables_paginate').hide();
+                }
             });
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Voicemail Boxes Management',
                 module: this.__module
             });
-
         },
         setup_table: function() {
-			var THIS = this;
-			var columns = [
-				{'sTitle': 'Username'},
-				{'sTitle': 'IP'},
-				{'sTitle': 'Port'},
-				{'sTitle': 'Date'},
-				{'sTitle': 'Time'},
-				{'sTitle': 'Details',
-					  'fnRender': function(obj) {
-					  console.log(obj);
-					  var reg_details = obj.aData[obj.iDataColumn];
-					  return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
-				  }}
-			];
+            var THIS = this;
+            var columns = [
+            {
+                'sTitle': 'Username'
+            },
 
-			winkstart.table.create('registration', $('#registration-grid'), columns);
-			$('#registration-grid_filter input[type=text]').first().focus();
+            {
+                'sTitle': 'IP'
+            },
+
+            {
+                'sTitle': 'Port'
+            },
+
+            {
+                'sTitle': 'Date'
+            },
+
+            {
+                'sTitle': 'Time'
+            },
+
+            {
+                'sTitle': 'Details',
+                'fnRender': function(obj) {
+                    console.log(obj);
+                    var reg_details = obj.aData[obj.iDataColumn];
+                    return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
+                }
+            }
+            ];
+
+            winkstart.table.create('registration', $('#registration-grid'), columns);
+            $('#registration-grid_filter input[type=text]').first().focus();
 			
-			$('.cancel-search').click(function(){
-				$('#registration-grid_filter input[type=text]').val('');
-			});
-		}
+            $('.cancel-search').click(function(){
+                $('#registration-grid_filter input[type=text]').val('');
+            });
+            
+            
+            
+        }
     }
-);
+    );
