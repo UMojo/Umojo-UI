@@ -26,6 +26,7 @@ winkstart.module('indesign', 'user_mgmt',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
         winkstart.publish('subnav.add', {
+            whapp: 'indesign',
             module: this.__module,
             label: 'User Management'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });

@@ -69,6 +69,7 @@ winkstart.module('voip', 'vmbox',
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('subnav.add', {
+            whapp: 'voip',
             module: this.__module,
             label: 'Voicemail Boxes',
             icon: 'vmbox'

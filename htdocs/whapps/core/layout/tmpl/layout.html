@@ -1,35 +1,37 @@
 <div>
-    <div class="header">
+    <div style="position:absolute;z-index:1;width:100%;">
+        <div class="header">
 
-    <!-- start topmost logo + header w/ applications + my account -->
-        <div class="logo">
-            <a class="img" href="#">2600hz.com</a>
-        </div>
+        <!-- start topmost logo + header w/ applications + my account -->
+            <div class="logo">
+                <a class="img" href="#">2600hz.com</a>
+            </div>
 
-	    <div class="main_nav">
-            <!-- appnav module will populate this area with loaded and accessible apps -->
+            <div class="main_nav">
+                <!-- appnav module will populate this area with loaded and accessible apps -->
+            </div>
+            
+            <ul class="universal_nav">
+                <li><a href="#" id="my_account" class="my_account">My Account</a></li>
+                <li><a href="#" id="my_help" class="help">Help</a></li>
+                <li><a href="#" id="my_logout" class="logout">Logout</a></li>
+            </ul>
         </div>
+        <!-- end topmost logo + header w/ applications + my account -->
         
-        <ul class="universal_nav">
-            <li><a href="#" id="my_account" class="my_account">My Account</a></li>
-            <li><a href="#" id="my_help" class="help">Help</a></li>
-            <li><a href="#" id="my_logout" class="logout">Logout</a></li>
-        </ul>
-    </div>
-    <!-- end topmost logo + header w/ applications + my account -->
-    
-    <div class="clear"></div>
+        <div class="clear"></div>
 
-    <div class="content_container">
-        <div class="ws-content" id="ws-content">
+        <div class="content_container">
+            <div class="ws-content" id="ws-content">
 
-            <!-- main content area -->
+                <!-- main content area -->
 
+            </div>
         </div>
+        <!-- end content container -->
     </div>
-    <!-- end content container -->
     
-    <div id="loading" style="display:none; border: 1px; background-color: #999999; position: absolute; top:40%; left:40%; width:20%; height:140px; text-align:center">
+    <div id="loading" style="display:none; border: 1px; background-color: #999999; position: absolute; top:40%; left:40%; width:20%; height:140px; text-align:center; z-index:100000">
       <p style="font-size:24px; line-height:140px"><img src="whapps/core/layout/images/loading.gif"/>&nbsp;&nbsp;Please wait...</p>
     </div>
 

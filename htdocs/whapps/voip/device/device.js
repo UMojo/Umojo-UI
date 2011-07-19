@@ -98,6 +98,7 @@ winkstart.module('voip', 'device',
         winkstart.registerResources(this.config.resources);
 
         winkstart.publish('subnav.add', {
+            whapp: 'voip',
             module: this.__module,
             label: 'Devices',
             icon: 'device'

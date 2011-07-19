@@ -143,7 +143,7 @@ a:active {
     text-align: center;
 }
 
-.main_nav li:hover a{
+.main_nav li:hover .whapp a{
     color: #05ADDC;
 }
 

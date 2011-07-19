@@ -26,6 +26,7 @@ winkstart.module('indesign', 'ring_group',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
         winkstart.publish('subnav.add', {
+            whapp: 'indesign',
             module: this.__module,
             label: 'Ring Group'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });

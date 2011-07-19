@@ -1,23 +1,23 @@
 .main_nav li .dropdown {
+    float: left;
     position: relative;
     top: 15px;
     left: -24px;
     width: 311px;
-    height: 50px;
-    clear: both;
+    /*height: 50px;*/
 }
 
 .main_nav li .dropdown .content {
     float: left;
-    z-index: 100; 
     width: 100%;
     height: 100%;
     padding-top: 15px;
+    padding-bottom: 10px;
 }
 
 .main_nav li .dropdown .background {
-    padding-top: 15px;
-    position: relative;
+    float: left;
+    position: absolute;
     top: 0px;
     left: 0px;
     background: #393939;
@@ -27,4 +27,21 @@
     height: 100%;
     border: 1px #05ADDC solid;
     z-index: -100; 
+}
+
+.main_nav li .dropdown .content .module {
+    display: block;
+    margin-left: 10px;
+    height: 30px;
+    width: 145px;
+    font-size: 10px;
+    text-align: left;
+    float: left;
+}
+
+.main_nav li .dropdown .content .module:nth-child(odd) {
+    width: 146px;
+    background-image: url(../layout/images/nav_line.jpg);
+    background-repeat: no-repeat;
+    background-position: right;
 }

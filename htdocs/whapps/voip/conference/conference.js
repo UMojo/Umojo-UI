@@ -61,6 +61,7 @@ function(args) {
     winkstart.registerResources(this.config.resources);
 
     winkstart.publish('subnav.add', {
+        whapp: 'voip',
         module: this.__module,
         label: 'Conferences',
         icon: 'conference'
