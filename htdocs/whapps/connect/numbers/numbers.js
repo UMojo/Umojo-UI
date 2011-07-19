@@ -162,7 +162,8 @@ winkstart.module('connect', 'numbers',
 
             $('.did_list .numbers .unassign').live('click', function() {
                 data = $(this).dataset();
-                winkstart.publish('sipservice.unassign_did', data);
+                console.log(data);
+                winkstart.publish('numbers.unassign_did', data);
             });
 
             $('.did_list .numbers .add').live('click', function() {
@@ -230,10 +231,10 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: data.key,
-                    json: JSON.stringify({
+                    account_id: MASTER_ACCOUNT_ID,
+                    data: {
                         number: data.number
-                    })
+                    }
                 }),
                 dataType: "json",
                 async:true,
@@ -343,8 +344,8 @@ winkstart.module('connect', 'numbers',
             var lnp_did = lnp_f.serializeObject();
             winkstart.getJSON("getLNPData",
             {
-                key: key,
-                json: JSON.stringify(lnp_did)
+                account_id: MASTER_ACCOUNT_ID,
+                data: lnp_did
             },
             function(msg){
                 if (typeof msg == 'object' && msg.data) {
@@ -352,7 +353,7 @@ winkstart.module('connect', 'numbers',
                     if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
                         popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
                         createUploader($('#lnp_s2_uploader')[0], '/v1/uploadLNP', {
-                            key: key,
+                            account_id: MASTER_ACCOUNT_ID,
                             did:trackData.lnp.did,
                             tracking:trackData.lnp.tracking
                         }, function(a,b,c,d) {
@@ -434,10 +435,10 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: data.key,
-                    json: JSON.stringify({
+                    account_id: MASTER_ACCOUNT_ID,
+                    data: {
                         number: data.number
-                    })
+                    }
                 }),
                 dataType: "json",
                 async:true,
@@ -483,12 +484,12 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: data.key,
-                    json: JSON.stringify({
+                    account_id: MASTER_ACCOUNT_ID,
+                    data: {
                         number: data.number,
                         address: data.address,
                         someOtherData: data.someOtherData
-                    })
+                    }
                 }),
                 dataType: "json",
                 async:true,
@@ -529,17 +530,17 @@ winkstart.module('connect', 'numbers',
 
         post_cnam: function(data) {
             winkstart.postJSON('CREATE_CNAM_ONLY...', {
-                key: data.key,
-                json: JSON.stringify({
+                	
+                data: {
                     caller_id: data.caller_id
+                }
                 }, function(msg){
                     if (msg && msg.errs && msg.errs[0]) {
                         display_errs(msg.errs);
                     }
                     redraw(msg.data);
-                }),
-            });
-        },
+                });
+            },
 
         /******************
          * DID Management *
@@ -580,12 +581,23 @@ winkstart.module('connect', 'numbers',
             var THIS = this;
             var did = data.did;
             var serverid = data.serverid;
+            /* 
+            	not sure about this code:
+
             delete(THIS.account.servers[serverid].DIDs[did]);
             if(THIS.account.DIDs_Unassigned == undefined) {
                 THIS.account.DIDs_Unassigned = {};
             }
             THIS.account.DIDs_Unassigned[did] = {};
-            THIS.update_account();
+            */
+            winkstart.postJSON('numbers.moveDID',
+	            {
+	            	data: {"DID":{"serverid": serverid , "did": did},"server":null} ,
+	            	account_id: MASTER_ACCOUNT_ID
+	            },
+	            function() {;}
+	            	//THIS.update_account({});
+	        );
         },
 
         delDID: function(did) {
@@ -599,10 +611,10 @@ winkstart.module('connect', 'numbers',
 
             winkstart.postJSON('sipservice.numbers.addDID',
             {
-                key: key,
-                json: JSON.stringify({
+                account_id: MASTER_ACCOUNT_ID,
+                data: {
                     DID:did
-                })
+                }
             },
             function(msg){
                 if (msg && msg.errs && msg.errs[0]) {
@@ -621,10 +633,10 @@ winkstart.module('connect', 'numbers',
             var addedDIDs;
             winkstart.postJSON('sipservice.numbers.addDIDs',
             {
-                key: key,
-                json: JSON.stringify({
+                account_id: MASTER_ACCOUNT_ID,
+                data: {
                     DIDs:dids
-                })
+                }
             },
             function(msg){
                 addedDIDs=msg; // I do not know why... (2011-07-15)
@@ -738,12 +750,12 @@ winkstart.module('connect', 'numbers',
         setE911: function(e911) {
             winkstart.postJSON("numbers.setE911",
             {
-                key: key,
-                json: JSON.stringify({
+			account_id: MASTER_ACCOUNT_ID,
+                data:{
                     "e911_info": e911.e911_info,
                     "did":e911.did,
                     "serverid":e911.serverid
-                })
+                }
             },
             function(msg){
                 if (msg && msg.errs && msg.errs[0]) {
@@ -757,12 +769,12 @@ winkstart.module('connect', 'numbers',
         setFailOver: function(info) {
             winkstart.postJSON("numbers.setFailOver",
             {
-                key: key,
-                json: JSON.stringify({
+                account_id: MASTER_ACCOUNT_ID,
+                data: {
                     did:info.did.did,
                     serverid:info.did.serverid,
                     failover: info.uri
-                })
+                }
             },
             function(msg){
                 if (msg && msg.errs && msg.errs[0]) {
@@ -777,8 +789,8 @@ winkstart.module('connect', 'numbers',
         setCID: function(info){
             winkstart.postJSON("numbers.setCID",
             {
-                key: key,
-                json: JSON.stringify(info)
+                account_id: MASTER_ACCOUNT_ID,
+                data: info
             },
             function(msg){
                 if (msg && msg.errs && msg.errs[0]) {
@@ -792,8 +804,8 @@ winkstart.module('connect', 'numbers',
         LNP_s1: function(frm) {
             winkstart.putJSON("request_portDID",
             {
-                key: key,
-                json: JSON.stringify(frm.serializeObject())
+                account_id: MASTER_ACCOUNT_ID,
+                data: frm.serializeObject()
             },
             function(msg){
                 if (msg && msg.errs && msg.errs[0]) {
@@ -818,8 +830,8 @@ winkstart.module('connect', 'numbers',
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
             winkstart.getJSON("searchNPA",
             {
-                key: key,
-                json: JSON.stringify(nbr)
+                account_id: MASTER_ACCOUNT_ID,
+                data: nbr
             },
             function(msg){
                 redraw(msg.data);
@@ -837,8 +849,8 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    key: key,
-                    json: JSON.stringify(nbr)
+                    account_id: MASTER_ACCOUNT_ID,
+                    data: nbr
                 }),
                 dataType: "json",
                 async:true,
