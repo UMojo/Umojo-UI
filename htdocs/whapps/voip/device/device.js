@@ -181,7 +181,7 @@ winkstart.module('voip', 'device',
                 var form_data = {
                     data : {
                         mac_address: "12:34:56:78:9A:BC",
-                        caller_id : {default : { }, emergency : { }},
+                        caller_id : {'default' : { }, emergency : { }},
                         media : {audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
                         sip : { realm: json.data.realm, username: generatedUsername, password: generatedPassword, expire_seconds: "360"}
                     }
@@ -220,7 +220,9 @@ winkstart.module('voip', 'device',
                         /* This is a new device - pass along empty params */
                         THIS.renderDevice(form_data);
                     }
-
+                    $.each($('body').find('*[tooltip]'), function(){
+                        $(this).tooltip({attach:'body'});
+                    });
                 });
             });
 
