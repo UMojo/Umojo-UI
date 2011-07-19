@@ -124,7 +124,7 @@ function(args) {
             $('#conference-view').empty();
             var THIS = this;
             var form_data = {
-                data: { moderator_play_name: "true", member_play_name: "true", member_pins: [], moderator_pins: []},
+                data: { moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
             };
 
             form_data.field_data = THIS.config.formData;
