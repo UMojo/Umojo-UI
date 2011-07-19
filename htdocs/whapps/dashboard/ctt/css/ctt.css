@@ -1,0 +1,10 @@
+#registration-view-wrapper {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#registration-view {
+    width: 1000px;
+    display: inline-block;
+}
+
