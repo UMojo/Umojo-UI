@@ -59,9 +59,16 @@ winkstart.module('core', 'appnav', {
                     $('span', $(this)).addClass('blue');
                 }, 
                 function() { 
-                    $('span', $(this)).removeClass('blue');
+                    if(!($('a', $(this)).is('.selected'))) {
+                        $('span', $(this)).removeClass('blue');
+                    }
                 }
             );
+            
+            $('.main_nav li').click( function() { 
+                $('.main_nav li span').removeClass('blue');
+                $('span', $(this)).addClass('blue');
+            });
 
             winkstart.log('AppNav: Adding navigation item ' + args.name);
         },
