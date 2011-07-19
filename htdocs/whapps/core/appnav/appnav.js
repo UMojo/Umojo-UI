@@ -44,8 +44,8 @@ winkstart.module('core', 'appnav', {
 
             $('.main_nav li').hoverIntent({
                 sensitivity: 1,
-                interval: 50,
-                timeout: 200,
+                interval: 40,
+                timeout: 300,
                 over: function() {
                     $('.dropdown', $(this)).slideDown(100);
                 },
