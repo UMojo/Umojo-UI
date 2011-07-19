@@ -55,6 +55,24 @@
     background-image: url(../images/icons_32x32_yellow.png);
 }
 
+/************** ICONS APPNAV *****/
+
+.icon.voip_services { /* 4, 5 */
+    background-position: -128px -160px;
+}
+
+.icon.cluster_manager { /* 23, 0 */
+    background-position: -736px 0px;
+}
+
+.icon.connectivity { /* 8, 13 */
+    background-position: -256px -416px;
+}
+
+.icon.dashboard { /* 10, 13 */
+    background-position: -320px -416px;
+}
+
 /************** ICONS SUBNAV *****/
 
 .icon.account { /* 0, 11 */

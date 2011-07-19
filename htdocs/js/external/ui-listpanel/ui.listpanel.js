@@ -62,8 +62,8 @@
              */
             
             this.pane_wrapper = $('<div class="left_side_bar"></div>').appendTo(this.element);
-            
-            this.flow_div = $('<div class="add_flow"><a class="plus_btn" href="#"><div style="margin-left: 30px; margin-top: 6px;">'+ this.options.new_entity_label +'</div></a></div>').appendTo(this.pane_wrapper);
+           
+            this.flow_div = $('<div class="add_flow"><a class="plus_btn" href="#"></a><p>'+ this.options.new_entity_label +'</p></div>').appendTo(this.pane_wrapper); 
 			
             var search_html = '';
             search_html += '<div class="search_box">';

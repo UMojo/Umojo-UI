@@ -10,7 +10,7 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 {{if data.id}}
-                    <li><a href="#">Conference Viewer</a></li>
+                    <!--<li><a href="#">Conference Viewer</a></li>-->
                 {{/if}}
             </ul>
 
@@ -37,18 +37,22 @@
                                 </select>
                             </li>
                             <li>
+                                <label for="conference_numbers">Conference Numbers:</label>
+                                <input id="conference_numbers" name="conference_numbers[0]" type="text" value="${data.conference_numbers[0]}"/>
+                            </li>
+                            <li>
                                 <label for="member_pins">Members PIN:</label>
-                                <input id="member_pins" name="member_pins[0]" type="text" value="${data.member_pins[0]}"/>
+                                <input id="member_pins" name="member.pins[0]" type="text" value="${data.member.pins[0]}"/>
                             </li>
                             <li>
                                 <label for="moderator_pins">Moderators PIN:</label>
-                                <input id="moderator_pins" name="moderator_pins[0]" type="text" value="${data.moderator_pins[0]}"/>
+                                <input id="moderator_pins" name="moderator.pins[0]" type="text" value="${data.moderator.pins[0]}"/>
                             </li>
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
-                </div> <!-- end basic settings -->
+                </div> 
             </div>
 
             <div class="clear"></div>
@@ -61,7 +65,7 @@
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon sip"/>Options</a></li>
-                        <li><a href="#">Conference Controls</a></li>
+                        <!--<li><a href="#">Conference Controls</a></li>-->
                     </ul>
                 </span>
 

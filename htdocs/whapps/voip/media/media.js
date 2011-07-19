@@ -155,7 +155,7 @@ winkstart.module('voip', 'media',
             $('#media-view').empty();
             var THIS = this;
             var form_data = {
-                data: {},   
+                data: { streamable: true},   
                 field_data: THIS.config.formData,
                 value: {}
             };
@@ -221,6 +221,24 @@ winkstart.module('voip', 'media',
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
             $("#name").focus();
+
+            $(".advanced_pane").hide();
+            $(".advanced_tabs_wrapper").hide();
+
+            $("#advanced_settings_link").click(function(event) {
+                if($(this).attr("enabled")=="true") {
+                    $(this).attr("enabled", "false");
+                    $(".advanced_pane").slideToggle(function(event) {
+                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
+                    });
+                }
+                else {
+                    $(this).attr("enabled", "true");
+                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
+                        $(".advanced_pane").slideToggle();
+                    });
+                }
+            });
 
             if(media_id != undefined) {
                 $('#upload_span').hide();
