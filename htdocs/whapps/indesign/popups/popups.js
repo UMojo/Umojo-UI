@@ -42,6 +42,7 @@ winkstart.module('indesign', 'popups',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
         winkstart.publish('subnav.add', {
+            whapp: 'indesign',
             module: this.__module,
             label: 'Pop Up Form'               // <--- THIS IS WHAT WILL SHOW ON THE TOP NAV BAR
         });

@@ -9,8 +9,17 @@ winkstart.module('indesign', 'indesign', {
         }
     },
     function() {
+        var THIS = this;
         // Loaded - add to nav bar
         winkstart.publish('appnav.add', { 'name' : 'indesign' });
+
+        $.each(THIS.modules, function(k, v) {
+            winkstart.module.loadPlugin('indesign', v, function() {
+                this.init(function() {
+                    winkstart.log('In-Design: Initialized ' + v);
+                });
+            });
+        });
     },
     {
         initialized :   false,
@@ -24,14 +33,7 @@ winkstart.module('indesign', 'indesign', {
                 THIS.initialized = true;
 
                 winkstart.log('In-Design: Initialized Top Navigation');
-                $.each(THIS.modules, function(k, v) {
-                    winkstart.module.loadPlugin('indesign', v, function() {
-                        this.init(function() {
-                            winkstart.log('In-Design: Initialized ' + v);
-                        });
-                    });
-                });
-
+                
                 // Display the navbar
                 $('#ws-content').empty();
 //                THIS.templates.indesign.tmpl({}).appendTo( $('#ws-content') );
