@@ -24,9 +24,11 @@
     border-bottom-color: #FFF;
 }
 
-.add_flow p{
+.add_flow div{
     text-transform: uppercase;
-    line-height:70px;   
+    margin-left: 30px;
+    width: 100px;
+    margin-top: 7px; 
 }
 
 .add_flow:hover {
@@ -82,7 +84,7 @@
 
 .list-panel-anchor ul{
     background-color:#989898;
-    
+
 }
 
 .list-panel-anchor ul li{
@@ -128,5 +130,5 @@
 }
 
 .ui-listpanel li a.action { position: absolute; right: 2px; top: 2px; }
- 
+
 .ui-listpanel input.search { height: 14px; padding: 1px; opacity: 0.5; margin: 4px; width: 90%; }
