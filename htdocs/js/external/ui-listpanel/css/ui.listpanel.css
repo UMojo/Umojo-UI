@@ -3,7 +3,7 @@
 .list_panel {
     width: 190px;
     float: left;
-    /**/ border-top-width: 1px; 
+    /* border-top-width: 1px; 
        border-right-width: 1px; 
        border-bottom-width: 1px; 
        border-top-style: solid; 
@@ -12,7 +12,7 @@
        border-top-color: #FFF; 
        border-right-color: #FFF; 
        border-bottom-color: #FFF; 
-    border-left-color: #FFF;
+    border-left-color: #FFF; */
     box-shadow: 5px 5px 5px #222222;
 }
 
