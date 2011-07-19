@@ -140,7 +140,11 @@ function(args) {
                             });
                         });
                         form_data.field_data.users = listUsers;
+                } else {
+                    listUsers.push({owner_id: '!', title: 'none'});
+                    form_data.field_data.users = listUsers;
                 }
+                
                 if (data && data.id) {
                 /* This is an existing conference - Grab JSON data from server for conference_id */
                 winkstart.getJSON('conference.get', {

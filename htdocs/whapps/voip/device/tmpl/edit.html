@@ -10,7 +10,9 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Setup Instructions</a></li>
-                <li><a href="#">Troubleshooting</a></li>
+                {{if data.id}}
+                    <li><a href="#">Troubleshooting</a></li>
+                {{/if}}
             </ul>
 
             <div class="clear"></div>
@@ -63,7 +65,6 @@
                     <div class="clear"></div>
                 </div> <!-- end setup instructions -->
 
-                
                 <div id="troubleshooting">
                     Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
                     <ul class="button">
@@ -98,8 +99,8 @@
 
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon phone"/>Caller ID</a></li>
-                        <li><a href="#"><span  class="icon sip"/>SIP Settings</a></li>
+                        <li><a href="#"><span class="icon phone" style="margin-bottom: 4px"/>Caller ID</a></li>
+                        <li><a href="#"><span class="icon sip"/>SIP Settings</a></li>
                         <li><a href="#"><span class="icon audio"/>Audio</a></li>
                         <li><a href="#"><span class="icon video"/>Video</a></li>
                         <li><a href="#"><span class="icon fax"/>Fax</a></li>
@@ -164,7 +165,7 @@
                             </li>
                             <li>
                                 <label for="sip_password">Password:</label>
-                                <input id="sip_password" name="sip.password" type="text"  value="${data.sip.password}" />
+                                <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
                             </li>
                             <li>
                                 <label for="sip_invite_format">Invite Format:</label>

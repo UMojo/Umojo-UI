@@ -9,9 +9,11 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
-                <li><a href="#">Equipment</a></li>
-                <li><a href="#">Phone Numbers</a></li>
-                <li><a href="#">Troubleshooting</a></li>
+                {{if data.id}}
+                    <li><a href="#">Equipment</a></li>
+                    <li><a href="#">Phone Numbers</a></li>
+                    <li><a href="#">Troubleshooting</a></li>
+                {{/if}}
             </ul>
 
             <div class="clear"></div>
