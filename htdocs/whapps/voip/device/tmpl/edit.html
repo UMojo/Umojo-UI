@@ -10,7 +10,9 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Setup Instructions</a></li>
+                {{if data.id}}
                 <li><a href="#">Troubleshooting</a></li>
+                {{/if}}
             </ul>
 
             <div class="clear"></div>
@@ -63,7 +65,6 @@
                     <div class="clear"></div>
                 </div> <!-- end setup instructions -->
 
-                
                 <div id="troubleshooting">
                     Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
                     <ul class="button">
