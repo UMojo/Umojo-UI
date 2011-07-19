@@ -44,10 +44,6 @@
     margin-right: 20px;
 }
 
-.add_flow:hover .plus_btn{
-    background-position: 0px -25px;
-}
-
 .search_box {
     height: 28px;
     background-color:#636363;
@@ -124,7 +120,7 @@
     background-position: center center !important;
     background-repeat: no-repeat !important;
     padding: 0 !important;
-    border: none; !important;
+    border: none !important;
 }
 
 .list-panel-anchor ul li .row_arrow a:hover{
