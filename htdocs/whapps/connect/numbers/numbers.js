@@ -79,12 +79,6 @@ winkstart.module('connect', 'numbers',
 
 
             /* DID Management */
-            "numbers.addDID": {
-                url: 'https://store.2600hz.com/v1/{account_id}/addDID',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
             "numbers.addDIDs": {
                 url: 'https://store.2600hz.com/v1/{account_id}/addDIDs',
                 contentType: 'application/json',
@@ -110,13 +104,13 @@ winkstart.module('connect', 'numbers',
             },
 
             "numbers.setFailOver": {
-                url: 'https://store.2600hz.com/v1/{account_id}/setFailOver',
+                url: 'https://store.2600hz.com/v1/{account_id}/failover',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
             "numbers.setCID": {
-                url: 'https://store.2600hz.com/v1/{account_id}/setCID',
+                url: 'https://store.2600hz.com/v1/{account_id}/cnam',
                 contentType: 'application/json',
                 verb: 'POST'
             }

@@ -26,7 +26,7 @@ winkstart.module('connect', 'endpoints',
         resources: {
             /* Endpoint Management */
             "endpoints.put": {
-                url: 'https://store.2600hz.com/v1/endpoints',
+                url: 'https://store.2600hz.com/v1/{account_id}/endpoints',
                 contentType: 'application/json',
                 verb: 'PUT'
             },

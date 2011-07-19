@@ -117,6 +117,11 @@ a:active {
 	left: 0;
 }
 
+.main_content {
+    padding-top:10px;
+    padding-left:10px;
+}
+
 .main_nav {
 /*	margin: 0 auto; */
     margin-left: 192px;
