@@ -1,0 +1,30 @@
+.main_nav li .dropdown {
+    position: relative;
+    top: 15px;
+    left: -24px;
+    width: 311px;
+    height: 50px;
+    clear: both;
+}
+
+.main_nav li .dropdown .content {
+    float: left;
+    z-index: 100; 
+    width: 100%;
+    height: 100%;
+    padding-top: 15px;
+}
+
+.main_nav li .dropdown .background {
+    padding-top: 15px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background: #393939;
+    opacity: 0.95;
+    filter: alpha(opacity=95);
+    width: 100%;
+    height: 100%;
+    border: 1px #05ADDC solid;
+    z-index: -100; 
+}
