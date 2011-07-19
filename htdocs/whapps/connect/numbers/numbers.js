@@ -62,13 +62,6 @@ winkstart.module('connect', 'numbers',
             },
 
 
-            "searchAvailDIDs": {
-                url: 'https://store.2600hz.com/v1/{account_id}/searchAvailDIDs',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
-
             "request_portDID": {
                 url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
                 contentType: 'application/json',

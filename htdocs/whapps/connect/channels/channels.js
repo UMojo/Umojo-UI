@@ -91,6 +91,7 @@ winkstart.module('connect', 'channels',
                     );
                 };
 
+                var new_account = {};
                 $.extend(new_account, winkstart.modules['connect'].account, form_data);
                 
                 // If an account change handler (such as a wizard or a billing confirmation callback) is registered, use it
