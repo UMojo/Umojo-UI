@@ -968,7 +968,7 @@ winkstart.module('connect', 'numbers',
 
 
         activate: function(data) {
-            $('#my_numbers').delegate('.add', "click", function(){
+            $('#my_numbers'). ('.add', "click", function(){
                     winkstart.publish('numbers.add_number_prompt');
             });
 
