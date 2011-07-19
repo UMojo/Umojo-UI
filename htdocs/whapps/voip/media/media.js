@@ -169,6 +169,16 @@ winkstart.module('voip', 'media',
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
+
+                    // Dirty hack because of the erlangers!! On creation, crossbar store streamable as a string, and as a boolean on update 
+                    // And as we're using the same template for both behaviors, we need the same kind of data.
+                    // To delete once this bug is fixed!
+                    if(form_data.data.streamable == "false") {
+                         form_data.data.streamable = false;
+                    }
+                    else if(form_data.data.streamable == "true") {
+                        form_data.data.streamable = true;
+                    }
                     THIS.renderMedia(form_data);
                 });
             } else {
@@ -200,7 +210,6 @@ winkstart.module('voip', 'media',
         renderMedia: function(form_data){
             var THIS = this;
             var media_id = form_data.data.id;
-            
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editMedia.tmpl(form_data).appendTo( $('#media-view') );
 
@@ -231,7 +240,6 @@ winkstart.module('voip', 'media',
                 /* Grab all the form field data */
                 var form_data = form2object('media-form');
                 form_data.description = form_data.upload_media;
-                
                 //delete form_data.upload_media;
                 THIS.saveMedia(media_id, form_data);
 
