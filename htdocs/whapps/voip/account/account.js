@@ -30,6 +30,7 @@ winkstart.module('voip', 'account',
                 {name : '#vm_to_email_support_number', regex : /^[\+]?[0-9]*$/},
                 {name : '#vm_to_email_support_email', regex : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
         ],
+        
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
