@@ -224,7 +224,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.modules['connect'].account_id,
                     data: {
                         number: data.number
                     }
@@ -337,7 +337,7 @@ winkstart.module('connect', 'numbers',
             var lnp_did = lnp_f.serializeObject();
             winkstart.getJSON("getLNPData",
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: lnp_did
             },
             function(msg){
@@ -346,7 +346,7 @@ winkstart.module('connect', 'numbers',
                     if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
                         popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
                         createUploader($('#lnp_s2_uploader')[0], '/v1/uploadLNP', {
-                            account_id: MASTER_ACCOUNT_ID,
+                            account_id: winkstart.modules['connect'].account_id,
                             did:trackData.lnp.did,
                             tracking:trackData.lnp.tracking
                         }, function(a,b,c,d) {
@@ -428,7 +428,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.modules['connect'].account_id,
                     data: {
                         number: data.number
                     }
@@ -477,7 +477,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.modules['connect'].account_id,
                     data: {
                         number: data.number,
                         address: data.address,
@@ -543,6 +543,17 @@ winkstart.module('connect', 'numbers',
             srv = srv.serverid;
             did = did.did;
 
+            winkstart.postJSON('numbers.moveDID',
+	            {
+	            	data: {"DID":{"did": did},"server":{"serverid":srv}},
+	            	account_id: winkstart.modules['connect'].account_id
+	            },
+	            function() {;}
+	            	//THIS.update_account({});
+	        );
+
+
+
             winkstart.log('DID ', did, ' srv', srv);
 
             // Is this an unassigned DID?
@@ -586,7 +597,7 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.moveDID',
 	            {
 	            	data: {"DID":{"serverid": serverid , "did": did},"server":null} ,
-	            	account_id: MASTER_ACCOUNT_ID
+	            	account_id: winkstart.modules['connect'].account_id
 	            },
 	            function() {;}
 	            	//THIS.update_account({});
@@ -604,7 +615,7 @@ winkstart.module('connect', 'numbers',
 
             winkstart.postJSON('sipservice.numbers.addDID',
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: {
                     DID:did
                 }
@@ -626,7 +637,7 @@ winkstart.module('connect', 'numbers',
             var addedDIDs;
             winkstart.postJSON('sipservice.numbers.addDIDs',
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: {
                     DIDs:dids
                 }
@@ -743,7 +754,7 @@ winkstart.module('connect', 'numbers',
         setE911: function(e911) {
             winkstart.postJSON("numbers.setE911",
             {
-			account_id: MASTER_ACCOUNT_ID,
+			account_id: winkstart.modules['connect'].account_id,
                 data:{
                     "e911_info": e911.e911_info,
                     "did":e911.did,
@@ -762,7 +773,7 @@ winkstart.module('connect', 'numbers',
         setFailOver: function(info) {
             winkstart.postJSON("numbers.setFailOver",
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: {
                     did:info.did.did,
                     serverid:info.did.serverid,
@@ -782,7 +793,7 @@ winkstart.module('connect', 'numbers',
         setCID: function(info){
             winkstart.postJSON("numbers.setCID",
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: info
             },
             function(msg){
@@ -797,7 +808,7 @@ winkstart.module('connect', 'numbers',
         LNP_s1: function(frm) {
             winkstart.putJSON("request_portDID",
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: frm.serializeObject()
             },
             function(msg){
@@ -823,7 +834,7 @@ winkstart.module('connect', 'numbers',
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
             winkstart.getJSON("searchNPA",
             {
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.modules['connect'].account_id,
                 data: nbr
             },
             function(msg){
@@ -842,7 +853,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.modules['connect'].account_id,
                     data: nbr
                 }),
                 dataType: "json",
@@ -950,7 +961,7 @@ winkstart.module('connect', 'numbers',
 
 
         activate: function(data) {
-            $('#my_numbers').delegate('.add', "click", function(){
+            $('#my_numbers'). ('.add', "click", function(){
                     winkstart.publish('numbers.add_number_prompt');
             });
 
