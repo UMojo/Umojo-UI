@@ -6,23 +6,43 @@
         Purpose of the stylesheet follows.
 */
 
-
 .quick_access {
     text-align: center;
+    margin: auto;
+    height:618px;
+    width:990px;
+    background-image: url('home.jpg');
+    background-repeat: no-repeat;
+}
+
+.quick_access .content {
+    text-align: center;
+    padding: 10px;
 }
 
 .quick_access .welcome h1 {
     line-height: 40px;
+    text-align: left;
+    font-size: 27px;
+    padding-left: 19px;
+    padding-top: 5px;
+    padding-bottom: 20px;
 }
 
 .quick_access .subtitle {
     font-size: 16px;
+    text-align: left;
 }
 
 .quick_access .options div {
     float: left;
     position: relative;
     width: 33%;
-    height: 150px;
+    height: 40px;
     text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 96px;
+    margin-top:20px;
+    margin-bottom:20px;
 }

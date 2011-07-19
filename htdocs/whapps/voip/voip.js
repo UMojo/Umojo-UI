@@ -41,6 +41,43 @@ winkstart.module('voip', 'voip', {
                 $('#ws-content').empty();
                 THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
 
+                // Link the main buttons
+                $('.options #users').click(function() {
+                    winkstart.publish('user.activate');
+                });
+
+                $('.options #devices').click(function() {
+                    winkstart.publish('device.activate');
+                });
+
+                $('.options #users').click(function() {
+                    winkstart.publish('user.activate');
+                });
+
+                $('.options #auto_attendant').click(function() {
+                    winkstart.publish('menu.activate');
+                });
+
+                $('.options #ring_groups').click(function() {
+                    winkstart.publish('callflow.activate');
+                });
+
+                $('.options #conferences').click(function() {
+                    winkstart.publish('conference.activate');
+                });
+
+                $('.options #registrations').click(function() {
+                    winkstart.publish('registration.activate');
+                });
+
+                $('.options #stats').click(function() {
+                    winkstart.publish('stats.activate');
+                });
+
+                $('.options #time_of_day').click(function() {
+                    winkstart.publish('timeofday.activate');
+                });
+
             }   // End initialization of modules
 
             //winkstart.registerResources(this.config.resources);
