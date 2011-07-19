@@ -168,6 +168,9 @@ winkstart.module('voip', 'user',
                 /* This is a new user - pass along empty params */
                 THIS.renderUser(form_data);
             }
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
+            });
             
         },
 
