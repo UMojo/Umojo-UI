@@ -160,10 +160,7 @@ winkstart.module('dashboard', 'ctt',
                             reply.data.user_agent = reply.data['user_agent'];
                         }
                         
-                                
                         console.log(reply.data);
-     
-                        var stringToDisplay = '';
                         
                         function noData(data){
                             if(data == null){
@@ -172,21 +169,21 @@ winkstart.module('dashboard', 'ctt',
                                 return data;
                             }
                         }
-
-                        winkstart.table.ctt.fnAddData([
-                            noData(reply.data.id),
-                            noData(reply.data.callee_id_number),
-                            noData(reply.data.caller_id_number),
-                            noData(reply.data.duration_seconds),
-                            noData(reply.data.hangup_cause),
-                            'Debug',
-                            'Details',
-                            'blabla'
-                            ]);
                             
+                        function writeContentDialog(id, obj){
+                            var out = '<div id="'+id+'">';                          
+                            out += 'App Name: '+obj.app_name;
+                            out += '<br />App Version: '+obj.app_version;
+                            out += '</div>'
+                            return out;
+                        }
+                        
                         if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
                             $.each(reply.data['related_cdrs'], function(index, value) {
                                 num_rows = num_rows+1;
+                                
+                                var dialog_div = writeContentDialog(+reply.data.id+'_'+index, value);
+                                
                                 winkstart.table.ctt.fnAddData([
                                     noData(reply.data.id+' jump :'+index),
                                     noData(value.callee_id_number),
@@ -194,9 +191,39 @@ winkstart.module('dashboard', 'ctt',
                                     noData(value.duration_seconds),
                                     noData(value.hangup_cause),
                                     'Debug',
-                                    'Details',
-                                    'blabla'
+                                    '<div id="'+reply.data.id+'_'+index+'_click">Details</div>'+dialog_div,
+                                    'Leg'
                                     ]);
+                                    
+                                $('#'+reply.data.id+'_'+index).dialog({
+                                    autoOpen:false
+                                });
+                                    
+                                $('#'+reply.data.id+'_'+index+'_click').click(function(){
+                                    $('#'+reply.data.id+'_'+index).dialog('open');
+                                });
+                            });
+                        }else{
+                            
+                            var dialog_div = writeContentDialog(reply.data.id, reply.data);
+  
+                            winkstart.table.ctt.fnAddData([
+                                noData(reply.data.id),
+                                noData(reply.data.callee_id_number),
+                                noData(reply.data.caller_id_number),
+                                noData(reply.data.duration_seconds),
+                                noData(reply.data.hangup_cause),
+                                'Debug',
+                                '<div id="'+reply.data.id+'_click">Details</div>'+dialog_div,
+                                'Leg'
+                                ]);
+                                
+                            $('#'+reply.data.id).dialog({
+                                autoOpen:false
+                            });
+                                    
+                            $('#'+reply.data.id+'_click').click(function(){
+                                $('#'+reply.data.id).dialog('open');
                             });
                         }
                         num_rows = num_rows+1;
@@ -205,7 +232,7 @@ winkstart.module('dashboard', 'ctt',
                         if(num_rows < 10){
                             $('body').find('.dataTables_paginate').hide();
                         }else{
-                             $('body').find('.dataTables_paginate').show();
+                            $('body').find('.dataTables_paginate').show();
                         }
                     });
                 });                
@@ -250,16 +277,7 @@ winkstart.module('dashboard', 'ctt',
             
             {
                 'sTitle': 'Show other leg'
-            },
-
-            //            {
-            //                'sTitle': 'Details',
-            //                'fnRender': function(obj) {
-            //                    console.log(obj);
-            //                    var reg_details = obj.aData[obj.iDataColumn];
-            //                    return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
-            //                }
-            //            }
+            }
             ];
 
             winkstart.table.create('ctt', $('#ctt-grid'), columns);
