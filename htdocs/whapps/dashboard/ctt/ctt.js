@@ -74,7 +74,7 @@ winkstart.module('dashboard', 'ctt',
                 $.each(reply.data, function() {
                     var cdr_id = this.id;
                     
-                    num_rows = num_rows+1;
+                    
 
                     //winkstart.getJSON('registration.read',{crossbar: true, account_id: MASTER_ACCOUNT_ID, registration_id: registration_id}, function(reply) {
                     winkstart.getJSON('cdr.read',{
@@ -172,7 +172,7 @@ winkstart.module('dashboard', 'ctt',
                                 return data;
                             }
                         }
-                        
+
                         winkstart.table.ctt.fnAddData([
                             noData(reply.data.id),
                             noData(reply.data.callee_id_number),
@@ -181,15 +181,34 @@ winkstart.module('dashboard', 'ctt',
                             noData(reply.data.hangup_cause),
                             'Debug',
                             'Details',
-                            'blabla',
-                        ]);
+                            'blabla'
+                            ]);
+                            
+                        if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
+                            $.each(reply.data['related_cdrs'], function(index, value) {
+                                num_rows = num_rows+1;
+                                winkstart.table.ctt.fnAddData([
+                                    noData(reply.data.id+' jump :'+index),
+                                    noData(value.callee_id_number),
+                                    noData(value.caller_id_number),
+                                    noData(value.duration_seconds),
+                                    noData(value.hangup_cause),
+                                    'Debug',
+                                    'Details',
+                                    'blabla'
+                                    ]);
+                            });
+                        }
+                        num_rows = num_rows+1;
+                        
+                        //Hack to hide pagination if number of rows < 10
+                        if(num_rows < 10){
+                            $('body').find('.dataTables_paginate').hide();
+                        }else{
+                             $('body').find('.dataTables_paginate').show();
+                        }
                     });
-                });
-                
-                //Hack to hide pagination if number of rows < 10
-                if(num_rows < 10){
-                    $('body').find('.dataTables_paginate').hide();
-                }
+                });                
             });
 
             winkstart.publish('layout.updateLoadedModule', {
@@ -201,7 +220,8 @@ winkstart.module('dashboard', 'ctt',
             var THIS = this;
             var columns = [
             {
-                'sTitle': 'Call id'
+                'sTitle': 'Call id',
+                'sWidth': '20%'
             },
 
             {
