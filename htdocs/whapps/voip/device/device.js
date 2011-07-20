@@ -265,6 +265,9 @@ winkstart.module('voip', 'device',
             } 
             form_data.media.audio.codecs = audioCodecs;
             form_data.media.video.codecs = videoCodecs;
+
+            form_data.status = form_data.status ? "Enabled" : "Disabled";
+
             return form_data;
         },
 

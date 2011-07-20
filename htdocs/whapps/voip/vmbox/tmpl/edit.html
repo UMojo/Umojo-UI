@@ -26,6 +26,18 @@
                                 <input id="mailbox" name="mailbox" type="text" value="${data.mailbox}" />
                             </li>
                             <li>
+                                <label for="owner_id">Belongs To:</label>
+                                <select name="owner_id" id="owner_id">
+                                {{each field_data.users}}
+                                    {{if data.owner_id == owner_id}}
+                                    <option value="${owner_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${owner_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li>
                                 <label for="pin">PIN number:</label>
                                 <input id="pin" name="pin" type="text" value="${data.pin}" />
                             </li>

@@ -43,10 +43,12 @@
                                 <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
                             </li>
                             <li>
-                                <label for="status">Status:</label>
-                                <select name="status" id="status">
-                                    {{tmpl(field_data.status_types, {selectedVal: data.status }) "#optionList"}}
-                                </select>
+                                <label for="status">Enabled</label>
+                                {{if data.status == "Enabled"}}
+                                <input type="checkbox" id="status" name="status" value="Enabled" checked="checked"/>
+                                {{else}}
+                                <input type="checkbox" id="status" name="status" value="Disabled"/>
+                                {{/if}}
                             </li>
                         </ul>
                     </fieldset>

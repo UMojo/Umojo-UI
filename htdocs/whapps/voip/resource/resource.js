@@ -35,9 +35,9 @@ winkstart.module('voip', 'resource',
             {name : '#weight_cost', regex : /^[0-9]+$/},
             {name : '#rules', regex : /^.*$/},
             {name : '#flags', regex : /^.*$/},
-            {name : '#caller_id_options_type', regex : /^\w+$/},
-            {name : '#gateways_server', regex : /^[0-9A-Za-z\-\.\:]+$/},
-            {name : '#gateways_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
+            {name : '#caller_id_options_type', regex : /^\w*$/},
+            {name : '#gateways_server', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
+            {name : '#gateways_realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
             {name : '#gateways_username', regex : /^\w+$/},
             {name : '#gateways_password', regex : /^[^\s]*$/},
             {name : '#gateways_prefix', regex : /^[\+]?[0-9]*$/},
@@ -70,7 +70,12 @@ winkstart.module('voip', 'resource',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
-            }
+            },
+            "account.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
         }
     },
 
@@ -159,32 +164,44 @@ winkstart.module('voip', 'resource',
 
             var generatedUsername = "user_" + THIS.generateRandomString(6);
             var generatedPassword = THIS.generateRandomString(12);
-
-            var form_data = {
-                data: { weight_cost: "100", gateways: [{ username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: {}, flags: []},   
-                field_data: THIS.config.formData,
-                value: {}
-            };
-
-            if (data && data.id) {
-                /* This is an existing resource - Grab JSON data from server for resource_id */
-                winkstart.getJSON('resource.get', {
-                    crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
-                    resource_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
-                    if(form_data.data.gateways[0].codecs == undefined) {
-                        form_data.data.gateways[0].codecs = {};
-                    }
-                    THIS.renderResource(form_data);
-                });
-            } else {
-                /* This is a new resource - pass along empty params */
-                THIS.renderResource(form_data);
-            }
             
+
+            winkstart.getJSON('account.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(json, xhr) {
+                var account_realm = json.data.realm;
+
+                var form_data = {
+                    data: { weight_cost: "100", gateways: [{ realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: { type: "external"}, flags: []},
+                    field_data: THIS.config.formData,
+                    value: {}
+                };
+
+                if (data && data.id) {
+                    /* This is an existing resource - Grab JSON data from server for resource_id */
+                    form_data = {
+                        data: { gateways: [{ codecs: []}], rules: [], caller_id_options: {}, flags: []},
+                        field_data: THIS.config.formData,
+                        value: {}
+                    };
+                    winkstart.getJSON('resource.get', {
+                        crossbar: true,
+                        account_id: MASTER_ACCOUNT_ID,
+                        resource_id: data.id
+                    }, function(json, xhr) {
+                        /* On success, take JSON and merge with default/empty fields */
+                        console.log(json);
+                        $.extend(true, form_data, json);
+                        console.log(form_data);
+                        if(form_data.data.gateways[0].codecs == undefined) {
+                            form_data.data.gateways[0].codecs = {};
+                        }
+                        THIS.renderResource(form_data);
+                    });
+                } else {
+                    /* This is a new resource - pass along empty params */
+                    THIS.renderResource(form_data);
+                }
+
+            });
         },
 
         deleteResource: function(resource_id) {
