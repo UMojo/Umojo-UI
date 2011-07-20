@@ -19,7 +19,8 @@ winkstart.module('voip', 'device',
 
         formData: {
                     status_types: [{value: 'Enabled'}, {value:'Disabled'}],
-                    auth_methods: [{value: 'Password'}, {value:'IP Address'}],
+                    //auth_methods: [{value: 'Password'}, {value:'IP Address'}],
+                    auth_methods: [{value: 'Password'}],
                     invite_formats: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
                     bypass_media_types: [{value: 'Automatic'}, {value:'Never'}, {value:'Always'}],
                     media_audio_codecs: [
@@ -40,7 +41,7 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-                {name : '#name', regex : /^[a-zA-Z0-9\s_]+$/},
+                {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
                 {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
                 {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
