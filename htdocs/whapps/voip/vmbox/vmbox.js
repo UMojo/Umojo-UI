@@ -136,7 +136,7 @@ winkstart.module('voip', 'vmbox',
             $('#vmbox-view').empty();
             var THIS = this;
             var form_data = {
-                data: { require_pin: "true"},   
+                data: { require_pin: true, skip_instructions: true},   
                 field_data: THIS.config.formData,
                 value: {}
             };
