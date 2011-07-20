@@ -240,7 +240,6 @@ winkstart.module('voip', 'account',
                     alert('You\'re now using '+form_data.data.name+'\'s account');
                 }
                 else {
-                    alert('Ok you were just clicking on this button because you have nothing more interesting to do, gotcha');
                 } 
  
                 return false;
