@@ -59,6 +59,11 @@ winkstart.module('voip', 'vmbox',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            "user.list": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -141,23 +146,45 @@ winkstart.module('voip', 'vmbox',
                 value: {}
             };
 
-            if (data && data.id) {
-                /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
-                winkstart.getJSON('vmbox.get', {
-                    crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
-                    vmbox_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
+            form_data.field_data.users = [];
+            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+                var listUsers = [];
+                console.log(json);
+                if(json.data.length > 0) {
+                    _.each(json.data, function(elem){
+                        var title = elem.first_name + ' ' + elem.last_name;
+                        listUsers.push({
+                            owner_id: elem.id,
+                            title: title
+                        });
+                    });
 
+                    form_data.field_data.users = listUsers;
+                } else {
+                    listUsers.push({owner_id: '!', title: 'none'});
+                    form_data.field_data.users = listUsers;
+                }
+                 if (data && data.id) {
+                    /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
+                    winkstart.getJSON('vmbox.get', {
+                        crossbar: true,
+                        account_id: MASTER_ACCOUNT_ID,
+                        vmbox_id: data.id
+                    }, function(json, xhr) {
+                        /* On success, take JSON and merge with default/empty fields */
+                        $.extend(true, form_data, json);
+
+                        THIS.renderVmbox(form_data);
+                    });
+                } else {
+                    /* This is a new vmbox - pass along empty params */
                     THIS.renderVmbox(form_data);
+                }
+
+                $.each($('body').find('*[tooltip]'), function(){
+                    $(this).tooltip({attach:'body'});
                 });
-            } else {
-                /* This is a new vmbox - pass along empty params */
-                THIS.renderVmbox(form_data);
-            }
-            
+            });
         },
 
         deleteVmbox: function(vmbox_id) {
