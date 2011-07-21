@@ -31,7 +31,6 @@ winkstart.module('voip', 'user',
         validation : [
                 {name : '#first_name', regex : /^[a-zA-Z\s\-]+$/},
                 {name : '#last_name', regex : /^[a-zA-Z\s\-]+$/},
-                {name : '#username', regex : /^\w+$/},
                 {name : '#email', regex: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
                 {name : '#caller_id_number_internal', regex: /^[\+]?[0-9]*$/},
                 {name : '#caller_id_name_internal', regex: /^.*$/},
@@ -236,6 +235,7 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
+                form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
                 return false;
