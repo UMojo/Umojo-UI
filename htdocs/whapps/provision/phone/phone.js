@@ -9,14 +9,14 @@ winkstart.module('provision', 'phone',
         /* What HTML templates will we be using? */
         templates: {
             index: 'tmpl/index.html',        // This is utilized later as THIS.templates.index.tmpl({ data_here})
-            results: 'tmpl/results.html'
+            yealink: 'tmpl/yealink.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'phone.activate' : 'activate',
-            'phone.index' : 'viewIndex',
-            'phone.edit' : 'edit_phone'
+            'phone.edit' : 'edit_phone',
+            'phone.list-panel-click' : 'edit_phone'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -49,6 +49,14 @@ winkstart.module('provision', 'phone',
 
         edit_phone : function(args) {
             var THIS = this;
+            var model = 'yealink';
+            var settings = {
+                'model' : 'yealink',
+                'settings' : { 'ringer_on' : true, 'ringer_type' : 5 }
+            };
+
+            console.log(args);
+            console.log(args.model);
 
             // Clear out the section of the screen named phone-view
             $('#phone-view').empty();
@@ -65,34 +73,22 @@ winkstart.module('provision', 'phone',
                 // What to do on successfully getting JSON
                 function (json, xhr) {*/
                     /* Show the phone configuration tool for this template */
-                    $('#phone-view').html(THIS.templates.phone_config.tmpl( { 'settings' : { 'ringer_on' : true, 'ringer_type' : 5 } }));
+                    $('#phone-view').html(THIS.templates[model].tmpl( settings ));
 /*                }
             );*/
 
         },
 
-        /**
-         * Draw device fields/template and populate data, add validation. Works for both create & edit
-         */
-        renderphone: function(form_data){
-            var THIS = this;
-            var phone_id = form_data.data.id;
-
-            console.log(form_data);
-            /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editDevice.tmpl(form_data).appendTo( $('#phone-view') );
-        },
-
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
          * and populating into our standardized data list "thing".
          */
-        renderList: function(){
+        render_list: function(){
             var THIS = this;
 
             // Uncomment the below when we start using a real API URL
 
             json = {};
-            json.data = [{ 'id' : '001298391233', 'name' : '00:12:98:39:12:33' }];
+            json.data = [{ 'id' : '001298391233', 'name' : '00:12:98:39:12:33', 'model' : 'yealink' }];
             /*winkstart.getJSON('phone.list', {
                 crossbar: true,
                 account_id: MASTER_ACCOUNT_ID
@@ -155,7 +151,7 @@ winkstart.module('provision', 'phone',
                 }
             });
             
-            THIS.renderList();
+            THIS.render_list();
         }
     } // End function definitions
 
