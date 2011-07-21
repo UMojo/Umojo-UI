@@ -52,11 +52,12 @@ winkstart.module('dashboard', 'ctt',
 
     {
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
+     * if appropriate. You should also attach to any default click items you want to respond to when people click
+     * on them. Also register resources.
+     */
         activate: function(data) {
             $('#ws-content').empty();
+            $('body').after('<div id="details_dialog"></div>');
             var THIS = this;
             
             winkstart.loadFormHelper('forms');
@@ -85,82 +86,6 @@ winkstart.module('dashboard', 'ctt',
                         if(reply.data == undefined) {
                             return false;
                         }
-
-                        //Dumb hack before crossbar reply is normalized (with lower case and _)
-                        if(reply.data['app_name'] != undefined) {
-                            reply.data.app_name = reply.data['app_name'];
-                        }
-                        if(reply.data['app_version'] != undefined) {
-                            reply.data.app_version = reply.data['app_version'];
-                        }
-                        if(reply.data['billing_seconds'] != undefined) {
-                            reply.data.billing_seconds = reply.data['billing_seconds'];
-                        }
-                        if(reply.data['call_direction'] != undefined) {
-                            reply.data.call_direction = reply.data['call_direction'];
-                        }
-                        if(reply.data['call_id'] != undefined) {
-                            reply.data.call_id = reply.data['call_id'];
-                        }
-                        if(reply.data['callee_id_name'] != undefined) {
-                            reply.data.callee_id_name = reply.data['callee_id_name'];
-                        }
-                        if(reply.data['callee_id_number'] != undefined) {
-                            reply.data.callee_id_number = reply.data['callee_id_number'];
-                        }
-                        if(reply.data['caller_id_name'] != undefined) {
-                            reply.data.caller_id_name = reply.data['caller_id_name'];
-                        }
-                        if(reply.data['caller_id_number'] != undefined) {
-                            reply.data.caller_id_number = reply.data['caller_id_number'];
-                        }
-                        if(reply.data['digits_dialed'] != undefined) {
-                            reply.data.digits_dialed = reply.data['digits_dialed'];
-                        }
-                        if(reply.data['duration_seconds'] != undefined) {
-                            reply.data.duration_seconds = reply.data['digits_dialed'];
-                        }
-                        if(reply.data['event_category'] != undefined) {
-                            reply.data.event_category = reply.data['event_category'];
-                        }
-                        if(reply.data['event_name'] != undefined) {
-                            reply.data.event_name = reply.data['event_name'];
-                        }
-                        if(reply.data['from_uri'] != undefined) {
-                            reply.data.from_uri = reply.data['from_uri'];
-                        }
-                        if(reply.data['handling_server_name'] != undefined) {
-                            reply.data.handling_server_name = reply.data['handling_server_name'];
-                        }
-                        if(reply.data['hangup_cause'] != undefined) {
-                            reply.data.hangup_cause = reply.data['hangup_cause'];
-                        }
-                        if(reply.data['id'] != undefined) {
-                            reply.data.id = reply.data['id'];
-                        }
-                        if(reply.data['local_sdp'] != undefined) {
-                            reply.data.local_sdp = reply.data['local_sdp'];
-                        }
-                        if(reply.data['remote_sdp'] != undefined) {
-                            reply.data.remote_sdp = reply.data['remote_sdp'];
-                        }
-                        if(reply.data['ringing_seconds'] != undefined) {
-                            reply.data.ringing_seconds = reply.data['ringing_seconds'];
-                        }
-                        if(reply.data['server_id'] != undefined) {
-                            reply.data.server_id = reply.data['server_id'];
-                        }
-                        if(reply.data['timestamp'] != undefined) {
-                            reply.data.timestamp = reply.data['timestamp'];
-                        }
-                        if(reply.data['to_uri'] != undefined) {
-                            reply.data.to_uri = reply.data['to_uri'];
-                        }
-                        if(reply.data['user_agent'] != undefined) {
-                            reply.data.user_agent = reply.data['user_agent'];
-                        }
-                        
-                        console.log(reply.data);
                         
                         function noData(data){
                             if(data == null){
@@ -171,61 +96,82 @@ winkstart.module('dashboard', 'ctt',
                         }
                             
                         function writeContentDialog(id, obj){
-                            var out = '<div id="'+id+'">';                          
-                            out += 'App Name: '+obj.app_name;
-                            out += '<br />App Version: '+obj.app_version;
-                            out += '</div>'
+                            var out = '<div id="'+id+'"><table class="details_table">';                          
+
+                            $.each(obj, function(index, value){
+                                if(index == 'local_sdp' || index == 'remote_sdp'){
+                                    out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+                                    var sdp = value.split('\n');
+                                    
+                                    sdp.splice(sdp.length-1, 1);
+                                    
+                                    $.each(sdp, function(i, v){
+                                        $.each(v.split('='), function($i, $v){
+                                            if($i == 0){
+                                                out += '<tr><td class="bold">'+$v+'</td>'; 
+                                            }
+                                            if($i == 1){
+                                                out += '<td>'+$v+'</td></tr>';  
+                                            }
+                                            
+                                        });
+                                    });
+                                    
+                                }else{
+                                    out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
+                                }
+ 
+                            });
+                            out += '</table></div>'
                             return out;
                         }
                         
-                        if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
-                            $.each(reply.data['related_cdrs'], function(index, value) {
-                                num_rows = num_rows+1;
-                                
-                                var dialog_div = writeContentDialog(+reply.data.id+'_'+index, value);
-                                
-                                winkstart.table.ctt.fnAddData([
-                                    noData(reply.data.id+' jump :'+index),
-                                    noData(value.callee_id_number),
-                                    noData(value.caller_id_number),
-                                    noData(value.duration_seconds),
-                                    noData(value.hangup_cause),
-                                    'Debug',
-                                    '<div id="'+reply.data.id+'_'+index+'_click">Details</div>'+dialog_div,
-                                    'Leg'
-                                    ]);
-                                    
-                                $('#'+reply.data.id+'_'+index).dialog({
-                                    autoOpen:false
-                                });
-                                    
-                                $('#'+reply.data.id+'_'+index+'_click').click(function(){
-                                    $('#'+reply.data.id+'_'+index).dialog('open');
-                                });
-                            });
-                        }else{
-                            
-                            var dialog_div = writeContentDialog(reply.data.id, reply.data);
-  
+                        function drawRows(id, obj){
+                           
                             winkstart.table.ctt.fnAddData([
-                                noData(reply.data.id),
-                                noData(reply.data.callee_id_number),
-                                noData(reply.data.caller_id_number),
-                                noData(reply.data.duration_seconds),
-                                noData(reply.data.hangup_cause),
-                                'Debug',
-                                '<div id="'+reply.data.id+'_click">Details</div>'+dialog_div,
-                                'Leg'
+                                noData(id),
+                                noData(obj.callee_id_number),
+                                noData(obj.caller_id_number),
+                                noData(obj.duration_seconds),
+                                noData(obj.hangup_cause),
+                                '<div class="link_table">Debug</div>',
+                                '<div id="'+id+'_details" class="link_table">Details</div>',
+                                '<div class="link_table">Leg</div>'
                                 ]);
-                                
-                            $('#'+reply.data.id).dialog({
-                                autoOpen:false
-                            });
+                            
                                     
-                            $('#'+reply.data.id+'_click').click(function(){
-                                $('#'+reply.data.id).dialog('open');
+                            $('#'+id+'_details').live('click', function(){
+                                var dialog_div = writeContentDialog(id, obj);
+                                
+                                $('#'+id+'_details').data('dialog', dialog_div);
+                                
+                                $('#details_dialog').dialog({
+                                    open: function(event, ui){
+                                        $('#details_dialog').empty();
+                                        $('#details_dialog').html($('#'+id+'_details').data('dialog'))
+                                    },
+                                    autoOpen: false,
+                                    title: 'Call id: '+id,
+                                    minWidth:550,
+                                    width: 550, 
+                                    minHeight:575,
+                                    height: 575
+                                });
+                                $('#details_dialog').dialog('open');
                             });
                         }
+                        
+                        console.log(reply.data);
+                        
+                        if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
+                            $.each(reply.data['related_cdrs'], function(index, value) {
+                                num_rows = num_rows+1;                       
+                                drawRows(reply.data.id+'_'+index, value);
+                            });
+                        }else{
+                            drawRows(reply.data.id, reply.data);
+                        }
+                        
                         num_rows = num_rows+1;
                         
                         //Hack to hide pagination if number of rows < 10
@@ -276,7 +222,7 @@ winkstart.module('dashboard', 'ctt',
             },
             
             {
-                'sTitle': 'Show other leg'
+                'sTitle': 'Other leg'
             }
             ];
 
