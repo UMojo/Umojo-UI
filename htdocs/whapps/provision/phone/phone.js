@@ -55,9 +55,6 @@ winkstart.module('provision', 'phone',
                 'settings' : { 'ringer_on' : true, 'ringer_type' : 5 }
             };
 
-            console.log(args);
-            console.log(args.model);
-
             // Clear out the section of the screen named phone-view
             $('#phone-view').empty();
 
