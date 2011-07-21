@@ -1,4 +1,4 @@
-winkstart.module('provision', 'provision', {
+winkstart.module('provision', 'provisioner', {
       css: [
          'css/window.css',
          'css/visual.css'
@@ -39,10 +39,6 @@ winkstart.module('provision', 'provision', {
       }
    },
    function (args) {
-       // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'provision' });
-
-      winkstart.publish('subnav.add', { module: this.__module, label: 'Provisioner', nav_category: 'category-3'});
    },
    {
 /*****************************************************************************
