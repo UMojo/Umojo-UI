@@ -64,7 +64,8 @@ function(args) {
         whapp: 'voip',
         module: this.__module,
         label: 'Conferences',
-        icon: 'conference'
+        icon: 'conference',
+        weight: '05'
     });
 },
 {	

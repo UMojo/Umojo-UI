@@ -71,7 +71,8 @@ winkstart.module('voip', 'account',
             whapp: 'voip',
             module: this.__module,
             label: 'Accounts',
-            icon: 'account'
+            icon: 'account',
+            weight: '0'
         });
     },
 

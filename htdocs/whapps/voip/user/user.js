@@ -78,7 +78,8 @@ winkstart.module('voip', 'user',
             whapp: 'voip',
             module: this.__module,
             label: 'Users',
-            icon: 'user'
+            icon: 'user',
+            weight: '10'
         });
     },
 

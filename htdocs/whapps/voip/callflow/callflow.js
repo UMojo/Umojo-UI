@@ -109,6 +109,7 @@ winkstart.module('voip', 'callflow',
             module: this.__module,
             label: 'Callflows',
             icon: 'callflow'
+            weight: '50'
         });
    },
    {
@@ -117,14 +118,13 @@ winkstart.module('voip', 'callflow',
 
          $('#ws-content').empty();
          THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
-         THIS.renderList();
+         THIS.renderList( function() { 
+            THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
+            THIS.renderTools();
+         });
 
          THIS.actions = THIS.config.actions;
          THIS.categories = THIS.config.categories;
-
-         //THIS._activate({target: $('#callflow-view')});
-         THIS.templates.callflow.tmpl(this.config.elements).appendTo($('#callflow-view'));
-         THIS.renderTools();
 
          $(this.config.elements.save).click(function () { THIS.save(); }).hover(function () { $(this).addClass('active'); }, function () { $(this).removeClass('active'); });
       },
@@ -666,7 +666,6 @@ winkstart.module('voip', 'callflow',
                 }, function(json) {
                     THIS.renderList();
                     THIS.editCallflow({id: json.data.id});
-                    alert('Callflow saved');
                 }
             );
          }
@@ -680,7 +679,6 @@ winkstart.module('voip', 'callflow',
                 }, function(json) {
                     THIS.renderList();
                     THIS.editCallflow({id: json.data.id});
-                    alert('Callflow created');
                 }
             );
          }
@@ -697,7 +695,7 @@ winkstart.module('voip', 'callflow',
       }, 
 
    //Regular WS JS here:
-    renderList: function(){
+    renderList: function(callback){
         var THIS = this;
 
         winkstart.getJSON('callflow.list', {
@@ -730,6 +728,10 @@ winkstart.module('voip', 'callflow',
 
             $("#callflow-listpanel").empty();
             $("#callflow-listpanel").listpanel(options);
+        
+            if(typeof callback == 'function') {
+                callback();
+            }
 
         });
     }

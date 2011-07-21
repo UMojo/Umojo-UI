@@ -102,7 +102,8 @@ winkstart.module('voip', 'device',
             whapp: 'voip',
             module: this.__module,
             label: 'Devices',
-            icon: 'device'
+            icon: 'device',
+            weight: '20'
         });
     },
 

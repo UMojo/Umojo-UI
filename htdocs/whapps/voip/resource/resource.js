@@ -88,7 +88,8 @@ winkstart.module('voip', 'resource',
             whapp: 'voip',
             module: this.__module,
             label: 'Resources',
-            icon: 'resource'
+            icon: 'resource',
+            weight: '35'
         });
     },
 
