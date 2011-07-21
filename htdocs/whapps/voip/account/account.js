@@ -71,7 +71,8 @@ winkstart.module('voip', 'account',
             whapp: 'voip',
             module: this.__module,
             label: 'Accounts',
-            icon: 'account'
+            icon: 'account',
+            weight: '0'
         });
     },
 
@@ -110,6 +111,9 @@ winkstart.module('voip', 'account',
                         THIS.editAccount({
                             id: account_id
                         });
+                        if(account_id == MASTER_ACCOUNT_ID) {
+                            $('#my_account').html('&nbsp;'+json.data.name);
+                        }
                     });
                 } else {
                     /* CREATE */
@@ -237,6 +241,7 @@ winkstart.module('voip', 'account',
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
                 if(confirm('Do you really want to use : '+form_data.data.name+'\'s account?')) {
                     MASTER_ACCOUNT_ID = form_data.data.id;
+                    $('#my_account').html("&nbsp;"+form_data.data.name);
                     alert('You\'re now using '+form_data.data.name+'\'s account');
                 }
                 else {

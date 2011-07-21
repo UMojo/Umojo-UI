@@ -46,7 +46,8 @@ winkstart.module('voip', 'registration',
             whapp: 'voip',
             module: this.__module,
             label: 'Registrations',
-            icon: 'registration'
+            icon: 'registration',
+            weight: '15'
         });
     },
 

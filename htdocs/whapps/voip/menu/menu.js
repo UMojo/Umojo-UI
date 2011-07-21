@@ -66,7 +66,8 @@ winkstart.module('voip', 'menu',
             whapp: 'voip',
             module: this.__module,
             label: 'Menus',
-            icon: 'menu'
+            icon: 'menu',
+            weight: '40'
         });
     },
 

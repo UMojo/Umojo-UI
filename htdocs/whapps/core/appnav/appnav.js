@@ -104,7 +104,7 @@ winkstart.module('core', 'appnav', {
             var THIS = this,
                 whapp_name = new String(data.whapp),
                 whapp = $('.main_nav li[module-name="' + whapp_name + '"]'),
-                module_name = new String(data.module),
+                module_weight = new String(data.weight),
                 listModules = $('.module', whapp);
 
             if(listModules.length == 0) {
@@ -113,17 +113,22 @@ winkstart.module('core', 'appnav', {
             }
             else {
                 $.each(listModules, function(k, v) {
-                    var currentModule = new String(listModules[k].attributes['module-name'].value),
-                        compare = ((module_name == currentModule) ? 0 : ((module_name > currentModule) ? 1 : -1));
+                    if(listModules[k].attributes['module-weight'] != undefined) {
+                        var currentModule = new String(listModules[k].attributes['module-weight'].value),
+                            compare = ((module_weight == currentModule) ? 0 : ((module_weight > currentModule) ? 1 : -1));
 
-                    if(k == listModules.length - 1 && compare > 0) {
+                        if(k == listModules.length - 1 && compare > 0) {
+                            THIS.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
+                            winkstart.log(data.module + ' appended');
+                            return false;
+                        }
+                        else if(compare < 0){
+                            THIS.templates.subitem.tmpl(data).insertBefore(listModules[k]);
+                            winkstart.log(data.module + ' insertBefore');
+                            return false;
+                        }
+                    } else {
                         THIS.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
-                        winkstart.log(data.module + ' appended');
-                        return false;
-                    }
-                    else if(compare < 0){
-                        THIS.templates.subitem.tmpl(data).insertBefore(listModules[k]);
-                        winkstart.log(data.module + ' insertBefore');
                         return false;
                     }
                 });
