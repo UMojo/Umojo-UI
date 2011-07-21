@@ -108,7 +108,7 @@ winkstart.module('voip', 'callflow',
             whapp: 'voip',
             module: this.__module,
             label: 'Callflows',
-            icon: 'callflow'
+            icon: 'callflow',
             weight: '50'
         });
    },
