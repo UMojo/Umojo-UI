@@ -1,7 +1,7 @@
 // This is the phone provisioning and management module
 winkstart.module('provision', 'provision', {
         subscribe: {
-            'dashboard.activate' : 'activate'
+            'provision.activate' : 'activate'
         }
     },
     function() {
