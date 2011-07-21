@@ -22,6 +22,10 @@
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
+                                <label for="gateways_server">Server</label>
+                                <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" />
+                            </li>
+                            <li>
                                 <label for="weight_cost">Weight Cost:</label>
                                 <input id="weight_cost" name="weight_cost" type="text" value="${data.weight_cost}" />
                             </li>
@@ -57,7 +61,7 @@
 
                 <span class="advanced_tabs_wrapper">  
                     <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon sip"/>Gateways</a></li>
+                        <li><a href="#"><span  class="icon sip"/>Gateway</a></li>
                         <li><a href="#"><span  class="icon audio"/>Gateways Codecs</a></li>
                         <li><a href="#"><span  class="icon sip"/>Caller-ID Options</a></li>
                     </ul>
