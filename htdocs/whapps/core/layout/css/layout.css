@@ -168,8 +168,8 @@ a:active {
 }
 
 ul.universal_nav {
-	flot: left;	
-	width: 240px;
+	float: left;	
+	/*width: 240px;*/
 	list-style: none;
 	position: absolute;
 	top: 0;

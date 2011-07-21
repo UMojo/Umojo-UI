@@ -1,9 +1,18 @@
 // This is the core module. It is responsible for loading all a base layout, a base navigation bar and any registered whApps
 winkstart.module('core', 'core', {
+         resources: {
+            "account.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            }
+        }
     },
     function(args) {
+        winkstart.registerResources(this.config.resources);
         // First thing we're going to do is go through is load our layout
-        winkstart.module.loadPlugin('core', 'layout', function() {
+        winkstart.module.loadPlugin('core', 'layout', function() {            
+
             this.init({ parent: $('body') }, function() {
 
                 // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
@@ -16,6 +25,9 @@ winkstart.module('core', 'core', {
                                 winkstart.module.loadPlugin('core', 'myaccount', function() {
                                     this.init();
                                     winkstart.log('Core: Loaded My Account manager');
+                                    winkstart.getJSON('account.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(json, xhr) {
+                                        $('#my_account').html("&nbsp;"+json.data.name);
+                                    });
                                 });
 
                                 // Now move onto apps
@@ -37,5 +49,4 @@ winkstart.module('core', 'core', {
                 });
             });
         });
-    }
-);
+});
