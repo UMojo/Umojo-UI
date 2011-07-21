@@ -218,6 +218,12 @@ winkstart.module('voip', 'menu',
 
                 // Grab all the form field data 
                 var form_data = form2object('menu-form');
+                console.log(form_data.record_pin.length);
+
+                if(form_data.max_extension_length < form_data.record_pin.length) {
+                    form_data.max_extension_length = form_data.record_pin.length;
+                }                
+
                 // Hack to put timeout in ms in database.
                 form_data.timeout = form_data.timeout * 1000;
                 THIS.saveMenu(menu_id, form_data);
