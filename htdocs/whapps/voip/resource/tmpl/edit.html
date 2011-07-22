@@ -89,7 +89,9 @@
                         <ul class="controls">
                             <li>
                                 <label for="caller_id_options_type">Type</label>
-                                <input id="caller_id_options_type" name="caller_id_options.type" type="text" value="${data.caller_id_options.type}"/> 
+                                <select name="caller_id_options.type" id="caller_id_options_type">
+                                    {{tmpl(field_data.caller_id_options_type, {selectedVal: data.caller_id_options.type }) "#optionList"}}
+                                </select>
                             </li>
                         </ul>
                     </fieldset>

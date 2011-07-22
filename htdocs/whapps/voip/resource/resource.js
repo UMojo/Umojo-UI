@@ -20,6 +20,7 @@ winkstart.module('voip', 'resource',
 
         formData: {
              invite_format: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
+             caller_id_options_type: [{value: 'external'}, {value:'internal'}, {value:'emergency'}],
                     codecs: [{field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G729', value: 'G729', caption: '8kbps (Requires License)'},
                             {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: '64kbps (North America)'},
                             {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: '64kbps (Elsewhere)'},
@@ -129,7 +130,6 @@ winkstart.module('voip', 'resource',
                         THIS.editResource({
                             id: resource_id
                         });
-                        console.log(json);
                     });
                 } else {
                     /* CREATE */
@@ -189,9 +189,7 @@ winkstart.module('voip', 'resource',
                         resource_id: data.id
                     }, function(json, xhr) {
                         /* On success, take JSON and merge with default/empty fields */
-                        console.log(json);
                         $.extend(true, form_data, json);
-                        console.log(form_data);
                         if(form_data.data.gateways[0].codecs == undefined) {
                             form_data.data.gateways[0].codecs = {};
                         }
