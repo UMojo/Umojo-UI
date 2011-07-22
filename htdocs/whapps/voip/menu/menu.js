@@ -14,7 +14,8 @@ winkstart.module('voip', 'menu',
         subscribe: {
             'menu.activate' : 'activate',
             'menu.list-panel-click' : 'editMenu',
-            'menu.edit-menu' : 'editMenu'
+            'menu.edit-menu' : 'editMenu',
+            'menu.popup' : 'popupMenu'
         },
 
         validation : [
@@ -22,7 +23,7 @@ winkstart.module('voip', 'menu',
                 {name : '#retries', regex : /^[0-9]+$/},
                 {name : '#record_pin', regex : /^[0-9]+$/},
                 {name : '#timeout', regex : /^[0-9]+$/},
-                {name : '#max_extension_length', regex : /^[0-9]+$/},
+                {name : '#max_extension_length', regex : /^[0-9]*$/},
                 {name : '#hunt_allow', regex : /^.*$/},
                 {name : '#hunt_deny', regex : /^.*$/},
         ],
@@ -84,7 +85,7 @@ winkstart.module('voip', 'menu',
             });
         },
 
-        saveMenu: function(menu_id, form_data) {
+        saveMenu: function(menu_id, form_data, popup) {
             var THIS = this;
 
             /* Check validation before saving */
@@ -113,15 +114,32 @@ winkstart.module('voip', 'menu',
 
                     /* Actually send the JSON data to the server */
                     winkstart.putJSON('menu.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editMenu({
-                            id: json.data.id
-                        });
+                        if(popup != undefined) {
+                            popup.dialog("close");
+                            popup.remove(); 
+                            
+                        } else {
+                            THIS.renderList();
+                            THIS.editMenu({
+                                id: json.data.id
+                            });
+                        }
                     });
                 }
             } else {
                 alert('Please correct errors that you have on the form.');
             }
+        },
+        
+        popupMenu: function(data) {
+            var THIS = this;
+            var form_data = {
+                data: { retries: "3", timeout: "10000" },
+                field_data: {},
+                value: {}
+            };
+            
+            THIS.renderMenu(form_data, true);
         },
 
         /*
@@ -174,14 +192,25 @@ winkstart.module('voip', 'menu',
         /**
          * Draw menu fields/template and populate data, add validation. Works for both create & edit
          */
-        renderMenu: function(form_data){
+        renderMenu: function(form_data, popup){
             var THIS = this;
+
+            if(typeof(popup) == undefined) {
+                popup = false;
+            }
+
             var menu_id = form_data.data.id;
             console.log(form_data);    
             //Hack to display time in seconds for the user.
             form_data.data.timeout = form_data.data.timeout / 1000;
             // Paint the template with HTML of form fields onto the page 
-            THIS.templates.editMenu.tmpl(form_data).appendTo( $('#menu-view') );
+            if(popup==true) {
+                var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#callflow-view')).dialog({width:800});
+                //var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#childForm'));
+            }
+            else {
+                THIS.templates.editMenu.tmpl(form_data).appendTo( $('#menu-view') );
+            }
 
             winkstart.cleanForm();
 
@@ -219,24 +248,31 @@ winkstart.module('voip', 'menu',
 
                 // Grab all the form field data 
                 var form_data = form2object('menu-form');
-                console.log(form_data.record_pin.length);
+                console.log(form_data);
 
-                if(form_data.max_extension_length < form_data.record_pin.length) {
+                if(form_data.max_extension_length == undefined) {
+                    form_data.max_extension_length = form_data.record_pin.length;
+                }
+                else if(form_data.max_extension_length < form_data.record_pin.length) {
                     form_data.max_extension_length = form_data.record_pin.length;
                 }                
 
                 // Hack to put timeout in ms in database.
                 form_data.timeout = form_data.timeout * 1000;
-                THIS.saveMenu(menu_id, form_data);
+                
+                THIS.saveMenu(menu_id, form_data, dialog);
 
                 return false;
             });
 
             $('.menu-cancel').click(function(event) {
                 event.preventDefault();
-
                 // Cheat - just delete the main content area. Nothing else needs doing really 
-                $('#menu-view').empty();
+                if(popup == false) {
+                    $('#menu-view').empty();
+                } else {
+                    dialog.dialog("close");
+                }
 
                 return false;
             });

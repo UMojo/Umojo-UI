@@ -438,9 +438,13 @@ winkstart.module('voip', 'callflow',
                                 selected: node.key
                             };
                         }
-
+                        
                         dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
-
+                    
+                        $('#create_new_item', dialog).click(function() {
+                            winkstart.publish(node_name+'.popup');
+                        });
+    
                         dialog.find('.submit_btn').click(function() {
                             var temp;
 
