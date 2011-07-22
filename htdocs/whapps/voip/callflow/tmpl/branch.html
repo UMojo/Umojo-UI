@@ -1,5 +1,9 @@
 <div>
    <div class="child">
+      {{if actionName != 'root'}}
+          <div style="display: inline-block; height: 10px; width: 100%; background: white; margin: 0; padding: 0;"/><br/>
+          <span style="display: inline-block; height: 35px; width: 20px; background-image: url(whapps/core/layout/images/arrow_white.png); margin: 0; padding: 0;"/>
+      {{/if}}
       <div class="branch">
          <div id="${id}" name="${actionName}" class="node icons_black ${actionName.replace(/ /gi, '')}"></div>
          <div class="children"></div>
