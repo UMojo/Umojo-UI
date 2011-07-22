@@ -65,8 +65,7 @@ winkstart.module('dashboard', 'ctt',
             this.templates.ctt.tmpl({}).appendTo( $('#ws-content') );
             
             var num_rows = 0;
-            
-            //winkstart.getJSON('registration.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(reply) {
+
             winkstart.getJSON('cdr.list', {
                 crossbar: true, 
                 account_id: '04152ed2b428922e99ac66f3a71b0215'
@@ -75,9 +74,6 @@ winkstart.module('dashboard', 'ctt',
                 $.each(reply.data, function() {
                     var cdr_id = this.id;
                     
-                    
-
-                    //winkstart.getJSON('registration.read',{crossbar: true, account_id: MASTER_ACCOUNT_ID, registration_id: registration_id}, function(reply) {
                     winkstart.getJSON('cdr.read',{
                         crossbar: true, 
                         account_id: '04152ed2b428922e99ac66f3a71b0215', 
@@ -95,7 +91,7 @@ winkstart.module('dashboard', 'ctt',
                             }
                         }
                             
-                        function writeContentDialog(id, obj){
+                        function writeDetailsDialog(id, obj){
                             var out = '<div id="'+id+'"><table class="details_table">';                          
 
                             $.each(obj, function(index, value){
@@ -126,6 +122,69 @@ winkstart.module('dashboard', 'ctt',
                             return out;
                         }
                         
+                        function writeLegsDialog(id, legA, legB){
+                            
+                            var out = '<div class="legA"><table class="details_table">'; 
+                            
+                            if(legA.other_leg_call_id != undefined && legA.other_leg_call_id != null && legB != null){
+                                $.each(legA, function(index, value){
+                                    if(index == 'local_sdp' || index == 'remote_sdp'){
+                                        out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+                                        var sdp = value.split('\n');
+                                    
+                                        sdp.splice(sdp.length-1, 1);
+                                    
+                                        $.each(sdp, function(i, v){
+                                            $.each(v.split('='), function($i, $v){
+                                                if($i == 0){
+                                                    out += '<tr><td class="bold">'+$v+'</td>'; 
+                                                }
+                                                if($i == 1){
+                                                    out += '<td>'+$v+'</td></tr>';  
+                                                }
+                                            
+                                            });
+                                        });
+                                    
+                                    }else{
+                                        out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
+                                    }
+ 
+                                });
+                                out += '</table></div><div class="legB"><table class="details_table">';                          
+
+                                $.each(legB, function(index, value){
+                                    if(index == 'local_sdp' || index == 'remote_sdp'){
+                                        out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+                                        var sdp = value.split('\n');
+                                    
+                                        sdp.splice(sdp.length-1, 1);
+                                    
+                                        $.each(sdp, function(i, v){
+                                            $.each(v.split('='), function($i, $v){
+                                                if($i == 0){
+                                                    out += '<tr><td class="bold">'+$v+'</td>'; 
+                                                }
+                                                if($i == 1){
+                                                    out += '<td>'+$v+'</td></tr>';  
+                                                }
+                                            
+                                            });
+                                        });
+                                    
+                                    }else{
+                                        out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
+                                    }
+ 
+                                });
+                                out += '</table></div>'
+                            }else{
+                                out = 'No Other Leg';
+                            }
+
+                            return out;
+                        }
+                        
                         function drawRows(id, obj){
                            
                             winkstart.table.ctt.fnAddData([
@@ -134,34 +193,90 @@ winkstart.module('dashboard', 'ctt',
                                 noData(obj.caller_id_number),
                                 noData(obj.duration_seconds),
                                 noData(obj.hangup_cause),
-                                '<div class="link_table">Debug</div>',
+                                '<div id="'+id+'_debug" class="link_table">Debug</div>',
                                 '<div id="'+id+'_details" class="link_table">Details</div>',
-                                '<div class="link_table">Leg</div>'
+                                '<div id="'+id+'_leg" class="link_table">Leg</div>'
                                 ]);
-                            
-                                    
-                            $('#'+id+'_details').live('click', function(){
-                                var dialog_div = writeContentDialog(id, obj);
                                 
-                                $('#'+id+'_details').data('dialog', dialog_div);
+                            $('#'+id+'_debug').live('click', function(){
+                                
+                                $('#details_dialog').dialog('close');
                                 
                                 $('#details_dialog').dialog({
                                     open: function(event, ui){
-                                        $('#details_dialog').empty();
-                                        $('#details_dialog').html($('#'+id+'_details').data('dialog'))
+                                        $.ajax({
+                                            url: "#",
+                                            data: ({
+                                                call_id : obj.call_id
+                                            }),
+                                            success: function(data) {
+                                                $('#details_dialog').html('Some data from server');
+                                            }
+                                        });
                                     },
                                     autoOpen: false,
-                                    title: 'Call id: '+id,
+                                    title: 'Debug for call id: '+id,
                                     minWidth:550,
                                     width: 550, 
                                     minHeight:575,
                                     height: 575
                                 });
+                                
+                                $('#details_dialog').dialog('open');     
+                            });
+                                    
+                            $('#'+id+'_details').live('click', function(){
+                                
+                                $('#details_dialog').dialog('close');
+                                
+                                var dialog_div = writeDetailsDialog(id, obj);
+                                $('#'+id+'_details').data('dialog', dialog_div);
+
+                                $('#details_dialog').dialog({
+                                    open: function(event, ui){
+                                        $('#details_dialog').html($('#'+id+'_details').data('dialog'))
+                                    },
+                                    autoOpen: false,
+                                    title: 'Details for call id: '+id,
+                                    minWidth:550,
+                                    width: 550, 
+                                    minHeight:575,
+                                    height: 575
+                                });
+                                
                                 $('#details_dialog').dialog('open');
                             });
+                            
+                            $('#'+id+'_leg').live('click', function(){
+                                
+                                winkstart.getJSON('cdr.read',{
+                                    crossbar: true, 
+                                    account_id: '04152ed2b428922e99ac66f3a71b0215', 
+                                    cdr_id: obj.id
+                                }, function(reply) {
+                                    var dialog_div = writeLegsDialog(id, obj, reply.data);
+                                    $('#'+id+'_leg').data('dialog', dialog_div);
+                                });
+                                
+                                $('#details_dialog').dialog('close');
+
+                                $('#details_dialog').dialog({
+                                    open: function(event, ui){
+                                        $('#details_dialog').html($('#'+id+'_leg').data('dialog'))
+                                    },
+                                    autoOpen: false,
+                                    title: 'Leg A: '+id+' Leg B: '+obj.other_leg_call_id,
+                                    minWidth:1115,
+                                    width: 1115, 
+                                    minHeight:575,
+                                    height: 575
+                                });
+                                
+                                $('#details_dialog').dialog('open');
+                            });
+                            
+
                         }
-                        
-                        console.log(reply.data);
                         
                         if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
                             $.each(reply.data['related_cdrs'], function(index, value) {
@@ -232,9 +347,7 @@ winkstart.module('dashboard', 'ctt',
             $('.cancel-search').click(function(){
                 $('#ctt-grid_filter input[type=text]').val('');
             });
-            
-            
-            
+ 
         }
     }
     );

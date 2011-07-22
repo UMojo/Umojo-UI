@@ -17,12 +17,12 @@
     color: white;
 }
 
-.details_table tr{
-    border-bottom: black solid 1px;
-}
-
 .details_table tr:first-child{
     border-top:black solid 1px;
+}
+
+.details_table tr{
+    border-bottom: black solid 1px;
 }
 
 .details_table td:first-child {
@@ -40,4 +40,13 @@
 .details_table .bold{
     text-transform: capitalize;
     font-weight: bold;
+}
+
+.legA{
+    float: left;
+    border-right: black solid 1px;
+}
+
+.legB {
+    float:right;
 }
