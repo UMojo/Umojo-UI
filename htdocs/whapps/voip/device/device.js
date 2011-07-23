@@ -19,11 +19,10 @@ winkstart.module('voip', 'device',
         },
 
         formData: {
-                    status_types: [{value: 'Enabled'}, {value:'Disabled'}],
                     //auth_methods: [{value: 'Password'}, {value:'IP Address'}],
-                    auth_methods: [{value: 'Password'}],
-                    invite_formats: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
-                    bypass_media_types: [{value: 'Automatic'}, {value:'Never'}, {value:'Always'}],
+                    auth_methods: [{id: 'password', value: 'Password'}],
+                    invite_formats: [{id: 'username', value: 'Username'}, {id: 'npan', value:'NPANXXXXX'}, {id: 'e164', value:'E. 164'}],
+                    bypass_media_types: [{id: 'auto', value: 'Automatic'}, {id: 'true', value:'Never'}, {id: 'false', value:'Always'}],
                     media_audio_codecs: [
                             {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G729', value: 'G729', caption: '8kbps (Requires License)'},
                             {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: '64kbps (North America)'},
@@ -205,7 +204,7 @@ winkstart.module('voip', 'device',
                     data : {
                         mac_address: "12:34:56:78:9A:BC",
                         caller_id : {'default' : { }, emergency : { }},
-                        media : {audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
+                        media : {bypass_media: "false", audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
                         sip : { realm: json.data.realm, username: generatedUsername, password: generatedPassword, expire_seconds: "360"}
                     }
                 };
@@ -286,8 +285,6 @@ winkstart.module('voip', 'device',
             } 
             form_data.media.audio.codecs = audioCodecs;
             form_data.media.video.codecs = videoCodecs;
-
-            form_data.status = form_data.status ? "Enabled" : "Disabled";
 
             return form_data;
         },

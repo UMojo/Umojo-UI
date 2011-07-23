@@ -317,7 +317,6 @@ winkstart.module('voip', 'callflow',
          this._formatFlow();
 
          var layout = this._renderBranch(this.flow.root);
-
          layout.find('.node').hover(function () { $(this).addClass('over'); }, function () { $(this).removeClass('over'); });
 
          layout.find('.node').each(function () {
@@ -438,9 +437,12 @@ winkstart.module('voip', 'callflow',
                                 selected: node.key
                             };
                         }
-
                         dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
-
+                    
+                        $('#create_new_item', dialog).click(function() {
+                            winkstart.publish(node_name+'.popup');
+                        });
+    
                         dialog.find('.submit_btn').click(function() {
                             var temp;
 
@@ -564,9 +566,36 @@ winkstart.module('voip', 'callflow',
 
       _renderBranch: function (branch) {
          var THIS = this;
+         
+         if(branch.key && branch.key.length > 10) {
+            branch.key = branch.key.substring(0,9);
+         }
+
          var flow = this.templates.branch.tmpl(branch);
+         flow.find('.link_option_menu').click( function() {
+            var data = {};
+            console.log('parent'+branch.actionNameParent);
+            if(branch.actionNameParent == 'menu') {
+                data.options = {
+                                    type: 'menu option',
+                                    items: THIS.config.menu_options,
+                                    selected: branch.key
+                                };
+                dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+                dialog.find('.submit_btn').click(function() {
+                        branch.key = $('#option-selector', dialog).val();
+                        dialog.dialog('close');
+                        THIS.renderFlow();
+                });
+            }
+
+         });
+
+         if(branch.actionNameParent == undefined) branch.actionNameParent = "root";
          var children = flow.find('.children');
          $.each(branch.children, function() {
+            console.log(branch.actionName);
+            this.actionNameParent = branch.actionName;
             children.append(THIS._renderBranch(this));
          });
          return flow;

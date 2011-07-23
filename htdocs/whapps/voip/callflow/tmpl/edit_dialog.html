@@ -5,7 +5,7 @@
                 <h3>${title}</h3>
                 {{if objects}}
                 <form name="form" method="post" action="#">
-                    <label>${objects.type}: </label>
+                    <label for="object-selector">${objects.type}: </label>
                     <select id="object-selector">
                     {{each(i,obj) objects.items}}
                         {{if objects.selected == obj.id}}
@@ -15,11 +15,12 @@
                         {{/if}}
                     {{/each}}
                     </select>
+                    <a href="#" id="create_new_item">Create new ${objects.type}</a>
                 </form>   
                 {{/if}}
                 {{if options}}
                 <form name="form" method="post" action="#">
-                    <label>${options.type}: </label>
+                    <label for="object-selector">${options.type}: </label>
                     <select id="option-selector">
                     {{each(key,opt) options.items}}
                         {{if options.selected == key}}
@@ -33,9 +34,10 @@
                 {{/if}}
                 <form name="form" method="post" action="#">
                     <div class="btn_wrapper">
-                        <a href="#" id="add" class="submit_btn ctr">Save</a><br>
+                        <a href="javascript:void(0)" id="add" class="submit_btn ctr">Save</a><br>
                     </div>
-                </form>    
+                </form>   
+                <div id="childForm"></div> 
             </div>
         </div>
     </div>

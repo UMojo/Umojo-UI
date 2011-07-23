@@ -44,10 +44,10 @@
                             </li>
                             <li>
                                 <label for="status">Enabled</label>
-                                {{if data.status == "Enabled"}}
-                                <input type="checkbox" id="status" name="status" value="Enabled" checked="checked"/>
+                                {{if data.status == true}}
+                                <input type="checkbox" id="status" name="status" checked="checked"/>
                                 {{else}}
-                                <input type="checkbox" id="status" name="status" value="Disabled"/>
+                                <input type="checkbox" id="status" name="status"/>
                                 {{/if}}
                             </li>
                         </ul>
@@ -157,8 +157,14 @@
                             </li>
                             <li>
                                 <label for="sip_method">Authentication Method:</label>
-                                <select name="sip.method" id="sip.method">
-                                    {{tmpl(field_data.auth_methods, {selectedVal: data.sip.method }) "#optionList"}}
+                                <select name="sip.method" id="sip_method">
+                                {{each field_data.auth_methods}}
+                                    {{if data.sip.method == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
                                 </select>
                             </li>
                             <li>
@@ -172,7 +178,13 @@
                             <li>
                                 <label for="sip_invite_format">Invite Format:</label>
                                 <select name="sip.invite_format" id="sip_invite_format">
-                                    {{tmpl(field_data.invite_formats, {selectedVal: data.sip.invite_format }) "#optionList"}}
+                                {{each field_data.invite_formats}}
+                                    {{if data.sip.invite_format == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
                                 </select>
                             </li>
                             <li>
@@ -192,8 +204,14 @@
                         <ul class="controls">
                             <li>
                                 <label for="media_bypass-media">Peer to Peer Audio</label>
-                                <select name="media.bypass_media" id="sip_invite-format">
-                                    {{tmpl(field_data.bypass_media_types, {selectedVal: data.media.bypass_media }) "#optionList"}}
+                                <select name="media.bypass_media" id="media_bypass_media">
+                                {{each field_data.bypass_media_types}}
+                                    {{if data.media.bypass_media == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
                                 </select>
                             </li>
                         </ul>
