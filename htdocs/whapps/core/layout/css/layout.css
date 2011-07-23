@@ -138,11 +138,11 @@ a:active {
 }
 
 .main_nav li {
-	background-image: url(../images/nav_line.jpg);
-	background-repeat: no-repeat;
+    background-image: url(../images/nav_line.jpg);
+    background-repeat: no-repeat;
     background-position: right;
-	padding: 0 23px;
-	float: left;
+    padding: 0 23px;
+    float: left;
     height: 80px;
     width: 110px;
     text-align: center;
@@ -158,9 +158,6 @@ a:active {
 
 .main_nav li .whapp span {
     margin-bottom: 5px;
-}
-
-.main_nav img {
 }
 
 .main_nav div {

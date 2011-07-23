@@ -13,6 +13,7 @@ winkstart.module('voip', 'device',
         /* What events do we listen for, in the browser? */
         subscribe: {
             'device.activate' : 'activate',
+            'device.popup' : 'devicePopup',
             'device.list-panel-click' : 'editDevice',
             'device.edit-device' : 'editDevice'
         },
@@ -169,6 +170,25 @@ winkstart.module('voip', 'device',
             }
             return sRandomString;
         },
+
+        devicePopup: function() {
+            var THIS = this;
+            
+            var form_data = {
+                data : {
+                    mac_address: "12:34:56:78:9A:BC",
+                    caller_id : {'default' : { }, emergency : { }},
+                    media : {audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
+                    sip : { realm: 'blah.com', username: 'test', password: 'test', expire_seconds: "360"}
+                }
+            };
+
+            form_data.field_data = THIS.config.formData;
+            form_data.field_data.users = [];
+
+            $('.resize').html(THIS.templates.editDevice.tmpl(form_data));
+        },
+
         /*
          * Create/Edit device properties (don't pass an ID field to cause a create instead of an edit)
          */

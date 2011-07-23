@@ -3,17 +3,15 @@ winkstart.module('connect', 'credits',
     {
         /* What HTML templates will we be using? */
         templates: {
-            add_credits: 'tmpl/add_credits.html'
+            manage_credits: 'tmpl/manage_credits.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
             'credits.activate' : 'activate',
             /* Credit Management */
-            'credits.add_credits_prompt' : 'add_credits_prompt',
-            'credits.add_credits' : 'add_credits',
-            'credits.update' : 'update',
-            'credits.change_recurring' : 'change_recurring'
+            'credits.manage' : 'manage',
+            'credits.update' : 'update'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -40,8 +38,8 @@ winkstart.module('connect', 'credits',
         winkstart.registerResources(this.config.resources);
 
         // Tie to DOM events
-        $('#my_services').delegate('#add_prepay_button', 'click', function() {
-            winkstart.publish('sipservice.add_credits');
+        $('#ws-content').delegate('.credits.manage', 'click', function() {
+            winkstart.publish('credits.manage');
         });
     }, // End initialization routine
 
@@ -64,9 +62,9 @@ winkstart.module('connect', 'credits',
 
         },
 
-        edit: function(args) {
+        manage: function(args) {
             var THIS = this;
-            dialogDiv = winkstart.popup(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.popup(THIS.templates.manage_credits.tmpl(winkstart.modules['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
             });
 
@@ -111,15 +109,8 @@ winkstart.module('connect', 'credits',
 
             $('.channels.twoway', dialog).html(this.channels.twoway_channels);
             $('.channels.inbound', dialog).html(this.channels.inbound_channels);
-        },
-
-
-        refresh: function() {
-            var THIS = this;
-            /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_credits') );
         }
 
     } // End function definitions
 
-    );  // End module
+);  // End module
