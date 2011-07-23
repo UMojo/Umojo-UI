@@ -2,7 +2,7 @@
     {{each(s,srv) servers}}
     <div class="server">
         <div class="title">
-            <a class="remove_server" data-serverid="${s}" href="#" title="Remove Server - ${server_name}" style="display:none; vertical-align: middle; float: left; max-width: 1.5em;"><img src="/images/error-icon_sm.png" style="max-width: 1.5em; vertical-align: middle;"></a>
+            <a class="remove_server" data-serverid="${s}" href="#" title="Remove Server - ${server_name}" style="display:none; vertical-align: middle; float: left; max-width: 1.5em;"><img class="icon error" style="max-width: 1.5em; vertical-align: middle;"></a>
             <span class="name">${server_name}</span>
             {{if monitor }}
             <span class="status">Monitoring is <span class="state-${monitor.monitor_enabled}">{{if monitor.monitor_enabled}}On{{else}}Off{{/if}}</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
@@ -18,7 +18,7 @@
                     <ul class="info menu_ip_list">
                         {{each(i, ip) auth.auth_ip}}
                         <li class="ip_list_ip">
-                            <a class="remove_auth_IP" data-serverid="${s}" data-removeip="${ip}" href="#"><img src="/images/error-icon_sm.png" class="remove_auth_IP" /></a>${ip}
+                            <a class="remove_auth_IP" data-serverid="${s}" data-removeip="${ip}" href="#"><img class="icon error remove_auth_IP" /></a>${ip}
                         </li>
                         {{/each}}
                     </ul>

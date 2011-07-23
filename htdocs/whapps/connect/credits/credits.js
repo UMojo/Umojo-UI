@@ -33,7 +33,7 @@ winkstart.module('connect', 'credits',
 
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
-    function(args) {
+    function() {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
 
@@ -47,42 +47,21 @@ winkstart.module('connect', 'credits',
 
     /* Define the functions for this module */
     {
-        show_estimate: function(dialogDiv) {
-            var THIS = this;
-
-            $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
-            $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
-
-            $('#trunks_total', dialogDiv).html(THIS.rates.trunks * $('#trunks', dialogDiv).val());
-            $('#inbound_trunks_total', dialogDiv).html(THIS.rates.inbound_trunks * $('#inbound_trunks', dialogDiv).val());
-        },
-
-        promo: function(promoCode) {
-            // Lookup a promotion & display it, add it to the order if they submit
-
-        },
-
         manage: function(args) {
             var THIS = this;
             dialogDiv = winkstart.popup(THIS.templates.manage_credits.tmpl(winkstart.modules['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
             });
 
-            THIS.show_estimate(dialogDiv);
-
-            $('#trunks, #inbound_trunks', dialogDiv).bind('keyup change', function() {
-                THIS.show_estimate(dialogDiv);
-            });
-
-            $('.update_channels_button', dialogDiv).click(function() {
+            $('.credits.add', dialogDiv).click(function() {
                 // Grab data from form
-                var form_data = form2object('channels');
+                var form_data = form2object('credits');
 
                 // Build the save function here, for use with or without a billing confirmation screen (coming up)
                 var save = function() {
-                    winkstart.postJSON('channels.post', {
+                    winkstart.postJSON('credits.post', {
                             data : form_data,
-                            account_id : '2600hz'
+                            account_id : winkstart.modules['connect'].account_id
                         },
                         function(data, xhr) {
                             // Check the response for errors

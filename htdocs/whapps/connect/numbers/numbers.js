@@ -121,22 +121,22 @@ winkstart.module('connect', 'numbers',
 
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
-    function(args) {
+    function() {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
-        
-        
-            $('#my_numbers').delegate('.add', "click", function(){
-                    winkstart.publish('numbers.add_number_prompt');
+
+        console.log('Started!');
+            $('.number .unassign').live('click', function() {
+                data = $(this).dataset();
+                winkstart.publish('numbers.unassign', data);
             });
 
-            /*
-            $('#tmp_add_number').click(function() {
+            $('.numbers.add').live('click', function() {
                 winkstart.publish('numbers.add_number_prompt');
             });
-			*/
-            $('#tmp_edit_port_number').click(function() {
-                winkstart.publish('sipservice.port_number');
+
+            $('.numbers.port').click(function() {
+                winkstart.publish('numbers.port');
             });
 
             /*$('#edit_cnam').click(function() {
@@ -160,12 +160,49 @@ winkstart.module('connect', 'numbers',
         
         
         
+            // Wire up the numbers box
+            $("#ws-content").delegate(".number.unassign", "click", function(){
+                moveDID($(this).dataset(), null);$(this).hide();
+            });
+
+            $("#ws-content").delegate(".number.failover", "click", function(){
+                winkstart.publish('sipservice.edit_failover', $(this).dataset());
+            });
+
+            $("#ws-content").delegate(".number.cid", "click", function(){
+                cidPrompt($(this).dataset(), null);
+            });
+
+            $("#ws-content").delegate(".number.e911", "click", function(){
+                e911Prompt($(this).dataset(), null);
+            });
+
+            $("#ws-content").delegate(".number.misc", "click", function(){
+                miscPrompt($(this).dataset(), null);
+            });
+
         
-        
-        
-        
-        
-        
+            // Make numbers draggable
+            $('#ws-content .number:not(.ui-draggable)').live('mousemove',function(){
+                $(this).draggable({
+                    cursor: 'pointer',
+                    opacity: 0.35,
+                    revert: true,
+                    scope: 'moveDID',
+                    appendTo: 'body',
+                    helper: 'clone',
+                    zIndex: 9999
+                });
+            });
+
+
+            $(".number.cancel").live('click', function(){
+                console.log('Cancel');
+                THIS.delDID($(this).dataset(), null);
+                setTimeout("winkstart.publish('sipservice.update_account')", 1);
+            });
+
+            console.log('Done initializing numbers');
         
     }, // End initialization routine
 
@@ -916,25 +953,6 @@ winkstart.module('connect', 'numbers',
             winkstart.log('Refreshing DIDs...');
             $('#my_numbers').empty();
             THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
-
-            // Make numbers draggable
-            $("#ws-content .number").draggable(
-            {
-                cursor: 'pointer',
-                opacity: 0.35 ,
-                revert: true,
-                scope: 'moveDID',
-                appendTo: 'body',
-                helper: 'clone',
-                revert : 'invalid'
-
-            }
-            );
-
-            $("#ws-content #control_area").delegate(".cancelDID", "click", function(){
-                THIS.delDID($(this).dataset(), null);
-                setTimeout("winkstart.publish('sipservice.update_account')", 1);
-            });
         },
 
         createUploader: function(elm, act, args, cb){
@@ -950,38 +968,6 @@ winkstart.module('connect', 'numbers',
                 element: elm,
                 action: act,
                 params: args
-            });
-        },
-
-
-        activate: function(data) {
-            $('#my_numbers'). ('.add', "click", function(){
-                    winkstart.publish('numbers.add_number_prompt');
-            });
-
-            $('#tmp_add_number').click(function() {
-                winkstart.publish('numbers.add_number_prompt');
-            });
-
-            $('#tmp_edit_port_number').click(function() {
-                winkstart.publish('sipservice.port_number');
-            });
-
-            /*$('#edit_cnam').click(function() {
-                winkstart.publish('sipservice.configure_cnam');
-            });
-
-            $('#tmp_edit_auth').click(function() {
-                winkstart.publish('sipservice.edit_auth');
-            });*/
-
-            $('.did_list .numbers .unassign').live('click', function() {
-                data = $(this).dataset();
-                winkstart.publish('sipservice.unassign_did', data);
-            });
-
-            $('.did_list .numbers .add').live('click', function() {
-                winkstart.publish('sipservice.addNumber');
             });
         }
     } // End function definitions

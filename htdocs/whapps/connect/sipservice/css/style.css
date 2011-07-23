@@ -118,9 +118,9 @@ span.ip_list_ip { display:block; z-index:5;}
 
 
 
-.error.errMsg:before {content: url(/../images/error-icon_sm.png); display:inline-block; vertical-align:middle; }
+/*.error.errMsg:before {content: url(/../images/error-icon_sm.png); display:inline-block; vertical-align:middle; }
 .warning.errMsg:before {content: url(/../images/warning-icon_sm.png); display:inline-block; vertical-align:middle; }
-.info.errMsg:before {content: url(/../images/info-icon_sm.png); display:inline-block; vertical-align:middle; }
+.info.errMsg:before {content: url(/../images/info-icon_sm.png); display:inline-block; vertical-align:middle; }*/
 
 .error.errMsg {display:inline-block; vertical-align:middle;}
 .warning.errMsg {display:inline-block; vertical-align:middle; }
@@ -493,7 +493,7 @@ input[type="search"] {
 
 #addCredsSpan {float: right; padding-right:2em}
 
-.no_cc_warning:before {content: url(/../images/warning-icon_sm.png); vertical-align: middle;}
+/*.no_cc_warning:before {content: url(/../images/warning-icon_sm.png); vertical-align: middle;}*/
 .no_cc_warning { font-size: 14px; }
 
 #add_a_server_first {font-weight: bold; vertical-align: middle; color: #646464; padding: 40% 20%;}
