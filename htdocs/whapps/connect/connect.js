@@ -18,7 +18,7 @@ winkstart.module('connect', 'connect', {
     },
     {
         initialized :   false,
-        modules :       ['sipservice', 'admin', 'channels', 'credits', 'endpoint', 'fraud', 'monitoring', 'numbers'],
+        modules :       ['sipservice', 'admin', 'channels', 'credits', 'endpoint', 'fraud', 'monitoring', 'numbers', 'discount'],
 
         activate: function() {
             winkstart.publish('sipservice.activate');

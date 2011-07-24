@@ -14,7 +14,7 @@ winkstart.module('connect', 'endpoint',
             'endpoint.list' : 'list',                    // Get endpoint list
             'endpoint.add' : 'add',                      // Add an endpoint
             'endpoint.edit' : 'edit',                    // Edit existing endpoint
-            'endpoint.delete' : 'del',                // Delete an endpoint
+            'endpoint.delete' : 'del',                   // Delete an endpoint
             'endpoint.update' : 'save'                   // Update defaults/general endpoint settings
         },
 
@@ -126,12 +126,13 @@ winkstart.module('connect', 'endpoint',
                         data : form_data,
                         account_id : winkstart.modules['connect'].account_id
                     },
-                    function(data, xhr) {
+                    function(json, xhr) {
                         // Check the response for errors
 
                         // Close the dialog
                         dialogDiv.dialog('close');
 
+                        winkstart.modules['connect'].account = json.data;
                         winkstart.publish('endpoint.refresh');
                     }
                 );

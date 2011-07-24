@@ -17,8 +17,8 @@
 #control_area #my_numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
 #control_area #my_numbers .numbers { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
 
-#control_area #my_numbers .numbers .delete { color:#d93636; float:right; margin: 10px 25px 0 0; }
-#control_area #my_numbers .numbers .delete:hover { text-decoration:none; }
+#control_area #my_numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
+#control_area #my_numbers .numbers .cancel_number:hover { text-decoration:none; }
 
 #control_area #my_numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
 #control_area #my_numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
@@ -37,7 +37,7 @@
 
 
 /* my services area */
-#control_area #my_services { width:423px; margin:0 0 40px 20px; }
+#control_area #my_services { width:423px; margin:0 0 15px 20px; }
 #control_area #my_services .title { width:363px; height:23px; background:url(../images/bg_trunks_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px;  }
 #control_area #my_services .info { background:url(../images/bg_trunk_li.jpg) top left no-repeat; width:423px; height:45px; color:#4e4d4d; padding-top:0em; }
 #control_area #my_services .info .amount { float:left; font-size:27px; margin:10px 0 0 30px; }
@@ -139,13 +139,13 @@ span.ip_list_ip { display:block; z-index:5;}
 
 /* scrollbars */
 #all_numbers_list {
-    max-height: 15em;
+    max-height: 16em;
     overflow-y: hidden;
     overflow-x: hidden;
 }
 
 #all_numbers_list:hover {
-    max-height: 15em;
+    max-height: 16em;
     overflow-y: scroll;
     overflow-x: hidden;
 }

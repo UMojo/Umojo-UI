@@ -18,6 +18,7 @@ winkstart.module('connect', 'numbers',
         /* What HTML templates will we be using? */
         templates: {
             port_number: 'tmpl/port_number.html',
+            cancel_number: 'tmpl/cancel_number.html',
             edit_failover: 'tmpl/edit_failover.html',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_e911: 'tmpl/edit_e911.html',
@@ -33,7 +34,8 @@ winkstart.module('connect', 'numbers',
             'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
             'numbers.post_number': 'post_number',
 
-            'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account
+            'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account (prompts for confirmation)
+            'numbers.delete_number' : 'delete_number',     // Immediately delete & cancel a number from account (no prompt)
             'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
             'numbers.update_number' : 'update_number',     // Update features / settings for a number
             'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
@@ -163,8 +165,8 @@ winkstart.module('connect', 'numbers',
             winkstart.publish('numbers.check_port', $(this).dataset());
         });
 
-        $('#ws-content').delegate(".numbers .delete", 'click', function(){
-            winkstart.publish('numbers.delete', $(this).dataset());
+        $('#ws-content').delegate(".numbers .cancel_number", 'click', function(){
+            winkstart.publish('numbers.cancel_number', $(this).dataset());
         });
 
 
@@ -193,8 +195,7 @@ winkstart.module('connect', 'numbers',
             });
 
             $('.submit_btn', dialogDiv).click(function() {
-                var data = {};
-                $.extend(data, args, form2object('failover'));     // Grab data from failover form
+                var data = $.extend({}, args, form2object('failover'));     // Grab data from failover form
 
                 // TODO: Validate data here
 
@@ -204,6 +205,10 @@ winkstart.module('connect', 'numbers',
                     success : function() {
                         // On success, close the dialog.
                         dialogDiv.dialog('close');
+
+                        if (args.success) {
+                            args.success(args);
+                        }
                     },
                     error : function() {
                         alert('Failed to save.');
@@ -218,10 +223,18 @@ winkstart.module('connect', 'numbers',
                     data: args.data,
                     account_id : winkstart.modules['connect'].account_id
                 },
-                function() {
-                    winkstart.publish('numbers.refresh');
-                    if (args.success)
-                        args.success();
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
                 }
             );
         },
@@ -233,8 +246,7 @@ winkstart.module('connect', 'numbers',
             });
 
             $('.submit_btn', dialogDiv).click(function() {
-                var data = {};
-                $.extend(data, args, form2object('cnam'));     // Grab data from cnam form
+                var data = $.extend({}, args, form2object('cnam'));     // Grab data from cnam form
 
                 // TODO: Validate data here
 
@@ -244,6 +256,10 @@ winkstart.module('connect', 'numbers',
                     success : function() {
                         // On success, close the dialog.
                         dialogDiv.dialog('close');
+
+                        if (args.success) {
+                            args.success(args);
+                        }
                     },
                     error : function() {
                         alert('Failed to save.');
@@ -258,10 +274,18 @@ winkstart.module('connect', 'numbers',
                     data: args.data,
                     account_id : winkstart.modules['connect'].account_id
                 },
-                function() {
-                    winkstart.publish('numbers.refresh');
-                    if (args.success)
-                        args.success();
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
                 }
             );
         },
@@ -273,17 +297,19 @@ winkstart.module('connect', 'numbers',
             });
 
             $('.submit_btn', dialogDiv).click(function() {
-                var data = {};
-                $.extend(data, args, form2object('e911'));     // Grab data from e911 form
+                var data = $.extend({}, args, form2object('e911'));     // Grab data from e911 form
 
                 // TODO: Validate data here
 
                 // Request an update & provide a callback for success or failure
                 winkstart.publish('numbers.update_e911', {
-                    data : data,
                     success : function() {
                         // On success, close the dialog.
                         dialogDiv.dialog('close');
+
+                        if (args.success) {
+                            args.success(args);
+                        }
                     },
                     error : function() {
                         alert('Failed to save.');
@@ -298,10 +324,18 @@ winkstart.module('connect', 'numbers',
                     data: args.data,
                     account_id : winkstart.modules['connect'].account_id
                 },
-                function() {
-                    winkstart.publish('numbers.refresh');
-                    if (args.success)
-                        args.success();
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
                 }
             );
         },
@@ -313,8 +347,7 @@ winkstart.module('connect', 'numbers',
             });
 
             $('.submit_btn', dialogDiv).click(function() {
-                var data = {};
-                $.extend(data, args, form2object('#fax'));     // Grab data from cnam form
+                var data = $.extend({}, args, form2object('#fax'));     // Grab data from cnam form
 
                 // TODO: Validate data here
 
@@ -324,6 +357,10 @@ winkstart.module('connect', 'numbers',
                     success : function() {
                         // On success, close the dialog.
                         dialogDiv.dialog('close');
+
+                        if (args.success) {
+                            args.success(args);
+                        }
                     },
                     error : function() {
                         alert('Failed to save.');
@@ -338,14 +375,70 @@ winkstart.module('connect', 'numbers',
                     data: args.data,
                     account_id : winkstart.modules['connect'].account_id
                 },
-                function() {
-                    winkstart.publish('numbers.refresh');
-                    if (args.success)
-                        args.success();
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
                 }
             );
         },
 
+
+        cancel_number: function(args) {
+            var dialogDiv = winkstart.popup(this.templates.cancel_number.tmpl(args), {
+                title: 'Cancel Number'
+            });
+
+            $('.submit_btn', dialogDiv).click(function() {
+                // TODO: Validate data here
+
+                // Request an update & provide a callback for success or failure
+                winkstart.publish('numbers.delete_number', {
+                    data : args,
+                    success : function() {
+                        // On success, close the dialog.
+                        dialogDiv.dialog('close');
+
+                        if (args.success) {
+                            args.success(args);
+                        }
+                    },
+                    error : function() {
+                        alert('Failed to save.');
+                    }
+                })
+            });
+        },
+
+        delete_number: function(args) {
+            winkstart.postJSON('numbers.delete_number',
+                {
+                    data: args.data,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
+                }
+            );
+        },
 
 
         defaults: function(info) {
@@ -488,7 +581,7 @@ winkstart.module('connect', 'numbers',
             if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                 if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa.get',
+                    winkstart.postJSON('numbers.search_npa',
                      {
                     	account_id: '2600hz',
 	                    data:args.data
@@ -503,7 +596,7 @@ winkstart.module('connect', 'numbers',
 
                 } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa_nxx.get',
+                    winkstart.postJSON('numbers.search_npa_nxx',
                      {
                      account_id: '2600hz',
                      data:args.data},
@@ -517,7 +610,7 @@ winkstart.module('connect', 'numbers',
 
                 } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
                     $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa.get',
+                    winkstart.postJSON('numbers.search_npa',
                      {
                     	account_id: '2600hz',
                      data:args.data},
@@ -665,8 +758,18 @@ winkstart.module('connect', 'numbers',
 	            	data: {"DID" : {"did": did},"server":{"serverid":srv}},
 	            	account_id: winkstart.modules['connect'].account_id
 	            },
-	            function() {
-                        winkstart.publish('numbers.refresh');
+	            function(json) {
+                        if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                            winkstart.modules['connect'].account = json.data;
+                            winkstart.publish('numbers.refresh');
+                            if (args.success)
+                                args.success();
+                        } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                            alert(json.errs[0].msg);
+                        } else {
+                            // TODO: Better process XHR here
+                            alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        }
                     }
 	        );
         },
@@ -688,8 +791,18 @@ winkstart.module('connect', 'numbers',
                     data: {"DID" : {"serverid" : serverid, "did" : did}, "server" : null} ,
                     account_id : winkstart.modules['connect'].account_id
                 },
-                function() {
-                    winkstart.publish('numbers.refresh');
+                function(json) {
+                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
+                        winkstart.modules['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
+                        if (args.success)
+                            args.success();
+                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
+                        alert(json.errs[0].msg);
+                    } else {
+                        // TODO: Better process XHR here
+                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                    }
                 }
             );
         },

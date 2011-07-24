@@ -12,31 +12,28 @@
     <div class="info" style="background-repeat: repeat-y; ">
         <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">per-minute credit</span>
 
-        <span id="addCredsSpan"><a href="#" id="add_prepay_button" class="credits manage button_small button">Manage Credit</a></span>
-    </div>
-
-    {{if account.billing }}
-    <div class="info">
-        <span class="e_num"></span>
-        <span class="e_detail">
-            <span class="cc_number">${account.billing.cards.length}</span> credit cards on file
-            <span class="edit"><a href="#">[edit]</a></span>
+        <span id="addCredsSpan">
+            <a href="#" id="add_prepay_button" class="credits manage button_small button">Manage Credit</a>
         </span>
     </div>
 
-    {{else}}
     <div class="info">
-
-        <span class="e_detail no_cc_warning">&nbsp;<span id="my_account_bottom" style="cursor:pointer; color:#2585A5;" class="">No Credit Card On File!</span></span>
+        <span class="e_num"></span>
+        <span class="e_detail">
+            {{if account.discount_code }}
+            <span class="edit discount">Discount Code: ${account.discount_code}</span>
+            {{else}}
+            <span class="edit discount">Add Discount Code</span>
+            {{/if}}
+        </span>
     </div>
-    {{/if}}
 
     <div class="addl" style="background-position:0px -40px; height:30px">
 
     </div>
 
     <ul class="buttons">
-        <li><a class="history" href="#">View Order History</a></li>
-        <li><a class="account" href="#">View Call Log</a></li>
+<!--        <li><a class="history" href="#">View Order History</a></li>
+        <li><a class="account" href="#">View Call Log</a></li>-->
     </ul>
 </div>

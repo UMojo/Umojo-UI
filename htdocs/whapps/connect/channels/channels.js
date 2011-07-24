@@ -82,12 +82,13 @@ winkstart.module('connect', 'channels',
                             data : form_data,
                             account_id : '2600hz'
                         },
-                        function(data, xhr) {
+                        function(json, xhr) {
                             // Check the response for errors
 
                             // Close the dialog
                             dialogDiv.dialog('close');
 
+                            winkstart.modules['connect'].account = json.data;
                             winkstart.publish('channels.refresh');
                         }
                     );

@@ -44,11 +44,15 @@ winkstart.module('connect', 'sipservice',
             'sipservice.index' : 'index',               // Splash screen
             'sipservice.main_menu' : 'main_menu',       // Main menu, once logged in
             'sipservice.refresh' : 'refresh',           // Refresh entire screen (should never be used theoretically)
+
+            // When other modules make a change, they will call their own refresh methods. We want to listen for those.
             'credits.refresh' : 'refresh',
             'channels.refresh' : 'refresh',
             'endpoint.refresh' : 'refresh',
-            'numbers.refresh' : 'refresh'
-            
+            'fraud.refresh' : 'refresh',
+            'monitoring.refresh' : 'refresh',
+            'numbers.refresh' : 'refresh',
+            'promo.refresh' : 'refresh'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -139,7 +143,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').html(this.templates.howto.tmpl());
         },
 
-        redraw: function() {
+        refresh: function() {
             var account = winkstart.modules['connect'].account;
 
             winkstart.log('Redrawing...');
@@ -171,10 +175,18 @@ winkstart.module('connect', 'sipservice',
 
             $('#auth_realm').html(account.account.auth_realm);
 
+            // Reformat any phone number that's US and e.164
+            // TODO: Move this elsewhere, via events?
+            $('.number').each(function(k,v) {
+                did = $(v).text();
+                did = did.replace(/\+1([2-9]\d{2})(\d{3})(\d{4})/, "($1) $2-$3");
+                $(v).text(did);
+            });
+
             // TODO: Fix this. It doesn't belong here. Move to endpoint.js and figure out dynamics
             $("#ws-content .drop_area:not(.ui-droppable").droppable({
                 drop: function(event, ui) {
-                    winkstart.publish('numbers.map_number', { did : $(ui.draggable).dataset(), new_server : $(this).dataset() });
+                    winkstart.publish('numbers.map_number', {did : $(ui.draggable).dataset(), new_server : $(this).dataset()});
                 },
                 accept: '.number' ,
                 activeClass: 'ui-state-highlight',
@@ -184,15 +196,15 @@ winkstart.module('connect', 'sipservice',
 
         },
 
-        refresh : function(){
+        load_account : function(){
             var THIS = this;
             var account_id = winkstart.modules['connect'].account_id;
 
             winkstart.log('Loading account ' + account_id);
 
-            winkstart.getJSON('sipservice.get', { account_id : account_id }, function(data, xhr) {
+            winkstart.getJSON('sipservice.get', {account_id : account_id}, function(data, xhr) {
                 winkstart.modules['connect'].account = data.data;
-                THIS.redraw();
+                THIS.refresh();
             });
         },
 
@@ -223,7 +235,7 @@ winkstart.module('connect', 'sipservice',
                 // populating it's own area.
                 THIS.main_menu();
 
-                THIS.refresh();
+                THIS.load_account();
             } else {
                 // Show landing page
                 
