@@ -43,15 +43,19 @@ winkstart.module('connect', 'sipservice',
 
             'sipservice.index' : 'index',               // Splash screen
             'sipservice.main_menu' : 'main_menu',       // Main menu, once logged in
-            'sipservice.refresh' : 'refresh'           // Refresh entire screen (should never be used theoretically)
+            'sipservice.refresh' : 'refresh',           // Refresh entire screen (should never be used theoretically)
+            'credits.refresh' : 'refresh',
+            'channels.refresh' : 'refresh',
+            'endpoint.refresh' : 'refresh',
+            'numbers.refresh' : 'refresh'
             
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
-//                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
+//                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+                url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
 
@@ -135,22 +139,60 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').html(this.templates.howto.tmpl());
         },
 
-        refresh: function() {
+        redraw: function() {
             var account = winkstart.modules['connect'].account;
+
+            winkstart.log('Redrawing...');
 
             $('#my_services').html(this.templates.main_services.tmpl(account));
 
             $('#my_servers').html(this.templates.main_servers.tmpl(account));
 
-            $('#my_numbers').html(this.templates.main_dids.tmpl(account));
+            var tmp = account;
+
+            tmp.unassigned = 0;
+            tmp.totalDIDs = 0;
+            if (tmp.DIDs_Unassigned) {
+                $.each(tmp.DIDs_Unassigned, function() {
+                    tmp.unassigned++;
+                    tmp.totalDIDs++;
+                });
+            };
+
+            $.each(tmp.servers, function(k, v) {
+                if (v.DIDs) {
+                    $.each(v.DIDs, function(i, j) {
+                        tmp.totalDIDs++;
+                    });
+                }
+            });
+
+            $('#my_numbers').html(this.templates.main_dids.tmpl(tmp));
+
+            $('#auth_realm').html(account.account.auth_realm);
+
+            // TODO: Fix this. It doesn't belong here. Move to endpoint.js and figure out dynamics
+            $("#ws-content .drop_area:not(.ui-droppable").droppable({
+                drop: function(event, ui) {
+                    winkstart.publish('numbers.map_number', { did : $(ui.draggable).dataset(), new_server : $(this).dataset() });
+                },
+                accept: '.number' ,
+                activeClass: 'ui-state-highlight',
+                activate: function(event, ui) {},
+                scope: 'moveDID'
+            }); // End droppable()
+
         },
 
-        load_account : function(account_id){
+        refresh : function(){
             var THIS = this;
+            var account_id = winkstart.modules['connect'].account_id;
+
+            winkstart.log('Loading account ' + account_id);
 
             winkstart.getJSON('sipservice.get', { account_id : account_id }, function(data, xhr) {
                 winkstart.modules['connect'].account = data.data;
-                THIS.refresh();
+                THIS.redraw();
             });
         },
 
@@ -181,7 +223,7 @@ winkstart.module('connect', 'sipservice',
                 // populating it's own area.
                 THIS.main_menu();
 
-                THIS.load_account('info_2600hz');
+                THIS.refresh();
             } else {
                 // Show landing page
                 
@@ -191,6 +233,7 @@ winkstart.module('connect', 'sipservice',
                 $('#ws-content a#signup_button').click(function() {
                     THIS.main_menu();
                 });
+
             }
         }
     } // End function definitions

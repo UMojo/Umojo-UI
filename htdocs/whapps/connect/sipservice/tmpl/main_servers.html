@@ -4,11 +4,9 @@
         <div class="title">
             <a class="remove_server" data-serverid="${s}" href="#" title="Remove Server - ${server_name}" style="display:none; vertical-align: middle; float: left; max-width: 1.5em;"><img class="icon error" style="max-width: 1.5em; vertical-align: middle;"></a>
             <span class="name">${server_name}</span>
-            {{if monitor }}
-            <span class="status">Monitoring is <span class="state-${monitor.monitor_enabled}">{{if monitor.monitor_enabled}}On{{else}}Off{{/if}}</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
-            {{else}}
-            <span class="status">Monitoring is <span class="state-false">Off</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
-            {{/if}}
+<!--            <span class="status">Monitoring is <span class="state-${monitor.monitor_enabled}">{{if monitor.monitor_enabled}}On{{else}}Off{{/if}}</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
+            <span class="status">Monitoring is <span class="state-false">Off</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>-->
+            <span class="status"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Defaults</a></span>
         </div>
         <div class="sip" style="display:none;">
             {{if auth.auth_method == "IP"}}
@@ -42,31 +40,32 @@
                 <span class="number" data-did="${i}" data-serverid="${s}">${i}</span>
 
                 {{if DID.failover}}
-                <a href="#" class="failover active" data-serverid="${s}" data-did="${i}" data-failover="${DID.failover.e164}">Failover #</a>
+                <a href="#" class="edit_failover active" data-serverid="${s}" data-did="${i}" data-failover="${DID.failover.e164}">Failover #</a>
                 {{else}}
-                <a href="#" class="failover" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
+                <a href="#" class="edit_failover" data-serverid="${s}" data-did="${i}" data-failover="">Failover #</a>
                 {{/if}}
 
                 {{if DID.caller_id}}
-                <a href="#" class="cid active"  data-serverid="${s}" title="${DID.caller_id.cid_name}" data-did="${i}">CID</a>
+                <a href="#" class="edit_cnam active"  data-serverid="${s}" title="${DID.caller_id.cid_name}" data-did="${i}">CID</a>
                 {{else}}
-                <a href="#" class="cid" data-serverid="${s}" title="Click to Set Outbound Caller ID Name (CNAM)" data-did="${i}">CID</a>
+                <a href="#" class="edit_cnam" data-serverid="${s}" title="Click to Set Outbound Caller ID Name (CNAM)" data-did="${i}">CID</a>
                 {{/if}}
 
                 {{if DID.e911_info}}
-                <a href="#" class="e911 {{if DID.e911_info}}active{{/if}}"  data-serverid="${s}"  data-did="${i}" {{if DID.e911_info}}title="${DID.e911_info.Address}"{{/if}}>e911</a>
+                <a href="#" class="edit_e911 {{if DID.e911_info}}active{{/if}}"  data-serverid="${s}"  data-did="${i}" {{if DID.e911_info}}title="${DID.e911_info.Address}"{{/if}}>e911</a>
                 {{else}}
-                <a href="#" class="e911" data-serverid="${s}"  data-did="${i}">e911</a>
+                <a href="#" class="edit_e911" data-serverid="${s}"  data-did="${i}">e911</a>
                 {{/if}}
                 
-                <a href="#" class="misc"  data-serverid="${s}" data-did="${i}">misc</a>
+                <a href="#" class="edit_misc"  data-serverid="${s}" data-did="${i}">misc</a>
+                
                 <a href="#" class="unassign"  data-serverid="${s}" data-did="${i}">Unassign</a>
 
             </div>
             {{/each}}
         </div>
-        <div class="drop_area" id="s_drop_${s}" data-serverid="${s}">Drag-n-Drop Numbers Here</div>
-        <div class="behavior"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Modify Default Behaviors</a> (Fail-over #, Caller ID, etc.)</div>
+        <div class="drop_area" id="s_drop_${s}" data-serverid="${s}"/>
+        <div class="behavior" />
     </div>
     {{/each}}
 

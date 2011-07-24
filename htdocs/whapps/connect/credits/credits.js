@@ -54,13 +54,14 @@ winkstart.module('connect', 'credits',
             });
 
             $('.credits.add', dialogDiv).click(function() {
+                add_credits = $('input[name=add_credits]:checked', '#credit_form').val();
                 // Grab data from form
-                var form_data = form2object('credits');
+                //var form_data = form2object('credit_form');
 
                 // Build the save function here, for use with or without a billing confirmation screen (coming up)
                 var save = function() {
                     winkstart.postJSON('credits.post', {
-                            data : form_data,
+                            data : { 'add_credits' : add_credits },
                             account_id : winkstart.modules['connect'].account_id
                         },
                         function(data, xhr) {
@@ -68,6 +69,8 @@ winkstart.module('connect', 'credits',
 
                             // Close the dialog
                             dialogDiv.dialog('close');
+
+                            winkstart.publish('credits.refresh');
                         }
                     );
                 };

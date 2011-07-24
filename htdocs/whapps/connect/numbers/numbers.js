@@ -18,9 +18,9 @@ winkstart.module('connect', 'numbers',
         /* What HTML templates will we be using? */
         templates: {
             port_number: 'tmpl/port_number.html',
-            failover: 'tmpl/edit_failover.html',
+            edit_failover: 'tmpl/edit_failover.html',
             edit_cnam: 'tmpl/edit_cnam.html',
-            service_loc: 'tmpl/service_loc.html',
+            edit_e911: 'tmpl/edit_e911.html',
             add_numbers: 'tmpl/add_numbers.html',
             search_dids_results: 'tmpl/search_dids_results.html'
             
@@ -28,49 +28,52 @@ winkstart.module('connect', 'numbers',
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'numbers.activate' : 'activate',
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
             'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
             'numbers.post_number': 'post_number',
+
             'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account
             'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
             'numbers.update_number' : 'update_number',     // Update features / settings for a number
+            'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
+            'numbers.edit_cnam' : 'edit_cnam',             // Configure CNAM
+            'numbers.update_cnam' : 'update_cnam',         // Update CNAM
+            'numbers.edit_e911' : 'edit_e911',             // Configure e911
+            'numbers.update_e911' : 'update_e911',         // Update e911
+            'numbers.edit_failover' : 'edit_failover',     // Configure Failover
+            'numbers.update_failover' : 'update_failover', // Update Failover
+            'numbers.unassign' : 'unassign',
+
             'numbers.request_port' : 'request_port',       // Request to port a number
             'numbers.port_number' : 'port_number',         // Submit a port request
             'numbers.post_port_number' : 'post_port_number',
-            'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
-            'numbers.configure_cnam' : 'configure_cnam',    // Configure CNAM
-            'numbers.post_cnam' : 'post_cnam',
-            'numbers.unassign_did' : 'unassign_did',
+
             'numbers.search_npa_nxx': 'search_npa_nxx'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             /* Search DIDs */
-            "numbers.search_npa_nxx.get": {
+            "numbers.search_npa_nxx": {
                 url: 'https://store.2600hz.com/v1/{account_id}/searchNPANXX',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.search_npa.get": {
+            "numbers.search_npa": {
                 url: 'https://store.2600hz.com/v1/{account_id}/searchNPA',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-
-            "request_portDID": {
+            "numbers.port": {
                 url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-
-
-            "getLNPData": {
+            "numbers.lnp": {
                 url: 'https://store.2600hz.com/v1/{account_id}/getLNPData',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -79,37 +82,37 @@ winkstart.module('connect', 'numbers',
 
 
             /* DID Management */
-            "numbers.addDIDs": {
+            "numbers.add": {
                 url: 'https://store.2600hz.com/v1/{account_id}/addDIDs',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.moveDID": {
+            "numbers.map_number": {
                 url: 'https://store.2600hz.com/v1/{account_id}/moveDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.delDID": {
+            "numbers.delete": {
                 url: 'https://store.2600hz.com/v1/{account_id}/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.setE911": {
-                url: 'https://store.2600hz.com/v1/{account_id}/setE911',
+            "numbers.update_e911": {
+                url: 'https://store.2600hz.com/v1/{account_id}/e911',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.setFailOver": {
+            "numbers.update_failover": {
                 url: 'https://store.2600hz.com/v1/{account_id}/failover',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.setCID": {
+            "numbers.update_cnam": {
                 url: 'https://store.2600hz.com/v1/{account_id}/cnam',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -125,207 +128,227 @@ winkstart.module('connect', 'numbers',
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.config.resources);
 
-        console.log('Started!');
-            $('.number .unassign').live('click', function() {
-                data = $(this).dataset();
-                winkstart.publish('numbers.unassign', data);
+        // Number manipulation from carrier
+        $('#ws-content').delegate('.numbers.add', 'click', function() {
+            winkstart.publish('numbers.add_number_prompt');
+        });
+
+        $('#ws-content').delegate('.numbers.port', 'click', function() {
+            winkstart.publish('numbers.port');
+        });
+
+
+        // Existing number manipulation
+        $('#ws-content').delegate('.numbers .unassign', 'click', function() {
+            winkstart.publish('numbers.unassign', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .edit_failover", "click", function(){
+            winkstart.publish('numbers.edit_failover', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .edit_cnam", "click", function(){
+            winkstart.publish('numbers.edit_cnam', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .edit_e911", "click", function(){
+            winkstart.publish('numbers.edit_e911', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .edit_misc", "click", function(){
+            winkstart.publish('numbers.edit_misc', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .check_port", 'click', function(){
+            winkstart.publish('numbers.check_port', $(this).dataset());
+        });
+
+        $('#ws-content').delegate(".numbers .delete", 'click', function(){
+            winkstart.publish('numbers.delete', $(this).dataset());
+        });
+
+
+        // Make numbers draggable
+        $('#ws-content .number:not(.ui-draggable)').live('mousemove',function(){
+            $(this).draggable({
+                cursor: 'pointer',
+                opacity: 0.35,
+                revert: 'invalid',
+                scope: 'moveDID',
+                appendTo: 'body',
+                helper: 'clone',
+                zIndex: 9999
             });
+        });
 
-            $('.numbers.add').live('click', function() {
-                winkstart.publish('numbers.add_number_prompt');
-            });
-
-            $('.numbers.port').click(function() {
-                winkstart.publish('numbers.port');
-            });
-
-            /*$('#edit_cnam').click(function() {
-                winkstart.publish('sipservice.configure_cnam');
-            });
-
-            $('#tmp_edit_auth').click(function() {
-                winkstart.publish('sipservice.edit_auth');
-            });*/
-
-            $('.did_list .numbers .unassign').live('click', function() {
-                data = $(this).dataset();
-                console.log(data);
-                winkstart.publish('numbers.unassign_did', data);
-            });
-
-            $('.did_list .numbers .add').live('click', function() {
-                winkstart.publish('sipservice.addNumber');
-            });
-        
-        
-        
-        
-            // Wire up the numbers box
-            $("#ws-content").delegate(".number.unassign", "click", function(){
-                moveDID($(this).dataset(), null);$(this).hide();
-            });
-
-            $("#ws-content").delegate(".number.failover", "click", function(){
-                winkstart.publish('sipservice.edit_failover', $(this).dataset());
-            });
-
-            $("#ws-content").delegate(".number.cid", "click", function(){
-                cidPrompt($(this).dataset(), null);
-            });
-
-            $("#ws-content").delegate(".number.e911", "click", function(){
-                e911Prompt($(this).dataset(), null);
-            });
-
-            $("#ws-content").delegate(".number.misc", "click", function(){
-                miscPrompt($(this).dataset(), null);
-            });
-
-        
-            // Make numbers draggable
-            $('#ws-content .number:not(.ui-draggable)').live('mousemove',function(){
-                $(this).draggable({
-                    cursor: 'pointer',
-                    opacity: 0.35,
-                    revert: true,
-                    scope: 'moveDID',
-                    appendTo: 'body',
-                    helper: 'clone',
-                    zIndex: 9999
-                });
-            });
-
-
-            $(".number.cancel").live('click', function(){
-                console.log('Cancel');
-                THIS.delDID($(this).dataset(), null);
-                setTimeout("winkstart.publish('sipservice.update_account')", 1);
-            });
-
-            console.log('Done initializing numbers');
-        
     }, // End initialization routine
 
 
 
     /* Define the functions for this module */
     {
-        edit_failover: function(number) {
-            var THIS = this;
-
-            var dialogDiv = THIS.templates.failover.tmpl({
-                failover: number.failover
-            }).dialog({
-                title: 'Edit Failover',
-                position: 'center',
-                height: 360,
-                width: 520
+        edit_failover: function(args) {
+            var dialogDiv = winkstart.popup(this.templates.edit_failover.tmpl(args), {
+                title: 'Edit Failover'
             });
 
-            winkstart.publish('sipservice.input_css');
+            $('.submit_btn', dialogDiv).click(function() {
+                var data = {};
+                $.extend(data, args, form2object('failover'));     // Grab data from failover form
 
-            dialogDiv.find('.submit_btn').click(function() {
-                console.log(dialogDiv);
-                winkstart.postJSON('sipservice.post_failover', {
-                    number : dialogDiv.find('#failover_number').val(),
-                    parent: number,
+                // TODO: Validate data here
+
+                // Request an update & provide a callback for success or failure
+                winkstart.publish('numbers.update_failover', {
+                    data : data,
                     success : function() {
+                        // On success, close the dialog.
                         dialogDiv.dialog('close');
+                    },
+                    error : function() {
+                        alert('Failed to save.');
                     }
-                });
-
+                })
             });
         },
 
-        post_failover: function(data) {
-            var THIS = this;
-            console.log(data);
-            if(data.number == '') {
-                delete  THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover;
-            } else {
-                THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
-                    e164: data.number
-                };
-            }
-
-            data.success();
-            THIS.update_account();
-        /*$.ajax({
-                url: "#",
-                global: true,
-                type: "POST",
-                data: ({
-                    account_id: winkstart.modules['connect'].account_id,
-                    data: {
-                        number: data.number
-                    }
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
+        update_failover: function(args) {
+            winkstart.postJSON('numbers.update_failover',
+                {
+                    data: args.data,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function() {
+                    winkstart.publish('numbers.refresh');
+                    if (args.success)
+                        args.success();
                 }
-            }
-            );*/
+            );
         },
 
-        //prompts
 
-        // '<pre>' + JSON.stringify(did) + '</pre>' +
-        failoverPrompt: function(did) {
-            popup($('#tmpl_fo_prompt').tmpl( did ) , {
-                title: 'Set Failover'
-            }	);
-            $('#fo_button').click(function() {
-                setFailOver({
-                    did: $('#fo_uri').dataset(),
-                    uri: $('#fo_uri').val()
-                } );
+        edit_cnam: function(args) {
+            var dialogDiv = winkstart.popup(this.templates.edit_cnam.tmpl(args), {
+                title: 'Edit Caller ID Name'
             });
-            $('#fo_uri').blur();
-        },
 
-        cidPrompt: function(did) {
-            popup($('#tmpl_cid_prompt').tmpl( did ) , {
-                title: 'Set CallerID'
-            }	);
-            $('#cid_prompt_form').submit(function() {
-                setCID({
-                    did: $('#cid_name').dataset('did'),
-                    serverid: $('#cid_name').dataset('serverid'),
-                    cid_name: $('#cid_name').val()
-                } );
-                return false;
+            $('.submit_btn', dialogDiv).click(function() {
+                var data = {};
+                $.extend(data, args, form2object('cnam'));     // Grab data from cnam form
+
+                // TODO: Validate data here
+
+                // Request an update & provide a callback for success or failure
+                winkstart.publish('numbers.update_cnam', {
+                    data : data,
+                    success : function() {
+                        // On success, close the dialog.
+                        dialogDiv.dialog('close');
+                    },
+                    error : function() {
+                        alert('Failed to save.');
+                    }
+                })
             });
         },
 
-        e911Prompt: function(e911) {
+        update_cnam: function(args) {
+            winkstart.postJSON('numbers.update_cnam',
+                {
+                    data: args.data,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function() {
+                    winkstart.publish('numbers.refresh');
+                    if (args.success)
+                        args.success();
+                }
+            );
+        },
 
-            popup($('#tmpl_e911_prompt').tmpl( {
-                did: e911.did,
-                serverid:e911.serverid,
-                e911_info: e911.e911_info || acct.servers[e911.serverid].DIDs[e911.did]['e911_info'] || {}
-            }), {
-                title: 'Set E911'
-            }	);
-            $('#e911_update_form').submit(function() {
-                setE911({
-                    'e911_info': $('#e911_update_form').serializeObject(),
-                    'did': $('#e911_button').dataset('did'),
-                    'serverid': $('#e911_button').dataset('serverid')
-                });
-                return false;
+
+        edit_e911: function(args) {
+            var dialogDiv = winkstart.popup(this.templates.edit_e911.tmpl(args), {
+                title: 'Edit Emergency 911 Location'
+            });
+
+            $('.submit_btn', dialogDiv).click(function() {
+                var data = {};
+                $.extend(data, args, form2object('e911'));     // Grab data from e911 form
+
+                // TODO: Validate data here
+
+                // Request an update & provide a callback for success or failure
+                winkstart.publish('numbers.update_e911', {
+                    data : data,
+                    success : function() {
+                        // On success, close the dialog.
+                        dialogDiv.dialog('close');
+                    },
+                    error : function() {
+                        alert('Failed to save.');
+                    }
+                })
             });
         },
 
-        miscPrompt: function() {
-
+        update_e911: function(args) {
+            winkstart.postJSON('numbers.update_e911',
+                {
+                    data: args.data,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function() {
+                    winkstart.publish('numbers.refresh');
+                    if (args.success)
+                        args.success();
+                }
+            );
         },
 
-        modifySRVDefaultsPrompt: function(info) {
+
+        edit_fax: function(args) {
+            var dialogDiv = winkstart.popup(this.templates.edit_fax.tmpl(args), {
+                title: 'Edit Fax Settings'
+            });
+
+            $('.submit_btn', dialogDiv).click(function() {
+                var data = {};
+                $.extend(data, args, form2object('#fax'));     // Grab data from cnam form
+
+                // TODO: Validate data here
+
+                // Request an update & provide a callback for success or failure
+                winkstart.publish('numbers.update_fax', {
+                    data : data,
+                    success : function() {
+                        // On success, close the dialog.
+                        dialogDiv.dialog('close');
+                    },
+                    error : function() {
+                        alert('Failed to save.');
+                    }
+                })
+            });
+        },
+
+        update_fax: function(args) {
+            winkstart.postJSON('numbers.update_fax',
+                {
+                    data: args.data,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function() {
+                    winkstart.publish('numbers.refresh');
+                    if (args.success)
+                        args.success();
+                }
+            );
+        },
+
+
+
+        defaults: function(info) {
             //	winkstart.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
             popup($('#tmpl_modSRVDefs_prompt').tmpl( {
                 s: info.serverid,
@@ -341,14 +364,11 @@ winkstart.module('connect', 'numbers',
         },
 
 
-        searchDIDsPrompt: function() {
-            THIS=this;
-            winkstart.popup(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
-                'title' : 'blah'
-            });
-        //TODO:  display "Add Credits" if it goes negative
-        },
 
+
+        /*********************
+         * Porting Functions *
+         *********************/
         LNPPrompt: function(args) {
             if (typeof args != 'object') {
                 args= new Object();
@@ -397,84 +417,6 @@ winkstart.module('connect', 'numbers',
             );
         },
 
-        updateDIDQtyCosts: function(did, qty) {
-            if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
-                $('#fd_' + did).dataset('qty',  parseInt( qty ));
-                return parseInt( qty );
-            }
-            return -1;
-        },
-
-
-
-
-        refresh: function() {
-            var THIS = this;
-            /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_numbers') );
-        },
-
-        add_number_prompt: function(args) {
-            var THIS = this;
-
-            var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
-                title: 'Add/Search Numbers'
-            });
-
-            winkstart.publish('sipservice.input_css');
-            $(dialogDiv).find('#sdid_npa').keyup(function() {
-                if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {
-                    $('#sdid_nxx').hide('slow');
-                } else {
-                    $('#sdid_nxx').show('slow');
-                }
-                });
-                
-
-
-                $('.ctr_btn', dialogDiv).click(function() {
-                    var NPA = $('#sdid_npa', dialogDiv).val();
-                    var NXX = $('#sdid_nxx', dialogDiv).val();
-                    winkstart.publish('numbers.search_npa_nxx', 
-                    	{
-	                    	account_id: '2600hz',
-                        	data : { 'NPA': NPA, 'NXX': NXX },
-	                        callback: function(results) {
-	                            console.log('Found these #s:', results);
-
-                            // Draw results on screen
-                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
-                        }
-                        }
-                        
-                    );
-                });
-
-        },
-
-
-        post_number: function(data) {
-            $.ajax({
-                url: "#",
-                global: true,
-                type: "POST",
-                data: ({
-                    account_id: winkstart.modules['connect'].account_id,
-                    data: {
-                        number: data.number
-                    }
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
-                }
-            }
-            );
-        },
 
         port_number: function(args) {
             var THIS = this;
@@ -528,176 +470,17 @@ winkstart.module('connect', 'numbers',
         },
 
 
-        configure_cnam: function(args) {
-            var THIS = this;
 
-            var dialogDiv = THIS.templates.edit_cnam.tmpl({}).dialog({
-                title: 'Edit Caller Id',
-                width: 580,
-                height: 250,
-                position: 'center'
-            });
-
-            winkstart.publish('sipservice.input_css');
-
-            $(dialogDiv).find('.submit_btn').click(function() {
-                winkstart.publish('sipservice.post_cnam', {
-                    caller_id : 500,
-                    success : function() {
-                        dialogDiv.dialog('close');
-                    }
-                });
-
-            });
-
-        },
-
-        post_cnam: function(data) {
-            winkstart.postJSON('CREATE_CNAM_ONLY...', {
-                	
-                data: {
-                    caller_id: data.caller_id
-                }
-                }, function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
-                });
-            },
 
         /******************
-         * DID Management *
+         * DID Purchasing *
          ******************/
-        moveDID: function(did, srv) {
-            var THIS = this;
-            srv = srv.serverid;
-            did = did.did;
-
-            winkstart.postJSON('numbers.moveDID',
-	            {
-	            	data: {"DID":{"did": did},"server":{"serverid":srv}},
-	            	account_id: winkstart.modules['connect'].account_id
-	            },
-	            function() {;}
-	            	//THIS.update_account({});
-	        );
-
-
-
-            winkstart.log('DID ', did, ' srv', srv);
-
-            // Is this an unassigned DID?
-            if (THIS.account.DIDs_Unassigned && THIS.account.DIDs_Unassigned[did]) {
-                // Yes! Assign it
-                THIS.account.servers[srv].DIDs[did] = THIS.account.DIDs_Unassigned[did];
-
-                // Remove old DID
-                delete(THIS.account.DIDs_Unassigned[did]);
-            } else {
-                // Nope, already mapped. Need to move it
-                var did_data = {};
-
-                // Look for this DID on any other server. If it's there, remove it
-                $.each(THIS.account.servers, function(k, v) {
-                    if (THIS.account.servers[k].DIDs[did]) {
-                        did_data = THIS.account.servers[k].DIDs[did];
-
-                        // Remove from the old server
-                        delete(THIS.account.servers[k].DIDs[did]);
-                    }
-                });
-
-                // Add whatever we found to the new server
-                THIS.account.servers[srv].DIDs[did] = did_data;
-            }
-        },
-        unassign_did: function(data) {
-            var THIS = this;
-            var did = data.did;
-            var serverid = data.serverid;
-            /* 
-            	not sure about this code:
-
-            delete(THIS.account.servers[serverid].DIDs[did]);
-            if(THIS.account.DIDs_Unassigned == undefined) {
-                THIS.account.DIDs_Unassigned = {};
-            }
-            THIS.account.DIDs_Unassigned[did] = {};
-            */
-            winkstart.postJSON('numbers.moveDID',
-	            {
-	            	data: {"DID":{"serverid": serverid , "did": did},"server":null} ,
-	            	account_id: winkstart.modules['connect'].account_id
-	            },
-	            function() {;}
-	            	//THIS.update_account({});
-	        );
-        },
-
-        delDID: function(did) {
-            var THIS = this;
-
-            delete(THIS.account.DIDs_Unassigned[did.did]);
-        },
-
-        addDID: function(dids) {
-
-
-            winkstart.postJSON('sipservice.numbers.addDID',
-            {
-                account_id: winkstart.modules['connect'].account_id,
-                data: {
-                    DID:did
-                }
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, "Error");
-                } else {
-                    msgAlert('Not enough credits to add ' + did);
-                    return false;
-                }
-                redraw(msg.data);
-            }
-            );
-        },
-
-
-        addDIDs: function(dids) {
-            var addedDIDs;
-            winkstart.postJSON('sipservice.numbers.addDIDs',
-            {
-                account_id: winkstart.modules['connect'].account_id,
-                data: {
-                    DIDs:dids
-                }
-            },
-            function(msg){
-                addedDIDs=msg; // I do not know why... (2011-07-15)
-                if (typeof msg =="object") {
-                    $("body").trigger('addDIDs', msg.data);
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-
-                    if (typeof msg.data == 'object' && typeof msg.data.acct == 'object') {
-                        redraw(msg.data.acct); // note more than just acct is returned
-                    }
-                }
-            }
-            );
-
-
-            return addedDIDs;
-        },
-
         // This function takes args.data with a { NPA : ###, NXX : ### } as arguments and searches for available phone numbers.
         //
         // OTHER THEN A PLEASE WAIT BOX, NO "PAINTING" OF RESULTS COMES FROM THIS FUNCTION.
         // All results will be passed to args.callback(results) for display/processing
         search_npa_nxx: function(args) {
-        
+
             NPA = args.data.NPA;
             NXX = args.data.NXX;
 
@@ -782,57 +565,132 @@ winkstart.module('connect', 'numbers',
             return purchasedDIDs;
         },
 
-        setE911: function(e911) {
-            winkstart.postJSON("numbers.setE911",
-            {
-			account_id: winkstart.modules['connect'].account_id,
-                data:{
-                    "e911_info": e911.e911_info,
-                    "did":e911.did,
-                    "serverid":e911.serverid
-                }
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-                redraw(msg.data);
-            }
-            );
+        searchDIDsPrompt: function() {
+            THIS=this;
+            winkstart.popup(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
+                'title' : 'blah'
+            });
+        //TODO:  display "Add Credits" if it goes negative
         },
 
-        setFailOver: function(info) {
-            winkstart.postJSON("numbers.setFailOver",
+        search_numbers_list: function (elm, list) {
+
+            var filter = $(elm).val();
+            if(filter) {
+                // this finds all links in a list that contain the input,
+                // and hide the ones not containing the input while showing the ones that do
+                $(list).find("span.number:not(:Contains(" + filter + "))").parent().slideUp();
+                $(list).find("span.number:Contains(" + filter + ")").parent().slideDown();
+            } else {
+                $(list).find("div").slideDown();
+            }
+            return false;
+        },
+
+
+        add_number_prompt: function(args) {
+            var THIS = this;
+
+            var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
+                title: 'Add/Search Numbers'
+            });
+
+            winkstart.publish('sipservice.input_css');
+            $(dialogDiv).find('#sdid_npa').keyup(function() {
+                if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {
+                    $('#sdid_nxx').hide('slow');
+                } else {
+                    $('#sdid_nxx').show('slow');
+                }
+                });
+
+
+
+                $('.ctr_btn', dialogDiv).click(function() {
+                    var NPA = $('#sdid_npa', dialogDiv).val();
+                    var NXX = $('#sdid_nxx', dialogDiv).val();
+                    winkstart.publish('numbers.search_npa_nxx',
+                    	{
+	                    	account_id: '2600hz',
+                        	data : {'NPA': NPA, 'NXX': NXX},
+	                        callback: function(results) {
+	                            console.log('Found these #s:', results);
+
+                            // Draw results on screen
+                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
+                        }
+                        }
+
+                    );
+                });
+
+        },
+
+
+        add: function(dids) {
+            winkstart.postJSON('numbers.addDIDs',
             {
                 account_id: winkstart.modules['connect'].account_id,
                 data: {
-                    did:info.did.did,
-                    serverid:info.did.serverid,
-                    failover: info.uri
+                    DIDs:dids
                 }
             },
             function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-                redraw(msg.data);
+                if (typeof msg =="object") {
+                    $("body").trigger('addDIDs', msg.data);
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
 
-            }
-            );
+                    if (typeof msg.data == 'object' && typeof msg.data.acct == 'object') {
+                        redraw(msg.data.acct); // note more than just acct is returned
+                    }
+                }
+            });
         },
 
-        setCID: function(info){
-            winkstart.postJSON("numbers.setCID",
-            {
-                account_id: winkstart.modules['connect'].account_id,
-                data: info
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-                redraw(msg.data);
+
+
+
+        /**************************
+         * Managing Owned Numbers *
+         **************************/
+        map_number: function(args) {
+            var THIS = this;
+            srv = args.new_server.serverid;
+            did = args.did.did;
+
+            winkstart.postJSON('numbers.map_number',
+	            {
+	            	data: {"DID" : {"did": did},"server":{"serverid":srv}},
+	            	account_id: winkstart.modules['connect'].account_id
+	            },
+	            function() {
+                        winkstart.publish('numbers.refresh');
+                    }
+	        );
+        },
+        
+        unassign: function(data) {
+            var did = data.did;
+            var serverid = data.serverid;
+            /* 
+            	not sure about this code:
+
+            delete(THIS.account.servers[serverid].DIDs[did]);
+            if(THIS.account.DIDs_Unassigned == undefined) {
+                THIS.account.DIDs_Unassigned = {};
             }
+            THIS.account.DIDs_Unassigned[did] = {};
+            */
+            winkstart.postJSON('numbers.map_number',
+                {
+                    data: {"DID" : {"serverid" : serverid, "did" : did}, "server" : null} ,
+                    account_id : winkstart.modules['connect'].account_id
+                },
+                function() {
+                    winkstart.publish('numbers.refresh');
+                }
             );
         },
 
@@ -855,63 +713,9 @@ winkstart.module('connect', 'numbers',
         },
 
 
-        portDID: function() {
-
-        },
-
-
-        not_used_anymore_searchNPA: function(nbr, cb) {
-            //			$.getJSON('/api/searchNPA', function(data) {
-            //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-            winkstart.getJSON("searchNPA",
-            {
-                account_id: winkstart.modules['connect'].account_id,
-                data: nbr
-            },
-            function(msg){
-                redraw(msg.data);
-            }
-            );
-        },
-
-
-        not_used_anymore_searchNPANXX: function(nbr, cb) {
-            $.getJSON('/api/searchNPANXX', function(data) {
-                $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
-            });
-            $.ajax({
-                url: "/api/searchNPANXX",
-                global: true,
-                type: "POST",
-                data: ({
-                    account_id: winkstart.modules['connect'].account_id,
-                    data: nbr
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    redraw(msg.data);
-
-                }
-            }
-            );
-
-        },
-
-        search_numbers_list: function (elm, list) {
-
-            var filter = $(elm).val();
-            if(filter) {
-                // this finds all links in a list that contain the input,
-                // and hide the ones not containing the input while showing the ones that do
-                $(list).find("span.number:not(:Contains(" + filter + "))").parent().slideUp();
-                $(list).find("span.number:Contains(" + filter + ")").parent().slideDown();
-            } else {
-                $(list).find("div").slideDown();
-            }
-            return false;
-        },
-
+        /*************************
+         * DID Display / Listing *
+         *************************/
         listDIDs: function(servers) {
             var THIS = this;
 
@@ -950,11 +754,17 @@ winkstart.module('connect', 'numbers',
                 }
             });
 
+            console.log(tmp);
+
             winkstart.log('Refreshing DIDs...');
             $('#my_numbers').empty();
             THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
         },
 
+
+        /*****************
+         * Other Helpers *
+         *****************/
         createUploader: function(elm, act, args, cb){
             var uploader = new qq.FileUploader({
                 allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
@@ -972,4 +782,149 @@ winkstart.module('connect', 'numbers',
         }
     } // End function definitions
 
-    );  // End module
+ );  // End module
+
+
+
+
+
+
+
+
+
+        // '<pre>' + JSON.stringify(did) + '</pre>' +
+/*        failover: function(did) {
+            popup($('#tmpl_fo_prompt').tmpl( did ) , {
+                title: 'Set Failover'
+            }	);
+            $('#fo_button').click(function() {
+                setFailOver({
+                    did: $('#fo_uri').dataset(),
+                    uri: $('#fo_uri').val()
+                } );
+            });
+            $('#fo_uri').blur();
+        },*/
+
+
+
+
+/*        not_used_anymore_searchNPA: function(nbr, cb) {
+            //			$.getJSON('/api/searchNPA', function(data) {
+            //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
+            winkstart.getJSON("searchNPA",
+            {
+                account_id: winkstart.modules['connect'].account_id,
+                data: nbr
+            },
+            function(msg){
+                redraw(msg.data);
+            }
+            );
+        },
+
+
+        not_used_anymore_searchNPANXX: function(nbr, cb) {
+            $.getJSON('/api/searchNPANXX', function(data) {
+                $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
+            });
+            $.ajax({
+                url: "/api/searchNPANXX",
+                global: true,
+                type: "POST",
+                data: ({
+                    account_id: winkstart.modules['connect'].account_id,
+                    data: nbr
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    redraw(msg.data);
+
+                }
+            }
+            );
+
+        },*/
+
+/*        post_failover: function(data) {
+            var THIS = this;
+            console.log(data);
+            if(data.number == '') {
+                delete  THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover;
+            } else {
+                THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
+                    e164: data.number
+                };
+            }
+
+            data.success();
+            THIS.update_account();*/
+        /*$.ajax({
+                url: "#",
+                global: true,
+                type: "POST",
+                data: ({
+                    account_id: winkstart.modules['connect'].account_id,
+                    data: {
+                        number: data.number
+                    }
+                }),
+                dataType: "json",
+                async:true,
+                success: function(msg){
+                    if (msg && msg.errs && msg.errs[0]) {
+                        display_errs(msg.errs);
+                    }
+                    redraw(msg.data);
+                }
+            }
+            );*/
+/*        },*/
+
+
+
+/*
+        updateDIDQtyCosts: function(did, qty) {
+            if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
+                $('#fd_' + did).dataset('qty',  parseInt( qty ));
+                return parseInt( qty );
+            }
+            return -1;
+        },
+
+ */
+
+
+
+
+
+/*
+ * Old DID Map code
+/*            winkstart.log('DID ', did, ' srv', srv);
+
+            // Is this an unassigned DID?
+            if (THIS.account.DIDs_Unassigned && THIS.account.DIDs_Unassigned[did]) {
+                // Yes! Assign it
+                THIS.account.servers[srv].DIDs[did] = THIS.account.DIDs_Unassigned[did];
+
+                // Remove old DID
+                delete(THIS.account.DIDs_Unassigned[did]);
+            } else {
+                // Nope, already mapped. Need to move it
+                var did_data = {};
+
+                // Look for this DID on any other server. If it's there, remove it
+                $.each(THIS.account.servers, function(k, v) {
+                    if (THIS.account.servers[k].DIDs[did]) {
+                        did_data = THIS.account.servers[k].DIDs[did];
+
+                        // Remove from the old server
+                        delete(THIS.account.servers[k].DIDs[did]);
+                    }
+                });
+
+                // Add whatever we found to the new server
+                THIS.account.servers[srv].DIDs[did] = did_data;
+            }*/
+

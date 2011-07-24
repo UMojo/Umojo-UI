@@ -1,18 +1,20 @@
 <div>
-
-    <div id="edit_cnam" class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
+    <div class="popup edit_cnam">
+        <div class="stylized myform">
+            <h3>Caller ID Name</h3><div class="icon location blue"></div>
+            <form id="cnam" name="cnam" method="post" action="#">
                 <p class="clear">When you call someone, show this as your name on their Caller ID Device:</p>
-                <form id="" name="form" method="post" action="#">
-                    <label>Caller ID</label><input type="text" name="CallerID" id="CallerID" class="field_last" />
-                </form>
 
+                <div>
+                    <label>Caller ID Name: </label>
+                    <input type="text" name="cid_name" class="field_last" />
+                </div>
+                
                 <p class="note_box clear">Note: These requests take up to 72 hours to process and can only be placed once every 72 hours.</p>
 
                 <a class="submit_btn ctr" href="#">Submit</a>
 
-            </div>
+            </form>
         </div>
     </div>
 

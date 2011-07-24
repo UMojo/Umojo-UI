@@ -66,6 +66,9 @@ winkstart.module('connect', 'endpoint',
             modifySRVDefaultsPrompt($(this).dataset(), null);
         });
 
+        // Define areas where numbers can be dropped and what to do when they are dropped
+/*        $("#ws-content .drop_area:not(.ui-droppable").live('mousemove', function() {
+        }); // End live()*/
     }, // End initialization routine
 
 
@@ -128,6 +131,8 @@ winkstart.module('connect', 'endpoint',
 
                         // Close the dialog
                         dialogDiv.dialog('close');
+
+                        winkstart.publish('endpoint.refresh');
                     }
                 );
 
@@ -190,22 +195,6 @@ winkstart.module('connect', 'endpoint',
             winkstart.log('Refreshing Servers...');
             $('#my_servers').empty();
             THIS.templates.main_servers.tmpl( account  ).appendTo ( $('#my_servers') );
-
-            // Define areas where numbers can be dropped and what to do when they are dropped
-            $("#ws-content .drop_area").droppable({
-                drop: function(event, ui) {
-                    tmp_ui=ui;
-                    tmp_md_this=this;
-                    THIS.moveDID($(tmp_ui.draggable).dataset(), $(tmp_md_this).dataset());
-                    setTimeout("winkstart.publish('sipservice.update_account')", 1);
-                },
-                accept: '.number' ,
-                activeClass: 'ui-state-highlight',
-                activate: function(event, ui) {
-                ;
-                },
-                scope: 'moveDID'
-            });
         },
 
         refresh: function() {

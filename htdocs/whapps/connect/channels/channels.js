@@ -87,6 +87,8 @@ winkstart.module('connect', 'channels',
 
                             // Close the dialog
                             dialogDiv.dialog('close');
+
+                            winkstart.publish('channels.refresh');
                         }
                     );
                 };
@@ -100,14 +102,14 @@ winkstart.module('connect', 'channels',
                     save();
                 }
             });
-        },
+        }/*,
 
         refresh: function(dialog) {
             // TODO - properly populate account
 
             $('.channels.twoway', dialog).html(this.channels.twoway_channels);
             $('.channels.inbound', dialog).html(this.channels.inbound_channels);
-        }
+        }*/
 
     } // End function definitions
 
