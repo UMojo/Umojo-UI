@@ -25,12 +25,12 @@ winkstart.module('dashboard', 'monitor',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        /*winkstart.publish('subnav.add', {
+        winkstart.publish('subnav.add', {
+            whapp: 'dashboard',
             module: this.__module,
-            label: 'Cluster Monitor'
-        });*/
-
-        winkstart.publish('monitor.activate');
+            label: 'Monitor',
+            icon: 'registration'
+        });
     }, // End initialization routine
 
 
