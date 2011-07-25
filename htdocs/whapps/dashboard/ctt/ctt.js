@@ -187,7 +187,6 @@ winkstart.module('dashboard', 'ctt',
                                 ]);
                                 
                             $('#'+id+'_debug').live('click', function(){
-                            
                                 var uri = encodeURI('http://logstash.databits.net/search#'+
                                     '{"offset":0,"count":50,"q":"callid:'+obj.call_id+'","interval":3600000}');
                                 window.open(uri);
@@ -211,7 +210,6 @@ winkstart.module('dashboard', 'ctt',
                                     minHeight:575,
                                     height: 575
                                 });
-                                
                                 $('#details_dialog').dialog('open');
                             });
                             
@@ -240,17 +238,12 @@ winkstart.module('dashboard', 'ctt',
                                             minHeight:575,
                                             height: 575
                                         });
-                                
                                         $('#details_dialog').dialog('open');
                                     });
                                 }else{
                                     alert('No B leg');
                                 }
-                                
-                                
                             });
-                            
-
                         }
                         
                         if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
