@@ -6,8 +6,7 @@ winkstart.module('dashboard', 'ctt',
 
         /* What HTML templates will we be using? */
         templates: {
-            ctt: 'tmpl/ctt.html'//,
-        //detailRegistration: 'tmpl/detailRegistration.html'
+            ctt: 'tmpl/ctt.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -16,9 +15,7 @@ winkstart.module('dashboard', 'ctt',
         },
 
         formData: {
-    
         },
-
         validation : [
         ],
 
@@ -108,25 +105,22 @@ winkstart.module('dashboard', 'ctt',
                                             }
                                             if($i == 1){
                                                 out += '<td>'+$v+'</td></tr>';  
-                                            }
-                                            
+                                            }  
                                         });
-                                    });
-                                    
+                                    }); 
                                 }else{
                                     out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
                                 }
- 
                             });
                             out += '</table></div>'
                             return out;
                         }
                         
-                        function writeLegsDialog(id, legA, legB){
+                        function writeLegsDialog(legA, legB){
                             
                             var out = '<div class="legA"><table class="details_table">'; 
                             
-                            if(legA.other_leg_call_id != undefined && legA.other_leg_call_id != null && legB != null){
+                            if(legB != null && legB != undefined){
                                 $.each(legA, function(index, value){
                                     if(index == 'local_sdp' || index == 'remote_sdp'){
                                         out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
@@ -142,14 +136,11 @@ winkstart.module('dashboard', 'ctt',
                                                 if($i == 1){
                                                     out += '<td>'+$v+'</td></tr>';  
                                                 }
-                                            
                                             });
                                         });
-                                    
                                     }else{
                                         out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
                                     }
- 
                                 });
                                 out += '</table></div><div class="legB"><table class="details_table">';                          
 
@@ -168,18 +159,15 @@ winkstart.module('dashboard', 'ctt',
                                                 if($i == 1){
                                                     out += '<td>'+$v+'</td></tr>';  
                                                 }
-                                            
                                             });
                                         });
-                                    
                                     }else{
                                         out += '<tr><td class="bold">'+index+'</td><td>'+value+'</td></tr>';
                                     }
- 
                                 });
                                 out += '</table></div>'
                             }else{
-                                out = 'No Other Leg';
+                                out = 'B leg undefined or null';
                             }
 
                             return out;
@@ -195,34 +183,14 @@ winkstart.module('dashboard', 'ctt',
                                 noData(obj.hangup_cause),
                                 '<div id="'+id+'_debug" class="link_table">Debug</div>',
                                 '<div id="'+id+'_details" class="link_table">Details</div>',
-                                '<div id="'+id+'_leg" class="link_table">Leg</div>'
+                                '<div id="'+id+'_leg" class="link_table">Leg B</div>'
                                 ]);
                                 
                             $('#'+id+'_debug').live('click', function(){
-                                
-                                $('#details_dialog').dialog('close');
-                                
-                                $('#details_dialog').dialog({
-                                    open: function(event, ui){
-                                        $.ajax({
-                                            url: "#",
-                                            data: ({
-                                                call_id : obj.call_id
-                                            }),
-                                            success: function(data) {
-                                                $('#details_dialog').html('Some data from server');
-                                            }
-                                        });
-                                    },
-                                    autoOpen: false,
-                                    title: 'Debug for call id: '+id,
-                                    minWidth:550,
-                                    width: 550, 
-                                    minHeight:575,
-                                    height: 575
-                                });
-                                
-                                $('#details_dialog').dialog('open');     
+                            
+                                var uri = encodeURI('http://logstash.databits.net/search#'+
+                                    '{"offset":0,"count":50,"q":"callid:'+obj.call_id+'","interval":3600000}');
+                                window.open(uri);
                             });
                                     
                             $('#'+id+'_details').live('click', function(){
@@ -248,31 +216,38 @@ winkstart.module('dashboard', 'ctt',
                             });
                             
                             $('#'+id+'_leg').live('click', function(){
-                                
-                                winkstart.getJSON('cdr.read',{
-                                    crossbar: true, 
-                                    account_id: '04152ed2b428922e99ac66f3a71b0215', 
-                                    cdr_id: obj.id
-                                }, function(reply) {
-                                    var dialog_div = writeLegsDialog(id, obj, reply.data);
-                                    $('#'+id+'_leg').data('dialog', dialog_div);
-                                });
-                                
-                                $('#details_dialog').dialog('close');
 
-                                $('#details_dialog').dialog({
-                                    open: function(event, ui){
-                                        $('#details_dialog').html($('#'+id+'_leg').data('dialog'))
-                                    },
-                                    autoOpen: false,
-                                    title: 'Leg A: '+id+' Leg B: '+obj.other_leg_call_id,
-                                    minWidth:1115,
-                                    width: 1115, 
-                                    minHeight:575,
-                                    height: 575
-                                });
+                                if(obj.other_leg_call_id != undefined && obj.other_leg_call_id != null){
+
+                                    winkstart.getJSON('cdr.read',{
+                                        crossbar: true, 
+                                        account_id: '04152ed2b428922e99ac66f3a71b0215', 
+                                        cdr_id: obj.id
+                                    }, function(reply) {
+                                        var dialog_div = writeLegsDialog(obj, reply.data);
+                                        $('#'+id+'_leg').data('dialog', dialog_div);
                                 
-                                $('#details_dialog').dialog('open');
+                                        $('#details_dialog').dialog('close');
+
+                                        $('#details_dialog').dialog({
+                                            open: function(event, ui){
+                                                $('#details_dialog').html($('#'+id+'_leg').data('dialog'))
+                                            },
+                                            autoOpen: false,
+                                            title: 'Leg A: '+id+' Leg B: '+obj.other_leg_call_id,
+                                            minWidth:1115,
+                                            width: 1115, 
+                                            minHeight:575,
+                                            height: 575
+                                        });
+                                
+                                        $('#details_dialog').dialog('open');
+                                    });
+                                }else{
+                                    alert('No B leg');
+                                }
+                                
+                                
                             });
                             
 
@@ -338,8 +313,7 @@ winkstart.module('dashboard', 'ctt',
             
             {
                 'sTitle': 'Other leg'
-            }
-            ];
+            }];
 
             winkstart.table.create('ctt', $('#ctt-grid'), columns);
             $('#ctt-grid_filter input[type=text]').first().focus();
@@ -347,7 +321,5 @@ winkstart.module('dashboard', 'ctt',
             $('.cancel-search').click(function(){
                 $('#ctt-grid_filter input[type=text]').val('');
             });
- 
         }
-    }
-    );
+    });
