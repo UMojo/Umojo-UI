@@ -173,6 +173,9 @@ winkstart.module('voip', 'callflow',
       },
 
       renderFlow: function () {
+         $('.div_line').removeClass('div_line');
+         $('.div_line_first').removeClass('div_line_first');
+         $('.div_line_last').removeClass('div_line_last');
          var target = $(this.config.elements.flow).empty();
          target.append(this._renderFlow());
       },
@@ -595,18 +598,22 @@ winkstart.module('voip', 'callflow',
          });
 
          var children = flow.find('.children');
+         var firstChildren = true;
+         var countEach = 0;
          $.each(branch.children, function() {
+            countEach++;
             this.actionNameParent = branch.actionName;
             this.countChildren = countChildren;
-            if(branch.children != undefined && branch.children[0] != undefined) {
-                branch.children[0].id == this.id ? this.firstChildren = "true" : this.firstChildren = "false";
-                branch.children[this.countChildren-1] == this ? this.lastChildren = "true" : this.lastChildren = "false";
+
+            if(firstChildren) {
+                this.firstChildren = "true";
+                firstChildren = false; 
             }
             else {
                 this.firstChildren = "false";
-                this.lastChildren = "true";
             }
-            //branch.children[this.countChildren-1] == this ? this.lastChildren = "true" : this.lastChildren = "false";
+
+            countEach == countChildren ? this.lastChildren = "true" : this.lastChildren = "false";
             children.append(THIS._renderBranch(this));
          });
          return flow;
