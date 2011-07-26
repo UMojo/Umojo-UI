@@ -1,12 +1,23 @@
 <div>
    <div class="child">
       {{if actionName != 'root'}}
-          <div style="display: inline-block; height: 10px; width: 100%; background: white; margin: 0; padding: 0;"/><br/>
-          <span style="display: inline-block; height: 35px; width: 20px; background-image: url(whapps/core/layout/images/arrow_white.png); margin: 0; padding: 0;">
-          {{if actionNameParent == 'menu'}}    
-                <a style="color: #000000;" href="javascript:void(0)" class="link_option_menu">&nbsp;${key}</a>
+          {{if countChildren != 1}}
+            {{if firstChildren == "true"}}
+                <div class="div_line_first" id="divLine${id}"/><br/>
+            {{else}}
+                {{if lastChildren == "true"}}
+                    <div class="div_line_last" id="divLine${id}"/><br/>
+                {{else}}
+                    <div class="div_line" id="divLine${id}"/><br/>
+                {{/if}}
+            {{/if}}
           {{/if}}
-          </span>
+          <div class="span_arrow">
+        
+          {{if actionNameParent == 'menu'}}    
+                <a class="a_link_option" href="javascript:void(0)">${key}</a>
+          {{/if}}
+          </div>
       {{/if}}
       <div class="branch">
          <div id="${id}" name="${actionName}" class="node icons_black ${actionName.replace(/ /gi, '')}"></div>

@@ -570,11 +570,14 @@ winkstart.module('voip', 'callflow',
          if(branch.key && branch.key.length > 10) {
             branch.key = branch.key.substring(0,9);
          }
-
+         if(branch.countChildren == undefined) branch.countChildren = 1;
          var flow = this.templates.branch.tmpl(branch);
-         flow.find('.link_option_menu').click( function() {
+         var countChildren = 0;
+         $.each(branch.children, function() {
+             countChildren++;
+         }); 
+         flow.find('.a_link_option').click( function() {
             var data = {};
-            console.log('parent'+branch.actionNameParent);
             if(branch.actionNameParent == 'menu') {
                 data.options = {
                                     type: 'menu option',
@@ -591,11 +594,19 @@ winkstart.module('voip', 'callflow',
 
          });
 
-         if(branch.actionNameParent == undefined) branch.actionNameParent = "root";
          var children = flow.find('.children');
          $.each(branch.children, function() {
-            console.log(branch.actionName);
             this.actionNameParent = branch.actionName;
+            this.countChildren = countChildren;
+            if(branch.children != undefined && branch.children[0] != undefined) {
+                branch.children[0].id == this.id ? this.firstChildren = "true" : this.firstChildren = "false";
+                branch.children[this.countChildren-1] == this ? this.lastChildren = "true" : this.lastChildren = "false";
+            }
+            else {
+                this.firstChildren = "false";
+                this.lastChildren = "true";
+            }
+            //branch.children[this.countChildren-1] == this ? this.lastChildren = "true" : this.lastChildren = "false";
             children.append(THIS._renderBranch(this));
          });
          return flow;

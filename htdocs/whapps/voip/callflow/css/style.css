@@ -192,3 +192,8 @@
 #ws_callflow #footer a.gray_btn { background: url(images/btn_darkGrey.png) no-repeat; width: 81px; height: 28px; display: block; text-align: center; line-height: 25px;}
 #ws_callflow #footer a.remove {}
 #ws_callflow #footer a.save {}
+#ws_callflow .div_line { display: inline-block; height: 5px; width: 100%; background: #424242; margin: 0; padding: 0; float: left;}
+#ws_callflow .div_line_first { display: inline-block; height: 5px; width: 52%; background: #424242; margin-left: 48%; padding: 0; float:left; }
+#ws_callflow .div_line_last { display: inline-block; height: 5px; width: 51%; background: #424242; margin: 0; padding: 0; text-align: center; float:left;}
+#ws_callflow .span_arrow { display: inline-block; height: 38px; width: 145px; background-image: url(images/arrow_grey.png); margin: 0; padding: 0; margin-top: -7px;} 
+#ws_callflow .a_link_option { color: #000000; text-decoration: underline; }
