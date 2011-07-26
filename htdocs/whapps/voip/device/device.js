@@ -242,9 +242,6 @@ winkstart.module('voip', 'device',
                         /* This is a new device - pass along empty params */
                         THIS.renderDevice(form_data);
                     }
-                    $.each($('body').find('*[tooltip]'), function(){
-                        $(this).tooltip({attach:'body'});
-                    });
                 });
             });
 
@@ -362,6 +359,10 @@ winkstart.module('voip', 'device',
                 THIS.deleteDevice(device_id);
 
                 return false;
+            });
+            
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
             });
         },
 
