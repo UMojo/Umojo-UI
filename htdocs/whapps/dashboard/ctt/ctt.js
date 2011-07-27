@@ -111,10 +111,11 @@ winkstart.module('dashboard', 'ctt',
 							var out = '<div><table class="details_table">';                          
 
 							$.each(obj, function(index, value){
+								//Hack to get Data from local and remote sdp
 								if(index == 'local_sdp' || index == 'remote_sdp'){
 									out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+									
 									var sdp = value.split('\n');
-                                    
 									sdp.splice(sdp.length-1, 1);
                                     
 									$.each(sdp, function(i, v){
@@ -143,8 +144,8 @@ winkstart.module('dashboard', 'ctt',
 								$.each(legA, function(index, value){
 									if(index == 'local_sdp' || index == 'remote_sdp'){
 										out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+										
 										var sdp = value.split('\n');
-                                    
 										sdp.splice(sdp.length-1, 1);
                                     
 										$.each(sdp, function(i, v){
@@ -166,8 +167,8 @@ winkstart.module('dashboard', 'ctt',
 								$.each(legB, function(index, value){
 									if(index == 'local_sdp' || index == 'remote_sdp'){
 										out += '<tr><td class="bold" colspan="2" style="text-align:center;">'+index+'</td></tr>';
+										
 										var sdp = value.split('\n');
-                                    
 										sdp.splice(sdp.length-1, 1);
                                     
 										$.each(sdp, function(i, v){
@@ -208,7 +209,7 @@ winkstart.module('dashboard', 'ctt',
                                 
 							$('#'+id+'_debug').live('click', function(){
 								var uri = encodeURI('http://log001-prod-dfw.2600hz.com:9292/search#'+
-									'{"offset":0,"count":50,"q":"message:\\"Call-ID:'+obj.call_id+'\\"","interval":3600000}');
+									'{"offset":0,"count":50,"q":"'+obj.call_id+'","interval":3600000}');
 								window.open(uri);
 							});
                                     
@@ -265,8 +266,6 @@ winkstart.module('dashboard', 'ctt',
 								}
 							});
 						}
-                        
-						console.log(reply.data);
 						
 						if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
 							$.each(reply.data['related_cdrs'], function(index, value) {
