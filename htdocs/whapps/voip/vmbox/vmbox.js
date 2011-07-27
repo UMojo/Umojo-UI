@@ -64,6 +64,11 @@ winkstart.module('voip', 'vmbox',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            "user.get": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -150,7 +155,6 @@ winkstart.module('voip', 'vmbox',
             form_data.field_data.users = [];
             winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
                 var listUsers = [];
-                console.log(json);
                 if(json.data.length > 0) {
                     _.each(json.data, function(elem){
                         var title = elem.first_name + ' ' + elem.last_name;
@@ -240,6 +244,16 @@ winkstart.module('voip', 'vmbox',
                         $(".advanced_pane").slideToggle();
                     });
                 }
+            });
+
+            $('#owner_id', '#vmbox-view').change(function() { 
+                winkstart.getJSON('user.get', {
+                    crossbar: true,
+                    account_id: MASTER_ACCOUNT_ID,
+                    user_id: $('#owner_id').val()
+                }, function(json, xhr) {
+                    $('#timezone', '#vmbox-view').val(json.data.timezone);
+                });
             });
 
             /* Listen for the submit event (i.e. they click "save") */
