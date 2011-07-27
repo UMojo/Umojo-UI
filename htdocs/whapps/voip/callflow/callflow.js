@@ -173,9 +173,6 @@ winkstart.module('voip', 'callflow',
       },
 
       renderFlow: function () {
-         $('.div_line').removeClass('div_line');
-         $('.div_line_first').removeClass('div_line_first');
-         $('.div_line_last').removeClass('div_line_last');
          var target = $(this.config.elements.flow).empty();
          target.append(this._renderFlow());
       },
@@ -353,7 +350,8 @@ winkstart.module('voip', 'callflow',
             else {
                node_html = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
 
-               node_html.find('.edit').click(function() {
+               //node_html.find('.edit').click(function() {
+               node_html.find('.module').click(function() {
                     var node_name = node.actionName, general, options;
 
                     general = function(json, other) {

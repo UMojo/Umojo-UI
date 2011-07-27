@@ -1,9 +1,20 @@
 <div>
     <div class="node-options">
-       <a href="javascript:" name="close" id="${id}" class="delete">X</a>
-       <div class="dragndrop"></div>
-       <a href="javascript:" class="app_btn"></a>
-       <a href="javascript:" id="${id}" class="edit"></a>
+        <a href="javascript:" name="close" id="${id}" class="delete">X</a>
+        <div class="module">
+            <div class="div_icon"><span class="icon ${actionName}"/></div>
+            {{if actionName == "temporal_route"}}
+                <div class="module_name"><b>temp. route</b></div>
+            {{else}}
+                {{if actionName == "play"}}
+                <div class="module_name"><b>media</b></div>
+                {{else}}
+                <div class="module_name"><b>${actionName}</b></div>
+                {{/if}}
+            {{/if}}
+            <div class="selected_item">details</div>
+            <a href="javascript:" id="${id}" class="edit icon small_lightgrey small_edit"></a>
+        </div>
     </div>
 </div>
 
