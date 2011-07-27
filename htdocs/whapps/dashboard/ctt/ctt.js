@@ -60,7 +60,7 @@ winkstart.module('dashboard', 'ctt',
 			winkstart.loadFormHelper('forms');
 
 			this.templates.ctt.tmpl({}).appendTo( $('#ws-content') );
-            
+			
 			var num_rows = 0;
 
 			winkstart.getJSON('cdr.list', {
@@ -88,9 +88,27 @@ winkstart.module('dashboard', 'ctt',
 								return data;
 							}
 						}
+						
+						function formatDate(timestamp){
+							var tmp = null;
+							var tpmDate = new Date((timestamp - 62167219200)*1000);
+						
+							if(tpmDate != null && tpmDate != undefined){
+								tmp = $.datepicker.formatDate('mm/dd/y', tpmDate);
+								
+								var min = tpmDate.getUTCMinutes();
+								
+								if(min < 10){
+									tmp += ' '+tpmDate.getHours()+':0'+min;
+								}else{
+									tmp += ' '+tpmDate.getHours()+':'+min;
+								}
+							}
+							return tmp;
+						}
                             
-						function writeDetailsDialog(id, obj){
-							var out = '<div id="'+id+'"><table class="details_table">';                          
+						function writeDetailsDialog(obj){
+							var out = '<div><table class="details_table">';                          
 
 							$.each(obj, function(index, value){
 								if(index == 'local_sdp' || index == 'remote_sdp'){
@@ -175,7 +193,7 @@ winkstart.module('dashboard', 'ctt',
 						}
                         
 						function drawRows(id, obj){
-                           
+
 							winkstart.table.ctt.fnAddData([
 								noData(id),
 								noData(obj.callee_id_number),
@@ -184,12 +202,13 @@ winkstart.module('dashboard', 'ctt',
 								noData(obj.hangup_cause),
 								'<div id="'+id+'_debug" class="link_table">Debug</div>',
 								'<div id="'+id+'_details" class="link_table">Details</div>',
-								'<div id="'+id+'_leg" class="link_table">Leg B</div>'
+								'<div id="'+id+'_leg" class="link_table">Leg B</div>',
+								noData(formatDate(obj.timestamp)),
 								]);
                                 
 							$('#'+id+'_debug').live('click', function(){
-								var uri = encodeURI('http://logstash.databits.net/search#'+
-									'{"offset":0,"count":50,"q":"callid:'+obj.call_id+'","interval":3600000}');
+								var uri = encodeURI('http://log001-prod-dfw.2600hz.com:9292/search#'+
+									'{"offset":0,"count":50,"q":"message:\\"Call-ID:'+obj.call_id+'\\"","interval":3600000}');
 								window.open(uri);
 							});
                                     
@@ -197,7 +216,7 @@ winkstart.module('dashboard', 'ctt',
                                 
 								$('#details_dialog').dialog('close');
                                 
-								var dialog_div = writeDetailsDialog(id, obj);
+								var dialog_div = writeDetailsDialog(obj);
 								$('#'+id+'_details').data('dialog', dialog_div);
 
 								$('#details_dialog').dialog({
@@ -247,6 +266,8 @@ winkstart.module('dashboard', 'ctt',
 							});
 						}
                         
+						console.log(reply.data);
+						
 						if(reply.data['related_cdrs'] != null && reply.data['related_cdrs'] != undefined){
 							$.each(reply.data['related_cdrs'], function(index, value) {
 								num_rows = num_rows+1;                       
@@ -272,6 +293,12 @@ winkstart.module('dashboard', 'ctt',
 				label: 'Voicemail Boxes Management',
 				module: this.__module
 			});
+			
+			$('#filter_today').live('click', function(){
+				winkstart.table.ctt.fnFilter($.datepicker.formatDate('mm/dd/y', new Date()));
+			});
+
+			
 		},
 		setup_table: function() {
 			var THIS = this;
@@ -304,13 +331,18 @@ winkstart.module('dashboard', 'ctt',
 			{
 				'sTitle': 'Details'
 			},
-            
+			
 			{
 				'sTitle': 'Other leg'
+			},
+			
+			{
+				'sTitle': 'Date'
 			}];
 
 			winkstart.table.create('ctt', $('#ctt-grid'), columns);
 			$('#ctt-grid_filter input[type=text]').first().focus();
+			$('#ctt-grid_filter').append('<a id="filter_today" ref="#">Today</a>');
 			
 			$('.cancel-search').click(function(){
 				$('#ctt-grid_filter input[type=text]').val('');
