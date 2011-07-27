@@ -309,6 +309,12 @@ winkstart.module('voip', 'media',
                             });
                         });
                     }
+                    new_list.sort(function(a, b) {
+                        var answer;
+                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        return answer;
+                    });
+
                     return new_list;
                 }
 

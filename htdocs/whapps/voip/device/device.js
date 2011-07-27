@@ -285,7 +285,7 @@ winkstart.module('voip', 'device',
             } 
             form_data.media.audio.codecs = audioCodecs;
             form_data.media.video.codecs = videoCodecs;
-
+            
             return form_data;
         },
 
@@ -387,6 +387,11 @@ winkstart.module('voip', 'device',
                             });
                         });
                     }
+                    new_list.sort(function(a, b) {
+                        var answer;
+                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        return answer;
+                    });
                     return new_list;
                 }
 
