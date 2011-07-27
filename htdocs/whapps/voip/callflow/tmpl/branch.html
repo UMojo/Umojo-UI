@@ -13,14 +13,20 @@
             {{/if}}
           {{/if}}
           <div class="span_arrow">
-        
-          {{if actionNameParent == 'menu'}}    
-                <a class="a_link_option" href="javascript:void(0)">${key}</a>
-          {{/if}}
           </div>
+          <br/>
+          {{if actionNameParent == 'menu'}}    
+          <div class="div_option">
+                <a class="a_link_option" href="javascript:void(0)">${key}</a>
+          </div>
+          {{/if}}
       {{/if}}
       <div class="branch">
-         <div id="${id}" name="${actionName}" class="node icons_black ${actionName.replace(/ /gi, '')}"></div>
+         {{if actionName != 'root'}}
+             <div id="${id}" name="${actionName}" class="node icons_black"></div>
+         {{else}}
+            <div id="${id}" name="${actionName}" class="node icons_black ${actionName.replace(/ /gi, '')}"></div>
+         {{/if}}
          <div class="children"></div>
       </div>
    </div>

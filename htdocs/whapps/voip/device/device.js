@@ -242,9 +242,6 @@ winkstart.module('voip', 'device',
                         /* This is a new device - pass along empty params */
                         THIS.renderDevice(form_data);
                     }
-                    $.each($('body').find('*[tooltip]'), function(){
-                        $(this).tooltip({attach:'body'});
-                    });
                 });
             });
 
@@ -285,7 +282,7 @@ winkstart.module('voip', 'device',
             } 
             form_data.media.audio.codecs = audioCodecs;
             form_data.media.video.codecs = videoCodecs;
-
+            
             return form_data;
         },
 
@@ -363,6 +360,10 @@ winkstart.module('voip', 'device',
 
                 return false;
             });
+            
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
+            });
         },
 
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
@@ -387,6 +388,11 @@ winkstart.module('voip', 'device',
                             });
                         });
                     }
+                    new_list.sort(function(a, b) {
+                        var answer;
+                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        return answer;
+                    });
                     return new_list;
                 }
 

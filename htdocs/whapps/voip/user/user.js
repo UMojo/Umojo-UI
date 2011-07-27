@@ -168,10 +168,6 @@ winkstart.module('voip', 'user',
                 /* This is a new user - pass along empty params */
                 THIS.renderUser(form_data);
             }
-            $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
-            });
-            
         },
 
         deleteUser: function(user_id) {
@@ -261,6 +257,10 @@ winkstart.module('voip', 'user',
 
                 return false;
             });
+            
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
+            });
         },
 
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
@@ -294,6 +294,11 @@ winkstart.module('voip', 'user',
                             });
                         });
                     }
+                    new_list.sort(function(a, b) {
+                        var answer;
+                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        return answer;
+                    });
                     return new_list;
                 }
 

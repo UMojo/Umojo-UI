@@ -41,18 +41,6 @@
                                 <label for="pin">PIN number:</label>
                                 <input id="pin" name="pin" type="text" value="${data.pin}" />
                             </li>
-                            <li>
-                                <label for="timezone">Timezone:</label>
-                                <select name="timezone" id="timezone">
-                                    {{each field_data.timezones}}
-                                    {{if data.timezone == value}}
-                                    <option value="${value}" selected="selected">${text}</option>
-                                    {{else}}
-                                    <option value="${value}">${text}</option>
-                                    {{/if}}
-                                    {{/each}}
-                                </select>
-                            </li>
                         </ul>
                     </fieldset>
 
@@ -82,6 +70,18 @@
                     <fieldset>
                         <legend>Options</legend>
                         <ul class="controls">
+                            <li>
+                                <label for="timezone">Timezone:</label>
+                                <select name="timezone" id="timezone">
+                                    {{each field_data.timezones}}
+                                    {{if data.timezone == value}}
+                                    <option value="${value}" selected="selected">${text}</option>
+                                    {{else}}
+                                    <option value="${value}">${text}</option>
+                                    {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
                             <li>
                                 <label for="require_pin">Require PIN?</label>
                                 {{if data.require_pin}}
