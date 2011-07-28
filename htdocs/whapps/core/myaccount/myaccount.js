@@ -50,7 +50,10 @@ winkstart.module('core', 'myaccount',
         $('a#my_account').live('click', function() {
             console.log('Click');
             winkstart.publish('myaccount.display');
-        })
+        });
+        $('a#my_logout').live('click', function() {
+            winkstart.publish('auth.activate');
+        });
     }, // End initialization routine
 
 

@@ -40,6 +40,8 @@ winkstart.module('core', 'appnav', {
             var list_node = $('div.header .main_nav').find('ul'),
                 item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.modules[args.name] }).appendTo(list_node);
 
+            if(MASTER_ACCOUNT_ID == '') $('.main_nav').hide();
+            if(args.name == 'auth') { $(item).hide(); }
             $('.dropdown', item).hide();
 
             $(item).hoverIntent({

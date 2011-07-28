@@ -241,7 +241,7 @@ winkstart.module('voip', 'account',
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
                 if(confirm('Do you really want to use : '+form_data.data.name+'\'s account?')) {
                     MASTER_ACCOUNT_ID = form_data.data.id;
-                    $('#my_account').html("&nbsp;"+form_data.data.name);
+                    //$('#my_account').html("&nbsp;"+form_data.data.name);
                     alert('You\'re now using '+form_data.data.name+'\'s account');
                 }
                 else {
