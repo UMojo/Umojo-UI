@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="js/external/jquery-ui-1.8.7.custom.min.js"></script>
     
 		<script type="text/javascript" src="js/external/form2object.js"></script>
+		<script type="text/javascript" src="js/external/md5_generator.js"></script>
 		<script type="text/javascript" src="js/external/tmpl/jquery.tmpl.js"></script>
 		<script type="text/javascript" src="js/external/tmpl/jquery.tmplPlus.js"></script>
 		<script type="text/javascript" src="js/external/jquery.isObject.js"></script>
@@ -50,8 +51,9 @@
 
 		<script type="text/javascript">
                     var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
-                    var MASTER_ACCOUNT_ID = 'dde8d2c09338e0b06c6243775574441f';
-                    var AUTH_TOKEN = 'abef516f933f5dbc3c662b65cd3b548e';
+                    var MASTER_ACCOUNT_ID = '';
+                    var AUTH_TOKEN = '';
+                    var CURRENT_USER_ID = '';
                     winkstart.debug = true;
                     amplify.cache = false;
                     api_key = '';
@@ -61,11 +63,16 @@
                             'label' : 'In Design',
                             'icon' : 'phone'
                         },*/
+                        'auth' : {'url': 'auth/',
+                            'label' : 'Login',
+                            'icon' : 'user',
+                            'auth_token' : ''
+                        },
 
-                        'provision'   : { 'url' : 'provision/',
+                        /*'provision'   : { 'url' : 'provision/',
                             'label' : 'Phone Manager',
                             'icon' : 'phone'
-                        },
+                        },*/
 
                         'voip'        : {
                             'url' : 'voip/',
@@ -77,7 +84,8 @@
                         'cluster'      : {
                             'url' : 'cluster/',
                             'label' : 'Cluster Manager',
-                            'icon' : 'cluster_manager'
+                            'icon' : 'cluster_manager',
+                            'auth_token' : ''
                         },
 
                         'connect'     : {
@@ -91,7 +99,8 @@
                         'dashboard'   : {
                             'url' : 'dashboard/',
                             'label' : 'Dashboard',
-                            'icon' : 'dashboard'
+                            'icon' : 'dashboard',
+                            'auth_token' : ''
                         }
                     };
 		</script>
