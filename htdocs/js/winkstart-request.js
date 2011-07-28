@@ -9,6 +9,14 @@
 			amplify.request.define( key, "ajax", {
 				url: resource.url,
 				decoder: function(response){
+                                        if ( response.xhr.status == "401" ) {
+                                            if (xhr.responseText) {
+                                                response.error( JSON.parse( xhr.responseText ), "auth_invalid" );
+                                            } else {
+                                                response.error( data, "auth_invalid");
+                                            }
+                                            return;
+                                        }
 					response.success( response.data, response.xhr);
 				},
                                 contentType: resource.contentType || 'application/json',
