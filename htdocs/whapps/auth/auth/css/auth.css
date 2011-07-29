@@ -1,17 +1,14 @@
-
-/*.ui-dialog {
-    background-image: url('../../../core/layout/images/popup_bg.png') !important;
-    background-repeat: no-repeat !important;
-    background-repeat-x: initial;
-    background-repeat-y: initial;
-    background-attachment: initial;
-    background-position-x: initial;
-    background-position-y: initial;
-    background-origin: initial;
-    background-clip: initial;
-    background-color: transparent !important;
-}*/
-
 .myform {
     margin-top: 50px !important;
+}
+
+#cross {
+	margin-left: 420px;
+	margin-right: -10px;
+	margin-top: -5px;
+	
+	width:17px;
+	height: 17px;
+	
+	cursor: pointer;
 }
