@@ -47,14 +47,12 @@ winkstart.module('auth', 'auth', {
                     var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
                     hashed_creds = $.md5(hashed_creds);
                     //hash MD5 hashed_creds
-                    var form_data = { 'credentials': hashed_creds, 'realm':'kanderson.pbx.dev.2600hz.com' };
+                    var form_data = { 'credentials': hashed_creds, 'realm': $('#realm', dialogDiv).val() };
                     var rest_data = {};
                     rest_data.crossbar = true;
                     rest_data.data = form_data;
                     winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
                         $('.main_nav').show();
-                        console.log(json);
-                        console.log(xhr);
                         MASTER_ACCOUNT_ID = json.data.account_id;
                         AUTH_TOKEN = json.auth_token;
                         CURRENT_USER_ID = json.data.owner_id;
