@@ -47,6 +47,7 @@ winkstart.module('auth', 'auth', {
                     resizable: false,
                     draggable: false,
                     modal: true,
+//                    show: 'fade',
                     open: function() {
                         $('.ui-dialog-titlebar').remove();
                         $('.ui-dialog').css('border', 'none');

@@ -1,4 +1,5 @@
-.ui-dialog {
+
+/*.ui-dialog {
     background-image: url('../../../core/layout/images/popup_bg.png') !important;
     background-repeat: no-repeat !important;
     background-repeat-x: initial;
@@ -9,7 +10,7 @@
     background-origin: initial;
     background-clip: initial;
     background-color: transparent !important;
-}
+}*/
 
 .myform {
     margin-top: 50px !important;
