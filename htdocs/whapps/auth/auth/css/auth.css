@@ -3,12 +3,12 @@
 }
 
 #cross {
-	margin-left: 420px;
-	margin-right: -10px;
-	margin-top: -5px;
-	
-	width:17px;
-	height: 17px;
-	
-	cursor: pointer;
+    margin-left: 420px;
+    margin-right: -10px;
+    margin-top: -5px;
+
+    width:17px;
+    height: 17px;
+
+    cursor: pointer;
 }
