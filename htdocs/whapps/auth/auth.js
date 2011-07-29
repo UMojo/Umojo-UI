@@ -11,6 +11,10 @@ winkstart.module('auth', 'auth', {
 			'auth.activate' : 'activate'
 		},
         
+        css: {
+                auth: 'css/auth.css'
+        },
+        
         resources: {
             "user_auth": {
                 url: CROSSBAR_REST_API_ENDPOINT + '/user_auth',
@@ -37,11 +41,20 @@ winkstart.module('auth', 'auth', {
             if(AUTH_TOKEN == '') {
                 var dialogDiv = THIS.templates.login.tmpl({}).dialog({
                     title: 'Login',
-                    width: 340,
-                    height: 240,
+                    width: 500,
+                    height: 500,
                     position: 'center',
-                    resizable: false
+                    resizable: false,
+                    draggable: false,
+                    modal: true,
+                    open: function() {
+                        $('.ui-dialog-titlebar').remove();
+                        $('.ui-dialog').css('border', 'none');
+                    }
                 });
+                
+                
+                
                 $('.main_nav').hide();
                 $(dialogDiv).find('.submit_btn').click(function() { 
                     var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
