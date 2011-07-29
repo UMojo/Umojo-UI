@@ -82,11 +82,16 @@ winkstart.module('core', 'appnav', {
 
             // Set up the subnav click handler
             $('.dropdown .content', item).delegate('.module', 'click', function() {
-                $('div.header .main_nav .whapp a').removeClass('selected');
-                $('.whapp a', $(this).parents('li')).addClass('selected');
-                $('.main_nav li .whapp .icon').removeClass('blue');
-                $('.whapp .icon', $(this).parents('li')).addClass('blue');
-                winkstart.publish($(this).attr('module-name') + '.activate');
+                //if(AUTH_TOKEN != '') {
+                    $('div.header .main_nav .whapp a').removeClass('selected');
+                    $('.whapp a', $(this).parents('li')).addClass('selected');
+                    $('.main_nav li .whapp .icon').removeClass('blue');
+                    $('.whapp .icon', $(this).parents('li')).addClass('blue');
+                    winkstart.publish($(this).attr('module-name') + '.activate');
+                //}
+                //else {
+                //    winkstart.publish ('auth.activate');
+                //}
                 return false;
             });
         },
@@ -94,8 +99,13 @@ winkstart.module('core', 'appnav', {
         activate: function(app_name) {
             // TODO: De-activate current app & unload it
 
-            winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
-            winkstart.publish ( app_name + '.activate', { });
+            if(AUTH_TOKEN != '') {
+                winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
+                winkstart.publish ( app_name + '.activate', { });
+            }
+            else {
+                winkstart.publish ('auth.activate');
+            }
         },
 
         remove: function() {

@@ -313,26 +313,29 @@ winkstart.module('voip', 'account',
         activate: function(data) {
             $('#ws-content').empty();
             var THIS = this;
-            this.templates.account.tmpl({}).appendTo( $('#ws-content') );
+            if(AUTH_TOKEN != '')
+            {
+                this.templates.account.tmpl({}).appendTo( $('#ws-content') );
 
-            winkstart.loadFormHelper('forms');
+                winkstart.loadFormHelper('forms');
 
-            winkstart.publish('layout.updateLoadedModule', {
-                label: 'Accounts Management',
-                module: this.__module
-            });
+                winkstart.publish('layout.updateLoadedModule', {
+                    label: 'Accounts Management',
+                    module: this.__module
+                });
 
-            $('.edit-account').live({
-                click: function(evt){
-                    var target = evt.currentTarget;
-                    var account_id = target.getAttribute('rel');
-                    winkstart.publish('account.edit-account', {
-                        'account_id' : account_id
-                    });
-                }
-            });
+                $('.edit-account').live({
+                    click: function(evt){
+                        var target = evt.currentTarget;
+                        var account_id = target.getAttribute('rel');
+                        winkstart.publish('account.edit-account', {
+                            'account_id' : account_id
+                        });
+                    }
+                });
 
-            THIS.renderList();
+                THIS.renderList();
+            }
         }
     }
 );

@@ -48,8 +48,12 @@ winkstart.module('core', 'myaccount',
 
         // This app is slightly invasive - it assumes it should always be bound to an element named my_account anywhere on the page
         $('a#my_account').live('click', function() {
-            console.log('Click');
-            winkstart.publish('myaccount.display');
+            if(AUTH_TOKEN != '') {
+                winkstart.publish('myaccount.display');
+            }
+            else {
+                winkstart.publish('auth.activate');
+            }
         });
         $('a#my_logout').live('click', function() {
             winkstart.publish('auth.activate');

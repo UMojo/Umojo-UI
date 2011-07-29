@@ -29,89 +29,81 @@ winkstart.module('auth', 'auth', {
     }
 },
 function() {
-    var THIS = this;
+	var THIS = this;
+        winkstart.registerResources(this.config.resources);
+        winkstart.publish('appnav.add', { 'name' : 'auth' });
+    },
+    {	
+        activate: function() {
+            var THIS = this;
+            $('#ws-content').empty();
+            $('.ui-dialog').remove();
+                        $('#cross').click(function(){
+                            $(dialogDiv).dialog('close');
+                        });
+            if(AUTH_TOKEN == '') {
+                $.fx.speeds._default = 800;
 
-    winkstart.registerResources(this.config.resources);
-    winkstart.publish('appnav.add', {
-        'name' : 'auth'
-    });
-},
-{	
-    activate: function() {
-        var THIS = this;
-        $('#ws-content').empty();
-        if(AUTH_TOKEN == '') {
-			
-            $.fx.speeds._default = 800;
-				
-            var dialogDiv = THIS.templates.login.tmpl({}).dialog({
-                title: 'Login',
-                width: 456,
-                height: 310,
-                position: 'center',
-                resizable: false,
-                draggable: false,
-                modal: true,
-                show: 'fade',
-                hide: 'fade',
-                open: function() {
-                    $('.ui-dialog-titlebar').remove();
-                    $('.ui-dialog').css('border', 'none');
-                    $('.ui-dialog').css('background-image', 'url("whapps/core/layout/images/popup_bg.png")');
-                    $('.ui-dialog').css('background-repeat', 'no-repeat');
-                    $('.ui-dialog').css('background-color', 'transparent');
-						
-                    $('.ui-widget-overlay').css('background', 'black');
-                    $('.ui-widget-overlay').css('opacity', '0.8');
-                    $('#cross').live('click', function(){
-                        $(dialogDiv).dialog('close');
-                    });
-                }
-            });
-                
-                
-                
-            $('.main_nav').hide();
-            $(dialogDiv).find('.submit_btn').click(function() { 
-                var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
-                hashed_creds = $.md5(hashed_creds);
-                //hash MD5 hashed_creds
-                var form_data = {
-                    'credentials': hashed_creds, 
-                    'realm': $('#realm', dialogDiv).val()
-                };
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.data = form_data;
-                winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
-                    $('.main_nav').show();
-                    MASTER_ACCOUNT_ID = json.data.account_id;
-                    AUTH_TOKEN = json.auth_token;
-                    CURRENT_USER_ID = json.data.owner_id;
-                    dialogDiv.dialog('close');
-                    winkstart.getJSON('user.get', {
-                        crossbar: true, 
-                        account_id: MASTER_ACCOUNT_ID, 
-                        user_id: CURRENT_USER_ID
-                    }, function(json, xhr) {
-                        $('#my_account').html("&nbsp;"+json.data.username);
-                        $('#my_logout').html("Logout");           
-                        $('.main_nav').show(); 
+                var dialogDiv = THIS.templates.login.tmpl({}).dialog({
+                    title: 'Login',
+                    width: 456,
+                    height: 310,
+                    position: 'center',
+                    resizable: false,
+                    draggable: false,
+                    modal: true,
+                    show: 'fade',
+                    hide: 'fade',
+                    open: function() {
+                        $('.ui-dialog-titlebar').remove();
+                        $('.ui-dialog').css('border', 'none');
+                        $('.ui-dialog').css('background-image', 'url("whapps/core/layout/images/popup_bg.png")');
+                        $('.ui-dialog').css('background-repeat', 'no-repeat');
+                        $('.ui-dialog').css('background-color', 'transparent');
+
+                        $('.ui-widget-overlay').css('background', 'black');
+                        $('.ui-widget-overlay').css('opacity', '0.8');
+                        $('#cross').live('click', function(){
+                            $(dialogDiv).dialog('close');
+                        });
+                    }
+                });
+
+                //all of the hiding are a temporary dirty ugly unefficient hack
+                $('.main_nav').hide();
+                $(dialogDiv).find('.submit_btn').click(function() { 
+                    var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
+                    hashed_creds = $.md5(hashed_creds);
+                    //hash MD5 hashed_creds
+                    var form_data = { 'credentials': hashed_creds, 'realm': $('#realm', dialogDiv).val() };
+                    var rest_data = {};
+                    rest_data.crossbar = true;
+                    rest_data.data = form_data;
+                    winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
+                        $('.main_nav').show();
+                        MASTER_ACCOUNT_ID = json.data.account_id;
+                        AUTH_TOKEN = json.auth_token;
+                        CURRENT_USER_ID = json.data.owner_id;
+                        dialogDiv.dialog('close');
+                        winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+                            $('#my_account').html("&nbsp;"+json.data.username);
+                            $('#my_logout').html("Logout");          
+                            $('.main_nav').show(); 
+                        });
                     });
                 });
-            });
-        } else {
-            if(confirm('Are you sure that you want to log out?')) {
-                AUTH_TOKEN = '';
-                MASTER_ACCOUNT_ID = '';
-                CURRENT_USER_ID = '';
-                $('#ws-content').empty();
-                $('a#my_logout').html("Login");            
-                $('a#my_account').html("Not connected");            
-                winkstart.publish('auth.activate');
+            } else {
+                if(confirm('Are you sure that you want to log out?')) {
+                    AUTH_TOKEN = '';
+                    MASTER_ACCOUNT_ID = '';
+                    CURRENT_USER_ID = '';
+                    $('#ws-content').empty();
+                    $('a#my_logout').html("Login");            
+                    $('a#my_account').html("Not connected");            
+                    winkstart.publish('auth.activate');
+                }
             }
-        }
-    },
+        },
 
     init: function() {
         // Check if we already have a session stored in a cookie

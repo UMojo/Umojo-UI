@@ -89,6 +89,11 @@ winkstart.module('voip', 'device',
                 url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
+            },  
+            "shared_auth": {
+                url: CROSSBAR_REST_API_ENDPOINT + '/shared_auth',
+                contentType: 'application/json',
+                verb: 'PUT'
             }
         }
     },
@@ -416,6 +421,12 @@ winkstart.module('voip', 'device',
          * on them. Also register resources.
          */
         activate: function(data) {
+                winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
+                    
+                });
+                winkstart.publish('auth.activate');
+                return false;
+            }
             $('#ws-content').empty();
             var THIS = this;
             this.templates.device.tmpl({}).appendTo( $('#ws-content') );
