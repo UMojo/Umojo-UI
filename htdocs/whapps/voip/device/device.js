@@ -421,12 +421,12 @@ winkstart.module('voip', 'device',
          * on them. Also register resources.
          */
         activate: function(data) {
-                winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
+            /*    winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
                     
                 });
                 winkstart.publish('auth.activate');
                 return false;
-            }
+            }*/
             $('#ws-content').empty();
             var THIS = this;
             this.templates.device.tmpl({}).appendTo( $('#ws-content') );
