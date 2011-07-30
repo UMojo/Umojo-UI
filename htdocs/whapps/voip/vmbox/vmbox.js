@@ -29,6 +29,7 @@ winkstart.module('voip', 'vmbox',
         },
 
         validation : [
+                {name : '#name', regex: /^[a-zA-Z0-9\s_']+$/},
                 {name : '#mailbox', regex : /^[0-9]+$/},
                 {name : '#pin', regex : /^[0-9]+$/},
         ],
@@ -314,7 +315,9 @@ winkstart.module('voip', 'vmbox',
                         });
                     }
                     new_list.sort(function(a, b) {
-                        var answer;
+                        var answer = 1;
+                        if(a.title == undefined) a.title = 'undefined';
+                        if(b.title == undefined) b.title = 'undefined';
                         a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
                         return answer;
                     });

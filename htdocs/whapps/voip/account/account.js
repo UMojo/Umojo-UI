@@ -284,8 +284,11 @@ winkstart.module('voip', 'account',
                         });
                     }
                     new_list.sort(function(a, b) {
-                        var answer;
-                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        var answer = 1;
+                        if(a.title == undefined) a.title = 'undefined';
+                        if(b.title == undefined) b.title = 'undefined';
+                            a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+                        }
                         return answer;
                     });
                     return new_list;
