@@ -17,7 +17,7 @@ winkstart.module('auth', 'auth', {
         
     resources: {
         "user_auth": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/user_auth',
+            url: winkstart.modules[CURRENT_WHAPP]['api_url'] + '/user_auth',
             contentType: 'application/json',
             verb: 'PUT'
         },
@@ -83,6 +83,7 @@ function() {
                         $('.main_nav').show();
                         MASTER_ACCOUNT_ID = json.data.account_id;
                         AUTH_TOKEN = json.auth_token;
+                        winkstart.modules['auth']['auth_token'] = json.auth_token;
                         CURRENT_USER_ID = json.data.owner_id;
                         dialogDiv.dialog('close');
                         winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {

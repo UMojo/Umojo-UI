@@ -37,7 +37,8 @@
         };
 
 	winkstart.getAuthToken = function(){
-		return AUTH_TOKEN;
+		//return AUTH_TOKEN;
+        return winkstart.modules[CURRENT_WHAPP]['auth_token'];
 	};
 	
 	winkstart.normalizeRequest = function(params){
