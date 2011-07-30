@@ -65,7 +65,8 @@ winkstart.module('dashboard', 'ctt',
 
 			winkstart.getJSON('cdr.list', {
 				crossbar: true, 
-				account_id: '04152ed2b428922e99ac66f3a71b0215'
+				account_id: MASTER_ACCOUNT_ID
+				//account_id: '04152ed2b428922e99ac66f3a71b0215'
 			}, function(reply) {
 				THIS.setup_table();
 				
@@ -74,7 +75,8 @@ winkstart.module('dashboard', 'ctt',
                     
 					winkstart.getJSON('cdr.read',{
 						crossbar: true, 
-						account_id: '04152ed2b428922e99ac66f3a71b0215', 
+						account_id: MASTER_ACCOUNT_ID, 
+						//account_id: '04152ed2b428922e99ac66f3a71b0215', 
 						cdr_id: cdr_id
 					}, function(reply) {
 						if(reply.data == undefined) {
@@ -240,7 +242,8 @@ winkstart.module('dashboard', 'ctt',
 
 									winkstart.getJSON('cdr.read',{
 										crossbar: true, 
-										account_id: '04152ed2b428922e99ac66f3a71b0215', 
+										account_id: MASTER_ACCOUNT_ID, 
+										//account_id: '04152ed2b428922e99ac66f3a71b0215', 
 										cdr_id: obj.id
 									}, function(reply) {
 										var dialog_div = writeLegsDialog(obj, reply.data);

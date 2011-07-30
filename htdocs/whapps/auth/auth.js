@@ -21,8 +21,13 @@ winkstart.module('auth', 'auth', {
             contentType: 'application/json',
             verb: 'PUT'
         },
+        "shared_auth_pbx": {
+            url: winkstart.modules['voip']['api_url'] + '/shared_auth',
+            contentType: 'application/json',
+            verb: 'PUT'
+        },
         "user.get": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+            url: winkstart.modules['voip']['api_url'] + '/accounts/{account_id}/users/{user_id}',
             contentType: 'application/json',
             verb: 'GET'
         }
@@ -80,16 +85,26 @@ function() {
                     rest_data.crossbar = true;
                     rest_data.data = form_data;
                     winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
-                        $('.main_nav').show();
                         MASTER_ACCOUNT_ID = json.data.account_id;
                         AUTH_TOKEN = json.auth_token;
                         winkstart.modules['auth']['auth_token'] = json.auth_token;
                         CURRENT_USER_ID = json.data.owner_id;
-                        dialogDiv.dialog('close');
-                        winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
-                            $('#my_account').html("&nbsp;"+json.data.username);
-                            $('#my_logout').html("Logout");          
-                            $('.main_nav').show(); 
+
+                        form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
+                        rest_data = {};
+                        rest_data.crossbar = true;
+                        rest_data.data = form_data;
+                        winkstart.putJSON('shared_auth_pbx', rest_data, function (json, xhr) {
+                            winkstart.modules['voip']['auth_token'] = json.auth_token;
+                            CURRENT_USER_ID = json.data.owner_id;
+                            CURRENT_WHAPP = 'voip';
+                            dialogDiv.dialog('close');
+                            $('.main_nav').show();
+                            winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+                                $('#my_account').html("&nbsp;"+json.data.username);
+                                $('#my_logout').html("Logout");
+                                $('.main_nav').show();
+                            });
                         });
                     });
                 });

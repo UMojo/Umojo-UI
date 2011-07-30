@@ -42,7 +42,6 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
             CURRENT_WHAPP = 'voip'; 
             if(winkstart.modules[CURRENT_WHAPP]['auth_token'] == '') {
-                console.log('auth token empty');
                 winkstart.registerResources(this.config.resources);
                 //TODO: dynamic realm
                 var form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
