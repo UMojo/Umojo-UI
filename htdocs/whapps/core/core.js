@@ -30,6 +30,15 @@ winkstart.module('core', 'core', {
                                             $('#my_account').html("&nbsp;"+json.data.name);
                                         });
                                     }
+                                    if(REGISTRATION_KEY != '' ) {
+                                        var rest_data = { data: {}};
+                                        winkstart.postJSON('register.activate', rest_data, function (json, xhr) {
+                                            REALM_LOGIN = json.data.account.realm;
+                                            alert('You\'re now registered, please log-in!');
+                                            });
+                                        REGISTRATION_KEY = '';
+                                    }
+
                                 });
 
                                 // Now move onto apps

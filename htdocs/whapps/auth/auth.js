@@ -4,7 +4,8 @@ winkstart.module('auth', 'auth', {
         thankyou: 'tmpl/thankyou.html',
         edit_billing: 'tmpl/edit_billing.html',
         recover_password: 'tmpl/recover_password.html',
-        login: 'tmpl/login.html'
+        login: 'tmpl/login.html',
+        register: 'tmpl/register.html'
     },
 		
     subscribe: {
@@ -17,7 +18,7 @@ winkstart.module('auth', 'auth', {
         
     resources: {
         "user_auth": {
-            url: winkstart.modules[CURRENT_WHAPP]['api_url'] + '/user_auth',
+            url: winkstart.modules['auth']['api_url'] + '/user_auth',
             contentType: 'application/json',
             verb: 'PUT'
         },
@@ -25,6 +26,16 @@ winkstart.module('auth', 'auth', {
             url: winkstart.modules['voip']['api_url'] + '/shared_auth',
             contentType: 'application/json',
             verb: 'PUT'
+        },
+        "register": {
+            url: winkstart.modules['auth']['api_url'] + '/signup',
+            contentType: 'application/json',
+            verb: 'PUT'
+        },
+        "register.activate": {
+            url: winkstart.modules['auth']['api_url']+REGISTRATION_KEY,
+            contentType: 'application/json',
+            verb: 'POST'
         },
         "user.get": {
             url: winkstart.modules['voip']['api_url'] + '/accounts/{account_id}/users/{user_id}',
@@ -43,10 +54,16 @@ function() {
             var THIS = this;
             $('#ws-content').empty();
             $('.ui-dialog').remove();
-                        $('#cross').click(function(){
-                            $(dialogDiv).dialog('close');
-                        });
-            if(AUTH_TOKEN == '') {
+            if(REGISTRATION_KEY != '' ) {
+                var rest_data = { data: {}};
+                winkstart.postJSON('register.activate', rest_data, function (json, xhr) {
+                    console.log(json);
+                    REALM_LOGIN = json.data.account.realm;
+                    alert('youre now registered'); 
+                });
+                REGISTRATION_KEY = ''; 
+            }
+            else if(AUTH_TOKEN == '') {
                 $.fx.speeds._default = 800;
 
                 var dialogDiv = THIS.templates.login.tmpl({}).dialog({
@@ -87,10 +104,11 @@ function() {
                     winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
                         MASTER_ACCOUNT_ID = json.data.account_id;
                         AUTH_TOKEN = json.auth_token;
+                        REALM_LOGIN = $('#realm', dialogDiv).val();
                         winkstart.modules['auth']['auth_token'] = json.auth_token;
                         CURRENT_USER_ID = json.data.owner_id;
 
-                        form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
+                        form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': REALM_LOGIN };
                         rest_data = {};
                         rest_data.crossbar = true;
                         rest_data.data = form_data;
@@ -107,6 +125,34 @@ function() {
                             });
                         });
                     });
+                });
+                $(dialogDiv).find('#register').click(function() {
+                    $.fx.speeds._default = 800;
+
+                    var dialogRegister = THIS.templates.register.tmpl({}).dialog({
+                        title: 'Register a new account',
+                        width: 456,
+                        height: 410,
+                        show: 'fade',
+                        hide: 'fade',
+                    });
+
+                    $(dialogRegister).find('#register_link').click(function() {
+                        var form_data = { 'account': { 'realm': $('#realm', dialogRegister).val() },
+                                          'user': {'first_name': $('#first_name', dialogRegister).val() , 'last_name':$('#last_name', dialogRegister).val(),
+                                                   'email': $('#email', dialogRegister).val(), 'username':$('#email', dialogRegister).val(), 
+                                                   'password' : $('#password', dialogRegister).val()},
+                                          'app_url': window.location.href };
+                        var rest_data = {};
+                        rest_data.crossbar = true;
+                        rest_data.data = form_data;
+                        winkstart.putJSON('register', rest_data, function (json, xhr) {
+                            alert('Registered successfully, please check your e-mail !');
+                            dialogRegister.dialog('close');
+                        });
+                    });
+
+                    $(dialogDiv).dialog('close');
                 });
             } else {
                 if(confirm('Are you sure that you want to log out?')) {
