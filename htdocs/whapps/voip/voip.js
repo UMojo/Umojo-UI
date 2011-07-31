@@ -24,15 +24,6 @@ winkstart.module('voip', 'voip', {
 
         // Loaded - add to nav bar
         winkstart.publish('appnav.add', { 'name' : 'voip' });
-
-        // Load the modules
-        $.each(THIS.modules, function(k, v) {
-            winkstart.module.loadPlugin('voip', v, function() {
-                this.init(function() {
-                    winkstart.log('VoIP: Initialized ' + v);
-                });
-            });
-        });
     },
     {
         initialized :   false,
@@ -40,17 +31,30 @@ winkstart.module('voip', 'voip', {
         
         activate: function() {
             var THIS = this;
-            CURRENT_WHAPP = 'voip'; 
+            CURRENT_WHAPP = 'voip';
+
             if(winkstart.modules['voip']['auth_token'] == '') {
                 winkstart.registerResources(this.config.resources);
+
                 //TODO: dynamic realm
                 var form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
+
                 winkstart.putJSON('shared_auth', rest_data, function (json, xhr) {
                     winkstart.modules[CURRENT_WHAPP]['auth_token'] = json.auth_token;
                     if (!THIS.initialized) {
+
+                        // Load the modules
+                        $.each(THIS.modules, function(k, v) {
+                            winkstart.module.loadPlugin('voip', v, function() {
+                                this.init(function() {
+                                    winkstart.log('VoIP: Initialized ' + v);
+                                });
+                            });
+                        });
+                        
                         // Display the navbar
                         $('#ws-content').empty();
                         THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
@@ -91,6 +95,8 @@ winkstart.module('voip', 'voip', {
                         $('.options #time_of_day').click(function() {
                             winkstart.publish('timeofday.activate');
                         });
+                        
+                        THIS.initialized = true;
                     }
                 });
             

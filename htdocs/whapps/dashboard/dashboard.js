@@ -11,14 +11,6 @@ function() {
         'name' : 'dashboard'
     });
 
-    // Load the modules
-    $.each(THIS.modules, function(k, v) {
-        winkstart.module.loadPlugin('dashboard', v, function() {
-            this.init(function() {
-                winkstart.log('Dashboard: Initialized ' + v);
-            });
-        });
-    });
 },
 {
     initialized :   false,
@@ -28,6 +20,14 @@ function() {
         var THIS = this;
             
         if (!THIS.initialized) {
+            // Load the modules
+            $.each(THIS.modules, function(k, v) {
+                winkstart.module.loadPlugin('dashboard', v, function() {
+                    this.init(function() {
+                        winkstart.log('Dashboard: Initialized ' + v);
+                    });
+                });
+            });
 
             // Display the navbar
             $('#ws-content').empty();
@@ -40,6 +40,8 @@ function() {
             $('.options #ctt').click(function() {
                 winkstart.publish('ctt.activate');
             });
+
+            THIS.initialized = true;
         } 
     }
 }

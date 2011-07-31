@@ -8,19 +8,24 @@ winkstart.module('connect', 'connect', {
         // Loaded - add to nav bar
         winkstart.publish('appnav.add', { 'name' : 'connect' });
 
-        $.each(this.modules, function(k, v) {
-            winkstart.module.loadPlugin('connect', v, function() {
-                this.init(function() {
-                    winkstart.log('Connect: Initialized ' + v);
-                });
-            });
-        });
     },
     {
         initialized :   false,
         modules :       ['sipservice', 'admin', 'channels', 'credits', 'endpoint', 'fraud', 'monitoring', 'numbers', 'discount'],
 
         activate: function() {
+            if (!THIS.initialized) {
+                $.each(this.modules, function(k, v) {
+                    winkstart.module.loadPlugin('connect', v, function() {
+                        this.init(function() {
+                            winkstart.log('Connect: Initialized ' + v);
+                        });
+                    });
+                });
+
+                THIS.initialized = true;
+            }
+
             winkstart.publish('sipservice.activate');
         }
     }

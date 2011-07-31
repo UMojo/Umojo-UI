@@ -2,7 +2,6 @@ winkstart.module('auth', 'auth', {
 		
     templates: {
         thankyou: 'tmpl/thankyou.html',
-        edit_billing: 'tmpl/edit_billing.html',
         recover_password: 'tmpl/recover_password.html',
         login: 'tmpl/login.html',
         register: 'tmpl/register.html'
@@ -66,7 +65,9 @@ function() {
             else if(AUTH_TOKEN == '') {
                 $.fx.speeds._default = 800;
 
-                var dialogDiv = THIS.templates.login.tmpl({}).dialog({
+                var dialogDiv = winkstart.popup(THIS.templates.login.tmpl({}), { title : 'Login' });
+                
+/*                .dialog({
                     title: 'Login',
                     width: 456,
                     height: 310,
@@ -77,23 +78,15 @@ function() {
                     show: 'fade',
                     hide: 'fade',
                     open: function() {
-                        $('.ui-dialog-titlebar').remove();
-                        $('.ui-dialog').css('border', 'none');
-                        $('.ui-dialog').css('background-image', 'url("whapps/core/layout/images/popup_bg.png")');
-                        $('.ui-dialog').css('background-repeat', 'no-repeat');
-                        $('.ui-dialog').css('background-color', 'transparent');
-
-                        $('.ui-widget-overlay').css('background', 'black');
-                        $('.ui-widget-overlay').css('opacity', '0.8');
                         $('#cross').live('click', function(){
                             $(dialogDiv).dialog('close');
                         });
                     }
-                });
+                });*/
 
                 //all of the hiding are a temporary dirty ugly unefficient hack
                 $('.main_nav').hide();
-                $(dialogDiv).find('.submit_btn').click(function() { 
+                $('.submit_btn', dialogDiv).click(function() {
                     var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
                     hashed_creds = $.md5(hashed_creds);
                     //hash MD5 hashed_creds
@@ -126,7 +119,7 @@ function() {
                         });
                     });
                 });
-                $(dialogDiv).find('#register').click(function() {
+                $('#register', dialogDiv).click(function() {
                     $.fx.speeds._default = 800;
 
                     var dialogRegister = THIS.templates.register.tmpl({}).dialog({
@@ -137,7 +130,7 @@ function() {
                         hide: 'fade',
                     });
 
-                    $(dialogRegister).find('#register_link').click(function() {
+                    $('#register_link', dialogRegister).click(function() {
                         var form_data = { 'account': { 'realm': $('#realm', dialogRegister).val() },
                                           'user': {'first_name': $('#first_name', dialogRegister).val() , 'last_name':$('#last_name', dialogRegister).val(),
                                                    'email': $('#email', dialogRegister).val(), 'username':$('#email', dialogRegister).val(), 
@@ -177,12 +170,7 @@ function() {
         
     login: function(args) {
         var THIS = this;
-        var dialogDiv = THIS.templates.login.tmpl({}).dialog({
-            title: 'Login',
-            width: 540,
-            height: 320,
-            position: 'center'
-        });
+        var dialogDiv = winkstart.popup(THIS.templates.login.tmpl({}), { title : 'Login'} );
         winkstart.publish('sipservice.input_css');
     },
 

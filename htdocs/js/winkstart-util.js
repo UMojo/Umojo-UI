@@ -23,24 +23,22 @@
     };
 
     winkstart.popup = function(content, options) {
-        var newDiv = $(document.createElement('div'));
-        $(newDiv).html(content);
+        var newDiv = $(document.createElement('div')).html(content);
 
-        if (!options) {
-            options = {};
-        }
+        defaults = {
+            width : 'auto',
+            show : { effect : 'fade', duration : 200 },
+            hide : { effect : 'fade', duration : 200 },
 
-        if (!options.close) {
-            // By default, don't long-live dialogs - kill them after they're closed. Normal default is just to hide them.
-            options.close = function() {
+            // By default, don't long-live dialogs - kill them after they're closed. Normal jquery default is just to hide them.
+            close : function() {
                 $(newDiv).dialog('destroy');    // Destroy the dialog utilizing the div and associated events
                 $(newDiv).remove(); // Remove the div
             }
-        }
+        };
 
-        if (!options.width) {
-            options.width = 'auto';
-        }
+        // Overwrite any defaults with settings passed in
+        $.extend(options, defaults);
 
         $(newDiv).dialog(options);
 

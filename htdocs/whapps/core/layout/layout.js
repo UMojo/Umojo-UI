@@ -3,7 +3,8 @@ winkstart.module('core', 'layout', {
         css: [
         'css/layout.css',
         'css/tabs.css',
-        'css/icons.css'
+        'css/icons.css',
+        'css/jquery.override.css'
         ],
 
         templates: {
