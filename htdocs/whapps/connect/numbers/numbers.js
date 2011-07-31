@@ -190,7 +190,7 @@ winkstart.module('connect', 'numbers',
     /* Define the functions for this module */
     {
         edit_failover: function(args) {
-            var dialogDiv = winkstart.popup(this.templates.edit_failover.tmpl(args), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_failover.tmpl(args), {
                 title: 'Edit Failover'
             });
 
@@ -241,7 +241,7 @@ winkstart.module('connect', 'numbers',
 
 
         edit_cnam: function(args) {
-            var dialogDiv = winkstart.popup(this.templates.edit_cnam.tmpl(args), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_cnam.tmpl(args), {
                 title: 'Edit Caller ID Name'
             });
 
@@ -292,7 +292,7 @@ winkstart.module('connect', 'numbers',
 
 
         edit_e911: function(args) {
-            var dialogDiv = winkstart.popup(this.templates.edit_e911.tmpl(args), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_e911.tmpl(args), {
                 title: 'Edit Emergency 911 Location'
             });
 
@@ -342,7 +342,7 @@ winkstart.module('connect', 'numbers',
 
 
         edit_fax: function(args) {
-            var dialogDiv = winkstart.popup(this.templates.edit_fax.tmpl(args), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_fax.tmpl(args), {
                 title: 'Edit Fax Settings'
             });
 
@@ -393,7 +393,7 @@ winkstart.module('connect', 'numbers',
 
 
         cancel_number: function(args) {
-            var dialogDiv = winkstart.popup(this.templates.cancel_number.tmpl(args), {
+            var dialogDiv = winkstart.dialog(this.templates.cancel_number.tmpl(args), {
                 title: 'Cancel Number'
             });
 
@@ -443,7 +443,7 @@ winkstart.module('connect', 'numbers',
 
         defaults: function(info) {
             //	winkstart.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
-            popup($('#tmpl_modSRVDefs_prompt').tmpl( {
+            winkstart.dialog($('#tmpl_modSRVDefs_prompt').tmpl( {
                 s: info.serverid,
                 srv: acct.servers[info.serverid],
                 'fa':info.fa || {}
@@ -466,7 +466,7 @@ winkstart.module('connect', 'numbers',
             if (typeof args != 'object') {
                 args= new Object();
             }
-            popup($('#tmpl_LNP_prompt').tmpl(args));
+            winkstart.dialog($('#tmpl_LNP_prompt').tmpl(args));
             $('#lnpRDate').datepicker({
                 autoSize: true ,
                 dateFormat: 'yy-mm-dd',
@@ -488,7 +488,7 @@ winkstart.module('connect', 'numbers',
                 if (typeof msg == 'object' && msg.data) {
                     var trackData=msg.data;
                     if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
-                        popup($('#tmpl_LNP_prompt_s2').tmpl(trackData));
+                        winkstart.dialog($('#tmpl_LNP_prompt_s2').tmpl(trackData));
                         createUploader($('#lnp_s2_uploader')[0], '/v1/uploadLNP', {
                             account_id: winkstart.modules['connect'].account_id,
                             did:trackData.lnp.did,
@@ -660,7 +660,7 @@ winkstart.module('connect', 'numbers',
 
         searchDIDsPrompt: function() {
             THIS=this;
-            winkstart.popup(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
+            winkstart.dialog(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
                 'title' : 'blah'
             });
         //TODO:  display "Add Credits" if it goes negative

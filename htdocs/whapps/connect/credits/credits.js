@@ -49,7 +49,7 @@ winkstart.module('connect', 'credits',
     {
         manage: function(args) {
             var THIS = this;
-            dialogDiv = winkstart.popup(THIS.templates.manage_credits.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.modules['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
             });
 

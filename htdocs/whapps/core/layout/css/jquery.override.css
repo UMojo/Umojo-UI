@@ -35,3 +35,7 @@ a.ui-dialog-titlebar-close {
     font-family: Verdana;
     font-weight: normal;
 }
+
+.ui-widget-overlay {
+    background: none repeat scroll 0 0 #222222 !important;
+}

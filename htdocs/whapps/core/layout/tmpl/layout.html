@@ -12,7 +12,7 @@
             </div>
             
             <ul class="universal_nav">
-                <li><a href="#" id="my_account" class="my_account">Not connected</a></li>
+                <li><a href="#" id="my_account" class="my_account"></a></li>
                 <li><a href="#" id="my_help" class="help">Help</a></li>
                 <li><a href="#" id="my_logout" class="logout">Login</a></li>
             </ul>
@@ -31,8 +31,10 @@
         <!-- end content container -->
     </div>
     
-    <div id="loading" style="display:none; border: 1px; background-color: #999999; position: absolute; top:40%; left:40%; width:20%; height:140px; text-align:center; z-index:100000">
-      <p style="font-size:24px; line-height:140px"><img src="whapps/core/layout/images/loading.gif"/>&nbsp;&nbsp;Please wait...</p>
+    <div id="loading">
+        <div class="graphic"><img src="whapps/core/layout/images/loading.gif"/></div>
+        <div class="text">Please wait...</div>
+        <div class="clear"/>
     </div>
 
 </div>

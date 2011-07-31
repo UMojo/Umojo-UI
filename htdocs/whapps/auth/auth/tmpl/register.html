@@ -1,18 +1,47 @@
 <div>
-    <div class="stylized myform">
-        <form name="form" method="post" action="#">
-            <label>Email</label>
-            <input type="text" name="email" id="email" value=""/>
-            <label>Password</label>
-            <input type="password" name="password" id="password" />
-            <label>First Name</label>
-            <input type="text" name="first_name" id="first_name"/>
-            <label>Last Name</label>
-            <input type="text" name="last_name" id="last_name"/>
-            <label>Realm</label>
-            <input type="text" name="realm" id="realm" class="field_last" />
+    <div class="popup popup_register">
+        <form name="form">
+            <ul class="controls">
+                <li>
+                    <label>Username</label>
+                    <input type="text" name="username" id="username" />
+                </li>
+                <li>
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" />
+                </li>
+                <li>
+                    <label>Email</label>
+                    <input type="text" name="email" id="email" value=""/>
+                </li>
+                <li>
+                    <label>First Name</label>
+                    <input type="text" name="first_name" id="first_name"/>
+                </li>
+                <li>
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" id="last_name"/>
+                </li>
+
+                {{if request_realm}}
+                <li>
+                    <label>Domain Name</label>
+                    <input type="text" name="realm" id="realm" class="field_last" />
+                </li>
+                {{/if}}
+
+            </ul>
+            
+            <div class="clear"/>
+
+            <div class="center">
+                <button class="register">Register</button>
+            </div>
+
+            <div class="clear"/>
+
+            <p>&nbsp;</p>
         </form>
-        <a class="submit_btn ctr clear" id="register_link" href="#">Register</a>
     </div>
 </div>
 

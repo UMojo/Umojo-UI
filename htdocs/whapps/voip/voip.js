@@ -33,7 +33,7 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
             CURRENT_WHAPP = 'voip';
 
-            if(winkstart.modules['voip']['auth_token'] == '') {
+            if(winkstart.modules['voip']['auth_token']) {
                 winkstart.registerResources(this.config.resources);
 
                 //TODO: dynamic realm

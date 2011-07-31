@@ -503,17 +503,7 @@ input[type="search"] {
 
 
 #diagnostics_toolbox.toolbox { display:none; }
-#loading {font-size: large; padding: 2em; background: black; border-radius: 1em; color:white; position: absolute; top:50%; left:50%; z-index:8000; opacity: 0.75;}
-#span_ajax_loader {
-    margin-left: 1em;
-    vertical-align: middle;
-}
-#loading_click_to_close {
-    color: #245AAA;
-    display: none;
-    font-weight: bold;
-    text-align: center;}
-#loading:hover #loading_click_to_close {display: block; 	cursor:pointer;}
+
 input[type="search"] {
     border: 2px inset;
     border-bottom-left-radius: 0.8em 0.8em;

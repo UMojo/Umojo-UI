@@ -22,7 +22,7 @@
         });
     };
 
-    winkstart.popup = function(content, options) {
+    winkstart.dialog = function(content, options) {
         var newDiv = $(document.createElement('div')).html(content);
 
         defaults = {

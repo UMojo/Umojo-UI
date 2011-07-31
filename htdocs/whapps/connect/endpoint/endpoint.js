@@ -105,7 +105,7 @@ winkstart.module('connect', 'endpoint',
 
         add: function() {
             var THIS = this;
-            dialogDiv = winkstart.popup(THIS.templates.edit_endpoint.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.dialog(THIS.templates.edit_endpoint.tmpl(winkstart.modules['connect'].account), {
                 title: 'Add Endpoint'
             });
 

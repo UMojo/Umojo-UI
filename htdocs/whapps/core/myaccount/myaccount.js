@@ -117,7 +117,7 @@ winkstart.module('core', 'myaccount',
         edit_billing: function() {
             var THIS = this;
 
-            //var dialogDiv = winkstart.popup(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
+            //var dialogDiv = winkstart.dialog(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
             var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
                 title: 'Add Billing Account',
                 position: 'center',
@@ -170,7 +170,7 @@ winkstart.module('core', 'myaccount',
                 jdata.tmplOpts = typeof opts.tmplOpts == 'object' ? opts.tmplOpts : {} ;
                 jdata.fa = typeof opts.fa == 'object' ? opts.fa : {} ;
                 //winkstart.log(JSON.stringify(jdata));
-                popup($('#tmpl_display_acct_info').tmpl(jdata), {
+                winkstart.dialog($('#tmpl_display_acct_info').tmpl(jdata), {
                     title: 'Account Billing Information'
                 });
             });
@@ -179,7 +179,7 @@ winkstart.module('core', 'myaccount',
 
 
         display: function() {
-            dialog = winkstart.popup(this.templates.myaccount.tmpl());
+            dialog = winkstart.dialog(this.templates.myaccount.tmpl());
 
             $('#billing', dialog).append(this.templates.billing.tmpl());
             $('#apps', dialog).append(this.templates.apps.tmpl());

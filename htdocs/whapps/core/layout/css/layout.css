@@ -22,6 +22,10 @@ html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockqu
 	clear: both;
 }
 
+.center {
+    text-align: center;
+}
+
 body {
 	background-image: url(../images/background.jpg);
 	background-repeat: repeat-x;
@@ -64,7 +68,8 @@ a {
 }
 
 a:hover {
-	color: #05addc;	
+    color: #05addc;
+    cursor: pointer;
 }
 
 a:active {
@@ -610,4 +615,44 @@ ul.button a{
 ul.button a:hover{
         color: #29abe1;
 
+}
+
+
+#loading {
+    font-size: large;
+    color:white;
+    padding: 2em;
+
+    background-color: #999999; 
+    border: 1px;
+    border-radius: 1em;
+    box-shadow: 3px 3px 3px #333333;
+
+    position: absolute;
+    top:43%;
+    left:43%;
+    z-index:9999;
+    opacity: 0.8;
+
+    display:none;
+}
+
+#loading .graphic {
+    float: left;
+}
+
+#loading .text {
+    float: left;
+    line-height: 32px;
+    margin-left: 10px;
+}
+
+blah {
+    position: absolute; top:40%; left:40%; width:20%; height:140px; text-align:center; z-index:100000
+}
+
+
+#span_ajax_loader {
+    margin-left: 1em;
+    vertical-align: middle;
 }

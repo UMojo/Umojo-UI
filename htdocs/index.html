@@ -52,15 +52,15 @@
 		<script type="text/javascript">
                     var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
                     //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
-                    var MASTER_ACCOUNT_ID = '';
-                    var AUTH_TOKEN = '';
-                    var CURRENT_USER_ID = '';
+                    var MASTER_ACCOUNT_ID = null;
+                    var AUTH_TOKEN = null;
+                    var CURRENT_USER_ID = null;
                     var CURRENT_WHAPP = 'auth';
-                    var REGISTRATION_KEY = '';
-                    var REALM_LOGIN = '';
+                    var ACTIVATION_KEY = null;
+                    var REALM_LOGIN = null;
                     winkstart.debug = true;
                     amplify.cache = false;
-                    api_key = '';
+                    api_key = null;
                     winkstart.modules = {
                         /*'indesign'    : {
                             'url' : 'indesign/',
@@ -72,7 +72,7 @@
                             'icon' : 'user',
                             'auth_token' : '',
                             'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1' 
-                        },
+                        }/*,
 
                         'provision'   : {
                             'label' : 'Phone Manager',
@@ -107,7 +107,7 @@
                             'icon' : 'dashboard',
                             'auth_token' : '',
                             'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        }
+                        }*/
                     };
 		</script>
 	</head>

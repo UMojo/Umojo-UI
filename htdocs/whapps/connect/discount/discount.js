@@ -41,7 +41,7 @@ winkstart.module('connect', 'discount',
     /* Define the functions for this module */
     {
         edit: function() {
-            var dialogDiv = winkstart.popup(this.templates.edit_discount.tmpl(winkstart.modules['connect'].account), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_discount.tmpl(winkstart.modules['connect'].account), {
                 title: 'Edit Discount'
             });
 

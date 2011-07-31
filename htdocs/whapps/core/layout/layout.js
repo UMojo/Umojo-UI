@@ -4,6 +4,7 @@ winkstart.module('core', 'layout', {
         'css/layout.css',
         'css/tabs.css',
         'css/icons.css',
+        'css/buttons.css',
         'css/jquery.override.css'
         ],
 
