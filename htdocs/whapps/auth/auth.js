@@ -17,27 +17,27 @@ winkstart.module('auth', 'auth',
         },
 
         resources: {
-            "user_auth": {
+            "auth.user_auth": {
                 url: winkstart.modules['auth']['api_url'] + '/user_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "shared_auth": {
+            "auth.shared_auth": {
                 url: winkstart.modules['auth']['api_url'] + '/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "register": {
+            "auth.register": {
                 url: winkstart.modules['auth']['api_url'] + '/signup',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "register.activate": {
+            "auth.activate": {
                 url: winkstart.modules['auth']['api_url'] + '{activation_key}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "user.get": {
+            "auth.get_user": {
                 url: winkstart.modules['auth']['api_url'] + '/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'GET'
@@ -48,9 +48,9 @@ winkstart.module('auth', 'auth',
         winkstart.registerResources(this.config.resources);
         winkstart.publish('appnav.add', {'name' : 'auth'});
         
-        // Check if we have an auth token. If not, hide the My Account button
-        if (!winkstart.modules['auth'].auth_token) {
-            $('a#my_account').hide();
+        // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
+        if (winkstart.modules['auth'].auth_token) {
+            $('a#my_account').show();
         }
     },
 
@@ -69,22 +69,32 @@ winkstart.module('auth', 'auth',
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                var form_data = {'account': {
-                                  'realm': $('#realm', dialogRegister).val()},
-                                  'app_url': window.location.href,
-                                  'user': {
-                                      'first_name': $('#first_name', dialogRegister).val() ,
-                                      'last_name':$('#last_name', dialogRegister).val(),
-                                      'email': $('#email', dialogRegister).val(),
-                                      'username':$('#username', dialogRegister).val(),
-                                      'password' : $('#password', dialogRegister).val()
-                                  }
-                                  };
+                var realm;
+                if (THIS.request_realm) {
+                    realm = $('#realm', dialogRegister).val();
+                } else {
+                    realm = $('#username', dialogRegister).val() + THIS.realm_suffix;
+                }
+
+                var form_data = {
+                    'account': {
+                        'realm': realm,
+                        'app_url': window.location.href
+                    },
+                    'user': {
+                        'username':$('#username', dialogRegister).val(),
+                        'password' : $('#password', dialogRegister).val(),
+                        'first_name': $('#first_name', dialogRegister).val() ,
+                        'last_name':$('#last_name', dialogRegister).val(),
+                        'email': $('#email', dialogRegister).val()
+                    }
+                };
+
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
-                winkstart.putJSON('register', rest_data, function (json, xhr) {
-                    alert('Registered successfully, please check your e-mail !');
+                winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                    alert('Registered successfully. Please check your e-mail to activate your account!');
                     dialogRegister.dialog('close');
                 });
             });
@@ -118,7 +128,7 @@ winkstart.module('auth', 'auth',
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
 
-                winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
+                winkstart.putJSON('auth.user_auth', rest_data, function (json, xhr) {
                     MASTER_ACCOUNT_ID = json.data.account_id;
                     AUTH_TOKEN = json.auth_token;
                     winkstart.modules['auth']['auth_token'] = json.auth_token;
@@ -129,13 +139,13 @@ winkstart.module('auth', 'auth',
                     rest_data.crossbar = true;
                     rest_data.data = form_data;
 
-                    winkstart.putJSON('shared_auth', rest_data, function (json, xhr) {
+                    winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
                         winkstart.modules['auth']['auth_token'] = json.auth_token;
                         CURRENT_USER_ID = json.data.owner_id;
                         CURRENT_WHAPP = 'voip';
                         dialogDiv.dialog('close');
-                        
-                        winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+
+                        winkstart.getJSON('auth.get_user', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
                             $('#my_account').show().html("&nbsp;"+json.data.username);
                             $('#my_logout').html("Logout");
                             $('.main_nav').show();
@@ -197,7 +207,7 @@ winkstart.module('auth', 'auth',
 
             if(ACTIVATION_KEY) {
                 var rest_data = { activtion_key : ACTIVATION_KEY, data: {} };
-                winkstart.postJSON('register.activate', rest_data, function (json, xhr) {
+                winkstart.postJSON('auth.activate', rest_data, function (json, xhr) {
                     console.log(json);
                     REALM_LOGIN = json.data.account.realm;
                     alert('You are now registered');

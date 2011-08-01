@@ -193,6 +193,7 @@ ul.universal_nav li a {
 
 ul.universal_nav li a.my_account {
 	background-image: url(../images/account_icon.png);
+        display: none;  /* Don't show this by default */
 }
 
 ul.universal_nav li a.help {
