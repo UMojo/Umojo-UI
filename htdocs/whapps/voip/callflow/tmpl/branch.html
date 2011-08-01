@@ -1,20 +1,24 @@
 <div>
    <div class="child">
       {{if actionName != 'root'}}
+          {{if actionNameParent == 'menu'}}    
+            <div class="span_arrow"></div>
+          {{else}}
+            <div class="span_arrow large"></div>
+          {{/if}}
+          <div class="clear"></div>
           {{if countChildren != 1}}
             {{if firstChildren == "true"}}
-                <div class="div_line_first" id="divLine${id}"/><br/>
+                <div class="div_line_first" id="divLine${id}"/>
             {{else}}
                 {{if lastChildren == "true"}}
-                    <div class="div_line_last" id="divLine${id}"/><br/>
+                    <div class="div_line_last" id="divLine${id}"/>
                 {{else}}
-                    <div class="div_line" id="divLine${id}"/><br/>
+                    <div class="div_line" id="divLine${id}"/>
                 {{/if}}
             {{/if}}
           {{/if}}
-          <div class="span_arrow">
-          </div>
-          <br/>
+          <div class="clear"></div>
           {{if actionNameParent == 'menu'}}    
           <div class="div_option">
                 <a class="a_link_option" href="javascript:void(0)">${key}</a>

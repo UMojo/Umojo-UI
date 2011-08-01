@@ -195,10 +195,64 @@
 #ws_callflow #footer a.gray_btn { background: url(images/btn_darkGrey.png) no-repeat; width: 81px; height: 28px; display: block; text-align: center; line-height: 25px;}
 #ws_callflow #footer a.remove {}
 #ws_callflow #footer a.save {}
-#ws_callflow .div_line { display: inline-block; height: 5px; width: 100%; background: #525252; margin-top: 9px; padding: 0; float: left;}
-#ws_callflow .div_line_first { display: inline-block; height: 5px; width: 52%; background: #525252; margin-left: 48%; margin-top: 9px; padding: 0; float:left; }
-#ws_callflow .div_line_last { display: inline-block; height: 5px; width: 51%; background: #525252; margin-top: 9px; padding: 0; text-align: center; float:left;}
-#ws_callflow .span_arrow { display: inline-block; height: 38px; width: 145px; background-image: url(images/arrow_grey.png); margin: 0; padding: 0; margin-top: -2px; } 
+
+/* This will blow your mind */
+#ws_callflow #ws_cf_flow .children .child:last-child:not(:first-child) {
+    padding-right: 10px;
+}
+
+/* This will blow your mindi AGAIN */
+#ws_callflow #ws_cf_flow .children .child:first-child:not(:last-child) {
+    padding-left: 10px;
+}
+
+#ws_callflow .div_line {
+    display: inline-block;
+    height: 5px;
+    width: 100%;
+    background: #525252;
+    margin-top: -43px;
+    margin-right: 0px;
+    margin-left: 0px; 
+    padding: 0;
+    float: left;
+}
+#ws_callflow .div_line_first { 
+    display: inline-block; 
+    height: 5px; 
+    width: 50%; 
+    background: #525252;
+    margin-top: -43px;
+    margin-right: 0px;
+    margin-left: 0px; 
+    padding: 0; 
+    float: right;
+}
+#ws_callflow .div_line_last {
+    display: inline-block;
+    height: 5px;
+    width: 50%;
+    background: #525252;
+    margin-top: -43px;
+    margin-right: 0px;
+    margin-left: 0px; 
+    padding: 0;
+    float: left;
+}
+#ws_callflow .span_arrow {
+    display: inline-block; 
+    height: 38px; 
+    width: 145px; 
+    background-image: url(images/arrow_grey.png); 
+    margin: 5px 0px 5px; 
+    padding: 0; 
+    position: relative; 
+}
+
+#ws_callflow .span_arrow.large {
+    height: 55px; 
+    background-image: url(images/arrow_grey_large.png); 
+}
 #ws_callflow .a_link_option { color: #FFFFFF;}
 #ws_callflow .div_option { display: inline-block; height: 15px; width: 131px; background-color: #727272; margin: 0; padding: 0; border: 1px solid #323232; }
 #ws_callflow .div_icon { display: inline-block; float:left; margin-left: 5px; margin-top: 20px;}
