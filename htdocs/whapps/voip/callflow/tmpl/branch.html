@@ -1,7 +1,7 @@
 <div>
    <div class="child">
       {{if actionName != 'root'}}
-          {{if actionNameParent == 'menu'}}    
+          {{if actionNameParent == 'menu' || actionNameParent == 'temporal_route' || actionNameParent == 'offnet'}}    
             <div class="span_arrow"></div>
           {{else}}
             <div class="span_arrow large"></div>
@@ -19,9 +19,9 @@
             {{/if}}
           {{/if}}
           <div class="clear"></div>
-          {{if actionNameParent == 'menu'}}    
+          {{if actionNameParent == 'menu' || actionNameParent == 'temporal_route' || actionNameParent == 'offnet'}}    
           <div class="div_option">
-                <a class="a_link_option" href="javascript:void(0)">${key}</a>
+                <a class="a_link_option" href="javascript:void(0)">${key.substr(0,15)}</a>
           </div>
           {{/if}}
       {{/if}}

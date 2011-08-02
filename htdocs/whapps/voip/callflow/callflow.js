@@ -569,7 +569,7 @@ winkstart.module('voip', 'callflow',
          var THIS = this;
          
          if(branch.key && branch.key.length > 10) {
-            branch.key = branch.key.substring(0,9);
+            //branch.key = branch.key.substring(0,9);
          }
          if(branch.countChildren == undefined) branch.countChildren = 1;
          var flow = this.templates.branch.tmpl(branch);
@@ -578,19 +578,46 @@ winkstart.module('voip', 'callflow',
              countChildren++;
          }); 
          flow.find('.a_link_option').click( function() {
-            var data = {};
-            if(branch.actionNameParent == 'menu') {
-                data.options = {
-                                    type: 'menu option',
-                                    items: THIS.config.menu_options,
-                                    selected: branch.key
-                                };
-                dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+            var data = {}, popup = function(){
+                var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
                 dialog.find('.submit_btn').click(function() {
                         branch.key = $('#option-selector', dialog).val();
                         dialog.dialog('close');
                         THIS.renderFlow();
+                }); 
+            };
+
+            if(branch.actionNameParent == 'menu') {
+                 data.options = {
+                                    type: 'menu option',
+                                    items: THIS.config.menu_options,
+                                    selected: branch.key
+                                };
+            }
+            else if(branch.actionNameParent == 'temporal_route') {
+                 data.options = {
+                                type: 'temporal rule',
+                                items: {},
+                                selected: 0
+                            };
+                winkstart.getJSON('timeofday.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                        var list = json.data,
+                            json_list = {};
+
+                        list.push({name: 'All other times (default action)', id:'_'});
+
+                        $.each(list, function() {
+                            json_list[this.id] = this.name;
+                        });
+
+                        data.options.items = json_list;
+                        data.options.selected = branch.key;
+
+                        popup();
                 });
+            }
+            if(data.options != undefined && branch.parent.actionName != 'temporal_route') {
+                popup();
             }
 
          });
