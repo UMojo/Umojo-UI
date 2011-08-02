@@ -1,7 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>2600hz WinkStart</title>
+	    <title>2600hz WinkStart</title>
+
+        <!-- Preload variable declaration -->
+		<script type="text/javascript">
+                    var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
+                    //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
+                    var MASTER_ACCOUNT_ID = null;
+                    var AUTH_TOKEN = null;
+                    var CURRENT_USER_ID = null;
+                    var CURRENT_WHAPP = 'auth';
+                    var ACTIVATION_KEY = null;
+                    var REALM_LOGIN = null;
+                    var api_key = null;
+        </script>
 		
 		<link rel="openid.server" href="http://openid.2600hz.com/server/server.php" />
 		<link type="text/css" href="css/base.css" rel="stylesheet" media="screen" />
@@ -49,18 +62,10 @@
 		<script type="text/javascript" src="js/winkstart-tables.js"></script>
 		<script type="text/javascript" src="js/winkstart-validate.js"></script>
 
+        <!-- Postload variable declaration -->
 		<script type="text/javascript">
-                    var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
-                    //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
-                    var MASTER_ACCOUNT_ID = null;
-                    var AUTH_TOKEN = null;
-                    var CURRENT_USER_ID = null;
-                    var CURRENT_WHAPP = 'auth';
-                    var ACTIVATION_KEY = null;
-                    var REALM_LOGIN = null;
                     winkstart.debug = true;
                     amplify.cache = false;
-                    api_key = null;
                     winkstart.modules = {
                         /*'indesign'    : {
                             'url' : 'indesign/',
