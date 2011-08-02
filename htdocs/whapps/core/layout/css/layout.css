@@ -103,9 +103,6 @@ a:active {
 	text-indent: -9999px;
 	display: block;
 	float: left;
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 
 .logo .img {
@@ -117,9 +114,6 @@ a:active {
 	text-indent: -9999px;
 	display: block;
 	float: left;
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 
 .main_content {
@@ -128,13 +122,9 @@ a:active {
 }
 
 .main_nav {
-/*	margin: 0 auto; */
-    margin-left: 192px;
-	width: 900px;
 	height: 80px;
-	position: relative;
-	top: 0;
 	font-size: 14px;
+    float: left;
 }
 
 .main_nav ul {
