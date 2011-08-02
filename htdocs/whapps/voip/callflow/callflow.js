@@ -356,7 +356,7 @@ winkstart.module('voip', 'callflow',
 
                     general = function(json, other) {
                         var dialog, data;
-                        
+                        console.log('node_name = ', node_name); 
                         if(node_name == 'temporal_route') {
                             data = {
                                 title: 'Configure your time of day route',
@@ -413,6 +413,22 @@ winkstart.module('voip', 'callflow',
                                 }
                             };
                         }
+                        else if(node_name == 'device') {
+                            console.log('enter device');
+                            data = {
+                                title: 'Select the ' + node_name,
+                                parameter: {
+                                    name: 'timeout',
+                                    value: (node.data.data == undefined || node.data.data.timeout == undefined) ? 20 : new Number(node.data.data.timeout)
+                                },
+                                objects: {
+                                    type: node_name,
+                                    items: json.data,
+                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
+                                }
+                            };
+
+                        }
                         else {
                             data = {
                                 title: 'Select the ' + node_name,
@@ -424,7 +440,8 @@ winkstart.module('voip', 'callflow',
                             };
                         }
 
-                        if(node.parent.actionName == 'menu') {
+                        //TODO: We want to remove this?
+                        /*if(node.parent.actionName == 'menu') {
                             data.options = {
                                 type: 'menu option',
                                 items: THIS.config.menu_options,
@@ -437,7 +454,7 @@ winkstart.module('voip', 'callflow',
                                 items: other,
                                 selected: node.key
                             };
-                        }
+                        }*/
                         dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
                     
                         $('#create_new_item', dialog).click(function() {
@@ -445,16 +462,19 @@ winkstart.module('voip', 'callflow',
                         });
     
                         dialog.find('.submit_btn').click(function() {
+                            console.log(node);
                             var temp;
 
                             if(node.data.data == undefined) {
                                 node.data.data = {};
                             }
-
-                            if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
+                            //TODO: We want to remove this?
+                            /*if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
                                 node.key = $('#option-selector', dialog).val();
+                            }*/
+                            if(node_name == 'device') {
+                                node.data.data.timeout = $('#parameter_input', dialog).val();
                             }
-
                             if(node_name == 'temporal_route') {
                                 node.data.data.timezone = $('#object-selector', dialog).val();
                             }
@@ -477,6 +497,7 @@ winkstart.module('voip', 'callflow',
 
                             dialog.dialog('close');
                             THIS.renderFlow();
+                            console.log(node);
                         });
                     };
 

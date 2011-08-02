@@ -32,6 +32,12 @@
                     </select>
                 </form>
                 {{/if}}
+                {{if parameter}}
+                <form name="form" method="post" action="#">
+                    <label for="parameter_input">${parameter.name}: </label>
+                    <input type="text" name="parameter_input" id="parameter_input" value="${parameter.value}"/>
+                </form>
+                {{/if}}
                 <form name="form" method="post" action="#">
                     <div class="btn_wrapper">
                         <a href="javascript:void(0)" id="add" class="submit_btn ctr">Save</a><br>
