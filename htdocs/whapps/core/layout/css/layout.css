@@ -584,25 +584,25 @@ a.detailed_listing:hover{
 ----REMOVE & SAVE BUTTONS-----
 *******************************/
 
-ul.button{
+ul.buttons{
         display: block;
         list-style-type: none;
         margin: 21px 0 0 0;
 
 }
 
-ul.button.right{
-    margin-left: 650px;
+ul.buttons.right{
+    margin-left: 570px;
 }
 
-ul.button li{
+ul.buttons li{
         float: left;
         text-align: center;
         padding-right: 3px;
 
 }
 
-ul.button a{
+ul.buttons a{
         display: block;
         background-image: url(../images/button_bg.png);
         width: 81px;
@@ -613,7 +613,7 @@ ul.button a{
         text-decoration: none;
 }
 
-ul.button a:hover{
+ul.buttons a:hover{
         color: #29abe1;
 
 }
