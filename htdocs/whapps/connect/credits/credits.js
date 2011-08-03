@@ -35,7 +35,7 @@ winkstart.module('connect', 'credits',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function() {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         // Tie to DOM events
         $('#ws-content').delegate('.credits.manage', 'click', function() {

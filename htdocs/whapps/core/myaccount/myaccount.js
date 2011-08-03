@@ -44,7 +44,7 @@ winkstart.module('core', 'myaccount',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
         // Tell winkstart about the APIs you are going to be using (see top of this file, under resources
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         // This app is slightly invasive - it assumes it should always be bound to an element named my_account anywhere on the page
         $('a#my_account').live('click', function() {

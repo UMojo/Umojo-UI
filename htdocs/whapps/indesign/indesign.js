@@ -40,7 +40,7 @@ winkstart.module('indesign', 'indesign', {
 
             }   // End initialization of modules
 
-            //winkstart.registerResources(this.config.resources);
+            //winkstart.registerResources(this.__whapp, this.config.resources);
 
             //winkstart.publish('layout.updateLoadedModule', {label: 'Device Management', module: this.__module});
 

@@ -31,19 +31,18 @@ winkstart.module('voip', 'voip', {
         
         activate: function() {
             var THIS = this;
-            CURRENT_WHAPP = 'voip';
 
             if(winkstart.apps['voip']['auth_token']) {
-                winkstart.registerResources(this.config.resources);
+                winkstart.registerResources(this.__whapp, this.config.resources);
 
                 //TODO: dynamic realm
-                var form_data = { 'shared_token': winkstart.apps['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
+                var form_data = { 'shared_token': winkstart.apps['voip']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
 
                 winkstart.putJSON('shared_auth', rest_data, function (json, xhr) {
-                    winkstart.apps[CURRENT_WHAPP]['auth_token'] = json.auth_token;
+                    winkstart.apps['voip']['auth_token'] = json.auth_token;
                     if (!THIS.initialized) {
 
                         // Load the modules

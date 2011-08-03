@@ -102,7 +102,7 @@ winkstart.module('voip', 'callflow',
 
    },
    function (args) {
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',

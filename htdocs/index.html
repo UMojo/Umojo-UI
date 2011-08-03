@@ -56,26 +56,68 @@
         <script type="text/javascript">
             //var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
             //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
-            /* var CURRENT_USER_ID = null; */
-            var CURRENT_WHAPP = 'auth';
+            /* var CURRENT_USER_ID = null;
             var GLOBAL_ACCOUNT_ID = null;
             var GLOBAL_AUTH_TOKEN = null;
-            var REALM_LOGIN = null;
+            var REALM_LOGIN = null;*/
+            var CURRENT_WHAPP = 'auth';
 
             winkstart.debug = true;
             amplify.cache = false;
 
             // Additional modules will be loaded after the main page loads
             winkstart.apps = {
-                'auth' : {
+                'auth' : {                                          // This is our global/failback auth mechanism
                     'api_url': 'http://apps.2600hz.com:8000/v1',
                     'label' : 'Login',
                     'icon' : 'user',
+                    'realm' : null,
                     'account_id' : null,
                     'auth_token' : null,
                     'user_id' : null
-                }
-            }
+                }/*,
+
+                "indesign"    : {
+                    "url" : "indesign/",
+                    "label" : "In Design",
+                    "icon" : "phone"
+                },
+
+                "provision"   : {
+                    "label" : "Phone Manager",
+                    "icon" : "phone",
+                    "api_url" : "http://apps002-dev-ord.2600hz.com:8000/v1"
+                },
+
+                "voip"        : {
+                    "label" : "PBX Services",
+                    "icon" : "voip_services",
+                    "auth_token" : "",
+                    "api_url" : "http://apps002-dev-ord.2600hz.com:8000/v1"
+                },
+
+                "cluster"      : {
+                    "label" : "Cluster Manager",
+                    "icon" : "cluster_manager",
+                    "auth_token" : "",
+                    "api_url" : "http://apps002-dev-ord.2600hz.com:8000/v1"
+                },
+
+                "connect"     : {
+                    "label" : "Connectivity",
+                    "auth_token" : "",
+                    "account_id" : "2600hz",
+                    "icon" : "connectivity",
+                    "api_url" : "http://apps002-dev-ord.2600hz.com:8000/v1"
+                },
+
+                "dashboard"   : {
+                    "label" : "Dashboard",
+                    "icon" : "dashboard",
+                    "auth_token" : "",
+                    "api_url" : "http://apps002-dev-ord.2600hz.com:8000/v1"
+                }*/
+            };
         </script>
     </head>
     <body>

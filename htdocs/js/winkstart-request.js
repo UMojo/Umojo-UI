@@ -1,8 +1,8 @@
 (function(winkstart, amplify, undefined) {
 	
-	winkstart.registerResources = function(resources){
+	winkstart.registerResources = function(app_name, resources){
 		var THIS = this;
-		
+
 		for(var key in resources){
 			var resource = resources[key];
 			
@@ -24,7 +24,7 @@
                                 type: resource.verb,
                                 accepts: 'application/json',
                                 beforeSend: function(jqXHR, settings){
-                                        jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken());
+                                        jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken(app_name));
                                 }
 			});
 		}
@@ -36,15 +36,14 @@
 		});
         };
 
-	winkstart.getAuthToken = function(){
-		//return AUTH_TOKEN;
-        return winkstart.apps[CURRENT_WHAPP]['auth_token'];
+	winkstart.getAuthToken = function(app_name){
+            return winkstart.apps[app_name]['auth_token'];
 	};
 	
 	winkstart.normalizeRequest = function(params){
 		//We were placing this in the params to denote a call to crossbar
 		delete params.crossbar;
-		params['auth-token'] = winkstart.getAuthToken();
+		//params['auth-token'] = winkstart.getAuthToken();
 		return params;
 	};
 

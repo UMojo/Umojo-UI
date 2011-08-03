@@ -28,7 +28,7 @@ winkstart.module('deploy', 'deploy', {
 			THIS.templates.deploy.tmpl({}).appendTo( $('#ws-content') );
 			THIS.templates.form.tmpl({}).appendTo( $('#deploy-form') );
 			THIS.templates.advform.tmpl({}).appendTo( $('#deploy-form .advanced .menu') );
-        		winkstart.registerResources(THIS.config.resources);
+        		winkstart.registerResources(this.__whapp, THIS.config.resources);
          	
 			winkstart.publish('layout.updateLoadedModule', {label: 'Deployment Tool - v0.02', module: THIS.__module});         	
 

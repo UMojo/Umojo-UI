@@ -61,7 +61,7 @@ winkstart.module('voip', 'menu',
     /* Bootstrap routine - run when the module is first loaded */
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',

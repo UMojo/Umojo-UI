@@ -128,7 +128,7 @@ winkstart.module('connect', 'numbers',
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function() {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         // Number manipulation from carrier
         $('#ws-content').delegate('.numbers.add', 'click', function() {

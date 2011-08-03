@@ -283,7 +283,7 @@ winkstart.module('dashboard', 'monitor',
             THIS.templates.index.tmpl().appendTo( $('#ws-content') );
 
             /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.config.resources);
+            winkstart.registerResources(this.__whapp, this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Cluster Monitor',

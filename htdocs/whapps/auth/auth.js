@@ -13,6 +13,7 @@ winkstart.module('auth', 'auth',
             'auth.load_account' : 'load_account',
             'auth.recover_password' : 'recover_password',
             'auth.authenticate' : 'authenticate',
+            'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
             'auth.save_registration' : 'save_registration'
         },
@@ -24,7 +25,7 @@ winkstart.module('auth', 'auth',
                 verb: 'PUT'
             },
             "auth.shared_auth": {
-                url: winkstart.apps['auth']['api_url'] + '/shared_auth',
+                url: '{api_url}/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
@@ -46,7 +47,7 @@ winkstart.module('auth', 'auth',
         }
     },
     function() {
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
         winkstart.publish('appnav.add', {'name' : 'auth'});
         
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
@@ -135,6 +136,7 @@ winkstart.module('auth', 'auth',
                     winkstart.apps['auth'].account_id = json.data.account_id;
                     winkstart.apps['auth'].auth_token = json.auth_token;
                     winkstart.apps['auth'].user_id = json.data.owner_id;
+                    winkstart.apps['auth'].realm = realm;
 
                     $(dialogDiv).dialog('close');
 
@@ -176,14 +178,42 @@ winkstart.module('auth', 'auth',
                     winkstart.apps[k] = v;
                     
                     // TODO: This is a hack. This should not be done - instead, a failback routine should go into the core
-                    winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+                    /*winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
                     winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
-                    winkstart.apps[k].auth_token = winkstart.apps['auth'].auth_token;
+                    winkstart.apps[k].auth_token = winkstart.apps['auth'].auth_token;*/
 
                     winkstart.module.loadApp(k, function() {
                         this.init();
                         winkstart.log('WhApps: Initializing ' + k);
                     })
+                });
+            });
+
+        },
+
+        // Use this to attempt a shared auth token login if the requested app doesn't have it's own auth token.
+        // TODO: If this fails, pop-up a login box for this particular app
+        shared_auth: function(args) {
+            var THIS = this;
+            var app_name = args.app_name;
+
+            rest_data = {
+                crossbar : true,
+                api_url : winkstart.apps[app_name].api_url,
+                realm : winkstart.apps['auth'].realm,                   // Treat auth as global
+                auth_token : winkstart.apps['auth'].auth_token,         // Treat auth as global
+                account_id : winkstart.apps['auth'].account_id,         // Treat auth as global
+                user_id : winkstart.apps['auth'].user_id                // Treat auth as global
+            };
+
+            winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
+                // If this is successful, we'll get a server-specific auth token back
+                winkstart.apps[app_name]['auth_token'] = json.auth_token;
+
+                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+                    $('#my_account').show().html("&nbsp;"+json.data.username);
+                    $('#my_logout').html("Logout");
+                    $('.main_nav').show();
                 });
             });
 
@@ -239,18 +269,20 @@ winkstart.module('auth', 'auth',
                     $.each(winkstart.apps, function(k, v) {
                         // TODO: ADD APP UNLOADING CODE HERE. Remove CSS and scripts. This should inherently delete apps.
 
+                        winkstart.apps[k].realm = null;
                         winkstart.apps[k].auth_token = null;
                         winkstart.apps[k].user_id = null;
                         winkstart.apps[k].account_id = null;
                     });
                     
-                    GLOBAL_AUTH_TOKEN = null;
-                    GLOBAL_ACCOUNT_ID = null;
-                    CURRENT_USER_ID = null;
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
                     $('a#my_account').hide();
-                    winkstart.publish('auth.activate');
+
+                    // Temporary hack until module unloading works properly
+                    window.location.reload();
+
+                    //winkstart.publish('auth.activate');
                 }
             }
         }

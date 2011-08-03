@@ -113,7 +113,7 @@ winkstart.module('connect', 'sipservice',
         });
 
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.config.resources);
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         // Only one option for now - go ahead and open it up!
         winkstart.publish('subnav.activate', 'sipservice');
@@ -243,6 +243,8 @@ winkstart.module('connect', 'sipservice',
                 THIS.templates.index.tmpl().appendTo( $('#ws-content') );
 
                 $('#ws-content a#signup_button').click(function() {
+                    THIS.create_account();
+                    
                     THIS.main_menu();
                 });
 

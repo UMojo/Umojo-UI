@@ -3,7 +3,7 @@ winkstart.module('core', 'core',
     {
     },
     function(args) {
-        //winkstart.registerResources(this.config.resources);
+        //winkstart.registerResources(this.__whapp, this.config.resources);
         // First thing we're going to do is go through is load our layout
         winkstart.module.loadModule('core', 'layout', function() {
 

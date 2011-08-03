@@ -6,8 +6,7 @@ winkstart.module('connect', 'connect', {
     },
     function() {
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'connect' });
-
+        winkstart.publish('appnav.add', { 'name' : this.__module });
     },
     {
         initialized :   false,
@@ -15,20 +14,25 @@ winkstart.module('connect', 'connect', {
 
         activate: function() {
             var THIS = this;
-            
-            if (!THIS.initialized) {
+
+
+            if (!winkstart.apps[this.__module].auth_token) {                    // Is this app authenticated?
+                winkstart.publish('auth.shared_auth', { app_name : this.__module });
+            } else if (!THIS.initialized) {                                 // Is this app initialized?
                 $.each(this.modules, function(k, v) {
-                    winkstart.module.loadModule('connect', v, function() {
+                    winkstart.module.loadModule(this.__module, v, function() {
                         this.init(function() {
-                            winkstart.log('Connect: Initialized ' + v);
+                            winkstart.log(this.__module + ': Initialized ' + v);
                         });
                     });
                 });
 
                 THIS.initialized = true;
+                
+                winkstart.publish('sipservice.activate');
+            } else {
+                winkstart.publish('sipservice.activate');
             }
-
-            winkstart.publish('sipservice.activate');
         }
     }
 );
