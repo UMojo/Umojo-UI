@@ -81,16 +81,12 @@ winkstart.module('core', 'appnav', {
 
             // Set up the subnav click handler
             $('.dropdown .content', item).delegate('.module', 'click', function() {
-                //if(AUTH_TOKEN != '') {
-                    $('div.header .main_nav .whapp a').removeClass('selected');
-                    $('.whapp a', $(this).parents('li')).addClass('selected');
-                    $('.main_nav li .whapp .icon').removeClass('blue');
-                    $('.whapp .icon', $(this).parents('li')).addClass('blue');
-                    winkstart.publish($(this).attr('module-name') + '.activate');
-                //}
-                //else {
-                //    winkstart.publish ('auth.activate');
-                //}
+                $('div.header .main_nav .whapp a').removeClass('selected');
+                $('.whapp a', $(this).parents('li')).addClass('selected');
+                $('.main_nav li .whapp .icon').removeClass('blue');
+                $('.whapp .icon', $(this).parents('li')).addClass('blue');
+                winkstart.publish($(this).attr('module-name') + '.activate');
+
                 return false;
             });
         },
@@ -106,7 +102,7 @@ winkstart.module('core', 'appnav', {
                 // Not logged in for this app...
 
                 // TODO: This is where failback should go.
-                winkstart.publish ('auth.activate');
+                winkstart.publish ('auth.shared_auth', { app_name : app_name });
             }
         },
 

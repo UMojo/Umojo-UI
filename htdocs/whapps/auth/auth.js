@@ -102,6 +102,7 @@ winkstart.module('auth', 'auth',
         },
 
         login: function() {
+            console.log('GOT HERE');
             var THIS = this;
             
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({}), {
@@ -111,6 +112,7 @@ winkstart.module('auth', 'auth',
             });
 
             $('button.login', dialogDiv).click(function(event) {
+                console.log('OR HERE');
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
