@@ -142,6 +142,7 @@ winkstart.module('voip', 'callflow',
              }, function(json) {
                 THIS._resetFlow();
                 THIS.flow.id = json.data.id;
+                THIS.flow.metadata = json.data.metadata;
                 if(json.data.flow.module != undefined) {
                     THIS.flow.root = THIS.buildFlow(json.data.flow, THIS.flow.root, 0, '_');
                 }
@@ -301,6 +302,7 @@ winkstart.module('voip', 'callflow',
          this.flow.root = this.branch('root');    // head of the flow tree
          this.flow.root.key = 'flow';
          this.flow.numbers = [];
+         this.flow.metadata = {};
          this._formatFlow();
       },
 
@@ -308,9 +310,18 @@ winkstart.module('voip', 'callflow',
          this.flow.root.index(0);
          this.flow.nodes = this.flow.root.nodes();
       },
-
-
-
+      getDetails: function(id, field) {
+          if(field != undefined) {
+              return this.flow.metadata[id][field];
+          }
+          else {
+              return this.flow.metadata[id];
+          }
+      },
+      setDetails: function(id, data) {
+          var THIS = this;
+          THIS.flow.metadata[id] = data;
+      },
 // FLOW /////////////////////////////////////////////////////////////////
       _renderFlow: function () {
          var THIS = this;
@@ -348,7 +359,35 @@ winkstart.module('voip', 'callflow',
                });
             }
             else {
-               node_html = THIS.templates.node.tmpl(THIS.flow.nodes[$(this).attr('id')]);
+               //node.details = '';
+               if(node.actionName == 'offnet') {
+                   if(node.module == 'offnet') {
+                       node.details = 'Global';
+                   }
+                   else {
+                       node.details = 'Local';
+                   }
+               } 
+               else if(node.actionName == 'temporal_route') {
+                   //TODO
+                   if(node.data.data != undefined && node.data.data.timezone != undefined) {
+                       node.details = 'PST';
+                   }
+               }
+               else if(node.actionName == 'conference') {
+                    if(node.data.data != undefined && node.data.data.id != undefined) {
+                       node.details = THIS.getDetails(node.data.data.id, 'name');
+                    }
+                    else node.details = "Conference Server";
+               }
+               else {
+                   if(node.data.data != undefined && node.data.data.id != undefined) {
+                       node.details = THIS.getDetails(node.data.data.id, 'name');
+                   }    
+               }
+               if(node.details == undefined) node.details = '';
+               
+               node_html = THIS.templates.node.tmpl(node);
 
                //node_html.find('.edit').click(function() {
                node_html.find('.module').click(function() {
@@ -356,7 +395,6 @@ winkstart.module('voip', 'callflow',
 
                     general = function(json, other) {
                         var dialog, data;
-                        console.log('node_name = ', node_name); 
                         if(node_name == 'temporal_route') {
                             data = {
                                 title: 'Configure your time of day route',
@@ -414,12 +452,11 @@ winkstart.module('voip', 'callflow',
                             };
                         }
                         else if(node_name == 'device') {
-                            console.log('enter device');
                             data = {
                                 title: 'Select the ' + node_name,
                                 parameter: {
                                     name: 'timeout',
-                                    value: (node.data.data == undefined || node.data.data.timeout == undefined) ? 20 : new Number(node.data.data.timeout)
+                                    value: (node.data.data == undefined || node.data.data.timeout == undefined) ? '20' : node.data.data.timeout
                                 },
                                 objects: {
                                     type: node_name,
@@ -462,7 +499,6 @@ winkstart.module('voip', 'callflow',
                         });
     
                         dialog.find('.submit_btn').click(function() {
-                            console.log(node);
                             var temp;
 
                             if(node.data.data == undefined) {
@@ -475,6 +511,7 @@ winkstart.module('voip', 'callflow',
                             if(node_name == 'device') {
                                 node.data.data.timeout = $('#parameter_input', dialog).val();
                             }
+
                             if(node_name == 'temporal_route') {
                                 node.data.data.timezone = $('#object-selector', dialog).val();
                             }
@@ -495,9 +532,14 @@ winkstart.module('voip', 'callflow',
                                 node.data.data.id = $('#object-selector', dialog).val();
                             }
 
+                            if(node_name != 'temporal_route' && node_name != 'offnet') {
+                                THIS.setDetails(node.data.data.id, { 'name' : $('#object-selector option:selected', dialog).text()});
+                            } 
+                            else {
+                            }
+
                             dialog.dialog('close');
                             THIS.renderFlow();
-                            console.log(node);
                         });
                     };
 
@@ -582,16 +624,25 @@ winkstart.module('voip', 'callflow',
                THIS.renderFlow();
             }
          });
-
          return layout;
       },
 
       _renderBranch: function (branch) {
          var THIS = this;
-         
-         if(branch.key && branch.key.length > 10) {
-            //branch.key = branch.key.substring(0,9);
+         if(branch.parent != undefined && (branch.parent.actionName == 'menu' || branch.parent.actionName == 'offnet')) {
+             if(branch.key != '_') {
+                 branch.key_details = branch.key;
+             }
+             else branch.key_details = 'Default';
          }
+         else if(branch.parent != undefined && branch.parent.actionName == 'temporal_route') {
+             if(branch.key != '_') {
+                 branch.key_details = THIS.getDetails(branch.key, 'name');
+             } 
+             else branch.key_details = 'All other times';
+         }
+        
+
          if(branch.countChildren == undefined) branch.countChildren = 1;
          var flow = this.templates.branch.tmpl(branch);
          var countChildren = 0;
@@ -603,6 +654,9 @@ winkstart.module('voip', 'callflow',
                 var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
                 dialog.find('.submit_btn').click(function() {
                         branch.key = $('#option-selector', dialog).val();
+                        if(branch.actionName != 'menu' && branch.actionName != 'offnet') {
+                            THIS.setDetails(branch.key, {'name': $('#option-selector option:selected', dialog).text()});
+                        }
                         dialog.dialog('close');
                         THIS.renderFlow();
                 }); 

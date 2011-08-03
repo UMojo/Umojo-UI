@@ -258,4 +258,4 @@
 #ws_callflow .div_icon { display: inline-block; float:left; margin-left: 5px; margin-top: 20px;}
 #ws_callflow .module { display: inline-block; font-size: 14px; height: 74px;}
 #ws_callflow .module_name { width: 100px; margin-left: -7px; margin-top: 25px; color: #dddddd; float: left; text-transform: uppercase; text-align: center;}
-#ws_callflow .selected_item { display: inline-block; font-size: 10px; margin-left: 60px; margin-top: -5px; color: #dddddd; width: 80px;}
+#ws_callflow .details { display: inline-block; font-size: 10px; margin-left: 30px; margin-top: -5px; color: #dddddd; width: 110px; height: 15px;}
