@@ -12,10 +12,8 @@ winkstart.module('voip', 'voip', {
         }
     },
     function() {
-        var THIS = this;
-
         // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'voip' });
+        winkstart.publish('appnav.add', { 'name' : this.__module });
     },
     {
         initialized :   false,
