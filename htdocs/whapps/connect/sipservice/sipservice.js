@@ -58,7 +58,7 @@ winkstart.module('connect', 'sipservice',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-//                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+//                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
@@ -144,7 +144,7 @@ winkstart.module('connect', 'sipservice',
         },
 
         refresh: function() {
-            var account = winkstart.modules['connect'].account;
+            var account = winkstart.apps['connect'].account;
 
             winkstart.log('Redrawing...');
 
@@ -198,12 +198,12 @@ winkstart.module('connect', 'sipservice',
 
         load_account : function(){
             var THIS = this;
-            var account_id = winkstart.modules['connect'].account_id;
+            var account_id = winkstart.apps['connect'].account_id;
 
             winkstart.log('Loading account ' + account_id);
 
             winkstart.getJSON('sipservice.get', {account_id : account_id}, function(data, xhr) {
-                winkstart.modules['connect'].account = data.data;
+                winkstart.apps['connect'].account = data.data;
                 THIS.refresh();
             });
         },
@@ -230,7 +230,7 @@ winkstart.module('connect', 'sipservice',
             $('#ws-content').empty();
 
             // If user is already logged in, go ahead and show their trunks & stuff
-            if (winkstart.modules['connect'].auth_token) {
+            if (winkstart.apps['connect'].auth_token) {
                 // Paint various sections on the page. Each individual section is responsible for loading it's own data and
                 // populating it's own area.
                 THIS.main_menu();

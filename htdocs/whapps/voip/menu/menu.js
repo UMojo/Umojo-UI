@@ -31,27 +31,27 @@ winkstart.module('voip', 'menu',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "menu.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/menus',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "menu.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "menu.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/menus',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "menu.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "menu.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/menus/{menu_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -95,7 +95,7 @@ winkstart.module('voip', 'menu',
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
-                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -158,7 +158,7 @@ winkstart.module('voip', 'menu',
                 /* This is an existing menu - Grab JSON data from server for menu_id */
                 winkstart.getJSON('menu.get', {
                     crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['voip'].account_id,
                     menu_id: data.id
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
@@ -178,7 +178,7 @@ winkstart.module('voip', 'menu',
             
             var rest_data = {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 menu_id: menu_id
             };
 
@@ -301,7 +301,7 @@ winkstart.module('voip', 'menu',
 
             winkstart.getJSON('menu.list', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

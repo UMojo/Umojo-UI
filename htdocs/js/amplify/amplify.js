@@ -704,7 +704,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
 				return base;
 			} else {
 				var _c = arguments.callee, _t = this, _a = arguments;
-				amplify.module.loadPlugin(w, m, function() {
+				amplify.module.loadModule(w, m, function() {
 					if ( !modules[w][m] ) {
 					} else {
 						_c.apply(_t, _a);
@@ -716,7 +716,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
 	};
 };
 
-amplify.module.load = function(whapp, callback) {
+amplify.module.loadApp = function(whapp, callback) {
     // Cache buster
     if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + whapp + '.js?_=' + (new Date()))
@@ -731,7 +731,7 @@ amplify.module.load = function(whapp, callback) {
     }
 };
 
-amplify.module.loadPlugin = function(whapp, module, callback) {
+amplify.module.loadModule = function(whapp, module, callback) {
     // Cache buster
     if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
@@ -750,7 +750,7 @@ amplify.module.loadPlugin = function(whapp, module, callback) {
 // loaded and instanciated
 amplify.module.constructor = function(args, callback) { callback(); };
 
-amplify.module.using = amplify.module.load;
+amplify.module.using = amplify.module.loadApp;
 
 })( this.amplify = this.amplify || {}, jQuery );
 

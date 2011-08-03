@@ -32,7 +32,7 @@ winkstart.module('connect', 'fraud',
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_fraud') );
+            THIS.templates.index.tmpl(winkstart.apps['connect'].account).appendTo( $('#my_fraud') );
         },
 
         activate: function(data) {

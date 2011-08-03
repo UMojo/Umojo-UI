@@ -22,7 +22,7 @@ function() {
         if (!THIS.initialized) {
             // Load the modules
             $.each(THIS.modules, function(k, v) {
-                winkstart.module.loadPlugin('dashboard', v, function() {
+                winkstart.module.loadModule('dashboard', v, function() {
                     this.init(function() {
                         winkstart.log('Dashboard: Initialized ' + v);
                     });

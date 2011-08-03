@@ -48,32 +48,32 @@ winkstart.module('voip', 'resource',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "resource.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "resource.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources/{resource_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "resource.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "resource.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources/{resource_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "resource.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/resources/{resource_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             "account.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -117,7 +117,7 @@ winkstart.module('voip', 'resource',
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
-                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -167,7 +167,7 @@ winkstart.module('voip', 'resource',
             var generatedPassword = THIS.generateRandomString(12);
             
 
-            winkstart.getJSON('account.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(json, xhr) {
+            winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(json, xhr) {
                 var account_realm = json.data.realm;
 
                 var form_data = {
@@ -185,7 +185,7 @@ winkstart.module('voip', 'resource',
                     };
                     winkstart.getJSON('resource.get', {
                         crossbar: true,
-                        account_id: MASTER_ACCOUNT_ID,
+                        account_id: winkstart.apps['voip'].account_id,
                         resource_id: data.id
                     }, function(json, xhr) {
                         /* On success, take JSON and merge with default/empty fields */
@@ -208,7 +208,7 @@ winkstart.module('voip', 'resource',
             
             var rest_data = {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 resource_id: resource_id
             };
 
@@ -306,7 +306,7 @@ winkstart.module('voip', 'resource',
 
             winkstart.getJSON('resource.list', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

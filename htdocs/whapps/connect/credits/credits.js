@@ -49,7 +49,7 @@ winkstart.module('connect', 'credits',
     {
         manage: function(args) {
             var THIS = this;
-            dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.apps['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
             });
 
@@ -62,7 +62,7 @@ winkstart.module('connect', 'credits',
                 var save = function() {
                     winkstart.postJSON('credits.post', {
                             data : { 'add_credits' : add_credits },
-                            account_id : winkstart.modules['connect'].account_id
+                            account_id : winkstart.apps['connect'].account_id
                         },
                         function(json, xhr) {
                             // Check the response for errors
@@ -70,7 +70,7 @@ winkstart.module('connect', 'credits',
                             // Close the dialog
                             dialogDiv.dialog('close');
 
-                            winkstart.modules['connect'].account = json.data;
+                            winkstart.apps['connect'].account = json.data;
                             winkstart.publish('credits.refresh');
                         }
                     );
@@ -78,7 +78,7 @@ winkstart.module('connect', 'credits',
 
                 // If a billing confirmation callback was passed in, utilize it and give it the callback to finish things up
                 if (args && args.confirm_billing) {
-                    $.extend(new_account, winkstart.modules['connect'].account, form_data);
+                    $.extend(new_account, winkstart.apps['connect'].account, form_data);
                     args.confirm_billing(new_account, save);
                 } else {
                     // Otherwise commit the change immediately

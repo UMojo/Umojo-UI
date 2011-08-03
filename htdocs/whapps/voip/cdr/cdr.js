@@ -63,7 +63,7 @@ winkstart.module('voip', 'cdr',
                 /* Arguments to pass to the other server, or config parameters on HOW to pass to the server */
                 {
                     /*crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,*/
+                    account_id: winkstart.apps['voip'].account_id,*/
                     account : "urban"
                 },
 

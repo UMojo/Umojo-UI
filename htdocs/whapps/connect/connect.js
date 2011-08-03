@@ -14,9 +14,11 @@ winkstart.module('connect', 'connect', {
         modules :       ['sipservice', 'admin', 'channels', 'credits', 'endpoint', 'fraud', 'monitoring', 'numbers', 'discount'],
 
         activate: function() {
+            var THIS = this;
+            
             if (!THIS.initialized) {
                 $.each(this.modules, function(k, v) {
-                    winkstart.module.loadPlugin('connect', v, function() {
+                    winkstart.module.loadModule('connect', v, function() {
                         this.init(function() {
                             winkstart.log('Connect: Initialized ' + v);
                         });

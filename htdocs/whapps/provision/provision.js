@@ -15,7 +15,7 @@ winkstart.module('provision', 'provision', {
 
         activate: function() {
             $.each(this.modules, function(k, v) {
-                winkstart.module.loadPlugin('provision', v, function() {
+                winkstart.module.loadModule('provision', v, function() {
                     this.init(function() {
                         winkstart.log('Provision: Initialized ' + v);
                     });

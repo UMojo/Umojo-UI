@@ -37,37 +37,37 @@ winkstart.module('voip', 'vmbox',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "vmbox.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/vmboxes',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "vmbox.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "vmbox.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/vmboxes',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "vmbox.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "vmbox.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/vmboxes/{vmbox_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             "user.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "user.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users/{user_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -111,7 +111,7 @@ winkstart.module('voip', 'vmbox',
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
-                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -154,7 +154,7 @@ winkstart.module('voip', 'vmbox',
             };
 
             form_data.field_data.users = [];
-            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+            winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
                 var listUsers = [];
                 if(json.data.length > 0) {
                     _.each(json.data, function(elem){
@@ -174,7 +174,7 @@ winkstart.module('voip', 'vmbox',
                     /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
                     winkstart.getJSON('vmbox.get', {
                         crossbar: true,
-                        account_id: MASTER_ACCOUNT_ID,
+                        account_id: winkstart.apps['voip'].account_id,
                         vmbox_id: data.id
                     }, function(json, xhr) {
                         /* On success, take JSON and merge with default/empty fields */
@@ -198,7 +198,7 @@ winkstart.module('voip', 'vmbox',
             
             var rest_data = {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 vmbox_id: vmbox_id
             };
 
@@ -250,7 +250,7 @@ winkstart.module('voip', 'vmbox',
             $('#owner_id', '#vmbox-view').change(function() { 
                 winkstart.getJSON('user.get', {
                     crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['voip'].account_id,
                     user_id: $('#owner_id').val()
                 }, function(json, xhr) {
                     $('#timezone', '#vmbox-view').val(json.data.timezone);
@@ -304,7 +304,7 @@ winkstart.module('voip', 'vmbox',
 
             winkstart.getJSON('vmbox.list', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

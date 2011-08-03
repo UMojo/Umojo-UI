@@ -14,7 +14,7 @@ winkstart.module('indesign', 'indesign', {
         winkstart.publish('appnav.add', { 'name' : 'indesign' });
 
         $.each(THIS.modules, function(k, v) {
-            winkstart.module.loadPlugin('indesign', v, function() {
+            winkstart.module.loadModule('indesign', v, function() {
                 this.init(function() {
                     winkstart.log('In-Design: Initialized ' + v);
                 });

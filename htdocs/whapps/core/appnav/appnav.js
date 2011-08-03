@@ -38,9 +38,8 @@ winkstart.module('core', 'appnav', {
     {   
         add: function(args) {
             var list_node = $('div.header .main_nav').find('ul'),
-                item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.modules[args.name] }).appendTo(list_node);
+                item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.apps[args.name] }).appendTo(list_node);
 
-            if(MASTER_ACCOUNT_ID == '') $('.main_nav').hide();
             if(args.name == 'auth') { $(item).hide(); }
             $('.dropdown', item).hide();
 
@@ -99,11 +98,14 @@ winkstart.module('core', 'appnav', {
         activate: function(app_name) {
             // TODO: De-activate current app & unload it
 
-            if(AUTH_TOKEN != '') {
+            if(winkstart.apps[app_name].auth_token != null) {
+                // Logged in for this app?
                 winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
                 winkstart.publish ( app_name + '.activate', { });
-            }
-            else {
+            } else {
+                // Not logged in for this app...
+
+                // TODO: This is where failback should go.
                 winkstart.publish ('auth.activate');
             }
         },

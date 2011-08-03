@@ -14,8 +14,8 @@ winkstart.module('deploy', 'deploy', {
 			'deploy.activate' : 'activate'
 		},
 		resources: {
-			"deploy.list": {url: CROSSBAR_REST_API_ENDPOINT + '/servers', contentType: 'application/json', verb: 'GET'},
-			"deploy.get": {url: CROSSBAR_REST_API_ENDPOINT + '/servers/{id}', contentType: 'application/json', verb: 'GET'}
+			"deploy.list": {url: winkstart.apps['cluster'].api_url + '/servers', contentType: 'application/json', verb: 'GET'},
+			"deploy.get": {url: winkstart.apps['cluster'].api_url + '/servers/{id}', contentType: 'application/json', verb: 'GET'}
 		}
 	},
 	function(args) {

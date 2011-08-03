@@ -32,7 +32,7 @@ winkstart.module('connect', 'monitoring',
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_monitoring') );
+            THIS.templates.index.tmpl(winkstart.apps['connect'].account).appendTo( $('#my_monitoring') );
         },
 
         activate: function(data) {

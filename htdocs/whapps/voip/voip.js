@@ -9,7 +9,7 @@ winkstart.module('voip', 'voip', {
 
         resources: {
             "shared_auth": {
-                url: winkstart.modules['voip']['api_url'] + '/shared_auth', //'http://apps002-dev-ord.2600hz.com:8000/v1/shared_auth',
+                url: winkstart.apps['voip']['api_url'] + '/shared_auth', //'http://apps002-dev-ord.2600hz.com:8000/v1/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
@@ -33,22 +33,22 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
             CURRENT_WHAPP = 'voip';
 
-            if(winkstart.modules['voip']['auth_token']) {
+            if(winkstart.apps['voip']['auth_token']) {
                 winkstart.registerResources(this.config.resources);
 
                 //TODO: dynamic realm
-                var form_data = { 'shared_token': winkstart.modules['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
+                var form_data = { 'shared_token': winkstart.apps['auth']['auth_token'], 'realm': 'testxav.pbx.2600hz.com' };
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
 
                 winkstart.putJSON('shared_auth', rest_data, function (json, xhr) {
-                    winkstart.modules[CURRENT_WHAPP]['auth_token'] = json.auth_token;
+                    winkstart.apps[CURRENT_WHAPP]['auth_token'] = json.auth_token;
                     if (!THIS.initialized) {
 
                         // Load the modules
                         $.each(THIS.modules, function(k, v) {
-                            winkstart.module.loadPlugin('voip', v, function() {
+                            winkstart.module.loadModule('voip', v, function() {
                                 this.init(function() {
                                     winkstart.log('VoIP: Initialized ' + v);
                                 });

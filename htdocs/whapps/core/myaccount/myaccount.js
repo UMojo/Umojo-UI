@@ -185,4 +185,4 @@ winkstart.module('core', 'myaccount',
             $('#apps', dialog).append(this.templates.apps.tmpl());
         }
     }
-    );  // End module
+);  // End module

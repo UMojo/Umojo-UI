@@ -23,7 +23,7 @@ winkstart.module('cluster', 'cluster', {
             this.initialized = true;
 
             $.each(this.modules, function(k, v) {
-                winkstart.module.loadPlugin('cluster', v, function() {
+                winkstart.module.loadModule('cluster', v, function() {
                     this.init(function() {
                         winkstart.log('Cluster: Initialized ' + v);
                     });

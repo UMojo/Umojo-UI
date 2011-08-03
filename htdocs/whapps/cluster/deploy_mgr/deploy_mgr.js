@@ -27,7 +27,7 @@ winkstart.module('cluster', 'deploy_mgr',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            'deploy_mgr.addserver' : { url : CROSSBAR_REST_API_ENDPOINT, httpMethod : 'POST', dataType : 'json' }
+            'deploy_mgr.addserver' : { url : winkstart.apps['cluster'].api_url, httpMethod : 'POST', dataType : 'json' }
         }
     }, // End module resource definitions
 

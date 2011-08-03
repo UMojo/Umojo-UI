@@ -56,42 +56,42 @@ winkstart.module('voip', 'device',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "device.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "device.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "device.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "device.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "device.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/devices/{device_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             "user.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },  
             "shared_auth": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/shared_auth',
+                url: winkstart.apps['voip'].api_url + '/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             }
@@ -135,7 +135,7 @@ winkstart.module('voip', 'device',
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
-                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -203,7 +203,7 @@ winkstart.module('voip', 'device',
             var generatedPassword = THIS.generateRandomString(12); 
             var generatedUsername = "user_" + THIS.generateRandomString(6); 
             
-            winkstart.getJSON('account.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(json, xhr) {
+            winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(json, xhr) {
                 console.log(json.data.realm);
                 var form_data = {
                     data : {
@@ -216,7 +216,7 @@ winkstart.module('voip', 'device',
 
                 form_data.field_data = THIS.config.formData;
                 form_data.field_data.users = [];
-                winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+                winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
                     var listUsers = [];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
@@ -236,7 +236,7 @@ winkstart.module('voip', 'device',
                     /* This is an existing device - Grab JSON data from server for device_id */
                         winkstart.getJSON('device.get', {
                             crossbar: true,
-                            account_id: MASTER_ACCOUNT_ID,
+                            account_id: winkstart.apps['voip'].account_id,
                             device_id: data.id
                             }, function(json, xhr) {
                                 /* On success, take JSON and merge with default/empty fields */
@@ -257,7 +257,7 @@ winkstart.module('voip', 'device',
             
             var rest_data = {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 device_id: device_id
             };
 
@@ -379,7 +379,7 @@ winkstart.module('voip', 'device',
 
             winkstart.getJSON('device.list', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

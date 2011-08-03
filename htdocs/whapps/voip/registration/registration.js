@@ -25,12 +25,12 @@ winkstart.module('voip', 'registration',
 		/* What API URLs are we going to be calling? Variables are in { }s */
 		resources: {
 			"registration.list": {
-				url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/registrations',
+				url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/registrations',
 				contentType: 'application/json',
 				verb: 'GET'
 			},
 			"registration.read": {
-				url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/registrations/{registration_id}',
+				url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/registrations/{registration_id}',
 				contentType: 'application/json',
 				verb: 'GET'
 			}
@@ -66,7 +66,7 @@ winkstart.module('voip', 'registration',
             
 			var num_rows = 0;
             
-			//winkstart.getJSON('registration.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function(reply) {
+			//winkstart.getJSON('registration.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(reply) {
 			winkstart.getJSON('registration.list', {
 				crossbar: true, 
 				account_id: '04152ed2b428922e99ac66f3a71b0215'
@@ -77,7 +77,7 @@ winkstart.module('voip', 'registration',
                     
 					num_rows = num_rows+1;
 
-					//winkstart.getJSON('registration.read',{crossbar: true, account_id: MASTER_ACCOUNT_ID, registration_id: registration_id}, function(reply) {
+					//winkstart.getJSON('registration.read',{crossbar: true, account_id: winkstart.apps['voip'].account_id, registration_id: registration_id}, function(reply) {
 					winkstart.getJSON('registration.read',{
 						crossbar: true, 
 						account_id: '04152ed2b428922e99ac66f3a71b0215', 

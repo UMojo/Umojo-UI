@@ -26,7 +26,7 @@
 			$.each(this.config.requires, function(k, module) {
                                 winkstart.log('Loading dependency ' + k + ' ' + module);
 				completed++;
-				amplify.module.loadPlugin(k, module, function() {
+				amplify.module.loadModule(k, module, function() {
 					completed--;
 				});
 			});
@@ -70,11 +70,11 @@
 	};
 		
 	// Bootstrap the app: Start by loading the core module
-	winkstart.module.load('core', function() {
+	winkstart.module.loadApp('core', function() {
 		// Create an instance of the core module, which loads layouts and all whApps
 		this.init();
                 
-/*			winkstart.module.loadPlugin('core', 'layout', function() {
+/*			winkstart.module.loadModule('core', 'layout', function() {
 				this.init({ parent: $('body') }, function() {
 					
 					//Bootstrap some form data

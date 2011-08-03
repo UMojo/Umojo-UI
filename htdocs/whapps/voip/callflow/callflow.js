@@ -74,27 +74,27 @@ winkstart.module('voip', 'callflow',
       },
       resources: {
             "callflow.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/callflows',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "callflow.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "callflow.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/callflows',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "callflow.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "callflow.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/callflows/{callflow_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -137,7 +137,7 @@ winkstart.module('voip', 'callflow',
          if(data && data.id) {
              winkstart.getJSON('callflow.get', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 callflow_id: data.id
              }, function(json) {
                 THIS._resetFlow();
@@ -351,7 +351,7 @@ winkstart.module('voip', 'callflow',
                });
 
                node_html.find('.trash').click(function() {
-                    winkstart.deleteJSON('callflow.delete', {account_id: MASTER_ACCOUNT_ID, callflow_id: THIS.flow.id}, function() {
+                    winkstart.deleteJSON('callflow.delete', {account_id: winkstart.apps['voip'].account_id, callflow_id: THIS.flow.id}, function() {
                         THIS.renderList();
                         THIS._resetFlow();
                         $(THIS.config.elements.flow).empty();
@@ -548,14 +548,14 @@ winkstart.module('voip', 'callflow',
                             general({}, other);
                         }
                         else {
-                            winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                            winkstart.getJSON(THIS.config.type_map[node_name] + '.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                                 general(json, other);
                             });
                         }
                     };
 
                     if(node.parent.actionName == 'temporal_route') {
-                        winkstart.getJSON('timeofday.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                        winkstart.getJSON('timeofday.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                             var list = json.data,
                                 json_list = {};
 
@@ -675,7 +675,7 @@ winkstart.module('voip', 'callflow',
                                 items: {},
                                 selected: 0
                             };
-                winkstart.getJSON('timeofday.list', {account_id: MASTER_ACCOUNT_ID}, function(json) {
+                winkstart.getJSON('timeofday.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                         var list = json.data,
                             json_list = {};
 
@@ -804,7 +804,7 @@ winkstart.module('voip', 'callflow',
 
          if(THIS.flow.id) {
             winkstart.postJSON('callflow.update', {
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['voip'].account_id,
                     callflow_id: THIS.flow.id,
                     data: {
                         numbers: THIS.flow.numbers,
@@ -818,7 +818,7 @@ winkstart.module('voip', 'callflow',
          }
          else {
             winkstart.putJSON('callflow.create', {
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['voip'].account_id,
                     data: {
                         numbers: THIS.flow.numbers,
                         flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
@@ -847,7 +847,7 @@ winkstart.module('voip', 'callflow',
 
         winkstart.getJSON('callflow.list', {
             crossbar: true,
-            account_id: MASTER_ACCOUNT_ID
+            account_id: winkstart.apps['voip'].account_id
         }, function (json, xhr) {
 
             // List Data that would be sent back from server

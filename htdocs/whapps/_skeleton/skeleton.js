@@ -59,7 +59,7 @@ winkstart.module('skeleton', 'skeleton',
                 /* Arguments to pass to the other server, or config parameters on HOW to pass to the server */
                 {
                     crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['app'].account_id,
                     some_value: "blah"
                 },
 

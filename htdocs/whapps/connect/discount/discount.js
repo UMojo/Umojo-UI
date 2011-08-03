@@ -41,7 +41,7 @@ winkstart.module('connect', 'discount',
     /* Define the functions for this module */
     {
         edit: function() {
-            var dialogDiv = winkstart.dialog(this.templates.edit_discount.tmpl(winkstart.modules['connect'].account), {
+            var dialogDiv = winkstart.dialog(this.templates.edit_discount.tmpl(winkstart.apps['connect'].account), {
                 title: 'Edit Discount'
             });
 
@@ -72,11 +72,11 @@ winkstart.module('connect', 'discount',
             winkstart.postJSON('discount.update',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('discount.refresh');
                         if (args.success)
                             args.success();

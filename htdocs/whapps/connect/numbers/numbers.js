@@ -221,11 +221,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.update_failover',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -272,11 +272,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.update_cnam',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -322,11 +322,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.update_e911',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -373,11 +373,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.update_fax',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -422,11 +422,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.delete_number',
                 {
                     data: args.data,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -481,7 +481,7 @@ winkstart.module('connect', 'numbers',
             var lnp_did = lnp_f.serializeObject();
             winkstart.getJSON("getLNPData",
             {
-                account_id: winkstart.modules['connect'].account_id,
+                account_id: winkstart.apps['connect'].account_id,
                 data: lnp_did
             },
             function(msg){
@@ -490,7 +490,7 @@ winkstart.module('connect', 'numbers',
                     if (typeof trackData == "object" && typeof trackData.lnp == "object" ) {
                         winkstart.dialog($('#tmpl_LNP_prompt_s2').tmpl(trackData));
                         createUploader($('#lnp_s2_uploader')[0], '/v1/uploadLNP', {
-                            account_id: winkstart.modules['connect'].account_id,
+                            account_id: winkstart.apps['connect'].account_id,
                             did:trackData.lnp.did,
                             tracking:trackData.lnp.tracking
                         }, function(a,b,c,d) {
@@ -543,7 +543,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: winkstart.modules['connect'].account_id,
+                    account_id: winkstart.apps['connect'].account_id,
                     data: {
                         number: data.number,
                         address: data.address,
@@ -723,7 +723,7 @@ winkstart.module('connect', 'numbers',
         add: function(dids) {
             winkstart.postJSON('numbers.addDIDs',
             {
-                account_id: winkstart.modules['connect'].account_id,
+                account_id: winkstart.apps['connect'].account_id,
                 data: {
                     DIDs:dids
                 }
@@ -756,11 +756,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.map_number',
 	            {
 	            	data: {"DID" : {"did": did},"server":{"serverid":srv}},
-	            	account_id: winkstart.modules['connect'].account_id
+	            	account_id: winkstart.apps['connect'].account_id
 	            },
 	            function(json) {
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                            winkstart.modules['connect'].account = json.data;
+                            winkstart.apps['connect'].account = json.data;
                             winkstart.publish('numbers.refresh');
                             if (args.success)
                                 args.success();
@@ -789,11 +789,11 @@ winkstart.module('connect', 'numbers',
             winkstart.postJSON('numbers.map_number',
                 {
                     data: {"DID" : {"serverid" : serverid, "did" : did}, "server" : null} ,
-                    account_id : winkstart.modules['connect'].account_id
+                    account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
                         if (args.success)
                             args.success();
@@ -810,7 +810,7 @@ winkstart.module('connect', 'numbers',
         LNP_s1: function(frm) {
             winkstart.putJSON("request_portDID",
             {
-                account_id: winkstart.modules['connect'].account_id,
+                account_id: winkstart.apps['connect'].account_id,
                 data: frm.serializeObject()
             },
             function(msg){
@@ -927,7 +927,7 @@ winkstart.module('connect', 'numbers',
             //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
             winkstart.getJSON("searchNPA",
             {
-                account_id: winkstart.modules['connect'].account_id,
+                account_id: winkstart.apps['connect'].account_id,
                 data: nbr
             },
             function(msg){
@@ -946,7 +946,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: winkstart.modules['connect'].account_id,
+                    account_id: winkstart.apps['connect'].account_id,
                     data: nbr
                 }),
                 dataType: "json",
@@ -978,7 +978,7 @@ winkstart.module('connect', 'numbers',
                 global: true,
                 type: "POST",
                 data: ({
-                    account_id: winkstart.modules['connect'].account_id,
+                    account_id: winkstart.apps['connect'].account_id,
                     data: {
                         number: data.number
                     }

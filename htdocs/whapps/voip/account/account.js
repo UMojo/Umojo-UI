@@ -35,27 +35,27 @@ winkstart.module('voip', 'account',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "account.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/',
+                url: winkstart.apps['voip'].api_url + '/accounts/',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/',
+                url: winkstart.apps['voip'].api_url + '/accounts/',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "account.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "account.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}',
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -111,7 +111,7 @@ winkstart.module('voip', 'account',
                         THIS.editAccount({
                             id: account_id
                         });
-                        if(account_id == MASTER_ACCOUNT_ID) {
+                        if(account_id == winkstart.apps['voip'].account_id) {
                             $('#my_account').html('&nbsp;'+json.data.name);
                         }
                     });
@@ -240,7 +240,7 @@ winkstart.module('voip', 'account',
 
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
                 if(confirm('Do you really want to use : '+form_data.data.name+'\'s account?')) {
-                    MASTER_ACCOUNT_ID = form_data.data.id;
+                    winkstart.apps['voip'].account_id = form_data.data.id;
                     //$('#my_account').html("&nbsp;"+form_data.data.name);
                     alert('You\'re now using '+form_data.data.name+'\'s account');
                 }
@@ -321,7 +321,7 @@ winkstart.module('voip', 'account',
         activate: function(data) {
             $('#ws-content').empty();
             var THIS = this;
-            if(AUTH_TOKEN != '')
+            if(winkstart.apps['voip'].auth_token != null)
             {
                 this.templates.account.tmpl({}).appendTo( $('#ws-content') );
 

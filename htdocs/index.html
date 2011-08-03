@@ -1,122 +1,86 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-	    <title>2600hz WinkStart</title>
+    <head>
+        <title>2600hz WinkStart</title>
 
         <!-- Preload variable declaration -->
-		<script type="text/javascript">
-                    var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
-                    //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
-                    var MASTER_ACCOUNT_ID = null;
-                    var AUTH_TOKEN = null;
-                    var CURRENT_USER_ID = null;
-                    var CURRENT_WHAPP = 'auth';
-                    var ACTIVATION_KEY = null;
-                    var REALM_LOGIN = null;
-                    var api_key = null;
-        </script>
-		
-		<link rel="openid.server" href="http://openid.2600hz.com/server/server.php" />
-		<link type="text/css" href="css/base.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="css/reset.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="css/form.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="css/tables.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="css/validate.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="css/jslider/jslider.css" rel="stylesheet" media="screen" />
+
+        <link rel="openid.server" href="http://openid.2600hz.com/server/server.php" />
+        <link type="text/css" href="css/base.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="css/reset.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="css/form.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="css/tables.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="css/validate.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="css/jslider/jslider.css" rel="stylesheet" media="screen" />
         <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.8.custom.css" rel="Stylesheet" />
 
-		<link type="text/css" href="js/external/ui-listpanel/css/ui.listpanel.css" rel="stylesheet" media="screen" />
-		<link type="text/css" href="js/external/ui-listpanel/css/jquery.jscrollpane.css" rel="stylesheet" media="screen" />
-        
+        <link type="text/css" href="js/external/ui-listpanel/css/ui.listpanel.css" rel="stylesheet" media="screen" />
+        <link type="text/css" href="js/external/ui-listpanel/css/jquery.jscrollpane.css" rel="stylesheet" media="screen" />
+
         <link type="text/css" href="css/jquery.tooltip.css" rel="stylesheet" media="screen" />
 
-		<script type="text/javascript" src="js/external/jquery-1.6.2.min.js"></script>
-		<script type="text/javascript" src="js/external/jquery.cors.js"></script>
-		<script type="text/javascript" src="js/external/underscore-min.js"></script>
-		<script type="text/javascript" src="js/external/jquery-ui-1.8.7.custom.min.js"></script>
-    
-		<script type="text/javascript" src="js/external/form2object.js"></script>
-		<script type="text/javascript" src="js/external/md5_generator.js"></script>
-		<script type="text/javascript" src="js/external/tmpl/jquery.tmpl.js"></script>
-		<script type="text/javascript" src="js/external/tmpl/jquery.tmplPlus.js"></script>
-		<script type="text/javascript" src="js/external/jquery.isObject.js"></script>
-		<script type="text/javascript" src="js/external/jquery.mousewheel.js"></script>
-		<script type="text/javascript" src="js/external/jquery.jscrollpane.min.js"></script>
-		<script type="text/javascript" src="js/external/jquery.tools.min.js"></script>
-		<script type="text/javascript" src="js/external/jquery.hoverIntent.minified.js"></script>
-		<script type="text/javascript" src="js/external/jquery.dataTables.js"></script>
-		<script type="text/javascript" src="js/external/jquery.slider.js"></script>
-		<script type="text/javascript" src="js/external/jquery.dependClass.js"></script>
-		<script type="text/javascript" src="js/external/jquery.dataset.js"></script>
-		<script type="text/javascript" src="js/external/ui-listpanel/ui.listpanel.js"></script>
-		<script type="text/javascript" src="js/external/lab.js"></script>
+        <script type="text/javascript" src="js/external/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="js/external/jquery.cors.js"></script>
+        <script type="text/javascript" src="js/external/underscore-min.js"></script>
+        <script type="text/javascript" src="js/external/jquery-ui-1.8.7.custom.min.js"></script>
+
+        <script type="text/javascript" src="js/external/form2object.js"></script>
+        <script type="text/javascript" src="js/external/md5_generator.js"></script>
+        <script type="text/javascript" src="js/external/tmpl/jquery.tmpl.js"></script>
+        <script type="text/javascript" src="js/external/tmpl/jquery.tmplPlus.js"></script>
+        <script type="text/javascript" src="js/external/jquery.isObject.js"></script>
+        <script type="text/javascript" src="js/external/jquery.mousewheel.js"></script>
+        <script type="text/javascript" src="js/external/jquery.jscrollpane.min.js"></script>
+        <script type="text/javascript" src="js/external/jquery.tools.min.js"></script>
+        <script type="text/javascript" src="js/external/jquery.hoverIntent.minified.js"></script>
+        <script type="text/javascript" src="js/external/jquery.dataTables.js"></script>
+        <script type="text/javascript" src="js/external/jquery.slider.js"></script>
+        <script type="text/javascript" src="js/external/jquery.dependClass.js"></script>
+        <script type="text/javascript" src="js/external/jquery.dataset.js"></script>
+        <script type="text/javascript" src="js/external/ui-listpanel/ui.listpanel.js"></script>
+        <script type="text/javascript" src="js/external/lab.js"></script>
         <script type="text/javascript" src="js/external/jquery.tooltip.js"></script>
-	
-		<script type="text/javascript" src="js/amplify/amplify.js"></script>
-		<script type="text/javascript" src="js/amplify/amplify.request.js"></script>
-		<script type="text/javascript" src="js/amplify/amplify.request.poll.js"></script>
-	
-		<script type="text/javascript" src="js/winkstart.js"></script>
-		<script type="text/javascript" src="js/winkstart-util.js"></script>
-		<script type="text/javascript" src="js/winkstart-request.js"></script>
-		<script type="text/javascript" src="js/winkstart-tables.js"></script>
-		<script type="text/javascript" src="js/winkstart-validate.js"></script>
+
+        <script type="text/javascript" src="js/amplify/amplify.js"></script>
+        <script type="text/javascript" src="js/amplify/amplify.request.js"></script>
+        <script type="text/javascript" src="js/amplify/amplify.request.poll.js"></script>
+
+        <script type="text/javascript" src="js/winkstart.js"></script>
+        <script type="text/javascript" src="js/winkstart-util.js"></script>
+        <script type="text/javascript" src="js/winkstart-request.js"></script>
+        <script type="text/javascript" src="js/winkstart-tables.js"></script>
+        <script type="text/javascript" src="js/winkstart-validate.js"></script>
 
         <!-- Postload variable declaration -->
-		<script type="text/javascript">
-                    winkstart.debug = true;
-                    amplify.cache = false;
-                    winkstart.modules = {
-                        /*'indesign'    : {
-                            'url' : 'indesign/',
-                            'label' : 'In Design',
-                            'icon' : 'phone'
-                        },*/
-                        'auth' : {
-                            'label' : 'Login',
-                            'icon' : 'user',
-                            'auth_token' : '',
-                            'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1' 
-                        },
 
-                        'provision'   : {
-                            'label' : 'Phone Manager',
-                            'icon' : 'phone',
-                            'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        },
+        <script type="text/javascript">
+            //var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
+            //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
+            /* var CURRENT_USER_ID = null; */
+            var CURRENT_WHAPP = 'auth';
+            var GLOBAL_ACCOUNT_ID = null;
+            var GLOBAL_AUTH_TOKEN = null;
+            var REALM_LOGIN = null;
 
-                        'voip'        : {
-                            'label' : 'PBX Services',
-                            'icon' : 'voip_services',
-                            'auth_token' : '',
-                            'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        },
+            winkstart.debug = true;
+            amplify.cache = false;
 
-                        'cluster'      : {
-                            'label' : 'Cluster Manager',
-                            'icon' : 'cluster_manager',
-                            'auth_token' : '',
-                            'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        },
+            // Additional modules will be loaded after the main page loads
+            winkstart.apps = {
+                'auth' : {
+                    'api_url': 'http://apps.2600hz.com:8000/v1',
+                    'label' : 'Login',
+                    'icon' : 'user',
+                    'account_id' : null,
+                    'auth_token' : null,
+                    'user_id' : null
+                }
+            }
+        </script>
+    </head>
+    <body>
 
-                        'connect'     : {
-                            'label' : 'Connectivity',
-                            'auth_token' : '',
-                            'account_id' : '2600hz',
-                            'icon' : 'connectivity',
-                            'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        },
-
-                        'dashboard'   : {
-                            'label' : 'Dashboard',
-                            'icon' : 'dashboard',
-                            'auth_token' : '',
-                            'api_url' : 'http://apps002-dev-ord.2600hz.com:8000/v1'
-                        }
-                    };
-		</script>
-	</head>
-	<body>
-         <div style="position: absolute; bottom:0%; right:0%; width:110px; vertical-align: bottom;"><a href="http://www.2600hz.com/" target="_blank" style="color: black;"><u>Powered by 2600hz</u></a></div>
-	</body>
+        <div class="clear"/>
+        <div style="position: absolute; bottom:0%; right:0%; width:110px; vertical-align: bottom;"><a href="http://www.2600hz.com/" target="_blank" style="color: black;"><u>Powered by 2600hz</u></a></div>
+    </body>
 </html>

@@ -21,27 +21,27 @@ winkstart.module('connect', 'admin',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.admin.list": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts',
+                url: winkstart.apps['connect'].api_url + '/ts_accounts',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "sipservice.admin.get": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "sipservice.admin.create": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts',
+                url: winkstart.apps['connect'].api_url + '/ts_accounts',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "sipservice.admin.update": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "sipservice.admin.delete": {
-                url: CROSSBAR_REST_API_ENDPOINT + '/ts_accounts/{account_id}',
+                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -63,7 +63,7 @@ winkstart.module('connect', 'admin',
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_admin') );
+            THIS.templates.index.tmpl(winkstart.apps['connect'].account).appendTo( $('#my_admin') );
         },
 
         add_number_manual_prompt: function(args) {

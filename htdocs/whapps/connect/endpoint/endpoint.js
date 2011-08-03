@@ -78,7 +78,7 @@ winkstart.module('connect', 'endpoint',
         edit_auth: function() {
             var THIS = this;
 
-            var dialogDiv = THIS.templates.edit_auth.tmpl(winkstart.modules['connect'].account).dialog({
+            var dialogDiv = THIS.templates.edit_auth.tmpl(winkstart.apps['connect'].account).dialog({
                 title: 'Edit Auth',
                 width: 500,
                 height: 500,
@@ -105,7 +105,7 @@ winkstart.module('connect', 'endpoint',
 
         add: function() {
             var THIS = this;
-            dialogDiv = winkstart.dialog(THIS.templates.edit_endpoint.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.dialog(THIS.templates.edit_endpoint.tmpl(winkstart.apps['connect'].account), {
                 title: 'Add Endpoint'
             });
 
@@ -124,7 +124,7 @@ winkstart.module('connect', 'endpoint',
                 // Build the save function here, for use with or without a billing confirmation screen (coming up)
                 winkstart.postJSON('endpoint.put', {
                         data : form_data,
-                        account_id : winkstart.modules['connect'].account_id
+                        account_id : winkstart.apps['connect'].account_id
                     },
                     function(json, xhr) {
                         // Check the response for errors
@@ -132,7 +132,7 @@ winkstart.module('connect', 'endpoint',
                         // Close the dialog
                         dialogDiv.dialog('close');
 
-                        winkstart.modules['connect'].account = json.data;
+                        winkstart.apps['connect'].account = json.data;
                         winkstart.publish('endpoint.refresh');
                     }
                 );
@@ -201,7 +201,7 @@ winkstart.module('connect', 'endpoint',
         refresh: function() {
             var THIS = this;
             /* Draw our base template into the window */
-            THIS.templates.index.tmpl(winkstart.modules['connect'].account).appendTo( $('#my_servers') );
+            THIS.templates.index.tmpl(winkstart.apps['connect'].account).appendTo( $('#my_servers') );
         }
         
     } // End function definitions

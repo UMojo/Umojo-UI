@@ -62,7 +62,7 @@ winkstart.module('connect', 'channels',
 
         edit: function() {
             var THIS = this;
-            dialogDiv = winkstart.dialog(THIS.templates.edit_channels.tmpl(winkstart.modules['connect'].account), {
+            dialogDiv = winkstart.dialog(THIS.templates.edit_channels.tmpl(winkstart.apps['connect'].account), {
                 title: 'Edit Flat-Rate Channels'
             });
 
@@ -88,14 +88,14 @@ winkstart.module('connect', 'channels',
                             // Close the dialog
                             dialogDiv.dialog('close');
 
-                            winkstart.modules['connect'].account = json.data;
+                            winkstart.apps['connect'].account = json.data;
                             winkstart.publish('channels.refresh');
                         }
                     );
                 };
 
                 var new_account = {};
-                $.extend(new_account, winkstart.modules['connect'].account, form_data);
+                $.extend(new_account, winkstart.apps['connect'].account, form_data);
                 
                 // If an account change handler (such as a wizard or a billing confirmation callback) is registered, use it
                 if (!winkstart.publish('sipservice.change_handler', { 'account' : new_account, 'save' : save })) {

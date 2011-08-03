@@ -20,32 +20,32 @@ winkstart.module('voip', 'conference', {
     
     resources: {
         "conference.list": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/conferences',
             contentType: 'application/json',
             verb: 'GET'
         },
         "conference.get": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/conferences/{conference_id}',
             contentType: 'application/json',
             verb: 'GET'
         },
         "conference.create": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/conferences',
             contentType: 'application/json',
             verb: 'PUT'
         },
         "conference.update": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/conferences/{conference_id}',
             contentType: 'application/json',
             verb: 'POST'
         },
         "conference.delete": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/conferences/{conference_id}',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/conferences/{conference_id}',
             contentType: 'application/json',
             verb: 'DELETE'
         },
         "user.list": {
-            url: CROSSBAR_REST_API_ENDPOINT + '/accounts/{account_id}/users',
+            url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/users',
             contentType: 'application/json',
             verb: 'GET'
         }
@@ -90,7 +90,7 @@ function(args) {
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
-                rest_data.account_id = MASTER_ACCOUNT_ID;
+                rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -131,7 +131,7 @@ function(args) {
 
             form_data.field_data = THIS.config.formData;
             form_data.field_data.users = [];
-            winkstart.getJSON('user.list', {crossbar: true, account_id: MASTER_ACCOUNT_ID}, function (json, xhr) {
+            winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
                     var listUsers = [];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
@@ -151,7 +151,7 @@ function(args) {
                 /* This is an existing conference - Grab JSON data from server for conference_id */
                 winkstart.getJSON('conference.get', {
                     crossbar: true,
-                    account_id: MASTER_ACCOUNT_ID,
+                    account_id: winkstart.apps['voip'].account_id,
                     conference_id: data.id
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
@@ -171,7 +171,7 @@ function(args) {
 
             var rest_data = {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID,
+                account_id: winkstart.apps['voip'].account_id,
                 conference_id: conference_id
             };
 
@@ -262,7 +262,7 @@ function(args) {
 
             winkstart.getJSON('conference.list', {
                 crossbar: true,
-                account_id: MASTER_ACCOUNT_ID
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server
