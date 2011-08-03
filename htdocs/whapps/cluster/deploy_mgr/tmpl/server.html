@@ -1,0 +1,14 @@
+<div>
+    <div class="server" server_id="${server_id}" id="${server_id}">
+        <div class="server_header">${server_name}<a class="cancel_btn" href="#"></a></div>
+        <div class="server_content">
+            <ul>
+                {{each server_roles}}
+                <li>${$value}</li>
+                {{/each}}
+            </ul>
+
+        </div>
+        <div class="server_footer ${server_state}">Status : <a class="update_status" href="#">${server_state}</a></div>
+    </div>
+</div>

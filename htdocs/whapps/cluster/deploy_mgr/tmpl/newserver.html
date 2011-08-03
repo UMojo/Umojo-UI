@@ -1,9 +1,24 @@
 <div>
-    <div class="server" server_id="${server_id}">
-        <h3>${servername}</h3>
-        <a class="cancel_btn" href="#">cancel button</a>
-        <div class="clear"></div>
-        <a class="power_btn" href="#">power button</a>
-        <a class="options" href="#">options</a>
+    <div>
+        <form id="serverinfo">
+            Hostname: <input type="text" name="hostname" /><br/>
+            Ip <input type="text" name="ip" /><br/>
+            Ssh port: <input type="text" name="ssh_port" /><br/>
+            Password: <input type="password" name="password" /><br/>
+            <br/>
+            Roles<br/>
+
+            <input name="roles" type="checkbox" value="winkstart_deploy_opensips"/> Call Director - OpenSIPs<br/>
+            <input name="roles" type="checkbox" value="winkstart_deploy_whapps"/>  App Server - Whapps Controller<br/>
+            <input name="roles" type="checkbox" value="winkstart_deploy_bigcouch"/> Database Server - CouchDB<br/>
+            <input name="roles" type="checkbox" value="winkstart_deploy_whistle_fs"/> Media Server - FreeSWITCH<br/>
+            <br/>
+            Os<br/>
+            <select name="os">
+                <option value="centos5-gems">CentOS 5</option>
+            </select>
+            <br/>
+            <a class="device-save save_btn" href="#">Add</a>
+        </form>
     </div>
 </div>
