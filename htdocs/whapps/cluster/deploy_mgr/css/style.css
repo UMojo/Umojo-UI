@@ -82,68 +82,6 @@ a.plus:hover {
 	border-bottom: #646464 solid 1px;
 }
 
-.server {
-	background-image: url(../img/server.png);
-	width: 169px;
-	height: 121px;
-	float: left;
-	margin: 0 9px 39px;
-}
-
-.server h3 {
-	font-size: 11px;
-	font-weight: bold;
-	margin: 4px 0 0 4px;
-	float: left;
-}
-
-.server a.cancel_btn {
-	background-image: url(../img/cancel_btn.png);
-	width: 15px;
-	height: 15px;
-	background-position: 0 0;
-	display: block;
-	float: right;
-	text-indent: -9999px;
-	margin: 1px 3px 0 0;
-}
-
-.server a.cancel_btn:hover {
-	background-position: 0 -15px;
-}
-
-.server a.power_btn {
-	background-image: url(../img/power_btn.png);
-	width: 13px;
-	height: 14px;
-	background-position: 0 0;
-	display: block;
-	float: left;
-	text-indent: -9999px;
-	margin: 83px 0 0 6px;
-}
-
-.server a.power_btn:hover {
-	background-position: 0 -14px;
-}
-
-.server a.options {
-	background-image: url(../img/option_icon.png);
-	background-repeat: no-repeat;
-	width: 62px;
-	height: 11px;
-	background-position: 40px 0px;
-	display: block;
-	float: right;
-	margin: 85px 5px 0 0;
-	font-size: 11px;
-	line-height: 11px;
-}
-
-.server a.options:hover {
-	background-position: 40px -11px;
-}
-
 a.add_server {
 	background-image: url(../img/add_server.png);
 	width: 170px;

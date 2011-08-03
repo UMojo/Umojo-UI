@@ -18,22 +18,22 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Friendly Name for this voicemail box">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Friendly Name for this voicemail box">
+                                    <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <span tooltip="Number of this voicemail box">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Number of this voicemail box">
+                                    <span class="tooltip"/>
                                     <label for="mailbox">Voicemail Box Number:</label>
                                 </span>
                                 <input id="mailbox" name="mailbox" type="text" value="${data.mailbox}" />
                             </li>
                             <li>
-                                <span tooltip="Chose the owner of this voicemail box">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Chose the owner of this voicemail box">
+                                    <span class="tooltip"/>
                                     <label for="owner_id">Belongs To:</label>
                                 </span>
                                 <select name="owner_id" id="owner_id">
@@ -47,11 +47,26 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Enter the PIN Number of this voicemail box">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter the PIN Number of this voicemail box">
+                                    <span class="tooltip"/>
                                     <label for="pin">PIN number:</label>
                                 </span>
                                 <input id="pin" name="pin" type="text" value="${data.pin}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the Unavailable message that you want to use for this this device.<br/>If you select - Skip Unavailable Message -, then no media file will be played.">
+                                    <span class="tooltip"/>
+                                    <label for="media_unavailable">Unavailable Message:</label>
+                                </span>
+                                <select name="media.unavailable" id="media_unavailable">
+                                {{each field_data.medias}}
+                                    {{if data.media.unavailable == media_id}}
+                                    <option value="${media_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${media_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
                             </li>
                         </ul>
                     </fieldset>
@@ -83,8 +98,8 @@
                         <legend>Options</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Select the timezone of this voicemail box">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select the timezone of this voicemail box">
+                                    <span class="tooltip"/>
                                     <label for="timezone">Timezone:</label>
                                 </span>
                                 <select name="timezone" id="timezone">
@@ -98,8 +113,8 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Does this voicemail require a PIN?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Does this voicemail require a PIN?">
+                                    <span class="tooltip"/>
                                     <label for="require_pin">Require PIN?</label>
                                 </span>
                                 {{if data.require_pin}}
@@ -109,8 +124,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)">
+                                    <span class="tooltip"/>
                                     <label for="check_if_owner">Auto-login enabled?</label>
                                 </span>
                                 {{if data.check_if_owner}}
@@ -120,8 +135,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want to skip greetings by default?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to skip greetings by default?">
+                                    <span class="tooltip"/>
                                     <label for="skip_greeting">Skip Greeting?</label>
                                 </span>
                                 {{if data.skip_greeting}}
@@ -131,8 +146,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want to skip instructions by default?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to skip instructions by default?">
+                                    <span class="tooltip"/>
                                     <label for="skip_instructions">Skip Instructions?</label>
                                 </span>
                                 {{if data.skip_instructions}}

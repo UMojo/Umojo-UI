@@ -21,15 +21,15 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Friendly name for this conference">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this conference">
+                                    <span class="tooltip"/>
                                     <label for="name">Conference Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}"/>
                             </li>
                             <li>    
-                                <span tooltip="Select the user who owns this conference">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select the user who owns this conference">
+                                    <span class="tooltip"/>
                                     <label for="owner_id">Belongs To:</label>
                                 </span>
                                 <select name="owner_id" id="owner_id">
@@ -43,22 +43,22 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Number(s) of this conference, used to access this conference from a conference server for example">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Number(s) of this conference, used to access this conference from a conference server for example">
+                                    <span class="tooltip"/>
                                     <label for="conference_numbers">Conference Numbers:</label>
                                 </span>
                                 <input id="conference_numbers" name="conference_numbers[0]" type="text" value="${data.conference_numbers[0]}"/>
                             </li>
                             <li>
-                                <span tooltip="Type the PIN code that the members will enter to join this conference">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Type the PIN code that the members will enter to join this conference">
+                                    <span class="tooltip"/>
                                     <label for="member_pins">Members PIN:</label>
                                 </span>
                                 <input id="member_pins" name="member.pins[0]" type="text" value="${data.member.pins[0]}"/>
                             </li>
                             <li>
-                                <span tooltip="Type the PIN code that the moderators will enter to join this conference">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Type the PIN code that the moderators will enter to join this conference">
+                                    <span class="tooltip"/>
                                     <label for="moderator_pins">Moderators PIN:</label>
                                 </span>
                                 <input id="moderator_pins" name="moderator.pins[0]" type="text" value="${data.moderator.pins[0]}"/>
@@ -94,8 +94,8 @@
                         <legend>Moderators</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Do you want to play name of moderators when they enters the conference?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to play name of moderators when they enters the conference?">
+                                    <span class="tooltip"/>
                                     <label for="moderator_play_name">Play name upon entry?</label>
                                 </span>
                                 {{if data.moderator_play_name }}
@@ -105,8 +105,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want the moderators to join the conference muted by default?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want the moderators to join the conference muted by default?">
+                                    <span class="tooltip"/>
                                     <label for="moderator_join_muted">Join the conference muted?</label>
                                 </span>
                                 {{if data.moderator_join_muted }}
@@ -116,8 +116,8 @@
                                 {{/if}} 
                             </li>
                             <li>
-                                <span tooltip="Do you want moderators to join the conference deaf by default">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want moderators to join the conference deaf by default">
+                                    <span class="tooltip"/>
                                     <label for="moderator_join_deaf">Join the conference deaf?</label>
                                 </span>
                                 {{if data.moderator_join_deaf }}
@@ -133,8 +133,8 @@
                         <legend>Members</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Do you want to play names of members when they enter the conference">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to play names of members when they enter the conference">
+                                    <span class="tooltip"/>
                                     <label for="member_play_name">Play name upon entry?</label>
                                 </span>
                                 {{if data.member_play_name }}
@@ -144,8 +144,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want the members to join the conference muted by default?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference muted by default?">
+                                    <span class="tooltip"/>
                                     <label for="member_join_muted">Join the conference muted?</label>
                                 </span>
                                 {{if data.member_join_muted }}
@@ -155,8 +155,8 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <span tooltip="Do you want the members to join the conference deaf by default?">   
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference deaf by default?">   
+                                    <span class="tooltip"/>
                                     <label for="member_join_deaf">Join the conference deaf?</label>
                                 </span>
                                 {{if data.member_join_deaf }}

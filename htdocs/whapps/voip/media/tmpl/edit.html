@@ -23,15 +23,15 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Friendly name for this media file">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this media file">
+                                    <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <span tooltip="Choose your audio file by clicking on the change file button.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Choose your audio file by clicking on the change file button.">
+                                    <span class="tooltip"/>
                                     <label>Media File: </label>
                                 </span>
                                 {{if data.id }}
@@ -74,8 +74,8 @@
                     <fieldset>
                         <ul class="controls">
                              <li>
-                                <span tooltip="Enable streaming of media">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enable streaming of media">
+                                    <span class="tooltip"/>
                                     <label for="streamable">Streamable:</label>
                                 </span>
                                 {{if data.streamable}}
