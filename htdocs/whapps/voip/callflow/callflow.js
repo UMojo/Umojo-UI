@@ -3,6 +3,7 @@ winkstart.module('voip', 'callflow',
       css: [
          'css/style.css',
          'css/popups.css',
+         'css/ringgroup.css',
          'css/callflow.css'
       ],
 
@@ -14,6 +15,7 @@ winkstart.module('voip', 'callflow',
          root: 'tmpl/root.html',
          node: 'tmpl/node.html',
          add_number: 'tmpl/add_number.html',
+         ring_group_dialog: 'tmpl/ring_group_dialog.html',
          edit_dialog: 'tmpl/edit_dialog.html'
       },
 
@@ -63,7 +65,7 @@ winkstart.module('voip', 'callflow',
       },
 
       categories: {
-         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow"]//,
+         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow","ring_group"]//,
          //"dia:lplan": ["answer", "hangup", "tone"]
       },
 
@@ -332,7 +334,7 @@ winkstart.module('voip', 'callflow',
 
          layout.find('.node').each(function () {
             var node_html, node = THIS.flow.nodes[$(this).attr('id')], $node = $(this);
-            if ($node.hasClass('root')) {
+            if (node.actionName == 'root') {
                $node.removeClass('icons_black root');
                node_html = THIS.templates.root.tmpl({numbers: THIS.flow.numbers.toString()});
 
@@ -357,6 +359,40 @@ winkstart.module('voip', 'callflow',
                         $(THIS.config.elements.flow).empty();
                     });
                });
+            }
+            else if(node.actionName == 'ring_group') {
+                node.details = '';
+                node_html = THIS.templates.node.tmpl(node);
+
+                $('.module', node_html).click(function() {
+                    var node_name = node.actionName,
+                        popup = THIS.templates.ring_group_dialog.tmpl({});
+
+                    winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
+                        $.each(json.data, function() {
+                            $('.available ul', popup).append('<li id="' + this.id + '">' + this.name + '</li>');
+                        });
+
+                        $('.available ul, .ring_group ul', popup).sortable({connectWith: '#ringgroup .wrapper .connect'});
+                        //$('.available, .ring_group', popup).jScrollPane();
+                        popup.dialog({width:400});
+
+                        $('.submit_btn', popup).click(function() {
+                            if(node.data.data == undefined) {
+                                node.data.data = {};
+                            }
+                            node.data.data.endpoints = [];
+                            $('.ring_group ul li', popup).each(function() {
+                                node.data.data.endpoints.push({id: $(this).attr('id')});
+                            });
+                            
+                            node.data.data.strategy = $('#strategy', popup).val();
+                            node.data.data.timeout = $('#timeout', popup).val();
+
+                            console.log(node.data.data);
+                        });
+                    });
+                });  
             }
             else {
                //node.details = '';
