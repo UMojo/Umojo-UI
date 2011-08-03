@@ -22,12 +22,17 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="name">Device Nickname:</label>
+                                <span tooltip="Friendly name for this device">
+                                    <img class="tooltip"/>
+                                    <label for="name">Device Nickname:</label>
+                                </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
-                                <img tooltip="Phone in Cubicle C" src="whapps/core/layout/images/question_mark.png" />
                             </li>
                             <li>
-                                <label for="owner_id">Belongs To:</label>
+                                <span tooltip="Select the owner of this device">
+                                    <img class="tooltip"/>
+                                    <label for="owner_id">Belongs To:</label>
+                                </span>
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
                                     {{if data.owner_id == owner_id}}
@@ -39,11 +44,17 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="mac_address">Device MAC Address:</label>
+                                <span tooltip="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B">
+                                    <img class="tooltip"/>
+                                    <label for="mac_address">Device MAC Address:</label>
+                                </span>
                                 <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
                             </li>
                             <li>
-                                <label for="status">Enabled</label>
+                                <span tooltip="Tick this checkbox if you want this device to be enabled once its setup is done">
+                                    <img class="tooltip"/>
+                                    <label for="status">Enabled</label>
+                                </span>
                                 {{if data.status == true}}
                                 <input type="checkbox" id="status" name="status" checked="checked"/>
                                 {{else}}
@@ -119,11 +130,17 @@
                         <legend>In-House Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller_id_name_internal">Caller ID Name:</label>
+                                <span tooltip="Define the Caller ID Name of this Device for In-House Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
                                 <input id="caller_id_name_internal" name="caller_id.emergency.name" type="text"  value="${data.caller_id.emergency.name}" />
                             </li>
                             <li>
-                                <label for="caller_id_number_internal">Caller ID Number:</label>
+                                <span tooltip="Define the Caller ID Number of this Device for In-House Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
                                 <input id="caller_id_number_internal" name="caller_id.emergency.number" type="text"  value="${data.caller_id.emergency.number}" />
                             </li>
                         </ul>
@@ -133,11 +150,17 @@
                         <legend>Outbound Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller_id_name_external">Caller ID Name:</label>
+                                <span tooltip="Define the Caller ID Name of this Device for Outbound Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
                                 <input id="caller_id_name_external" name="caller_id.default.name" type="text"  value="${data.caller_id.default.name}" />
                             </li>
                             <li>
-                                <label for="caller_id_number_external">Caller ID Number:</label>
+                                <span tooltip="Define the Caller ID Number of this Device for Outbound Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
                                 <input id="caller_id_number_external" name="caller_id.default.number" type="text"  value="${data.caller_id.default.number}" />
                             </li>
                         </ul>
@@ -152,11 +175,17 @@
                         <legend>SIP Settings</legend>
                         <ul class="controls">
                             <li>
-                                <label for="sip_realm">Realm / Domain Name:</label>
+                                <span tooltip="Input you're SIP Realm (Domain Name)">
+                                    <img class="tooltip"/>
+                                    <label for="sip_realm">Realm / Domain Name:</label>
+                                </span>
                                 <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
                             </li>
                             <li>
-                                <label for="sip_method">Authentication Method:</label>
+                                <span tooltip="Select your authentication method">
+                                    <img class="tooltip"/>
+                                    <label for="sip_method">Authentication Method:</label>
+                                </span>
                                 <select name="sip.method" id="sip_method">
                                 {{each field_data.auth_methods}}
                                     {{if data.sip.method == id}}
@@ -168,15 +197,24 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="sip_username">Username:</label>
+                                <span tooltip="Enter your SIP Username">
+                                    <img class="tooltip"/>
+                                    <label for="sip_username">Username:</label>
+                                </span>
                                 <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
                             </li>
                             <li>
-                                <label for="sip_password">Password:</label>
+                                <span tooltip="Enter your SIP Password">
+                                    <img class="tooltip"/>
+                                    <label for="sip_password">Password:</label>
+                                </span>
                                 <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
                             </li>
                             <li>
-                                <label for="sip_invite_format">Invite Format:</label>
+                                <span tooltip="Enter your SIP Invite Format">
+                                    <img class="tooltip"/>
+                                    <label for="sip_invite_format">Invite Format:</label>
+                                </span>
                                 <select name="sip.invite_format" id="sip_invite_format">
                                 {{each field_data.invite_formats}}
                                     {{if data.sip.invite_format == id}}
@@ -188,7 +226,10 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="sip_expire_seconds">Expire Seconds:</label>
+                                <span tooltip="Enter the expiration time of this device (in seconds)">
+                                    <img class="tooltip"/>
+                                    <label for="sip_expire_seconds">Expire Seconds:</label>
+                                </span>
                                 <input id="sip_expire_seconds" name="sip.expire_seconds" type="text"  value="${data.sip.expire_seconds}" />
                             </li>
                         </ul>
@@ -203,7 +244,10 @@
                         <legend>Optimization</legend>
                         <ul class="controls">
                             <li>
-                                <label for="media_bypass-media">Peer to Peer Audio</label>
+                                <span tooltip="Select the kind of Peer-to-Peer that you would like to set on this device">
+                                    <img class="tooltip"/>
+                                    <label for="media_bypass-media">Peer to Peer Audio</label>
+                                </span>
                                 <select name="media.bypass_media" id="media_bypass_media">
                                 {{each field_data.bypass_media_types}}
                                     {{if data.media.bypass_media == id}}
@@ -243,7 +287,10 @@
                         <legend>Fax Support</legend>
                         <ul class="controls">
                             <li>
-                                <label for="media_codecs">T.38</label>
+                                <span tooltip="Do you want to enable T-38 for this device?">
+                                    <img class="tooltip"/>
+                                    <label for="media_codecs">T.38</label>
+                                </span>
                                 <select name="media.fax.codecs" id="media_fax_codecs">
                                     {{tmpl(field_data.media_fax_codecs, {selectedVal: data.media.fax.codecs }) "#optionList"}}
                                 </select>

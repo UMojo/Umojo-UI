@@ -24,13 +24,13 @@ winkstart.module('voip', 'device',
                     invite_formats: [{id: 'username', value: 'Username'}, {id: 'npan', value:'NPANXXXXX'}, {id: 'e164', value:'E. 164'}],
                     bypass_media_types: [{id: 'auto', value: 'Automatic'}, {id: 'true', value:'Never'}, {id: 'false', value:'Always'}],
                     media_audio_codecs: [
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G729', value: 'G729', caption: '8kbps (Requires License)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: '64kbps (North America)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: '64kbps (Elsewhere)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: '48kbps'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: '56kbps'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: '56kbps'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: '64kbps'}
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G729', value: 'G729', caption: 'G729 - 8kbps (Requires License)'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: 'G711u / PCMU - 64kbps (North America)'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: 'G711a / PCMA - 64kbps (Elsewhere)'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: 'G722 (HD) @ 16kHz'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: 'G722_32G722.1 (HD) @ 32kHz'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: 'Siren (HD) @ 48kHz'},
+                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: 'Siren (HD) @ 64kHz'}
                     ],
                     media_video_codecs: [
                             {field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H261', value: 'H261', caption: 'H261'},

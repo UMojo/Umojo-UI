@@ -23,9 +23,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="first_name">First Name:</label>
+                                <span tooltip="First Name">
+                                    <img class="tooltip"/><label for="first_name">First Name:</label>
+                                </span>
                                 <input id="first_name" name="first_name" type="text" value="${data.first_name}" />
-                                <img tooltip="First Name" src="whapps/core/layout/images/question_mark.png" />
                             </li>
                         </ul>
                     </fieldset>
@@ -33,9 +34,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="last_name">Last Name:</label>
+                                <span tooltip="Last Name">
+                                    <img class="tooltip"/><label for="last_name">Last Name:</label>
+                                </span>
                                 <input id="last_name" name="last_name" type="text" value="${data.last_name}" />
-                                <img tooltip="Last Name" src="whapps/core/layout/images/question_mark.png" />
                             </li>
                         </ul>
                     </fieldset>
@@ -43,9 +45,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="email">Email Address:</label>
+                                <span tooltip="Email Address like: user@company.com">
+                                    <img class="tooltip"/><label for="email">Email Address:</label>
+                                </span>
                                 <input id="email" name="email" type="text" value="${data.email}" />
-                                <img tooltip="user@2600hz.com" src="whapps/core/layout/images/question_mark.png" />
                             </li>
                         </ul>
                     </fieldset>
@@ -56,7 +59,6 @@
             </div>
 
             <div class="clear"></div>
-
 
             <span class="advanced_settings_box">
                 <span>
@@ -80,7 +82,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="verified">User has been verified?</label>
+                                <span tooltip="User has been verified?">
+                                    <img class="tooltip"/>
+                                    <label for="verified">User has been verified?</label>
+                                </span>
                                 {{if data.verified}}
                                 <input id="verified" name="verified" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -88,7 +93,9 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                <span tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
+                                    <img class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                </span>
                                 {{if data.vm_to_email_enabled}}
                                 <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -96,7 +103,9 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="timezone">Timezone:</label>
+                                <span tooltip="Select the timezone of this user.">
+                                    <img class="tooltip"/><label for="timezone">Timezone:</label>
+                                </span>
                                 <select name="timezone" id="timezone">
                                     {{each field_data.timezones}}
                                     {{if data.timezone == value}}
@@ -117,11 +126,15 @@
                         <legend>In-House Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller_id_name_internal">Caller ID Name:</label>
+                                <span tooltip="Define the Caller ID Name of this User for In-House Calls.<br/>If not defined, then the Caller ID Name of the account will be used.">
+                                    <img class="tooltip"/><label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
                                 <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
                             </li>
                             <li>
-                                <label for="caller_id_number_internal">Caller ID Number:</label>
+                                <span tooltip="Define the Caller ID Numver of this User for In-House Calls.<br/>If not defined, then the Caller ID Number of the account will be used.">
+                                    <img class="tooltip"/><label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
                                 <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
                             </li>
                         </ul>
@@ -131,11 +144,17 @@
                         <legend>Outbound Calls</legend>
                         <ul class="controls">
                             <li>
-                                <label for="caller_id_name_external">Caller ID Name:</label>
+                                <span tooltip="Define the Caller ID Name of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Name of the account will be used.">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
                                 <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
                             </li>
                             <li>
-                                <label for="caller_id_number_external">Caller ID Number:</label>
+                                <span tooltip="Define the Caller ID Number of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Number of the account will be used.">
+                                    <img class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
                                 <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
                             </li>
                         </ul>
@@ -147,7 +166,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="call_forward.enabled">Call-Forward enabled?</label>
+                                <span tooltip="Is the call-forwarding feature enabled for this user?">
+                                    <img class="tooltip"/>
+                                    <label for="call_forward.enabled">Call-Forward enabled?</label>
+                                </span>
                                 {{if data.call_forward.enabled}}
                                 <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -155,11 +177,15 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="call_forward_number">Number to redirect calls to:</label>
+                                <span tooltip="What is the number to redirect calls to for the call-forwarding feature?">
+                                    <img class="tooltip"/><label for="call_forward_number">Number to redirect calls to:</label>
+                                </span>
                                 <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
                             </li>
                             <li>
-                                <label for="require_keypress">Require Key Press?</label>
+                                <span tooltip="Do you want this user to press a key to answer a call that has been call-forwarded?">
+                                    <img class="tooltip"/><label for="require_keypress">Require Key Press?</label>
+                                </span>
                                 {{if data.call_forward.require_keypress}}
                                 <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -167,7 +193,9 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="call_forward_keep_caller_id">Keep Caller ID?</label>
+                                <span tooltip="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded.<br/> If false it will use the caller-id of the user.">
+                                    <img class="tooltip"/><label for="call_forward_keep_caller_id">Keep Caller ID?</label>
+                                </span>
                                 {{if data.call_forward.keep_caller_id}}
                                 <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
                                 {{else}}

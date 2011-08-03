@@ -285,6 +285,10 @@ winkstart.module('voip', 'media',
 
                 return false;
             });
+            
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
+            });
         },
 
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server

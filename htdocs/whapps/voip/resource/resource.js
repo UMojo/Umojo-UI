@@ -21,13 +21,13 @@ winkstart.module('voip', 'resource',
         formData: {
              invite_format: [{value: 'Username'}, {value:'NPANXXXXX'}, {value:'E. 164'}],
              caller_id_options_type: [{value: 'external'}, {value:'internal'}, {value:'emergency'}],
-                    codecs: [{field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G729', value: 'G729', caption: '8kbps (Requires License)'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: '64kbps (North America)'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: '64kbps (Elsewhere)'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: '48kbps'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: '56kbps'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: '56kbps'},
-                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: '64kbps'}
+                    codecs: [{field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G729', value: 'G729', caption: 'G729 - 8kbps (Requires License)'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: 'G711u / PCMU - 64kbps (North America)'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: 'G711a / PCMA - 64kbps (Elsewhere)'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: 'G722 (HD) @ 16kHz'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: 'G722_32G722.1 (HD) @ 32 kHz'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: 'Siren (HD) @ 48kHz'},
+                            {field_id:'gateway_codecs', field_name: 'gateways[0].codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: 'Siren (HD) @ 64 kHz'}
                     ],
         },
 
@@ -291,6 +291,10 @@ winkstart.module('voip', 'resource',
                 THIS.deleteResource(resource_id);
 
                 return false;
+            });
+
+            $.each($('body').find('*[tooltip]'), function(){
+                $(this).tooltip({attach:'body'});
             });
         },
 

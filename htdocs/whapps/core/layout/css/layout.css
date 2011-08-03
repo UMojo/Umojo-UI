@@ -647,3 +647,12 @@ blah {
     margin-left: 1em;
     vertical-align: middle;
 }
+
+/**** Tooltip ****/
+.tooltip {
+    float:left;
+    margin-left: -20px;
+    background-image: url('../images/question_mark.png');
+    height: 16px;
+    width: 16px;
+}

@@ -18,11 +18,17 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="name">Name:</label>
+                                <span tooltip="A friendly name for this Time of day rule">
+                                    <img class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <label for="days">Days:</label>
+                                <span tooltip="Select the days that you want this rule to apply to">
+                                    <img class="tooltip"/>
+                                    <label for="days">Days:</label>
+                                </span>
                                 {{each(i, day) field_data.days}}
                                     ${day}
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
@@ -33,7 +39,10 @@
                                 {{/each}}
                             </li>
                             <li>
-                                <label for="time">Time:</label>
+                                <span tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
+                                    <img class="tooltip"/>
+                                    <label for="time">Time:</label>
+                                </span>
                                 <span class="time-wrapper">
                                     <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
                                 </span>

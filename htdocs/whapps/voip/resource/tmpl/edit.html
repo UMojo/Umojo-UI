@@ -18,27 +18,45 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="name">Name:</label>
+                                <span tooltip="Friendly name of this resource">
+                                    <img class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
-                            <li>
-                                <label for="gateways_server">Server</label>
+                            <li>    
+                                <span tooltip="The destination server domain or IP">
+                                    <img class="tooltip"/>
+                                    <label for="gateways_server">Server</label>
+                                </span>
                                 <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" />
                             </li>
                             <li>
-                                <label for="weight_cost">Weight Cost:</label>
+                                <span tooltip="If resource routing rules overlap, the hightest weight will take precedence">
+                                    <img class="tooltip"/>
+                                    <label for="weight_cost">Weight Cost:</label>
+                                </span>
                                 <input id="weight_cost" name="weight_cost" type="text" value="${data.weight_cost}" />
                             </li>
                             <li>
-                                <label for="rules">Rules:</label>
+                                <span tooltip="The rule is a regex of numbers for this resource.<br/>For instance, if the regex is ^\\+{0,1}1{0,1}(\\d{10})$ then this resource will be used <br/>in order to call numbers starting or not by a +1 and followed by 10 numbers.">
+                                    <img class="tooltip"/>
+                                    <label for="rules">Rules:</label>
+                                </span>
                                 <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
                             </li>
                             <li>
-                                <label for="flags">Flags:</label>
+                                <span tooltip="A supported functionnality by this route, such as fax, e911 or g729">
+                                    <img class="tooltip"/>
+                                    <label for="flags">Flags:</label>
+                                </span>
                                 <input id="flags" name="flags[0]" type="text" value="${data.flags[0]}" />
                             </li>
                             <li>
-                                <label for="enabled">Enabled</label>
+                                <span tooltip="When set to false the resource will be ignored by the call routing engine">
+                                    <img class="tooltip"/>
+                                    <label for="enabled">Enabled</label>
+                                </span>
                                 {{if data.enabled}}
                                 <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
                                 {{else}}
@@ -88,7 +106,10 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="caller_id_options_type">Type</label>
+                                <span tooltip="An arbitrary caller-id type to search for when this route is used">
+                                    <img class="tooltip">
+                                    <label for="caller_id_options_type">Type</label>
+                                </span>
                                 <select name="caller_id_options.type" id="caller_id_options_type">
                                     {{tmpl(field_data.caller_id_options_type, {selectedVal: data.caller_id_options.type }) "#optionList"}}
                                 </select>

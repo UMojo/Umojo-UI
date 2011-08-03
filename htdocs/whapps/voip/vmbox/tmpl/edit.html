@@ -18,15 +18,24 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <label for="name">Name:</label>
+                                <span tooltip="Friendly Name for this voicemail box">
+                                    <img class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <label for="mailbox">Voicemail Box Number:</label>
+                                <span tooltip="Number of this voicemail box">
+                                    <img class="tooltip"/>
+                                    <label for="mailbox">Voicemail Box Number:</label>
+                                </span>
                                 <input id="mailbox" name="mailbox" type="text" value="${data.mailbox}" />
                             </li>
                             <li>
-                                <label for="owner_id">Belongs To:</label>
+                                <span tooltip="Chose the owner of this voicemail box">
+                                    <img class="tooltip"/>
+                                    <label for="owner_id">Belongs To:</label>
+                                </span>
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
                                     {{if data.owner_id == owner_id}}
@@ -38,7 +47,10 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="pin">PIN number:</label>
+                                <span tooltip="Enter the PIN Number of this voicemail box">
+                                    <img class="tooltip"/>
+                                    <label for="pin">PIN number:</label>
+                                </span>
                                 <input id="pin" name="pin" type="text" value="${data.pin}" />
                             </li>
                         </ul>
@@ -71,7 +83,10 @@
                         <legend>Options</legend>
                         <ul class="controls">
                             <li>
-                                <label for="timezone">Timezone:</label>
+                                <span tooltip="Select the timezone of this voicemail box">
+                                    <img class="tooltip"/>
+                                    <label for="timezone">Timezone:</label>
+                                </span>
                                 <select name="timezone" id="timezone">
                                     {{each field_data.timezones}}
                                     {{if data.timezone == value}}
@@ -83,7 +98,10 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="require_pin">Require PIN?</label>
+                                <span tooltip="Does this voicemail require a PIN?">
+                                    <img class="tooltip"/>
+                                    <label for="require_pin">Require PIN?</label>
+                                </span>
                                 {{if data.require_pin}}
                                 <input id="require_pin" name="require_pin" type="checkbox" checked="checked" />
                                 {{else}}
@@ -91,7 +109,10 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="check_if_owner">Auto-login enabled?</label>
+                                <span tooltip="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)">
+                                    <img class="tooltip"/>
+                                    <label for="check_if_owner">Auto-login enabled?</label>
+                                </span>
                                 {{if data.check_if_owner}}
                                 <input id="check_if_owner" name="check_if_owner" type="checkbox" checked="checked" />
                                 {{else}}
@@ -99,7 +120,10 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="skip_greeting">Skip Greeting?</label>
+                                <span tooltip="Do you want to skip greetings by default?">
+                                    <img class="tooltip"/>
+                                    <label for="skip_greeting">Skip Greeting?</label>
+                                </span>
                                 {{if data.skip_greeting}}
                                 <input id="skip_greeting" name="skip_greeting" type="checkbox" checked="checked" />
                                 {{else}}
@@ -107,7 +131,10 @@
                                 {{/if}}
                             </li>
                             <li>
-                                <label for="skip_instructions">Skip Instructions?</label>
+                                <span tooltip="Do you want to skip instructions by default?">
+                                    <img class="tooltip"/>
+                                    <label for="skip_instructions">Skip Instructions?</label>
+                                </span>
                                 {{if data.skip_instructions}}
                                 <input id="skip_instructions" name="skip_instructions" type="checkbox" checked="checked" />
                                 {{else}}
