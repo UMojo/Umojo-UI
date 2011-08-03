@@ -7,14 +7,6 @@ winkstart.module('voip', 'voip', {
                 voip: 'voip.html'
         },
 
-        resources: {
-            "shared_auth": {
-                url: winkstart.apps['voip']['api_url'] + '/shared_auth', //'http://apps002-dev-ord.2600hz.com:8000/v1/shared_auth',
-                contentType: 'application/json',
-                verb: 'PUT'
-            },
-        },
- 
         subscribe: {
             'voip.activate' : 'activate'
         }
