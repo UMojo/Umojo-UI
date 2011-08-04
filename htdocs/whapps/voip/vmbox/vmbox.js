@@ -148,47 +148,67 @@ winkstart.module('voip', 'vmbox',
             $('#vmbox-view').empty();
             var THIS = this;
             var form_data = {
-                data: { require_pin: true, check_if_owner: true},   
+                data: { require_pin: true, check_if_owner: true, media: {}},   
                 field_data: THIS.config.formData,
                 value: {}
             };
 
             form_data.field_data.users = [];
-            winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
-                var listUsers = [];
+            form_data.field_data.medias = [];
+            winkstart.getJSON('media.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
+                var listMedias = [];
+                listMedias.push({media_id: '', title: '- Skip Unavailable Message -'});
                 if(json.data.length > 0) {
                     _.each(json.data, function(elem){
-                        var title = elem.first_name + ' ' + elem.last_name;
-                        listUsers.push({
-                            owner_id: elem.id,
+                        var title = elem.name;
+                        listMedias.push({
+                            media_id: elem.id,
                             title: title
                         });
                     });
 
-                    form_data.field_data.users = listUsers;
+                    form_data.field_data.medias = listMedias;
                 } else {
-                    listUsers.push({owner_id: '!', title: 'none'});
-                    form_data.field_data.users = listUsers;
+                    listMedias.push({media_id: '!', title: 'none'});
+                    form_data.field_data.medias = listMedias;
                 }
-                 if (data && data.id) {
-                    /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
-                    winkstart.getJSON('vmbox.get', {
-                        crossbar: true,
-                        account_id: winkstart.apps['voip'].account_id,
-                        vmbox_id: data.id
-                    }, function(json, xhr) {
-                        /* On success, take JSON and merge with default/empty fields */
-                        $.extend(true, form_data, json);
 
+                winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
+                    var listUsers = [];
+                    if(json.data.length > 0) {
+                        _.each(json.data, function(elem){
+                            var title = elem.first_name + ' ' + elem.last_name;
+                            listUsers.push({
+                                owner_id: elem.id,
+                                title: title
+                            });
+                        });
+
+                        form_data.field_data.users = listUsers;
+                    } else {
+                        listUsers.push({owner_id: '!', title: 'none'});
+                        form_data.field_data.users = listUsers;
+                    }
+                     if (data && data.id) {
+                        /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
+                        winkstart.getJSON('vmbox.get', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            vmbox_id: data.id
+                        }, function(json, xhr) {
+                            /* On success, take JSON and merge with default/empty fields */
+                            $.extend(true, form_data, json);
+
+                            THIS.renderVmbox(form_data);
+                        });
+                    } else {
+                        /* This is a new vmbox - pass along empty params */
                         THIS.renderVmbox(form_data);
-                    });
-                } else {
-                    /* This is a new vmbox - pass along empty params */
-                    THIS.renderVmbox(form_data);
-                }
+                    }
 
-                $.each($('body').find('*[tooltip]'), function(){
-                    $(this).tooltip({attach:'body'});
+                    $.each($('body').find('*[tooltip]'), function(){
+                        $(this).tooltip({attach:'body'});
+                    });
                 });
             });
         },

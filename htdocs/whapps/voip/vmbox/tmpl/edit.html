@@ -53,6 +53,21 @@
                                 </span>
                                 <input id="pin" name="pin" type="text" value="${data.pin}" />
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the Unavailable message that you want to use for this this device.<br/>If you select - Skip Unavailable Message -, then no media file will be played.">
+                                    <span class="tooltip"/>
+                                    <label for="media_unavailable">Unavailable Message:</label>
+                                </span>
+                                <select name="media.unavailable" id="media_unavailable">
+                                {{each field_data.medias}}
+                                    {{if data.media.unavailable == media_id}}
+                                    <option value="${media_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${media_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
                         </ul>
                     </fieldset>
 
