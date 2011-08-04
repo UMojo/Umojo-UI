@@ -27,6 +27,44 @@ winkstart.module('cluster', 'deploy_mgr',
             'deploy_mgr.requestFirstServer': 'requestFirstServer',
             'deploy_mgr.setlink': 'setLink'
         },
+        
+        validationTab1 : [
+            {name : '#hostname_1_1', regex : /^.+$/},
+            {name : '#ip_1_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_1_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_1_1', regex : /^.+$/}
+        ],
+        
+        validationTab2 : [
+            {name : '#hostname_7_1', regex : /^.+$/},
+            {name : '#ip_7_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_1', regex : /^.+$/},
+            {name : '#hostname_7_2', regex : /^.+$/},
+            {name : '#ip_7_2', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_2', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_2', regex : /^.+$/},
+            {name : '#hostname_7_3', regex : /^.+$/},
+            {name : '#ip_7_3', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_3', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_3', regex : /^.+$/},
+            {name : '#hostname_7_4', regex : /^.+$/},
+            {name : '#ip_7_4', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_4', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_4', regex : /^.+$/},
+            {name : '#hostname_7_5', regex : /^.+$/},
+            {name : '#ip_7_5', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_5', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_5', regex : /^.+$/},
+            {name : '#hostname_7_6', regex : /^.+$/},
+            {name : '#ip_7_6', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_6', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_6', regex : /^.+$/},
+            {name : '#hostname_7_7', regex : /^.+$/},
+            {name : '#ip_7_7', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#ssh_port_7_7', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#root_password_7_7', regex : /^.+$/}
+        ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
@@ -69,7 +107,30 @@ winkstart.module('cluster', 'deploy_mgr',
 
 
     /* Define the functions for this module */
-    {
+    {   
+        validateForm: function(state, tab) {
+            var THIS = this;
+            
+            if (state == 'save') {
+                if(tab != '2') {
+                    $(THIS.config.validationTab1).each(function(k, v) {
+                        winkstart.validate.save($(v.name), v.regex);
+                    });
+                } else {
+                    $(THIS.config.validationTab2).each(function(k, v) {
+                        winkstart.validate.save($(v.name), v.regex);
+                    });
+                }
+            } else if(state == undefined) {
+                $(THIS.config.validationTab1).each(function(k, v) {
+                    winkstart.validate.add($(v.name), v.regex);
+                });
+                $(THIS.config.validationTab2).each(function(k, v) {
+                    winkstart.validate.add($(v.name), v.regex);
+                });
+            }
+        },
+        
         server_count : 0,
         
         requestServer: function() {
@@ -83,7 +144,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 open:function(){
                     $('#serverinfo a.save_btn').live('click', function() {
                         var data = form2object('serverinfo');
-                        data.roles = new Array();
+                        data.roles = new Array();                      
                         $('input[name="roles"]:checked', '#serverinfo').each(function(){
                             data.roles.push($(this).val());
                         });
@@ -110,38 +171,54 @@ winkstart.module('cluster', 'deploy_mgr',
                 height: 600, 
                 width: 480,
                 open: function(){
+                    THIS.validateForm();
                     $('#serverinfo_dev a.save_btn').live('click', function() {
                         var data = form2object('serverinfo_dev');
                         data.roles = new Array('all_in_one');
-                        winkstart.publish('deploy_mgr.addServer', data);
-                        $('#server_dialog').dialog('close');
+                        
+                        // Validation in the dev case
+                        THIS.validateForm('save', '1');
+                        
+                        if(!$('.invalid').size()) {
+                            winkstart.publish('deploy_mgr.addServer', data);
+                            $('#server_dialog').dialog('close');
+                        } else {
+                            alert ('Please correct errors that you have on the form.');
+                        }
                     });
                     $('#serverinfo_prod a.save_btn').live('click', function() {
                         var data = form2object('serverinfo_prod');
-                        $.each(data, function(){
-                            var server = {
-                                hostname: this[0],
-                                ip: this[1],
-                                ssh_port: this[2],
-                                password: this[3]
-                            };
-                            server.roles = new Array();
-                            server.roles.push(this[4]);
-                            if(this[5]){
-                                server.roles.push(this[5]);
-                            }
-                            winkstart.publish('deploy_mgr.addServer', server, true);
-                        });
-                        $('#server_dialog').dialog('close');
                         
-                        //Hack to deploy server after adding them all
-                        setTimeout(function(){
-                            $('.cluster').find('.server').each(function(){
-                                var serverId = $(this).attr('server_id');
-                                winkstart.publish('deploy_mgr.updateServer',  serverId);
-                            }); 
-                        },5000);
+                        // Validation in the prod case
+                        THIS.validateForm('save', '2');
                         
+                        if(!$('.invalid').size()) {
+                            $.each(data, function(){
+                                var server = {
+                                    hostname: this[0],
+                                    ip: this[1],
+                                    ssh_port: this[2],
+                                    password: this[3]
+                                };
+                                server.roles = new Array();
+                                server.roles.push(this[4]);
+                                if(this[5]){
+                                    server.roles.push(this[5]);
+                                }
+
+
+                                winkstart.publish('deploy_mgr.addServer', server, true);
+                            });
+                            $('#server_dialog').dialog('close');
+
+                            //Hack to deploy server after adding them all
+                            setTimeout(function(){
+                                $('.cluster').find('.server').each(function(){
+                                    var serverId = $(this).attr('server_id');
+                                    winkstart.publish('deploy_mgr.updateServer',  serverId);
+                                }); 
+                            },5000);
+                        }
                     });
                 }
             });
@@ -157,7 +234,7 @@ winkstart.module('cluster', 'deploy_mgr',
             rest_data.crossbar = true;
             rest_data.account_id = '04152ed2b428922e99ac66f3a71b0215';
             rest_data.data = serverData;
-            
+
             winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
                 if(json.status == 'success'){  
                     var data = {};
@@ -165,12 +242,12 @@ winkstart.module('cluster', 'deploy_mgr',
                     data.server_id = json.data.id;
                     data.server_state = 'never_run';
                     data.server_roles = json.data.roles;
-                    
+
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                     if(noUpdate != true){
                         winkstart.publish('deploy_mgr.updateServer',  json.data.id);
                     }
-                    
+
                     THIS.server_count++;
                     winkstart.publish('deploy_mgr.setlink');
                 }
@@ -294,9 +371,9 @@ winkstart.module('cluster', 'deploy_mgr',
         },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-     * if appropriate. You should also attach to any default click items you want to respond to when people click
-     * on them. Also register resources.
-     */
+ * if appropriate. You should also attach to any default click items you want to respond to when people click
+ * on them. Also register resources.
+ */
         activate: function(data) {
             var THIS = this;
 
