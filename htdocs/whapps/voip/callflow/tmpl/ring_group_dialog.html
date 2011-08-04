@@ -4,26 +4,29 @@
             <div id="ringgroup" class="stylized myform">
                 <h3>Ring Groups</h3>
                 <div class="wrapper">
-                    <div class="available">
+                    <div class="available scrollable">
                         <ul class="connect">
                         </ul>
                     </div>
-                    <div class="ring_group">
+                    <div class="ring_group scrollable">
                         <ul class="connect">
                         </ul>
                     </div>
                 </div>
                 <form>
-                    <div>
-                        <label>Ring Strategy</label>
-                        <select id="strategy">
-                            <option value="simultaneous">At the same time</option>
-                            <option value="single">One at a time</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Timeout</label>
-                        <input id="timeout" type="text"/>
+                    <div class="options">
+                        <div>
+                            <label>Ring Strategy</label>
+                            <select id="strategy">
+                                <option value="simultaneous">At the same time</option>
+                                <option value="single">One at a time</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Timeout</label>
+                            <input id="timeout" type="text"/>
+                            <div class="clear"/>
+                        </div>
                     </div>
                 </form>
                 <form name="form" method="post" action="#">

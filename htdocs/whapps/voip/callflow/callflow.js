@@ -368,14 +368,45 @@ winkstart.module('voip', 'callflow',
                     var node_name = node.actionName,
                         popup = THIS.templates.ring_group_dialog.tmpl({});
 
+                    console.log(node.data.data);
                     winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                         $.each(json.data, function() {
                             $('.available ul', popup).append('<li id="' + this.id + '">' + this.name + '</li>');
                         });
 
-                        $('.available ul, .ring_group ul', popup).sortable({connectWith: '#ringgroup .wrapper .connect'});
-                        //$('.available, .ring_group', popup).jScrollPane();
+                        if(node.data.data == undefined) {
+                            node.data.data = {};
+                        }
+                        else { 
+                            if(node.data.data.endpoints != undefined) {
+                                $.each(node.data.data.endpoints, function() { 
+                                    console.log(this);
+                                    $('.available ul #' + this.id, popup).detach().appendTo($('.ring_group ul', popup));
+                                });
+                            }
+
+                            if(node.data.data.strategy != undefined) {
+                                $('#strategy', popup).val(node.data.data.strategy);
+                            }
+
+                            if(node.data.data.timeout != undefined) {
+                                $('#timeout', popup).val(node.data.data.timeout);
+                            }
+                        }
+
                         popup.dialog({width:400});
+
+                        $('.scrollable', popup).jScrollPane();
+
+                        $('.available ul, .ring_group ul', popup).sortable({
+                            connectWith: '#ringgroup .wrapper .connect',
+                            receive: function() {
+                                $(this).parents('.scrollable').data('jsp').reinitialise();
+                            },
+                            remove: function() {
+                                $(this).parents('.scrollable').data('jsp').reinitialise();
+                            }
+                        });
 
                         $('.submit_btn', popup).click(function() {
                             if(node.data.data == undefined) {
@@ -389,6 +420,7 @@ winkstart.module('voip', 'callflow',
                             node.data.data.strategy = $('#strategy', popup).val();
                             node.data.data.timeout = $('#timeout', popup).val();
 
+                            popup.dialog('close');
                         });
                     });
                 });  

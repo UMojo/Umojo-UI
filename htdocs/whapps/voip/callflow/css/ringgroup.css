@@ -1,21 +1,32 @@
 #ringgroup .wrapper {
-    float: left;
+    clear: left;
+    width: 100%;
 }
 
 #ringgroup .wrapper .available {
     background-color: red;
-    min-height: 100px;
+    height: 250px;
     width: 150px;
     float: left;
+    overflow: auto;
 }
 
 #ringgroup .wrapper .ring_group {
     background-color: yellow;
-    min-height: 100px;
+    height: 250px;
     width: 150px;
-    float: left;
+    float: right;
+    overflow: auto;
 }
 
 #ringgroup .wrapper ul {
-    min-height: 100px;
+    min-height: 250px;
+}
+
+#ringgroup .wrapper ul li {
+    list-style-type: none;
+}
+
+#ringgroup .options {
+    
 }
