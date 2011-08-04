@@ -24,7 +24,8 @@ winkstart.module('cluster', 'deploy_mgr',
             'deploy_mgr.updateServer' : 'updateServer',
             'deploy_mgr.statusServer' : 'statusServer',
             'deploy_mgr.listServer' : 'listServer',
-            'deploy_mgr.requestFirstServer': 'requestFirstServer'
+            'deploy_mgr.requestFirstServer': 'requestFirstServer',
+            'deploy_mgr.setlink': 'setLink'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -78,6 +79,7 @@ winkstart.module('cluster', 'deploy_mgr',
             var THIS = this;
             
             $('#server_dialog').empty();
+            $('#server_dialog').dialog('destroy');
             THIS.templates.newserver.tmpl().appendTo('#server_dialog');
             
             $('#server_dialog').dialog({
@@ -104,13 +106,44 @@ winkstart.module('cluster', 'deploy_mgr',
             var THIS = this;
             
             $('#server_dialog').empty();
-            THIS.templates.firstserver.tmpl().appendTo('#server_dialog');
-            $("#tabs ul").tabs("#tabs .pane > div");
+            $('#server_dialog').dialog('destroy');
             
+            THIS.templates.firstserver.tmpl().appendTo('#server_dialog');
+            
+            $("#tabs ul").tabs("#tabs .pane > div");
             $(".pane").css('width', '380')
+            
             $('#server_dialog').dialog({
                 height: 600, 
-                width: 480
+                width: 480,
+                open: function(){
+                    $('#serverinfo_dev a.save_btn').live('click', function() {
+                        var data = form2object('serverinfo_dev');
+                        data.roles = new Array('all_in_one');
+                        console.log(data);
+                        winkstart.publish('deploy_mgr.addServer', data);
+                        $('#server_dialog').dialog('close');
+                    });
+                    
+                    $('#serverinfo_prod a.save_btn').live('click', function() {
+                        var data = form2object('serverinfo_prod');
+                        $.each(data, function(){
+                            var server = {
+                                hostname: this[0],
+                                ip: this[1],
+                                ssh_port: this[2],
+                                password: this[3]
+                            };
+                            server.roles = new Array();
+                            server.roles.push(this[4]);
+                            if(this[5]){
+                                server.roles.push(this[5]);
+                            }
+                            winkstart.publish('deploy_mgr.addServer', server);
+                        });
+                        $('#server_dialog').dialog('close');
+                    });
+                }
             });
             $('#server_dialog').dialog('open');
         },
@@ -136,8 +169,11 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                     winkstart.publish('deploy_mgr.updateServer',  json.data.id);
+                    THIS.server_count++;
+                    winkstart.publish('deploy_mgr.setlink');
                 }
             });
+            
         },
 
         deleteServer: function(serverId) {
@@ -153,8 +189,9 @@ winkstart.module('cluster', 'deploy_mgr',
                 if(json.status == "success"){
                     $('#'+serverId).remove();
                     THIS.server_count--;
+                    winkstart.publish('deploy_mgr.setlink');
                 }
-            });
+            });  
         },
         
         updateServer: function(serverId) {
@@ -194,6 +231,27 @@ winkstart.module('cluster', 'deploy_mgr',
                 }); 
             }, 15000);
         },
+        
+        setLink: function(){
+            var THIS = this;
+            console.log(THIS.server_count);
+            switch(THIS.server_count){
+                case 0:
+                    $('.cluster_pane a.add_server').show();
+                    $('.cluster_pane a.add_server').click(function() {
+                        winkstart.publish('deploy_mgr.requestFirstServer');
+                    });
+                    break;
+                case 1:
+                    $('.cluster_pane a.add_server').hide();
+                    break;
+                default:
+                    $('.cluster_pane a.add_server').show();
+                    $('.cluster_pane a.add_server').click(function() {
+                        winkstart.publish('deploy_mgr.requestServer');
+                    });
+            }
+        },
 
         listServer: function() {
             var THIS = this;
@@ -216,17 +274,7 @@ winkstart.module('cluster', 'deploy_mgr',
                    
                 });
 
-                if(THIS.server_count == 0){
-                    $('.cluster_pane a.add_server').click(function() {
-                        winkstart.publish('deploy_mgr.requestFirstServer');
-                    });
-                }else if(THIS.server_count == 1){
-                    $('.cluster_pane a.add_server').remove();
-                }else{
-                    $('.cluster_pane a.add_server').click(function() {
-                        winkstart.publish('deploy_mgr.requestServer');
-                    });
-                }
+                winkstart.publish('deploy_mgr.setlink');
                 
                 $('.server a.cancel_btn').live('click', function() {
                     if(confirm('Do you want to delete this server ?')){
