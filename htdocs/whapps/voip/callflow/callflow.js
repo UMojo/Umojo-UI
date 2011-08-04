@@ -389,7 +389,6 @@ winkstart.module('voip', 'callflow',
                             node.data.data.strategy = $('#strategy', popup).val();
                             node.data.data.timeout = $('#timeout', popup).val();
 
-                            console.log(node.data.data);
                         });
                     });
                 });  
@@ -528,7 +527,12 @@ winkstart.module('voip', 'callflow',
                                 selected: node.key
                             };
                         }*/
-                        dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+                        dialog = THIS.templates.edit_dialog.tmpl(data).dialog({
+                            title : data.title,
+                            resizable : false,
+                            modal: true,
+                            width: 400
+                        });
                     
                         $('#create_new_item', dialog).click(function() {
                             winkstart.publish(node_name+'.popup');
@@ -690,7 +694,7 @@ winkstart.module('voip', 'callflow',
                 var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
                 dialog.find('.submit_btn').click(function() {
                         branch.key = $('#option-selector', dialog).val();
-                        if(branch.actionName != 'menu' && branch.actionName != 'offnet') {
+                        if(branch.parent.actionName != 'menu' && branch.parent.actionName != 'offnet') {
                             THIS.setDetails(branch.key, {'name': $('#option-selector option:selected', dialog).text()});
                         }
                         dialog.dialog('close');

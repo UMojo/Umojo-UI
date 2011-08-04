@@ -47,12 +47,13 @@
     right: 34px;
     text-align: center;
     width: 81px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     color: white;
 }
 
 .btn_wrapper {
     text-align: center;
+    padding-top: 1px;
 }
 
 .popup a.register_btn {
@@ -221,19 +222,25 @@
     width: 140px;
     float: left;
  /*   margin-top: 8px; */
+    padding-right:10px;
+    text-transform: capitalize;
     clear: both;
 }
 
 .myform input {
     float: left;
     font-size: 12px;
-    padding: 4px 2px;
-    border: solid 1px #09F;
-    width: 200px;
-    margin: 2px 0 5px 10px;
+    padding: 2px 2px;
+    border: solid 1px #A2A2A2;
+    width: 145px;
+    /*margin: 2px 0 5px 10px;*/
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.myform select {
+    width: 150px;
 }
 
 .popup input.field_round {
