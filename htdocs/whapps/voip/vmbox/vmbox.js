@@ -157,7 +157,7 @@ winkstart.module('voip', 'vmbox',
             form_data.field_data.medias = [];
             winkstart.getJSON('media.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
                 var listMedias = [];
-                listMedias.push({media_id: '', title: '- Skip Unavailable Message -'});
+                listMedias.push({media_id: '', title: '- Not set -'});
                 if(json.data.length > 0) {
                     _.each(json.data, function(elem){
                         var title = elem.name;
