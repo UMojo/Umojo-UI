@@ -112,6 +112,8 @@
     width: 90%;
     height: 15%;
     margin: auto;
+    font-size: 80%;
+    text-align: left;
 }
 
 .server a.cancel_btn {
@@ -131,7 +133,7 @@
 }
 
 .idle {
-    color: greenyellow;
+    color: greenyellow;    
 }
 
 .never_run {
@@ -140,6 +142,9 @@
 
 .running {
     color: orange;
+    background-image: url(../img/ajax-loader.gif);
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
 #tabs2 h4 {
