@@ -651,8 +651,13 @@ blah {
 /**** Tooltip ****/
 .tooltip {
     float:left;
-    margin-left: -20px;
     background-image: url('../images/question_mark.png');
     height: 16px;
     width: 16px;
+}
+
+.tooltip-wrapper {
+    display: inline-block;
+    float: left;
+    margin-left: -16px;
 }

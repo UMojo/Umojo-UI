@@ -22,15 +22,15 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Friendly name for this device">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this device">
+                                    <span class="tooltip"/>
                                     <label for="name">Device Nickname:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <span tooltip="Select the owner of this device">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select the owner of this device">
+                                    <span class="tooltip"/>
                                     <label for="owner_id">Belongs To:</label>
                                 </span>
                                 <select name="owner_id" id="owner_id">
@@ -44,15 +44,15 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B">
+                                    <span class="tooltip"/>
                                     <label for="mac_address">Device MAC Address:</label>
                                 </span>
                                 <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
                             </li>
                             <li>
-                                <span tooltip="Tick this checkbox if you want this device to be enabled once its setup is done">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want this device to be enabled once its setup is done">
+                                    <span class="tooltip"/>
                                     <label for="status">Enabled</label>
                                 </span>
                                 {{if data.status == true}}
@@ -80,7 +80,7 @@
 
                 <div id="troubleshooting">
                     Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
-                    <ul class="button">
+                    <ul class="buttons">
                         <li>
                             <a href="#">Ring Phone</a>
                         </li>
@@ -92,7 +92,7 @@
                     <br/>
                     
                     If you are having problems with your phone or wish to upgrade it's firmware, you can reboot the phone.
-                    <ul class="button">
+                    <ul class="buttons">
                         <li>
                             <a href="#">Reboot</a>
                         </li>
@@ -130,15 +130,15 @@
                         <legend>In-House Calls</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Define the Caller ID Name of this Device for In-House Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Device for In-House Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_name_internal">Caller ID Name:</label>
                                 </span>
                                 <input id="caller_id_name_internal" name="caller_id.emergency.name" type="text"  value="${data.caller_id.emergency.name}" />
                             </li>
                             <li>
-                                <span tooltip="Define the Caller ID Number of this Device for In-House Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for In-House Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_number_internal">Caller ID Number:</label>
                                 </span>
                                 <input id="caller_id_number_internal" name="caller_id.emergency.number" type="text"  value="${data.caller_id.emergency.number}" />
@@ -150,15 +150,15 @@
                         <legend>Outbound Calls</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Define the Caller ID Name of this Device for Outbound Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Device for Outbound Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_name_external">Caller ID Name:</label>
                                 </span>
                                 <input id="caller_id_name_external" name="caller_id.default.name" type="text"  value="${data.caller_id.default.name}" />
                             </li>
                             <li>
-                                <span tooltip="Define the Caller ID Number of this Device for Outbound Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for Outbound Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_number_external">Caller ID Number:</label>
                                 </span>
                                 <input id="caller_id_number_external" name="caller_id.default.number" type="text"  value="${data.caller_id.default.number}" />
@@ -175,15 +175,15 @@
                         <legend>SIP Settings</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Input you're SIP Realm (Domain Name)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Input you're SIP Realm (Domain Name)">
+                                    <span class="tooltip"/>
                                     <label for="sip_realm">Realm / Domain Name:</label>
                                 </span>
                                 <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
                             </li>
                             <li>
-                                <span tooltip="Select your authentication method">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select your authentication method">
+                                    <span class="tooltip"/>
                                     <label for="sip_method">Authentication Method:</label>
                                 </span>
                                 <select name="sip.method" id="sip_method">
@@ -197,22 +197,22 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Enter your SIP Username">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Username">
+                                    <span class="tooltip"/>
                                     <label for="sip_username">Username:</label>
                                 </span>
                                 <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
                             </li>
                             <li>
-                                <span tooltip="Enter your SIP Password">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Password">
+                                    <span class="tooltip"/>
                                     <label for="sip_password">Password:</label>
                                 </span>
                                 <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
                             </li>
                             <li>
-                                <span tooltip="Enter your SIP Invite Format">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Invite Format">
+                                    <span class="tooltip"/>
                                     <label for="sip_invite_format">Invite Format:</label>
                                 </span>
                                 <select name="sip.invite_format" id="sip_invite_format">
@@ -226,8 +226,8 @@
                                 </select>
                             </li>
                             <li>
-                                <span tooltip="Enter the expiration time of this device (in seconds)">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Enter the expiration time of this device (in seconds)">
+                                    <span class="tooltip"/>
                                     <label for="sip_expire_seconds">Expire Seconds:</label>
                                 </span>
                                 <input id="sip_expire_seconds" name="sip.expire_seconds" type="text"  value="${data.sip.expire_seconds}" />
@@ -244,8 +244,8 @@
                         <legend>Optimization</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Select the kind of Peer-to-Peer that you would like to set on this device">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select the kind of Peer-to-Peer that you would like to set on this device">
+                                    <span class="tooltip"/>
                                     <label for="media_bypass-media">Peer to Peer Audio</label>
                                 </span>
                                 <select name="media.bypass_media" id="media_bypass_media">
@@ -287,8 +287,8 @@
                         <legend>Fax Support</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Do you want to enable T-38 for this device?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to enable T-38 for this device?">
+                                    <span class="tooltip"/>
                                     <label for="media_codecs">T.38</label>
                                 </span>
                                 <select name="media.fax.codecs" id="media_fax_codecs">

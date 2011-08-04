@@ -18,15 +18,15 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="A friendly name for this Time of day rule">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="A friendly name for this Time of day rule">
+                                    <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <span tooltip="Select the days that you want this rule to apply to">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Select the days that you want this rule to apply to">
+                                    <span class="tooltip"/>
                                     <label for="days">Days:</label>
                                 </span>
                                 {{each(i, day) field_data.days}}
@@ -39,8 +39,8 @@
                                 {{/each}}
                             </li>
                             <li>
-                                <span tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
+                                    <span class="tooltip"/>
                                     <label for="time">Time:</label>
                                 </span>
                                 <span class="time-wrapper">

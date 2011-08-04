@@ -18,22 +18,22 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Friendly name for this Menu">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this Menu">
+                                    <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li> 
                             <li>
-                                <span tooltip="PIN to enter in order to allow users to record their own greetings">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="PIN to enter in order to allow users to record their own greetings">
+                                    <span class="tooltip"/>
                                     <label for="record_pin">Prompt Record PIN:</label>
                                 </span>
                                 <input id="record_pin" name="record_pin" type="text" value="${data.record_pin}" />
                             </li>
                             <li>
-                                <span tooltip="Do you want to allow the user to dial extensions from this menu?">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Do you want to allow the user to dial extensions from this menu?">
+                                    <span class="tooltip"/>
                                     <label for="hunt">Allow caller to dial extensions?</label>
                                 </span>
                                 {{if data.hunt}}
@@ -74,15 +74,15 @@
                         <legend>Hunting</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="List of numbers that users are allowed to dial when hunting">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="List of numbers that users are allowed to dial when hunting">
+                                    <span class="tooltip"/>
                                     <label for="hunt_allow">Whitelist of numbers (regex)</label>
                                 </span>
                                 <input id="hunt_allow" name="hunt_allow" type="text" value="${data.hunt_allow}" />
                             </li>
                             <li>
-                                <span tooltip="List of numbers that users are not allowed to dial when hunting">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="List of numbers that users are not allowed to dial when hunting">
+                                    <span class="tooltip"/>
                                     <label for="hunt_deny">Blacklist of numbers (regex)</label>
                                 </span>
                                 <input id="hunt_deny" name="hunt_deny" type="textbox" value="${data.hunt_deny}"/>
@@ -98,22 +98,22 @@
                         <legend>Menu Options</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Number of allowed retries on misdial on this menu">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Number of allowed retries on misdial on this menu">
+                                    <span class="tooltip"/>
                                     <label for="retries">Number of retries on misdial:</label>
                                 </span>
                                 <input id="retries" name="retries" type="text" value="${data.retries}" />
                             </li>
                             <li>
-                                <span tooltip="Allowed number of seconds without any key pressed:">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Allowed number of seconds without any key pressed:">
+                                    <span class="tooltip"/>
                                     <label for="timeout">Timeout for dialing (s):</label>
                                 </span>
                                 <input id="timeout" name="timeout" type="text" value="${data.timeout}" />
                             </li>
                             <li>
-                                <span tooltip="Max number of digits dialable by the user? If not set, is defaulted to the Record PIN number length.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Max number of digits dialable by the user? If not set, is defaulted to the Record PIN number length.">
+                                    <span class="tooltip"/>
                                     <label for="max_extension_length">Extension Number Length:</label>
                                 </span>
                                 <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />

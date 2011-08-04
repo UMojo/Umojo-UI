@@ -18,15 +18,15 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Name of this account">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Name of this account">
+                                    <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
-                                <span tooltip="Realm of this account">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Realm of this account">
+                                    <span class="tooltip"/>
                                     <label for="realm">Realm (unique):</label>
                                 </span>
                                 <input id="realm" name="realm" type="text" value="${data.realm}" />
@@ -62,15 +62,15 @@
                         <legend>In-House Calls</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_name_internal">Caller ID Name:</label>
                                 </span>
                                 <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
                             </li>
                             <li>
-                                <span tooltip="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_number_internal">Caller ID Number:</label>
                                 </span>
                                 <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
@@ -82,15 +82,15 @@
                         <legend>Outbound Calls</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_name_external">Caller ID Name:</label>
                                 </span>
                                 <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
                             </li>
                             <li>
-                                <span tooltip="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
+                                    <span class="tooltip"/>
                                     <label for="caller_id_number_external">Caller ID Number:</label>
                                 </span>
                                 <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
@@ -107,15 +107,15 @@
                         <legend>Template fields</legend>
                         <ul class="controls">
                             <li>
-                                <span tooltip="Input the support number that will be inserted in the voicemail-to-email template">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Input the support number that will be inserted in the voicemail-to-email template">
+                                    <span class="tooltip"/>
                                     <label for="vm_to_email_support_number">Support Number:</label>
                                 </span>
                                 <input id="vm_to_email_support_number" name="vm_to_email.support_number" type="text"  value="${data.vm_to_email.support_number}" />
                             </li>
                             <li>
-                                <span tooltip="Input the support email address that will be inserted in the voicemail-to-email template">
-                                    <img class="tooltip"/>
+                                <span class="tooltip-wrapper" tooltip="Input the support email address that will be inserted in the voicemail-to-email template">
+                                    <span class="tooltip"/>
                                     <label for="vm_to_email_support_email">Support Email</label>
                                 </span>
                                 <input id="vm_to_email_support_email" name="vm_to_email.support_email" type="text"  value="${data.vm_to_email.support_email}" />
