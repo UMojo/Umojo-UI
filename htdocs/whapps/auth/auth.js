@@ -35,7 +35,7 @@ winkstart.module('auth', 'auth',
                 verb: 'PUT'
             },
             "auth.activate": {
-                url: winkstart.apps['auth']['api_url'] + '{activation_key}',
+                url: winkstart.apps['auth']['api_url'] + '/signup/{activation_key}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -50,8 +50,14 @@ winkstart.module('auth', 'auth',
         winkstart.registerResources(this.__whapp, this.config.resources);
         winkstart.publish('appnav.add', {'name' : 'auth'});
         
+        if(URL_DATA['activation_key']) {
+            winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function() {
+               alert('You are now registered! Please log in.'); 
+            });
+        }
+
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
-        if (winkstart.apps['auth'].auth_token) {
+        if(winkstart.apps['auth'].auth_token) {
             $('a#my_account').show();
         }
     },

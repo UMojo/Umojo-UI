@@ -3,7 +3,19 @@
     <head>
         <title>2600hz WinkStart</title>
 
-        <!-- Preload variable declaration -->
+        <!-- Awesome URL Parsing -->
+        <script type="text/javascript">
+            var URL_DATA = {},
+                URL_GET_STRING = window.location.href.replace(/^(.+)\?/, ''),
+                URL_DATA_STRINGS = URL_GET_STRING.split('&'),
+                DATA,
+                i;
+
+            for(i = 0; i < URL_DATA_STRINGS.length; i++) {
+                DATA = URL_DATA_STRINGS[i].split('=');
+                URL_DATA[DATA[0]] = DATA[1];
+            }
+        </script>
 
         <link rel="openid.server" href="http://openid.2600hz.com/server/server.php" />
         <link type="text/css" href="css/base.css" rel="stylesheet" media="screen" />
