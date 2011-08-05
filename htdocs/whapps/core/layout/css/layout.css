@@ -413,7 +413,7 @@ a.status5{
 	width: 98%;
 	margin: 0;
 	height: 400px;
-    z-index: 1000;
+    z-index: -1000;
     position: relative;
 }
 
