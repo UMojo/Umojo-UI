@@ -212,7 +212,7 @@ winkstart.module('auth', 'auth',
                 // If this is successful, we'll get a server-specific auth token back
                 winkstart.apps[app_name]['auth_token'] = json.auth_token;
 
-                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: winkstart.apps['auth'].account_id, user_id: winkstart.apps['auth'].user_id}, function(json, xhr) {
                     $('#my_account').show().html("&nbsp;"+json.data.username);
                     $('#my_logout').html("Logout");
                     $('.main_nav').show();
