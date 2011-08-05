@@ -25,52 +25,194 @@ winkstart.module('cluster', 'deploy_mgr',
             'deploy_mgr.statusServer' : 'statusServer',
             'deploy_mgr.listServer' : 'listServer',
             'deploy_mgr.requestFirstServer': 'requestFirstServer',
-            'deploy_mgr.setlink': 'setLink'
+            'deploy_mgr.setlink': 'setLink',
+            'deploy_mgr.getroles': 'getRoles'
         },
         
         validationTab1 : [
-            {name : '#hostname_1_1', regex : /^.+$/},
-            {name : '#ip_1_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_1_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_1_1', regex : /^.+$/}
+        {
+            name : '#hostname_1_1', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_1_1', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_1_1', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_1_1', 
+            regex : /^.+$/
+        }
         ],
         
         validationTab2 : [
-            {name : '#hostname_7_1', regex : /^.+$/},
-            {name : '#ip_7_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_1', regex : /^.+$/},
-            {name : '#hostname_7_2', regex : /^.+$/},
-            {name : '#ip_7_2', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_2', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_2', regex : /^.+$/},
-            {name : '#hostname_7_3', regex : /^.+$/},
-            {name : '#ip_7_3', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_3', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_3', regex : /^.+$/},
-            {name : '#hostname_7_4', regex : /^.+$/},
-            {name : '#ip_7_4', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_4', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_4', regex : /^.+$/},
-            {name : '#hostname_7_5', regex : /^.+$/},
-            {name : '#ip_7_5', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_5', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_5', regex : /^.+$/},
-            {name : '#hostname_7_6', regex : /^.+$/},
-            {name : '#ip_7_6', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_6', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_6', regex : /^.+$/},
-            {name : '#hostname_7_7', regex : /^.+$/},
-            {name : '#ip_7_7', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_7', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_7', regex : /^.+$/}
+        {
+            name : '#hostname_7_1', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_1', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_1', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_1', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_2', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_2', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_2', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_2', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_3', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_3', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_3', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_3', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_4', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_4', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_4', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_4', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_5', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_5', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_5', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_5', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_6', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_6', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_6', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_6', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#hostname_7_7', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ip_7_7', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#ssh_port_7_7', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#root_password_7_7', 
+            regex : /^.+$/
+        }
         ],
         
         validationTab3 : [
-            {name : '#hostnameNewServer', regex : /^.+$/},
-            {name : '#ipNewServer', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#sshNewServer', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#passwordNewServer', regex : /^.+$/}
+        {
+            name : '#hostnameNewServer', 
+            regex : /^.+$/
+        },
+
+        {
+            name : '#ipNewServer', 
+            regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+        },
+
+        {
+            name : '#sshNewServer', 
+            regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/
+        },
+
+        {
+            name : '#passwordNewServer', 
+            regex : /^.+$/
+        }
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -266,7 +408,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     data.server_name = json.data.hostname;
                     data.server_id = json.data.id;
                     data.server_state = 'never_run';
-                    data.server_roles = json.data.roles;
+                    data.server_roles = THIS.getRoles(json.data.roles)
 
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                     if(noUpdate != true){
@@ -357,6 +499,31 @@ winkstart.module('cluster', 'deploy_mgr',
                     });
             }
         },
+        
+        getRoles: function(roles) {
+	
+            var newRoles = [];
+    
+            var basicRoles = {
+                winkstart_deploy_opensips: 'Call Director - OpenSIPs',
+                winkstart_deploy_whapps: 'App Server - Whapps Controller', 
+                winkstart_deploy_bigcouch: 'Database Server - CouchDB',   
+                winkstart_deploy_whistle_fs: 'Media Server - FreeSWITCH', 
+                all_in_one: ['Call Director - OpenSIPs',
+                'App Server - Whapps Controller',
+                'Database Server - CouchDB',
+                'Media Server - FreeSWITCH']
+            };
+	
+            $.each(basicRoles, function(i, v){
+                $.each(roles, function(i1, v1){
+                    if(v1 == i){
+                        newRoles.push(v);
+                    }
+                });
+            });
+            return newRoles;
+        },
 
         listServer: function() {
             var THIS = this;
@@ -372,7 +539,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         server_name : this.hostname,
                         server_id : this.id,
                         server_state : this.deploy_status,
-                        server_roles : this.roles
+                        server_roles : THIS.getRoles(this.roles)
                     };
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                 });
