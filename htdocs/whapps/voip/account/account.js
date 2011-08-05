@@ -35,7 +35,7 @@ winkstart.module('voip', 'account',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "account.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/',
+                url: winkstart.apps['voip'].api_url + '/accounts/' + winkstart.apps['voip'].account_id + '/children',
                 contentType: 'application/json',
                 verb: 'GET'
             },
