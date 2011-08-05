@@ -128,6 +128,18 @@ a.save_btn {
 	bottom: -44px;
 }
 
+a.save_btnServer {
+    background-image: url(../img/regular_btn.png);
+    width: 81px;
+	height: 27px;
+    text-align: center;
+	font-weight: bold;
+    display: block;
+    line-height: 27px;
+    margin: auto;
+    margin-top: 10px;
+}
+
 .heading{
 	width: 100%;
 	height: 85px;
@@ -203,4 +215,12 @@ a.save_btn {
 
 .dialog {
     display:none;
+}
+
+.newServerLbl {
+    width: 100px;
+}
+
+.checkboxRoleServer {
+    margin-left: 20px;
 }
