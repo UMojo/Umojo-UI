@@ -222,12 +222,13 @@ winkstart.module('cluster', 'deploy_mgr',
                                     hostname: this[0],
                                     ip: this[1],
                                     ssh_port: this[2],
-                                    password: this[3]
+                                    password: this[3],
+                                    os: this[4]
                                 };
                                 server.roles = new Array();
-                                server.roles.push(this[4]);
-                                if(this[5]){
-                                    server.roles.push(this[5]);
+                                server.roles.push(this[5]);
+                                if(this[6]){
+                                    server.roles.push(this[6]);
                                 }
 
 
