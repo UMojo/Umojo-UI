@@ -202,10 +202,10 @@ winkstart.module('auth', 'auth',
             rest_data = {
                 crossbar : true,
                 api_url : winkstart.apps[app_name].api_url,
-                realm : winkstart.apps['auth'].realm,                   // Treat auth as global
-                auth_token : winkstart.apps['auth'].auth_token,         // Treat auth as global
-                account_id : winkstart.apps['auth'].account_id,         // Treat auth as global
-                user_id : winkstart.apps['auth'].user_id                // Treat auth as global
+                data: {
+                    realm : winkstart.apps['auth'].realm,                     // Treat auth as global
+                    shared_token : winkstart.apps['auth'].auth_token          // Treat auth as global
+                }
             };
 
             winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
