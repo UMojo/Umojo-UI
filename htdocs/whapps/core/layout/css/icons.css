@@ -144,6 +144,10 @@
     background-position: -448px -229px;
 }
 
+.icon.ring_group { /* 18, 5 Needs to change to a better one */
+    background-position: -576px -165px;
+}
+
 
 /************** ICONS ************/
 .icon.phone {

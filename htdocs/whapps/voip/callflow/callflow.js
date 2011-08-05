@@ -797,10 +797,10 @@ winkstart.module('voip', 'callflow',
          var THIS = this;
          var buf = $(this.config.elements.buf);
          var tools = THIS.templates.tools.tmpl({categories: THIS.categories});
-
          tools.find('.category').click(function () {
-            $(this).toggleClass('voicemail_apps');
-            $(this).children().toggleClass('open');
+            //$(this).toggleClass('voicemail_apps');
+            //$(this).children().toggleClass('open');
+            $(this).find('.activeArrow').size() > 0 ? $('.arrow_category').removeClass('activeArrow').addClass('inactiveArrow') : $('.arrow_category').removeClass('inactiveArrow').addClass('activeArrow');
             var current = $(this);
             while(current.next().hasClass('tool') ||
                   current.next().hasClass('app_list_nav') ||
@@ -838,6 +838,7 @@ winkstart.module('voip', 'callflow',
 
          tools.find('.action').each(function () { action($(this)); });
 
+         tools.find('#basic').find('.text_category').html('List of Applications');
          return tools;
       },
 
