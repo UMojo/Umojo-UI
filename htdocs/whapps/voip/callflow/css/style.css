@@ -21,7 +21,7 @@
 #ws_callflow #search #searchsubmit { float: left;}
 #ws_callflow #search #searchfield { background: url(images/search_mid.png) repeat-x; border: medium none; float: left; height: 20px; width: 120px;}
 
-#ws_callflow > .callflow { float: left; width: 80%;}
+#ws_callflow > .callflow { float: left; width: 85%;}
 #ws_callflow .callflow.add_num {  width: 830px;}
 #ws_callflow .callflow.app_tree { width: 638px;}
 #ws_callflow .callflow #add_new_number { background: url(images/bg_add_number.png) no-repeat; width: 239px; height: 152px; margin: 100px auto 0;}
