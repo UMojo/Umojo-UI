@@ -202,17 +202,17 @@ winkstart.module('auth', 'auth',
             rest_data = {
                 crossbar : true,
                 api_url : winkstart.apps[app_name].api_url,
-                realm : winkstart.apps['auth'].realm,                   // Treat auth as global
-                auth_token : winkstart.apps['auth'].auth_token,         // Treat auth as global
-                account_id : winkstart.apps['auth'].account_id,         // Treat auth as global
-                user_id : winkstart.apps['auth'].user_id                // Treat auth as global
+                data: {
+                    realm : winkstart.apps['auth'].realm,                     // Treat auth as global
+                    shared_token : winkstart.apps['auth'].auth_token          // Treat auth as global
+                }
             };
 
             winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
                 // If this is successful, we'll get a server-specific auth token back
                 winkstart.apps[app_name]['auth_token'] = json.auth_token;
 
-                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
+                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: winkstart.apps['auth'].account_id, user_id: winkstart.apps['auth'].user_id}, function(json, xhr) {
                     $('#my_account').show().html("&nbsp;"+json.data.username);
                     $('#my_logout').html("Logout");
                     $('.main_nav').show();

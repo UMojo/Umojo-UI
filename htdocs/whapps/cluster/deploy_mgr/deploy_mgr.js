@@ -65,6 +65,13 @@ winkstart.module('cluster', 'deploy_mgr',
             {name : '#ssh_port_7_7', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
             {name : '#root_password_7_7', regex : /^.+$/}
         ],
+        
+        validationTab3 : [
+            {name : '#hostnameNewServer', regex : /^.+$/},
+            {name : '#ipNewServer', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
+            {name : '#sshNewServer', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
+            {name : '#passwordNewServer', regex : /^.+$/}
+        ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
@@ -112,12 +119,16 @@ winkstart.module('cluster', 'deploy_mgr',
             var THIS = this;
             
             if (state == 'save') {
-                if(tab != '2') {
+                if(tab != '2' && tab != '3') {
                     $(THIS.config.validationTab1).each(function(k, v) {
                         winkstart.validate.save($(v.name), v.regex);
                     });
-                } else {
+                } else if (tab == '2') {
                     $(THIS.config.validationTab2).each(function(k, v) {
+                        winkstart.validate.save($(v.name), v.regex);
+                    });
+                } else if (tab == '3') {
+                    $(THIS.config.validationTab3).each(function(k, v) {
                         winkstart.validate.save($(v.name), v.regex);
                     });
                 }
@@ -126,6 +137,9 @@ winkstart.module('cluster', 'deploy_mgr',
                     winkstart.validate.add($(v.name), v.regex);
                 });
                 $(THIS.config.validationTab2).each(function(k, v) {
+                    winkstart.validate.add($(v.name), v.regex);
+                });
+                $(THIS.config.validationTab3).each(function(k, v) {
                     winkstart.validate.add($(v.name), v.regex);
                 });
             }
@@ -141,15 +155,25 @@ winkstart.module('cluster', 'deploy_mgr',
             THIS.templates.newserver.tmpl().appendTo('#server_dialog');
             
             $('#server_dialog').dialog({
+                height: '320',
+                width: '310',
                 open:function(){
-                    $('#serverinfo a.save_btn').live('click', function() {
+                    THIS.validateForm();
+                    $('#serverinfo a.save_btnServer').live('click', function() {
                         var data = form2object('serverinfo');
-                        data.roles = new Array();                      
+                        data.roles = new Array();                    
                         $('input[name="roles"]:checked', '#serverinfo').each(function(){
                             data.roles.push($(this).val());
                         });
-                        $('#server_dialog').dialog('close');
-                        winkstart.publish('deploy_mgr.addServer', data);
+                        
+                        THIS.validateForm('save', '3');
+                        
+                        if(!$('.invalid').size() && $('.checkboxRoleServer:checked').size() != 0) {
+                            $('#server_dialog').dialog('close');
+                            winkstart.publish('deploy_mgr.addServer', data);
+                        } else {
+                            alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
+                        }
                     })
                 }
             });
@@ -172,7 +196,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 width: 480,
                 open: function(){
                     THIS.validateForm();
-                    $('#serverinfo_dev a.save_btn').live('click', function() {
+                    $('#serverinfo_dev a.save_btnServer').live('click', function() {
                         var data = form2object('serverinfo_dev');
                         data.roles = new Array('all_in_one');
                         
@@ -186,7 +210,7 @@ winkstart.module('cluster', 'deploy_mgr',
                             alert ('Please correct errors that you have on the form.');
                         }
                     });
-                    $('#serverinfo_prod a.save_btn').live('click', function() {
+                    $('#serverinfo_prod a.save_btnServer').live('click', function() {
                         var data = form2object('serverinfo_prod');
                         
                         // Validation in the prod case
@@ -198,12 +222,13 @@ winkstart.module('cluster', 'deploy_mgr',
                                     hostname: this[0],
                                     ip: this[1],
                                     ssh_port: this[2],
-                                    password: this[3]
+                                    password: this[3],
+                                    os: this[4]
                                 };
                                 server.roles = new Array();
-                                server.roles.push(this[4]);
-                                if(this[5]){
-                                    server.roles.push(this[5]);
+                                server.roles.push(this[5]);
+                                if(this[6]){
+                                    server.roles.push(this[6]);
                                 }
 
 
@@ -232,7 +257,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {};
             rest_data.crossbar = true;
-            rest_data.account_id = '04152ed2b428922e99ac66f3a71b0215';
+            rest_data.account_id = winkstart.apps['cluster'].account_id;
             rest_data.data = serverData;
 
             winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
@@ -260,7 +285,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: '04152ed2b428922e99ac66f3a71b0215',
+                account_id: winkstart.apps['cluster'].account_id, 
                 server_id: serverId
             };
             winkstart.deleteJSON('deploy_mgr.deleteserver', rest_data, function (json, xhr) {
@@ -277,7 +302,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: '04152ed2b428922e99ac66f3a71b0215',
+                account_id: winkstart.apps['cluster'].account_id,
                 server_id: serverId
             };
 
@@ -294,7 +319,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: '04152ed2b428922e99ac66f3a71b0215'
+                account_id: winkstart.apps['cluster'].account_id
             };
             setInterval(function(){ 
                 $('.cluster').find('.server').each(function(){
@@ -338,7 +363,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             winkstart.getJSON('deploy_mgr.list', {
                 crossbar: true, 
-                account_id: '04152ed2b428922e99ac66f3a71b0215'
+                account_id: winkstart.apps['cluster'].account_id 
             }, function(reply) {
                 $.each(reply.data, function(){
                     THIS.server_count++;
