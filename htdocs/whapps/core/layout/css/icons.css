@@ -92,8 +92,8 @@
     background-position: -160px -5px;
 }
 
-.icon.conference { /* 10, 5 */
-    background-position: -832px -165px;
+.icon.conference { /* 14, 3 */
+    background-position: -448px -96px;
 }
 
 .icon.device { /* 16, 5 */
@@ -144,7 +144,7 @@
     background-position: -448px -229px;
 }
 
-.icon.ring_group { /* 18, 5 Needs to change to a better one */
+.icon.ring_group { /* 10, 5 Needs to change to a better one */
     background-position: -320px -165px;
 }
 
