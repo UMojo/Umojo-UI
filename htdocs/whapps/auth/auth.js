@@ -96,7 +96,14 @@ winkstart.module('auth', 'auth',
                             'password' : $('#password', dialogRegister).val(),
                             'first_name': $('#first_name', dialogRegister).val() ,
                             'last_name':$('#last_name', dialogRegister).val(),
-                            'email': $('#email', dialogRegister).val()
+                            'email': $('#email', dialogRegister).val(),
+                            'apps': {
+                                "cluster": {
+                                   "label": "Cluster Manager",
+                                   "icon": "cluster_manager",
+                                   "api_url": "http://apps.2600hz.com:8000/v1"
+                               }
+                             }
                         }
                     }
                 };
