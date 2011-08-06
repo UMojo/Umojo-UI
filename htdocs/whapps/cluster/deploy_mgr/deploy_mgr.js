@@ -257,7 +257,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {};
             rest_data.crossbar = true;
-            rest_data.account_id = winkstart.apps['cluster'].account_id;
+            rest_data.account_id = winkstart.apps['auth'].account_id;
             rest_data.data = serverData;
 
             winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
@@ -285,7 +285,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: winkstart.apps['cluster'].account_id, 
+                account_id: winkstart.apps['auth'].account_id, 
                 server_id: serverId
             };
             winkstart.deleteJSON('deploy_mgr.deleteserver', rest_data, function (json, xhr) {
@@ -302,7 +302,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: winkstart.apps['cluster'].account_id,
+                account_id: winkstart.apps['auth'].account_id,
                 server_id: serverId
             };
 
@@ -319,7 +319,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var rest_data = {
                 crossbar: true,
-                account_id: winkstart.apps['cluster'].account_id
+                account_id: winkstart.apps['auth'].account_id
             };
             setInterval(function(){ 
                 $('.cluster').find('.server').each(function(){
@@ -363,7 +363,7 @@ winkstart.module('cluster', 'deploy_mgr',
             
             winkstart.getJSON('deploy_mgr.list', {
                 crossbar: true, 
-                account_id: winkstart.apps['cluster'].account_id 
+                account_id: winkstart.apps['auth'].account_id 
             }, function(reply) {
                 $.each(reply.data, function(){
                     THIS.server_count++;

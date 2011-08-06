@@ -83,7 +83,7 @@ winkstart.module('auth', 'auth',
                     data : {
                         'account': {
                             'realm': realm,
-                            'app_url': window.location.href
+                            'app_url': window.location.href.replace(/#/, '')
                         },
                         'user': {
                             'username':$('#username', dialogRegister).val(),
