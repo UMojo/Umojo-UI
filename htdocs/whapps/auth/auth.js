@@ -178,6 +178,7 @@ winkstart.module('auth', 'auth',
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
                     winkstart.apps[k] = v;
+                    winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
                     
                     // TODO: This is a hack. This should not be done - instead, a failback routine should go into the core
                     /*winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
