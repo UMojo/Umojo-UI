@@ -138,6 +138,12 @@ a.save_btnServer {
     line-height: 27px;
     margin: auto;
     margin-top: 10px;
+    color: white;
+}
+
+a.save_btnServer:hover {
+	color: #05AFDC;
+    cursor: pointer;
 }
 
 .heading{
