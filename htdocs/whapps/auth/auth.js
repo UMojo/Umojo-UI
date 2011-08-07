@@ -115,7 +115,6 @@ winkstart.module('auth', 'auth',
         },
 
         login: function() {
-            console.log('GOT HERE');
             var THIS = this;
             
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({}), {
@@ -125,7 +124,6 @@ winkstart.module('auth', 'auth',
             });
 
             $('button.login', dialogDiv).click(function(event) {
-                console.log('OR HERE');
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
@@ -177,7 +175,7 @@ winkstart.module('auth', 'auth',
         },
 
         load_account: function(args) {
-            console.log('Loading your apps!');
+            winkstart.log('Loading your apps!');
             rest_data = {
                 crossbar : true,
                 account_id : winkstart.apps['auth'].account_id,
@@ -218,6 +216,7 @@ winkstart.module('auth', 'auth',
                 api_url : winkstart.apps[app_name].api_url,
                 data: {
                     realm : winkstart.apps['auth'].realm,                     // Treat auth as global
+                    account_id : winkstart.apps['auth'].account_id,           // Treat auth as global
                     shared_token : winkstart.apps['auth'].auth_token          // Treat auth as global
                 }
             };
@@ -270,7 +269,7 @@ winkstart.module('auth', 'auth',
 /*            if(ACTIVATION_KEY) {
                 var rest_data = { activtion_key : ACTIVATION_KEY, data: {} };
                 winkstart.postJSON('auth.activate', rest_data, function (json, xhr) {
-                    console.log(json);
+                    winkstart.log(json);
                     REALM_LOGIN = json.data.account.realm;
                     alert('You are now registered');
                 });

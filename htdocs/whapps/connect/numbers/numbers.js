@@ -707,7 +707,7 @@ winkstart.module('connect', 'numbers',
 	                    	account_id: '2600hz',
                         	data : {'NPA': NPA, 'NXX': NXX},
 	                        callback: function(results) {
-	                            console.log('Found these #s:', results);
+	                            winkstart.log('Found these #s:', results);
 
                             // Draw results on screen
                             $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
@@ -867,7 +867,7 @@ winkstart.module('connect', 'numbers',
                 }
             });
 
-            console.log(tmp);
+            winkstart.log(tmp);
 
             winkstart.log('Refreshing DIDs...');
             $('#my_numbers').empty();
@@ -962,7 +962,7 @@ winkstart.module('connect', 'numbers',
 
 /*        post_failover: function(data) {
             var THIS = this;
-            console.log(data);
+            winkstart.log(data);
             if(data.number == '') {
                 delete  THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover;
             } else {

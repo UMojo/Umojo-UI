@@ -162,7 +162,7 @@ winkstart.module('voip', 'registration',
 						var humanDate = friendlyDate.toLocaleDateString();
 						var humanTime = friendlyDate.toLocaleTimeString(); 
                                 
-						console.log(reply.data);
+						winkstart.log(reply.data);
      
 						var stringToDisplay = 'Details of Registration\\n';
 						stringToDisplay += '\\nid: ' + reply.data.id; 
@@ -232,7 +232,7 @@ winkstart.module('voip', 'registration',
 			{
 				'sTitle': 'Details',
 				'fnRender': function(obj) {
-					console.log(obj);
+					winkstart.log(obj);
 					var reg_details = obj.aData[obj.iDataColumn];
 					return '<a href="#" onClick="alert(\''+reg_details+'\');">Details</a>';
 				}

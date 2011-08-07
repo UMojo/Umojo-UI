@@ -200,7 +200,7 @@ winkstart.module('voip', 'menu',
             }
 
             var menu_id = form_data.data.id;
-            console.log(form_data);    
+            winkstart.log(form_data);
             //Hack to display time in seconds for the user.
             form_data.data.timeout = form_data.data.timeout / 1000;
             // Paint the template with HTML of form fields onto the page 
@@ -248,7 +248,7 @@ winkstart.module('voip', 'menu',
 
                 // Grab all the form field data 
                 var form_data = form2object('menu-form');
-                console.log(form_data);
+                winkstart.log(form_data);
 
                 if(form_data.max_extension_length == undefined) {
                     form_data.max_extension_length = form_data.record_pin.length;

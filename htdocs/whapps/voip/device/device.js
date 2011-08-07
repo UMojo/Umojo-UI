@@ -204,7 +204,7 @@ winkstart.module('voip', 'device',
             var generatedUsername = "user_" + THIS.generateRandomString(6); 
             
             winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(json, xhr) {
-                console.log(json.data.realm);
+                winkstart.log(json.data.realm);
                 var form_data = {
                     data : {
                         mac_address: "12:34:56:78:9A:BC",
@@ -298,7 +298,7 @@ winkstart.module('voip', 'device',
             var THIS = this;
             var device_id = form_data.data.id;
 
-            console.log(form_data);
+            winkstart.log(form_data);
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
 

@@ -74,8 +74,8 @@ winkstart.module('voip', 'cdr',
 			$('#ws-content').empty();
 
 			// Grab doc.Call-Direction, doc.Call-ID, doc.Callee-ID-Name, doc.Callee-ID-Number, doc.Caller-ID-Name, doc.Caller-ID-Number, doc.Custom-Channel-Vars, doc.
-		console.log(json);
-		console.log(json.rows[0].doc['From-Uri'],  json.rows[0].doc['To-Uri']);
+		winkstart.log(json);
+		winkstart.log(json.rows[0].doc['From-Uri'],  json.rows[0].doc['To-Uri']);
 
 		             /*<div>{data.doc['From-Uri']}</div> */
             THIS.templates.results.tmpl({data:json.rows}).appendTo( $('#ws-content') );

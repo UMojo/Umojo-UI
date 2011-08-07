@@ -58,7 +58,7 @@ winkstart.module('connect', 'endpoint',
 
         // Tie to DOM events
         $('#ws-content').delegate('.endpoint.delete', 'click', function(event, target) {
-            console.log(event, target);
+            winkstart.log(event, target);
             winkstart.publish('endpoint.delete');
         });
 

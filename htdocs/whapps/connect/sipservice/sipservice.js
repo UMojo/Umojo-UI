@@ -118,6 +118,7 @@ winkstart.module('connect', 'sipservice',
         // Only one option for now - go ahead and open it up!
         winkstart.publish('subnav.activate', 'sipservice');
 
+        winkstart.publish('sipservice.activate');
     }, // End initialization routine
 
 

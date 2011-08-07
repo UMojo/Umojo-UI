@@ -368,7 +368,7 @@ winkstart.module('voip', 'callflow',
                     var node_name = node.actionName,
                         popup = THIS.templates.ring_group_dialog.tmpl({});
 
-                    console.log(node.data.data);
+                    winkstart.log(node.data.data);
                     winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                         $.each(json.data, function() {
                             $('.available ul', popup).append('<li id="' + this.id + '">' + this.name + '</li>');
@@ -380,7 +380,7 @@ winkstart.module('voip', 'callflow',
                         else { 
                             if(node.data.data.endpoints != undefined) {
                                 $.each(node.data.data.endpoints, function() { 
-                                    console.log(this);
+                                    winkstart.log(this);
                                     $('.available ul #' + this.id, popup).detach().appendTo($('.ring_group ul', popup));
                                 });
                             }
