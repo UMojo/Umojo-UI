@@ -2,15 +2,35 @@
     clear: left;
     width: 100%;
 }
-#ringgroup .wrapperForm {
+#ringgroup .wrapper_form {
     margin-top: 20px;
+    margin-left: 40px;
+}
+
+#ringgroup .wrapper .column {
+    width: 200px;
+}
+
+#ringgroup .wrapper .column.right {
+    float: right;
+}
+
+#ringgroup .wrapper .column.left {
+    float: left;
+}
+
+#ringgroup .wrapper .title_column {
+    background-color: #AFAFAF;
+    height: 18px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
 }
 
 #ringgroup .wrapper .available {
     background-color: #AFAFAF;
     height: 250px;
-    width: 150px;
-    float: left;
+    width: 200px;
     overflow: auto;
 }
 
@@ -21,8 +41,7 @@
 #ringgroup .wrapper .ring_group {
     background-color: #AFAFAF;
     height: 250px;
-    width: 150px;
-    float: right;
+    width: 200px;
     overflow: auto;
 }
 
@@ -33,6 +52,7 @@
 #ringgroup .wrapper li {
     list-style-type: none;
     background-color: #808080;
+    color: white;
     border-bottom: 1px solid #DEDEDE;
     border-top: 1px solid #5F5F5F;
     display: block;
