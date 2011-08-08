@@ -8,7 +8,8 @@ winkstart.module('voip', 'voip', {
         },
 
         subscribe: {
-            'voip.activate' : 'activate'
+            'voip.activate' : 'activate',
+            'voip.initialized' : 'initialized'
         }
     },
     function() {
@@ -16,22 +17,33 @@ winkstart.module('voip', 'voip', {
         winkstart.publish('appnav.add', { 'name' : this.__module });
     },
     {
-        initialized :   false,
+        is_initialized :   false,
         modules :       ['account', 'media', 'device', 'callflow', 'conference', 'user', 'vmbox', 'menu', 'registration', 'resource', 'timeofday'],
-        
-        activate: function() {
+        loaded_modules : [],
+
+        initialized: function() {
             var THIS = this;
 
-            if (!winkstart.apps[this.__module].auth_token) {                    // Is this app authenticated?
-                winkstart.publish('auth.shared_auth', { app_name : this.__module });
-            } else if (!THIS.initialized) {                                 // Is this app initialized?
-                winkstart.registerResources(this.__whapp, this.config.resources);
+            winkstart.publish('subnav.show', THIS.__module);
+        },
+        
+        activate: function() {
+            var THIS = this,
+                mod_count;
+
+            if (!THIS.is_initialized) {                                 // Is this app initialized?
+                winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
                 // Load the modules
+                mod_count = THIS.modules.length;
                 $.each(THIS.modules, function(k, v) {
                     winkstart.module.loadModule('voip', v, function() {
                         this.init(function() {
                             winkstart.log('VoIP: Initialized ' + v);
+                            
+                            if(!--mod_count) {
+                                winkstart.publish('voip.initialized', {});
+                            }
                         });
                     });
                 });
@@ -76,13 +88,13 @@ winkstart.module('voip', 'voip', {
                     winkstart.publish('timeofday.activate');
                 });
 
-                THIS.initialized = true;
+                THIS.is_initialized = true;
             } else {
                 // Already initialized - just show main page
 
                 $('#ws-content').empty();
                 THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
             }
-        }
+        },
     }
 );

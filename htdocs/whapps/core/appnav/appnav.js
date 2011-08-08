@@ -14,7 +14,9 @@ winkstart.module('core', 'appnav', {
             'appnav.add'        : 'add',
             'appnav.activate'   : 'activate',
             'appnav.remove'     : 'remove',
-            'subnav.add'        : 'sub_add'
+            'subnav.add'        : 'sub_add',
+            'subnav.show'       : 'show_menu',
+            'subnav.hide'       : 'hide_menu'
         }
         
     },
@@ -48,14 +50,10 @@ winkstart.module('core', 'appnav', {
                 interval: 40,
                 timeout: 300,
                 over: function() {
-                    if($(this).attr('menu') != 'false') {
-                        $('.dropdown', $(this)).slideDown(100);
-                    }
+                    winkstart.publish('subnav.show', args.name);
                 },
                 out: function() {
-                    if($(this).attr('menu') != 'false') {
-                        $('.dropdown', $(this)).slideUp(100);
-                    }
+                    winkstart.publish('subnav.hide', args.name);
                 }
             });
 
@@ -91,19 +89,39 @@ winkstart.module('core', 'appnav', {
             });
         },
 
+        show_menu: function(module_name) {
+            var module = $('li[module-name=' + module_name + ']', '.main_nav > ul');
+
+            if(module.attr('menu') != 'false') {
+                $('.dropdown', module).slideDown(100);
+            }
+        },
+
+        hide_menu: function(module_name) {
+            var module = $('li[module-name=' + module_name + ']', '.main_nav > ul');
+
+            if(module.attr('menu') != 'false') {
+                $('.dropdown', module).slideUp(100);
+            }
+        },
+
         activate: function(app_name) {
+            var THIS = this;
             // TODO: De-activate current app & unload it
 
             if(winkstart.apps[app_name].auth_token != null) {
-                // Logged in for this app?
-                winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
-                winkstart.publish ( app_name + '.activate', { });
+                THIS._activate(app_name);
             } else {
                 // Not logged in for this app...
 
                 // TODO: This is where failback should go.
-                winkstart.publish ('auth.shared_auth', { app_name : app_name });
+                winkstart.publish ('auth.shared_auth', { app_name : app_name, callback : THIS._activate });
             }
+        },
+
+        _activate: function(app_name) {
+            winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
+            winkstart.publish ( app_name + '.activate', { });
         },
 
         remove: function() {

@@ -189,7 +189,10 @@ winkstart.module('auth', 'auth',
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
                     winkstart.apps[k] = v;
-                    winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+
+                    if(!v.account_id) {
+                        winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+                    }
                     
                     // TODO: This is a hack. This should not be done - instead, a failback routine should go into the core
                     /*winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
@@ -208,8 +211,9 @@ winkstart.module('auth', 'auth',
         // Use this to attempt a shared auth token login if the requested app doesn't have it's own auth token.
         // TODO: If this fails, pop-up a login box for this particular app
         shared_auth: function(args) {
-            var THIS = this;
-            var app_name = args.app_name;
+            var THIS = this,
+                app_name = args.app_name,
+                callback = args.callback;
 
             rest_data = {
                 crossbar : true,
@@ -229,6 +233,10 @@ winkstart.module('auth', 'auth',
                     $('#my_account').show().html("&nbsp;"+json.data.username);
                     $('#my_logout').html("Logout");
                     $('.main_nav').show();
+
+                    if(typeof callback == 'function') {
+                        callback(app_name);
+                    }
                 });
             });
 
