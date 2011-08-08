@@ -400,6 +400,9 @@ winkstart.module('voip', 'callflow',
 
                         $('.available ul, .ring_group ul', popup).sortable({
                             connectWith: '#ringgroup .wrapper .connect',
+                            zIndex: 2000,
+                            helper: 'clone',
+                            appendTo: '#ringgroup .wrapper',
                             receive: function() {
                                 $(this).parents('.scrollable').data('jsp').reinitialise();
                             },
