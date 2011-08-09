@@ -371,7 +371,7 @@ winkstart.module('voip', 'callflow',
                     winkstart.log(node.data.data);
                     winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                         $.each(json.data, function() {
-                            $('.available ul', popup).append('<li id="' + this.id + '"><a href="#" class="drag_btn"></a>&nbsp;&nbsp;' + this.name + '</li>');
+                            $('.available ul', popup).append('<li id="' + this.id + '"><a href="#" class="drag_btn"></a>&nbsp;&nbsp;' + this.name.substr(0,15) + '</li>');
                         });
 
                         if(node.data.data == undefined) {
@@ -394,7 +394,7 @@ winkstart.module('voip', 'callflow',
                             }
                         }
 
-                        popup.dialog({width:400});
+                        popup.dialog({width:500, title: 'Ring group'});
 
                         $('.scrollable', popup).jScrollPane();
 

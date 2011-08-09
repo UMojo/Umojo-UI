@@ -2,35 +2,38 @@
     <div class="popup container_resize">
         <div class="resize">
             <div id="ringgroup" class="stylized myform">
-                <h3>Ring Groups</h3>
                 <div class="wrapper">
-                    <div class="available scrollable">
-                        <ul class="connect">
-                        </ul>
+                    <div class="column left">
+                        <div class="title_column">Available Devices</div>
+                        <div class="available scrollable">
+                            <ul class="connect">
+                            </ul>
+                        </div>
                     </div>
-                    <div class="ring_group scrollable">
-                        <ul class="connect">
-                        </ul>
-                    </div>
+                    <div class="column right">
+                        <div class="title_column">Assigned Devices</div>
+                        <div class="ring_group scrollable">
+                            <ul class="connect">
+                            </ul>
+                        </div>
+                    </div> 
                 </div>
                 <div class="clear"/>
-                <div class="wrapperForm">
-                    <form>
-                        <div class="options">
-                            <div>
-                                <label>Ring Strategy</label>
-                                <select id="strategy">
-                                    <option value="simultaneous">At the same time</option>
-                                    <option value="single">One at a time</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Timeout</label>
-                                <input id="timeout" type="text"/>
-                                <div class="clear"/>
-                            </div>
+                <div class="wrapper_form">
+                    <div class="options">
+                        <div>
+                            <label>Ring Strategy</label>
+                            <select id="strategy">
+                                <option value="simultaneous">At the same time</option>
+                                <option value="single">One at a time</option>
+                            </select>
                         </div>
-                    </form>
+                        <div>
+                            <label>Timeout</label>
+                            <input id="timeout" type="text"/>
+                            <div class="clear"/>
+                        </div>
+                    </div>
                 </div>
                 <form name="form" method="post" action="#">
                     <div class="btn_wrapper">
