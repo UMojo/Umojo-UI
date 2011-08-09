@@ -14,6 +14,10 @@
     overflow: auto;
 }
 
+#ringgroup .wrapper .connect {
+    min-height: 250px;
+}
+
 #ringgroup .wrapper .ring_group {
     background-color: #AFAFAF;
     height: 250px;
