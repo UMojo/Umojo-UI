@@ -3,14 +3,15 @@ winkstart.module('core', 'myaccount',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-        'css/style.css'
+        'css/style.css',
         ],
 
         /* What HTML templates will we be using? */
         templates: {
             myaccount: 'tmpl/myaccount.html',
             billing: 'tmpl/billing.html',
-            apps: 'tmpl/apps.html'
+            apps: 'tmpl/apps.html',
+            userlevel: 'tmpl/userlevel.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -47,8 +48,8 @@ winkstart.module('core', 'myaccount',
         winkstart.registerResources(this.__whapp, this.config.resources);
 
         // This app is slightly invasive - it assumes it should always be bound to an element named my_account anywhere on the page
-        $('a#my_account').live('click', function() {
-            if(AUTH_TOKEN != '') {
+        $('#my_account').live('click', function() {
+            if(winkstart.apps['auth'].auth_token != '') {
                 winkstart.publish('myaccount.display');
             }
             else {
@@ -179,10 +180,17 @@ winkstart.module('core', 'myaccount',
 
 
         display: function() {
-            dialog = winkstart.dialog(this.templates.myaccount.tmpl());
-
-            $('#billing', dialog).append(this.templates.billing.tmpl());
-            $('#apps', dialog).append(this.templates.apps.tmpl());
+            var THIS = this;
+            
+            THIS.templates.myaccount.tmpl().dialog({
+                height: '600',
+                width: '500',
+                open:function(){
+                    THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
+                    THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
+                    THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
+                }
+            });
         }
     }
 );  // End module
