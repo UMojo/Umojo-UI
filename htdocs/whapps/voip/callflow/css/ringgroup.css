@@ -2,9 +2,12 @@
     clear: left;
     width: 100%;
 }
+#ringgroup .wrapperForm {
+    margin-top: 20px;
+}
 
 #ringgroup .wrapper .available {
-    background-color: red;
+    background-color: #AFAFAF;
     height: 250px;
     width: 150px;
     float: left;
@@ -12,21 +15,38 @@
 }
 
 #ringgroup .wrapper .ring_group {
-    background-color: yellow;
+    background-color: #AFAFAF;
     height: 250px;
     width: 150px;
     float: right;
     overflow: auto;
 }
 
-#ringgroup .wrapper ul {
-    min-height: 250px;
+#ringgroup .wrapper {
+    background-color: #808080;
 }
 
-#ringgroup .wrapper ul li {
+#ringgroup .wrapper li {
     list-style-type: none;
+    background-color: #808080;
+    border-bottom: 1px solid #DEDEDE;
+    border-top: 1px solid #5F5F5F;
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    list-style-type: none;
+    position: relative;
 }
-
+#ringgroup .wrapper li:hover {
+    background-color: #0097BB;
+}
+#ringgroup .wrapper li a.drag_btn{
+    background-color: #808080;
+    background-image: url("../images/drag_btn.png");
+    float: left;
+    height: 22px;
+    width: 9px;
+}
 #ringgroup .options {
     
 }

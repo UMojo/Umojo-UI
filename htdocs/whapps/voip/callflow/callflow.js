@@ -371,7 +371,7 @@ winkstart.module('voip', 'callflow',
                     winkstart.log(node.data.data);
                     winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id}, function(json) {
                         $.each(json.data, function() {
-                            $('.available ul', popup).append('<li id="' + this.id + '">' + this.name + '</li>');
+                            $('.available ul', popup).append('<li id="' + this.id + '"><a href="#" class="drag_btn"></a>&nbsp;&nbsp;' + this.name + '</li>');
                         });
 
                         if(node.data.data == undefined) {

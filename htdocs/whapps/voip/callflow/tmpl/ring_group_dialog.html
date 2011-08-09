@@ -13,22 +13,25 @@
                         </ul>
                     </div>
                 </div>
-                <form>
-                    <div class="options">
-                        <div>
-                            <label>Ring Strategy</label>
-                            <select id="strategy">
-                                <option value="simultaneous">At the same time</option>
-                                <option value="single">One at a time</option>
-                            </select>
+                <div class="clear"/>
+                <div class="wrapperForm">
+                    <form>
+                        <div class="options">
+                            <div>
+                                <label>Ring Strategy</label>
+                                <select id="strategy">
+                                    <option value="simultaneous">At the same time</option>
+                                    <option value="single">One at a time</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Timeout</label>
+                                <input id="timeout" type="text"/>
+                                <div class="clear"/>
+                            </div>
                         </div>
-                        <div>
-                            <label>Timeout</label>
-                            <input id="timeout" type="text"/>
-                            <div class="clear"/>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
                 <form name="form" method="post" action="#">
                     <div class="btn_wrapper">
                         <a href="javascript:void(0)" id="add" class="submit_btn ctr">Save</a><br>
