@@ -135,8 +135,8 @@ winkstart.module('connect', 'numbers',
             winkstart.publish('numbers.add_number_prompt');
         });
 
-        $('#ws-content').delegate('.numbers.port', 'click', function() {
-            winkstart.publish('numbers.port');
+        $('#ws-content').delegate('.numbers.import', 'click', function() {
+            winkstart.publish('numbers.port_number');
         });
 
 
