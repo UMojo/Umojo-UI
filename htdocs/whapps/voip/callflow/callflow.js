@@ -339,7 +339,7 @@ winkstart.module('voip', 'callflow',
                node_html = THIS.templates.root.tmpl({numbers: THIS.flow.numbers.toString()});
 
                node_html.find('.btn_plus_sm').click(function() {
-                    var dialog = THIS.templates.add_number.tmpl({}).dialog();
+                    var dialog = THIS.templates.add_number.tmpl({}).dialog({width: 400, title: 'Add a number', resizable: 'false'});
                     
                     dialog.find('.submit_btn').click(function() {
                         THIS.flow.numbers.push(dialog.find('#number').val());
@@ -394,7 +394,7 @@ winkstart.module('voip', 'callflow',
                             }
                         }
 
-                        popup.dialog({width:500, title: 'Ring group'});
+                        popup.dialog({width:500, title: 'Ring group', resizable: 'false'});
 
                         $('.scrollable', popup).jScrollPane();
 
@@ -726,7 +726,7 @@ winkstart.module('voip', 'callflow',
          }); 
          flow.find('.a_link_option').click( function() {
             var data = {}, popup = function(){
-                var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400});
+                var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400, title: 'Settings'});
                 dialog.find('.submit_btn').click(function() {
                         branch.key = $('#option-selector', dialog).val();
                         if(branch.parent.actionName != 'menu' && branch.parent.actionName != 'offnet') {
