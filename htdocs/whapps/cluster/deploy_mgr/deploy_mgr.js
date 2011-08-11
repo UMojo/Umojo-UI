@@ -575,8 +575,7 @@ winkstart.module('cluster', 'deploy_mgr',
 			$.each($('body').find('*[tooltip]'), function(){
 				
 				var options = {
-					xMove: -150,					 
-					yMove: -100
+                    attach: 'body'
 				};
 				
 				$(this).tooltip(options);
