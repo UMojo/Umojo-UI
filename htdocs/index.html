@@ -66,12 +66,6 @@
         <!-- Postload variable declaration -->
 
         <script type="text/javascript">
-            //var CROSSBAR_REST_API_ENDPOINT = 'http://apps002-dev-ord.2600hz.com:8000/v1';
-            //var CROSSBAR_REST_API_ENDPOINT = 'http://apps001-demo-ord.2600hz.com:8000/v1';
-            /* var CURRENT_USER_ID = null;
-            var GLOBAL_ACCOUNT_ID = null;
-            var GLOBAL_AUTH_TOKEN = null;
-            var REALM_LOGIN = null;*/
             var CURRENT_WHAPP = 'auth';
 
             winkstart.debug = true;
@@ -80,7 +74,7 @@
             // Additional modules will be loaded after the main page loads
             winkstart.apps = {
                 'auth' : {                                          // This is our global/failback auth mechanism
-                    'api_url': 'http://apps.2600hz.com:8000/v1',
+                    'api_url': 'http://apps002-dev-ord.2600hz.com:8000/v1',
                     'label' : 'Login',
                     'icon' : 'user',
                     'realm' : null,
