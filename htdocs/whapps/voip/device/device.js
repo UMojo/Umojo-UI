@@ -1,7 +1,7 @@
 winkstart.module('voip', 'device',
     {
         css: [
-            'css/device.css'
+        'css/device.css'
         ],
 
         /* What HTML templates will we be using? */
@@ -19,38 +19,172 @@ winkstart.module('voip', 'device',
         },
 
         formData: {
-                    //auth_methods: [{value: 'Password'}, {value:'IP Address'}],
-                    auth_methods: [{id: 'password', value: 'Password'}],
-                    invite_formats: [{id: 'username', value: 'Username'}, {id: 'npan', value:'NPANXXXXX'}, {id: 'e164', value:'E. 164'}],
-                    bypass_media_types: [{id: 'auto', value: 'Automatic'}, {id: 'true', value:'Never'}, {id: 'false', value:'Always'}],
-                    media_audio_codecs: [
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G729', value: 'G729', caption: 'G729 - 8kbps (Requires License)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711u / PCMU', value: 'PCMU', caption: 'G711u / PCMU - 64kbps (North America)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G711a / PCMA', value: 'PCMA', caption: 'G711a / PCMA - 64kbps (Elsewhere)'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722 (HD) @ 16kHz', value: 'G722_16', caption: 'G722 (HD) @ 16kHz'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'G722_32G722.1 (HD) @ 32kHz', value: 'G722_32', caption: 'G722_32G722.1 (HD) @ 32kHz'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 48kHz', value: 'CELT_48', caption: 'Siren (HD) @ 48kHz'},
-                            {field_id:'media_audio_codecs', field_name: 'media.audio.codecs[]', field_label: 'Siren (HD) @ 64kHz', value: 'CELT_64', caption: 'Siren (HD) @ 64kHz'}
-                    ],
-                    media_video_codecs: [
-                            {field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H261', value: 'H261', caption: 'H261'},
-                            {field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H263', value: 'H263', caption: 'H263'},
-                            {field_id:'media_video_codecs', field_name: 'media.video.codecs[]', field_label: 'H264', value: 'H264', caption: 'H264'}
-                    ],
-                    media_fax_codecs: [{value: 'Auto-Detect'}, {value:'Always Force'}, {value:'Disabled'}]
+            //auth_methods: [{value: 'Password'}, {value:'IP Address'}],
+            auth_methods: [{
+                id: 'password', 
+                value: 'Password'
+            }],
+            invite_formats: [{
+                id: 'username', 
+                value: 'Username'
+            }, {
+                id: 'npan', 
+                value:'NPANXXXXX'
+            }, {
+                id: 'e164', 
+                value:'E. 164'
+            }],
+            bypass_media_types: [{
+                id: 'auto', 
+                value: 'Automatic'
+            }, {
+                id: 'true', 
+                value:'Never'
+            }, {
+                id: 'false', 
+                value:'Always'
+            }],
+            media_audio_codecs: [
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'G729', 
+                value: 'G729', 
+                caption: 'G729 - 8kbps (Requires License)'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'G711u / PCMU', 
+                value: 'PCMU', 
+                caption: 'G711u / PCMU - 64kbps (North America)'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'G711a / PCMA', 
+                value: 'PCMA', 
+                caption: 'G711a / PCMA - 64kbps (Elsewhere)'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'G722 (HD) @ 16kHz', 
+                value: 'G722_16', 
+                caption: 'G722 (HD) @ 16kHz'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'G722_32G722.1 (HD) @ 32kHz', 
+                value: 'G722_32', 
+                caption: 'G722_32G722.1 (HD) @ 32kHz'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'Siren (HD) @ 48kHz', 
+                value: 'CELT_48', 
+                caption: 'Siren (HD) @ 48kHz'
+            },
+
+            {
+                field_id:'media_audio_codecs', 
+                field_name: 'media.audio.codecs[]', 
+                field_label: 'Siren (HD) @ 64kHz', 
+                value: 'CELT_64', 
+                caption: 'Siren (HD) @ 64kHz'
+            }
+            ],
+            media_video_codecs: [
+            {
+                field_id:'media_video_codecs', 
+                field_name: 'media.video.codecs[]', 
+                field_label: 'H261', 
+                value: 'H261', 
+                caption: 'H261'
+            },
+
+            {
+                field_id:'media_video_codecs', 
+                field_name: 'media.video.codecs[]', 
+                field_label: 'H263', 
+                value: 'H263', 
+                caption: 'H263'
+            },
+
+            {
+                field_id:'media_video_codecs', 
+                field_name: 'media.video.codecs[]', 
+                field_label: 'H264', 
+                value: 'H264', 
+                caption: 'H264'
+            }
+            ],
+            media_fax_codecs: [{
+                value: 'Auto-Detect'
+            }, {
+                value:'Always Force'
+            }, {
+                value:'Disabled'
+            }]
         },
 
         validation : [
-                {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
-                {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
-                {name : '#caller_id_name_internal', regex : /^.*$/},
-                {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
-                {name : '#caller_id_name_external', regex : /^.*$/},
-                {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
-                {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
-                {name : '#sip_username', regex : /^[^\s]+$/},
-                {name : '#sip_password', regex : /^[^\s]+$/},
-                {name : '#sip_expire_seconds', regex : /^[0-9]+$/}
+        {
+            name : '#name', 
+            regex : /^[a-zA-Z0-9\s_']+$/
+        },
+
+        {
+            name : '#mac_address', 
+            regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/
+        },
+
+        {
+            name : '#caller_id_name_internal', 
+            regex : /^.*$/
+        },
+
+        {
+            name : '#caller_id_number_internal', 
+            regex : /^[\+]?[0-9]*$/
+        },
+
+        {
+            name : '#caller_id_name_external', 
+            regex : /^.*$/
+        },
+
+        {
+            name : '#caller_id_number_external', 
+            regex : /^[\+]?[0-9]*$/
+        },
+
+        {
+            name : '#sip_realm', 
+            regex : /^[0-9A-Za-z\-\.\:]+$/
+        },
+
+        {
+            name : '#sip_username', 
+            regex : /^[^\s]+$/
+        },
+
+        {
+            name : '#sip_password', 
+            regex : /^[^\s]+$/
+        },
+
+        {
+            name : '#sip_expire_seconds', 
+            regex : /^[0-9]+$/
+        }
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -74,6 +208,11 @@ winkstart.module('voip', 'device',
                 url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'POST'
+            },
+            "device.filter":{
+                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices?filter_mac_address={mac_address}',
+                contentType: 'application/json',
+                verb: 'GET'
             },
             "device.delete": {
                 url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
@@ -137,7 +276,7 @@ winkstart.module('voip', 'device',
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
-
+                
                 /* Is this a create or edit? See if there's a known ID */
                 if (device_id) {
                     /* EDIT */
@@ -150,20 +289,30 @@ winkstart.module('voip', 'device',
                         });
                     });
                 } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('device.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editDevice({
-                            id: json.data.id
-                        });
-                    });
-                }
+                    winkstart.getJSON('device.filter', {
+                        crossbar: true,
+                        account_id: winkstart.apps['voip'].account_id,
+                        mac_address: form_data.mac_address
+                    }, function (json, xhr) {
+                        if(json.data.length == 0){
+                            /* CREATE */
+                            /* Actually send the JSON data to the server */
+                            winkstart.putJSON('device.create', rest_data, function (json, xhr) {
+                                THIS.renderList();
+                                THIS.editDevice({
+                                    id: json.data.id
+                                });
+                            });                           
+                        }else{
+                            alert('Mac address already used!');
+                        }
+                    });  
+                }  
             } else {
                 alert('Please correct errors that you have on the form.');
             }
         },
+        
         //Function to generate random usernames and passwords        
         generateRandomString: function(pLength){
             var chars = "0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz";
@@ -181,9 +330,27 @@ winkstart.module('voip', 'device',
             var form_data = {
                 data : {
                     mac_address: "12:34:56:78:9A:BC",
-                    caller_id : {'default' : { }, emergency : { }},
-                    media : {audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
-                    sip : { realm: 'blah.com', username: 'test', password: 'test', expire_seconds: "360"}
+                    caller_id : {
+                        'default' : { }, 
+                        emergency : { }
+                    },
+                    media : {
+                        audio : {
+                            codecs : ["PCMU", "PCMA"]
+                        }, 
+                        video : {
+                            codecs : []
+                        }, 
+                        fax: {
+                            codecs: []
+                        }
+                    },
+                    sip : {
+                        realm: 'blah.com', 
+                        username: 'test', 
+                        password: 'test', 
+                        expire_seconds: "360"
+                    }
                 }
             };
 
@@ -194,8 +361,8 @@ winkstart.module('voip', 'device',
         },
 
         /*
-         * Create/Edit device properties (don't pass an ID field to cause a create instead of an edit)
-         */
+     * Create/Edit device properties (don't pass an ID field to cause a create instead of an edit)
+     */
         editDevice: function(data){
             $('#device-view').empty();
             var THIS = this;
@@ -203,20 +370,45 @@ winkstart.module('voip', 'device',
             var generatedPassword = THIS.generateRandomString(12); 
             var generatedUsername = "user_" + THIS.generateRandomString(6); 
             
-            winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(json, xhr) {
+            winkstart.getJSON('account.get', {
+                crossbar: true, 
+                account_id: winkstart.apps['voip'].account_id
+            }, function(json, xhr) {
                 winkstart.log(json.data.realm);
                 var form_data = {
                     data : {
                         mac_address: "12:34:56:78:9A:BC",
-                        caller_id : {'default' : { }, emergency : { }},
-                        media : {bypass_media: "false", audio : {codecs : ["PCMU", "PCMA"]}, video : {codecs : []}, fax: {codecs: []}},
-                        sip : { realm: json.data.realm, username: generatedUsername, password: generatedPassword, expire_seconds: "360"}
+                        caller_id : {
+                            'default' : { }, 
+                            emergency : { }
+                        },
+                        media : {
+                            bypass_media: "false", 
+                            audio : {
+                                codecs : ["PCMU", "PCMA"]
+                            }, 
+                            video : {
+                                codecs : []
+                            }, 
+                            fax: {
+                                codecs: []
+                            }
+                        },
+                        sip : {
+                            realm: json.data.realm, 
+                            username: generatedUsername, 
+                            password: generatedPassword, 
+                            expire_seconds: "360"
+                        }
                     }
                 };
 
                 form_data.field_data = THIS.config.formData;
                 form_data.field_data.users = [];
-                winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function (json, xhr) {
+                winkstart.getJSON('user.list', {
+                    crossbar: true, 
+                    account_id: winkstart.apps['voip'].account_id
+                }, function (json, xhr) {
                     var listUsers = [];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
@@ -229,19 +421,22 @@ winkstart.module('voip', 'device',
                         
                         form_data.field_data.users = listUsers;
                     } else {
-                        listUsers.push({owner_id: '!', title: 'none'});
+                        listUsers.push({
+                            owner_id: '!', 
+                            title: 'none'
+                        });
                         form_data.field_data.users = listUsers;
                     }
                     if (data && data.id) {
-                    /* This is an existing device - Grab JSON data from server for device_id */
+                        /* This is an existing device - Grab JSON data from server for device_id */
                         winkstart.getJSON('device.get', {
                             crossbar: true,
                             account_id: winkstart.apps['voip'].account_id,
                             device_id: data.id
-                            }, function(json, xhr) {
-                                /* On success, take JSON and merge with default/empty fields */
-                                $.extend(true, form_data, json);
-                                THIS.renderDevice(form_data);
+                        }, function(json, xhr) {
+                            /* On success, take JSON and merge with default/empty fields */
+                            $.extend(true, form_data, json);
+                            THIS.renderDevice(form_data);
                         });
                     } else {
                         /* This is a new device - pass along empty params */
@@ -292,8 +487,8 @@ winkstart.module('voip', 'device',
         },
 
         /**
-         * Draw device fields/template and populate data, add validation. Works for both create & edit
-         */
+     * Draw device fields/template and populate data, add validation. Works for both create & edit
+     */
         renderDevice: function(form_data){
             var THIS = this;
             var device_id = form_data.data.id;
@@ -318,12 +513,16 @@ winkstart.module('voip', 'device',
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
                     $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
+                        $(".advanced_tabs_wrapper").animate({
+                            width: 'toggle'
+                        });
                     });
                 }
                 else {
                     $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
+                    $(".advanced_tabs_wrapper").animate({
+                        width: 'toggle'
+                    }, function(event) {
                         $(".advanced_pane").slideToggle();
                     });
                 }
@@ -367,13 +566,15 @@ winkstart.module('voip', 'device',
             });
             
             $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
+                $(this).tooltip({
+                    attach:'body'
+                });
             });
         },
 
         /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
+     * and populating into our standardized data list "thing".
+     */
         renderList: function(){
             var THIS = this;
 
@@ -417,9 +618,9 @@ winkstart.module('voip', 'device',
         },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
+     * if appropriate. You should also attach to any default click items you want to respond to when people click
+     * on them. Also register resources.
+     */
         activate: function(data) {
             /*    winkstart.putJSON('user_auth', rest_data, function (json, xhr) {
                     
@@ -451,4 +652,4 @@ winkstart.module('voip', 'device',
             THIS.renderList();
         }
     }
-);
+    );
