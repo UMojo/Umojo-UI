@@ -424,6 +424,10 @@ a.status5{
     height: 60%;
 }
 
+#welcomediv h1 {
+    text-align: center;
+}
+
 
 /*************************************
 -------------DATA LIST---------------
