@@ -185,6 +185,7 @@ winkstart.module('auth', 'auth',
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
                 $('a#my_logout').html("Logout");
                 $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name).show();
+                $('.homepage').html('');
 
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
@@ -225,12 +226,17 @@ winkstart.module('auth', 'auth',
                 }
             };
 
-            winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
-                // If this is successful, we'll get a server-specific auth token back
-                winkstart.apps[app_name]['auth_token'] = json.auth_token;
+            get_user_fn = function(auth_token) {
+                var options = {
+                    crossbar: true,
+                    account_id: winkstart.apps['auth'].account_id, 
+                    user_id: winkstart.apps['auth'].user_id
+                };
 
-                winkstart.getJSON('auth.get_user', {crossbar: true, account_id: winkstart.apps['auth'].account_id, user_id: winkstart.apps['auth'].user_id}, function(json, xhr) {
-                    $('#my_account').show().html("&nbsp;"+json.data.username);
+                winkstart.apps[app_name]['auth_token'] = auth_token;
+
+                winkstart.getJSON('auth.get_user', options, function(json, xhr) {
+                    $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name);
                     $('#my_logout').html("Logout");
                     $('.main_nav').show();
 
@@ -238,8 +244,17 @@ winkstart.module('auth', 'auth',
                         callback(app_name);
                     }
                 });
-            });
+            }
 
+            if(winkstart.apps['auth'].api_url != winkstart.apps[app_name].api_url) {
+                winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
+                    // If this is successful, we'll get a server-specific auth token back
+                    get_user_fn(json.auth_token);    
+                });
+            }
+            else {
+                get_user_fn(winkstart.apps['auth'].auth_token);
+            }
         },
 
         recover_password: function(args) {

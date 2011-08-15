@@ -104,10 +104,10 @@
                                 </span>
                                 <select name="timezone" id="timezone">
                                     {{each field_data.timezones}}
-                                    {{if data.timezone == value}}
-                                    <option value="${value}" selected="selected">${text}</option>
+                                    {{if data.timezone == text}}
+                                    <option value="${text}" selected="selected">${text}</option>
                                     {{else}}
-                                    <option value="${value}">${text}</option>
+                                    <option value="${text}">${text}</option>
                                     {{/if}}
                                     {{/each}}
                                 </select>

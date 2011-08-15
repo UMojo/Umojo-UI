@@ -19,24 +19,6 @@ winkstart.module('core', 'core',
                                 winkstart.module.loadModule('core', 'myaccount', function() {
                                     this.init();
                                     winkstart.log('Core: Loaded My Account manager');
-
-                                    /*
-                                    // THIS DOESN'T BELONG HERE. - Darren
-                                    
-                                    if(CURRENT_USER_ID != '') {
-                                        winkstart.getJSON('user.get', {crossbar: true, account_id: MASTER_ACCOUNT_ID, user_id: CURRENT_USER_ID}, function(json, xhr) {
-                                            $('#my_account').html("&nbsp;"+json.data.name);
-                                        });
-                                    }
-                                    if(REGISTRATION_KEY != '' ) {
-                                        var rest_data = { data: {}};
-                                        winkstart.postJSON('register.activate', rest_data, function (json, xhr) {
-                                            REALM_LOGIN = json.data.account.realm;
-                                            alert('You\'re now registered, please log-in!');
-                                            });
-                                        REGISTRATION_KEY = '';
-                                    }*/
-
                                 });
 
                                 // Now move onto apps

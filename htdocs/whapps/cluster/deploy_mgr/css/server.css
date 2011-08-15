@@ -70,6 +70,24 @@
     background-position: 0 -15px;
 }
 
+
+.server a.question_icon {
+    background-image: url(../img/help_monitor.png);
+    width: 14px;
+    height: 14px;
+    background-position: 0 0;
+    display: block;
+    
+    float: left;
+    margin-top: 1%;
+    margin-left: -2%;
+    cursor: pointer;
+}
+
+.server a.question_icon:hover {
+    background-position: 0 -15px;
+}
+
 .idle {
     color: greenyellow;    
 }

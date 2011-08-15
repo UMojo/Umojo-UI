@@ -638,11 +638,6 @@ ul.buttons a:hover{
     margin-left: 10px;
 }
 
-blah {
-    position: absolute; top:40%; left:40%; width:20%; height:140px; text-align:center; z-index:100000
-}
-
-
 #span_ajax_loader {
     margin-left: 1em;
     vertical-align: middle;

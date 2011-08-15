@@ -3,8 +3,8 @@ winkstart.module('cluster', 'deploy_mgr',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-        'css/style.css',
-        'css/server.css'
+            'css/style.css',
+            'css/server.css'
         ],
 
         /* What HTML templates will we be using? */
@@ -110,7 +110,8 @@ winkstart.module('cluster', 'deploy_mgr',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('deploy_mgr.activate');
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+        winkstart.registerResources(this.__whapp, this.config.resources);
     }, // End initialization routine
 
 
@@ -151,13 +152,8 @@ winkstart.module('cluster', 'deploy_mgr',
         requestServer: function() {
             var THIS = this;
             
-            $('#server_dialog').empty();
-            $('#server_dialog').dialog('destroy');
-            THIS.templates.newserver.tmpl().appendTo('#server_dialog');
-            
-            $('#server_dialog').dialog({
-                height: '320',
-                width: '310',
+            var serverDialog = winkstart.dialog(THIS.templates.newserver.tmpl(), {
+                title: 'Register a New Server',
                 open:function(){
                     THIS.validateForm();
                     $('#serverinfo a.save_btnServer').live('click', function() {
@@ -170,32 +166,27 @@ winkstart.module('cluster', 'deploy_mgr',
                         THIS.validateForm('save', '3');
                         
                         if(!$('.invalid').size() && $('.checkboxRoleServer:checked').size() != 0) {
-                            $('#server_dialog').dialog('close');
                             winkstart.publish('deploy_mgr.addServer', data);
+                            $(serverDialog).dialog('close');
                         } else {
                             alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
                         }
                     })
                 }
             });
-            $('#server_dialog').dialog('open');
+            
+            $(serverDialog).dialog('open');
         },
         
         requestFirstServer: function() {
             var THIS = this;
             
-            $('#server_dialog').empty();
-            $('#server_dialog').dialog('destroy');
-            
-            THIS.templates.firstserver.tmpl().appendTo('#server_dialog');
-            
-            $("#tabs ul").tabs("#tabs .pane > div");
-            $(".pane").css('width', '380')
-            
-            $('#server_dialog').dialog({
-                height: 600, 
-                width: 480,
+            var firstServerDialog = winkstart.dialog(THIS.templates.firstserver.tmpl(), {
+                resizable: false,
                 open: function(){
+                    $("#tabs ul").tabs("#tabs .pane > div");
+                    $(".pane").css('width', '380');
+                    
                     THIS.validateForm();
                     $('#serverinfo_dev a.save_btnServer').live('click', function() {
                         var data = form2object('serverinfo_dev');
@@ -206,7 +197,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         
                         if(!$('.invalid').size()) {
                             winkstart.publish('deploy_mgr.addServer', data);
-                            $('#server_dialog').dialog('close');
+                            $(firstServerDialog).dialog('close');
                         } else {
                             alert ('Please correct errors that you have on the form.');
                         }
@@ -231,11 +222,9 @@ winkstart.module('cluster', 'deploy_mgr',
                                 if(this[6]){
                                     server.roles.push(this[6]);
                                 }
-
-
                                 winkstart.publish('deploy_mgr.addServer', server, true);
                             });
-                            $('#server_dialog').dialog('close');
+                            $(firstServerDialog).dialog('close');
 
                             //Hack to deploy server after adding them all
                             setTimeout(function(){
@@ -244,15 +233,15 @@ winkstart.module('cluster', 'deploy_mgr',
                                     winkstart.publish('deploy_mgr.updateServer',  serverId);
                                 }); 
                             },5000);
+                            
+                            
                         }
                     });
                 }
             });
-            $('#server_dialog').dialog('open');
+            $(firstServerDialog).dialog('open');
         },
-        
-        
-        
+
         addServer: function(serverData, noUpdate) {
             var THIS = this;
             
@@ -268,6 +257,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     data.server_id = json.data.id;
                     data.server_state = 'never_run';
                     data.server_roles = THIS.getRoles(json.data.roles)
+                    data.tooltip = 'Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
 
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                     if(noUpdate != true){
@@ -276,6 +266,8 @@ winkstart.module('cluster', 'deploy_mgr',
 
                     THIS.server_count++;
                     winkstart.publish('deploy_mgr.setlink');
+					
+                    THIS.tooltip();
                 }
             });
             
@@ -394,14 +386,20 @@ winkstart.module('cluster', 'deploy_mgr',
                 $.each(reply.data, function(){
                     THIS.server_count++;
                     
+                    console.log(this);
+					
                     var data = {
                         server_name : this.hostname,
                         server_id : this.id,
                         server_state : this.deploy_status,
-                        server_roles : THIS.getRoles(this.roles)
+                        server_roles : THIS.getRoles(this.roles),
+                        tooltip: 'Host Name: '+this.hostname + ' <br/>Ip: ' + this.ip
                     };
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                 });
+				
+                THIS.tooltip();
+				
                 winkstart.publish('deploy_mgr.setlink');
                 
                 $('.server a.cancel_btn').live('click', function() {
@@ -420,6 +418,17 @@ winkstart.module('cluster', 'deploy_mgr',
                 winkstart.publish('deploy_mgr.statusServer');
             });
         },
+		
+        tooltip: function(){
+            $.each($('body').find('*[tooltip]'), function(){
+				
+                var options = {
+                    attach: 'body'
+                };
+				
+                $(this).tooltip(options);
+            });
+        },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
  * if appropriate. You should also attach to any default click items you want to respond to when people click
@@ -433,9 +442,6 @@ winkstart.module('cluster', 'deploy_mgr',
 
             /* Draw our base template into the window */
             THIS.templates.index.tmpl().appendTo( $('#ws-content') );
-
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.__whapp, this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Server Manager',

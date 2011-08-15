@@ -30,7 +30,7 @@
 
 #control_area #my_numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
 #control_area #my_numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
-#control_area #my_numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; padding:5px 0 0 30px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
+#control_area #my_numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
 #control_area #my_numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
 #control_area #my_numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
 #control_area #my_numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
@@ -352,11 +352,11 @@ span.ip_list_ip { display:block; z-index:5;}
     text-align:center;
     background-color: #e33100;
     display: block;
-    padding: 5px 10px 6px;
+    /*padding: 5px 10px 6px;*/
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    line-height: 1;
+    line-height: 24px;
 
     /* css3 implementation :) */
     -moz-border-radius: 5px;
@@ -364,7 +364,7 @@ span.ip_list_ip { display:block; z-index:5;}
     -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(0,0,0,0.25);
+    /*border-bottom: 1px solid rgba(0,0,0,0.25);*/
     position: relative;
     cursor: pointer;
 
@@ -389,11 +389,11 @@ a.button {
     text-align:center;
     background-color: #4E4D4D;
     display: block;
-    padding: 5px 10px 6px;
+    /*padding: 5px 10px 6px;*/
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    line-height: 1;
+    line-height: 24px;
 
     /* css3 implementation :) */
     -moz-border-radius: 5px;
@@ -401,7 +401,7 @@ a.button {
     -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(0,0,0,0.25);
+    /*border-bottom: 1px solid rgba(0,0,0,0.25);*/
     position: relative;
     cursor: pointer;
 
