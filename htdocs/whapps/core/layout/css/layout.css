@@ -419,7 +419,9 @@ a.status5{
 
 #welcomediv {
     margin-top: 5%;
-    margin-left: 25%
+    margin-left: 20%;
+    margin-right: 20%;
+    height: 60%;
 }
 
 
