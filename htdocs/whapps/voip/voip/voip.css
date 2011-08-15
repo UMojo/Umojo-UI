@@ -46,3 +46,9 @@
     margin-top:20px;
     margin-bottom:20px;
 }
+
+#cur_api_url {
+    float: right;
+    margin-top: -50px;
+    margin-right: 10px;
+}
