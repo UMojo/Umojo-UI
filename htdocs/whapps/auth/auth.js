@@ -152,7 +152,10 @@ winkstart.module('auth', 'auth',
                     winkstart.apps['auth'].realm = realm;
 
                     $(dialogDiv).dialog('close');
-
+                    
+                    // Deleting the welcome message
+                    $('#ws-content').empty();
+                    
                     winkstart.publish('auth.load_account');
                 });
             });

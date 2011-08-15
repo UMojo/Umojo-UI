@@ -9,7 +9,8 @@ winkstart.module('core', 'layout', {
         ],
 
         templates: {
-            layout: 'tmpl/layout.html'
+            layout: 'tmpl/layout.html',
+            welcome: 'tmpl/welcome.html'
         },
 
         subscribe: {
@@ -50,6 +51,9 @@ winkstart.module('core', 'layout', {
                                     $('#ws-content').empty();
                             }
                     });*/
+        
+        // Adding the welcome template
+        this.templates.welcome.tmpl().appendTo( '#ws-content' );
 
         winkstart.log ('Layout: Initialized layout.');
     },
