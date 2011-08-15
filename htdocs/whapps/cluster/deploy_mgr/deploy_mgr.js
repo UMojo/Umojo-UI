@@ -3,8 +3,8 @@ winkstart.module('cluster', 'deploy_mgr',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-        'css/style.css',
-        'css/server.css'
+            'css/style.css',
+            'css/server.css'
         ],
 
         /* What HTML templates will we be using? */
@@ -251,7 +251,8 @@ winkstart.module('cluster', 'deploy_mgr',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('deploy_mgr.activate');
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+        winkstart.registerResources(this.__whapp, this.config.resources);
     }, // End initialization routine
 
 
@@ -582,9 +583,6 @@ winkstart.module('cluster', 'deploy_mgr',
 
             /* Draw our base template into the window */
             THIS.templates.index.tmpl().appendTo( $('#ws-content') );
-
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.__whapp, this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Server Manager',
