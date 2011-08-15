@@ -3,8 +3,8 @@ winkstart.module('cluster', 'deploy_mgr',
     {
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
-            'css/style.css',
-            'css/server.css'
+        'css/style.css',
+        'css/server.css'
         ],
 
         /* What HTML templates will we be using? */
@@ -12,7 +12,9 @@ winkstart.module('cluster', 'deploy_mgr',
             index: 'tmpl/index.html',
             newserver: 'tmpl/newserver.html',
             server: 'tmpl/server.html',
-            firstserver: 'tmpl/firstServer.html'
+            firstserver: 'tmpl/firstServer.html',
+            addcluster: 'tmpl/addCluster.html',
+            noserver: 'tmpl/noServer.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -329,16 +331,20 @@ winkstart.module('cluster', 'deploy_mgr',
         
         setLink: function(){
             var THIS = this;
-            //hack double click
-            $('.cluster_pane a.add_server').unbind();
-            $('.cluster_pane a.add_server').die();
             
+            //No server Dialog
+            var noServerDialog = winkstart.dialog(THIS.templates.noserver.tmpl(), {
+                autoOpen : false
+            });
+ 
             switch(THIS.server_count){
                 case 0:
                     $('.cluster_pane a.add_server').show();
                     $('.cluster_pane a.add_server').click(function() {
                         winkstart.publish('deploy_mgr.requestFirstServer');
                     });
+                    
+                    $(noServerDialog).dialog('open');
                     break;
                 case 1:
                     $('.cluster_pane a.add_server').hide();
@@ -421,12 +427,9 @@ winkstart.module('cluster', 'deploy_mgr',
 		
         tooltip: function(){
             $.each($('body').find('*[tooltip]'), function(){
-				
-                var options = {
+                $(this).tooltip({
                     attach: 'body'
-                };
-				
-                $(this).tooltip(options);
+                });
             });
         },
 
@@ -449,8 +452,17 @@ winkstart.module('cluster', 'deploy_mgr',
             });
             winkstart.publish('deploy_mgr.listServer');
 
-            $('#server_dialog').dialog( {
+            $('#server_dialog').dialog({
                 autoOpen : false
             });
+            
+            //Add Cluster Dialog
+            var addCluster = winkstart.dialog(THIS.templates.addcluster.tmpl(), {
+                autoOpen : false
+            });
+            
+            $('a.plus').click(function(){
+                $(addCluster).dialog('open');
+            });          
         }
     });  // End module
