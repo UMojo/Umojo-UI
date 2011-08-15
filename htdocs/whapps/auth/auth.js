@@ -185,6 +185,7 @@ winkstart.module('auth', 'auth',
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
                 $('a#my_logout').html("Logout");
                 $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name).show();
+                $('.homepage').html('');
 
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
