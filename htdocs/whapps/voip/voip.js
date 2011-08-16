@@ -19,9 +19,11 @@ winkstart.module('voip', 'voip', {
     function() {
         var THIS = this;
 
-        // Loaded - add to nav bar
-        winkstart.publish('appnav.add', {
-            'name' : this.__module
+        winkstart.publish ('auth.shared_auth', {
+            app_name: THIS.__module,
+            callback: function() {
+                winkstart.publish('appnav.add', { 'name' : THIS.__module });
+            }
         });
 
         THIS.uninitialized_count = THIS._count(THIS.modules);

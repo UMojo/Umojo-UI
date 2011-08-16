@@ -6,8 +6,14 @@ winkstart.module('cluster', 'cluster', {
         }
     },
     function() {
-        // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : 'cluster' });
+        var THIS = this;
+
+        winkstart.publish ('auth.shared_auth', { 
+            app_name: THIS.__module,
+            callback: function() {
+                winkstart.publish('appnav.add', { 'name' : THIS.__module });
+            }
+        });
     },
     {
         is_initialized :   false,

@@ -220,13 +220,11 @@ winkstart.module('auth', 'auth',
         // Use this to attempt a shared auth token login if the requested app doesn't have it's own auth token.
         // TODO: If this fails, pop-up a login box for this particular app
         shared_auth: function(args) {
-            var THIS = this,
-                app_name = args.app_name,
-                callback = args.callback;
+            var THIS = this;
 
             rest_data = {
                 crossbar : true,
-                api_url : winkstart.apps[app_name].api_url,
+                api_url : winkstart.apps[args.app_name].api_url,
                 data: {
                     realm : winkstart.apps['auth'].realm,                     // Treat auth as global
                     account_id : winkstart.apps['auth'].account_id,           // Treat auth as global
@@ -234,7 +232,7 @@ winkstart.module('auth', 'auth',
                 }
             };
 
-            get_user_fn = function(auth_token) {
+            get_user_fn = function(auth_token, app_name, callback) {
                 var options = {
                     crossbar: true,
                     account_id: winkstart.apps['auth'].account_id, 
@@ -244,24 +242,24 @@ winkstart.module('auth', 'auth',
                 winkstart.apps[app_name]['auth_token'] = auth_token;
 
                 winkstart.getJSON('auth.get_user', options, function(json, xhr) {
-                    $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name);
+                    //$('a#my_account').html(json.data.first_name + ' ' + json.data.last_name);
                     $('#my_logout').html("Logout");
                     $('.main_nav').show();
 
                     if(typeof callback == 'function') {
-                        callback(app_name);
+                        callback();
                     }
                 });
             }
 
-            if(winkstart.apps['auth'].api_url != winkstart.apps[app_name].api_url) {
+            if(winkstart.apps['auth'].api_url != winkstart.apps[args.app_name].api_url) {
                 winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
                     // If this is successful, we'll get a server-specific auth token back
-                    get_user_fn(json.auth_token);    
+                    get_user_fn(json.auth_token, args.app_name, args.callback);    
                 });
             }
             else {
-                get_user_fn(winkstart.apps['auth'].auth_token);
+                get_user_fn(winkstart.apps['auth'].auth_token, args.app_name, args.callback);
             }
         },
 

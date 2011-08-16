@@ -111,12 +111,7 @@ winkstart.module('core', 'appnav', {
 
             if(winkstart.apps[app_name].auth_token != null) {
                 THIS._activate(app_name);
-            } else {
-                // Not logged in for this app...
-
-                // TODO: This is where failback should go.
-                winkstart.publish ('auth.shared_auth', { app_name : app_name, callback : THIS._activate });
-            }
+            } 
         },
 
         _activate: function(app_name) {
