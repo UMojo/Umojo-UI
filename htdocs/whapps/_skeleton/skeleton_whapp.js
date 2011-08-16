@@ -1,8 +1,8 @@
-// This is the server module
-winkstart.module('cluster', 'cluster', {
+// This is the VoIP Services base application
+winkstart.module('skel', 'skel', {
         subscribe: {
-            'cluster.activate' : 'activate',
-            'cluster.initialized' : 'initialized'
+            'skel.activate' : 'activate',
+            'skel.initialized' : 'initialized'
         }
     },
     /* The code in this initialization function is required for
@@ -26,7 +26,7 @@ winkstart.module('cluster', 'cluster', {
          * <module name>: <initialization status> 
          */
         modules: {
-            'deploy_mgr': false, 
+            //skel: false
         },
 
         /* The following code is generic and should be abstracted.
@@ -86,11 +86,14 @@ winkstart.module('cluster', 'cluster', {
          * (Really need to figure out a better way...)
          */
 
-        // A setup_page function is required for the copy and paste code
+        /* A setup_page function is required for the copy and paste code.
+         * This code is run when the whapp is successfully initialized,
+         * or when it is activated (and is already initialized).
+         */
         setup_page: function() {
             var THIS = this; 
 
-            winkstart.publish('deploy_mgr.activate', {});
+            // Do something here
         }
     }
 );
