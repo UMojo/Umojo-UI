@@ -1,105 +1,152 @@
 // This is the VoIP Services base application
 winkstart.module('voip', 'voip', {
-    css: {
-        voip: 'voip.css'
-    },
-    templates: {
-        voip: 'voip.html'
-    },
+        css: {
+            voip: 'voip.css'
+        },
 
-    subscribe: {
-        'voip.activate' : 'activate',
-        'voip.initialized' : 'initialized'
-    }
-},
-function() {
-    // Loaded - add to nav bar
-    winkstart.publish('appnav.add', {
-        'name' : this.__module
-        });
-},
-{
-    is_initialized :   false,
-    modules :       ['account', 'media', 'device', 'callflow', 'conference', 'user', 'vmbox', 'menu', 'registration', 'resource', 'timeofday'],
+        templates: {
+            voip: 'voip.html'
+        },
 
-    initialized: function() {
-        var THIS = this;
-
-        THIS.is_initialized = true;
-
-        winkstart.publish('subnav.show', THIS.__module);
-
-        THIS.setup_page();
-    },
-        
-    activate: function() {
-        var THIS = this,
-        mod_count;
-
-        if (!THIS.is_initialized) {                                 // Is this app initialized?
-            // Load the modules
-            mod_count = THIS.modules.length;
-            $.each(THIS.modules, function(k, v) {
-                winkstart.module.loadModule('voip', v, function() {
-                    this.init(function() {
-                        winkstart.log('VoIP: Initialized ' + v);
-                            
-                        if(!--mod_count) {
-                            winkstart.publish('voip.initialized', {});
-                        }
-                    });
-                });
-            });
-                
-        } else {
-            THIS.setup_page();
+        subscribe: {
+            'voip.activate' : 'activate',
+            'voip.initialized' : 'initialized'
         }
     },
+    /* The code in this initialization function is required for
+     * loading routine.
+     */
+    function() {
+        var THIS = this;
 
-    setup_page: function() {
-        var THIS = this; 
-
-        $('#ws-content').empty();
-        THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
-        
-        $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['auth'].api_url +'</b>');
-
-        // Link the main buttons
-        $('.options #users').click(function() {
-            winkstart.publish('user.activate');
+        // Loaded - add to nav bar
+        winkstart.publish('appnav.add', {
+            'name' : this.__module
         });
 
-        $('.options #devices').click(function() {
-            winkstart.publish('device.activate');
-        });
+        THIS.uninitialized_count = THIS._count(THIS.modules);
+    },
+    {
+        /* A modules object is required for the loading routine.
+         * The format is as follows:
+         * <module name>: <initialization status> 
+         */
+        modules: {
+            'account': false, 
+            'media': false, 
+            'device': false, 
+            'callflow': false, 
+            'conference': false, 
+            'user': false, 
+            'vmbox': false, 
+            'menu': false, 
+            'registration': false, 
+            'resource': false, 
+            'timeofday': false
+        },
 
-        $('.options #users').click(function() {
-            winkstart.publish('user.activate');
-        });
+        /* The following code is generic and should be abstracted.
+         * For the time being, you can just copy and paste this
+         * into other whapps.
+         *
+         * BEGIN COPY AND PASTE CODE
+         */
+        is_initialized: false,
 
-        $('.options #auto_attendant').click(function() {
-            winkstart.publish('menu.activate');
-        });
+        uninitialized_count: 1337,
 
-        $('.options #ring_groups').click(function() {
-            winkstart.publish('callflow.activate');
-        });
+        initialized: function() {
+            var THIS = this;
 
-        $('.options #conferences').click(function() {
-            winkstart.publish('conference.activate');
-        });
+            THIS.is_initialized = true;
 
-        $('.options #registrations').click(function() {
-            winkstart.publish('registration.activate');
-        });
+            winkstart.publish('subnav.show', THIS.__module);
 
-        $('.options #stats').click(function() {
-            winkstart.publish('stats.activate');
-        });
+            THIS.setup_page();
+        },
+            
+        activate: function() {
+            var THIS = this;
 
-        $('.options #time_of_day').click(function() {
-            winkstart.publish('timeofday.activate');
-        });
+            if (!THIS.is_initialized) {
+                // Load the modules
+                $.each(THIS.modules, function(k, v) {
+                    if(!v) {
+                        THIS.modules[k] = true;
+                        winkstart.module.loadModule(THIS.__module, k, function() {
+                            this.init(function() {
+                                winkstart.log(THIS.__module + ': Initialized ' + k);
+                                    
+                                if(!--THIS.uninitialzed_count) {
+                                    winkstart.publish(THIS.__module + '.initialized', {});
+                                }
+                            });
+                        });
+                    }
+                });
+            } else {
+                THIS.setup_page();
+            }
+        },
+
+        _count: function(obj) {
+            var count = 0;
+
+            $.each(obj, function() {
+                count++;
+            });
+
+            return count;
+        },
+        /* END COPY AND PASTE CODE
+         * (Really need to figure out a better way...)
+         */
+
+        // A setup_page function is required for the copy and paste code
+        setup_page: function() {
+            var THIS = this; 
+
+            $('#ws-content').empty();
+            THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+            
+            $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
+
+            // Link the main buttons
+            $('.options #users').click(function() {
+                winkstart.publish('user.activate');
+            });
+
+            $('.options #devices').click(function() {
+                winkstart.publish('device.activate');
+            });
+
+            $('.options #users').click(function() {
+                winkstart.publish('user.activate');
+            });
+
+            $('.options #auto_attendant').click(function() {
+                winkstart.publish('menu.activate');
+            });
+
+            $('.options #ring_groups').click(function() {
+                winkstart.publish('callflow.activate');
+            });
+
+            $('.options #conferences').click(function() {
+                winkstart.publish('conference.activate');
+            });
+
+            $('.options #registrations').click(function() {
+                winkstart.publish('registration.activate');
+            });
+
+            $('.options #stats').click(function() {
+                winkstart.publish('stats.activate');
+            });
+
+            $('.options #time_of_day').click(function() {
+                winkstart.publish('timeofday.activate');
+            });
+        }
     }
-}
 );
