@@ -9,23 +9,26 @@
 			amplify.request.define( key, "ajax", {
 				url: resource.url,
 				decoder: function(response){
-                                        if ( response.xhr.status == "401" ) {
-                                            if (xhr.responseText) {
-                                                response.error( JSON.parse( xhr.responseText ), "auth_invalid" );
-                                            } else {
-                                                response.error( data, "auth_invalid");
-                                            }
-                                            return;
-                                        }
+                    if ( response.xhr.status == "401" ) {
+                        if (xhr.responseText) {
+                            response.error( JSON.parse( xhr.responseText ), "auth_invalid" );
+                        } else {
+                            response.error( data, "auth_invalid");
+                        }
+                        return;
+                    }
 					response.success( response.data, response.xhr);
 				},
-                                contentType: resource.contentType || 'application/json',
-                                dataType: 'json',
-                                type: resource.verb,
-                                accepts: 'application/json',
-                                beforeSend: function(jqXHR, settings){
-                                        jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken(app_name));
-                                }
+                contentType: resource.contentType || 'application/json',
+                dataType: 'json',
+                type: resource.verb,
+                //jQuery is setting this wrong
+                //accepts: 'application/json',
+                processData: resource.verb == "GET",
+                cache: false,
+                beforeSend: function(jqXHR, settings){
+                    jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken(app_name));
+                }
 			});
 		}
 	};
@@ -37,7 +40,7 @@
         };
 
 	winkstart.getAuthToken = function(app_name){
-            return winkstart.apps[app_name]['auth_token'];
+        return winkstart.apps[app_name]['auth_token'];
 	};
 	
 	winkstart.normalizeRequest = function(params){
@@ -47,16 +50,16 @@
 		return params;
 	};
 
-	winkstart.getJSON = function(resource_name, params, callback){
-		amplify.request( resource_name, (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params ), function( data, xhr) {
+	winkstart.getJSON = function(resource_name, params, callback) {
+		amplify.request( resource_name, ('crossbar' in params ? winkstart.normalizeRequest(params) : params ), function( data, xhr) {
 			callback(data, xhr);
 		});
 	};
 	
-	winkstart.postJSON = function(resource_name, params, callback){
+	winkstart.postJSON = function(resource_name, params, callback) {
 		
-		var norm_params = (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params );
-                norm_params.verb = 'post';
+		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params );
+        norm_params.verb = 'post';
 		norm_params.json_string = JSON.stringify(norm_params);
 		
 		amplify.request( resource_name, norm_params, function( data, xhr ) {
@@ -64,18 +67,19 @@
 		});
 	};
 	
-	winkstart.deleteJSON = function(resource_name, params, callback){
+	winkstart.deleteJSON = function(resource_name, params, callback) {
 		
-		var norm_params = (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params );
+		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params );
 		norm_params.verb = 'delete';
+        norm_params.json_string = "";
 		
 		amplify.request( resource_name, norm_params, function( data, xhr ) {
 			callback(data, xhr);
 		});
 	};
 	
-	winkstart.putJSON = function(resource_name, params, callback){
-		var norm_params = (jQuery.inArray(params, 'crossbar') ? winkstart.normalizeRequest(params) : params );
+	winkstart.putJSON = function(resource_name, params, callback) {
+		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params );
 		norm_params.verb = 'put';
 		norm_params.json_string = JSON.stringify(norm_params);
 		
