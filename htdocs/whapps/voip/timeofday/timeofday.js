@@ -18,7 +18,7 @@ winkstart.module('voip', 'timeofday',
         },
 
         formData: {
-            days: [
+            wdays: [
                 "Monday",
                 "Tuesday",
                 "Wednesday",
@@ -26,6 +26,45 @@ winkstart.module('voip', 'timeofday',
                 "Friday",
                 "Saturday",
                 "Sunday"
+            ],
+            day: [
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+                "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+            ],
+            cycle: [{
+                id: 'weekly',
+                value: 'Weekly'
+            }, {
+                id: 'monthly',
+                value:'Monthly'
+            }, {
+                id: 'yearly',
+                value:'Yearly'
+            }/*, {
+                id: 'date',
+                value: 'Date'
+            }*/
+            ],
+            ordinals: [
+                {id: 'first', value: 'First'},
+                {id: 'second', value: 'Second'},
+                {id: 'third', value: 'Third'},
+                {id: 'fourth', value: 'Fourth'},
+                {id: 'last', value: 'Last'}
+            ],
+            months: [
+                {id: 1, value: 'January'},
+                {id: 2, value: 'February'},
+                {id: 3, value: 'March'},
+                {id: 4, value: 'April'},
+                {id: 5, value: 'May'},
+                {id: 6, value: 'June'},
+                {id: 7, value: 'July'},
+                {id: 8, value: 'August'},
+                {id: 9, value: 'September'},
+                {id: 10, value: 'October'},
+                {id: 11, value: 'November'},
+                {id: 12, value: 'December'}
             ]
         },
 
@@ -102,7 +141,6 @@ winkstart.module('voip', 'timeofday',
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.data = form_data;
-
                 /* Is this a create or edit? See if there's a known ID */
                 if (timeofday_id) {
                     /* EDIT */
@@ -140,8 +178,9 @@ winkstart.module('voip', 'timeofday',
                 data : {
                     time_window_start: 0,
                     time_window_stop: 0,
-                    cycle: 'weekly',
-                    wdays: []
+                    //cycle: 'weekly',
+                    wdays: [],
+                    days: []
                 },
                 field_data: THIS.config.formData
             };
@@ -181,7 +220,7 @@ winkstart.module('voip', 'timeofday',
             var wdays = [],
                 times = form_data.time.split(';');
 
-            $.each(form_data.days, function(i, val) {
+            $.each(form_data.wdays, function(i, val) {
                 if(val) {
                     // Check for spelling ;)
                     if(val == 'wednesday') {
@@ -190,13 +229,26 @@ winkstart.module('voip', 'timeofday',
                     wdays.push(val);
                 }
             });
+    
+            if($('#checkbox_date_type').attr('checked') == 'checked') {
+                form_data.days = form_data.day;
+                delete form_data.wdays;
+                delete form_data.ordinal;
+            } else {
+                form_data.wdays = wdays;
+                delete form_data.days;
+            }
 
-            delete form_data.days;
-            form_data.wdays = wdays;
-
+            delete form_data.day;
+            delete form_data.type_day;
             delete form_data.time;
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
+
+            if($('#cycle').val() != 'weekly') {
+                delete form_data.time_window_start;
+                delete form_data.time_window_stop;
+            }
             
             return form_data;
         },
@@ -228,6 +280,51 @@ winkstart.module('voip', 'timeofday',
 
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
+
+            $('#hours_slider').hide();
+            $('#days_checkbox').hide();
+            $('#ordinal_day').hide();
+            $('#month_picker').hide();
+            $('#date_picker').hide();
+            $('#day_fixed').hide();
+            $('#type_date').hide();
+           
+            $('#checkbox_date_type').click(function() {
+                if($(this).attr('checked')) {
+                    $('#days_checkbox').hide();
+                    $('#ordinal_day').hide();
+                    $('#day_fixed').show();
+                } else {
+                    $('#day_fixed').hide();
+                    $('#days_checkbox').show();
+                    $('#ordinal_day').show();
+                }
+            });
+            
+            if(timeofday_id == undefined) {
+                $('#days_checkbox').show();
+                $('#hours_slider').show();
+            } else {
+                if(form_data.data.cycle == "monthly") {
+                    $('#days_checkbox').show();
+                    $('#ordinal_day').show();
+                } else if(form_data.data.cycle == "yearly") {
+                    $('#month_picker').show();
+                    $('#type_date').show();
+                    if(form_data.data.days != undefined && form_data.data.days[0] != undefined) {
+                        $('#day_fixed').show();
+                        $('#checkbox_date_type').attr('checked', 'true');
+                    } else {
+                        $('#days_checkbox').show();
+                        $('#ordinal_day').show();
+                    }
+                } else if(form_data.data.cycle == "date") {
+                    $('#date_picker').show();
+                } else if(form_data.data.cycle = "weekly") {
+                    $('#hours_slider').show();
+                    $('#days_checkbox').show();
+                }
+            }
 
             $("#advanced_settings_link").click(function(event) {
                 if($(this).attr("enabled")=="true") {
@@ -268,6 +365,34 @@ winkstart.module('voip', 'timeofday',
                 },
                 onstatechange: function () {}
             });
+            
+            $('#cycle').change(function(event) {
+                    $('#date_picker', '#timeofday-form').hide();
+                    $('#ordinal_day', '#timeofday-form').hide();
+                    $('#month_picker', '#timeofday-form').hide();
+                    $('#type_date', '#timeofday-form').hide();
+                    $('#day_fixed', '#timeofday-form').hide();
+                    $('#hours_slider', '#timeofday-form').hide();
+                    $('#days_checkbox', '#timeofday-form').hide();
+                if($(this).val() == 'weekly') {
+                    $('#hours_slider', '#timeofday-form').show();
+                    $('#days_checkbox', '#timeofday-form').show();
+                } else if($(this).val() == 'yearly') {
+                    $('#type_date', '#timeofday-form').show();
+                    $('#month_picker', '#timeofday-form').show();
+                    if($('#checkbox_date_type').attr('checked') == 'checked') {
+                        $('#day_fixed').show();
+                    } else {
+                        $('#days_checkbox').show();
+                        $('#ordinal_day').show();
+                    }
+                } else if($(this).val() == 'monthly') {
+                    $('#days_checkbox').show();
+                    $('#ordinal_day').show();
+                } else if($(this).val() == 'date') {
+                    $('#date_picker').show();
+                }
+            });
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.timeofday-save').click(function(event) {
@@ -278,7 +403,6 @@ winkstart.module('voip', 'timeofday',
 
                 /* Grab all the form field data */
                 var form_data = form2object('timeofday-form');
-                
                 form_data = THIS.cleanFormData(form_data); 
 
                 THIS.saveTimeofday(timeofday_id, form_data);
@@ -305,6 +429,8 @@ winkstart.module('voip', 'timeofday',
 
                 return false;
             });
+
+            //$('#day').datepicker();
 
             $.each($('body').find('*[tooltip]'), function(){
                 $(this).tooltip({attach:'body'});

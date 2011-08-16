@@ -13,3 +13,10 @@ ul.buttons.timeofday {
     height: 50px;
     margin-top: 10px;
 }
+
+#ui-datepicker-div
+{
+    z-index: 99999 !important;
+}
+
+

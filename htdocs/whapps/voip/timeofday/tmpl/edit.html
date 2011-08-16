@@ -25,20 +25,88 @@
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
                             <li>
+                                <span class="tooltip-wrapper" tooltip="Select the recurrence of this time based route">
+                                    <span class="tooltip"/>
+                                    <label for="cycle">Recurrence:</label>
+                                </span>
+                                 <select id="cycle" name="cycle">
+                                {{each field_data.cycle}}
+                                    {{if data.cycle == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li id="type_date">
+                                <span class="tooltip-wrapper" tooltip="Choose whether your date is specific like the 4th of July, or if it uses an ordinal number.">
+                                    <span class="tooltip"/>
+                                    <label for="name">Specific Date:</label>
+                                </span> 
+                                <input name="type_day" type="checkbox" id="checkbox_date_type"/>
+                            </li>
+                            <li id="days_checkbox">
                                 <span class="tooltip-wrapper" tooltip="Select the days that you want this rule to apply to">
                                     <span class="tooltip"/>
-                                    <label for="days">Days:</label>
+                                    <label for="wdays">Days:</label>
                                 </span>
-                                {{each(i, day) field_data.days}}
+                                {{each(i, day) field_data.wdays}}
                                     ${day}
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
-                                        <input class="days" name="days[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/>
+                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/>
                                     {{else}}
-                                        <input class="days" name="days[]" type="checkbox" value="${day.toLowerCase()}"/>
+                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}"/>
                                     {{/if}}
                                 {{/each}}
                             </li>
-                            <li>
+                            <li id="day_fixed">
+                                <span class="tooltip-wrapper" tooltip="Select the day">
+                                    <span class="tooltip"/>
+                                    <label for="day">Day: </label>
+                                </span>
+                                <select id="day" name="day[0]">
+                                {{each(i, day) field_data.day}}
+                                    ${day}
+                                    {{if data.days[0] == day}}
+                                    <option name="day" value="${day}" selected="selected">${day}</option>
+                                    {{else}}
+                                    <option name="day" value="${day}">${day}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li id="ordinal_day">
+                                <span class="tooltip-wrapper" tooltip="Select the ordinal, for example if you would like to create a rule<br/> for the first monday of March, you would select First in this list.">
+                                    <span class="tooltip"/>
+                                    <label for="ordinal">Ordinal: </label>
+                                </span>
+                                <select id="ordinal" name="ordinal">
+                                {{each field_data.ordinals}}
+                                    {{if data.ordinal == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li id="month_picker">
+                                <span class="tooltip-wrapper" tooltip="Select the month">
+                                    <span class="tooltip"/>
+                                    <label for="month">Month: </label>
+                                </span>
+                                <select id="month" name="month">
+                                {{each field_data.months}}
+                                    {{if data.month == id}}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li id="hours_slider">
                                 <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
                                     <span class="tooltip"/>
                                     <label for="time">Time:</label>
@@ -47,7 +115,13 @@
                                     <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
                                 </span>
                             </li>
-                            <input type="hidden" id="cycle" name="cycle" value="${data.cycle}"/>
+                            <!--<li id="date_picker">
+                                <span class="tooltip-wrapper" tooltip="Type a date or just click inside the textbox to select a day">
+                                    <span class="tooltip"/>
+                                    <label for="day">Day:</label>
+                                </span>
+                                <input id="day" type="text" name="day" value="${day}"/>
+                            </li>-->
                         </ul>
                     </fieldset>
 
