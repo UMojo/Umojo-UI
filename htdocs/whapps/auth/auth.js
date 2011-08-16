@@ -102,7 +102,12 @@ winkstart.module('auth', 'auth',
                                    "label": "Cluster Manager",
                                    "icon": "cluster_manager",
                                    "api_url": "http://apps.2600hz.com:8000/v1"
-                               }
+                                },
+                                "voip": {
+                                    'label': 'VoIP Services',
+                                    'icon': 'phone',
+                                    'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                                }
                              }
                         }
                     }

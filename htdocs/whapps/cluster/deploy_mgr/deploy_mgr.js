@@ -344,7 +344,9 @@ winkstart.module('cluster', 'deploy_mgr',
                         winkstart.publish('deploy_mgr.requestFirstServer');
                     });
                     
-                    $(noServerDialog).dialog('open');
+                    //Removing until there is content
+                    //$(noServerDialog).dialog('open');
+
                     break;
                 case 1:
                     $('.cluster_pane a.add_server').hide();
