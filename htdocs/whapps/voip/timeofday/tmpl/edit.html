@@ -40,28 +40,28 @@
                                 </select>
                             </li>
                             <li id="type_date">
-                                <span class="tooltip-wrapper" tooltip="Choose whether your date is specific like the 4th of July, or if it uses an ordinal number.">
+                                <span class="tooltip-wrapper" tooltip="Tick the checkbox if you want to create a rule for a day like 4th of July, 1st of January.<br/> If you want to create a rule for the first Tuesday of October, then don't tick the checkbox!">
                                     <span class="tooltip"/>
                                     <label for="name">Specific Date:</label>
                                 </span> 
                                 <input name="type_day" type="checkbox" id="checkbox_date_type"/>
                             </li>
                             <li id="days_checkbox">
-                                <span class="tooltip-wrapper" tooltip="Select the days that you want this rule to apply to">
+                                <span class="tooltip-wrapper" tooltip="Select the days which you want this rule to apply to">
                                     <span class="tooltip"/>
                                     <label for="wdays">Days:</label>
                                 </span>
                                 {{each(i, day) field_data.wdays}}
-                                    ${day}
+                                    ${day}  
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/>
+                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/> 
                                     {{else}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}"/>
+                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}"/> 
                                     {{/if}}
                                 {{/each}}
                             </li>
                             <li id="day_fixed">
-                                <span class="tooltip-wrapper" tooltip="Select the day">
+                                <span class="tooltip-wrapper" tooltip="Select the day which you want this rule to apply to">
                                     <span class="tooltip"/>
                                     <label for="day">Day: </label>
                                 </span>
@@ -77,9 +77,9 @@
                                 </select>
                             </li>
                             <li id="ordinal_day">
-                                <span class="tooltip-wrapper" tooltip="Select the ordinal, for example if you would like to create a rule<br/> for the first monday of March, you would select First in this list.">
+                                <span class="tooltip-wrapper" tooltip="Select the ordinal, for example if you would like to create a rule<br/> for the first monday of a month, you would select First in this list.">
                                     <span class="tooltip"/>
-                                    <label for="ordinal">Ordinal: </label>
+                                    <label for="ordinal">Ordinal Number: </label>
                                 </span>
                                 <select id="ordinal" name="ordinal">
                                 {{each field_data.ordinals}}
@@ -92,7 +92,7 @@
                                 </select>
                             </li>
                             <li id="month_picker">
-                                <span class="tooltip-wrapper" tooltip="Select the month">
+                                <span class="tooltip-wrapper" tooltip="Select the month which you want this rule to apply to">
                                     <span class="tooltip"/>
                                     <label for="month">Month: </label>
                                 </span>
