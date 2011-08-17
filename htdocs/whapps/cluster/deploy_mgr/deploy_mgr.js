@@ -298,10 +298,11 @@ winkstart.module('cluster', 'deploy_mgr',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['auth'].account_id,
-                server_id: serverId
+                server_id: serverId,
+                data: {}
             };
 
-            winkstart.getJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
+            winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                     $('#'+serverId+' a.update_status').html(json.data.status);
                     $('#'+serverId+' div.server_footer').removeClass('idle running never_run').addClass(json.data.status);
