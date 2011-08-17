@@ -346,7 +346,8 @@ winkstart.module('cluster', 'deploy_mgr',
                     });
                     
                     //Removing until there is content
-                    //$(noServerDialog).dialog('open');
+                    $(noServerDialog).dialog('open');
+                    $('.close', noServerDialog).click(function() { $(noServerDialog.dialog('close'))});
 
                     break;
                 case 1:
