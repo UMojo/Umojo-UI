@@ -42,9 +42,12 @@
 
     background-color: white;
 
-    overflow: auto;
+    overflow: auto; 
 }
 
+.server_content li{
+    list-style-type: none;
+}
 .server_footer {
     width: 90%;
     height: 15%;
