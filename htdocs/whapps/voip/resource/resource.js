@@ -209,7 +209,7 @@ winkstart.module('voip', 'resource',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url,
                 resource_id: resource_id
             };
 
