@@ -27,27 +27,27 @@ winkstart.module('voip', 'media',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "media.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/media',
+                url: '{api_url}/accounts/{account_id}/media',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "media.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/media/{media_id}',
+                url: '{api_url}/accounts/{account_id}/media/{media_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "media.create": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/media',
+                url: '{api_url}/accounts/{account_id}/media',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "media.update": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/media/{media_id}',
+                url: '{api_url}/accounts/{account_id}/media/{media_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "media.delete": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/media/{media_id}',
+                url: '{api_url}/accounts/{account_id}/media/{media_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -91,6 +91,7 @@ winkstart.module('voip', 'media',
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
+                rest_data.api_url = winkstart.apps['voip'].api_url;
                 rest_data.data = form_data;
                 
                 /* Is this a create or edit? See if there's a known ID */
@@ -100,6 +101,7 @@ winkstart.module('voip', 'media',
                     winkstart.getJSON('media.get', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
                         media_id: media_id
                     }, function(json, xhr) {
                         if($('#upload_span').is(":visible") && $('#file').val() != ''){
@@ -167,6 +169,7 @@ winkstart.module('voip', 'media',
                 winkstart.getJSON('media.get', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
                     media_id: data.id
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
@@ -196,6 +199,7 @@ winkstart.module('voip', 'media',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url,
                 media_id: media_id
             };
 
@@ -299,7 +303,8 @@ winkstart.module('voip', 'media',
 
             winkstart.getJSON('media.list', {
                 crossbar: true,
-                account_id: winkstart.apps['voip'].account_id
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

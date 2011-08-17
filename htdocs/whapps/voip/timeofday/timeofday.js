@@ -75,27 +75,27 @@ winkstart.module('voip', 'timeofday',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "timeofday.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/temporal_rules',
+                url: '{api_url}/accounts/{account_id}/temporal_rules',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "timeofday.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
+                url: '{api_url}/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "timeofday.create": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/temporal_rules',
+                url: '{api_url}/accounts/{account_id}/temporal_rules',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "timeofday.update": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
+                url: '{api_url}/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "timeofday.delete": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/temporal_rules/{timeofday_id}',
+                url: '{api_url}/accounts/{account_id}/temporal_rules/{timeofday_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -140,6 +140,7 @@ winkstart.module('voip', 'timeofday',
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
+                rest_data.api_url = winkstart.apps['voip'].api_url;
                 rest_data.data = form_data;
                 /* Is this a create or edit? See if there's a known ID */
                 if (timeofday_id) {
@@ -190,6 +191,7 @@ winkstart.module('voip', 'timeofday',
                 winkstart.getJSON('timeofday.get', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
                     timeofday_id: data.id
                     }, function(json, xhr) {
                         $.extend(true, form_data, json);
@@ -207,6 +209,7 @@ winkstart.module('voip', 'timeofday',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url,
                 timeofday_id: timeofday_id
             };
 
@@ -445,7 +448,8 @@ winkstart.module('voip', 'timeofday',
 
             winkstart.getJSON('timeofday.list', {
                 crossbar: true,
-                account_id: winkstart.apps['voip'].account_id
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

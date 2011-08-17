@@ -48,32 +48,32 @@ winkstart.module('voip', 'resource',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "resource.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources',
+                url: '{api_url}/accounts/{account_id}/resources',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "resource.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
+                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "resource.create": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources',
+                url: '{api_url}/accounts/{account_id}/resources',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "resource.update": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
+                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "resource.delete": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/resources/{resource_id}',
+                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             "account.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -114,10 +114,10 @@ winkstart.module('voip', 'resource',
             THIS.validateForm('save');
 
             if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
+                rest_data.api_url = winkstart.apps['voip'].api_url;
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -134,7 +134,6 @@ winkstart.module('voip', 'resource',
                 } else {
                     /* CREATE */
 
-                    /* Actually send the JSON data to the server */
                     winkstart.putJSON('resource.create', rest_data, function (json, xhr) {
                         THIS.renderList();
                         THIS.editResource({
@@ -167,7 +166,7 @@ winkstart.module('voip', 'resource',
             var generatedPassword = THIS.generateRandomString(12);
             
 
-            winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(json, xhr) {
+            winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json, xhr) {
                 var account_realm = json.data.realm;
 
                 var form_data = {
@@ -186,6 +185,7 @@ winkstart.module('voip', 'resource',
                     winkstart.getJSON('resource.get', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
                         resource_id: data.id
                     }, function(json, xhr) {
                         /* On success, take JSON and merge with default/empty fields */
@@ -209,6 +209,7 @@ winkstart.module('voip', 'resource',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].account_id,
                 resource_id: resource_id
             };
 
@@ -306,7 +307,8 @@ winkstart.module('voip', 'resource',
 
             winkstart.getJSON('resource.list', {
                 crossbar: true,
-                account_id: winkstart.apps['voip'].account_id
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

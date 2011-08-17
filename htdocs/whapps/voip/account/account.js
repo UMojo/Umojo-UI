@@ -35,27 +35,27 @@ winkstart.module('voip', 'account',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "account.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/' + winkstart.apps['voip'].account_id + '/children',
+                url: '{api_url}/accounts/' + winkstart.apps['voip'].account_id + '/children',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.create": {
-                url: winkstart.apps['voip'].api_url + '/accounts/',
+                url: '{api_url}/accounts/',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "account.update": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "account.delete": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
@@ -98,10 +98,10 @@ winkstart.module('voip', 'account',
             THIS.validateForm('save');
 
             if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.data = form_data;
+                rest_data.api_url = winkstart.apps['voip'].api_url;
 
                 /* Is this a create or edit? See if there's a known ID */
                 if (account_id) {
@@ -120,7 +120,6 @@ winkstart.module('voip', 'account',
                 } else {
                     /* CREATE */
 
-                    /* Actually send the JSON data to the server */
                     winkstart.putJSON('account.create', rest_data, function (json, xhr) {
                         THIS.renderList();
                         THIS.editAccount({
@@ -146,12 +145,11 @@ winkstart.module('voip', 'account',
             };
 
             if (data && data.id) {
-                /* This is an existing account - Grab JSON data from server for account_id */
                 winkstart.getJSON('account.get', {
                     crossbar: true,
                     account_id: data.id,
+                    api_url: winkstart.apps['voip'].api_url,
                 }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
 
                     THIS.renderAccount(form_data);
@@ -168,10 +166,10 @@ winkstart.module('voip', 'account',
             
             var rest_data = {
                 crossbar: true,
-                account_id: account_id
+                account_id: account_id,
+                api_url: winkstart.apps['voip'].api_url
             };
 
-            /* Actually send the JSON data to the server */
             winkstart.deleteJSON('account.delete', rest_data, function (json, xhr) {
                 THIS.renderList();
                 $('#account-view').empty();
@@ -276,7 +274,8 @@ winkstart.module('voip', 'account',
             var THIS = this;
 
             winkstart.getJSON('account.list', {
-                crossbar: true
+                crossbar: true,
+                api_url: winkstart.apps['voip'].api_url
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server

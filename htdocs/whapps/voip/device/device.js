@@ -190,47 +190,47 @@ winkstart.module('voip', 'device',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "device.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices',
+                url: '{api_url}/accounts/{account_id}/devices',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "device.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "device.create": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices',
+                url: '{api_url}/accounts/{account_id}/devices',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "device.update": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
             "device.filter":{
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices?filter_mac_address={mac_address}',
+                url: '{api_url}/accounts/{account_id}/devices?filter_mac_address={mac_address}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "device.delete": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/devices/{device_id}',
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             "user.list": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}/users',
+                url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             "account.get": {
-                url: winkstart.apps['voip'].api_url + '/accounts/{account_id}',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },  
             "shared_auth": {
-                url: winkstart.apps['voip'].api_url + '/shared_auth',
+                url: '{api_url}/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             }
@@ -275,6 +275,7 @@ winkstart.module('voip', 'device',
                 var rest_data = {};
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
+                rest_data.api_url = winkstart.apps['voip'].api_url;
                 rest_data.data = form_data;
                 
                 /* Is this a create or edit? See if there's a known ID */
@@ -292,6 +293,7 @@ winkstart.module('voip', 'device',
                     winkstart.getJSON('device.filter', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
                         mac_address: form_data.mac_address
                     }, function (json, xhr) {
                         if(json.data.length == 0){
@@ -372,7 +374,8 @@ winkstart.module('voip', 'device',
             
             winkstart.getJSON('account.get', {
                 crossbar: true, 
-                account_id: winkstart.apps['voip'].account_id
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url
             }, function(json, xhr) {
                 winkstart.log(json.data.realm);
                 var form_data = {
@@ -407,7 +410,8 @@ winkstart.module('voip', 'device',
                 form_data.field_data.users = [];
                 winkstart.getJSON('user.list', {
                     crossbar: true, 
-                    account_id: winkstart.apps['voip'].account_id
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
                 }, function (json, xhr) {
                     var listUsers = [];
                     if(json.data.length > 0) {
@@ -432,6 +436,7 @@ winkstart.module('voip', 'device',
                         winkstart.getJSON('device.get', {
                             crossbar: true,
                             account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
                             device_id: data.id
                         }, function(json, xhr) {
                             /* On success, take JSON and merge with default/empty fields */
@@ -453,6 +458,7 @@ winkstart.module('voip', 'device',
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url,
                 device_id: device_id
             };
 
@@ -580,7 +586,8 @@ winkstart.module('voip', 'device',
 
             winkstart.getJSON('device.list', {
                 crossbar: true,
-                account_id: winkstart.apps['voip'].account_id
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server
