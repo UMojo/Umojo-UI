@@ -190,6 +190,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     $(".pane").css('width', '380');
                     
                     THIS.validateForm();
+                    
                     $('#serverinfo_dev a.save_btnServer').live('click', function() {
                         var data = form2object('serverinfo_dev');
                         data.roles = new Array('all_in_one');
@@ -235,9 +236,11 @@ winkstart.module('cluster', 'deploy_mgr',
                                     winkstart.publish('deploy_mgr.updateServer',  serverId);
                                 }); 
                             },5000);
-                            
-                            
                         }
+                    });
+                    
+                    $.each($('body').find('*[tooltip]'), function(){
+                        $(this).tooltip({attach:'body'});
                     });
                 }
             });
@@ -337,6 +340,10 @@ winkstart.module('cluster', 'deploy_mgr',
             var noServerDialog = winkstart.dialog(THIS.templates.noserver.tmpl(), {
                 autoOpen : false
             });
+            
+            //Hack DBClick
+            $('.cluster_pane a.add_server').die();
+            $('.cluster_pane a.add_server').unbind();
  
             switch(THIS.server_count){
                 case 0:
@@ -344,11 +351,10 @@ winkstart.module('cluster', 'deploy_mgr',
                     $('.cluster_pane a.add_server').click(function() {
                         winkstart.publish('deploy_mgr.requestFirstServer');
                     });
-                    
-                    //Removing until there is content
                     $(noServerDialog).dialog('open');
-                    $('.close', noServerDialog).click(function() { $(noServerDialog.dialog('close'))});
-
+                    $('.close', noServerDialog).click(function() { 
+                        $(noServerDialog.dialog('close'))
+                    });
                     break;
                 case 1:
                     $('.cluster_pane a.add_server').hide();
@@ -401,7 +407,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         server_id : this.id,
                         server_state : this.deploy_status,
                         server_roles : THIS.getRoles(this.roles),
-                        tooltip: 'Host Name: '+this.hostname + ' <br/>Ip: ' + this.ip
+                        tooltip: 'Host Name: '+this.hostname + ' <br/>IP: ' + this.ip
                     };
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                 });

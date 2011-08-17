@@ -37,15 +37,15 @@
 	var defaults = {
 		xMove: 20,					 
 		yMove: 10,					
-		width: 0,					//Width of the tooltip
-		height: 0,					//Height of the tooltip
+		width: 0,                       //Width of the tooltip
+		height: 0,                      //Height of the tooltip
 		tooltip_class: 'tooltip_div',	//Class of the tooltip
-		header_class: 'tip_header',	//Class of the tooltip header
-		body_class: 'tip_body',		//Class of the tooltip body
-		footer_class: 'tip_footer',	//Class of the tooltip footer
-		header: null,				//Text in the header
-		footer: null,				//Text in the footer
-		attach: null				//Place where you want to attach the html code default:after the current obj
+		header_class: 'tooltip_header',     //Class of the tooltip header
+		body_class: 'tooltip_body',         //Class of the tooltip body
+		footer_class: 'tooltip_footer',     //Class of the tooltip footer
+		header: null,                   //Text in the header
+		footer: null,                   //Text in the footer
+		attach: null                    //Place where you want to attach the html code default:after the current obj
 	};
 	
 	var methods = {
