@@ -162,9 +162,9 @@ winkstart.module('cluster', 'deploy_mgr',
             
             var serverDialog = winkstart.dialog(THIS.templates.newserver.tmpl(), {
                 title: 'Register a New Server',
-                open:function(){
+                open: function(){
                     THIS.validateForm();
-                    $('#serverinfo a.save_btnServer').live('click', function() {
+                    $('#serverinfo a.save_btnServer', $(this)).click(function() {
                         var data = form2object('serverinfo');
                         data.roles = new Array();                    
                         $('input[name="roles"]:checked', '#serverinfo').each(function(){
@@ -178,6 +178,7 @@ winkstart.module('cluster', 'deploy_mgr',
                             $(serverDialog).dialog('close');
                             THIS.templates.helpdeploy.tmpl().dialog();
                         } else {
+                            r
                             alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
                         }
                     })
@@ -198,7 +199,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     THIS.validateForm();
                     
-                    $('#serverinfo_dev a.save_btnServer').live('click', function() {
+                    $('#serverinfo_dev a.save_btnServer', $(this)).click(function() {
                         var data = form2object('serverinfo_dev');
                         data.roles = new Array('all_in_one');
                         
@@ -212,7 +213,7 @@ winkstart.module('cluster', 'deploy_mgr',
                             alert ('Please correct errors that you have on the form.');
                         }
                     });
-                    $('#serverinfo_prod a.save_btnServer').live('click', function() {
+                    $('#serverinfo_prod a.save_btnServer', $(this)).click(function() {
                         var data = form2object('serverinfo_prod');
                         
                         // Validation in the prod case
@@ -487,6 +488,14 @@ winkstart.module('cluster', 'deploy_mgr',
                 crossbar: true, 
                 account_id: winkstart.apps['auth'].account_id 
             }, function(reply) {
+                /* Clear out the center part of the window - get ready to put our own content in there */
+                $('#ws-content').empty();
+
+                /* Draw our base template into the window */
+                THIS.templates.index.tmpl().appendTo( $('#ws-content') );
+
+                THIS.server_count = 0;
+
                 $.each(reply.data, function(){
                     THIS.server_count++;
                     
@@ -537,12 +546,6 @@ winkstart.module('cluster', 'deploy_mgr',
  */
         activate: function(data) {
             var THIS = this;
-
-            /* Clear out the center part of the window - get ready to put our own content in there */
-            $('#ws-content').empty();
-
-            /* Draw our base template into the window */
-            THIS.templates.index.tmpl().appendTo( $('#ws-content') );
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Server Manager',
