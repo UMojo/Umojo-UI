@@ -14,7 +14,8 @@ winkstart.module('cluster', 'deploy_mgr',
             server: 'tmpl/server.html',
             firstserver: 'tmpl/firstServer.html',
             addcluster: 'tmpl/addCluster.html',
-            noserver: 'tmpl/noServer.html'
+            noserver: 'tmpl/noServer.html',
+            helpdeploy: 'tmpl/helpdeploy.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -104,6 +105,11 @@ winkstart.module('cluster', 'deploy_mgr',
                 url: winkstart.apps['cluster'].api_url + '/accounts/{account_id}/servers/{server_id}/deployment',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            "deploy_mgr.user.get": {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     }, // End module resource definitions
@@ -170,6 +176,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         if(!$('.invalid').size() && $('.checkboxRoleServer:checked').size() != 0) {
                             winkstart.publish('deploy_mgr.addServer', data);
                             $(serverDialog).dialog('close');
+                            THIS.templates.helpdeploy.tmpl().dialog();
                         } else {
                             alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
                         }
@@ -273,7 +280,77 @@ winkstart.module('cluster', 'deploy_mgr',
                     winkstart.publish('deploy_mgr.setlink');
 					
                     THIS.tooltip();
+
+                    console.log(json.data.roles);
+
+                    if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                        THIS._changeURL(json.data.ip);
+                    }
                 }
+            });
+        },
+        
+//        _setupWhappServersUrl: function() {
+//            var THIS = this;
+//           
+//            winkstart.getJSON('cluster.listservers', {
+//                crossbar: true, 
+//                account_id: winkstart.apps['auth'].account_id 
+//            }, function(reply) {
+
+//                
+//                var url = "";
+//                
+//                $.each(reply.data, function(k, server) {
+
+//                    roles = server.roles;
+
+//                    $.each(roles, function(k, role){
+//                        if(role == 'winkstart_deploy_whapps' || role == 'all_in_one') {
+//                            url = server.hostname;
+//                        }
+//                    });
+//                });
+//                
+//                if (url != "")
+//                    THIS._changeURL(url);
+////                $.each(reply.data, function () {
+////                });
+//            });
+//            
+//            $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
+//        },
+        
+        _changeURL: function(url) {
+            winkstart.getJSON('auth.get_user', {
+                crossbar: true,
+                api_url: winkstart.apps['auth'].api_url,
+                account_id: winkstart.apps['auth'].account_id,
+                user_id: winkstart.apps['auth'].user_id
+            }, function(json, xhr) {
+                
+                var inUrl = 'http://'+url+':8000/v1';
+                json.data.apps.voip.api_url = inUrl;
+                
+                var inLabel = "VoIP Services";
+                json.data.apps.voip.label = inLabel;
+                
+                $.each($('.main_nav').find('*[module-name]'), function(){
+                    if($(this).attr('module-name') == 'voip')
+                        $(this).find('a').html(inLabel);
+                });
+
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.api_url = winkstart.apps['auth'].api_url;
+                rest_data.account_id = winkstart.apps['auth'].account_id;
+                rest_data.user_id = winkstart.apps['auth'].user_id;
+                rest_data.data = json.data;
+
+                winkstart.postJSON('auth.user.update', rest_data, function (json, xhr) {
+                    winkstart.apps['voip'].auth_token = "";
+                    winkstart.apps['voip'].api_url = inUrl;
+                });
             });
             
         },
@@ -307,7 +384,12 @@ winkstart.module('cluster', 'deploy_mgr',
 
             winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
-                    $('#'+serverId+' a.update_status').html(json.data.status);
+                    var status = json.data.status;
+                        
+                    if(status == 'idle')
+                        status = "done";
+                        
+                    $('#'+serverId+' a.update_status').html(status);
                     $('#'+serverId+' div.server_footer').removeClass('idle running never_run').addClass(json.data.status);
                 });
             });
@@ -326,7 +408,12 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     rest_data.server_id = serverId;
                     winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
-                        $('#'+serverId+' a.update_status').html(json.data.status);
+                        var status = json.data.status;
+                        
+                        if(status == 'idle')
+                            status = "done";
+                        
+                        $('#'+serverId+' a.update_status').html(status);
                         $('#'+serverId+' div.server_footer').removeClass('idle running never_run').addClass(json.data.status);
                     });
                 }); 
@@ -352,6 +439,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         winkstart.publish('deploy_mgr.requestFirstServer');
                     });
                     $(noServerDialog).dialog('open');
+
                     $('.close', noServerDialog).click(function() { 
                         $(noServerDialog.dialog('close'))
                     });
@@ -409,6 +497,8 @@ winkstart.module('cluster', 'deploy_mgr',
                         server_roles : THIS.getRoles(this.roles),
                         tooltip: 'Host Name: '+this.hostname + ' <br/>IP: ' + this.ip
                     };
+                    console.log(data.server_state);
+                    
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                 });
 				

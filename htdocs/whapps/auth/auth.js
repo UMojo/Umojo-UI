@@ -40,9 +40,14 @@ winkstart.module('auth', 'auth',
                 verb: 'POST'
             },
             "auth.get_user": {
-                url: winkstart.apps['auth']['api_url'] + '/accounts/{account_id}/users/{user_id}',
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            "auth.user.update": {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'POST'
             }
         }
     },
@@ -186,6 +191,7 @@ winkstart.module('auth', 'auth',
             rest_data = {
                 crossbar : true,
                 account_id : winkstart.apps['auth'].account_id,
+                api_url : winkstart.apps['auth'].api_url,
                 user_id : winkstart.apps['auth'].user_id
             }
 
@@ -235,6 +241,7 @@ winkstart.module('auth', 'auth',
                 var options = {
                     crossbar: true,
                     account_id: winkstart.apps['auth'].account_id, 
+                    api_url : winkstart.apps['auth'].api_url,
                     user_id: winkstart.apps['auth'].user_id
                 };
 

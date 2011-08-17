@@ -4,6 +4,14 @@ winkstart.module('cluster', 'cluster', {
             'cluster.activate' : 'activate',
             'cluster.initialized' : 'initialized',
             'cluster.module_activate': 'module_activate'
+        },
+        
+        resources: {
+            "cluster.listservers": {
+                url: winkstart.apps['cluster'].api_url + '/accounts/{account_id}/servers',
+                contentType: 'application/json',
+                verb: 'GET'
+            }
         }
     },
     /* The code in this initialization function is required for
@@ -18,6 +26,8 @@ winkstart.module('cluster', 'cluster', {
                 winkstart.publish('appnav.add', { 'name' : THIS.__module });
             }
         });
+        
+        winkstart.registerResources(this.__whapp, this.config.resources);
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
     },
@@ -27,7 +37,7 @@ winkstart.module('cluster', 'cluster', {
          * <module name>: <initialization status> 
          */
         modules: {
-            'deploy_mgr': false, 
+            'deploy_mgr': false
         },
 
         /* The following code is generic and should be abstracted.

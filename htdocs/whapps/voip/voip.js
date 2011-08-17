@@ -98,6 +98,7 @@ winkstart.module('voip', 'voip', {
             } else {
                 THIS.setup_page();
             }
+            
         },
 
         module_activate: function(args) {

@@ -9,6 +9,10 @@
             </ul>
 
         </div>
-        <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">${server_state}</a></div>
+        {{if server_state == 'idle'}}
+            <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">done</a></div>
+        {{else}}
+            <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">${server_state}</a></div>
+        {{/if}}
     </div>
 </div>
