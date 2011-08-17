@@ -583,7 +583,7 @@ winkstart.module('connect', 'numbers',
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa',
                      {
-                    	account_id: '2600hz',
+                    	account_id: winkstart.apps['connect'].account_id,
 	                    data:args.data
 	                   },
                     function(jdata) {
@@ -598,7 +598,7 @@ winkstart.module('connect', 'numbers',
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa_nxx',
                      {
-                     account_id: '2600hz',
+                     account_id: winkstart.apps['connect'].account_id,
                      data:args.data},
                     function(jdata) {
                         // Remove please wait
@@ -612,7 +612,7 @@ winkstart.module('connect', 'numbers',
                     $('#sad_LoadingTime').slideDown();
                     winkstart.postJSON('numbers.search_npa',
                      {
-                    	account_id: '2600hz',
+                    	account_id: winkstart.apps['connect'].account_id,
                      data:args.data},
                     function(jdata) {
                         // Remove please wait
@@ -704,7 +704,7 @@ winkstart.module('connect', 'numbers',
                     var NXX = $('#sdid_nxx', dialogDiv).val();
                     winkstart.publish('numbers.search_npa_nxx',
                     	{
-	                    	account_id: '2600hz',
+	                    	account_id: winkstart.apps['connect'].account_id,
                         	data : {'NPA': NPA, 'NXX': NXX},
 	                        callback: function(results) {
 	                            winkstart.log('Found these #s:', results);

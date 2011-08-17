@@ -80,7 +80,7 @@ winkstart.module('connect', 'channels',
                 var save = function() {
                     winkstart.postJSON('channels.post', {
                             data : form_data,
-                            account_id : '2600hz'
+                            account_id : winkstart.apps['connect'].account_id
                         },
                         function(json, xhr) {
                             // Check the response for errors
