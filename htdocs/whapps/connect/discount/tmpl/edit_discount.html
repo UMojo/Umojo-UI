@@ -7,7 +7,7 @@
                 <div class="clear"/>
 
                 <label class="inline">Enter Discount Code:</label>
-                <input id="discount_code" class="idleField field_round center" type="text" value="${account.discount_code}" name="discount_code">
+                <input id="discount_code" class="idleField field_round center" maxlength="6" type="text" value="${account.discount_code}" name="discount_code">
 
                 <h2>Discount Details</h2>
                 <p class="note_box" class="discount_details">
@@ -20,9 +20,9 @@
                     {{/if}}
                 </p>
 
-                <a class="submit_btn clear ctr_btn" href="#">Use Discount</a>
+                <a class="submit_btn clear ctr_btn" href="#">Use Code</a>
             </div>
-            <div class="center">We'll review your changes on the next page...</div>
+            <div class="center">We'll adjust your account when you submit</div>
         </form>
     </div>
 </div>

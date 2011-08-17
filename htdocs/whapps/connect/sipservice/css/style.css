@@ -415,6 +415,8 @@ a.button:hover {
 /* end that jq-ui thing */
 .ui-draggable {cursor:pointer;}
 
+.edit.discount {cursor:pointer;}
+
 
 #control_area #my_numbers .numbers .unassigned {color: #437B3D;;}
 
@@ -492,7 +494,7 @@ input[type="search"] {
 
 }
 
-#addCredsSpan {float: right; padding-right:2em}
+#addCredsSpan {float: right; /*padding-right:2em */ }
 
 /*.no_cc_warning:before {content: url(/../images/warning-icon_sm.png); vertical-align: middle;}*/
 .no_cc_warning { font-size: 14px; }

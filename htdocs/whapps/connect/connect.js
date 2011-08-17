@@ -88,7 +88,6 @@ winkstart.module('connect', 'connect', {
         },
 
         setup_page: function() {
-            console.log ('Got here.');
         }
     }
 );
