@@ -97,11 +97,8 @@ winkstart.module('connect', 'channels',
                 var new_account = {};
                 $.extend(new_account, winkstart.apps['connect'].account, form_data);
                 
-                // If an account change handler (such as a wizard or a billing confirmation callback) is registered, use it
-                if (!winkstart.publish('sipservice.change_handler', { 'account' : new_account, 'save' : save })) {
-                    // Otherwise commit the change immediately
-                    save();
-                }
+                // Otherwise commit the change immediately
+                save();
             });
         }/*,
 

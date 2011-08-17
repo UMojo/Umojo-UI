@@ -1,35 +1,94 @@
 // This is the connectivity management module (VoIP connectivity services like SIP and Google Voice)
 winkstart.module('connect', 'connect', {
         subscribe: {
-            'connect.activate' : 'activate'
+            'connect.activate' : 'activate',
+            'connect.initialized' : 'initialized'
         }
     },
+    /* The code in this initialization function is required for
+     * loading routine.
+     */
     function() {
-        // Loaded - add to nav bar
-        winkstart.publish('appnav.add', { 'name' : this.__module });
+        var THIS = this;
+
+        winkstart.publish ('auth.shared_auth', {
+            app_name: THIS.__module,
+            callback: function() {
+                winkstart.publish('appnav.add', { 'name' : THIS.__module });
+            }
+        });
+
+        THIS.uninitialized_count = THIS._count(THIS.modules);
     },
     {
-        initialized :   false,
-        modules :       ['sipservice', 'admin', 'channels', 'credits', 'endpoint', 'fraud', 'monitoring', 'numbers', 'discount'],
+        modules :       {
+            'sipservice' : false,
+            'admin' : false,
+            'channels' : false,
+            'credits' : false,
+            'endpoint' : false,
+            'fraud' : false,
+            'monitoring' : false,
+            'numbers' : false,
+            'discount' : false
+        },
+
+        /* The following code is generic and should be abstracted.
+         * For the time being, you can just copy and paste this
+         * into other whapps.
+         *
+         * BEGIN COPY AND PASTE CODE
+         */
+        is_initialized: false,
+
+        uninitialized_count: 1337,
+
+        initialized: function() {
+            var THIS = this;
+
+            THIS.is_initialized = true;
+
+            winkstart.publish('subnav.show', THIS.__module);
+
+            THIS.setup_page();
+        },
 
         activate: function() {
             var THIS = this;
 
-            if (!winkstart.apps[this.__module].auth_token) {                    // Is this app authenticated?
-                winkstart.publish('auth.shared_auth', { app_name : this.__module });
-            } else if (!THIS.initialized) {                                 // Is this app initialized?
-                $.each(this.modules, function(k, v) {
-                    winkstart.module.loadModule('connect', v, function() {
-                        this.init(function() {
-                            winkstart.log('Connect: Initialized ' + v);
-                        });
-                    });
-                });
+            if (!THIS.is_initialized) {
+                // Load the modules
+                $.each(THIS.modules, function(k, v) {
+                    if(!v) {
+                        THIS.modules[k] = true;
+                        winkstart.module.loadModule(THIS.__module, k, function() {
+                            this.init(function() {
+                                winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                THIS.initialized = true;
+                                if(!--THIS.uninitialzed_count) {
+                                    winkstart.publish(THIS.__module + '.initialized', {});
+                                }
+                            });
+                        });
+                    }
+                });
             } else {
-                winkstart.publish('sipservice.activate');
+                THIS.setup_page();
             }
+        },
+
+        _count: function(obj) {
+            var count = 0;
+
+            $.each(obj, function() {
+                count++;
+            });
+
+            return count;
+        },
+
+        setup_page: function() {
+            console.log ('Got here.');
         }
     }
 );

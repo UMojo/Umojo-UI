@@ -685,7 +685,8 @@ winkstart.module('connect', 'numbers',
             var THIS = this;
 
             var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
-                title: 'Add/Search Numbers'
+                title: 'Add/Search Numbers',
+                width : '600px'
             });
 
             winkstart.publish('sipservice.input_css');
