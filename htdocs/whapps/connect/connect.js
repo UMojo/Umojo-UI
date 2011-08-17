@@ -2,7 +2,8 @@
 winkstart.module('connect', 'connect', {
         subscribe: {
             'connect.activate' : 'activate',
-            'connect.initialized' : 'initialized'
+            'connect.initialized' : 'initialized',
+            'connect.module_activate': 'module_activate'
         }
     },
     /* The code in this initialization function is required for
@@ -56,6 +57,14 @@ winkstart.module('connect', 'connect', {
         activate: function() {
             var THIS = this;
 
+            THIS.whapp_auth(function() {
+                THIS.initialization_check();
+            });
+        },
+
+        initialization_check: function() {
+            var THIS = this;
+
             if (!THIS.is_initialized) {
                 // Load the modules
                 $.each(THIS.modules, function(k, v) {
@@ -77,6 +86,28 @@ winkstart.module('connect', 'connect', {
             }
         },
 
+        module_activate: function(args) {
+            var THIS = this;
+
+            THIS.whapp_auth(function() {
+                winkstart.publish(args.name + '.activate');
+            });
+        },
+
+        whapp_auth: function(callback) {
+            var THIS = this;
+
+            if('auth_token' in winkstart.apps[THIS.__module] && !winkstart.apps[THIS.__module].auth_token) {
+                winkstart.publish('auth.shared_auth', {
+                    app_name: THIS.__module,
+                    callback: (typeof callback == 'function') ? callback : undefined
+                });
+            }
+            else {
+                callback();
+            }
+        },
+
         _count: function(obj) {
             var count = 0;
 
@@ -86,6 +117,9 @@ winkstart.module('connect', 'connect', {
 
             return count;
         },
+        /* END COPY AND PASTE CODE
+         * (Really need to figure out a better way...)
+         */
 
         setup_page: function() {
         }

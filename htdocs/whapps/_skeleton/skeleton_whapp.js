@@ -2,7 +2,8 @@
 winkstart.module('skel', 'skel', {
         subscribe: {
             'skel.activate' : 'activate',
-            'skel.initialized' : 'initialized'
+            'skel.initialized' : 'initialized',
+            'skel.module_activate': 'module_activate'
         }
     },
     /* The code in this initialization function is required for
@@ -48,8 +49,16 @@ winkstart.module('skel', 'skel', {
 
             THIS.setup_page();
         },
-            
+
         activate: function() {
+            var THIS = this;
+
+            THIS.whapp_auth(function() {
+                THIS.initialization_check();
+            });
+        },
+
+        initialization_check: function() {
             var THIS = this;
 
             if (!THIS.is_initialized) {
@@ -60,7 +69,7 @@ winkstart.module('skel', 'skel', {
                         winkstart.module.loadModule(THIS.__module, k, function() {
                             this.init(function() {
                                 winkstart.log(THIS.__module + ': Initialized ' + k);
-                                    
+
                                 if(!--THIS.uninitialzed_count) {
                                     winkstart.publish(THIS.__module + '.initialized', {});
                                 }
@@ -70,6 +79,28 @@ winkstart.module('skel', 'skel', {
                 });
             } else {
                 THIS.setup_page();
+            }
+        },
+
+        module_activate: function(args) {
+            var THIS = this;
+
+            THIS.whapp_auth(function() {
+                winkstart.publish(args.name + '.activate');
+            });
+        },
+
+        whapp_auth: function(callback) {
+            var THIS = this;
+
+            if('auth_token' in winkstart.apps[THIS.__module] && !winkstart.apps[THIS.__module].auth_token) {
+                winkstart.publish('auth.shared_auth', {
+                    app_name: THIS.__module,
+                    callback: (typeof callback == 'function') ? callback : undefined
+                });
+            }
+            else {
+                callback();
             }
         },
 

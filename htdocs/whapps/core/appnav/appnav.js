@@ -42,7 +42,6 @@ winkstart.module('core', 'appnav', {
             var list_node = $('div.header .main_nav').find('ul'),
                 item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.apps[args.name] }).appendTo(list_node);
 
-            if(args.name == 'auth') { $(item).hide(); }
             $('.dropdown', item).hide();
 
             $(item).hoverIntent({
@@ -83,7 +82,7 @@ winkstart.module('core', 'appnav', {
                 $('.whapp a', $(this).parents('li')).addClass('selected');
                 $('.main_nav li .whapp .icon').removeClass('blue');
                 $('.whapp .icon', $(this).parents('li')).addClass('blue');
-                winkstart.publish($(this).attr('module-name') + '.activate');
+                winkstart.publish(args.name + '.module_activate', { name: $(this).attr('module-name') });
 
                 return false;
             });

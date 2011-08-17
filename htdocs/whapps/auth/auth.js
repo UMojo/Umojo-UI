@@ -48,7 +48,6 @@ winkstart.module('auth', 'auth',
     },
     function() {
         winkstart.registerResources(this.__whapp, this.config.resources);
-        winkstart.publish('appnav.add', {'name' : 'auth'});
         
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function() {
