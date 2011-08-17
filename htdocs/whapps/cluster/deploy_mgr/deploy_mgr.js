@@ -396,8 +396,6 @@ winkstart.module('cluster', 'deploy_mgr',
                 $.each(reply.data, function(){
                     THIS.server_count++;
                     
-                    console.log(this);
-					
                     var data = {
                         server_name : this.hostname,
                         server_id : this.id,
