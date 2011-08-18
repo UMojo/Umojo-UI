@@ -695,7 +695,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     switch ($(this).html()) {
                         case 'Update':
-                            if(confirm('Do you want to update this server ?')){
+                            if(confirm('Do you want to update this server to the latest software version?')){
                                 winkstart.publish('deploy_mgr.updateServer',  data);
                             }
                             break;
