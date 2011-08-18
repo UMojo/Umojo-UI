@@ -532,6 +532,8 @@ winkstart.module('cluster', 'deploy_mgr',
             winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                     var status = json.data.status;
+                    
+                    console.log(json);
                         
                     if(status == 'idle')
                         status = "done";
@@ -556,6 +558,8 @@ winkstart.module('cluster', 'deploy_mgr',
                     rest_data.server_id = serverId;
                     winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                         var status = json.data.status;
+                        
+                        console.log(json);
                         
                         if(status == 'idle')
                             status = "done";

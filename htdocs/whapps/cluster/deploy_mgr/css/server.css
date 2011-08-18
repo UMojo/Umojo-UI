@@ -49,6 +49,7 @@
 .server_content li{
     list-style-type: none;
 }
+
 .server_footer {
     width: 90%;
     height: 15%;
@@ -73,7 +74,6 @@
 .server a.cancel_btn:hover {
     background-position: 0 -15px;
 }
-
 
 .server a.question_icon {
     background-image: url(../img/help_monitor.png);
