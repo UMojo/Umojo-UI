@@ -659,7 +659,6 @@ winkstart.module('cluster', 'deploy_mgr',
                         server_roles : THIS.getRoles(this.roles),
                         tooltip: 'Host Name: '+this.hostname + ' <br/>IP: ' + this.ip
                     };
-                    console.log(data.server_state);
                     
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                 });
@@ -674,11 +673,25 @@ winkstart.module('cluster', 'deploy_mgr',
                     }
                 });
 
-                $('.server_footer a.update_status').live('click', function() {
-                    if(confirm('Do you want to deploy this server ?')){
-                        var data = $(this).parent().parent().attr('id');
-                        
-                        winkstart.publish('deploy_mgr.updateServer',  data);
+                $('.server_footer a.update_status').live('click', function() {                    
+                    var data = $(this).parent().parent().attr('id');
+                    
+                    switch ($(this).html()) {
+                        case 'done':
+                            if(confirm('Do you want to update this server ?')){
+                                winkstart.publish('deploy_mgr.updateServer',  data);
+                            }
+                            break;
+                            
+                        case 'running':
+                            alert('Sever already running !');
+                            break;
+                            
+                        case 'never_run':
+                            if(confirm('Do you want to deploy this server ?')){
+                                winkstart.publish('deploy_mgr.updateServer',  data);
+                            }
+                            break;
                     }  
                 });
                 winkstart.publish('deploy_mgr.statusServer');
