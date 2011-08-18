@@ -292,7 +292,7 @@ winkstart.module('voip', 'user',
 
                             new_list.push({
                                 id: elem.id,
-                                title: elem.username + ' (' + elem.first_name + ' ' + elem.last_name + ')'
+                                title: elem.first_name + ' ' + elem.last_name
                             });
                         });
                     }
