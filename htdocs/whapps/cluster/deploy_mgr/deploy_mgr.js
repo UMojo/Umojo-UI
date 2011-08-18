@@ -338,7 +338,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 var inLabel = "VoIP Services";
                 json.data.apps.voip.label = inLabel;
                 
-                $('.main_nav li[module-name=voip]').html('VoIP Services');
+                $('.main_nav li[module-name=voip] a').html('VoIP Services');
 
                 var rest_data = {};
                 rest_data.crossbar = true;
