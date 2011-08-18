@@ -642,9 +642,14 @@ winkstart.module('cluster', 'deploy_mgr',
             
                 $('a.plus').click(function(){
                     var addCluster = winkstart.dialog(THIS.templates.addcluster.tmpl(), {
+                        title: 'Add a new cluster',
+                        resizable: false,
                         autoOpen : false
                     });
                     $(addCluster).dialog('open');
+                    $('.close', $(addCluster)).click(function() {
+                        $(addCluster).dialog('close');
+                    });
                 });
 
                 THIS.server_count = 0;
