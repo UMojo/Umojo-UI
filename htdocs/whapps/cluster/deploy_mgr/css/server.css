@@ -92,6 +92,24 @@
     background-position: 0 -15px;
 }
 
+.thumb_up {
+    background-image: url(../img/thumb_up.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.thumb_down {
+    background-image: url(../img/thumb_down.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.logrunning {
+    background-image: url(../img/ajax-loader.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .Update {
     color: greenyellow;    
 }

@@ -420,7 +420,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     data.server_name = json.data.hostname;
                     data.server_id = json.data.id;
                     data.server_state = 'never_run';
-                    data.server_roles = THIS.getRoles(json.data.roles)
+                    //data.server_roles = THIS.getRoles(json.data.roles);
                     data.tooltip = 'Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
 
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
@@ -532,11 +532,39 @@ winkstart.module('cluster', 'deploy_mgr',
             winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                     var status = THIS.setStatus(json.data.status);
+                    
+                    console.log(json.data);
  
                     $('#'+serverId+' a.update_status').html(status);
                     $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
                 });
             });
+        },
+        
+        setLoglist: function(logs, serverId) {
+            var logListContent = "";
+            
+            if (logs != {}) {
+                $.each(logs, function() {
+                    var classLog = "";
+
+                    if(this.status == "running")
+                        classLog = "logrunning";
+                    else if (this.status == "ok")
+                        classLog = "thumb_up";
+                    else if (this.status == "ko")
+                        classLog = "thumb_down";
+                    else
+                        classLog = "";
+
+                    logListContent += "<tr>";
+                    logListContent += "<td id='log"+ this.name +"'>"+ this.name +"</td>";
+                    logListContent += "<td id='logstatus"+ this.name +"' class='"+ classLog +"'></td>";
+                    logListContent += "</tr>";
+                });
+            }
+
+            $('#'+serverId+' #loglist').html(logListContent);
         },
         
         statusServer: function() {
@@ -546,19 +574,29 @@ winkstart.module('cluster', 'deploy_mgr',
                 crossbar: true,
                 account_id: winkstart.apps['auth'].account_id
             };
+            
+            THIS.getStatus(rest_data);
             setInterval(function(){ 
-                $('.cluster').find('.server').each(function(){
+                THIS.getStatus(rest_data);
+            }, 15000);
+        },
+        
+        getStatus: function(rest_data) {
+            var THIS = this;
+            
+            $('.cluster').find('.server').each(function(){
                     var serverId = $(this).attr('server_id');
                     
                     rest_data.server_id = serverId;
                     winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                         var status = THIS.setStatus(json.data.status);
-
+                        
+                        THIS.setLoglist(json.data.log, serverId);
+                        
                         $('#'+serverId+' a.update_status').html(status);
                         $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
                     });
                 }); 
-            }, 15000);
         },
         
         setStatus: function(oldStatus){
@@ -665,7 +703,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 });
 
                 THIS.server_count = 0;
-
+                
                 $.each(reply.data, function(){
                     THIS.server_count++;
                     
@@ -709,6 +747,7 @@ winkstart.module('cluster', 'deploy_mgr',
                             break;
                     }  
                 });
+            
                 winkstart.publish('deploy_mgr.statusServer');
             });
             

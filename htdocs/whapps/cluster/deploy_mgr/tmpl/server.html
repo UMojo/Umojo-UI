@@ -2,14 +2,11 @@
     <div class="server" server_id="${server_id}" id="${server_id}">
         <div class="server_header" >${server_name.substr(0,15)}<a class="question_icon" href="#" tooltip="${tooltip}"></a><a class="cancel_btn" href="#"></a></div>
         <div class="server_content">
-            <table>
-                {{each logs}}
-                <tr>
-                    <td></td>
-                    <td></td>
-                </tr>
-                {{/each}}
+            
+            <table id="loglist">
+                
             </table>
+            
         </div>
         {{if server_state == 'idle'}}
             <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">done</a></div>
