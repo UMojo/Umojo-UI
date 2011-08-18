@@ -92,15 +92,15 @@
     background-position: 0 -15px;
 }
 
-.idle {
+.Update {
     color: greenyellow;    
 }
 
-.never_run {
+.Deploy {
     color: red;
 }
 
-.running {
+.Running {
     color: orange;
     background-image: url(../img/ajax-loader.gif);
     background-repeat: no-repeat;

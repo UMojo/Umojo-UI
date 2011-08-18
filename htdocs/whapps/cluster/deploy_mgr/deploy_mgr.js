@@ -531,15 +531,10 @@ winkstart.module('cluster', 'deploy_mgr',
 
             winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
-                    var status = json.data.status;
-                    
-                    console.log(json);
-                        
-                    if(status == 'idle')
-                        status = "done";
-                        
+                    var status = THIS.setStatus(json.data.status);
+ 
                     $('#'+serverId+' a.update_status').html(status);
-                    $('#'+serverId+' div.server_footer').removeClass('idle running never_run').addClass(json.data.status);
+                    $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
                 });
             });
         },
@@ -557,18 +552,31 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     rest_data.server_id = serverId;
                     winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
-                        var status = json.data.status;
-                        
-                        console.log(json);
-                        
-                        if(status == 'idle')
-                            status = "done";
-                        
+                        var status = THIS.setStatus(json.data.status);
+
                         $('#'+serverId+' a.update_status').html(status);
-                        $('#'+serverId+' div.server_footer').removeClass('idle running never_run').addClass(json.data.status);
+                        $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
                     });
                 }); 
             }, 15000);
+        },
+        
+        setStatus: function(oldStatus){
+            var newStatus = '';
+            
+            switch (oldStatus) {
+                case 'never_run':
+                    newStatus = 'Deploy';
+                    break;
+                case 'running':
+                    newStatus = 'Running';
+                    break;
+                case 'idle':
+                    newStatus = 'Update';
+                    break;
+            }
+
+            return newStatus;
         },
         
         setLink: function(){
@@ -664,7 +672,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     var data = {
                         server_name : this.hostname,
                         server_id : this.id,
-                        server_state : this.deploy_status,
+                        server_state : THIS.setStatus(this.deploy_status),
                         server_roles : THIS.getRoles(this.roles),
                         tooltip: 'Host Name: '+this.hostname + ' <br/>IP: ' + this.ip
                     };
@@ -686,17 +694,15 @@ winkstart.module('cluster', 'deploy_mgr',
                     var data = $(this).parent().parent().attr('id');
                     
                     switch ($(this).html()) {
-                        case 'done':
+                        case 'Update':
                             if(confirm('Do you want to update this server ?')){
                                 winkstart.publish('deploy_mgr.updateServer',  data);
                             }
                             break;
-                            
-                        case 'running':
+                        case 'Running':
                             alert('Sever already running !');
                             break;
-                            
-                        case 'never_run':
+                        case 'Deploy':
                             if(confirm('Do you want to deploy this server ?')){
                                 winkstart.publish('deploy_mgr.updateServer',  data);
                             }
