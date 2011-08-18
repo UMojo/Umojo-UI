@@ -176,7 +176,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         if(!$('.invalid').size() && $('.checkboxRoleServer:checked').size() != 0) {
                             winkstart.publish('deploy_mgr.addServer', data);
                             $(serverDialog).dialog('close');
-                            THIS.templates.helpdeploy.tmpl().dialog();
+                            THIS.templates.helpdeploy.tmpl().dialog({resizable: 'false'});
                         } else {
                             r
                             alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
@@ -209,6 +209,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         if(!$('.invalid').size()) {
                             winkstart.publish('deploy_mgr.addServer', data);
                             $(firstServerDialog).dialog('close');
+                            THIS.templates.helpdeploy.tmpl().dialog({resizable: 'false'});
                         } else {
                             alert ('Please correct errors that you have on the form.');
                         }
@@ -236,6 +237,7 @@ winkstart.module('cluster', 'deploy_mgr',
                                 winkstart.publish('deploy_mgr.addServer', server, true);
                             });
                             $(firstServerDialog).dialog('close');
+                            THIS.templates.helpdeploy.tmpl().dialog({resizable: 'false'});
 
                             //Hack to deploy server after adding them all
                             setTimeout(function(){
@@ -336,10 +338,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 var inLabel = "VoIP Services";
                 json.data.apps.voip.label = inLabel;
                 
-                $.each($('.main_nav').find('*[module-name]'), function(){
-                    if($(this).attr('module-name') == 'voip')
-                        $(this).find('a').html(inLabel);
-                });
+                $('.main_nav li[module-name=voip]').html('VoIP Services');
 
                 var rest_data = {};
                 rest_data.crossbar = true;
