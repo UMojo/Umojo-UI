@@ -420,7 +420,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     data.server_name = json.data.hostname;
                     data.server_id = json.data.id;
                     data.server_state = 'never_run';
-                    //data.server_roles = THIS.getRoles(json.data.roles);
+                    data.server_roles = THIS.getRoles(json.data.roles);
                     data.tooltip = 'Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
 
                     THIS.templates.server.tmpl(data).prependTo($('.cluster'));
@@ -532,8 +532,6 @@ winkstart.module('cluster', 'deploy_mgr',
             winkstart.putJSON('deploy_mgr.deploy', rest_data, function (json, xhr) {
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                     var status = THIS.setStatus(json.data.status);
-                    
-                    console.log(json.data);
  
                     $('#'+serverId+' a.update_status').html(status);
                     $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
@@ -575,7 +573,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 account_id: winkstart.apps['auth'].account_id
             };
             
-            THIS.getStatus(rest_data);
+            //THIS.getStatus(rest_data);
             setInterval(function(){ 
                 THIS.getStatus(rest_data);
             }, 15000);
@@ -591,7 +589,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                         var status = THIS.setStatus(json.data.status);
                         
-                        THIS.setLoglist(json.data.log, serverId);
+                        //THIS.setLoglist(json.data.log, serverId);
                         
                         $('#'+serverId+' a.update_status').html(status);
                         $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
