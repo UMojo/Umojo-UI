@@ -435,7 +435,7 @@ winkstart.module('cluster', 'deploy_mgr',
             THIS.getStatus(rest_data);
             setInterval(function(){ 
                 THIS.getStatus(rest_data);
-            }, 15000);
+            }, 60000);
         },
         
         getStatus: function(rest_data) {
