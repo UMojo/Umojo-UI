@@ -25,7 +25,9 @@ winkstart.module('connect', 'sipservice',
             main_services : 'tmpl/main_services.html',
 
             /* Number Management */
-            order_history: 'tmpl/order_history.html'
+            order_history: 'tmpl/order_history.html',
+            
+            edit_server: 'tmpl/edit_server.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -58,7 +60,7 @@ winkstart.module('connect', 'sipservice',
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-//                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
+                //                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
@@ -145,6 +147,8 @@ winkstart.module('connect', 'sipservice',
         },
 
         refresh: function() {
+            var THIS = this;
+            
             var account = winkstart.apps['connect'].account;
 
             winkstart.log('Redrawing...');
@@ -187,7 +191,10 @@ winkstart.module('connect', 'sipservice',
             // TODO: Fix this. It doesn't belong here. Move to endpoint.js and figure out dynamics
             $("#ws-content .drop_area:not(.ui-droppable").droppable({
                 drop: function(event, ui) {
-                    winkstart.publish('numbers.map_number', {did : $(ui.draggable).dataset(), new_server : $(this).dataset()});
+                    winkstart.publish('numbers.map_number', {
+                        did : $(ui.draggable).dataset(), 
+                        new_server : $(this).dataset()
+                    });
                 },
                 accept: '.number' ,
                 activeClass: 'ui-state-highlight',
@@ -195,6 +202,21 @@ winkstart.module('connect', 'sipservice',
                 scope: 'moveDID'
             }); // End droppable()
 
+            $('.modifyServerDefaults').click(function(){
+                var data = {
+                    account: account,
+                    server: account.servers[$(this).attr('data-serverid')]
+                };
+
+                var defaultDialog = winkstart.dialog(THIS.templates.edit_server.tmpl(data), {
+                    open: function(){
+                        $('a.submit_btn', '#edit_server').click(function(){
+                            $(defaultDialog).dialog('close');
+                            alert('Do nothing for now !');
+                        });
+                    }
+                });
+            });
         },
 
         load_account : function(){
@@ -203,7 +225,9 @@ winkstart.module('connect', 'sipservice',
 
             winkstart.log('Loading account ' + account_id);
 
-            winkstart.getJSON('sipservice.get', {account_id : account_id}, function(data, xhr) {
+            winkstart.getJSON('sipservice.get', {
+                account_id : account_id
+            }, function(data, xhr) {
                 winkstart.apps['connect'].account = data.data;
                 THIS.refresh();
             });
@@ -253,4 +277,4 @@ winkstart.module('connect', 'sipservice',
         }
     } // End function definitions
 
-);  // End module
+    );  // End module
