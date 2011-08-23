@@ -82,6 +82,10 @@
     background-position: -320px -416px;
 }
 
+.icon.user_portal {
+    background-position: -478px -192px;
+}
+
 /************** ICONS SUBNAV *****/
 
 .icon.account { /* 0, 11 */
@@ -148,6 +152,10 @@
     background-position: -320px -165px;
 }
 
+.icon.settings {
+    background-position: -480px -131px;
+}
+
 
 /************** ICONS ************/
 .icon.phone {
@@ -203,7 +211,7 @@
 }
 
 .icon.cdr {
-    background-position: -192px -229px;
+    background-position: -192px -165px;
 }
 
 .icon.billing {

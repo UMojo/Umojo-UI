@@ -84,7 +84,7 @@
 
 .dataTables_info {
     color: #323232;
-	width: 60%;
+	width: 30%;
 	float: left;
     margin-top: 10px;
 }
@@ -248,7 +248,7 @@ tr.even {
 }
 
 .paging_full_numbers {
-	width: 400px;
+	width: 30%;
 	height: 22px;
 	line-height: 22px;
 }
