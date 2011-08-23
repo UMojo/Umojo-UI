@@ -180,7 +180,6 @@ winkstart.module('cluster', 'deploy_mgr',
                                 resizable: 'false'
                             });
                         } else {
-                            r
                             alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
                         }
                     })
@@ -197,7 +196,11 @@ winkstart.module('cluster', 'deploy_mgr',
                 resizable: false,
                 open: function(){
                     $("#tabs ul").tabs("#tabs .pane > div");
-                    $(".pane").css('width', '380');
+                    
+                    //Fix CSS
+                    $("ul.settings_tabs", "#tabs").css('margin', '0');
+                    $(".pane", "#tabs").css('margin', '0');
+                    $(".pane", "#tabs").css('width', '380');
                     
                     THIS.validateForm();
                     
