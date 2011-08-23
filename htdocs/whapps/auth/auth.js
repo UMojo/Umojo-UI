@@ -55,8 +55,16 @@ winkstart.module('auth', 'auth',
         winkstart.registerResources(this.__whapp, this.config.resources);
         
         if(URL_DATA['activation_key']) {
-            winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function() {
-               alert('You are now registered! Please log in.'); 
+            winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
+               alert('You are now registered! Please log in.');
+               if(data.auth_token != '' && data.auth_token != 'null'){
+                    winkstart.apps['auth'].account_id = data.data.account.id;
+                    winkstart.apps['auth'].auth_token = data.auth_token;
+                    winkstart.apps['auth'].user_id = data.data.user.id;
+                    winkstart.apps['auth'].realm = data.data.account.realm;
+                    
+                    winkstart.publish('auth.load_account');
+               }
             });
         }
 
