@@ -7,7 +7,7 @@
 
 			<div class="rcMsg">{{each(i, car) data}}{{if car.ratecenter}}Rate Center: ${car.ratecenter} {{/if}}&nbsp; {{/each}} &nbsp;</div>
 			<div style="" class="credit_preauth"></div>
-			<div><a href="#" class="button" onclick="purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));">Buy DIDs</a></div><div class="helpertext">This will charge your credit card</div>
+			<!--<div><a href="#" class="button" onclick="purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));">Buy DIDs</a></div><div class="helpertext">This will charge your credit card</div>-->
 
 			<form id="addDIDForm" onsubmit="addDIDs($('input:checkbox:checked.f_dids')); return false;"  style="overflow: auto; max-width 20em; max-height: 15em;">
 		{{each(i,car) data}}
