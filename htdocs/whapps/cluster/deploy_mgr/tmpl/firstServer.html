@@ -43,73 +43,75 @@
                 </form>
             </div>
             <div id="tabs2">
-                <form id="serverinfo_prod">
+                <form id="serverinfo_prod_1" class="serverinfo_prod">
                     <br/>
                     <h4>Server 1: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_1" type="text" name='server1[]'/><div class="clear"/>
+                    <input id="hostname_7_1" type="text" name='hostname'/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_1" type="text" name="server1[]"/><div class="clear"/>
+                    <input id="ip_7_1" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_1" type="text" name="server1[]"/><div class="clear"/>
+                    <input id="ssh_port_7_1" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_1" type="password" name="server1[]"/><div class="clear"/>
+                    <input id="root_password_7_1" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span> 
-                    <select name="server1[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Server Type.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server1[]" type="checkbox" value="winkstart_deploy_opensips" checked="checked" disabled="disabled"/> Call Director - OpenSIPs<div class="clear"/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_opensips" checked="checked" disabled="disabled"/> Call Director - OpenSIPs<div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Server Type.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server1[]" type="checkbox" value="winkstart_deploy_whapps" checked="checked" disabled="disabled"/> App Server - Whapps Controller<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_whapps" checked="checked" disabled="disabled"/> App Server - Whapps Controller<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_2" class="serverinfo_prod">
                     <h4>Server 2: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_2" type="text" name="server2[]"/><div class="clear"/>
+                    <input id="hostname_7_2" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_2" type="text" name="server2[]"/><div class="clear"/>
+                    <input id="ip_7_2" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_2" type="text" name="server2[]"/><div class="clear"/>
+                    <input id="ssh_port_7_2" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_2" type="password" name="server2[]"/><div class="clear"/>
+                    <input id="root_password_7_2" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span>
-                    <select name="server2[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -117,39 +119,41 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server2[]" type="checkbox" value="winkstart_deploy_opensips" checked="checked" disabled="disabled"/> Call Director - OpenSIPs<div class="clear"/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_opensips" checked="checked" disabled="disabled"/> Call Director - OpenSIPs<div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Server Type.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server2[]" type="checkbox" value="winkstart_deploy_whapps" checked="checked" disabled="disabled"/> App Server - Whapps Controller<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_whapps" checked="checked" disabled="disabled"/> App Server - Whapps Controller<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_3" class="serverinfo_prod">
                     <h4>Server 3: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_3" type="text" name="server3[]"/><div class="clear"/>
+                    <input id="hostname_7_3" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_3" type="text" name="server3[]"/><div class="clear"/>
+                    <input id="ip_7_3" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_3" type="text" name="server3[]"/><div class="clear"/>
+                    <input id="ssh_port_7_3" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_3" type="password" name="server3[]"/><div class="clear"/>
+                    <input id="root_password_7_3" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span> 
-                    <select name="server3[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -157,34 +161,36 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server3[]" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_4" class="serverinfo_prod">
                     <h4>Server 4: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_4" type="text" name="server4[]"/><div class="clear"/>
+                    <input id="hostname_7_4" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_4" type="text" name="server4[]"/><div class="clear"/>
+                    <input id="ip_7_4" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_4" type="text" name="server4[]"/><div class="clear"/>
+                    <input id="ssh_port_7_4" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_4" type="password" name="server4[]"/><div class="clear"/>
+                    <input id="root_password_7_4" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span> 
-                    <select name="server4[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -192,34 +198,36 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server4[]" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_5" class="serverinfo_prod">
                     <h4>Server 5: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_5" type="text" name="server5[]"/><div class="clear"/>
+                    <input id="hostname_7_5" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_5" type="text" name="server5[]"/><div class="clear"/>
+                    <input id="ip_7_5" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_5" type="text" name="server5[]"/><div class="clear"/>
+                    <input id="ssh_port_7_5" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_5" type="password" name="server5[]"/><div class="clear"/>
+                    <input id="root_password_7_5" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span>
-                    <select name="server5[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -227,34 +235,36 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server5[]" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_bigcouch" checked="checked" disabled="disabled"/> Database Server - CouchDB<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_6" class="serverinfo_prod">
                     <h4>Server 6: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_6" type="text" name="server6[]"/><div class="clear"/>
+                    <input id="hostname_7_6" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_6" type="text" name="server6[]"/><div class="clear"/>
+                    <input id="ip_7_6" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_6" type="text" name="server6[]"/><div class="clear"/>
+                    <input id="ssh_port_7_6" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_6" type="password" name="server6[]"/><div class="clear"/>
+                    <input id="root_password_7_6" type="password" name="password"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span>
-                    <select name="server6[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -262,34 +272,36 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server6[]" type="checkbox" value="winkstart_deploy_whistle_fs" checked="checked" disabled="disabled"/> Media Server - FreeSWITCH<div class="clear"/>
-                    <hr/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_whistle_fs" checked="checked" disabled="disabled"/> Media Server - FreeSWITCH<div class="clear"/>
+                </form>
+                <hr/>
+                <form id="serverinfo_prod_7" class="serverinfo_prod">
                     <h4>Server 7: </h4>
                     <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Hostname: </label>
                     </span>
-                    <input id="hostname_7_7" type="text" name="server7[]"/><div class="clear"/>
+                    <input id="hostname_7_7" type="text" name="hostname"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">IP: </label>
                     </span>
-                    <input id="ip_7_7" type="text" name="server7[]"/><div class="clear"/>
+                    <input id="ip_7_7" type="text" name="ip"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">SSH Port: </label>
                     </span>
-                    <input id="ssh_port_7_7" type="text" name="server7[]"/><div class="clear"/>
+                    <input id="ssh_port_7_7" type="text" name="ssh_port"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="Main password on the server.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Root Password: </label>
                     </span>
-                    <input id="root_password_7_7" type="password" name="server7[]"/><div class="clear"/>
+                    <input id="root_password_7_7" type="password" name="passwor"/><div class="clear"/>
                     <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
                         <span class="tooltip"/>
                         <label class="newServerLbl">Os: </label>
                     </span>
-                    <select name="server7[]">
+                    <select name="os">
                         <option value="centos5-gems">CentOS 5</option>
                     </select>
                     <div class="clear"/>
@@ -297,7 +309,7 @@
                         <span class="tooltip"/>
                         <label class="newServerLbl">Roles: </label>
                     </span>
-                    <input id="roles_7_1" name="server7[]" type="checkbox" value="winkstart_deploy_whistle_fs" checked="checked" disabled="disabled"/> Media Server - FreeSWITCH<div class="clear"/>
+                    <input id="roles_7_1" name="roles" type="checkbox" value="winkstart_deploy_whistle_fs" checked="checked" disabled="disabled"/> Media Server - FreeSWITCH<div class="clear"/>
 
                     <a class="save_btnServer" href="#">Add</a>
                 </form>

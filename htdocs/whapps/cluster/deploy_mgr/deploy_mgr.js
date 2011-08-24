@@ -221,27 +221,18 @@ winkstart.module('cluster', 'deploy_mgr',
                             alert ('Please correct errors that you have on the form.');
                         }
                     });
-                    $('#serverinfo_prod a.save_btnServer', $(this)).click(function() {
-                        var data = form2object('serverinfo_prod');
-                        
+                    $('.serverinfo_prod a.save_btnServer', $(this)).click(function() {
                         // Validation in the prod case
                         THIS.validateForm('save', '2');
                         
                         if(!$('.invalid').size()) {
-                            $.each(data, function(){
-                                var server = {
-                                    hostname: this[0],
-                                    ip: this[1],
-                                    ssh_port: this[2],
-                                    password: this[3],
-                                    os: this[4]
-                                };
-                                server.roles = new Array();
-                                server.roles.push(this[5]);
-                                if(this[6]){
-                                    server.roles.push(this[6]);
-                                }
-                                winkstart.publish('deploy_mgr.addServer', server, true);
+                            $('.serverinfo_prod').each(function(){
+								var data = form2object($(this).attr('id'));
+								data.roles = new Array();                    
+								$('input[name="roles"]', '#'+$(this).attr('id')).each(function(){
+									data.roles.push($(this).val());
+								});
+								winkstart.publish('deploy_mgr.addServer', data, true);
                             });
                             $(firstServerDialog).dialog('close');
                             THIS.templates.helpdeploy.tmpl().dialog({
