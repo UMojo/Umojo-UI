@@ -1,6 +1,6 @@
     winkstart.module('userportal', 'userportal', {
         css: {
-            voip: 'css/userportal.css'
+            userportal: 'css/userportal.css'
         },
 
         templates: {
@@ -118,7 +118,6 @@
             var THIS = this;
 
             $('#ws-content').empty();
-            THIS.templates.userportal.tmpl({}).appendTo( $('#ws-content') );
 
             // Link the main buttons
             $('.options #cdr').click(function() {
@@ -132,15 +131,9 @@
             $('.options #voicemail').click(function() {
                 winkstart.publish('voicemail.activate');
             });
-            /*if(v == 'voicemail') {
-                $('.sub_nav li').each( function() {
-                    if($(this).attr('module-name') == "voicemail") {
-                        $(this).addClass('selected');
-                    }
-                });
-
-                winkstart.publish('voicemail.activate', {});
-            }*/
+    
+            //We want to load the voicemail module as the opening page of the userportal
+            winkstart.publish('voicemail.activate');
         }
     }
 );
