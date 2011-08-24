@@ -42,6 +42,21 @@
                                 <input id="hunt" name="hunt" type="checkbox"/>
                                 {{/if}}
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the Greeting message that you want to use for this this menu.<br/>If you select - Not set -, then no media file will be played.">
+                                    <span class="tooltip"/>
+                                    <label for="media_greeting">Greeting Message:</label>
+                                </span>
+                                <select name="media.greeting" id="media_greeting">
+                                {{each field_data.medias}}
+                                    {{if data.media.greeting == media_id}}
+                                    <option value="${media_id}" selected="selected">${title}</option>
+                                    {{else}}
+                                    <option value="${media_id}">${title}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
                         </ul>
                     </fieldset>
 

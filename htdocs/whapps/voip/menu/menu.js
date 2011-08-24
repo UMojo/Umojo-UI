@@ -150,29 +150,51 @@ winkstart.module('voip', 'menu',
             $('#menu-view').empty();
             var THIS = this;
             var form_data = {
-                data: { retries: "3", timeout: "10000" },   
+                data: { retries: "3", timeout: "10000", media: {}},   
                 field_data: {},
                 value: {}
             };
+            form_data.field_data.medias = [];
 
-            if (data && data.id) {
-                /* This is an existing menu - Grab JSON data from server for menu_id */
-                winkstart.getJSON('menu.get', {
+            winkstart.getJSON('media.list', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    menu_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(json, xhr) {
+                    var listMedias = [];
+                    listMedias.push({media_id: '', title: '- Not set -'});
+                    if(json.data.length > 0) {
+                        _.each(json.data, function(elem) {
+                            var title = elem.name;  
+                            listMedias.push({
+                                media_id: elem.id,
+                                title: title
+                            });
+                        });
+                    }
+                    form_data.field_data.medias = listMedias;
+    
+                     if (data && data.id) {
+                        /* This is an existing menu - Grab JSON data from server for menu_id */
+                        winkstart.getJSON('menu.get', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            menu_id: data.id
+                        }, function(json, xhr) {
+                            /* On success, take JSON and merge with default/empty fields */
+                            $.extend(true, form_data, json);
 
-                    THIS.renderMenu(form_data);
-                });
-            } else {
-                /* This is a new menu - pass along empty params */
-                THIS.renderMenu(form_data);
-            }
-            
+                            THIS.renderMenu(form_data);
+                        });
+                    } else {
+                        /* This is a new menu - pass along empty params */
+                        THIS.renderMenu(form_data);
+                    }
+
+                }
+            );
         },
 
         deleteMenu: function(menu_id) {
