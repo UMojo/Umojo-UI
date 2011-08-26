@@ -730,9 +730,17 @@ winkstart.module('connect', 'numbers',
 	                        callback: function(results) {
 	                            winkstart.log('Found these #s:', results);
 
-                            // Draw results on screen
-                            $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
-                        }
+                                // Draw results on screen
+                                $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
+
+                                $('.needCreditAdj', dialogDiv).change(function() {
+                                    THIS.updateDIDQtyCosts($(this).attr('data-did'), $(this).val());
+                                });
+
+                                $('.needCreditAdj', dialogDiv).blur(function() {
+                                    THIS.updateDIDQtyCosts($(this).attr('data-did'), $(this).val());
+                                });
+                            }
                         }
 
                     );
@@ -741,10 +749,17 @@ winkstart.module('connect', 'numbers',
                 $('#add_numbers_button', dialogDiv).click(function() {
                     THIS.purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));
                     dialogDiv.dialog('close');
+                    dialogDiv.remove();
                 });
 
         },
-
+        updateDIDQtyCosts: function(did, qty) {
+            if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
+                $('#fd_' + did).dataset('qty',  parseInt( qty ));
+                return parseInt( qty );
+            }
+            return -1;
+        },
 
         add: function(dids) {
             winkstart.postJSON('numbers.add',
@@ -787,7 +802,6 @@ winkstart.module('connect', 'numbers',
 	            	account_id: winkstart.apps['connect'].account_id
 	            },
 	            function(json) {
-                        console.log(json);
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                             winkstart.apps['connect'].account = json.data;
                         
@@ -824,7 +838,6 @@ winkstart.module('connect', 'numbers',
                     account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
-                    console.log(json);
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                         winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
