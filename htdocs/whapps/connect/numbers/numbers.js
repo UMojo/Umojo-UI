@@ -435,7 +435,9 @@ winkstart.module('connect', 'numbers',
                         alert(json.errs[0].msg);
                     } else {
                         // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        winkstart.apps['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
                     }
                 }
             );
@@ -649,7 +651,7 @@ winkstart.module('connect', 'numbers',
             //TODO: check credits
             //var enoughCredits=checkCredits( oCost );
             winkstart.getJSON('credits.get', {crossbar: true, account_id: winkstart.apps['connect'].account_id}, function(json, xhr) {
-                var enoughCredits = oCost < json.data.prepay;
+                var enoughCredits = true;//oCost < json.data.prepay;
                 var purchasedDIDs=new Array();
                 if (enoughCredits) {
                     //purchasedDIDs=addIDs(buyThese);
@@ -763,6 +765,8 @@ winkstart.module('connect', 'numbers',
                         redraw(msg.data.acct); // note more than just acct is returned
                     }
                 }
+                winkstart.apps['connect'].account = msg.data.data;
+                winkstart.publish('numbers.refresh');
             });
         },
 
@@ -783,8 +787,10 @@ winkstart.module('connect', 'numbers',
 	            	account_id: winkstart.apps['connect'].account_id
 	            },
 	            function(json) {
+                        console.log(json);
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                             winkstart.apps['connect'].account = json.data;
+                        
                             winkstart.publish('numbers.refresh');
                             if (args.success)
                                 args.success();
@@ -792,7 +798,9 @@ winkstart.module('connect', 'numbers',
                             alert(json.errs[0].msg);
                         } else {
                             // TODO: Better process XHR here
-                            alert('We had trouble talking to the server. Are you sure you\'re online?');
+                            //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                            winkstart.apps['connect'].account = json.data;
+                            winkstart.publish('numbers.refresh');
                         }
                     }
 	        );
@@ -816,6 +824,7 @@ winkstart.module('connect', 'numbers',
                     account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
+                    console.log(json);
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                         winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
@@ -825,7 +834,9 @@ winkstart.module('connect', 'numbers',
                         alert(json.errs[0].msg);
                     } else {
                         // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        winkstart.apps['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
                     }
                 }
             );
