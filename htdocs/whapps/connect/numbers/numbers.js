@@ -96,7 +96,7 @@ winkstart.module('connect', 'numbers',
                 verb: 'POST'
             },
 
-            "numbers.delete": {
+            "numbers.delete_number": {
                 url: 'https://store.2600hz.com/v1/{account_id}/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -414,7 +414,8 @@ winkstart.module('connect', 'numbers',
                     error : function() {
                         alert('Failed to save.');
                     }
-                })
+                });
+                dialogDiv.dialog('close');
             });
         },
 
@@ -434,7 +435,9 @@ winkstart.module('connect', 'numbers',
                         alert(json.errs[0].msg);
                     } else {
                         // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        winkstart.apps['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
                     }
                 }
             );
@@ -634,6 +637,7 @@ winkstart.module('connect', 'numbers',
 
 
         purchaseDIDs: function(DIDs) {
+            var THIS = this;
             var rCost= 0;
             var oCost= 0;
             var buyThese = new Array();
@@ -644,18 +648,34 @@ winkstart.module('connect', 'numbers',
             //			winkstart.log($(elm).dataset('did'));
             });
 
+            //TODO: check credits
+            //var enoughCredits=checkCredits( oCost );
+            winkstart.getJSON('credits.get', {crossbar: true, account_id: winkstart.apps['connect'].account_id}, function(json, xhr) {
+                var enoughCredits = true;//oCost < json.data.prepay;
+                var purchasedDIDs=new Array();
+                if (enoughCredits) {
+                    //purchasedDIDs=addIDs(buyThese);
+                    purchasedDIDs=THIS.add(buyThese);
 
-            var enoughCredits=checkCredits( oCost );
+                } else {
+                    alert('Not enough credits to add these DIDs');
+                    return false;
+                }
+
+                return purchasedDIDs;
+            });
+            /*var enoughCredits = true;
             var purchasedDIDs=new Array();
             if (enoughCredits) {
-                purchasedDIDs=addDIDs(buyThese);
+                //purchasedDIDs=addIDs(buyThese);
+                purchasedDIDs=THIS.add(buyThese);
 
             } else {
                 msgAlert('Not enough credits to add these DIDs');
                 return false;
             }
 
-            return purchasedDIDs;
+            return purchasedDIDs;*/
         },
 
         searchDIDsPrompt: function() {
@@ -700,7 +720,7 @@ winkstart.module('connect', 'numbers',
 
 
 
-                $('.ctr_btn', dialogDiv).click(function() {
+                $('#search_numbers_button', dialogDiv).click(function() {
                     var NPA = $('#sdid_npa', dialogDiv).val();
                     var NXX = $('#sdid_nxx', dialogDiv).val();
                     winkstart.publish('numbers.search_npa_nxx',
@@ -718,11 +738,16 @@ winkstart.module('connect', 'numbers',
                     );
                 });
 
+                $('#add_numbers_button', dialogDiv).click(function() {
+                    THIS.purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));
+                    dialogDiv.dialog('close');
+                });
+
         },
 
 
         add: function(dids) {
-            winkstart.postJSON('numbers.addDIDs',
+            winkstart.postJSON('numbers.add',
             {
                 account_id: winkstart.apps['connect'].account_id,
                 data: {
@@ -733,13 +758,15 @@ winkstart.module('connect', 'numbers',
                 if (typeof msg =="object") {
                     $("body").trigger('addDIDs', msg.data);
                     if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
+                        //display_errs(msg.errs);
                     }
 
                     if (typeof msg.data == 'object' && typeof msg.data.acct == 'object') {
                         redraw(msg.data.acct); // note more than just acct is returned
                     }
                 }
+                winkstart.apps['connect'].account = msg.data.data;
+                winkstart.publish('numbers.refresh');
             });
         },
 
@@ -760,8 +787,10 @@ winkstart.module('connect', 'numbers',
 	            	account_id: winkstart.apps['connect'].account_id
 	            },
 	            function(json) {
+                        console.log(json);
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                             winkstart.apps['connect'].account = json.data;
+                        
                             winkstart.publish('numbers.refresh');
                             if (args.success)
                                 args.success();
@@ -769,7 +798,9 @@ winkstart.module('connect', 'numbers',
                             alert(json.errs[0].msg);
                         } else {
                             // TODO: Better process XHR here
-                            alert('We had trouble talking to the server. Are you sure you\'re online?');
+                            //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                            winkstart.apps['connect'].account = json.data;
+                            winkstart.publish('numbers.refresh');
                         }
                     }
 	        );
@@ -793,6 +824,7 @@ winkstart.module('connect', 'numbers',
                     account_id : winkstart.apps['connect'].account_id
                 },
                 function(json) {
+                    console.log(json);
                     if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                         winkstart.apps['connect'].account = json.data;
                         winkstart.publish('numbers.refresh');
@@ -802,7 +834,9 @@ winkstart.module('connect', 'numbers',
                         alert(json.errs[0].msg);
                     } else {
                         // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
+                        winkstart.apps['connect'].account = json.data;
+                        winkstart.publish('numbers.refresh');
                     }
                 }
             );
