@@ -1,109 +1,220 @@
-winkstart.module('voip', 'callflow',
-   {
-      css: [
-         'css/style.css',
-         'css/popups.css',
-         'css/ringgroup.css',
-         'css/callflow.css'
-      ],
+winkstart.module('voip', 'callflow', {
+        css: [
+            'css/style.css',
+            'css/popups.css',
+            'css/ringgroup.css',
+            'css/callflow.css'
+        ],
 
-      templates: {
-         callflow: 'tmpl/callflow.html',
-         callflow_main: 'tmpl/callflow_main.html',
-         branch: 'tmpl/branch.html',
-         tools: 'tmpl/tools.html',
-         root: 'tmpl/root.html',
-         node: 'tmpl/node.html',
-         add_number: 'tmpl/add_number.html',
-         ring_group_dialog: 'tmpl/ring_group_dialog.html',
-         edit_dialog: 'tmpl/edit_dialog.html'
-      },
+        templates: {
+            callflow: 'tmpl/callflow.html',
+            callflow_main: 'tmpl/callflow_main.html',
+            branch: 'tmpl/branch.html',
+            tools: 'tmpl/tools.html',
+            root: 'tmpl/root.html',
+            node: 'tmpl/node.html',
+            add_number: 'tmpl/add_number.html',
+            ring_group_dialog: 'tmpl/ring_group_dialog.html',
+            edit_dialog: 'tmpl/edit_dialog.html'
+        },
 
-      elements: {
-         flow: '#ws_cf_flow',
-         tools: '#ws_cf_tools',
-         save: '#ws_cf_save',
-         buf: '#ws_cf_buf'
-      },
+        elements: {
+            flow: '#ws_cf_flow',
+            tools: '#ws_cf_tools',
+            save: '#ws_cf_save',
+            buf: '#ws_cf_buf'
+        },
 
-      actions: {
-          "root"        : { "name" : "root",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "false"},
-          "device"      : { "name" : "device",      "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "conference"  : { "name" : "conference",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "menu"        : { "name" : "menu",        "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
-          "callflow"    : { "name" : "callflow",    "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "voicemail"   : { "name" : "voicemail",   "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "play"        : { "name" : "play",        "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "offnet"      : { "name" : "offnet",      "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
-          "ring_group"  : { "name" : "ring_group",  "rules" : [ {"type" : "quantity", "maxSize" : "1"} ], "isUsable" : "true"},
-          "temporal_route"  : { "name" : "temporal_route",  "rules" : [ {"type" : "quantity", "maxSize" : "9"} ], "isUsable" : "true"},
-      },
+        nodes: {
+            'root': {
+                'name': 'Root',
+                'rules': [ 
+                    {
+                        'type': 'quantity',
+                        'maxSize' : '1'
+                    } 
+                ],
+                'isUsable' : 'false'
+            },
+            'device': {
+                'name': 'Device',
+                'icon': 'phone',
+                'category': 'basic',
+                'module': 'device',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'conference': {
+                'name': 'Conference',
+                'icon': 'conference',
+                'category': 'basic',
+                'module': 'conference',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'menu': {
+                'name': 'Menu',
+                'icon': 'menu',
+                'category': 'basic',
+                'module': 'menu',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '9'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'callflow': {
+                'name': 'Callflow',
+                'icon': 'callflow',
+                'category': 'basic',
+                'module': 'callflow',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'voicemail': {
+                'name': 'Voicemail',
+                'icon': 'voicemail',
+                'category': 'basic',
+                'module': 'vmbox',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize' : '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'play': {
+                'name': 'Play',
+                'icon': 'play',
+                'category': 'basic',
+                'module': 'media',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'offnet': {
+                'name': 'Offnet',
+                'icon': 'offnet',
+                'category': 'basic',
+                'module': 'offnet',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '9'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'ringgroup': {
+                'name': 'Ring Group',
+                'icon': 'ring_group',
+                'category': 'basic',
+                'module': 'ring_group',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '1'
+                    }
+                ],
+                'isUsable': 'true'
+            },
+            'timeofday': {
+                'name': 'Time of Day',
+                'icon': 'temporal_route',
+                'category': 'basic',
+                'module': 'temporal_route',
+                'rules': [
+                    {
+                        'type': 'quantity',
+                        'maxSize': '9'
+                    }
+                ],
+                'isUsable': 'true'
+            }
+        },
 
-      type_map: {
-         "device": "device",
-         "menu": "menu",
-         "play": "media",
-         "voicemail": "vmbox",
-         "callflow": "callflow",
-         "conference": "conference"
-      },
+        type_map: {
+            'device': 'device',
+            'menu': 'menu',
+            'play': 'media',
+            'voicemail': 'vmbox',
+            'callflow': 'callflow',
+            'conference': 'conference'
+        },
 
-      menu_options: {
-        "_": "default action",
-        "0": "0",
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "*": "*",
-        "#": "#"
-      },
+        menu_options: {
+            '_': 'default action',
+            '0': '0',
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '*': '*',
+            '#': '#'
+        },
 
-      categories: {
-         "Basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow","ring_group"],
-         "Dialplan": ["answer", "hangup", "tone"]
-      },
+        subscribe: {
+            'callflow.activate' : 'activate',
+            'callflow.list-panel-click' : 'editCallflow',
+            'callflow.edit-callflow' : 'editCallflow'
+        },
 
-      subscribe: {
-         'callflow.activate' : 'activate',
-         'callflow.list-panel-click' : 'editCallflow',
-         'callflow.edit-callflow' : 'editCallflow'
-      },
-      resources: {
-            "callflow.list": {
+        resources: {
+            'callflow.list': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "callflow.get": {
+            'callflow.get': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "callflow.create": {
+            'callflow.create': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "callflow.update": {
+            'callflow.update': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "callflow.delete": {
+            'callflow.delete': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             }
-      }
-
-   },
-   function (args) {
+        }
+    },
+    function (args) {
         winkstart.registerResources(this.__whapp, this.config.resources);
 
         winkstart.publish('subnav.add', {
@@ -113,23 +224,38 @@ winkstart.module('voip', 'callflow',
             icon: 'callflow',
             weight: '50'
         });
-   },
-   {
-      activate: function () {
-         var THIS = this;
+    },
+    {
+        activate: function () {
+            var THIS = this;
 
-         $('#ws-content').empty();
-         THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
-         THIS.renderList( function() { 
-            THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
-            THIS.renderTools();
-         });
+            $('#ws-content').empty();
+            THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
 
-         THIS.actions = THIS.config.actions;
-         THIS.categories = THIS.config.categories;
+            THIS.renderList(function() { 
+                THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
+                THIS.renderTools();
+            });
 
-         $(this.config.elements.save).click(function () { THIS.save(); }).hover(function () { $(this).addClass('active'); }, function () { $(this).removeClass('active'); });
-      },
+            THIS.actions = THIS.config.nodes;
+
+            $.each(THIS.actions, function(i, data) {
+                if('category' in data) {
+                    data.category in THIS.categories ? true : THIS.categories[data.category] = [];
+                    THIS.categories[data.category].push(i);
+                }
+            });
+
+            $(this.config.elements.save).click(function() {
+                THIS.save();
+            }).hover(function() {
+                    $(this).addClass('active');
+                },
+                function() {
+                    $(this).removeClass('active');
+                }
+            );
+        },
 
       editCallflow: function(data) {
          var THIS = this;
@@ -182,8 +308,6 @@ winkstart.module('voip', 'callflow',
       },
 
       renderTools: function () {
-         var target = $(this.config.elements.tools).empty();
-         target.append(this._renderTools());
       },
 
       // Create a new branch node for the flow
@@ -209,7 +333,7 @@ winkstart.module('voip', 'callflow',
             this.potentialChildren = function () {
                var list = [];
 
-               for (var i in THIS.actions) if (THIS.actions[i].isUsable) list[THIS.actions[i].name] = THIS.actions[i].name;
+               for (var i in THIS.actions) if (THIS.actions[i].isUsable) list[i] = i;
 
                for (var i in THIS.actions[this.actionName].rules) {
                   var rule = THIS.actions[this.actionName].rules[i];
@@ -289,11 +413,6 @@ winkstart.module('voip', 'callflow',
         });
         return count;
       },
-
-// A set of actions: modules/apps tied together with rules, restricting dependencies between the actions
-      root: { name : 'root', rules : [ {type : 'quantity', maxSize : 1} ], isUsable : false},
-
-      actions: { root : this.root },
 
 // Action categories
       categories: { },
@@ -795,12 +914,14 @@ winkstart.module('voip', 'callflow',
          return flow;
       },
 
-
-// TOOL BAR /////////////////////////////////////////////////////////////
-        _renderTools: function () {
+        renderTools: function () {
             var THIS = this,
-                buf = $(this.config.elements.buf),
-                tools = THIS.templates.tools.tmpl({ categories: THIS.categories });
+                buf = $(THIS.config.elements.buf),
+                tools = THIS.templates.tools.tmpl({
+                    categories: THIS.categories,
+                    nodes: THIS.actions
+                }),
+                target;
 
             $('.category', tools).click(function () {
                 var current = $(this);
@@ -853,9 +974,12 @@ winkstart.module('voip', 'callflow',
                 });
             }
 
-            $('.action', tools).each(function () { action($(this)); });
-
-            return tools;
+            $('.action', tools).each(function() {
+                action($(this));
+            });
+                
+            target = $(THIS.config.elements.tools).empty();
+            target.append(tools);
         },
 
 // DESTINATION POINTS ///////////////////////////////////////
@@ -925,58 +1049,67 @@ winkstart.module('voip', 'callflow',
 /*****************************************************************************
  *  Deep object cloning  ***
  *****************************************************************************/
-      _clone: function (obj) {
-         if (obj == null || typeof(obj) != 'object') return obj;
-         var o = new obj.constructor(); 
-         for (var key in obj) o[key] = this._clone(obj[key]);
-         return o;
-      }, 
+        _clone: function (obj) {
+            var o;
 
-   //Regular WS JS here:
-    renderList: function(callback){
-        var THIS = this;
+            if (obj == null || typeof(obj) != 'object') return obj;
 
-        winkstart.getJSON('callflow.list', {
-            crossbar: true,
-            account_id: winkstart.apps['voip'].account_id,
-            api_url: winkstart.apps['voip'].api_url
-        }, function (json, xhr) {
+            o = new obj.constructor(); 
+            for (var key in obj) o[key] = this._clone(obj[key]);
 
-            // List Data that would be sent back from server
-            function map_crossbar_data(crossbar_data){
-                var new_list = [];
-                if(crossbar_data.length > 0) {
-                    _.each(crossbar_data, function(elem){
-                        new_list.push({
-                            id: elem.id,
-                            title: elem.numbers.toString()
+            return o;
+        }, 
+
+        renderList: function(callback){
+            var THIS = this;
+
+            winkstart.getJSON('callflow.list', {
+                    crossbar: true,
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function (data, status) {
+
+                    // List Data that would be sent back from server
+                    function map_crossbar_data(crossbar_data){
+                        var new_list = [],
+                            answer;
+
+                        if(crossbar_data.length > 0) {
+                            _.each(crossbar_data, function(elem){
+                                new_list.push({
+                                    id: elem.id,
+                                    title: elem.numbers.toString()
+                                });
+                            });
+                        }
+
+                        new_list.sort(function(a, b) {
+                            a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+
+                            return answer;
                         });
-                    });
+
+                        return new_list;
+                    }
+
+                    var options = {};
+                    options.label = 'Callflow Module';
+                    options.identifier = 'callflow-module-listview';
+                    options.new_entity_label = 'Callflow';
+                    options.data = map_crossbar_data(data.data);
+                    options.publisher = winkstart.publish;
+                    options.notifyMethod = 'callflow.list-panel-click';
+                    options.notifyCreateMethod = 'callflow.edit-callflow';  /* Edit with no ID = Create */
+
+                    $("#callflow-listpanel").empty();
+                    $("#callflow-listpanel").listpanel(options);
+
+                    if(typeof callback == 'function') {
+                        callback();
+                    }
                 }
-                new_list.sort(function(a, b) {
-                    var answer;
-                    a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                    return answer;
-                });
-                return new_list;
-            }
-
-            var options = {};
-            options.label = 'Callflow Module';
-            options.identifier = 'callflow-module-listview';
-            options.new_entity_label = 'Callflow';
-            options.data = map_crossbar_data(json.data);
-            options.publisher = winkstart.publish;
-            options.notifyMethod = 'callflow.list-panel-click';
-            options.notifyCreateMethod = 'callflow.edit-callflow';  /* Edit with no ID = Create */
-
-            $("#callflow-listpanel").empty();
-            $("#callflow-listpanel").listpanel(options);
-        
-            if(typeof callback == 'function') {
-                callback();
-            }
-
-        });
+            );
+        }
     }
-});
+);
