@@ -651,7 +651,7 @@ winkstart.module('connect', 'numbers',
             //TODO: check credits
             //var enoughCredits=checkCredits( oCost );
             winkstart.getJSON('credits.get', {crossbar: true, account_id: winkstart.apps['connect'].account_id}, function(json, xhr) {
-                var enoughCredits = true;//oCost < json.data.prepay;
+                var enoughCredits = oCost < json.data.prepay;
                 var purchasedDIDs=new Array();
                 if (enoughCredits) {
                     //purchasedDIDs=addIDs(buyThese);
