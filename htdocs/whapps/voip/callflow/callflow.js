@@ -65,8 +65,8 @@ winkstart.module('voip', 'callflow',
       },
 
       categories: {
-         "basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow","ring_group"]//,
-         //"dia:lplan": ["answer", "hangup", "tone"]
+         "Basic" : ["device","voicemail","menu","temporal_route","offnet","play","conference","callflow","ring_group"],
+         "Dialplan": ["answer", "hangup", "tone"]
       },
 
       subscribe: {
@@ -797,54 +797,66 @@ winkstart.module('voip', 'callflow',
 
 
 // TOOL BAR /////////////////////////////////////////////////////////////
-      _renderTools: function () {
-         var THIS = this;
-         var buf = $(this.config.elements.buf);
-         var tools = THIS.templates.tools.tmpl({categories: THIS.categories});
-         tools.find('.category').click(function () {
-            //$(this).toggleClass('voicemail_apps');
-            //$(this).children().toggleClass('open');
-            $(this).find('.activeArrow').size() > 0 ? $('.arrow_category').removeClass('activeArrow').addClass('inactiveArrow') : $('.arrow_category').removeClass('inactiveArrow').addClass('activeArrow');
-            var current = $(this);
-            while(current.next().hasClass('tool') ||
-                  current.next().hasClass('app_list_nav') ||
-                  current.next().hasClass('clear')) {
-               current = current.next();
-               current.toggle();
-            }
-         });
+        _renderTools: function () {
+            var THIS = this,
+                buf = $(this.config.elements.buf),
+                tools = THIS.templates.tools.tmpl({ categories: THIS.categories });
 
-//         tools.find('.category').click();
+            $('.category', tools).click(function () {
+                var current = $(this);
 
-         tools.find('.tool').hover(function () {$(this).addClass('active');}, function () {$(this).removeClass('active');})
+                if($('.arrow_category', $(this)).hasClass('activeArrow')) {
+                    $('.arrow_category', $(this)).removeClass('activeArrow').addClass('inactiveArrow')
+                    $('.text_category', $(this)).removeClass('activeText').addClass('inactiveText')
+                }
+                else {
+                    $('.arrow_category', $(this)).removeClass('inactiveArrow').addClass('activeArrow');
+                    $('.text_category', $(this)).removeClass('inactiveText').addClass('activeText');
+                }
+                
 
-         function action (el) {
-            el.draggable({
-               start: function () {
-                  THIS._enableDestinations($(this));
-
-                  var clone = $(this).clone();
-                  action(clone);
-                  clone.addClass('inactive');
-                  clone.insertBefore($(this));
-
-                  $(this).addClass('active');
-               },
-               drag: function () {
-               },
-               stop: function () {
-                  THIS._disableDestinations();
-                  $(this).prev().removeClass('inactive');
-                  $(this).remove();
-               }
+                while(current.next().hasClass('tool') || current.next().hasClass('app_list_nav') || current.next().hasClass('clear')) {
+                    current = current.next();
+                    current.toggle();
+                }
             });
-         }
 
-         tools.find('.action').each(function () { action($(this)); });
+            $('.tool', tools).hover(
+                function () {
+                    $(this).addClass('active');
+                }, 
+                function () {
+                    $(this).removeClass('active');
+                }
+            );
 
-         tools.find('#basic').find('.text_category').html('List of Applications');
-         return tools;
-      },
+            function action (el) {
+                el.draggable({
+                    start: function () {
+                        var clone = $(this).clone();
+
+                        THIS._enableDestinations($(this));
+
+                        action(clone);
+                        clone.addClass('inactive');
+                        clone.insertBefore($(this));
+
+                        $(this).addClass('active');
+                    },
+                    drag: function () {
+                    },
+                    stop: function () {
+                        THIS._disableDestinations();
+                        $(this).prev().removeClass('inactive');
+                        $(this).remove();
+                    }
+                });
+            }
+
+            $('.action', tools).each(function () { action($(this)); });
+
+            return tools;
+        },
 
 // DESTINATION POINTS ///////////////////////////////////////
       _enableDestinations: function (el) {
