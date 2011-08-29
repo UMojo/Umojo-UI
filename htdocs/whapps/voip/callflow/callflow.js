@@ -1233,8 +1233,42 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     'isUsable': 'true',
-                    'edit': function(node, node_html) {
+                    'caption': function(node, caption_map) {
+                        var id = node.getMetadata('id');
 
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    'edit': function(node, node_html, callback) {
+                        winkstart.getJSON('vmbox.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.edit_dialog.tmpl({
+                                    objects: {
+                                        type: 'voicemail',
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Voicemail' });
+
+                                $('.submit_btn', popup).click(function() {
+                                    node.setMetadata('id', $('#object-selector', popup).val());
+
+                                    node.caption = $('#object-selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
                     }
                 },
                 'play': {
