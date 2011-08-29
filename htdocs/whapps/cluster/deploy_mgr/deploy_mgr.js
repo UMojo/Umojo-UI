@@ -15,7 +15,8 @@ winkstart.module('cluster', 'deploy_mgr',
             firstserver: 'tmpl/firstServer.html',
             addcluster: 'tmpl/addCluster.html',
             noserver: 'tmpl/noServer.html',
-            helpdeploy: 'tmpl/helpdeploy.html'
+            helpdeploy: 'tmpl/helpdeploy.html',
+            form: 'tmpl/form.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -31,51 +32,6 @@ winkstart.module('cluster', 'deploy_mgr',
             'deploy_mgr.setlink': 'setLink',
             'deploy_mgr.getroles': 'getRoles'
         },
-        
-        validationTab1 : [
-            {name : '#hostname_1_1', regex : /^.+$/},
-            {name : '#ip_1_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_1_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_1_1', regex : /^.+$/}
-        ],
-        
-        validationTab2 : [
-            {name : '#hostname_7_1', regex : /^.+$/},
-            {name : '#ip_7_1', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_1', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_1', regex : /^.+$/},
-            {name : '#hostname_7_2', regex : /^.+$/},
-            {name : '#ip_7_2', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_2', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_2', regex : /^.+$/},
-            {name : '#hostname_7_3', regex : /^.+$/},
-            {name : '#ip_7_3', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_3', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_3', regex : /^.+$/},
-            {name : '#hostname_7_4', regex : /^.+$/},
-            {name : '#ip_7_4', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_4', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_4', regex : /^.+$/},
-            {name : '#hostname_7_5', regex : /^.+$/},
-            {name : '#ip_7_5', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_5', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_5', regex : /^.+$/},
-            {name : '#hostname_7_6', regex : /^.+$/},
-            {name : '#ip_7_6', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_6', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_6', regex : /^.+$/},
-            {name : '#hostname_7_7', regex : /^.+$/},
-            {name : '#ip_7_7', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#ssh_port_7_7', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#root_password_7_7', regex : /^.+$/}
-        ],
-        
-        validationTab3 : [
-            {name : '#hostnameNewServer', regex : /^.+$/},
-            {name : '#ipNewServer', regex : /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/},
-            {name : '#sshNewServer', regex : /^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$/},
-            {name : '#passwordNewServer', regex : /^.+$/}
-        ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
@@ -125,38 +81,7 @@ winkstart.module('cluster', 'deploy_mgr',
 
     /* Define the functions for this module */
     {   
-        validateForm: function(state, tab) {
-            var THIS = this;
-            
-            if (state == 'save') {
-                if(tab != '2' && tab != '3') {
-                    $(THIS.config.validationTab1).each(function(k, v) {
-                        winkstart.validate.save($(v.name), v.regex);
-                    });
-                } else if (tab == '2') {
-                    $(THIS.config.validationTab2).each(function(k, v) {
-                        winkstart.validate.save($(v.name), v.regex);
-                    });
-                } else if (tab == '3') {
-                    $(THIS.config.validationTab3).each(function(k, v) {
-                        winkstart.validate.save($(v.name), v.regex);
-                    });
-                }
-            } else if(state == undefined) {
-                $(THIS.config.validationTab1).each(function(k, v) {
-                    winkstart.validate.add($(v.name), v.regex);
-                });
-                $(THIS.config.validationTab2).each(function(k, v) {
-                    winkstart.validate.add($(v.name), v.regex);
-                });
-                $(THIS.config.validationTab3).each(function(k, v) {
-                    winkstart.validate.add($(v.name), v.regex);
-                });
-            }
-        },
-        
         server_count : 0,
-        
         requestServer: function() {
             var THIS = this;
             
@@ -185,80 +110,88 @@ winkstart.module('cluster', 'deploy_mgr',
                     })
                 }
             });
-            
-            $(serverDialog).dialog('open');
         },
         
         requestFirstServer: function() {
-            var THIS = this;
-            
-            var firstServerDialog = winkstart.dialog(THIS.templates.firstserver.tmpl(), {
+            var THIS = this,
+            serverTypes = ['Own', 'Rackspace', 'Amazon', 'Linode'],
+            firstServerDialog = winkstart.dialog(THIS.templates.firstserver.tmpl(), {
                 resizable: false,
-                open: function(){
-                    $("#tabs ul").tabs("#tabs .pane > div");
-                    
-                    //Fix CSS
-                    $("ul.settings_tabs", "#tabs").css('margin', '0');
-                    $(".pane", "#tabs").css('margin', '0');
-                    $(".pane", "#tabs").css('width', '380');
-                    
-                    THIS.validateForm();
-                    
-                    $('#serverinfo_dev a.save_btnServer', $(this)).click(function() {
-                        var data = form2object('serverinfo_dev');
-                        data.roles = new Array('all_in_one');
-                        
-                        // Validation in the dev case
-                        THIS.validateForm('save', '1');
-                        
-                        if(!$('.invalid').size()) {
-                            winkstart.publish('deploy_mgr.addServer', data);
-                            $(firstServerDialog).dialog('close');
-                            THIS.templates.helpdeploy.tmpl().dialog({
-                                resizable: 'false'
-                            });
-                        } else {
-                            alert ('Please correct errors that you have on the form.');
-                        }
-                    });
-                    $('.serverinfo_prod a.save_btnServer', $(this)).click(function() {
-                        // Validation in the prod case
-                        THIS.validateForm('save', '2');
-                        
-                        if(!$('.invalid').size()) {
-                            $('.serverinfo_prod').each(function(){
-								var data = form2object($(this).attr('id'));
-								data.roles = new Array();                    
-								$('input[name="roles"]', '#'+$(this).attr('id')).each(function(){
-									data.roles.push($(this).val());
-								});
-								winkstart.publish('deploy_mgr.addServer', data, true);
-                            });
-                            $(firstServerDialog).dialog('close');
-                            THIS.templates.helpdeploy.tmpl().dialog({
-                                resizable: 'false'
-                            });
-
-                            //Hack to deploy server after adding them all
-                            setTimeout(function(){
-                                $('.cluster').find('.server').each(function(){
-                                    var serverId = $(this).attr('server_id');
-                                    winkstart.publish('deploy_mgr.updateServer',  serverId);
-                                }); 
-                            },5000);
-                        }
+                title: 'Types',
+                open: function(){       
+                    $(this).dialog({
+                        width: 200
                     });
                     
-                    $.each($('body').find('*[tooltip]'), function(){
-                        $(this).tooltip({
-                            attach:'body'
+                    $('.serverType', firstServerDialog).each(function(){
+                        var select = this;
+                        $.each(serverTypes,function(i, v){
+                            $(select).append('<option value="'+i+'">'+v+'</option>');
+                        });      
+                    });
+                    
+                    $('#selectType').change(function(){
+                        $(firstServerDialog).dialog({
+                            width: 200
+                        });
+                        $('.type').each(function(){
+                            $(this).hide();
+                        });
+                        $('#'+$(this).val()).fadeToggle("slow", "linear");
+                        $('.content_form', $(firstServerDialog)).html('');
+                    });
+					
+                    $('.type').each(function(){
+                        var div = this;
+                        $('.serverType', $(div)).change(function(){
+                            $(firstServerDialog).dialog({
+                                width: 550
+                            });
+                            var data = {
+                                servers: [],
+                                roles: [],
+                                type: div.id
+                            };
+                            switch(div.id){
+                                case '0':
+                                    data.roles.push('all_in_one');
+                                    break;
+                                default:
+                                    data.roles.push(['winkstart_deploy_opensips', 'winkstart_deploy_whapps']);
+                                    data.roles.push(['winkstart_deploy_opensips', 'winkstart_deploy_whapps']);
+                                    data.roles.push(['winkstart_deploy_bigcouch']);
+                                    data.roles.push(['winkstart_deploy_bigcouch']);
+                                    data.roles.push(['winkstart_deploy_bigcouch']);
+                                    data.roles.push(['winkstart_deploy_whistle_fs']);
+                                    data.roles.push(['winkstart_deploy_whistle_fs']);
+                                    break;
+                            }
+                            $(div).find('.serverType option:selected').each(function(){
+                                data.servers.push($(this).text());
+                            });
+                            
+                            $('.content_form', $(firstServerDialog)).html(THIS.templates.form.tmpl(data));
+                            
+                            $.each($('body').find('*[tooltip]'), function(){
+                                $(this).tooltip({attach:'body'});
+                            });
+                            
+                            $('.content_form').find('.save_btnServer').click(function(){
+                                var data = {
+                                    servers: []
+                                };
+                                $('.content_form').find('.servers').each(function(){
+                                    data.servers.push(form2object(this.id));
+                                });
+                                console.log(data);
+                            });
+                            
                         });
                     });
                 }
             });
-            $(firstServerDialog).dialog('open');
         },
-
+        
         addServer: function(serverData, noUpdate) {
             var THIS = this;
             
@@ -292,37 +225,6 @@ winkstart.module('cluster', 'deploy_mgr',
                 }
             });
         },
-        
-        //        _setupWhappServersUrl: function() {
-        //            var THIS = this;
-        //           
-        //            winkstart.getJSON('cluster.listservers', {
-        //                crossbar: true, 
-        //                account_id: winkstart.apps['auth'].account_id 
-        //            }, function(reply) {
-
-        //                
-        //                var url = "";
-        //                
-        //                $.each(reply.data, function(k, server) {
-
-        //                    roles = server.roles;
-
-        //                    $.each(roles, function(k, role){
-        //                        if(role == 'winkstart_deploy_whapps' || role == 'all_in_one') {
-        //                            url = server.hostname;
-        //                        }
-        //                    });
-        //                });
-        //                
-        //                if (url != "")
-        //                    THIS._changeURL(url);
-        ////                $.each(reply.data, function () {
-        ////                });
-        //            });
-        //            
-        //            $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
-        //        },
         
         _changeURL: function(url) {
             winkstart.getJSON('auth.get_user', {
@@ -436,18 +338,18 @@ winkstart.module('cluster', 'deploy_mgr',
             var THIS = this;
             
             $('.cluster').find('.server').each(function(){
-                    var serverId = $(this).attr('server_id');
+                var serverId = $(this).attr('server_id');
                     
-                    rest_data.server_id = serverId;
-                    winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
-                        var status = THIS.setStatus(json.data.status);
+                rest_data.server_id = serverId;
+                winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
+                    var status = THIS.setStatus(json.data.status);
                         
-                        //THIS.setLoglist(json.data.log, serverId);
+                    //THIS.setLoglist(json.data.log, serverId);
                         
-                        $('#'+serverId+' a.update_status').html(status);
-                        $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
-                    });
-                }); 
+                    $('#'+serverId+' a.update_status').html(status);
+                    $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
+                });
+            }); 
         },
         
         setStatus: function(oldStatus){
@@ -614,9 +516,9 @@ winkstart.module('cluster', 'deploy_mgr',
         },
 
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
- * if appropriate. You should also attach to any default click items you want to respond to when people click
- * on them. Also register resources.
- */
+     * if appropriate. You should also attach to any default click items you want to respond to when people click
+     * on them. Also register resources.
+     */
         activate: function(data) {
             var THIS = this;
 
