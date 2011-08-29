@@ -79,36 +79,42 @@ winkstart.module('connect', 'sipservice',
     function(args) {
         /* Paint the subnav */
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: 'sipservice.apis',
             label: 'APIs',
             icon: 'puzzle'
         });
 
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: 'sipservice.legal',
             label: 'Legal',
             icon: 'legal'
         });
 
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: 'sipservice.support',
             label: 'Support',
             icon: 'support'
         });
 
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: 'sipservice.rates',
             label: 'Rates',
             icon: 'price_tag'
         });
 
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: 'sipservice.howto',
             label: 'How to Use',
             icon: 'book'
         });
 
         winkstart.publish('subnav.add', {
+            whapp: 'connect',
             module: this.__module,
             label: 'SIP Services',
             icon: 'active_phone'
@@ -116,11 +122,6 @@ winkstart.module('connect', 'sipservice',
 
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.__whapp, this.config.resources);
-
-        // Only one option for now - go ahead and open it up!
-        winkstart.publish('subnav.activate', 'sipservice');
-
-        winkstart.publish('sipservice.activate');
     }, // End initialization routine
 
 

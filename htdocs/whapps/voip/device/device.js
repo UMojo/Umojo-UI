@@ -136,55 +136,16 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-        {
-            name : '#name', 
-            regex : /^[a-zA-Z0-9\s_']+$/
-        },
-
-        {
-            name : '#mac_address', 
-            regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/
-        },
-
-        {
-            name : '#caller_id_name_internal', 
-            regex : /^.*$/
-        },
-
-        {
-            name : '#caller_id_number_internal', 
-            regex : /^[\+]?[0-9]*$/
-        },
-
-        {
-            name : '#caller_id_name_external', 
-            regex : /^.*$/
-        },
-
-        {
-            name : '#caller_id_number_external', 
-            regex : /^[\+]?[0-9]*$/
-        },
-
-        {
-            name : '#sip_realm', 
-            regex : /^[0-9A-Za-z\-\.\:]+$/
-        },
-
-        {
-            name : '#sip_username', 
-            regex : /^[^\s]+$/
-        },
-
-        {
-            name : '#sip_password', 
-            regex : /^[^\s]+$/
-        },
-
-        {
-            name : '#sip_expire_seconds', 
-            regex : /^[0-9]+$/
-        }
+            {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
+            {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
+            {name : '#caller_id_name_internal', regex : /^.*$/},
+            {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
+            {name : '#caller_id_name_external', regex : /^.*$/},
+            {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
+            {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
+            {name : '#sip_username', regex : /^[^\s]+$/},
+            {name : '#sip_password', regex : /^[^\s]+$/},
+            {name : '#sip_expire_seconds', regex : /^[0-9]+$/}
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -657,6 +618,23 @@ winkstart.module('voip', 'device',
             });
 
             THIS.renderList();
+            
+            $('#sip_password[type="password"]').live('focus', function() {
+                var value = $(this).val();
+                $('<input id="sip_password" name="sip.password" type="text"/>').insertBefore($(this)).val(value).focus();
+                $(this).remove();
+            });
+
+            $('#sip_password[type="text"]').live('blur', function(ev) {
+                var value;
+                if($(this).attr('removing') != 'true') {
+                    $(this).attr('removing', 'true');
+                    value = $(this).val();
+                    $('<input id="sip_password" name="sip.password" type="password"/>').insertBefore($(this)).val(value);
+                    $(this).remove();
+                }
+            });
+
         }
     }
     );

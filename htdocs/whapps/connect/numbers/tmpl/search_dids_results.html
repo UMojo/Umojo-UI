@@ -1,26 +1,30 @@
-<hr/>
+<div>
+    <div>
+        <h3 style="float:none;">Results</h3>
+        <hr/>
 		{{each(i,err) errs}}
 			<div class="errMsg">${err.msg}</div>
 		{{/each}}
 
-
-			<div class="rcMsg">Rate Center: {{each(i, car) data}}{{if car.ratecenter}}${car.ratecenter} {{/if}}&nbsp; {{/each}} &nbsp;</div>
+			<div class="rcMsg">{{each(i, car) data}}{{if car.ratecenter}}Rate Center: ${car.ratecenter} {{/if}}&nbsp; {{/each}} &nbsp;</div>
 			<div style="" class="credit_preauth"></div>
-			<div><a href="#" class="button" onclick="purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));">Purchase DIDs</a></div><div class="helpertext">This will charge your credit card</div>
 
-			<form id="addDIDForm" onsubmit="addDIDs($('input:checkbox:checked.f_dids');); return false;"  style="overflow: scroll; max-width 20em; max-height: 15em;">
+			<form id="addDIDForm" onsubmit="addDIDs($('input:checkbox:checked.f_dids')); return false;"  style="overflow: auto; max-width 20em; max-height: 15em;">
 		{{each(i,car) data}}
-
 		{{each(i,fnbr) car.dids}}
-				<div class="foundDID"><label for="fd_${fnbr.did}">${fnbr.did}</label><input type="checkbox" id="fd_${fnbr.did}" class="f_dids needCreditItem" value="${fnbr.did}" data-recurringCost="${fnbr.rCost}" data-oneTimeCost="${fnbr.oCost}" data-did="${fnbr.did}" data-provider="${fnbr.provider}" data-qty="1" />
-					{{if fnbr.rc && fnbr.rc.npanxx}} - <span class="did_ratecenter">${fnbr.rc.npanxx[0].ratecenter} ${fnbr.rc.npanxx[0].state}</span> {{/if}}
-					{{if fnbr.did.length < 10}}
-						QTY: <input type="number" step="1" pattern="^\d*$" name="" class="needCreditAdj shortInt" id="adf_${fnbr.did}_qty" onchange="updateDIDQtyCosts(${fnbr.did}, parseInt(this.value));" onselect=" updateDIDQtyCosts(${fnbr.did}, parseInt(this.value)); ;"  onclick=" updateDIDQtyCosts(${fnbr.did}, parseInt(this.value)); ;"    onfocus=" updateDIDQtyCosts(${fnbr.did}, parseInt(this.value)); ;"  onblur=" updateDIDQtyCosts(${fnbr.did}, parseInt(this.value)); ;" value="1" />
-						
-					{{/if}}
-				</div>
-		{{/each}}
+				<div class="foundDID" style="height: 30px;"><label for="fd_${fnbr.did}">${fnbr.did}</label><input type="checkbox" id="fd_${fnbr.did}" class="f_dids needCreditItem" value="${fnbr.did}" data-recurringCost="${fnbr.rCost}" data-oneTimeCost="${fnbr.oCost}" data-did="${fnbr.did}" data-provider="${fnbr.provider}" data-qty="1" />
+                    {{if fnbr.rc}}
+                        {{if fnbr.rc.npanxx}}
+                            <span class="did_ratecenter">&nbsp;${fnbr.rc.npanxx[0].ratecenter}&nbsp;${fnbr.rc.npanxx[0].state}&nbsp;</span>
+                        {{/if}}
+                    {{/if}}
 
+                    {{if fnbr.did.length != 10}}
+                        QTY: <input type="number" data-did="${fnbr.did}" style="height:12px; float: none;" step="1" pattern="^\d*$" name="" class="needCreditAdj shortInt" id="adf_${fnbr.did}_qty" value="1"/>
+                    {{/if}}
+                </div>
+		{{/each}}
 		{{/each}}
 			</form>
-
+    </div>
+<div>
