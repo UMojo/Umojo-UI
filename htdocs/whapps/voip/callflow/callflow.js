@@ -150,12 +150,13 @@ winkstart.module('voip', 'callflow', {
         buildFlow: function (json, parent, id, key) {
             var THIS = this,
 
-            branch = THIS.branch(json.module);
+            branch = THIS.branch(THIS.construct_action(json));
 
             branch.data.data = ('data' in json) ? json.data : {};
             branch.id = ++id;
             branch.key = key;
 
+            console.log(branch);
             branch.caption = THIS.actions[branch.actionName].caption(branch, THIS.flow.caption_map);
 
             $.each(json.children, function(key, child) {
@@ -165,6 +166,29 @@ winkstart.module('voip', 'callflow', {
             parent.addChild(branch);
 
             return parent;
+        },
+
+        construct_action: function(json) {
+            var action = '';
+
+            if('data' in json) {
+                if('id' in json.data) {
+                    action = 'id=*,';
+                }
+
+                if('action' in json.data) {
+                    action += 'action=' + json.data.action + ',';
+                }
+            }
+
+            if(action != '') {
+                action = '[' + action.replace(/,$/, ']');
+            }
+            else {
+                action = '[]';
+            }
+
+            return json.module + action;
         },
 
         renderFlow: function () {
@@ -377,7 +401,10 @@ winkstart.module('voip', 'callflow', {
             }
             else {
                 node.details = '';
-                node_html = THIS.templates.node.tmpl(node);
+                node_html = THIS.templates.node.tmpl({
+                    node: node,
+                    callflow: THIS.actions[node.actionName]
+                });
 
                 $('.module', node_html).click(function() {
                     THIS.actions[node.actionName].edit(node, node_html, function() {
@@ -1020,33 +1047,36 @@ winkstart.module('voip', 'callflow', {
                 
             $.extend(callflow_nodes, {
                 'root': {
-                    'name': 'Root',
-                    'rules': [ 
+                    name: 'Root',
+                    rules: [ 
                         {
-                            'type': 'quantity',
-                            'maxSize' : '1'
+                            type: 'quantity',
+                            maxSize: '1'
                         } 
                     ],
-                    'isUsable' : 'false'
+                    isUsable : 'false'
                 },
-                'device': {
-                    'name': 'Device',
-                    'icon': 'phone',
-                    'category': 'basic',
-                    'module': 'device',
-                    'rules': [
+                'device[id=*]': {
+                    name: 'Device',
+                    icon: 'phone',
+                    category: 'basic',
+                    module: 'device',
+                    data: {
+                        id: null
+                    },
+                    rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize': '1'
+                            type: 'quantity',
+                            maxSize: '1'
                         }
                     ],
-                    'isUsable': 'true',
-                    'caption': function(node, caption_map) {
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
-                        return (id) ? caption_map[id].name : '';
+                        return (id && id != '') ? caption_map[id].name : '';
                     },
-                    'edit': function(node, node_html, callback) {
+                    edit: function(node, node_html, callback) {
                         winkstart.getJSON('device.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1084,36 +1114,52 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
-                'conference': {
-                    'name': 'Conference',
-                    'icon': 'conference',
-                    'category': 'basic',
-                    'module': 'conference',
-                    'rules': [
+                'conference[]': {
+                    name: 'Conference Server',
+                    icon: 'conference',
+                    category: 'advanced',
+                    module: 'conference',
+                    data: {},
+                    rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize': '1'
+                            type: 'quantity',
+                            maxSize: '1'
                         }
                     ],
-                    'isUsable': 'true',
-                    'caption': function(node) {
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, node_html, callback) {
+                    }
+                },
+                'conference[id=*]': {
+                    name: 'Conference',
+                    icon: 'conference',
+                    category: 'basic',
+                    module: 'conference',
+                    data: {
+                        id: null
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
                         var id = node.getMetadata('id');
 
-                        return (id) ? caption_map[id] : '*Conference Server*';
+                        return (id && id != '') ? caption_map[id] : '';
                     },
-                    'edit': function(node, node_html, callback) {
+                    edit: function(node, node_html, callback) {
                         winkstart.getJSON('conference.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(data, status) {
                                 var popup, popup_html;
-
-                                // Add the conference server option
-                                data.data.push({
-                                    id: '!',
-                                    name: '*Conference Server*'
-                                });
 
                                 popup_html = THIS.templates.edit_dialog.tmpl({
                                     objects: {
@@ -1126,14 +1172,7 @@ winkstart.module('voip', 'callflow', {
                                 popup = winkstart.dialog(popup_html, { title: 'Conference' });
 
                                 $('.submit_btn', popup).click(function() {
-                                    var id = $('#object-selector', popup).val();
-
-                                    if(id == '!') {
-                                        node.deleteMetadata('id');
-                                    }
-                                    else {
-                                        node.setMetadata('id', id);
-                                    }
+                                    node.setMetadata('id', $('#object-selector', popup).val());
 
                                     node.caption = $('#object-selector option:selected', popup).text();
 
@@ -1147,40 +1186,27 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
-                'menu': {
-                    'name': 'Menu',
-                    'icon': 'menu',
-                    'category': 'basic',
-                    'module': 'menu',
-                    'rules': [
+                'callflow[id=*]': {
+                    name: 'Callflow',
+                    icon: 'callflow',
+                    category: 'basic',
+                    module: 'callflow',
+                    data: {
+                        id: null
+                    },
+                    rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize': '9'
+                            type: 'quantity',
+                            maxSize: '1'
                         }
                     ],
-                    'isUsable': 'true',
-                    'edit': function(node, node_html) {
-
-                    }
-                },
-                'callflow': {
-                    'name': 'Callflow',
-                    'icon': 'callflow',
-                    'category': 'basic',
-                    'module': 'callflow',
-                    'rules': [
-                        {
-                            'type': 'quantity',
-                            'maxSize': '1'
-                        }
-                    ],
-                    'isUsable': 'true',
-                    'caption': function(node, caption_map) {
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
                         return (id) ? caption_map[id].numbers.toString() : '';
                     },
-                    'edit': function(node, node_html, callback) {
+                    edit: function(node, node_html, callback) {
                         winkstart.getJSON('callflow.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1221,24 +1247,27 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
-                'voicemail': {
-                    'name': 'Voicemail',
-                    'icon': 'voicemail',
-                    'category': 'basic',
-                    'module': 'vmbox',
-                    'rules': [
+                'voicemail[id=*]': {
+                    name: 'Voicemail',
+                    icon: 'voicemail',
+                    category: 'basic',
+                    module: 'vmbox',
+                    data: {
+                        id: null
+                    },
+                    rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize' : '1'
+                            type: 'quantity',
+                            maxSize: '1'
                         }
                     ],
-                    'isUsable': 'true',
-                    'caption': function(node, caption_map) {
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
                         return (id) ? caption_map[id].name : '';
                     },
-                    'edit': function(node, node_html, callback) {
+                    edit: function(node, node_html, callback) {
                         winkstart.getJSON('vmbox.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1270,7 +1299,8 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
-                },
+                }
+                /*,
                 'play': {
                     'name': 'Play',
                     'icon': 'play',
@@ -1319,6 +1349,22 @@ winkstart.module('voip', 'callflow', {
 
                     }
                 },
+                'menu': {
+                    'name': 'Menu',
+                    'icon': 'menu',
+                    'category': 'basic',
+                    'module': 'menu',
+                    'rules': [
+                        {
+                            'type': 'quantity',
+                            'maxSize': '9'
+                        }
+                    ],
+                    'isUsable': 'true',
+                    'edit': function(node, node_html) {
+
+                    }
+                },
                 'timeofday': {
                     'name': 'Time of Day',
                     'icon': 'temporal_route',
@@ -1334,7 +1380,7 @@ winkstart.module('voip', 'callflow', {
                     'edit': function(node, node_html) {
 
                     }
-                }
+                }*/
             });
         }
     }

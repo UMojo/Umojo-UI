@@ -48,7 +48,18 @@
 #ws_callflow .callflow .node { display: inline-block; }
 #ws_callflow .callflow .node .delete { background: url(images/btn_delete.png) no-repeat; width: 6px; height: 6px; display: block; text-indent: -10000px; left: 5px; top: 5px; position: relative; float: right; margin-right:10px;}
 #ws_callflow .callflow .node .dragndrop { background: url(images/dragndrop.png) no-repeat 12px 5px; float: left; width: 95px; height: 15px; display: block;}
-#ws_callflow .callflow .node .edit { float: right; clear: both; width: 16px; height: 16px; display: block;}
+
+#ws_callflow .callflow .node .edit {
+    float: right;
+    clear: both;
+    width: 16px;
+    height: 16px;
+    display: block;
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+}
+
 #ws_callflow .callflow .app_btn { clear: both; display: block; height: 56px; width: 112px;}
 
 #ws_callflow .callflow .app_menu { background: url(images/icons_black/menu.png) no-repeat; }
@@ -69,7 +80,11 @@
 #ws_callflow .callflow .icons_black .app_btn { clear: both; display: block; height: 56px; width: 112px;}
 
 /*.callflow .icons_white { width: 106px; padding: 20px;}*/
-#ws_callflow .tool .icon.app_sm { margin: 4px; display: inline-block; margin-top: 16px;}
+#ws_callflow .tool .icon.app_sm {
+    margin: 4px;
+    display: inline-block;
+    margin-top: 10px;
+}
 
 #ws_callflow .callflow .drag_here { background: url(images/drag_here.png) no-repeat; float: left; position: relative; top: 40px; left: 30px;}
 #ws_callflow .toolbox { width: 160px; }
