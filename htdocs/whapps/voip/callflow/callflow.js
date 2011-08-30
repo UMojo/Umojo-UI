@@ -194,137 +194,166 @@ winkstart.module('voip', 'callflow', {
             return json.module + action;
         },
 
-        renderFlow: function () {
+        renderFlow: function() {
             var target = $(this.config.elements.flow).empty();
 
             target.append(this._renderFlow());
         },
 
-      // Create a new branch node for the flow
-      branch: function (actionName) {
-         var THIS = this;
+        // Create a new branch node for the flow
+        branch: function(actionName) {
+            var THIS = this;
 
-         function branch (actionName) {
-
-            // ---------- SO MUCH WIN ON THIS LINE ----------
-            var that = this;
-            // ----------------------------------------------
-
-            this.id = -1;                   // id for direct access
-            //Hack so that resources are treated as offnets
-            this.actionName = (actionName == 'resource') ? 'offnet' : actionName;
-            this.module = THIS.actions[this.actionName].module;
-            this.key = '_';
-            this.parent = null;
-            this.children = {};
-            this.data = { 
+            function branch(actionName) {
+                var that = this;
+                this.id = -1;  
+                this.actionName = (actionName == 'resource') ? 'offnet' : actionName;
+                this.module = THIS.actions[this.actionName].module;
+                this.key = '_';
+                this.parent = null;
+                this.children = {};
+                this.data = { 
                 data: THIS.actions[this.actionName].data
-            };                 // data caried by the node
-            this.caption = '';
-            this.key_caption = '';
+                };
+                this.caption = '';
+                this.key_caption = '';
 
-            // returns a list of potential child actions that can be added to the branch
-            this.potentialChildren = function () {
-               var list = [];
+                this.potentialChildren = function() {
+                    var list = [];
 
-               for (var i in THIS.actions) if (THIS.actions[i].isUsable) list[i] = i;
-
-               for (var i in THIS.actions[this.actionName].rules) {
-                  var rule = THIS.actions[this.actionName].rules[i];
-
-                  switch (rule.type) {
-                     case 'quantity': {
-                        if (THIS._count(this.children) >= rule.maxSize) list = [];
-                     } break;
-                     // ADD MORE RULE PROCESSING HERE ////////////////////
-                  }
-               }
-
-               return list;
-            }
-
-            this.contains = function (branch) {
-               var toCheck = branch;
-               while(toCheck.parent) if (this.id == toCheck.id) return true; else toCheck = toCheck.parent;
-               return false;
-            }
-
-            this.removeChild = function (branch) {
-                $.each(this.children, function(i, child) {
-                    if(child.id == branch.id) {
-                        delete that.children[i];
+                    for(var i in THIS.actions) {
+                        if(THIS.actions[i].isUsable) {
+                            list[i] = i;
+                        }
                     }
-                });
-            }
 
-            this.addChild = function (branch) {
-               if (!(branch.actionName in this.potentialChildren())) return false;
-               if (branch.contains(this)) return false;
-               if (branch.parent) branch.parent.removeChild(branch);
-               branch.parent = this;
-               this.children[THIS._count(this.children)] = branch;
-               return true;
-            }
+                    for(var i in THIS.actions[this.actionName].rules) {
+                        var rule = THIS.actions[this.actionName].rules[i];
 
-            this.getMetadata = function(key) {
-                var value;
+                        switch (rule.type) {
+                            case 'quantity':
+                                if(THIS._count(this.children) >= rule.maxSize) {
+                                    list = [];
+                                }
+                                break;
+                        }
+                    }
 
-                if('data' in this.data && key in this.data.data) {
-                    value = this.data.data[key];
-
-                    return (value == 'null') ? null : value;
+                    return list;
                 }
 
-                return false;
-            }
+                this.contains = function(branch) {
+                    var toCheck = branch;
 
-            this.setMetadata = function(key, value) {
-                if(!('data' in this.data)) {
-                    this.data.data = {};
+                    while(toCheck.parent) {
+                        if(this.id == toCheck.id) {
+                            return true;
+                        }
+                        else {
+                            toCheck = toCheck.parent;
+                        }
+                    }
+
+                    return false;
                 }
 
-                this.data.data[key] = (value == null) ? 'null' : value;
-            }
-
-            this.deleteMetadata = function(key) {
-                if('data' in this.data && key in this.data.data) {
-                    delete node.data.data[key];
+                this.removeChild = function(branch) {
+                    $.each(this.children, function(i, child) {
+                        if(child.id == branch.id) {
+                            delete that.children[i];
+                        }
+                    });
                 }
-            }
 
-            this.index = function (index) {
-               this.id = index;
-               $.each(this.children, function() {
-                    index = this.index(index+1);
-               });
-               return index;
-            }
+                this.addChild = function(branch) {
+                    if(!(branch.actionName in this.potentialChildren())) {
+                        return false;
+                    }
 
-            this.nodes = function () {
-               var nodes = {};
-               nodes[this.id] = this;
-               $.each(this.children, function() {
-                  var buf = this.nodes();
-                  $.each(buf, function() {
+                    if(branch.contains(this)) {
+                        return false;
+                    }
+
+                    if(branch.parent) {
+                        branch.parent.removeChild(branch);
+                    }
+
+                    branch.parent = this;
+
+                    this.children[THIS._count(this.children)] = branch;
+
+                    return true;
+                }
+
+                this.getMetadata = function(key) {
+                    var value;
+
+                    if('data' in this.data && key in this.data.data) {
+                        value = this.data.data[key];
+
+                        return (value == 'null') ? null : value;
+                    }
+
+                    return false;
+                }
+
+                this.setMetadata = function(key, value) {
+                    if(!('data' in this.data)) {
+                        this.data.data = {};
+                    }
+
+                    this.data.data[key] = (value == null) ? 'null' : value;
+                }
+
+                this.deleteMetadata = function(key) {
+                    if('data' in this.data && key in this.data.data) {
+                        delete node.data.data[key];
+                    }
+                }
+
+                this.index = function (index) {
+                    this.id = index;
+
+                    $.each(this.children, function() {
+                        index = this.index(index+1);
+                    });
+
+                    return index;
+                }
+
+                this.nodes = function () {
+                    var nodes = {};
+
                     nodes[this.id] = this;
-                  });
-               });
-               return nodes;
+
+                    $.each(this.children, function() {
+                        var buf = this.nodes();
+
+                        $.each(buf, function() {
+                            nodes[this.id] = this;
+                        });
+                    });
+
+                    return nodes;
+                }
+
+                this.serialize = function () {
+                    var json = $.extend(true, {}, this.data);
+
+                    json.module = this.module;
+
+                    json.children = {};
+
+                    $.each(this.children, function() {
+                        json.children[this.key] = this.serialize();
+                    });
+
+                    return json;
+                }
             }
 
-            this.serialize = function () {
-               var json = THIS._clone(this.data);
-               json.module = this.module;
-               json.children = {};
-               $.each(this.children, function() {
-                    json.children[this.key] = this.serialize();
-               });
-               return json;
-            }
-         }
-
-         return new branch(actionName);
-      },
+            return new branch(actionName);
+        },
 
         _count: function(json) {
             var count = 0;
@@ -681,17 +710,6 @@ winkstart.module('voip', 'callflow', {
                 );
             }
         },
-
-        _clone: function (obj) {
-            var o;
-
-            if (obj == null || typeof(obj) != 'object') return obj;
-
-            o = new obj.constructor(); 
-            for (var key in obj) o[key] = this._clone(obj[key]);
-
-            return o;
-        }, 
 
         renderList: function(callback){
             var THIS = this;
