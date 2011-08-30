@@ -100,56 +100,79 @@ winkstart.module('voip', 'user',
             // Deleting the password values from the infos gathered in the form
             delete form_data.pwd_mngt_pwd1;
             delete form_data.pwd_mngt_pwd2;
-            
-            console.log(form_data);
 
             /* Check validation before saving */
             THIS.validateForm('save');
 
             tmpPassword = $('#pwd_mngt_pwd1').val();
-
+            
             if($('pwd_mngt_pwd1').val() == $('pwd_mngt_pwd1').val()) {
                 if(!$('.invalid').size()) {
                     /* Construct the JSON we're going to send */
-                    var rest_data = {};
-                    rest_data.crossbar = true;
-                    rest_data.account_id = winkstart.apps['voip'].account_id;
-                    rest_data.api_url = winkstart.apps['voip'].api_url;
-                    rest_data.data = form_data;
-
-                    // If another password is set ("fakePassword" is the default value)
-                    if (tmpPassword != "fakePassword") {
-                        rest_data.data.password = tmpPassword;
-                    }
 
                     /* Is this a create or edit? See if there's a known ID */
                     if (user_id) {
-                        /* EDIT */
-                        rest_data.user_id = user_id;
-                        winkstart.postJSON('user.update', rest_data, function (json, xhr) {
-                            /* Refresh the list and the edit content */
-                            THIS.renderList();
-                            THIS.editUser({
-                                id: user_id
+                        
+                        winkstart.getJSON('user.get', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            user_id: user_id
+                        }, function(data, status){
+                            delete data.data.id;
+                            var newform_data = $.extend(true, {}, data.data, form_data);
+                            
+                            var rest_data = {};
+                            rest_data.crossbar = true;
+                            rest_data.account_id = winkstart.apps['voip'].account_id,
+                            rest_data.api_url = winkstart.apps['voip'].api_url,
+                            rest_data.user_id = user_id;
+                            rest_data.data = newform_data
+                            
+                            // If another password is set ("fakePassword" is the default value)
+                            if (tmpPassword != "fakePassword") {
+                                rest_data.data.password = tmpPassword;
+                            }
+                            
+                            
+                            /* EDIT */
+                            winkstart.postJSON('user.update', rest_data, function (json, xhr) {
+                                /* Refresh the list and the edit content */
+                                THIS.renderList();
+                                THIS.editUser({
+                                    id: user_id
+                                });
                             });
                         });
+                        
+                        
                     } else {
                         /* CREATE */
 
                         /* Actually send the JSON data to the server */
-                        winkstart.putJSON('user.create', rest_data, function (json, xhr) {
+                        winkstart.putJSON('user.create', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            data: form_data
+                        }, function (json, xhr) {
                             THIS.renderList();
                             THIS.editUser({
                                 id: json.data.id
                             });
                         });
                     }
+
                 } else {
                     alert('Please correct errors that you have on the form.');
                 }
             } else {
                 alert('Please confirm your password');
             }
+
+            
+
+            
         },
 
         /*
@@ -162,7 +185,7 @@ winkstart.module('voip', 'user',
             var form_data = {
                 data : {
                     call_forward: {},
-                    caller_id: { internal: { }, external: { }}
+                    caller_id: {internal: { }, external: { }}
                 }
             };
             
