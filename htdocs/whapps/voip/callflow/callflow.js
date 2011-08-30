@@ -25,21 +25,21 @@ winkstart.module('voip', 'callflow', {
             buf: '#ws_cf_buf'
         },
 
-        menu_options: {
-            '_': 'default action',
-            '0': '0',
-            '1': '1',
-            '2': '2',
-            '3': '3',
-            '4': '4',
-            '5': '5',
-            '6': '6',
-            '7': '7',
-            '8': '8',
-            '9': '9',
-            '*': '*',
-            '#': '#'
-        },
+        menu_options: [
+            {id: '_', name: 'Default action'},
+            {id: '1', name: '1'},
+            {id: '2', name: '2'},
+            {id: '3', name: '3'},
+            {id: '4', name: '4'},
+            {id: '5', name: '5'},
+            {id: '6', name: '6'},
+            {id: '7', name: '7'},
+            {id: '8', name: '8'},
+            {id: '9', name: '9'},
+            {id: '0', name: '0'},
+            {id: '#', name: '#'},
+            {id: '*', name: '*'}
+        ],
 
         subscribe: {
             'callflow.activate' : 'activate',
@@ -358,23 +358,6 @@ winkstart.module('voip', 'callflow', {
             THIS.flow.nodes = THIS.flow.root.nodes();
         },
 
-        getDetails: function(id, field) {
-            var THIS = this;
-
-            if(field != undefined) {
-                return THIS.flow.metadata[id][field];
-            }
-            else {
-                return THIS.flow.metadata[id];
-            }
-        },
-
-        setDetails: function(id, data) {
-            var THIS = this;
-
-            THIS.flow.metadata[id] = data;
-        },
-       
         _renderFlow: function () {
             var THIS = this;
 
@@ -447,15 +430,20 @@ winkstart.module('voip', 'callflow', {
 
                 $(this).droppable({
                     drop: function (event, ui) {
-                        var target = THIS.flow.nodes[$(this).attr('id')];
+                        var target = THIS.flow.nodes[$(this).attr('id')],
+                            action;
 
                         if (ui.draggable.hasClass('action')) {
-                            var action = ui.draggable.attr('name'),
+                            action = ui.draggable.attr('name'),
 
                             branch = THIS.branch(action);
                             branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
 
                             if (target.addChild(branch)) {
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                    branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
+                                }
+
                                 THIS.renderFlow();
                             }
                         }
@@ -464,6 +452,13 @@ winkstart.module('voip', 'callflow', {
                             var branch = THIS.flow.nodes[ui.draggable.attr('id')];
 
                             if (target.addChild(branch)) {
+                                // If we move a node, destroy its key
+                                branch.key = '_';
+
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                    branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
+                                }
+
                                 ui.draggable.remove();
                                 THIS.renderFlow();
                             }
@@ -519,7 +514,7 @@ winkstart.module('voip', 'callflow', {
                 children;
             
             if(branch.parent && ('key_edit' in THIS.actions[branch.parent.actionName])) {
-                $('.a_link_option', flow).click(function() {
+                $('.div_option', flow).click(function() {
                     THIS.actions[branch.parent.actionName].key_edit(branch, function() {
                         THIS.renderFlow();
                     });
@@ -1082,7 +1077,29 @@ winkstart.module('voip', 'callflow', {
                         return (key != '_') ? key : 'Default action';
                     },
                     key_edit: function(child_node, callback) {
-                        console.log('BOOOOOOM');
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.edit_dialog.tmpl({
+                            objects: {
+                                type: 'menu option',
+                                items: THIS.config.menu_options,
+                                selected: child_node.key
+                            }
+                        });
+
+                        popup = winkstart.dialog(popup_html, { title: 'Menu Option' });
+
+                        $('.submit_btn', popup).click(function() {
+                            child_node.key = $('#object-selector', popup).val();
+
+                            child_node.key_caption = $('#object-selector option:selected', popup).text();
+
+                            popup.dialog('close');
+
+                            if(typeof callback == 'function') {
+                                callback();
+                            }
+                        });
                     },
                     caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
@@ -1165,22 +1182,6 @@ winkstart.module('voip', 'callflow', {
                     'icon': 'offnet',
                     'category': 'basic',
                     'module': 'offnet',
-                    'rules': [
-                        {
-                            'type': 'quantity',
-                            'maxSize': '9'
-                        }
-                    ],
-                    'isUsable': 'true',
-                    'edit': function(node, callback) {
-
-                    }
-                },
-                'menu': {
-                    'name': 'Menu',
-                    'icon': 'menu',
-                    'category': 'basic',
-                    'module': 'menu',
                     'rules': [
                         {
                             'type': 'quantity',
