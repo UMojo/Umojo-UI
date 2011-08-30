@@ -23,6 +23,12 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
+                                <span class="tooltip-wrapper" tooltip="Username">
+                                    <span class="tooltip"/><label for="username">Username:</label>
+                                </span>
+                                <input id="username" name="username" type="text" value="${data.username}" />
+                            </li>
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="First Name">
                                     <span class="tooltip"/><label for="first_name">First Name:</label>
                                 </span>
@@ -60,7 +66,9 @@
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
                         <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
                         <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Call Forward</a></li>
-                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
+                        {{if data.id != undefined}}
+                            <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
+                        {{/if}}
                     </ul>
                 </span>
 
@@ -200,22 +208,25 @@
 
                 </div>
                 
+                {{if data.id != undefined}}
+                
                 <div id="password_management">
                     <fieldset>
                         <ul class="controls">
                             <li>
                                 <label for="pwd_reco_pwd1">New password: </label>
-                                <input id="pwd_mngt_pwd1" name="password_recovery.pwd1" type="password"/>
+                                <input id="pwd_mngt_pwd1" name="pwd_mngt_pwd1" type="password" value="fakePassword"/>
                             </li>
                             <li>
                                 <label for="pwd_reco_pwd2">Confirm password: </label>
-                                <input id="pwd_mngt_pwd2" name="password_recovery.pwd2" type="password"/>
+                                <input id="pwd_mngt_pwd2" name="pwd_mngt_pwd2" type="password" value="fakePassword"/>
                             </li>
                         </ul>
                     </fieldset>
                     
                     <div class="clear"></div>
                 </div>
+                {{/if}}
 
             </div>
 

@@ -96,42 +96,59 @@ winkstart.module('voip', 'user',
 
         saveUser: function(user_id, form_data) {
             var THIS = this;
+            
+            // Deleting the password values from the infos gathered in the form
+            delete form_data.pwd_mngt_pwd1;
+            delete form_data.pwd_mngt_pwd2;
+            
+            console.log(form_data);
 
             /* Check validation before saving */
             THIS.validateForm('save');
 
-            if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.account_id = winkstart.apps['voip'].account_id;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-                rest_data.data = form_data;
+            tmpPassword = $('#pwd_mngt_pwd1').val();
 
-                /* Is this a create or edit? See if there's a known ID */
-                if (user_id) {
-                    /* EDIT */
-                    rest_data.user_id = user_id;
-                    winkstart.postJSON('user.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editUser({
-                            id: user_id
+            if($('pwd_mngt_pwd1').val() == $('pwd_mngt_pwd1').val()) {
+                if(!$('.invalid').size()) {
+                    /* Construct the JSON we're going to send */
+                    var rest_data = {};
+                    rest_data.crossbar = true;
+                    rest_data.account_id = winkstart.apps['voip'].account_id;
+                    rest_data.api_url = winkstart.apps['voip'].api_url;
+                    rest_data.data = form_data;
+
+                    // If another password is set ("fakePassword" is the default value)
+                    if (tmpPassword != "fakePassword") {
+                        rest_data.data.password = tmpPassword;
+                    }
+
+                    /* Is this a create or edit? See if there's a known ID */
+                    if (user_id) {
+                        /* EDIT */
+                        rest_data.user_id = user_id;
+                        winkstart.postJSON('user.update', rest_data, function (json, xhr) {
+                            /* Refresh the list and the edit content */
+                            THIS.renderList();
+                            THIS.editUser({
+                                id: user_id
+                            });
                         });
-                    });
+                    } else {
+                        /* CREATE */
+
+                        /* Actually send the JSON data to the server */
+                        winkstart.putJSON('user.create', rest_data, function (json, xhr) {
+                            THIS.renderList();
+                            THIS.editUser({
+                                id: json.data.id
+                            });
+                        });
+                    }
                 } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('user.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editUser({
-                            id: json.data.id
-                        });
-                    });
+                    alert('Please correct errors that you have on the form.');
                 }
             } else {
-                alert('Please correct errors that you have on the form.');
+                alert('Please confirm your password');
             }
         },
 
@@ -139,6 +156,7 @@ winkstart.module('voip', 'user',
          * Create/Edit user properties (don't pass an ID field to cause a create instead of an edit)
          */
         editUser: function(data){
+
             $('#user-view').empty();
             var THIS = this;
             var form_data = {
@@ -233,7 +251,7 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
-                form_data.username = form_data.email;
+                //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
                 return false;
