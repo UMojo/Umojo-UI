@@ -156,7 +156,6 @@ winkstart.module('voip', 'callflow', {
             branch.id = ++id;
             branch.key = key;
 
-            console.log(branch);
             branch.caption = THIS.actions[branch.actionName].caption(branch, THIS.flow.caption_map);
 
             $.each(json.children, function(key, child) {
