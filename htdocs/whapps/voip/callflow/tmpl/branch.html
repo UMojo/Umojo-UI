@@ -1,37 +1,33 @@
 <div>
-   <div class="child">
-      {{if actionName != 'root'}}
-          {{if actionNameParent == 'menu' || actionNameParent == 'temporal_route' || actionNameParent == 'offnet'}}    
-            <div class="span_arrow"></div>
-          {{else}}
-            <div class="span_arrow large"></div>
-          {{/if}}
-          <div class="clear"></div>
-          {{if countChildren != 1}}
-            {{if firstChildren == "true"}}
-                <div class="div_line_first" id="divLine${id}"/>
+    <div class="child">
+        {{if node.actionName != 'root'}}
+            {{if display_key}}    
+                <div class="span_arrow"></div>
             {{else}}
-                {{if lastChildren == "true"}}
-                    <div class="div_line_last" id="divLine${id}"/>
-                {{else}}
-                    <div class="div_line" id="divLine${id}"/>
-                {{/if}}
+                <div class="span_arrow large"></div>
             {{/if}}
-          {{/if}}
-          <div class="clear"></div>
-          {{if actionNameParent == 'menu' || actionNameParent == 'temporal_route' || actionNameParent == 'offnet'}}    
-          <div class="div_option">
-                <a class="a_link_option" href="javascript:void(0)">${key_details.substr(0,18)}</a>
-          </div>
-          {{/if}}
-      {{/if}}
-      <div class="branch">
-         {{if actionName != 'root'}}
-             <div id="${id}" name="${actionName}" class="node icons_black"></div>
-         {{else}}
-            <div id="${id}" name="${actionName}" class="node icons_black ${actionName.replace(/ /gi, '')}"></div>
-         {{/if}}
-         <div class="children"></div>
-      </div>
-   </div>
+
+            <div class="clear"></div>
+
+            <div class="div_line" id="divLine${node.id}"/>
+
+            <div class="clear"></div>
+
+            {{if display_key}}    
+                <div class="div_option">
+                    <a class="a_link_option" href="#">${node.key_caption}</a>
+                </div>
+            {{/if}}
+        {{/if}}
+
+        <div class="branch">
+            {{if node.actionName != 'root'}}
+                <div id="${node.id}" name="${node.actionName}" class="node icons_black"></div>
+            {{else}}
+                <div id="${node.id}" name="root" class="node icons_black root"></div>
+            {{/if}}
+
+            <div class="children"></div>
+        </div>
+    </div>
 </div>

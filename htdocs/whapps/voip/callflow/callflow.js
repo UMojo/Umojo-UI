@@ -158,6 +158,10 @@ winkstart.module('voip', 'callflow', {
 
             branch.caption = THIS.actions[branch.actionName].caption(branch, THIS.flow.caption_map);
 
+            if('key_caption' in THIS.actions[parent.actionName]) {
+                branch.key_caption = THIS.actions[parent.actionName].key_caption(branch, THIS.flow.caption_map);
+            }
+
             $.each(json.children, function(key, child) {
                 branch = THIS.buildFlow(child, branch, id, key);
             });
@@ -209,12 +213,15 @@ winkstart.module('voip', 'callflow', {
             this.id = -1;                   // id for direct access
             //Hack so that resources are treated as offnets
             this.actionName = (actionName == 'resource') ? 'offnet' : actionName;
-            this.module = actionName;
+            this.module = THIS.actions[this.actionName].module;
             this.key = '_';
             this.parent = null;
             this.children = {};
-            this.data = {};                 // data caried by the node
+            this.data = { 
+                data: THIS.actions[this.actionName].data
+            };                 // data caried by the node
             this.caption = '';
+            this.key_caption = '';
 
             // returns a list of potential child actions that can be added to the branch
             this.potentialChildren = function () {
@@ -260,8 +267,12 @@ winkstart.module('voip', 'callflow', {
             }
 
             this.getMetadata = function(key) {
+                var value;
+
                 if('data' in this.data && key in this.data.data) {
-                    return this.data.data[key]
+                    value = this.data.data[key];
+
+                    return (value == 'null') ? null : value;
                 }
 
                 return false;
@@ -272,7 +283,7 @@ winkstart.module('voip', 'callflow', {
                     this.data.data = {};
                 }
 
-                this.data.data[key] = value;
+                this.data.data[key] = (value == null) ? 'null' : value;
             }
 
             this.deleteMetadata = function(key) {
@@ -364,473 +375,166 @@ winkstart.module('voip', 'callflow', {
             THIS.flow.metadata[id] = data;
         },
        
-      _renderFlow: function () {
-         var THIS = this;
-         this._formatFlow();
+        _renderFlow: function () {
+            var THIS = this;
 
-         var layout = this._renderBranch(this.flow.root);
-         layout.find('.node').hover(function () { $(this).addClass('over'); }, function () { $(this).removeClass('over'); });
+            THIS._formatFlow();
 
-         layout.find('.node').each(function () {
-            var node_html, node = THIS.flow.nodes[$(this).attr('id')], $node = $(this);
-            if (node.actionName == 'root') {
-               $node.removeClass('icons_black root');
-               node_html = THIS.templates.root.tmpl({numbers: THIS.flow.numbers.toString()});
+            var layout = THIS._renderBranch(THIS.flow.root);
 
-               node_html.find('.btn_plus_sm').click(function() {
-                    var dialog = THIS.templates.add_number.tmpl({}).dialog({width: 400, title: 'Add a number', resizable: 'false'});
-                    
-                    dialog.find('.submit_btn').click(function() {
-                        THIS.flow.numbers.push(dialog.find('#add_number_text').val());
-                        dialog.dialog('close');
-                        THIS.renderFlow();
-                    });
-               });
+            $('.node', layout).hover(function() {
+                    $(this).addClass('over');
+                },
+                function() {
+                    $(this).removeClass('over');
+                }
+            );
 
-               node_html.find('.save').click(function() {
-                    THIS.save();
-               });
+            $('.node', layout).each(function() {
+                var node_html, node = THIS.flow.nodes[$(this).attr('id')], $node = $(this);
 
-               node_html.find('.trash').click(function() {
-                    winkstart.deleteJSON('callflow.delete', {account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url, callflow_id: THIS.flow.id}, function() {
-                        THIS.renderList();
-                        THIS._resetFlow();
-                    });
-               });
-            }
-            else {
-                node.details = '';
-                node_html = THIS.templates.node.tmpl({
-                    node: node,
-                    callflow: THIS.actions[node.actionName]
-                });
+                if (node.actionName == 'root') {
+                    $node.removeClass('icons_black root');
 
-                $('.module', node_html).click(function() {
-                    THIS.actions[node.actionName].edit(node, node_html, function() {
-                        THIS.renderFlow();
-                    });
-                });
-            }
-            /*
-            else if(node.actionName == 'ring_group') {
-                node.details = '';
-                node_html = THIS.templates.node.tmpl(node);
+                    node_html = THIS.templates.root.tmpl({ numbers: THIS.flow.numbers.toString() });
 
-                $('.module', node_html).click(function() {
-                    var node_name = node.actionName,
-                        popup = THIS.templates.ring_group_dialog.tmpl({});
-
-                    winkstart.log(node.data.data);
-                    winkstart.getJSON('device.list', {account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json) {
-                        $.each(json.data, function() {
-                            $('.available ul', popup).append('<li id="' + this.id + '"><a href="#" class="drag_btn"></a>&nbsp;&nbsp;' + this.name.substr(0,15) + '</li>');
+                    $('.btn_plus_sm', node_html).click(function() {
+                        var dialog = THIS.templates.add_number.tmpl({}).dialog({
+                            width: 400,
+                            title: 'Add a number',
+                            resizable: 'false'
                         });
 
-                        if(node.data.data == undefined) {
-                            node.data.data = {};
-                        }
-                        else { 
-                            if(node.data.data.endpoints != undefined) {
-                                $.each(node.data.data.endpoints, function() { 
-                                    winkstart.log(this);
-                                    $('.available ul #' + this.id, popup).detach().appendTo($('.ring_group ul', popup));
-                                });
-                            }
-
-                            if(node.data.data.strategy != undefined) {
-                                $('#strategy', popup).val(node.data.data.strategy);
-                            }
-
-                            if(node.data.data.timeout != undefined) {
-                                $('#timeout', popup).val(node.data.data.timeout);
-                            }
-                        }
-
-                        popup.dialog({width:500, title: 'Ring group', resizable: 'false'});
-
-                        $('.scrollable', popup).jScrollPane();
-
-                        $('.available ul, .ring_group ul', popup).sortable({
-                            connectWith: '#ringgroup .wrapper .connect',
-                            zIndex: 2000,
-                            helper: 'clone',
-                            appendTo: '#ringgroup .wrapper',
-                            receive: function() {
-                                $(this).parents('.scrollable').data('jsp').reinitialise();
-                            },
-                            remove: function() {
-                                $(this).parents('.scrollable').data('jsp').reinitialise();
-                            }
-                        });
-
-                        $('.submit_btn', popup).click(function() {
-                            if(node.data.data == undefined) {
-                                node.data.data = {};
-                            }
-                            node.data.data.endpoints = [];
-                            $('.ring_group ul li', popup).each(function() {
-                                node.data.data.endpoints.push({id: $(this).attr('id')});
-                            });
-                            
-                            node.data.data.strategy = $('#strategy', popup).val();
-                            node.data.data.timeout = $('#timeout', popup).val();
-
-                            popup.dialog('close');
-                        });
-                    });
-                });  
-            }
-            else {
-               //node.details = '';
-               if(node.actionName == 'offnet') {
-                   if(node.module == 'offnet') {
-                       node.details = 'Global';
-                   }
-                   else {
-                       node.details = 'Local';
-                   }
-               } 
-               else if(node.actionName == 'temporal_route') {
-                   //TODO
-                   if(node.data.data != undefined && node.data.data.timezone != undefined) {
-                       node.details = 'PST';
-                   }
-               }
-               else if(node.actionName == 'conference') {
-                    if(node.data.data != undefined && node.data.data.id != undefined) {
-                       node.details = THIS.getDetails(node.data.data.id, 'name');
-                    }
-                    else node.details = "Conference Server";
-               }
-               else {
-                   if(node.data.data != undefined && node.data.data.id != undefined) {
-                       node.details = THIS.getDetails(node.data.data.id, 'name');
-                   }    
-               }
-               if(node.details == undefined) node.details = '';
-               
-               node_html = THIS.templates.node.tmpl(node);
-
-               //node_html.find('.edit').click(function() {
-               node_html.find('.module').click(function() {
-                    var node_name = node.actionName, general, options;
-
-                    general = function(json, other) {
-                        var dialog, data;
-                        if(node_name == 'temporal_route') {
-                            data = {
-                                title: 'Configure your time of day route',
-                                objects: {
-                                    type: 'Timezone',
-                                    items: [ 
-                                        {id: 'America/Los_Angeles', name: 'PST'}
-                                    ],
-                                    selected: (node.data.data == undefined) ? 0 : node.data.data.timezone
-                                }
-                            };
-                        }
-                        else if(node_name == 'offnet') {
-                            data = {
-                                title: 'Configure your offnet',
-                                objects: {
-                                    type: 'Resource type',
-                                    items: [
-                                        {id: 'resource', name: 'Local'},
-                                        {id: 'offnet', name: 'Global'}
-                                    ],
-                                    selected: node.module
-                                }
-                            };
-                        }
-                        else if(node_name == 'conference') {
-                            json.data.push({id:'!', name: '*Conference Server*'});
-
-                            data = {
-                                title: 'Configure the conference',
-                                objects: {
-                                    type: node_name,
-                                    items: json.data,
-                                    selected: (node.data.data == undefined || node.data.data.id == undefined) ? '!' : node.data.data.id
-                                }
-                            };
-                        }
-                        else if(node_name == 'callflow') {
-                            var list = [];
-                            $.each(json.data, function(i, val) {
-                                //Sanity Check! Don't reference the same callflow!
-                                if(this.id != THIS.flow.id) {
-                                    this.name = this.numbers.toString();
-                                    list.push(this);
-                                }
-                            });
-
-                            data = {
-                                title: 'Select the callflow',
-                                objects: {
-                                    type: node_name,
-                                    items: list,
-                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
-                                }
-                            };
-                        }
-                        else if(node_name == 'device') {
-                            data = {
-                                title: 'Select the ' + node_name,
-                                parameter: {
-                                    name: 'timeout',
-                                    value: (node.data.data == undefined || node.data.data.timeout == undefined) ? '20' : node.data.data.timeout
-                                },
-                                objects: {
-                                    type: node_name,
-                                    items: json.data,
-                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
-                                }
-                            };
-
-                        }
-                        else {
-                            data = {
-                                title: 'Select the ' + node_name,
-                                objects: {
-                                    type: node_name,
-                                    items: json.data,
-                                    selected: (node.data.data == undefined) ? 0 : node.data.data.id
-                                }
-                            };
-                        }
-
-                        dialog = THIS.templates.edit_dialog.tmpl(data).dialog({
-                            title : data.title,
-                            resizable : false,
-                            modal: true,
-                            width: 400
-                        });
-                    
-                        $('#create_new_item', dialog).click(function() {
-                            winkstart.publish(node_name+'.popup');
-                        });
-    
-                        dialog.find('.submit_btn').click(function() {
-                            var temp;
-
-                            if(node.data.data == undefined) {
-                                node.data.data = {};
-                            }
-                            //TODO: We want to remove this?
-                            //if(node.parent.actionName == 'menu' || node.parent.actionName == 'temporal_route') {
-                            //    node.key = $('#option-selector', dialog).val();
-                            //}
-                            if(node_name == 'device') {
-                                node.data.data.timeout = $('#parameter_input', dialog).val();
-                            }
-
-                            if(node_name == 'temporal_route') {
-                                node.data.data.timezone = $('#object-selector', dialog).val();
-                            }
-                            else if(node_name == 'offnet') {
-                                node.module = $('#object-selector', dialog).val();
-                            }
-                            else if(node_name == 'conference') {
-                                temp = $('#object-selector', dialog).val();
-
-                                if(temp == '!') {
-                                    delete node.data.data.id;
-                                }
-                                else {
-                                    node.data.data.id = temp;
-                                }
-                            }
-                            else {
-                                node.data.data.id = $('#object-selector', dialog).val();
-                            }
-
-                            if(node_name != 'temporal_route' && node_name != 'offnet') {
-                                THIS.setDetails(node.data.data.id, { 'name' : $('#object-selector option:selected', dialog).text()});
-                            } 
-                            else {
-                            }
+                        $('.submit_btn', dialog).click(function() {
+                            THIS.flow.numbers.push(dialog.find('#add_number_text').val());
 
                             dialog.dialog('close');
                             THIS.renderFlow();
                         });
-                    };
+                    });
 
-                    test = function(other) {
-                        if(node_name == 'temporal_route' || node_name == 'offnet') {
-                            general({}, other);
-                        }
-                        else {
-                            winkstart.getJSON(THIS.nodes[node_name].module + '.list', {account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json) {
-                                general(json, other);
-                            });
-                        }
-                    };
+                    $('.save', node_html).click(function() {
+                        THIS.save();
+                    });
 
-                    if(node.parent.actionName == 'temporal_route') {
-                        winkstart.getJSON('timeofday.list', {account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json) {
-                            var list = json.data,
-                                json_list = {};
+                    $('.trash', node_html).click(function() {
+                        winkstart.deleteJSON('callflow.delete', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                callflow_id: THIS.flow.id
+                            },
+                            function() {
+                                THIS.renderList();
+                                THIS._resetFlow();
+                            }
+                        );
+                    });
+                }
+                else {
+                    node_html = THIS.templates.node.tmpl({
+                        node: node,
+                        callflow: THIS.actions[node.actionName]
+                    });
 
-                            list.push({name: 'All other times (default action)', id:'_'});
-
-                            $.each(list, function() {
-                                json_list[this.id] = this.name;
-                            });
-
-                            test(json_list);
+                    $('.module', node_html).click(function() {
+                        THIS.actions[node.actionName].edit(node, function() {
+                            THIS.renderFlow();
                         });
-                    }
-                    else {
-                        test({});
-                    }
-               });
-            }*/
-            $(this).append(node_html);
+                    });
+                }
 
-            $(this).droppable({
-               drop: function (event, ui) {
-                  var target = THIS.flow.nodes[$(this).attr('id')];
-                  if (ui.draggable.hasClass('action')) {
-                     var action = ui.draggable.attr('name'),
-                         branch = THIS.branch(action);
-                         branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
-                     if (target.addChild(branch)) {
-                        var popup = THIS.actions[action].popup;
-                        if (popup) winkstart.publish(popup+'.popup', target.children[target.children.length-1]);
+                $(this).append(node_html);
+
+                $(this).droppable({
+                    drop: function (event, ui) {
+                        var target = THIS.flow.nodes[$(this).attr('id')];
+
+                        if (ui.draggable.hasClass('action')) {
+                            var action = ui.draggable.attr('name'),
+
+                            branch = THIS.branch(action);
+                            branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
+
+                            if (target.addChild(branch)) {
+                                THIS.renderFlow();
+                            }
+                        }
+
+                        if (ui.draggable.hasClass('node')) {
+                            var branch = THIS.flow.nodes[ui.draggable.attr('id')];
+
+                            if (target.addChild(branch)) {
+                                ui.draggable.remove();
+                                THIS.renderFlow();
+                            }
+                        }
+                    }
+                });
+
+                // dragging the whole branch
+                $(this).draggable({
+                    start: function () {
+                        var children = $(this).next(),
+                            t = children.offset().top - $(this).offset().top,
+                            l = children.offset().left - $(this).offset().left;
+
+                        THIS._enableDestinations($(this));
+
+                        $(this).attr('t', t); $(this).attr('l', l);
+                    },
+                    drag: function () {
+                        var children = $(this).next(),
+                            t = $(this).position().top + parseInt($(this).attr('t')),
+                            l = $(this).position().left + parseInt($(this).attr('l'));
+
+                        children.offset({ top: t, left: l });
+                    },
+                    stop: function () {
+                        THIS._disableDestinations();
+
                         THIS.renderFlow();
-                     }
-                  }
-                  if (ui.draggable.hasClass('node')) {
-                     var branch = THIS.flow.nodes[ui.draggable.attr('id')];
-                     if (target.addChild(branch)) { ui.draggable.remove(); THIS.renderFlow(); }
-                  }
-               }
+                    }
+                });
             });
 
-            // dragging the whole branch
-            $(this).draggable({
-               start: function () {
-                  THIS._enableDestinations($(this));
+            $('.delete', layout).click(function() {
+                var node = THIS.flow.nodes[$(this).attr('id')];
 
-                  var children = $(this).next();
-                  var t = children.offset().top - $(this).offset().top;
-                  var l = children.offset().left - $(this).offset().left;
-                  $(this).attr('t', t); $(this).attr('l', l);
-               },
-               drag: function () {
-                  var children = $(this).next();
-                  var t = $(this).position().top + parseInt($(this).attr('t'));
-                  var l = $(this).position().left + parseInt($(this).attr('l'));
-                  children.offset({ top: t, left: l });
-               },
-               stop: function () {
-                  THIS._disableDestinations();
-                  THIS.renderFlow();
-               }
+                if (node.parent) {
+                    node.parent.removeChild(node);
+
+                    THIS.renderFlow();
+                }
             });
-         });
 
-         layout.find('.delete').click(function() {
-            var node = THIS.flow.nodes[$(this).attr('id')];
-            if (node.parent) {
-               node.parent.removeChild(node);
-               THIS.renderFlow();
-            }
-         });
-         return layout;
-      },
+            return layout;
+        },
 
-      _renderBranch: function (branch) {
-         var THIS = this;
-         if(branch.parent != undefined && (branch.parent.actionName == 'menu' || branch.parent.actionName == 'offnet')) {
-             if(branch.key != '_') {
-                 branch.key_details = branch.key;
-             }
-             else branch.key_details = 'Default';
-         }
-         else if(branch.parent != undefined && branch.parent.actionName == 'temporal_route') {
-             if(branch.key != '_') {
-                 branch.key_details = THIS.getDetails(branch.key, 'name');
-             } 
-             else branch.key_details = 'All other times';
-         }
-        
-
-         if(branch.countChildren == undefined) branch.countChildren = 1;
-         var flow = this.templates.branch.tmpl(branch);
-         var countChildren = 0;
-         $.each(branch.children, function() {
-             countChildren++;
-         }); 
-         flow.find('.a_link_option').click( function() {
-            var data = {}, popup = function(){
-                var dialog = THIS.templates.edit_dialog.tmpl(data).dialog({width: 400, title: 'Settings'});
-                dialog.find('.submit_btn').click(function() {
-                        branch.key = $('#option-selector', dialog).val();
-                        if(branch.parent.actionName != 'menu' && branch.parent.actionName != 'offnet') {
-                            THIS.setDetails(branch.key, {'name': $('#option-selector option:selected', dialog).text()});
-                        }
-                        dialog.dialog('close');
+        _renderBranch: function(branch) {
+            var THIS = this,
+                flow = THIS.templates.branch.tmpl({
+                    node: branch,
+                    display_key: branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])
+                }),
+                children;
+            
+            if(branch.parent && ('key_edit' in THIS.actions[branch.parent.actionName])) {
+                $('.a_link_option', flow).click(function() {
+                    THIS.actions[branch.parent.actionName].key_edit(branch, function() {
                         THIS.renderFlow();
-                }); 
-            };
-
-            if(branch.actionNameParent == 'menu') {
-                 data.options = {
-                                    type: 'menu option',
-                                    items: THIS.config.menu_options,
-                                    selected: branch.key
-                                };
-            }
-            else if(branch.actionNameParent == 'temporal_route') {
-                 data.options = {
-                                type: 'temporal rule',
-                                items: {},
-                                selected: 0
-                            };
-                winkstart.getJSON('timeofday.list', {account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json) {
-                        var list = json.data,
-                            json_list = {};
-
-                        list.push({name: 'All other times (default action)', id:'_'});
-
-                        $.each(list, function() {
-                            json_list[this.id] = this.name;
-                        });
-
-                        data.options.items = json_list;
-                        data.options.selected = branch.key;
-
-                        popup();
+                    });
                 });
             }
-            if(data.options != undefined && branch.parent.actionName != 'temporal_route') {
-                popup();
-            }
 
-         });
+            // This need to be evaluated before the children start adding content
+            children = $('.children', flow);
 
-         var children = flow.find('.children');
-         var firstChildren = true;
-         var countEach = 0;
-         $.each(branch.children, function() {
-            countEach++;
-            this.actionNameParent = branch.actionName;
-            this.countChildren = countChildren;
+            $.each(branch.children, function() {
+                children.append(THIS._renderBranch(this));
+            });
 
-            if(firstChildren) {
-                this.firstChildren = "true";
-                firstChildren = false; 
-            }
-            else {
-                this.firstChildren = "false";
-            }
-
-            countEach == countChildren ? this.lastChildren = "true" : this.lastChildren = "false";
-            children.append(THIS._renderBranch(this));
-         });
-         return flow;
-      },
+            return flow;
+        },
 
         renderTools: function () {
             var THIS = this,
@@ -911,73 +615,78 @@ winkstart.module('voip', 'callflow', {
             target.append(tools);
         },
 
-// DESTINATION POINTS ///////////////////////////////////////
-      _enableDestinations: function (el) {
-         var THIS = this;
+        _enableDestinations: function (el) {
+            var THIS = this;
 
-         $('.node').each(function () {
-            var activate = true;
-            var target = THIS.flow.nodes[$(this).attr('id')];
-            if (el.attr('name') in target.potentialChildren()) {
-               if (el.hasClass('node') && THIS.flow.nodes[el.attr('id')].contains(target)) {
-                  activate = false;
-               }
+            $('.node').each(function () {
+                var activate = true,
+                    target = THIS.flow.nodes[$(this).attr('id')];
+
+                if (el.attr('name') in target.potentialChildren()) {
+                    if (el.hasClass('node') && THIS.flow.nodes[el.attr('id')].contains(target)) {
+                        activate = false;
+                    }
+                }
+                else {
+                    activate = false;
+                }
+
+                if (activate) {
+                    $(this).addClass('active');
+                }
+                else {
+                    $(this).addClass('inactive');
+                    $(this).droppable('disable');
+                }
+            });
+        },
+
+        _disableDestinations: function () {
+            $('.node').each(function () {
+                $(this).removeClass('active');
+                $(this).removeClass('inactive');
+                $(this).droppable('enable');
+            });
+
+            $('.tool').removeClass('active');
+        },
+
+        save: function () {
+            var THIS = this;
+
+            if(THIS.flow.id) {
+                winkstart.postJSON('callflow.update', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        callflow_id: THIS.flow.id,
+                        data: {
+                            numbers: THIS.flow.numbers,
+                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                        }
+                    },
+                    function(json) {
+                        THIS.renderList();
+                        THIS.editCallflow({id: json.data.id});
+                    }
+                );
             }
-            else activate = false;
-            if (activate) $(this).addClass('active');
             else {
-               $(this).addClass('inactive');
-               $(this).droppable('disable');
+                winkstart.putJSON('callflow.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: {
+                            numbers: THIS.flow.numbers,
+                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                        }
+                    },
+                    function(json) {
+                        THIS.renderList();
+                        THIS.editCallflow({id: json.data.id});
+                    }
+                );
             }
-         });
-      },
+        },
 
-      _disableDestinations: function () {
-         $('.node').each(function () {
-            $(this).removeClass('active');
-            $(this).removeClass('inactive');
-            $(this).droppable('enable');
-         });
-         $('.tool').removeClass('active');
-      },
-
-      save: function () {
-         var THIS = this;
-
-         if(THIS.flow.id) {
-            winkstart.postJSON('callflow.update', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    callflow_id: THIS.flow.id,
-                    data: {
-                        numbers: THIS.flow.numbers,
-                        flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
-                    }
-                }, function(json) {
-                    THIS.renderList();
-                    THIS.editCallflow({id: json.data.id});
-                }
-            );
-         }
-         else {
-            winkstart.putJSON('callflow.create', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    data: {
-                        numbers: THIS.flow.numbers,
-                        flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
-                    }
-                }, function(json) {
-                    THIS.renderList();
-                    THIS.editCallflow({id: json.data.id});
-                }
-            );
-         }
-      },
-
-/*****************************************************************************
- *  Deep object cloning  ***
- *****************************************************************************/
         _clone: function (obj) {
             var o;
 
@@ -1061,7 +770,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'device',
                     data: {
-                        id: null
+                        id: "null"
                     },
                     rules: [
                         {
@@ -1075,7 +784,7 @@ winkstart.module('voip', 'callflow', {
 
                         return (id && id != '') ? caption_map[id].name : '';
                     },
-                    edit: function(node, node_html, callback) {
+                    edit: function(node, callback) {
                         winkstart.getJSON('device.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1091,7 +800,7 @@ winkstart.module('voip', 'callflow', {
                                     objects: {
                                         type: 'device',
                                         items: data.data,
-                                        selected: node.getMetadata('id') || 0
+                                        selected: node.getMetadata('id') || ''
                                     }
                                 });
 
@@ -1129,7 +838,7 @@ winkstart.module('voip', 'callflow', {
                     caption: function(node) {
                         return '';
                     },
-                    edit: function(node, node_html, callback) {
+                    edit: function(node, callback) {
                     }
                 },
                 'conference[id=*]': {
@@ -1138,7 +847,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'conference',
                     data: {
-                        id: null
+                        id: "null"
                     },
                     rules: [
                         {
@@ -1152,7 +861,7 @@ winkstart.module('voip', 'callflow', {
 
                         return (id && id != '') ? caption_map[id] : '';
                     },
-                    edit: function(node, node_html, callback) {
+                    edit: function(node, callback) {
                         winkstart.getJSON('conference.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1191,7 +900,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'callflow',
                     data: {
-                        id: null
+                        id: "null"
                     },
                     rules: [
                         {
@@ -1205,7 +914,7 @@ winkstart.module('voip', 'callflow', {
 
                         return (id) ? caption_map[id].numbers.toString() : '';
                     },
-                    edit: function(node, node_html, callback) {
+                    edit: function(node, callback) {
                         winkstart.getJSON('callflow.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1250,9 +959,9 @@ winkstart.module('voip', 'callflow', {
                     name: 'Voicemail',
                     icon: 'voicemail',
                     category: 'basic',
-                    module: 'vmbox',
+                    module: 'voicemail',
                     data: {
-                        id: null
+                        id: "null"
                     },
                     rules: [
                         {
@@ -1266,7 +975,7 @@ winkstart.module('voip', 'callflow', {
 
                         return (id) ? caption_map[id].name : '';
                     },
-                    edit: function(node, node_html, callback) {
+                    edit: function(node, callback) {
                         winkstart.getJSON('vmbox.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -1298,22 +1007,157 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
+                },
+                'media[id=*]': {
+                    name: 'Play Media',
+                    icon: 'play',
+                    category: 'advanced',
+                    module: 'media',
+                    data: {
+                        id: "null"
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('media.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.edit_dialog.tmpl({
+                                    objects: {
+                                        type: 'media',
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Play Media' });
+
+                                $('.submit_btn', popup).click(function() {
+                                    node.setMetadata('id', $('#object-selector', popup).val());
+
+                                    node.caption = $('#object-selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'menu[id=*]': {
+                    name: 'Menu',
+                    icon: 'menu',
+                    category: 'basic',
+                    module: 'menu',
+                    data: {
+                        id: "null"
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '9'
+                        }
+                    ],
+                    isUsable: 'true',
+                    key_caption: function(child_node, caption_map) {
+                        var key = child_node.key;
+
+                        return (key != '_') ? key : 'Default action';
+                    },
+                    key_edit: function(child_node, callback) {
+                        console.log('BOOOOOOM');
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('menu.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.edit_dialog.tmpl({
+                                    objects: {
+                                        type: 'menu',
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Menu' });
+
+                                $('.submit_btn', popup).click(function() {
+                                    node.setMetadata('id', $('#object-selector', popup).val());
+
+                                    node.caption = $('#object-selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
                 }
-                /*,
-                'play': {
-                    'name': 'Play',
-                    'icon': 'play',
-                    'category': 'basic',
-                    'module': 'media',
-                    'rules': [
+                /*'ring_group[]': {
+                    name: 'Ring Group',
+                    icon: 'ring_group',
+                    category: 'advanced',
+                    module: 'ring_group',
+                    data: {},
+                    rules: [
                         {
                             'type': 'quantity',
                             'maxSize': '1'
                         }
                     ],
-                    'isUsable': 'true',
-                    'edit': function(node, node_html) {
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('device.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip']
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
 
+                                popup = winkstart.dialog(popup_html, { title: 'Ring Group' });
+
+                                $('.submit_btn', popup).click(function() {
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
                     }
                 },
                 'offnet': {
@@ -1328,23 +1172,7 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     'isUsable': 'true',
-                    'edit': function(node, node_html) {
-
-                    }
-                },
-                'ringgroup': {
-                    'name': 'Ring Group',
-                    'icon': 'ring_group',
-                    'category': 'basic',
-                    'module': 'ring_group',
-                    'rules': [
-                        {
-                            'type': 'quantity',
-                            'maxSize': '1'
-                        }
-                    ],
-                    'isUsable': 'true',
-                    'edit': function(node, node_html) {
+                    'edit': function(node, callback) {
 
                     }
                 },
@@ -1360,7 +1188,7 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     'isUsable': 'true',
-                    'edit': function(node, node_html) {
+                    'edit': function(node, callback) {
 
                     }
                 },
@@ -1376,7 +1204,7 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     'isUsable': 'true',
-                    'edit': function(node, node_html) {
+                    'edit': function(node, callback) {
 
                     }
                 }*/

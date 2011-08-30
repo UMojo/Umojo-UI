@@ -164,7 +164,7 @@
     padding-left: 10px;
 }
 
-#ws_callflow .div_line {
+#ws_callflow .children > .child > .div_line {
     display: inline-block;
     height: 5px;
     width: 100%;
@@ -175,7 +175,7 @@
     padding: 0;
     float: left;
 }
-#ws_callflow .div_line_first { 
+#ws_callflow .children > .child:first-child > .div_line { 
     display: inline-block; 
     height: 5px; 
     width: 50%; 
@@ -186,7 +186,7 @@
     padding: 0; 
     float: right;
 }
-#ws_callflow .div_line_last {
+#ws_callflow .children > .child:last-child > .div_line {
     display: inline-block;
     height: 5px;
     width: 50%;
@@ -197,6 +197,11 @@
     padding: 0;
     float: left;
 }
+
+#ws_callflow .children > .child:first-child:last-child > .div_line {
+    display: none;
+}
+
 #ws_callflow .span_arrow {
     display: inline-block; 
     height: 38px; 
