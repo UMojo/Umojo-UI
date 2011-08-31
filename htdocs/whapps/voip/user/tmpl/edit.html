@@ -46,6 +46,20 @@
                                 </span>
                                 <input id="email" name="email" type="text" value="${data.email}" />
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The user privilege level">
+                                    <span class="tooltip"/><label for="user_level">User privilege level:</label>
+                                </span>
+                                <select id="user_level" name="user_level">
+                                    {{if priv_level == 'admin'}} 
+                                    <option value="admin" selected>Administrator</option>
+                                    <option value="user">User</option>
+                                    {{else}}
+                                    <option value="admin">Administrator</option>
+                                    <option value="user" selected>User</option>
+                                    {{/if}}
+                                </select>
+                            </li>
                         </ul>
                     </fieldset>
 
@@ -66,9 +80,7 @@
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
                         <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
                         <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Call Forward</a></li>
-                        {{if data.id != undefined}}
-                            <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
-                        {{/if}}
+                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
                     </ul>
                 </span>
 
@@ -208,8 +220,6 @@
 
                 </div>
                 
-                {{if data.id != undefined}}
-                
                 <div id="password_management">
                     <fieldset>
                         <ul class="controls">
@@ -226,8 +236,6 @@
                     
                     <div class="clear"></div>
                 </div>
-                {{/if}}
-
             </div>
 
         <ul class="buttons right users">

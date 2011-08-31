@@ -104,9 +104,9 @@ winkstart.module('voip', 'user',
             /* Check validation before saving */
             THIS.validateForm('save');
 
-            tmpPassword = $('#pwd_mngt_pwd1').val();
+            var tmpPassword = $('#pwd_mngt_pwd1').val();
             
-            if($('pwd_mngt_pwd1').val() == $('pwd_mngt_pwd1').val()) {
+            if($('#pwd_mngt_pwd1').val() == $('#pwd_mngt_pwd2').val()) {
                 if(!$('.invalid').size()) {
                     /* Construct the JSON we're going to send */
 
@@ -120,6 +120,41 @@ winkstart.module('voip', 'user',
                             user_id: user_id
                         }, function(data, status){
                             delete data.data.id;
+                            
+                            // If there is no apps object
+                            if (!("apps" in data.data)) {
+                                data.data.apps = {};
+                            }
+                            
+                            // If the user is an admin
+                            if (form_data.user_level == "admin") {
+                                if (!("voip" in data.data.apps)) {
+                                    data.data.apps.voip = {
+                                        "label": "VoIP Services",
+                                        "icon": "phone",
+                                        "api_url": "http://apps.2600hz.com:8000/v1"
+                                    };
+                                }
+                                
+                                if ("userportal" in data.data.apps) {
+                                    delete data.data.apps.userportal;
+                                }
+                            } else { // If the user is a "simple" user.
+                                if (!("userportal" in data.data.apps)) {
+                                    data.data.apps.userportal = {
+                                        "label": "User Portal",
+                                        "icon": "phone",
+                                        "api_url": "http://apps.2600hz.com:8000/v1"
+                                    };
+                                }
+                                
+                                if ("voip" in data.data.apps) {
+                                    delete data.data.apps.voip;
+                                }
+                            }
+                            
+                            delete form_data.user_level;
+                            
                             var newform_data = $.extend(true, {}, data.data, form_data);
                             
                             var rest_data = {};
@@ -127,13 +162,14 @@ winkstart.module('voip', 'user',
                             rest_data.account_id = winkstart.apps['voip'].account_id,
                             rest_data.api_url = winkstart.apps['voip'].api_url,
                             rest_data.user_id = user_id;
-                            rest_data.data = newform_data
+                            rest_data.data = newform_data;
                             
                             // If another password is set ("fakePassword" is the default value)
                             if (tmpPassword != "fakePassword") {
                                 rest_data.data.password = tmpPassword;
                             }
                             
+                            console.log(rest_data);
                             
                             /* EDIT */
                             winkstart.postJSON('user.update', rest_data, function (json, xhr) {
@@ -148,6 +184,24 @@ winkstart.module('voip', 'user',
                         
                     } else {
                         /* CREATE */
+                        
+                        form_data.apps = {};
+                        
+                        if (form_data.user_level == "admin") {
+                            form_data.apps.voip = {
+                                "label": "VoIP Services",
+                                "icon": "phone",
+                                "api_url": "http://apps.2600hz.com:8000/v1"
+                            };
+                        } else {
+                            form_data.apps.userportal = {
+                                "label": "User Portal",
+                                "icon": "phone",
+                                "api_url": "http://apps.2600hz.com:8000/v1"
+                            }
+                        }
+                        
+                        delete form_data.user_level;
 
                         /* Actually send the JSON data to the server */
                         winkstart.putJSON('user.create', {
@@ -234,6 +288,13 @@ winkstart.module('voip', 'user',
         renderUser: function(form_data){
             var THIS = this;
             var user_id = form_data.data.id;
+            
+            // If the voip whapps is present, then it's an admin'
+            if ('apps' in form_data.data && 'voip' in form_data.data.apps) {
+                form_data.priv_level = 'admin';
+            } else {
+                form_data.priv_level = 'user';
+            }
 
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editUser.tmpl(form_data).appendTo( $('#user-view') );
