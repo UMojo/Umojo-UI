@@ -16,7 +16,8 @@ winkstart.module('cluster', 'deploy_mgr',
             addcluster: 'tmpl/addCluster.html',
             noserver: 'tmpl/noServer.html',
             helpdeploy: 'tmpl/helpdeploy.html',
-            form: 'tmpl/form.html'
+            form_firstServer: 'tmpl/form_firstServer.html',
+            form_newServer: 'tmpl/form_newServer.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -81,40 +82,72 @@ winkstart.module('cluster', 'deploy_mgr',
 
     /* Define the functions for this module */
     {   
-        server_count : 0,
+        server_count: 0,
+        serverTypes: ['Own', 'Rackspace', 'Amazon', 'Linode'],
+        
         requestServer: function() {
             var THIS = this;
             
             var serverDialog = winkstart.dialog(THIS.templates.newserver.tmpl(), {
                 title: 'Register a New Server',
                 open: function(){
-                    THIS.validateForm();
-                    $('#serverinfo a.save_btnServer', $(this)).click(function() {
-                        var data = form2object('serverinfo');
-                        data.roles = new Array();                    
-                        $('input[name="roles"]:checked', '#serverinfo').each(function(){
-                            data.roles.push($(this).val());
+                    $(this).dialog({
+                        width: 200
+                    });
+ 
+                    $.each(THIS.serverTypes,function(i, v){
+                        $('.serverType', serverDialog).append('<option value="'+i+'">'+v+'</option>');
+                    });      
+                    
+                    $('.serverType', serverDialog).change(function(){
+                        $(serverDialog).dialog({
+                            width: 550
+                        });
+                        var data = {
+                            servers: [],
+                            type: $('.serverType option:selected').val()
+                        };
+                        data.servers.push($('.serverType option:selected').text());
+                            
+                        $('.content_form', $(serverDialog)).html(THIS.templates.form_newServer.tmpl(data));
+                        THIS.tooltip();
+                        //CSS fix
+                        $('#serverinfo').find('input:checkbox').each(function(i, o){
+                            if(i != 0){
+                                $(o).css('margin-left', 100);
+                            }
+                            if(i != 0 && i != 1){
+                                $(o).css('margin-top', 5);
+                            }
+                        });
+                            
+                        $('.content_form').find('.save_btnServer').click(function(){
+                            var data = {
+                                servers: []
+                            },
+                            obj= form2object('serverinfo');
+                            obj.roles =  new Array();
+
+                            $('.roles:checked', $('#serverinfo')).each(function(){
+                                obj.roles.push($(this).val());
+                            });                                   
+                            data.servers.push(obj);
+                            $(serverDialog).dialog('close');
+                            winkstart.publish('deploy_mgr.addServer', data);
                         });
                         
-                        THIS.validateForm('save', '3');
                         
-                        if(!$('.invalid').size() && $('.checkboxRoleServer:checked').size() != 0) {
-                            winkstart.publish('deploy_mgr.addServer', data);
-                            $(serverDialog).dialog('close');
-                            THIS.templates.helpdeploy.tmpl().dialog({
-                                resizable: 'false'
-                            });
-                        } else {
-                            alert ('Please correct errors that you have on the form and make sure that you choose AT LEAST one role.');
-                        }
-                    })
+                        
+                        
+                    });
+
+                    
                 }
             });
         },
         
         requestFirstServer: function() {
             var THIS = this,
-            serverTypes = ['Own', 'Rackspace', 'Amazon', 'Linode'],
             firstServerDialog = winkstart.dialog(THIS.templates.firstserver.tmpl(), {
                 resizable: false,
                 title: 'Types',
@@ -125,7 +158,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                     $('.serverType', firstServerDialog).each(function(){
                         var select = this;
-                        $.each(serverTypes,function(i, v){
+                        $.each(THIS.serverTypes,function(i, v){
                             $(select).append('<option value="'+i+'">'+v+'</option>');
                         });      
                     });
@@ -149,41 +182,49 @@ winkstart.module('cluster', 'deploy_mgr',
                             });
                             var data = {
                                 servers: [],
-                                roles: [],
+                                roles: [['winkstart_deploy_opensips', 'winkstart_deploy_whapps'],
+                                ['winkstart_deploy_opensips', 'winkstart_deploy_whapps'],
+                                ['winkstart_deploy_bigcouch'],
+                                ['winkstart_deploy_bigcouch'],
+                                ['winkstart_deploy_bigcouch'],
+                                ['winkstart_deploy_whistle_fs'],
+                                ['winkstart_deploy_whistle_fs']],
                                 type: div.id
                             };
-                            switch(div.id){
-                                case '0':
-                                    data.roles.push('all_in_one');
-                                    break;
-                                default:
-                                    data.roles.push(['winkstart_deploy_opensips', 'winkstart_deploy_whapps']);
-                                    data.roles.push(['winkstart_deploy_opensips', 'winkstart_deploy_whapps']);
-                                    data.roles.push(['winkstart_deploy_bigcouch']);
-                                    data.roles.push(['winkstart_deploy_bigcouch']);
-                                    data.roles.push(['winkstart_deploy_bigcouch']);
-                                    data.roles.push(['winkstart_deploy_whistle_fs']);
-                                    data.roles.push(['winkstart_deploy_whistle_fs']);
-                                    break;
-                            }
+  
                             $(div).find('.serverType option:selected').each(function(){
                                 data.servers.push($(this).text());
                             });
                             
-                            $('.content_form', $(firstServerDialog)).html(THIS.templates.form.tmpl(data));
-                            
-                            $.each($('body').find('*[tooltip]'), function(){
-                                $(this).tooltip({attach:'body'});
-                            });
+                            $('.content_form', $(firstServerDialog)).html(THIS.templates.form_firstServer.tmpl(data));
+                            THIS.tooltip();
                             
                             $('.content_form').find('.save_btnServer').click(function(){
-                                var data = {
+                                var post = {
                                     servers: []
                                 };
                                 $('.content_form').find('.servers').each(function(){
-                                    data.servers.push(form2object(this.id));
+                                    var form = this,
+                                    obj = form2object(form.id),
+                                    tmpServer;
+                                    
+                                    if(obj.number == 7){
+                                        $.each(data.roles, function(){
+                                            tmpServer = $.extend(true, {}, obj);
+                                            tmpServer.roles = this;
+                                            delete(tmpServer.number);
+                                            post.servers.push(tmpServer);
+                                        });
+                                    }else{
+                                        obj.roles =  new Array();
+                                        $('.roles', $('#'+form.id)).each(function(){
+                                            obj.roles.push($(this).val());
+                                        });                                   
+                                        post.servers.push(obj);
+                                    }
                                 });
-                                console.log(data);
+                                $(firstServerDialog).dialog('close');
+                                winkstart.publish('deploy_mgr.addServer', post);
                             });
                             
                         });
@@ -192,38 +233,75 @@ winkstart.module('cluster', 'deploy_mgr',
             });
         },
         
-        addServer: function(serverData, noUpdate) {
-            var THIS = this;
-            
-            var rest_data = {};
-            rest_data.crossbar = true;
-            rest_data.account_id = winkstart.apps['auth'].account_id;
-            rest_data.data = serverData;
+        addServer: function(data) {
+            var THIS = this,
+            servers = data.servers;
 
-            winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
-                if(json.status == 'success'){  
-                    var data = {};
-                    data.server_name = json.data.hostname;
-                    data.server_id = json.data.id;
-                    data.server_state = 'never_run';
-                    data.server_roles = THIS.getRoles(json.data.roles);
-                    data.tooltip = 'Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
+            $.each(servers, function(i, v){
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = winkstart.apps['auth'].account_id;
+                rest_data.data = v;
+                
+                switch(v.type){
+                    case 'Own':
+                        winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
+                            if(json.status == 'success'){  
+                                var data = {};
+                                data.server_name = json.data.hostname;
+                                data.server_id = json.data.id;
+                                data.server_state = 'never_run';
+                                data.server_roles = THIS.getRoles(json.data.roles);
+                                data.tooltip = 'Type: '+rest_data.data.type+'<br/>Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
+        
+                                THIS.templates.server.tmpl(data).prependTo($('.cluster'));
 
-                    THIS.templates.server.tmpl(data).prependTo($('.cluster'));
-                    if(noUpdate != true){
-                        winkstart.publish('deploy_mgr.updateServer',  json.data.id);
-                    }
+                                winkstart.publish('deploy_mgr.updateServer',  json.data.id);
 
-                    THIS.server_count++;
-                    winkstart.publish('deploy_mgr.setlink');
-					
-                    THIS.tooltip();
+                                THIS.server_count++;
+                                winkstart.publish('deploy_mgr.setlink');
+        					
+                                THIS.tooltip();
+        
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
+                            }
+                        });
+                        console.log(rest_data);
+                        break;
+                    default:
+                        rest_data.data.hostname = '2600hz.server'+i+'.com';
+                        rest_data.data.ip = '1.1.1.'+i;
+                        rest_data.data.password = 'password';
+                        rest_data.data.ssh_port = '22';
+                        
+                        winkstart.putJSON('deploy_mgr.addserver', rest_data, function (json, xhr) {
+                            if(json.status == 'success'){  
+                                var data = {};
+                                data.server_name = json.data.hostname;
+                                data.server_id = json.data.id;
+                                data.server_state = 'never_run';
+                                data.server_roles = THIS.getRoles(json.data.roles);
+                                data.tooltip = 'Type: '+rest_data.data.type+'<br/>Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
+        
+                                THIS.templates.server.tmpl(data).prependTo($('.cluster'));
+                                winkstart.publish('deploy_mgr.updateServer',  json.data.id);
 
-                    if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                        THIS._changeURL(json.data.ip);
-                    }
+                                THIS.server_count++;
+                                winkstart.publish('deploy_mgr.setlink');
+        					
+                                THIS.tooltip();
+        
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
+                            }
+                        });
+                        console.log(rest_data);
+                        break;
                 }
-            });
+            });    
         },
         
         _changeURL: function(url) {
