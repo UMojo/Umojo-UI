@@ -169,8 +169,6 @@ winkstart.module('voip', 'user',
                                 rest_data.data.password = tmpPassword;
                             }
                             
-                            console.log(rest_data);
-                            
                             /* EDIT */
                             winkstart.postJSON('user.update', rest_data, function (json, xhr) {
                                 /* Refresh the list and the edit content */
@@ -201,7 +199,16 @@ winkstart.module('voip', 'user',
                             }
                         }
                         
+                        var tmpPassword = $('#pwd_mngt_pwd1').val();
+                        
                         delete form_data.user_level;
+                        delete form_data.pwd_mngt_pwd1;
+                        delete form_data.pwd_mngt_pwd2;
+                        
+                        // If another password is set ("fakePassword" is the default value)
+                        if (tmpPassword != "fakePassword") {
+                            form_data.data.password = tmpPassword;
+                        }
 
                         /* Actually send the JSON data to the server */
                         winkstart.putJSON('user.create', {
