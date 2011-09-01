@@ -1,25 +1,27 @@
-#ringgroup .wrapper {
+#two_columns .wrapper {
     clear: left;
     width: 100%;
 }
-#ringgroup .wrapper_form {
+#two_columns .wrapper_form {
     margin-top: 20px;
     margin-left: 40px;
 }
 
-#ringgroup .wrapper .column {
+#two_columns .wrapper .column {
     width: 200px;
 }
 
-#ringgroup .wrapper .column.right {
+#two_columns .wrapper .column.right {
     float: right;
+    margin-left: 10px;
 }
 
-#ringgroup .wrapper .column.left {
+#two_columns .wrapper .column.left {
     float: left;
+    margin-right: 10px;
 }
 
-#ringgroup .wrapper .title_column {
+#two_columns .wrapper .title_column {
     background-color: #AFAFAF;
     height: 18px;
     font-weight: bold;
@@ -27,29 +29,29 @@
     text-align: center;
 }
 
-#ringgroup .wrapper .available {
+#two_columns .wrapper .left ul.connect {
     background-color: #AFAFAF;
     height: 250px;
     width: 200px;
     overflow: auto;
 }
 
-#ringgroup .wrapper .connect {
+#two_columns .wrapper .connect {
     min-height: 250px;
 }
 
-#ringgroup .wrapper .ring_group {
+#two_columns .wrapper .right ul.connect {
     background-color: #AFAFAF;
     height: 250px;
     width: 200px;
     overflow: auto;
 }
 
-#ringgroup .wrapper {
+#two_columns .wrapper {
     background-color: #808080;
 }
 
-#ringgroup .wrapper li {
+#two_columns .wrapper li {
     list-style-type: none;
     background-color: #808080;
     color: white;
@@ -61,16 +63,16 @@
     list-style-type: none;
     position: relative;
 }
-#ringgroup .wrapper li:hover {
+#two_columns .wrapper li:hover {
     background-color: #0097BB;
 }
-#ringgroup .wrapper li a.drag_btn{
+#two_columns .wrapper li a.drag_btn{
     background-color: #808080;
     background-image: url("../images/drag_btn.png");
     float: left;
     height: 22px;
     width: 9px;
 }
-#ringgroup .options {
+#two_columns .options {
     
 }

@@ -2,7 +2,7 @@ winkstart.module('voip', 'callflow', {
         css: [
             'css/style.css',
             'css/popups.css',
-            'css/ringgroup.css',
+            'css/two_columns.css',
             'css/callflow.css'
         ],
 
@@ -15,7 +15,8 @@ winkstart.module('voip', 'callflow', {
             node: 'tmpl/node.html',
             add_number: 'tmpl/add_number.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
-            edit_dialog: 'tmpl/edit_dialog.html'
+            edit_dialog: 'tmpl/edit_dialog.html',
+            two_column: 'tmpl/two_column.html'
         },
 
         elements: {
@@ -1239,6 +1240,276 @@ winkstart.module('voip', 'callflow', {
                             }
                         });
                     }
+                },
+                'temporal_route[action=enable]': {
+                    name: 'Enable Time of Day',
+                    icon: 'temporal_route',
+                    category: 'advanced',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'enable',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+
+                                popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Enable Time of Day rules' });
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    recieve: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+
+                                $('.submit_btn', popup).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup).each(function() {
+                                        _rules.push($(this).attr('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'temporal_route[action=disable]': {
+                    name: 'Disable Time of Day',
+                    icon: 'temporal_route',
+                    category: 'advanced',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'disable',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+
+                                popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Disable Time of Day rules' });
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    recieve: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+
+                                $('.submit_btn', popup).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup).each(function() {
+                                        _rules.push($(this).attr('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'temporal_route[action=reset]': {
+                    name: 'Reset Time of Day',
+                    icon: 'temporal_route',
+                    category: 'advanced',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'reset',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+
+                                popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Reset Time of Day rules' });
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    recieve: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+
+                                $('.submit_btn', popup).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup).each(function() {
+                                        _rules.push($(this).attr('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
                 }
                 /*
                 'ring_group[]': {
@@ -1246,6 +1517,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'ring_group',
                     category: 'advanced',
                     module: 'ring_group',
+                    r
                     data: {
                         name: ''
                     },

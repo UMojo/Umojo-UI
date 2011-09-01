@@ -1,0 +1,36 @@
+<div>
+    <div class="popup container_resize">
+        <div class="resize">
+            <div id="two_columns" class="stylized myform">
+                <div class="wrapper">
+                    <div class="column left">
+                        <div class="title_column">${left.title}</div>
+                        <div class="scrollable">
+                            <ul class="connect">
+                                {{each(i, item) left.items}}
+                                    <li id="${item.id}">${item.name}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="column right">
+                        <div class="title_column">${right.title}</div>
+                        <div class="scrollable">
+                            <ul class="connect">
+                                {{each(i, item) right.items}}
+                                    <li id="${item.id}">${item.name}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div> 
+                </div>
+                <div class="clear"/>
+                <form name="form" method="post" action="#">
+                    <div class="btn_wrapper">
+                        <a href="#" id="add" class="submit_btn ctr">Save</a><br>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div>
+</div>
