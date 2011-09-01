@@ -95,18 +95,13 @@ winkstart.module('voip', 'user',
         },
 
         saveUser: function(user_id, form_data) {
-            var THIS = this;
-            
-            // Deleting the password values from the infos gathered in the form
-            delete form_data.pwd_mngt_pwd1;
-            delete form_data.pwd_mngt_pwd2;
+            var THIS = this,
+                tmpPassword = form_data.pwd_mngt_pwd1;
 
             /* Check validation before saving */
             THIS.validateForm('save');
 
-            var tmpPassword = $('#pwd_mngt_pwd1').val();
-            
-            if($('#pwd_mngt_pwd1').val() == $('#pwd_mngt_pwd2').val()) {
+            if(form_data.pwd_mngt_pwd1 == form_data.pwd_mngt_pwd2) {
                 if(!$('.invalid').size()) {
                     /* Construct the JSON we're going to send */
 
@@ -132,7 +127,7 @@ winkstart.module('voip', 'user',
                                     data.data.apps.voip = {
                                         "label": "VoIP Services",
                                         "icon": "phone",
-                                        "api_url": "http://apps.2600hz.com:8000/v1"
+                                        "api_url": winkstart.apps['voip'].api_url
                                     };
                                 }
                                 
@@ -143,8 +138,8 @@ winkstart.module('voip', 'user',
                                 if (!("userportal" in data.data.apps)) {
                                     data.data.apps.userportal = {
                                         "label": "User Portal",
-                                        "icon": "phone",
-                                        "api_url": "http://apps.2600hz.com:8000/v1"
+                                        "icon": "userportal",
+                                        "api_url": winkstart.apps['voip'].api_url
                                     };
                                 }
                                 
@@ -153,6 +148,8 @@ winkstart.module('voip', 'user',
                                 }
                             }
                             
+                            delete form_data.pwd_mngt_pwd1;
+                            delete form_data.pwd_mngt_pwd2;
                             delete form_data.user_level;
                             
                             var newform_data = $.extend(true, {}, data.data, form_data);
@@ -168,7 +165,7 @@ winkstart.module('voip', 'user',
                             if (tmpPassword != "fakePassword") {
                                 rest_data.data.password = tmpPassword;
                             }
-                            
+            
                             /* EDIT */
                             winkstart.postJSON('user.update', rest_data, function (json, xhr) {
                                 /* Refresh the list and the edit content */
@@ -189,17 +186,17 @@ winkstart.module('voip', 'user',
                             form_data.apps.voip = {
                                 "label": "VoIP Services",
                                 "icon": "phone",
-                                "api_url": "http://apps.2600hz.com:8000/v1"
+                                "api_url": winkstart.apps['voip'].api_url
                             };
                         } else {
                             form_data.apps.userportal = {
                                 "label": "User Portal",
-                                "icon": "phone",
-                                "api_url": "http://apps.2600hz.com:8000/v1"
+                                "icon": 'userportal',
+                                "api_url": winkstart.apps['voip'].api_url
                             }
                         }
                         
-                        var tmpPassword = $('#pwd_mngt_pwd1').val();
+                        var tmpPassword = form_data.pwd_mngt_pwd1;
                         
                         delete form_data.user_level;
                         delete form_data.pwd_mngt_pwd1;
@@ -207,7 +204,7 @@ winkstart.module('voip', 'user',
                         
                         // If another password is set ("fakePassword" is the default value)
                         if (tmpPassword != "fakePassword") {
-                            form_data.data.password = tmpPassword;
+                            form_data.password = tmpPassword;
                         }
 
                         /* Actually send the JSON data to the server */
