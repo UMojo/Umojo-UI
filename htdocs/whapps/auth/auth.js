@@ -76,7 +76,6 @@ winkstart.module('auth', 'auth',
 
     {
         request_realm : false,
-        realm_suffix : '.sip.2600hz.com',
 
         register: function() {
             var THIS = this;
@@ -90,10 +89,15 @@ winkstart.module('auth', 'auth',
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 var realm;
-                if (THIS.request_realm) {
+                if(THIS.request_realm) {
                     realm = $('#realm', dialogRegister).val();
                 } else {
-                    realm = $('#username', dialogRegister).val() + THIS.realm_suffix;
+                    realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
+                }
+
+                // If realm was set in the URL, override all
+                if('realm' in URL_DATA) {
+                    realm = URL_DATA['realm'];
                 }
 
                 var rest_data = {
@@ -151,7 +155,12 @@ winkstart.module('auth', 'auth',
                 if (THIS.request_realm) {
                     realm = $('#realm', dialogDiv).val();
                 } else {
-                    realm = $('#login', dialogDiv).val() + THIS.realm_suffix;
+                    realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
+                }
+                
+                // If realm was set in the URL, override all
+                if('realm' in URL_DATA) {
+                    realm = URL_DATA['realm'];
                 }
 
                 var rest_data = {
