@@ -242,8 +242,17 @@ h3 {
 }
 
 p.note_box {
-	background-color: #E7E7E7;
-	padding: 15px 10px;
-	font-size: 10px;
-	line-height:15px;
+    background-color: #E7E7E7;
+    padding: 15px 10px;
+    font-size: 10px;
+    line-height:15px;
+}
+
+input[disabled=disabled] {
+    border: none;
+    background: none;
+}
+
+#ssh_port {
+    width: 50px;
 }
