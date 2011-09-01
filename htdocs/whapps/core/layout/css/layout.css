@@ -417,11 +417,9 @@ a.status5{
     position: relative;
 }
 
-#welcomediv {
-    margin-top: 5%;
-    margin-left: 18%;
-    margin-right: 20%;
-    height: 60%;
+.welcomediv {
+	text-align: center;
+	width: 100%;
 }
 
 #welcomediv h1 {
