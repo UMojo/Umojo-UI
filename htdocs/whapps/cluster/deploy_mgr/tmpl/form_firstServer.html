@@ -48,7 +48,7 @@
         </span>
         <input id="roles" name="roles" class="roles" type="checkbox" value="all_in_one" checked="checked" disabled="disabled"/>All in one<div class="clear"/>
 
-        <a class="save_btnServer" href="#">Add</a>
+        <a class="save_btnServer" href="#">Deploy</a>
     </form>
     {{else}}
     <form id="dev" class="servers">
@@ -79,7 +79,7 @@
         </span>
         <input id="roles" name="roles" type="checkbox" class="roles" value="all_in_one" checked="checked" disabled="disabled"/>All in one<div class="clear"/>
 
-        <a class="save_btnServer" href="#">Add</a>
+        <a class="save_btnServer" href="#">Deploy</a>
     </form>
     {{/if}}
     {{else type == "1"}}
@@ -107,7 +107,7 @@
         </select><div class="clear"/> 
         <input id="number" name="number" type="hidden" value="7"/>
 
-        <a class="save_btnServer" href="#">Add</a>
+        <a class="save_btnServer" href="#">Deploy</a>
     </form>
     {{else}}
     <p class="note_box">For this option select 7 differents servers</p>
@@ -184,6 +184,6 @@
     {{/if}}
     <hr/>
     {{/each}}
-    <a class="save_btnServer" href="#">Add</a>
+    <a class="save_btnServer" href="#">Deploy</a>
     {{/if}}
 </div>
