@@ -1,14 +1,17 @@
 <div>
     <div class="popup container_resize">
         <div class="resize">
-            <div id="two_columns" class="stylized myform">
+            <div id="two_columns">
                 <div class="wrapper">
                     <div class="column left">
                         <div class="title_column">${left.title}</div>
                         <div class="scrollable">
                             <ul class="connect">
                                 {{each(i, item) left.items}}
-                                    <li id="${item.id}">${item.name}</li>
+                                    <li id="${item.id}" data-id="${item.id}">
+                                        <a href="#" class="drag_btn"></a>
+                                        ${item.name}
+                                    </li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -18,14 +21,18 @@
                         <div class="scrollable">
                             <ul class="connect">
                                 {{each(i, item) right.items}}
-                                    <li id="${item.id}">${item.name}</li>
+                                    <li id="${item.id}" data-id="${item.id}">
+                                        <a href="#" class="drag_btn"></a>
+                                        ${item.name}
+                                    </li>
                                 {{/each}}
                             </ul>
                         </div>
                     </div> 
                 </div>
                 <div class="clear"/>
-                <form name="form" method="post" action="#">
+                <form name="form" class="stylized myform" method="post" action="#">
+                    <div class="optional_content"></div>
                     <div class="btn_wrapper">
                         <a href="#" id="add" class="submit_btn ctr">Save</a><br>
                     </div>

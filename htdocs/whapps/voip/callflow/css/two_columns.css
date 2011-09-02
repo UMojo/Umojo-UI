@@ -67,12 +67,20 @@
     background-color: #0097BB;
 }
 #two_columns .wrapper li a.drag_btn{
-    background-color: #808080;
     background-image: url("../images/drag_btn.png");
     float: left;
     height: 22px;
     width: 9px;
+    margin-right: 5px;
 }
+
+/* Ring group specific css */
 #two_columns .options {
-    
+    float: right; 
+    margin-right: 5px;
+}
+
+#two_columns .options .option {
+    width: 30px;
+    font-size: 10px;
 }

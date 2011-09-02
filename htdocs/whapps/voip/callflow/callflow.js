@@ -14,9 +14,9 @@ winkstart.module('voip', 'callflow', {
             root: 'tmpl/root.html',
             node: 'tmpl/node.html',
             add_number: 'tmpl/add_number.html',
-            ring_group_dialog: 'tmpl/ring_group_dialog.html',
             edit_dialog: 'tmpl/edit_dialog.html',
-            two_column: 'tmpl/two_column.html'
+            two_column: 'tmpl/two_column.html',
+            ring_group_dialog: 'tmpl/ring_group_dialog.html'
         },
 
         elements: {
@@ -1304,7 +1304,7 @@ winkstart.module('voip', 'callflow', {
                                     zIndex: 2000,
                                     helper: 'clone',
                                     appendTo: $('.wrapper', popup),
-                                    recieve: function() {
+                                    receive: function() {
                                         $('.scrollable', popup).data('jsp').reinitialise();
                                     },
                                     remove: function() {
@@ -1316,7 +1316,7 @@ winkstart.module('voip', 'callflow', {
                                     var _rules = [];
 
                                     $('.right .connect li', popup).each(function() {
-                                        _rules.push($(this).attr('id'));
+                                        _rules.push($(this).dataset('id'));
                                     });
 
                                     node.setMetadata('rules', _rules);
@@ -1394,7 +1394,7 @@ winkstart.module('voip', 'callflow', {
                                     zIndex: 2000,
                                     helper: 'clone',
                                     appendTo: $('.wrapper', popup),
-                                    recieve: function() {
+                                    receive: function() {
                                         $('.scrollable', popup).data('jsp').reinitialise();
                                     },
                                     remove: function() {
@@ -1406,7 +1406,7 @@ winkstart.module('voip', 'callflow', {
                                     var _rules = [];
 
                                     $('.right .connect li', popup).each(function() {
-                                        _rules.push($(this).attr('id'));
+                                        _rules.push($(this).dataset('id'));
                                     });
 
                                     node.setMetadata('rules', _rules);
@@ -1484,7 +1484,7 @@ winkstart.module('voip', 'callflow', {
                                     zIndex: 2000,
                                     helper: 'clone',
                                     appendTo: $('.wrapper', popup),
-                                    recieve: function() {
+                                    receive: function() {
                                         $('.scrollable', popup).data('jsp').reinitialise();
                                     },
                                     remove: function() {
@@ -1496,7 +1496,7 @@ winkstart.module('voip', 'callflow', {
                                     var _rules = [];
 
                                     $('.right .connect li', popup).each(function() {
-                                        _rules.push($(this).attr('id'));
+                                        _rules.push($(this).dataset('id'));
                                     });
 
                                     node.setMetadata('rules', _rules);
@@ -1510,14 +1510,12 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
-                }
-                /*
+                }, 
                 'ring_group[]': {
                     name: 'Ring Group',
                     icon: 'ring_group',
-                    category: 'advanced',
+                    category: 'basic',
                     module: 'ring_group',
-                    r
                     data: {
                         name: ''
                     },
@@ -1534,14 +1532,117 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                         winkstart.getJSON('device.list', {
                                 account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip']
+                                api_url: winkstart.apps['voip'].api_url
                             },
                             function(data, status) {
-                                var popup, popup_html;
+                                var popup, popup_html, index, endpoints
+                                    selected_endpoints = {},
+                                    unselected_endpoints = [];
+
+                                if(endpoints = node.getMetadata('endpoints')) {
+                                    // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
+                                    // we also need to clone to preven managing of objects
+                                    $.each($.extend(true, {}, endpoints), function(i, obj) {
+                                        obj.name = 'Undefined';
+                                        selected_endpoints[obj.id] = obj; 
+                                    });
+
+                                    $.each(data.data, function(i, obj) {
+                                        if(obj.id in selected_endpoints) {
+                                            selected_endpoints[obj.id].name = obj.name;
+                                        }
+                                        else {
+                                            unselected_endpoints.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_endpoints = data.data;
+                                }
+
+                                popup_html = THIS.templates.ring_group_dialog.tmpl({
+                                    left: {
+                                        title: 'Unselected devices',
+                                        items: unselected_endpoints
+                                    },
+                                    right: {
+                                        title: 'Selected devices',
+                                        items: selected_endpoints
+                                    },
+                                    form: {
+                                        name: node.getMetadata('name') || '',
+                                        strategy: {
+                                            items: [
+                                                {   
+                                                    id: 'simultaneous',
+                                                    name: 'At the same time'
+                                                },
+                                                {
+                                                    id: 'single',
+                                                    name: 'In order'
+                                                }
+                                            ],
+                                            selected: node.getMetadata('strategy') || 'simultaneous'
+                                        },
+                                        timeout: node.getMetadata('timeout') || '30'
+                                    }
+                                });
+
+                                $('.column.left .options', popup_html).hide();
+
+                                $('.options .option', popup_html).each(function() {
+                                    $(this).tooltip({
+                                        attach: 'body'
+                                    });
+                                });
+
+                                $('.options .option.delay', popup_html).bind('change blur focus', function() {
+                                    $(this).parents('li').dataset('delay', $(this).val());
+                                });
+
+                                $('.options .option.timeout', popup_html).bind('change blur focus', function() {
+                                    $(this).parents('li').dataset('timeout', $(this).val());
+                                });
 
                                 popup = winkstart.dialog(popup_html, { title: 'Ring Group' });
 
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    receive: function(ev, ui) {
+                                        if($(this).parents('.column').hasClass('left')) {
+                                            $('.options', ui.item).hide();
+                                        }
+                                        else {
+                                            $('.options', ui.item).show();
+                                        }
+
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function(ev, ui) {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+
                                 $('.submit_btn', popup).click(function() {
+                                    var name = $('#name', popup).val();
+
+                                    endpoints = [];
+
+                                    $('.right .connect li', popup).each(function() {
+                                        endpoints.push($(this).dataset());
+                                    });
+
+                                    node.setMetadata('endpoints', endpoints);
+                                    node.setMetadata('name', name);
+                                    node.setMetadata('strategy', $('#strategy', popup).val());
+                                    node.setMetadata('timeout', $('#timeout', popup).val());
+
+                                    node.caption = name;
 
                                     popup.dialog('close');
 
@@ -1552,7 +1653,7 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
-                },
+                }/*,
                 'offnet': {
                     'name': 'Offnet',
                     'icon': 'offnet',
