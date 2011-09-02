@@ -787,7 +787,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'device',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
@@ -864,7 +864,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'conference',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
@@ -917,7 +917,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'callflow',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
@@ -978,7 +978,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'voicemail',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
@@ -1025,13 +1025,34 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
+                'voicemail[action=check]': {
+                    name: 'Check Voicemail',
+                    icon: 'voicemail',
+                    category: 'advanced',
+                    module: 'voicemail',
+                    data: {
+                        action: 'check'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
                 'media[id=*]': {
                     name: 'Play Media',
                     icon: 'play',
                     category: 'advanced',
                     module: 'media',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
@@ -1084,7 +1105,7 @@ winkstart.module('voip', 'callflow', {
                     category: 'basic',
                     module: 'menu',
                     data: {
-                        id: "null"
+                        id: 'null'
                     },
                     rules: [
                         {
