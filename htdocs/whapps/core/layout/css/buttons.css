@@ -22,3 +22,11 @@
     color: #05AFDC;
     cursor: pointer;
 }
+
+.save-btn:hover {
+    color: greenyellow !important;
+}
+
+.delete-btn:hover {
+    color: red !important;
+}

@@ -95,56 +95,155 @@ winkstart.module('voip', 'user',
         },
 
         saveUser: function(user_id, form_data) {
-            var THIS = this;
+            var THIS = this,
+                tmpPassword = form_data.pwd_mngt_pwd1;
 
             /* Check validation before saving */
             THIS.validateForm('save');
 
-            if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.account_id = winkstart.apps['voip'].account_id;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-                rest_data.data = form_data;
+            if(form_data.pwd_mngt_pwd1 == form_data.pwd_mngt_pwd2) {
+                if(!$('.invalid').size()) {
+                    /* Construct the JSON we're going to send */
 
-                /* Is this a create or edit? See if there's a known ID */
-                if (user_id) {
-                    /* EDIT */
-                    rest_data.user_id = user_id;
-                    winkstart.postJSON('user.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editUser({
-                            id: user_id
+                    /* Is this a create or edit? See if there's a known ID */
+                    if (user_id) {
+                        
+                        winkstart.getJSON('user.get', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            user_id: user_id
+                        }, function(data, status){
+                            delete data.data.id;
+                            
+                            // If there is no apps object
+                            if (!("apps" in data.data)) {
+                                data.data.apps = {};
+                            }
+                            
+                            // If the user is an admin
+                            if (form_data.user_level == "admin") {
+                                if (!("voip" in data.data.apps)) {
+                                    data.data.apps.voip = {
+                                        "label": "VoIP Services",
+                                        "icon": "phone",
+                                        "api_url": winkstart.apps['voip'].api_url
+                                    };
+                                }
+                                
+                                if ("userportal" in data.data.apps) {
+                                    delete data.data.apps.userportal;
+                                }
+                            } else { // If the user is a "simple" user.
+                                if (!("userportal" in data.data.apps)) {
+                                    data.data.apps.userportal = {
+                                        "label": "User Portal",
+                                        "icon": "userportal",
+                                        "api_url": winkstart.apps['voip'].api_url
+                                    };
+                                }
+                                
+                                if ("voip" in data.data.apps) {
+                                    delete data.data.apps.voip;
+                                }
+                            }
+                            
+                            delete form_data.pwd_mngt_pwd1;
+                            delete form_data.pwd_mngt_pwd2;
+                            delete form_data.user_level;
+                            
+                            var newform_data = $.extend(true, {}, data.data, form_data);
+                            
+                            var rest_data = {};
+                            rest_data.crossbar = true;
+                            rest_data.account_id = winkstart.apps['voip'].account_id,
+                            rest_data.api_url = winkstart.apps['voip'].api_url,
+                            rest_data.user_id = user_id;
+                            rest_data.data = newform_data;
+                            
+                            // If another password is set ("fakePassword" is the default value)
+                            if (tmpPassword != "fakePassword") {
+                                rest_data.data.password = tmpPassword;
+                            }
+            
+                            /* EDIT */
+                            winkstart.postJSON('user.update', rest_data, function (json, xhr) {
+                                /* Refresh the list and the edit content */
+                                THIS.renderList();
+                                THIS.editUser({
+                                    id: user_id
+                                });
+                            });
                         });
-                    });
+                        
+                        
+                    } else {
+                        /* CREATE */
+                        
+                        form_data.apps = {};
+                        
+                        if (form_data.user_level == "admin") {
+                            form_data.apps.voip = {
+                                "label": "VoIP Services",
+                                "icon": "phone",
+                                "api_url": winkstart.apps['voip'].api_url
+                            };
+                        } else {
+                            form_data.apps.userportal = {
+                                "label": "User Portal",
+                                "icon": 'userportal',
+                                "api_url": winkstart.apps['voip'].api_url
+                            }
+                        }
+                        
+                        var tmpPassword = form_data.pwd_mngt_pwd1;
+                        
+                        delete form_data.user_level;
+                        delete form_data.pwd_mngt_pwd1;
+                        delete form_data.pwd_mngt_pwd2;
+                        
+                        // If another password is set ("fakePassword" is the default value)
+                        if (tmpPassword != "fakePassword") {
+                            form_data.password = tmpPassword;
+                        }
+
+                        /* Actually send the JSON data to the server */
+                        winkstart.putJSON('user.create', {
+                            crossbar: true,
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            data: form_data
+                        }, function (json, xhr) {
+                            THIS.renderList();
+                            THIS.editUser({
+                                id: json.data.id
+                            });
+                        });
+                    }
+
                 } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('user.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editUser({
-                            id: json.data.id
-                        });
-                    });
+                    alert('Please correct errors that you have on the form.');
                 }
             } else {
-                alert('Please correct errors that you have on the form.');
+                alert('Please confirm your password');
             }
+
+            
+
+            
         },
 
         /*
          * Create/Edit user properties (don't pass an ID field to cause a create instead of an edit)
          */
         editUser: function(data){
+
             $('#user-view').empty();
             var THIS = this;
             var form_data = {
                 data : {
                     call_forward: {},
-                    caller_id: { internal: { }, external: { }}
+                    caller_id: {internal: { }, external: { }}
                 }
             };
             
@@ -193,6 +292,13 @@ winkstart.module('voip', 'user',
         renderUser: function(form_data){
             var THIS = this;
             var user_id = form_data.data.id;
+            
+            // If the voip whapps is present, then it's an admin'
+            if ('apps' in form_data.data && 'voip' in form_data.data.apps) {
+                form_data.priv_level = 'admin';
+            } else {
+                form_data.priv_level = 'user';
+            }
 
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editUser.tmpl(form_data).appendTo( $('#user-view') );
@@ -233,7 +339,7 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
-                form_data.username = form_data.email;
+                //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
                 return false;

@@ -63,7 +63,8 @@ winkstart.module('connect', 'channels',
         edit: function() {
             var THIS = this;
             dialogDiv = winkstart.dialog(THIS.templates.edit_channels.tmpl(winkstart.apps['connect'].account), {
-                title: 'Edit Flat-Rate Channels'
+                title: 'Edit Flat-Rate Channels',
+                resizable: false
             });
 
             THIS.show_estimate(dialogDiv);

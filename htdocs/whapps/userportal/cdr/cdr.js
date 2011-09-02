@@ -15,12 +15,12 @@ winkstart.module('userportal', 'cdr', {
 
 	resources: {
 		'cdr.list': {
-			url: '{api_url}/accounts/{account_id}/cdr',
+			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdr',
 			contentType: 'application/json',
 			verb: 'GET'
 		},
 		'cdr.read': {
-			url: '{api_url}/accounts/{account_id}/cdr/{cdr_id}',
+			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdr/{cdr_id}',
 			contentType: 'application/json',
 			verb: 'GET'
 		},
@@ -137,6 +137,7 @@ function(args) {
 		winkstart.getJSON('cdr.list', {
 			crossbar: true, 
 			account_id: winkstart.apps['userportal'].account_id,
+		    user_id: winkstart.apps['userportal'].user_id,
             api_url: winkstart.apps['userportal'].api_url
 		}, function(reply) {
 			$.each(reply.data, function() {
@@ -145,6 +146,7 @@ function(args) {
 				winkstart.getJSON('cdr.read', {
 					crossbar: true, 
 					account_id: winkstart.apps['userportal'].account_id, 
+		            user_id: winkstart.apps['userportal'].user_id,
                     api_url: winkstart.apps['userportal'].api_url,
 					cdr_id: cdr_id
 				}, function(reply) {
@@ -177,9 +179,6 @@ function(args) {
 							noData(duration), 
 							noData(humanFullDate)]);
 					}
-					
-					
-                    
 				});
 			}); 
 		});

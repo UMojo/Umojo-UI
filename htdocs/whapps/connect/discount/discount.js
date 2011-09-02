@@ -15,7 +15,7 @@ winkstart.module('connect', 'discount',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            'credits.post': {
+            'promo.post': {
                 url: 'https://store.2600hz.com/v1/{account_id}/promo',
                 contentType: 'application/json',
                 verb: 'POST'

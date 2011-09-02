@@ -50,7 +50,8 @@ winkstart.module('connect', 'credits',
         manage: function(args) {
             var THIS = this;
             dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.apps['connect'].account), {
-                title: 'Edit Flat-Rate Channels'
+                title: 'Add credits to your account',
+                resizable: false,
             });
 
             $('.credits.add', dialogDiv).click(function() {

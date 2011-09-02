@@ -122,6 +122,7 @@ winkstart.module('connect', 'connect', {
          */
 
         setup_page: function() {
+            winkstart.publish('sipservice.activate');
         }
     }
 );
