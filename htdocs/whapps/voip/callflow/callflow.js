@@ -437,6 +437,7 @@ winkstart.module('voip', 'callflow', {
                                 callflow_id: THIS.flow.id
                             },
                             function() {
+                                $('#ws_callflow').empty();
                                 THIS.renderList();
                                 THIS._resetFlow();
                             }
@@ -580,6 +581,8 @@ winkstart.module('voip', 'callflow', {
                 categories: THIS.categories,
                 nodes: THIS.actions
             });
+
+            $('.tool, .app_list_nav, .clear', tools).hide();
 
             $('.category', tools).click(function () {
                 var current = $(this);
@@ -1521,8 +1524,8 @@ winkstart.module('voip', 'callflow', {
                     },
                     rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize': '1'
+                            type: 'quantity',
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
@@ -1653,28 +1656,76 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
-                }/*,
+                },
+                'call_forward[action=activate]': {
+                    name: 'Enable call forwarding',
+                    icon: 'rightarrow',
+                    category: 'advanced',
+                    module: 'call_forward',
+                    data: {
+                        action: 'activate'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'call_forward[action=deactivate]': {
+                    name: 'Disable call forwarding',
+                    icon: 'rightarrow',
+                    category: 'advanced',
+                    module: 'call_forward',
+                    data: {
+                        action: 'deactivate'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'call_forward[action=update]': {
+                    name: 'Update call forwarding',
+                    icon: 'rightarrow',
+                    category: 'advanced',
+                    module: 'call_forward',
+                    data: {
+                        action: 'update'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                }
+                /*,
                 'offnet': {
                     'name': 'Offnet',
                     'icon': 'offnet',
                     'category': 'basic',
                     'module': 'offnet',
-                    'rules': [
-                        {
-                            'type': 'quantity',
-                            'maxSize': '9'
-                        }
-                    ],
-                    'isUsable': 'true',
-                    'edit': function(node, callback) {
-
-                    }
-                },
-                'timeofday': {
-                    'name': 'Time of Day',
-                    'icon': 'temporal_route',
-                    'category': 'basic',
-                    'module': 'temporal_route',
                     'rules': [
                         {
                             'type': 'quantity',
