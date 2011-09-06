@@ -1212,7 +1212,7 @@ winkstart.module('voip', 'callflow', {
 
                                 popup_html = THIS.templates.edit_dialog.tmpl({
                                     objects: {
-                                        tpye: 'temporal rule',
+                                        type: 'temporal rule',
                                         items: data.data,
                                         selected: child_node.key
                                     }
@@ -1243,12 +1243,12 @@ winkstart.module('voip', 'callflow', {
                         popup_html = THIS.templates.edit_dialog.tmpl({
                             objects: {
                                 type: 'timezone',
-                                items: [
-                                    { id: 'America/Los_Angeles', name: 'America/Los_Angeles' }
-                                ],
-                                selected: node.getMetadata('timezone') || ''
+                                items: {},
+                                selected: {}
                             }
                         });
+
+                        winkstart.timezone.populate_dropdown($('#object-selector', popup_html), node.getMetadata('timezone') || '');
 
                         popup = winkstart.dialog(popup_html, { title: 'Time of Day' });
 
