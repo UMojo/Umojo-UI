@@ -208,7 +208,7 @@ winkstart.module('voip', 'callflow', {
             function branch(actionName) {
                 var that = this;
                 this.id = -1;  
-                this.actionName = (actionName == 'resource') ? 'offnet' : actionName;
+                this.actionName = actionName;
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
@@ -1740,24 +1740,45 @@ winkstart.module('voip', 'callflow', {
                     },
                     edit: function(node, callback) {
                     }
-                }
-                /*,
-                'offnet': {
-                    'name': 'Offnet',
-                    'icon': 'offnet',
-                    'category': 'basic',
-                    'module': 'offnet',
-                    'rules': [
+                },
+                'offnet[]': {
+                    name: 'Global Resource',
+                    icon: 'offnet',
+                    category: 'basic',
+                    module: 'offnet',
+                    data: {},
+                    rules: [
                         {
-                            'type': 'quantity',
-                            'maxSize': '9'
+                            type: 'quantity',
+                            maxSize: '0'
                         }
                     ],
-                    'isUsable': 'true',
-                    'edit': function(node, callback) {
-
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
                     }
-                }*/
+                },
+                'resource[]': {
+                    name: 'Resource',
+                    icon: 'resource',
+                    category: 'basic',
+                    module: 'resource',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                }
             });
         }
     }
