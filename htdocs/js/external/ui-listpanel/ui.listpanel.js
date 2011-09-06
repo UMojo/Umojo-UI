@@ -127,7 +127,7 @@
         _getListNode: function(node_data) {
             
         	var html_string = '';
-        	html_string += '<li class="list-element" title="'+node_data.title+'">';
+        	html_string += '<li class="list-element" title="'+node_data.title+'" id="'+node_data.id+'">';
         	html_string += '<a data-action="media" data-module="activate" href="#">'+node_data.title+'</a>';
         	//html_string += '<div class="row_arrow"><a data-action="media" data-module="activate" href="#"></a></div>'; 
         	html_string += '</li>';
