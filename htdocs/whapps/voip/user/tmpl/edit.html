@@ -23,6 +23,12 @@
                     <fieldset>
                         <ul class="controls">
                             <li>
+                                <span class="tooltip-wrapper" tooltip="Username">
+                                    <span class="tooltip"/><label for="username">Username:</label>
+                                </span>
+                                <input id="username" name="username" type="text" value="${data.username}" />
+                            </li>
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="First Name">
                                     <span class="tooltip"/><label for="first_name">First Name:</label>
                                 </span>
@@ -39,6 +45,20 @@
                                     <span class="tooltip"/><label for="email">Email Address:</label>
                                 </span>
                                 <input id="email" name="email" type="text" value="${data.email}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The user privilege level">
+                                    <span class="tooltip"/><label for="user_level">User privilege level:</label>
+                                </span>
+                                <select id="user_level" name="user_level">
+                                    {{if priv_level == 'admin'}} 
+                                    <option value="admin" selected>Administrator</option>
+                                    <option value="user">User</option>
+                                    {{else}}
+                                    <option value="admin">Administrator</option>
+                                    <option value="user" selected>User</option>
+                                    {{/if}}
+                                </select>
                             </li>
                         </ul>
                     </fieldset>
@@ -60,6 +80,7 @@
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
                         <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
                         <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Call Forward</a></li>
+                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
                     </ul>
                 </span>
 
@@ -97,13 +118,6 @@
                                     <span class="tooltip"/><label for="timezone">Timezone:</label>
                                 </span>
                                 <select name="timezone" id="timezone">
-                                    {{each field_data.timezones}}
-                                    {{if data.timezone == text}}
-                                    <option value="${text}" selected="selected">${text}</option>
-                                    {{else}}
-                                    <option value="${text}">${text}</option>
-                                    {{/if}}
-                                    {{/each}}
                                 </select>
                             </li>
                         </ul>
@@ -198,13 +212,29 @@
                     <div class="clear"></div>
 
                 </div>
-
+                
+                <div id="password_management">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="pwd_reco_pwd1">New password: </label>
+                                <input id="pwd_mngt_pwd1" name="pwd_mngt_pwd1" type="password" value="fakePassword"/>
+                            </li>
+                            <li>
+                                <label for="pwd_reco_pwd2">Confirm password: </label>
+                                <input id="pwd_mngt_pwd2" name="pwd_mngt_pwd2" type="password" value="fakePassword"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    
+                    <div class="clear"></div>
+                </div>
             </div>
 
         <ul class="buttons right users">
-            <li><a class="user-save" href="#">Save</a></li>
+            <li><a class="user-save save-btn" href="#">Save</a></li>
             {{if data.id}}
-                <li><a class="user-delete" href="#">Delete</a></li>
+                <li><a class="user-delete delete-btn" href="#">Delete</a></li>
             {{/if}}
             <li><a class="user-cancel" href="#">Cancel</a></li>
         </ul>

@@ -32,6 +32,9 @@ winkstart.module('skeleton', 'skeleton',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
+        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
+        winkstart.registerResources(this.__whapp, this.config.resources);
+
         winkstart.publish('subnav.add', {
             module: this.__module,
             label: 'Skeleton'
@@ -86,9 +89,6 @@ winkstart.module('skeleton', 'skeleton',
 
             /* Draw our base template into the window */
             THIS.templates.index.tmpl().appendTo( $('#ws-content') );
-
-            /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-            winkstart.registerResources(this.__whapp, this.config.resources);
 
             winkstart.publish('layout.updateLoadedModule', {
                 label: 'Skeleton',

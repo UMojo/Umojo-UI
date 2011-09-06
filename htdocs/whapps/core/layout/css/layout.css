@@ -410,22 +410,19 @@ a.status5{
 **************************************/
 
 .content_container {
-	width: 98%;
+	width: 100%;
 	margin: 0;
-	height: 400px;
     z-index: -1000;
     position: relative;
 }
 
-#welcomediv {
-    margin-top: 5%;
-    margin-left: 20%;
-    margin-right: 20%;
-    height: 60%;
-}
-
-#welcomediv h1 {
-    text-align: center;
+.welcomediv {
+    background-image: url(../images/AppStore_welcomePage.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 15px;
+	width: 100%;
+    height: 465px;
 }
 
 

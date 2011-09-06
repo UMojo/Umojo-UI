@@ -76,7 +76,6 @@ winkstart.module('auth', 'auth',
 
     {
         request_realm : false,
-        realm_suffix : '.sip.2600hz.com',
 
         register: function() {
             var THIS = this;
@@ -90,10 +89,15 @@ winkstart.module('auth', 'auth',
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 var realm;
-                if (THIS.request_realm) {
+                if(THIS.request_realm) {
                     realm = $('#realm', dialogRegister).val();
                 } else {
-                    realm = $('#username', dialogRegister).val() + THIS.realm_suffix;
+                    realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
+                }
+
+                // If realm was set in the URL, override all
+                if('realm' in URL_DATA) {
+                    realm = URL_DATA['realm'];
                 }
 
                 var rest_data = {
@@ -151,7 +155,12 @@ winkstart.module('auth', 'auth',
                 if (THIS.request_realm) {
                     realm = $('#realm', dialogDiv).val();
                 } else {
-                    realm = $('#login', dialogDiv).val() + THIS.realm_suffix;
+                    realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
+                }
+                
+                // If realm was set in the URL, override all
+                if('realm' in URL_DATA) {
+                    realm = URL_DATA['realm'];
                 }
 
                 var rest_data = {
@@ -162,19 +171,27 @@ winkstart.module('auth', 'auth',
                     }
                 };
 
-                winkstart.putJSON('auth.user_auth', rest_data, function (json, xhr) {
-                    winkstart.apps['auth'].account_id = json.data.account_id;
-                    winkstart.apps['auth'].auth_token = json.auth_token;
-                    winkstart.apps['auth'].user_id = json.data.owner_id;
-                    winkstart.apps['auth'].realm = realm;
+                winkstart.putJSON('auth.user_auth', rest_data, function (data, status) {
+                        winkstart.apps['auth'].account_id = data.data.account_id;
+                        winkstart.apps['auth'].auth_token = data.auth_token;
+                        winkstart.apps['auth'].user_id = data.data.owner_id;
+                        winkstart.apps['auth'].realm = realm;
 
-                    $(dialogDiv).dialog('close');
-                    
-                    // Deleting the welcome message
-                    $('#ws-content').empty();
-                    
-                    winkstart.publish('auth.load_account');
-                });
+                        $(dialogDiv).dialog('close');
+                        
+                        // Deleting the welcome message
+                        $('#ws-content').empty();
+                        
+                        winkstart.publish('auth.load_account');
+                    },
+                    function(data, status) {
+                        if(status == '401' || status == '403') {
+                            alert('Invalid credentials, please check that your username and password are correct.');
+                        }
+                        else {
+                            alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                        }
+                    });
             });
 
             $('a.register', dialogDiv).click(function(event) {
