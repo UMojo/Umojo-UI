@@ -334,7 +334,7 @@ winkstart.module('voip', 'resource',
                 var options = {};
                 options.label = 'Resources Module';
                 options.identifier = 'resource-module-listview';
-                options.new_entity_label = 'Resource';
+                options.new_entity_label = 'Add Resource';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'resource.list-panel-click';

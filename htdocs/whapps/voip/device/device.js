@@ -617,7 +617,7 @@ winkstart.module('voip', 'device',
                 var options = {};
                 options.label = 'Device Module';
                 options.identifier = 'device-module-listview';
-                options.new_entity_label = 'Device';
+                options.new_entity_label = 'Add Device';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'device.list-panel-click';
