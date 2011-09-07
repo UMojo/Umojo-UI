@@ -2,9 +2,7 @@
     <div class="inner">
         <form id="device-form" action="" method="post" class="niceform">
             {{if data.id}}
-                <h1>Edit Device</h1>
-            {{else}}
-                <h1>Create Device</h1>
+                <h1>Edit SIP Device</h1>
             {{/if}}
 
             <ul class="settings_tabs settings1">
@@ -298,6 +296,7 @@
                                 <span>(Requires a T.38 Capable Device)</span>
                             </li>
                         </ul>
+                        <input type="hidden" value="${data.device_type}" name="device_type"/>
                     </fieldset>
                     
                     <div class="clear"></div>
@@ -313,6 +312,7 @@
             {{/if}}
             <li><a class="device-cancel" href="#">Cancel</a></li>
         </ul>
+        <div class="clear"></div>
             
         </form>
     </div>
