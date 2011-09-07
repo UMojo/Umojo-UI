@@ -118,13 +118,6 @@
                                     <span class="tooltip"/><label for="timezone">Timezone:</label>
                                 </span>
                                 <select name="timezone" id="timezone">
-                                    {{each field_data.timezones}}
-                                    {{if data.timezone == text}}
-                                    <option value="${text}" selected="selected">${text}</option>
-                                    {{else}}
-                                    <option value="${text}">${text}</option>
-                                    {{/if}}
-                                    {{/each}}
                                 </select>
                             </li>
                         </ul>
