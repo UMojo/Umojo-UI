@@ -873,7 +873,7 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     isUsable: 'true',
-                    caption: function(node) {
+                    caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
                         return (id && id != '') ? caption_map[id] : '';
@@ -1046,11 +1046,11 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                     }
                 },
-                'media[id=*]': {
+                'play[id=*]': {
                     name: 'Play Media',
                     icon: 'play',
                     category: 'advanced',
-                    module: 'media',
+                    module: 'play',
                     data: {
                         id: 'null'
                     },
