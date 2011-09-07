@@ -1,43 +1,69 @@
 <div>
     <div class="popup container_resize">
         <div class="resize">
-            <div id="ringgroup" class="stylized myform">
+            <div id="two_columns">
                 <div class="wrapper">
                     <div class="column left">
-                        <div class="title_column">Available Devices</div>
-                        <div class="available scrollable">
+                        <div class="title_column">${left.title}</div>
+                        <div class="scrollable">
                             <ul class="connect">
+                                {{each(i, item) left.items}}
+                                    <li id="${item.id}" data-id="${item.id}" data-delay="0", data-timeout="0">
+                                        <a href="#" class="drag_btn"></a>
+                                        ${item.name}
+                                        <span class="options">
+                                            <input class="option delay" type="text" value="0" tooltip="Delay (in seconds)"/>
+                                            <input class="option timeout" type="text" value="0" tooltip="Timeout (in seconds)"/>
+                                        </span>
+                                    </li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div>
                     <div class="column right">
-                        <div class="title_column">Assigned Devices</div>
-                        <div class="ring_group scrollable">
+                        <div class="title_column">${right.title}</div>
+                        <div class="scrollable">
                             <ul class="connect">
+                                {{each(i, item) right.items}}
+                                    <li id="${item.id}" data-id="${item.id}" data-delay="${item.delay}" data-timeout="${item.timeout}">
+                                        <a href="#" class="drag_btn"></a>
+                                        ${item.name}
+                                        <span class="options">
+                                            <input class="option delay" type="text" value="${item.delay}" tooltip="Delay (in seconds)"/>
+                                            <input class="option timeout" type="text" value="${item.timeout}" tooltip="Timeout (in seconds)"/>
+                                        </span>
+                                    </li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div> 
                 </div>
                 <div class="clear"/>
-                <div class="wrapper_form">
-                    <div class="options">
-                        <div>
-                            <label>Ring Strategy</label>
-                            <select id="strategy">
-                                <option value="simultaneous">At the same time</option>
-                                <option value="single">One at a time</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Timeout</label>
-                            <input id="timeout" type="text"/>
-                            <div class="clear"/>
-                        </div>
+                <form name="form" class="stylized myform" method="post" action="#">
+                    <div>
+                        <label>Name</label>
+                        <input id="name" type="text" value="${form.name}"/>
+                        <div class="clear"/>
                     </div>
-                </div>
-                <form name="form" method="post" action="#">
+                    <div>
+                        <label>Ring Strategy</label>
+                        <select id="strategy">
+                            {{each(i, obj) form.strategy.items}}
+                                {{if form.strategy.selected == obj.id}}
+                                    <option value="${obj.id}" SELECTED>${obj.name}</option>
+                                {{else}}
+                                    <option value="${obj.id}">${obj.name}</option>
+                                {{/if}}
+                            {{/each}} 
+                        </select>
+                    </div>
+                    <div>
+                        <label>Timeout</label>
+                        <input id="timeout" type="text" value="${form.timeout}"/>
+                        <div class="clear"/>
+                    </div>
                     <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="submit_btn ctr">Save</a><br>
+                        <a href="#" class="submit_btn ctr">Save</a><br>
                     </div>
                 </form>   
             </div>

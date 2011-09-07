@@ -381,7 +381,7 @@ winkstart.module('provision', 'provisioner', {
 
          for (var i in model.files) files.push(model.directory+model.files[i]);
 
-         winkstart.log('loading files');
+         console.log('loading files');
          this._loadFiles(files, function ( ) { THIS._parseDefault(); callback(); });
       },
 

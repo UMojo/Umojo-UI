@@ -345,7 +345,7 @@ winkstart.module('voip', 'vmbox',
                 var options = {};
                 options.label = 'Voicemail Boxes Module';
                 options.identifier = 'vmbox-module-listview';
-                options.new_entity_label = 'Voicemail Box';
+                options.new_entity_label = 'Add Voicemail Box';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'vmbox.list-panel-click';

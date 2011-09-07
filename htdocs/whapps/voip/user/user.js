@@ -404,7 +404,7 @@ winkstart.module('voip', 'user',
                 var options = {};
                 options.label = 'User Module';
                 options.identifier = 'user-module-listview';
-                options.new_entity_label = 'User';
+                options.new_entity_label = 'Add User';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'user.list-panel-click';

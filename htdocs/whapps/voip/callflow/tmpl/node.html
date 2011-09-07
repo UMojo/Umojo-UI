@@ -1,19 +1,11 @@
 <div>
     <div class="node-options">
-        <a href="javascript:" name="close" id="${id}" class="delete">X</a>
+        <a href="javascript:" name="close" id="${node.id}" class="delete">X</a>
         <div class="module">
-            <div class="div_icon"><span class="icon ${actionName}"/></div>
-            {{if actionName == "temporal_route"}}
-                <div class="module_name"><b>time of day</b></div>
-            {{else}}
-                {{if actionName == "play"}}
-                <div class="module_name"><b>media</b></div>
-                {{else}}
-                <div class="module_name"><b>${actionName.replace('_',' ')}</b></div>
-                {{/if}}
-            {{/if}}
-            <div class="details">${details.substr(0,20)}</div>
-            <a href="javascript:" id="${id}" class="edit icon small_lightgrey small_edit"></a>
+            <div class="div_icon"><span class="icon ${callflow.icon}"/></div>
+            <div class="module_name"><b>${callflow.name}</b></div>
+            <div class="details">${node.caption.substr(0,20)}</div>
+            <a href="javascript:" id="${node.id}" class="edit icon small_lightgrey small_edit"></a>
         </div>
     </div>
 </div>
