@@ -873,7 +873,7 @@ winkstart.module('voip', 'callflow', {
                         }
                     ],
                     isUsable: 'true',
-                    caption: function(node) {
+                    caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
                         return (id && id != '') ? caption_map[id] : '';
