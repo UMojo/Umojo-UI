@@ -1046,11 +1046,11 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                     }
                 },
-                'media[id=*]': {
+                'play[id=*]': {
                     name: 'Play Media',
                     icon: 'play',
                     category: 'advanced',
-                    module: 'media',
+                    module: 'play',
                     data: {
                         id: 'null'
                     },
