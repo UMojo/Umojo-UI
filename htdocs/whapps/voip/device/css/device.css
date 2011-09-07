@@ -28,11 +28,13 @@ ul.buttons.devices {
 .media_tabs .buttons {
 	width: 191px;
 	height: 130px;
+	line-height: 130px;
     display: inline-block;
 	position: relative;
 	margin: 0 3px;	
 	background-image:url(../images/blank_btn.png);
 	background-position: 0px 0px;		
+    text-align: center;
 }
 
 .media_tabs .buttons:hover {
