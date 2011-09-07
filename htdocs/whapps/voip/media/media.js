@@ -333,7 +333,7 @@ winkstart.module('voip', 'media',
                 var options = {};
                 options.label = 'Media Module';
                 options.identifier = 'media-module-listview';
-                options.new_entity_label = 'Media';
+                options.new_entity_label = 'Add Media';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'media.list-panel-click';

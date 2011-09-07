@@ -475,7 +475,7 @@ winkstart.module('voip', 'timeofday',
                 var options = {};
                 options.label = 'Time of Day Module';
                 options.identifier = 'timeofday-module-listview';
-                options.new_entity_label = 'Time of Day';
+                options.new_entity_label = 'Add Time of Day';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'timeofday.list-panel-click';

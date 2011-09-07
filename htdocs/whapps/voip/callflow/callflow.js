@@ -751,7 +751,7 @@ winkstart.module('voip', 'callflow', {
                     var options = {};
                     options.label = 'Callflow Module';
                     options.identifier = 'callflow-module-listview';
-                    options.new_entity_label = 'Callflow';
+                    options.new_entity_label = 'Add Callflow';
                     options.data = map_crossbar_data(data.data);
                     options.publisher = winkstart.publish;
                     options.notifyMethod = 'callflow.list-panel-click';
