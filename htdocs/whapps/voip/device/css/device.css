@@ -52,6 +52,12 @@ ul.buttons.devices {
 	border-radius: 12px;
 }
 
+.media_tabs .buttons .label_device {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: white;
+}
+
 .media_pane {
 	width:860px;
 	margin-left:18px;
