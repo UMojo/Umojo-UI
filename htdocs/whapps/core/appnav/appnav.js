@@ -67,8 +67,6 @@ winkstart.module('core', 'appnav', {
             $('.dropdown .content', item).delegate('.module', 'click', function() {
                 $('div.header .main_nav .whapp a').removeClass('selected');
                 $('.whapp a', $(this).parents('li')).addClass('selected');
-                $('.main_nav li .whapp .icon').removeClass('blue');
-                $('.whapp .icon', $(this).parents('li')).addClass('blue');
                 winkstart.publish(args.name + '.module_activate', { name: $(this).attr('module-name') });
 
                 return false;
