@@ -98,7 +98,7 @@ a:active {
 	width: 192px;
 	height: 80px;
 	background-image: url(../images/nav_line.jpg);
-	background-repeat: no-repeat;
+	background-repeat: repeat-y;
     background-position: right;
 	text-indent: -9999px;
 	display: block;
@@ -134,7 +134,7 @@ a:active {
 
 .main_nav li {
     background-image: url(../images/nav_line.jpg);
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-position: right;
     padding: 0 23px;
     float: left;
