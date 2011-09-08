@@ -110,7 +110,9 @@ winkstart.module('cluster', 'deploy_mgr',
                         data.servers.push($('.serverType option:selected').text());
                             
                         $('.content_form', $(serverDialog)).html(THIS.templates.form_newServer.tmpl(data));
+                        
                         THIS.tooltip();
+                        
                         //CSS fix
                         $('#serverinfo').find('input:checkbox').each(function(i, o){
                             if(i != 0){
@@ -255,6 +257,9 @@ winkstart.module('cluster', 'deploy_mgr',
                                 data.tooltip = 'Type: '+rest_data.data.type+'<br/>Host Name: '+json.data.hostname + '<br/>Ip: ' + json.data.ip;
         
                                 THIS.templates.server.tmpl(data).prependTo($('.cluster'));
+                                
+                                $('.server_progress', '#'+data.server_id).progressbar({value:25});
+                                
 
                                 winkstart.publish('deploy_mgr.updateServer',  json.data.id);
 
@@ -263,14 +268,15 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                                    THIS._changeURL(json.data.ip);
-                                }
+                            // f(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                            //  THIS._changeURL(json.data.ip);
+                            // }
                             }
                         });
-                        console.log(rest_data);
                         break;
                     default:
+                        
+                        //FAKE FOR NOW !!!!!!!!!!!!
                         rest_data.data.hostname = '2600hz.server'+i+'.com';
                         rest_data.data.ip = '1.1.1.'+i;
                         rest_data.data.password = 'password';
@@ -293,12 +299,11 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                                    THIS._changeURL(json.data.ip);
-                                }
+                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                            // THIS._changeURL(json.data.ip);
+                            //  }
                             }
                         });
-                        console.log(rest_data);
                         break;
                 }
             });    
@@ -481,6 +486,10 @@ winkstart.module('cluster', 'deploy_mgr',
                         winkstart.publish('deploy_mgr.requestServer');
                     });
             }
+        },
+        
+        setPgbar: function(serverId, value){
+            $('.server_progress', '#'+serverId).progressbar({'value':value});
         },
         
         getRoles: function(roles) {
