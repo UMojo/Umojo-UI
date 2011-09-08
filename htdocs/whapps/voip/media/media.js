@@ -87,6 +87,8 @@ winkstart.module('voip', 'media',
             /* Check validation before saving */
             THIS.validateForm('save');
             if(!$('.invalid').size()) {
+                delete form_data.auth_token;
+
                 /* Construct the JSON we're going to send */
                 var rest_data = {};
                 rest_data.crossbar = true;
@@ -159,7 +161,8 @@ winkstart.module('voip', 'media',
             $('#media-view').empty();
             var THIS = this;
             var form_data = {
-                data: { streamable: true},   
+                auth_token: winkstart.apps['voip'].auth_token,
+                data: { streamable: true },   
                 field_data: THIS.config.formData,
                 value: {}
             };
@@ -330,7 +333,7 @@ winkstart.module('voip', 'media',
                 var options = {};
                 options.label = 'Media Module';
                 options.identifier = 'media-module-listview';
-                options.new_entity_label = 'Media';
+                options.new_entity_label = 'Add Media';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'media.list-panel-click';

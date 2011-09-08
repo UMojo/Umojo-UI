@@ -136,22 +136,66 @@ winkstart.module('voip', 'device',
         },
 
         validation : [
-            {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
-            {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
-            {name : '#caller_id_name_internal', regex : /^.*$/},
-            {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
-            {name : '#caller_id_name_external', regex : /^.*$/},
-            {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
-            {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
-            {name : '#sip_username', regex : /^[^\s]+$/},
-            {name : '#sip_password', regex : /^[^\s]+$/},
-            {name : '#sip_expire_seconds', regex : /^[0-9]+$/}
+        {
+            name : '#name', 
+            regex : /^[a-zA-Z0-9\s_']+$/
+        },
+
+        {
+            name : '#mac_address', 
+            regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/
+        },
+
+        {
+            name : '#caller_id_name_internal', 
+            regex : /^.*$/
+        },
+
+        {
+            name : '#caller_id_number_internal', 
+            regex : /^[\+]?[0-9]*$/
+        },
+
+        {
+            name : '#caller_id_name_external', 
+            regex : /^.*$/
+        },
+
+        {
+            name : '#caller_id_number_external', 
+            regex : /^[\+]?[0-9]*$/
+        },
+
+        {
+            name : '#sip_realm', 
+            regex : /^[0-9A-Za-z\-\.\:]+$/
+        },
+
+        {
+            name : '#sip_username', 
+            regex : /^[^\s]+$/
+        },
+
+        {
+            name : '#sip_password', 
+            regex : /^[^\s]+$/
+        },
+
+        {
+            name : '#sip_expire_seconds', 
+            regex : /^[0-9]+$/
+        }
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "device.list": {
                 url: '{api_url}/accounts/{account_id}/devices',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "device.status": {
+                url: '{api_url}/accounts/{account_id}/devices/status',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -573,7 +617,7 @@ winkstart.module('voip', 'device',
                 var options = {};
                 options.label = 'Device Module';
                 options.identifier = 'device-module-listview';
-                options.new_entity_label = 'Device';
+                options.new_entity_label = 'Add Device';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'device.list-panel-click';
@@ -581,7 +625,22 @@ winkstart.module('voip', 'device',
 
                 $("#device-listpanel").empty();
                 $("#device-listpanel").listpanel(options);
-
+                
+                
+                winkstart.getJSON('device.status', {
+                    crossbar: true,
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                }, function (json, xhr) {
+                    $.each(json.data, function(i,o){
+                        if(o.registered == true){
+                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/green.png" width="16" height="16"/>');
+                        }else{
+                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/red.png" width="16" height="16"/>');
+                        }
+                    });
+                
+                });
             });
         },
 

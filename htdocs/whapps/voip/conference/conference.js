@@ -292,7 +292,7 @@ function(args) {
                 var options = {};
                 options.label = 'Conference Module';
                 options.identifier = 'conference-module-listview';
-                options.new_entity_label = 'Conference';
+                options.new_entity_label = 'Add Conference';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'conference.list-panel-click';

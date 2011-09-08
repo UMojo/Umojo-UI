@@ -353,7 +353,7 @@ winkstart.module('voip', 'menu',
                 var options = {};
                 options.label = 'Menu Module';
                 options.identifier = 'menu-module-listview';
-                options.new_entity_label = 'Menu';
+                options.new_entity_label = 'Add Menu';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'menu.list-panel-click';

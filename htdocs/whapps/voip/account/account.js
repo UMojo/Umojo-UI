@@ -301,7 +301,7 @@ winkstart.module('voip', 'account',
                 var options = {};
                 options.label = 'Accounts Module';
                 options.identifier = 'account-module-listview';
-                options.new_entity_label = 'Account';
+                options.new_entity_label = 'Add Account';
                 options.data = map_crossbar_data(json.data);
                 options.publisher = winkstart.publish;
                 options.notifyMethod = 'account.list-panel-click';

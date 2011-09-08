@@ -1,18 +1,17 @@
 <div>
-   <div>
-{{each(category, actions) categories}}
-      <div id="${category}" name="${category}" class="category"><div class="open"><span class="arrow_category activeArrow"/><div class="text_category">${category_name}</div></div></div>
-   {{each(i, action) actions}}
-      <div class="tool"><div href="#" name="${action}" class="action icon app_sm ${action.replace(/ /gi, '')}"></div>
-      {{if action == "temporal_route"}}
-          <div class="tool_name">Time of Day</div></div>
-      {{else}}
-          <div class="tool_name">${action.replace("_"," ")}</div></div>
-      {{/if}}
-   {{/each}}
-      <div class="clear"></div>
-      <div class="app_list_nav">
-      </div>
-{{/each}}
-   </div>
+    <div>
+        {{each(category, actions) categories}}
+            <div id="${category.toLowerCase()}" name="${category.toLowerCase()}" class="category"><div class="open"><span class="arrow_category inactiveArrow"/><div class="text_category inactiveText">${category}</div></div></div>
+
+            {{each(i, action) actions}}
+                <div class="tool">
+                    <div href="#" name="${action}" class="action icon app_sm ${nodes[action].icon}"></div>
+                    <div class="tool_name">${nodes[action].name}</div>
+                </div>
+            {{/each}}
+
+            <div class="clear"></div>
+            <div class="app_list_nav"></div>
+        {{/each}}
+    </div>
 </div>
