@@ -8,14 +8,14 @@
             <div class="server_progress" style="display:none"></div>
             {{/if}}
 
-            <div id="loglist">
+            <!--<div id="loglist">
                 
-            </div>
-            <!--<ul>
+            </div>-->
+            <ul>
                 {{each server_roles}}
                 <li>${$value}</li>
                 {{/each}}
-            </ul>-->
+            </ul>
         </div>
         <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">${server_state}</a></div>
     </div>
