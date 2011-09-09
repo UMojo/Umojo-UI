@@ -51,9 +51,9 @@ winkstart.module('voip', 'conference', {
         }
     },
     validation: [
-        {name: '#name', regex: /^.*$/},
-        {name: '#member_pins', regex: /^[0-9]+$/},
-        {name: '#moderator_pins', regex: /^[0-9]+$/}
+//        {name: '#name', regex: /^.*$/},
+//        {name: '#member_pins', regex: /^[0-9]+$/},
+//        {name: '#moderator_pins', regex: /^[0-9]+$/}
     ]
 },
 function(args) {
@@ -80,6 +80,35 @@ function(args) {
             }
         });
     },
+    _getPinNumber: function(start_pin) {
+        var finalPinMember = '';
+        
+        $.each(start_pin, function(index, value) {
+            if(!(isNaN(value))) {
+                finalPinMember += value;
+            } else {
+                if(value.match(/^[aAbBcC]$/)) {
+                    finalPinMember += 2
+                } else if(value.match(/^[dDeEfF]$/)) {
+                    finalPinMember += 3
+                } else if(value.match(/^[gGhHiI]$/)) {
+                    finalPinMember += 4
+                } else if(value.match(/^[jJkKlL]$/)) {
+                    finalPinMember += 5
+                } else if(value.match(/^[mMnNoO]$/)) {
+                    finalPinMember += 6
+                } else if(value.match(/^[pPqQrRsS]$/)) {
+                    finalPinMember += 7
+                } else if(value.match(/^[tTuUvV]$/)) {
+                    finalPinMember += 8
+                } else if(value.match(/^[wWxXyYzZ]$/)) {
+                    finalPinMember += 9
+                }
+            }
+        })
+        
+        return finalPinMember;
+    },
     saveConference: function(conference_id, form_data) {
             var THIS = this;
 
@@ -92,6 +121,10 @@ function(args) {
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
+                
+                form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
+                form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
+                
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -127,7 +160,7 @@ function(args) {
             $('#conference-view').empty();
             var THIS = this;
             var form_data = {
-                data: { moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
+                data: {moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
             };
 
             form_data.field_data = THIS.config.formData;
