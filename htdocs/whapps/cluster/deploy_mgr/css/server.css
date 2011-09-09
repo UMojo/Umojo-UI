@@ -81,7 +81,7 @@
     height: 14px;
     background-position: 0 0;
     display: block;
-    
+
     float: left;
     margin-top: 1%;
     margin-left: -2%;
@@ -96,18 +96,33 @@
     background-image: url(../img/thumb_up.png);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .thumb_down {
     background-image: url(../img/thumb_down.png);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .logrunning {
     background-image: url(../img/ajax-loader.gif);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .Update {
@@ -129,4 +144,17 @@
     text-align: center;
     margin-bottom: 5px;
     margin-top: 5px;
+}
+
+.server_progress {
+    width: 80%;
+    height: 15%;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    margin-left: 10%;
+    border: 1px solid #DDD;
+}
+
+.server_progress .ui-progressbar-value {
+    margin: 0px;
 }
