@@ -24,10 +24,10 @@
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
-                            <li>
+                            <li id="repeats">
                                 <span class="tooltip-wrapper" tooltip="Select the recurrence of this time based route">
                                     <span class="tooltip"/>
-                                    <label for="cycle">Recurrence:</label>
+                                    <label for="cycle">Repeats:</label>
                                 </span>
                                  <select id="cycle" name="cycle">
                                 {{each field_data.cycle}}
@@ -39,47 +39,33 @@
                                 {{/each}}
                                 </select>
                             </li>
-                            <li id="type_date">
-                                <span class="tooltip-wrapper" tooltip="Tick the checkbox if you want to create a rule for a day like 4th of July, 1st of January.<br/> If you want to create a rule for the first Tuesday of October, then don't tick the checkbox!">
+                            <li id="every">
+                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, define the recurrence of this rule">
                                     <span class="tooltip"/>
-                                    <label for="name">Specific Date:</label>
-                                </span> 
-                                <input name="type_day" type="checkbox" id="checkbox_date_type"/>
-                            </li>
-                            <li id="days_checkbox">
-                                <span class="tooltip-wrapper" tooltip="Select the days which you want this rule to apply to">
-                                    <span class="tooltip"/>
-                                    <label for="wdays">Days:</label>
+                                    <label>Every:</label>
                                 </span>
-                                {{each(i, day) field_data.wdays}}
-                                    ${day}  
-                                    {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/> 
-                                    {{else}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}"/> 
-                                    {{/if}}
-                                {{/each}}
-                            </li>
-                            <li id="day_fixed">
-                                <span class="tooltip-wrapper" tooltip="Select the day which you want this rule to apply to">
-                                    <span class="tooltip"/>
-                                    <label for="day">Day: </label>
+                                <span id="yearly_every">
+                                    <select name="month">
+                                    {{each field_data.months}}
+                                        {{if data.month == id}}}
+                                        <option value="${id}" selected="selected">${value}</option>
+                                        {{else}}
+                                        <option value="${id}">${value}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
                                 </span>
-                                <select id="day" name="day[0]">
-                                {{each(i, day) field_data.day}}
-                                    ${day}
-                                    {{if data.days[0] == day}}
-                                    <option name="day" value="${day}" selected="selected">${day}</option>
-                                    {{else}}
-                                    <option name="day" value="${day}">${day}</option>
-                                    {{/if}}
-                                {{/each}}
-                                </select>
+                                <span id="monthly_every">
+                                    <input id="interval_month" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace(/\D+/, '')"/>&nbsp;month(s)
+                                </span>
+                                <span id="weekly_every">
+                                    <input id="interval_week" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace (/\D+/, '')"/>&nbsp;week(s)
+                                </span>
                             </li>
-                            <li id="ordinal_day">
-                                <span class="tooltip-wrapper" tooltip="Select the ordinal, for example if you would like to create a rule<br/> for the first monday of a month, you would select First in this list.">
+                            <li id="on">
+                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, select the specific day(s) where this rule should apply">
                                     <span class="tooltip"/>
-                                    <label for="ordinal">Ordinal Number: </label>
+                                    <label>On:</label>
                                 </span>
                                 <select id="ordinal" name="ordinal">
                                 {{each field_data.ordinals}}
@@ -90,23 +76,45 @@
                                     {{/if}}
                                 {{/each}}
                                 </select>
-                            </li>
-                            <li id="month_picker">
-                                <span class="tooltip-wrapper" tooltip="Select the month which you want this rule to apply to">
-                                    <span class="tooltip"/>
-                                    <label for="month">Month: </label>
+                                <span id="weekdays">
+                                    <select id="wday" name="weekday">
+                                    {{each(i, day) field_data.wdays}}
+                                        {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
+                                        <option value="${day.toLowerCase()}" selected="selected">${day}</option>
+                                        {{else}}
+                                        <option value="${day.toLowerCase()}">${day}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
                                 </span>
-                                <select id="month" name="month">
-                                {{each field_data.months}}
-                                    {{if data.month == id}}}
-                                    <option value="${id}" selected="selected">${value}</option>
+                                <span id="days_checkboxes">
+                                {{each(i, day) field_data.wdays}}
+                                    {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
+                                        <div class="fake_checkbox checked" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
                                     {{else}}
-                                    <option value="${id}">${value}</option>
+                                        <div class="fake_checkbox" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
+                                    {{/if}}
+                                {{/each}}
+                                </span>
+                                <select id="specific_day" name="days[0]">
+                                {{each(i, day) field_data.day}}
+                                    ${day}
+                                    {{if data.days[0] == day}}
+                                    <option value="${day}" selected="selected">${day}</option>
+                                    {{else}}
+                                    <option value="${day}">${day}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
                             </li>
-                            <li id="hours_slider">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the starting date of this rule">
+                                    <span class="tooltip"/>
+                                    <label for="day">Start Date: </label>
+                                </span>
+                                <input type="text" id="start_date" name="start_date" value="${data.start_date}" size="10"/>
+                            </li>
+                            <li id="start_time">
                                 <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
                                     <span class="tooltip"/>
                                     <label for="time">Time:</label>
@@ -115,13 +123,6 @@
                                     <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
                                 </span>
                             </li>
-                            <!--<li id="date_picker">
-                                <span class="tooltip-wrapper" tooltip="Type a date or just click inside the textbox to select a day">
-                                    <span class="tooltip"/>
-                                    <label for="day">Day:</label>
-                                </span>
-                                <input id="day" type="text" name="day" value="${day}"/>
-                            </li>-->
                         </ul>
                     </fieldset>
 
