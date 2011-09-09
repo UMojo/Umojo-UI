@@ -96,18 +96,33 @@
     background-image: url(../img/thumb_up.png);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .thumb_down {
     background-image: url(../img/thumb_down.png);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .logrunning {
     background-image: url(../img/ajax-loader.gif);
     background-repeat: no-repeat;
     background-position: center;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-top: 2px;
 }
 
 .Update {

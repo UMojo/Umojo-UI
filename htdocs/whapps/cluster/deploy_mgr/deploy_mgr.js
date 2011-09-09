@@ -137,13 +137,7 @@ winkstart.module('cluster', 'deploy_mgr',
                             $(serverDialog).dialog('close');
                             winkstart.publish('deploy_mgr.addServer', data);
                         });
-                        
-                        
-                        
-                        
                     });
-
-                    
                 }
             });
         },
@@ -268,7 +262,7 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                            // f(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
                             //  THIS._changeURL(json.data.ip);
                             // }
                             }
@@ -393,13 +387,10 @@ winkstart.module('cluster', 'deploy_mgr',
                     else
                         classLog = "";
 
-                    logListContent += "<tr>";
-                    logListContent += "<td id='log"+ this.name +"'>"+ this.name +"</td>";
-                    logListContent += "<td id='logstatus"+ this.name +"' class='"+ classLog +"'></td>";
-                    logListContent += "</tr>";
+                    logListContent += "<div>"+this.name+" : <div class='"+classLog+"'></div></div>";
                 });
             }
-
+            
             $('#'+serverId+' #loglist').html(logListContent);
         },
         
@@ -426,8 +417,18 @@ winkstart.module('cluster', 'deploy_mgr',
                 rest_data.server_id = serverId;
                 winkstart.getJSON('deploy_mgr.getdeploystatus', rest_data, function (json, xhr) {
                     var status = THIS.setStatus(json.data.status);
+                    
+                    // HERE'S GONNA BE THE MODIFICATION OF THE SERVER'S CONTENT FOR THE LOGS
                         
-                    //THIS.setLoglist(json.data.log, serverId);
+                    
+                        
+                    json.data.log = [
+                            {"name": "freeswitch", "status": "running"},
+                            {"name": "freeswitch2", "status": "ok"},
+                            {"name": "freeswitch3", "status": "ko"}
+                    ]
+                        
+                    THIS.setLoglist(json.data.log, serverId);
                         
                     $('#'+serverId+' a.update_status').html(status);
                     $('#'+serverId+' div.server_footer').removeClass('Update Running Deploy').addClass(status);
