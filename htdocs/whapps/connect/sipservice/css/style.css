@@ -516,3 +516,8 @@ input[type="search"] {
     padding: 0px .8em;
 
 }
+
+#edit_server .icon {
+    margin-left: -20px;
+    margin-top: -10px;
+}
