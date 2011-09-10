@@ -21,7 +21,7 @@ winkstart.module('voip', 'menu',
         validation : [
                 {name : '#name', regex: /^.*/},
                 {name : '#retries', regex : /^[0-9]+$/},
-                {name : '#record_pin', regex : /^[0-9]+$/},
+                {name : '#record_pin', regex : /^[0-9]*$/},
                 {name : '#timeout', regex : /^[0-9]+$/},
                 {name : '#max_extension_length', regex : /^[0-9]*$/},
                 {name : '#hunt_allow', regex : /^.*$/},
@@ -274,13 +274,10 @@ winkstart.module('voip', 'menu',
                 // Grab all the form field data 
                 var form_data = form2object('menu-form');
                 winkstart.log(form_data);
-
-                if(form_data.max_extension_length == undefined) {
+            
+                if(form_data.record_pin != undefined && (form_data.max_extension_length == undefined || form_data.max_extension_length < form_data.record_pin.length)) {
                     form_data.max_extension_length = form_data.record_pin.length;
                 }
-                else if(form_data.max_extension_length < form_data.record_pin.length) {
-                    form_data.max_extension_length = form_data.record_pin.length;
-                }                
 
                 // Hack to put timeout in ms in database.
                 form_data.timeout = form_data.timeout * 1000;
