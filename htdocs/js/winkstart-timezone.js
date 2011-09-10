@@ -388,6 +388,10 @@
         populate_dropdown: function(dropdown, selected) {
             var THIS = this;
 
+            if(selected == undefined) {
+                selected = jstz.determine_timezone().name();
+            }
+
             $.each(THIS.list, function(i, data) {
                 if(selected == data) { 
                     dropdown.append('<option value="' + data + '" SELECTED>' + data + '</option>');           
