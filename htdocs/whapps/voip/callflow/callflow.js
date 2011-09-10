@@ -214,7 +214,7 @@ winkstart.module('voip', 'callflow', {
                 this.parent = null;
                 this.children = {};
                 this.data = { 
-                data: THIS.actions[this.actionName].data
+                    data: $.extend(true, {}, THIS.actions[this.actionName].data)
                 };
                 this.caption = '';
                 this.key_caption = '';
@@ -876,7 +876,7 @@ winkstart.module('voip', 'callflow', {
                     caption: function(node, caption_map) {
                         var id = node.getMetadata('id');
 
-                        return (id && id != '') ? caption_map[id] : '';
+                        return (id && id != '') ? caption_map[id].name : '';
                     },
                     edit: function(node, callback) {
                         winkstart.getJSON('conference.list', {
