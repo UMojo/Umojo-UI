@@ -19,13 +19,13 @@ winkstart.module('voip', 'timeofday',
 
         formData: {
             wdays: [
+                "Sunday",
                 "Monday",
                 "Tuesday",
                 "Wednesday",
                 "Thursday",
                 "Friday",
-                "Saturday",
-                "Sunday"
+                "Saturday"
             ],
             day: [
                 "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
@@ -341,7 +341,6 @@ winkstart.module('voip', 'timeofday',
             $('#weekdays', '#timeofday-form').hide();
             $('#specific_day', '#timeofday-form').hide();   
 
-
             if(timeofday_id == undefined) {
                 $('#weekly_every', '#timeofday-form').show();
                 $('#days_checkboxes', '#timeofday-form').show();
@@ -383,6 +382,10 @@ winkstart.module('voip', 'timeofday',
                 }
             });
 
+            $('.fake_checkbox', '#timeofday-form').click(function() {
+                $(this).toggleClass('checked');
+            });
+
             $("#time", form).slider({
                 from: 0,
                 to: 86400,
@@ -417,6 +420,7 @@ winkstart.module('voip', 'timeofday',
                     $('#specific_day', '#timeofday-form').hide();
                 }
             });
+
             $('#cycle', '#timeofday-form').change(function() {
                 $('#yearly_every', '#timeofday-form').hide();
                 $('#monthly_every', '#timeofday-form').hide();
@@ -467,6 +471,14 @@ winkstart.module('voip', 'timeofday',
 
                 /* Grab all the form field data */
                 var form_data = form2object('timeofday-form');
+
+                form_data.wdays = [];
+                $('.fake_checkbox.checked','#timeofday-form').each(function() {
+                    form_data.wdays.push($(this).attr('data-value'));                    
+                });
+    
+                form_data.interval = $('#cycle','#timeofday-form').val() == 'monthly' ? $('#interval_month', '#timeofday-form').val() : $('#interval_week', '#timeofday-form').val();
+
                 form_data = THIS.cleanFormData(form_data); 
 
                 THIS.saveTimeofday(timeofday_id, form_data);

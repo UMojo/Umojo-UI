@@ -39,7 +39,6 @@
                                 {{/each}}
                                 </select>
                             </li>
-                            <hr/>
                             <li id="every">
                                 <span class="tooltip-wrapper" tooltip="Depending on the cycle, define the recurrence of this rule">
                                     <span class="tooltip"/>
@@ -90,11 +89,10 @@
                                 </span>
                                 <span id="days_checkboxes">
                                 {{each(i, day) field_data.wdays}}
-                                    ${day}
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}" CHECKED/>
+                                        <div class="fake_checkbox checked" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
                                     {{else}}
-                                        <input class="wdays" name="wdays[]" type="checkbox" value="${day.toLowerCase()}"/>
+                                        <div class="fake_checkbox" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
                                     {{/if}}
                                 {{/each}}
                                 </span>
@@ -114,7 +112,7 @@
                                     <span class="tooltip"/>
                                     <label for="day">Start Date: </label>
                                 </span>
-                                <input type="text" id="start_date" name="start_date" value="${data.start_date}" size="8"/>
+                                <input type="text" id="start_date" name="start_date" value="${data.start_date}" size="10"/>
                             </li>
                             <li id="start_time">
                                 <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
