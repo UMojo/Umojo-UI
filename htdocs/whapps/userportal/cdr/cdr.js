@@ -1,7 +1,7 @@
 winkstart.module('userportal', 'cdr', {
 	css: [
-	'css/style.css',
-	'css/jquery-ui-1.8.8.custom.css'
+	'css/style.css'
+	//'css/jquery-ui-1.8.8.custom.css'
 	],
 				
 	templates: {

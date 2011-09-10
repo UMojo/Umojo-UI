@@ -5,6 +5,9 @@
     Description:
         jQuery UI and other default overrides for this layout/theme
 */
+.ui-datepicker {
+    z-index: 99999 !important;
+}
 
 .ui-dialog {
     padding: 0em;
