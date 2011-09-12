@@ -31,8 +31,10 @@ winkstart.module('core', 'layout', {
 
         THIS.attach();
 
-        // Adding the welcome template
-        THIS.templates.welcome.tmpl().appendTo( '#ws-content' );
+        // If we find a login cookie, don't display welcome message
+        if(!$.cookie('c_winkstart_auth')) {
+            THIS.templates.welcome.tmpl().appendTo('#ws-content');
+        }
 
         $('#ws-content .welcomediv').click(function() {
             winkstart.publish('auth.register');
