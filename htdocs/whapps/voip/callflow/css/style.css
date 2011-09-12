@@ -166,35 +166,22 @@
 
 #ws_callflow .children > .child > .div_line {
     display: inline-block;
-    height: 5px;
+    height: 6px;
     width: 100%;
-    background: #525252;
-    margin-top: -43px;
+    background-image: url(../images/line_callflow.png);
+    background-repeat: repeat-x;
+    margin-top: -33px;
     margin-right: 0px;
     margin-left: 0px; 
-    padding: 0;
+    padding: 0px;
     float: left;
 }
 #ws_callflow .children > .child:first-child > .div_line { 
-    display: inline-block; 
-    height: 5px; 
     width: 50%; 
-    background: #525252;
-    margin-top: -43px;
-    margin-right: 0px;
-    margin-left: 0px; 
-    padding: 0; 
     float: right;
 }
 #ws_callflow .children > .child:last-child > .div_line {
-    display: inline-block;
-    height: 5px;
     width: 50%;
-    background: #525252;
-    margin-top: -43px;
-    margin-right: 0px;
-    margin-left: 0px; 
-    padding: 0;
     float: left;
 }
 
@@ -202,20 +189,38 @@
     display: none;
 }
 
-#ws_callflow .span_arrow {
+#ws_callflow .children > .child > .span_arrow {
     display: inline-block; 
-    height: 38px; 
     width: 145px; 
-    background-image: url(images/arrow_grey.png); 
-    margin: 5px 0px 5px; 
-    padding: 0; 
+    background-repeat: no-repeat; 
+    background-position: center center; 
+    margin: 2px 0px 2px; 
+    padding: 0px; 
     position: relative; 
 }
 
-#ws_callflow .span_arrow.large {
-    height: 55px; 
-    background-image: url(images/arrow_grey_large.png); 
+#ws_callflow .children > .child > .span_arrow.small {
+    height: 31px; 
+    background-image: url(../images/center_arrow.png); 
 }
+
+#ws_callflow .children > .child:first-child > .span_arrow.small {
+    background-image: url(../images/left_arrow.png); 
+}
+
+#ws_callflow .children > .child:last-child > .span_arrow.small {
+    background-image: url(../images/right_arrow.png); 
+}
+
+#ws_callflow .children > .child:first-child:last-child > .span_arrow.small {
+    background-image: url(../images/small_arrow.png); 
+}
+
+#ws_callflow .children > .child > .span_arrow.large {
+    height: 48px; 
+    background-image: url(../images/tall_arrow.png); 
+}
+
 #ws_callflow .a_link_option { color: #FFFFFF;}
 #ws_callflow .div_option { display: inline-block; height: 15px; width: 131px; background-color: #727272; margin: 0; padding: 0; border: 1px solid #323232; }
 #ws_callflow .div_icon { display: inline-block; float:left; margin-left: 5px; margin-top: 20px;}
