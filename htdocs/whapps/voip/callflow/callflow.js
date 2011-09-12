@@ -1760,11 +1760,31 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                     }
                 },
+                'resources[]': {
+                    name: 'Resource',
+                    icon: 'resource',
+                    category: 'basic',
+                    module: 'resources',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                /* This is not the correct callflow node... Need this for migrations */
                 'resource[]': {
                     name: 'Resource',
                     icon: 'resource',
                     category: 'basic',
-                    module: 'resource',
+                    module: 'resources',
                     data: {},
                     rules: [
                         {
