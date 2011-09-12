@@ -1783,7 +1783,6 @@ winkstart.module('voip', 'callflow', {
                 'resource[]': {
                     name: 'Resource',
                     icon: 'resource',
-                    category: 'basic',
                     module: 'resources',
                     data: {},
                     rules: [
@@ -1794,6 +1793,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
+                        alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {
