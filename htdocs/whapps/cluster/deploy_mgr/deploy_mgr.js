@@ -252,7 +252,9 @@ winkstart.module('cluster', 'deploy_mgr',
         
                                 THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                                 
-                                $('.server_progress', '#'+data.server_id).progressbar({value:25});
+                                $('.server_progress', '#'+data.server_id).progressbar({
+                                    value:25
+                                });
                                 
 
                                 winkstart.publish('deploy_mgr.updateServer',  json.data.id);
@@ -262,9 +264,9 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                            //  THIS._changeURL(json.data.ip);
-                            // }
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
                             }
                         });
                         break;
@@ -293,9 +295,9 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                            // THIS._changeURL(json.data.ip);
-                            //  }
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
                             }
                         });
                         break;
@@ -423,9 +425,20 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                         
                     json.data.log = [
-                            {"name": "freeswitch", "status": "running"},
-                            {"name": "freeswitch2", "status": "ok"},
-                            {"name": "freeswitch3", "status": "ko"}
+                    {
+                        "name": "freeswitch", 
+                        "status": "running"
+                    },
+
+                    {
+                        "name": "freeswitch2", 
+                        "status": "ok"
+                    },
+
+                    {
+                        "name": "freeswitch3", 
+                        "status": "ko"
+                    }
                     ]
                         
                     THIS.setLoglist(json.data.log, serverId);
@@ -490,7 +503,9 @@ winkstart.module('cluster', 'deploy_mgr',
         },
         
         setPgbar: function(serverId, value){
-            $('.server_progress', '#'+serverId).progressbar({'value':value});
+            $('.server_progress', '#'+serverId).progressbar({
+                'value':value
+            });
         },
         
         getRoles: function(roles) {
