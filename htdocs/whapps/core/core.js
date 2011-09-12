@@ -30,7 +30,7 @@ winkstart.module('core', 'core',
                                     winkstart.module.loadApp(k, function() {
                                         this.init();
                                         winkstart.log('WhApps: Initializing ' + k);
-                                    })
+                                    });
                                 });
 
                                 winkstart.log('WhApps: Finished Loading WhApps');

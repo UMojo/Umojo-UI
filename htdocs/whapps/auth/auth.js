@@ -52,6 +52,8 @@ winkstart.module('auth', 'auth',
         }
     },
     function() {
+        var cookie_data;
+
         winkstart.registerResources(this.__whapp, this.config.resources);
         
         if(URL_DATA['activation_key']) {
@@ -71,6 +73,12 @@ winkstart.module('auth', 'auth',
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
         if(winkstart.apps['auth'].auth_token) {
             $('a#my_account').show();
+        }
+
+        if(cookie_data = $.cookie('c_winkstart_auth')) {
+            $('#ws-content').empty();
+            eval('winkstart.apps["auth"] = ' + cookie_data);
+            winkstart.publish('auth.load_account');
         }
     },
 
@@ -181,6 +189,8 @@ winkstart.module('auth', 'auth',
                         
                         // Deleting the welcome message
                         $('#ws-content').empty();
+
+                        $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
                         
                         winkstart.publish('auth.load_account');
                     },
@@ -349,6 +359,8 @@ winkstart.module('auth', 'auth',
                         winkstart.apps[k].user_id = null;
                         winkstart.apps[k].account_id = null;
                     });
+
+                    $.cookie('c_winkstart_auth', null);
                     
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
