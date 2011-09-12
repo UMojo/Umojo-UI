@@ -185,6 +185,7 @@ winkstart.module('core', 'myaccount',
             THIS.templates.myaccount.tmpl().dialog({
                 height: '600',
                 width: '500',
+                title: 'My account',
                 open:function(){
                     THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
                     THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');

@@ -8,3 +8,42 @@
 .list-skeleton {
     cursor: pointer;
 }
+
+.myaccount_popup h3 {
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#billing a {
+    background-image: url(../images/regular_btn.png);
+    width: 81px;
+    height: 27px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    line-height: 27px;
+    color: white;
+    margin: auto; 
+}
+
+#billing .left {
+    margin: 0px; 
+}
+
+#billing a:hover {
+    color: #05AFDC;
+    cursor: pointer;
+}
+
+#billing p.note_box {
+    background-color: #E7E7E7;
+    padding: 15px 10px;
+    font-size: 10px;
+    line-height: 15px;
+}
+
+.myaccount_popup .apps li{
+    margin-left: 20px;
+    
+}
