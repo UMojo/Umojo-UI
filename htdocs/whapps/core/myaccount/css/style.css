@@ -27,13 +27,13 @@
     margin: auto; 
 }
 
-#billing .left {
-    margin: 0px; 
-}
-
 #billing a:hover {
     color: #05AFDC;
     cursor: pointer;
+}
+
+#billing .left {
+    margin: 0px; 
 }
 
 #billing p.note_box {
@@ -46,4 +46,22 @@
 .myaccount_popup .apps li{
     margin-left: 20px;
     
+}
+
+
+#apykey a {
+    background-image: url(../images/regular_btn.png);
+    width: 81px;
+    height: 27px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    line-height: 27px;
+    color: white;
+    margin: auto; 
+}
+
+#apykey a:hover {
+    color: #05AFDC;
+    cursor: pointer;
 }
