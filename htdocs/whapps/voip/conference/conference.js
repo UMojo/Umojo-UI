@@ -51,9 +51,10 @@ winkstart.module('voip', 'conference', {
         }
     },
     validation: [
-//        {name: '#name', regex: /^.*$/},
-//        {name: '#member_pins', regex: /^[0-9]+$/},
-//        {name: '#moderator_pins', regex: /^[0-9]+$/}
+        {name: '#name', regex: /^.+$/},
+        {name: '#member_pins', regex: /^[a-z0-9A-Z]*$/},
+        {name: '#conference_numbers', regex: /^[0-9]+$/},
+        {name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/}
     ]
 },
 function(args) {
@@ -121,9 +122,13 @@ function(args) {
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
-                
-                form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
-                form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
+               
+                if(form_data.member != undefined) { 
+                    form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
+                }
+                if(form_data.moderator != undefined) {
+                    form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
+                }
                 
                 rest_data.data = form_data;
 
