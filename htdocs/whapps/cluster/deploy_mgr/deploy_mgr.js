@@ -542,6 +542,7 @@ winkstart.module('cluster', 'deploy_mgr',
             }, function(reply) {
                 /* Clear out the center part of the window - get ready to put our own content in there */
                 $('#ws-content').empty();
+                $('#ws-content').css('margin-left','5%');
 
                 /* Draw our base template into the window */
                 THIS.templates.index.tmpl().appendTo( $('#ws-content') );
