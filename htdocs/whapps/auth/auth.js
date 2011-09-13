@@ -52,6 +52,8 @@ winkstart.module('auth', 'auth',
         }
     },
     function() {
+        var cookie_data;
+
         winkstart.registerResources(this.__whapp, this.config.resources);
         
         if(URL_DATA['activation_key']) {
@@ -72,6 +74,12 @@ winkstart.module('auth', 'auth',
         if(winkstart.apps['auth'].auth_token) {
             $('a#my_account').show();
         }
+
+        if(cookie_data = $.cookie('c_winkstart_auth')) {
+            $('#ws-content').empty();
+            eval('winkstart.apps["auth"] = ' + cookie_data);
+            winkstart.publish('auth.load_account');
+        }
     },
 
     {
@@ -87,51 +95,56 @@ winkstart.module('auth', 'auth',
 
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
-
-                var realm;
-                if(THIS.request_realm) {
-                    realm = $('#realm', dialogRegister).val();
-                } else {
-                    realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
-                }
-
-                // If realm was set in the URL, override all
-                if('realm' in URL_DATA) {
-                    realm = URL_DATA['realm'];
-                }
-
-                var rest_data = {
-                    crossbar : true,
-                    data : {
-                        'account': {
-                            'realm': realm,
-                            'app_url': window.location.href.replace(/#/, '')
-                        },
-                        'user': {
-                            'username':$('#username', dialogRegister).val(),
-                            'password' : $('#password', dialogRegister).val(),
-                            'first_name': $('#first_name', dialogRegister).val() ,
-                            'last_name':$('#last_name', dialogRegister).val(),
-                            'email': $('#email', dialogRegister).val(),
-                            'apps': {
-                                "cluster": {
-                                   "label": "Cluster Manager",
-                                   "icon": "cluster_manager",
-                                   "api_url": "http://apps.2600hz.com:8000/v1"
-                                },
-                                "voip": {
-                                    'label': 'Trial PBX',
-                                    'icon': 'phone',
-                                    'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
-                                }
-                             }
-                        }
+                
+                if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
+                    var realm;
+                    if(THIS.request_realm) {
+                        realm = $('#realm', dialogRegister).val();
+                    } else {
+                        realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
                     }
-                };
-                winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                    alert('Registered successfully. Please check your e-mail to activate your account!');
-                    dialogRegister.dialog('close');
-                });
+
+                    // If realm was set in the URL, override all
+                    if('realm' in URL_DATA) {
+                        realm = URL_DATA['realm'];
+                    }
+
+                    var rest_data = {
+                        crossbar : true,
+                        data : {
+                            'account': {
+                                'realm': realm,
+                                'app_url': window.location.href.replace(/#/, '')
+                            },
+                            'user': {
+                                'username':$('#username', dialogRegister).val(),
+                                'password' : $('#password', dialogRegister).val(),
+                                'first_name': $('#first_name', dialogRegister).val() ,
+                                'last_name':$('#last_name', dialogRegister).val(),
+                                'email': $('#email', dialogRegister).val(),
+                                'apps': {
+                                    "cluster": {
+                                       "label": "Cluster Manager",
+                                       "icon": "cluster_manager",
+                                       "api_url": "http://apps.2600hz.com:8000/v1"
+                                    },
+                                    "voip": {
+                                        'label': 'Trial PBX',
+                                        'icon': 'phone',
+                                        'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                                    }
+                                 }
+                            }
+                        }
+                    };
+                    winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                        alert('Registered successfully. Please check your e-mail to activate your account!');
+                        dialogRegister.dialog('close');
+                    });
+                }
+                else {
+                    alert('Please confirm your password');
+                }
             });
         },
 
@@ -181,6 +194,8 @@ winkstart.module('auth', 'auth',
                         
                         // Deleting the welcome message
                         $('#ws-content').empty();
+
+                        $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
                         
                         winkstart.publish('auth.load_account');
                     },
@@ -349,6 +364,8 @@ winkstart.module('auth', 'auth',
                         winkstart.apps[k].user_id = null;
                         winkstart.apps[k].account_id = null;
                     });
+
+                    $.cookie('c_winkstart_auth', null);
                     
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");

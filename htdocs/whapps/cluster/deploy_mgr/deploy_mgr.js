@@ -83,7 +83,7 @@ winkstart.module('cluster', 'deploy_mgr',
     /* Define the functions for this module */
     {   
         server_count: 0,
-        serverTypes: ['Own' ],
+        serverTypes: ['Own'],
         
         requestServer: function() {
             var THIS = this;
@@ -319,7 +319,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 var inLabel = "VoIP Services";
                 json.data.apps.voip.label = inLabel;
                 
-                $('.main_nav li[module-name=voip] a').html('VoIP Services');
+                $('.main_nav li[module-name=voip] .whapp a').html('VoIP Services');
 
                 var rest_data = {};
                 rest_data.crossbar = true;
