@@ -83,7 +83,7 @@ winkstart.module('cluster', 'deploy_mgr',
     /* Define the functions for this module */
     {   
         server_count: 0,
-        serverTypes: ['Own', 'Rackspace', 'Amazon', 'Linode'],
+        serverTypes: ['Own'],
         
         requestServer: function() {
             var THIS = this;
