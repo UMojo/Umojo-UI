@@ -11,8 +11,9 @@
 
 .myaccount_popup h3 {
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-top: 5px;
+    font-weight: bold;
 }
 
 #billing a {
@@ -24,16 +25,14 @@
     display: block;
     line-height: 27px;
     color: white;
-    margin: auto; 
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px
 }
 
 #billing a:hover {
     color: #05AFDC;
     cursor: pointer;
-}
-
-#billing .left {
-    margin: 0px; 
 }
 
 #billing p.note_box {
@@ -48,7 +47,6 @@
     
 }
 
-
 #apykey a {
     background-image: url(../images/regular_btn.png);
     width: 81px;
@@ -58,7 +56,9 @@
     display: block;
     line-height: 27px;
     color: white;
-    margin: auto; 
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px
 }
 
 #apykey a:hover {
