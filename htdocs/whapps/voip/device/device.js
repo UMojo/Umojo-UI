@@ -386,6 +386,7 @@ winkstart.module('voip', 'device',
                 var form_data = {
                     data : {
                         mac_address: "12:34:56:78:9A:BC",
+                        status: true,
                         caller_id : {
                             'default' : { }, 
                             emergency : { }
