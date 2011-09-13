@@ -95,51 +95,56 @@ winkstart.module('auth', 'auth',
 
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
-
-                var realm;
-                if(THIS.request_realm) {
-                    realm = $('#realm', dialogRegister).val();
-                } else {
-                    realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
-                }
-
-                // If realm was set in the URL, override all
-                if('realm' in URL_DATA) {
-                    realm = URL_DATA['realm'];
-                }
-
-                var rest_data = {
-                    crossbar : true,
-                    data : {
-                        'account': {
-                            'realm': realm,
-                            'app_url': window.location.href.replace(/#/, '')
-                        },
-                        'user': {
-                            'username':$('#username', dialogRegister).val(),
-                            'password' : $('#password', dialogRegister).val(),
-                            'first_name': $('#first_name', dialogRegister).val() ,
-                            'last_name':$('#last_name', dialogRegister).val(),
-                            'email': $('#email', dialogRegister).val(),
-                            'apps': {
-                                "cluster": {
-                                   "label": "Cluster Manager",
-                                   "icon": "cluster_manager",
-                                   "api_url": "http://apps.2600hz.com:8000/v1"
-                                },
-                                "voip": {
-                                    'label': 'Trial PBX',
-                                    'icon': 'phone',
-                                    'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
-                                }
-                             }
-                        }
+                
+                if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
+                    var realm;
+                    if(THIS.request_realm) {
+                        realm = $('#realm', dialogRegister).val();
+                    } else {
+                        realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
                     }
-                };
-                winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                    alert('Registered successfully. Please check your e-mail to activate your account!');
-                    dialogRegister.dialog('close');
-                });
+
+                    // If realm was set in the URL, override all
+                    if('realm' in URL_DATA) {
+                        realm = URL_DATA['realm'];
+                    }
+
+                    var rest_data = {
+                        crossbar : true,
+                        data : {
+                            'account': {
+                                'realm': realm,
+                                'app_url': window.location.href.replace(/#/, '')
+                            },
+                            'user': {
+                                'username':$('#username', dialogRegister).val(),
+                                'password' : $('#password', dialogRegister).val(),
+                                'first_name': $('#first_name', dialogRegister).val() ,
+                                'last_name':$('#last_name', dialogRegister).val(),
+                                'email': $('#email', dialogRegister).val(),
+                                'apps': {
+                                    "cluster": {
+                                       "label": "Cluster Manager",
+                                       "icon": "cluster_manager",
+                                       "api_url": "http://apps.2600hz.com:8000/v1"
+                                    },
+                                    "voip": {
+                                        'label': 'Trial PBX',
+                                        'icon': 'phone',
+                                        'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                                    }
+                                 }
+                            }
+                        }
+                    };
+                    winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                        alert('Registered successfully. Please check your e-mail to activate your account!');
+                        dialogRegister.dialog('close');
+                    });
+                }
+                else {
+                    alert('Please confirm your password');
+                }
             });
         },
 
