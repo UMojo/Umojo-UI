@@ -338,8 +338,8 @@ winkstart.module('voip', 'device',
                 data : {
                     mac_address: "12:34:56:78:9A:BC",
                     caller_id : {
-                        'default' : { }, 
-                        emergency : { }
+                        external: { }, 
+                        internal: { }
                     },
                     media : {
                         audio : {
@@ -388,8 +388,8 @@ winkstart.module('voip', 'device',
                         mac_address: "12:34:56:78:9A:BC",
                         status: true,
                         caller_id : {
-                            'default' : { }, 
-                            emergency : { }
+                            external: { }, 
+                            internal: { }
                         },
                         media : {
                             bypass_media: "auto", 
@@ -447,6 +447,17 @@ winkstart.module('voip', 'device',
                         }, function(json, xhr) {
                             /* On success, take JSON and merge with default/empty fields */
                             $.extend(true, form_data, json);
+
+                            // Perform some migrations:
+                            if('default' in form_data.data.caller_id) {
+                                form_data.data.caller_id.external = form_data.data.caller_id.default;
+                                delete form_data.data.caller_id.default;
+                            }
+                            if('emergency' in form_data.data.caller_id) {
+                                form_data.data.caller_id.internal = form_data.data.caller_id.emergency;
+                                delete form_data.data.caller_id.emergency;
+                            }
+
                             THIS.renderDevice(form_data);
                         });
                     } else {
