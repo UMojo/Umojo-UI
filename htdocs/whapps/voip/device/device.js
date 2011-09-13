@@ -392,7 +392,7 @@ winkstart.module('voip', 'device',
                             emergency : { }
                         },
                         media : {
-                            bypass_media: "false", 
+                            bypass_media: "auto", 
                             audio : {
                                 codecs : ["PCMU", "PCMA"]
                             }, 
