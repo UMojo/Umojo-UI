@@ -2,10 +2,11 @@
     <div class="node-options">
         <a href="javascript:" name="close" id="${node.id}" class="delete">X</a>
         <div class="module">
-            <div class="div_icon"><span class="icon ${callflow.icon}"/></div>
-            <div class="module_name"><b>${callflow.name}</b></div>
+            <div class="div_icon">
+                <span class="icon ${callflow.icon}"/>
+                <span class="module_name">${callflow.name}</span>
+            </div>
             <div class="details">${node.caption.substr(0,20)}</div>
-            <a href="javascript:" id="${node.id}" class="edit icon small_lightgrey small_edit"></a>
         </div>
     </div>
 </div>

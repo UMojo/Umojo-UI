@@ -1,7 +1,6 @@
 #ws_callflow blockquote:before, blockquote:after,q:before, q:after {	content: "";}
 #ws_callflow blockquote, q {	quotes: "" ""; }
 
-#ws_callflow a { text-decoration: none; color: #fff;}
 #ws_callflow .clear { clear: both;}
 
 #ws_callflow .btn_plus { background: url(images/btn_plus.png) no-repeat; display: block; height: 27px; line-height: 26px;}
@@ -221,9 +220,35 @@
     background-image: url(../images/tall_arrow.png); 
 }
 
-#ws_callflow .a_link_option { color: #FFFFFF;}
-#ws_callflow .div_option { display: inline-block; height: 15px; width: 131px; background-color: #727272; margin: 0; padding: 0; border: 1px solid #323232; }
-#ws_callflow .div_icon { display: inline-block; float:left; margin-left: 5px; margin-top: 20px;}
-#ws_callflow .module { display: inline-block; font-size: 14px; height: 74px;}
-#ws_callflow .module_name { width: 100px; margin-left: -7px; margin-top: 25px; color: #dddddd; float: left; text-transform: uppercase; text-align: center;}
+#ws_callflow .a_link_option {
+    font-size: 11px;
+}
+#ws_callflow .div_option {
+    display: inline-block; 
+    height: 15px; 
+    width: 131px; 
+    background-color: #424242;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #000000;
+}
+
+#ws_callflow .div_icon {
+    display: inline-block;
+    margin-top: 20px;
+    width: 143px;
+}
+
+#ws_callflow .module {
+    display: inline-block;
+    font-size: 14px;
+    height: 74px;
+}
+
+#ws_callflow .module_name {
+    color: #dddddd;
+    text-transform: uppercase;
+    text-align: center;
+}
+
 #ws_callflow .details { display: inline-block; font-size: 10px; margin-left: 30px; margin-top: -5px; color: #dddddd; width: 110px; height: 15px;}
