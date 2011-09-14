@@ -17,3 +17,18 @@
     display: inline-block;
     margin-left: 10px;
 }
+
+.foundDID {
+    text-align: center;
+}
+
+.did_ratecenter {
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    width: 15%;
+}
+
+.needCreditAdj {
+    height: 12px;
+}
