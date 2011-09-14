@@ -12,7 +12,7 @@ winkstart.module('core', 'myaccount',
             billing: 'tmpl/billing.html',
             apps: 'tmpl/apps.html',
             userlevel: 'tmpl/userlevel.html',
-            apykey: 'tmpl/apykey.html'
+            apikey: 'tmpl/apikey.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -184,7 +184,7 @@ winkstart.module('core', 'myaccount',
             var THIS = this;
             
             var tmpl = {
-                apy:['Linode', 'Rackspace', 'Amazon']
+                api:['Linode', 'Rackspace', 'Amazon']
                 };
             
             THIS.templates.myaccount.tmpl().dialog({
@@ -194,7 +194,7 @@ winkstart.module('core', 'myaccount',
                 open:function(){
                     THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
                     THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
-                    THIS.templates.apykey.tmpl(tmpl).appendTo('.myaccount_popup #apykey');
+                    THIS.templates.apikey.tmpl(tmpl).appendTo('.myaccount_popup #apikey');
                     THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
                 }
             });
