@@ -374,15 +374,19 @@ a.detailed_listing:hover{
 ----REMOVE & SAVE BUTTONS-----
 *******************************/
 
+div.buttons_wrapper{
+    width: 804px;
+    margin-left: 18px;
+    margin-top: 10px;
+}
+
 ul.buttons{
         display: block;
         list-style-type: none;
-        margin: 21px 0 0 0;
-
 }
 
 ul.buttons.right{
-    margin-left: 570px;
+    float: right;
 }
 
 ul.buttons li{

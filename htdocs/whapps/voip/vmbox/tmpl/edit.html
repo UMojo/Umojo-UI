@@ -157,14 +157,15 @@
                 </div>
 
             </div>
-
-        <ul class="buttons right vmboxes">
-            <li><a class="vmbox-save save-btn" href="#">Save</a></li>
-            {{if data.id}}
-                <li><a class="vmbox-delete delete-btn" href="#">Delete</a></li>
-            {{/if}}
-            <li><a class="vmbox-cancel" href="#">Cancel</a></li>
-        </ul>
+        <div class="buttons_wrapper">
+            <ul class="buttons right vmboxes">
+                <li><a class="vmbox-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="vmbox-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+                <li><a class="vmbox-cancel" href="#">Cancel</a></li>
+            </ul>
+        </div>
             
         </form>
     </div>

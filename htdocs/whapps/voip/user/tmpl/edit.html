@@ -240,14 +240,15 @@
                     <div class="clear"></div>
                 </div>
             </div>
-
-        <ul class="buttons right users">
-            <li><a class="user-save save-btn" href="#">Save</a></li>
-            {{if data.id}}
-                <li><a class="user-delete delete-btn" href="#">Delete</a></li>
-            {{/if}}
-            <li><a class="user-cancel" href="#">Cancel</a></li>
-        </ul>
+        <div class="buttons_wrapper">
+            <ul class="buttons right users">
+                <li><a class="user-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="user-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+                <li><a class="user-cancel" href="#">Cancel</a></li>
+            </ul>
+        </div>
             
         </form>
     </div>
