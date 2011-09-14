@@ -15,6 +15,10 @@
 winkstart.module('connect', 'numbers',
     /* Start module resource definitions */
     {
+        css: [
+            'css/numbers.css'
+        ],
+        
         /* What HTML templates will we be using? */
         templates: {
             port_number: 'tmpl/port_number.html',
