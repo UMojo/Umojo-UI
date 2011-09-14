@@ -1,0 +1,19 @@
+#sdidform #sdid_npa {
+    width: 4em;
+    margin-left: 190px;
+}
+
+#sdidform #sdid_nxx {
+    width: 4em;
+    margin-left: 80px;
+}
+
+#sdidform #ACspan {
+    display: inline-block;
+    margin-left: 178px;
+}
+
+#sdidform #COCspan {
+    display: inline-block;
+    margin-left: 10px;
+}

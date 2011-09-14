@@ -134,14 +134,14 @@
                                     <span class="tooltip"/>
                                     <label for="caller_id_name_internal">Caller ID Name:</label>
                                 </span>
-                                <input id="caller_id_name_internal" name="caller_id.emergency.name" type="text"  value="${data.caller_id.emergency.name}" />
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for In-House Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
                                     <span class="tooltip"/>
                                     <label for="caller_id_number_internal">Caller ID Number:</label>
                                 </span>
-                                <input id="caller_id_number_internal" name="caller_id.emergency.number" type="text"  value="${data.caller_id.emergency.number}" />
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -154,14 +154,14 @@
                                     <span class="tooltip"/>
                                     <label for="caller_id_name_external">Caller ID Name:</label>
                                 </span>
-                                <input id="caller_id_name_external" name="caller_id.default.name" type="text"  value="${data.caller_id.default.name}" />
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for Outbound Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
                                     <span class="tooltip"/>
                                     <label for="caller_id_number_external">Caller ID Number:</label>
                                 </span>
-                                <input id="caller_id_number_external" name="caller_id.default.number" type="text"  value="${data.caller_id.default.number}" />
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -306,13 +306,15 @@
 
             </div>
 
-        <ul class="buttons right devices">
-            <li><a class="device-save save-btn" href="#">Save</a></li>
-            {{if data.id}}
-                <li><a class="device-delete delete-btn" href="#">Delete</a></li>
-            {{/if}}
-            <li><a class="device-cancel" href="#">Cancel</a></li>
-        </ul>
+        <div class="buttons_wrapper">
+            <ul class="buttons right devices">
+                <li><a class="device-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="device-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+                <li><a class="device-cancel" href="#">Cancel</a></li>
+            </ul>
+        </div>
             
         </form>
     </div>

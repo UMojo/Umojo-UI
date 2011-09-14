@@ -168,7 +168,7 @@ winkstart.module('voip', 'device',
 
         {
             name : '#sip_realm', 
-            regex : /^[0-9A-Za-z\-\.\:]+$/
+            regex : /^[0-9A-Za-z\-\.\:\_]+$/
         },
 
         {
@@ -338,8 +338,8 @@ winkstart.module('voip', 'device',
                 data : {
                     mac_address: "12:34:56:78:9A:BC",
                     caller_id : {
-                        'default' : { }, 
-                        emergency : { }
+                        external: { }, 
+                        internal: { }
                     },
                     media : {
                         audio : {
@@ -388,11 +388,11 @@ winkstart.module('voip', 'device',
                         mac_address: "12:34:56:78:9A:BC",
                         status: true,
                         caller_id : {
-                            'default' : { }, 
-                            emergency : { }
+                            external: { }, 
+                            internal: { }
                         },
                         media : {
-                            bypass_media: "false", 
+                            bypass_media: "auto", 
                             audio : {
                                 codecs : ["PCMU", "PCMA"]
                             }, 
@@ -419,24 +419,16 @@ winkstart.module('voip', 'device',
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 }, function (json, xhr) {
-                    var listUsers = [];
-                    if(json.data.length > 0) {
-                        _.each(json.data, function(elem){
-                            var title = elem.first_name + ' ' + elem.last_name;
-                            listUsers.push({
-                                owner_id: elem.id,
-                                title: title
-                            });
-                        });
-                        
-                        form_data.field_data.users = listUsers;
-                    } else {
+                    var listUsers = [{owner_id: '', title: 'None'}];
+                    _.each(json.data, function(elem){
+                        var title = elem.first_name + ' ' + elem.last_name;
                         listUsers.push({
-                            owner_id: '!', 
-                            title: 'none'
+                            owner_id: elem.id,
+                            title: title
                         });
-                        form_data.field_data.users = listUsers;
-                    }
+                    });
+                    
+                    form_data.field_data.users = listUsers;
                     if (data && data.id) {
                         /* This is an existing device - Grab JSON data from server for device_id */
                         winkstart.getJSON('device.get', {
@@ -447,6 +439,17 @@ winkstart.module('voip', 'device',
                         }, function(json, xhr) {
                             /* On success, take JSON and merge with default/empty fields */
                             $.extend(true, form_data, json);
+
+                            // Perform some migrations:
+                            if('default' in form_data.data.caller_id) {
+                                form_data.data.caller_id.external = form_data.data.caller_id.default;
+                                delete form_data.data.caller_id.default;
+                            }
+                            if('emergency' in form_data.data.caller_id) {
+                                form_data.data.caller_id.internal = form_data.data.caller_id.emergency;
+                                delete form_data.data.caller_id.emergency;
+                            }
+
                             THIS.renderDevice(form_data);
                         });
                     } else {

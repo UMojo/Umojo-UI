@@ -29,6 +29,7 @@
             width : 'auto',
             show : { effect : 'fade', duration : 200 },
             hide : { effect : 'fade', duration : 200 },
+            modal : true,
 
             // By default, don't long-live dialogs - kill them after they're closed. Normal jquery default is just to hide them.
             close : function() {

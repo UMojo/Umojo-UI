@@ -83,7 +83,7 @@ winkstart.module('cluster', 'deploy_mgr',
     /* Define the functions for this module */
     {   
         server_count: 0,
-        serverTypes: ['Own' ],
+        serverTypes: ['Own'],
         
         requestServer: function() {
             var THIS = this;
@@ -252,7 +252,9 @@ winkstart.module('cluster', 'deploy_mgr',
         
                                 THIS.templates.server.tmpl(data).prependTo($('.cluster'));
                                 
-                                $('.server_progress', '#'+data.server_id).progressbar({value:25});
+                                $('.server_progress', '#'+data.server_id).progressbar({
+                                    value:25
+                                });
                                 
 
                                 winkstart.publish('deploy_mgr.updateServer',  json.data.id);
@@ -262,9 +264,9 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                            //  THIS._changeURL(json.data.ip);
-                            // }
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
                             }
                         });
                         break;
@@ -293,9 +295,9 @@ winkstart.module('cluster', 'deploy_mgr',
         					
                                 THIS.tooltip();
         
-                            // if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
-                            // THIS._changeURL(json.data.ip);
-                            //  }
+                                if(json.data.roles == "all_in_one" || jQuery.inArray("winkstart_deploy_whapps", json.data.roles) >= 0){
+                                    THIS._changeURL(json.data.ip);
+                                }
                             }
                         });
                         break;
@@ -317,7 +319,7 @@ winkstart.module('cluster', 'deploy_mgr',
                 var inLabel = "VoIP Services";
                 json.data.apps.voip.label = inLabel;
                 
-                $('.main_nav li[module-name=voip] a').html('VoIP Services');
+                $('.main_nav li[module-name=voip] .whapp a').html('VoIP Services');
 
                 var rest_data = {};
                 rest_data.crossbar = true;
@@ -378,16 +380,20 @@ winkstart.module('cluster', 'deploy_mgr',
                 $.each(logs, function() {
                     var classLog = "";
 
-                    if(this.status == "running")
+                    if(this.status == "running"){
                         classLog = "logrunning";
-                    else if (this.status == "ok")
+                    }
+                    else if (this.status == "ok"){
                         classLog = "thumb_up";
-                    else if (this.status == "ko")
+                    }
+                    else if (this.status == "ko"){
                         classLog = "thumb_down";
-                    else
+                    }
+                    else{
                         classLog = "";
+                    }
 
-                    logListContent += "<div>"+this.name+" : <div class='"+classLog+"'></div></div>";
+                    logListContent += "<div class='"+this.status+"'>"+this.name+" : <div class='"+classLog+"'></div></div>";
                 });
             }
             
@@ -423,9 +429,20 @@ winkstart.module('cluster', 'deploy_mgr',
                     
                         
                     json.data.log = [
-                            {"name": "freeswitch", "status": "running"},
-                            {"name": "freeswitch2", "status": "ok"},
-                            {"name": "freeswitch3", "status": "ko"}
+                    {
+                        "name": "freeswitch", 
+                        "status": "running"
+                    },
+
+                    {
+                        "name": "freeswitch2", 
+                        "status": "ok"
+                    },
+
+                    {
+                        "name": "freeswitch3", 
+                        "status": "ko"
+                    }
                     ]
                         
                     THIS.setLoglist(json.data.log, serverId);
@@ -490,7 +507,9 @@ winkstart.module('cluster', 'deploy_mgr',
         },
         
         setPgbar: function(serverId, value){
-            $('.server_progress', '#'+serverId).progressbar({'value':value});
+            $('.server_progress', '#'+serverId).progressbar({
+                'value':value
+            });
         },
         
         getRoles: function(roles) {
@@ -527,6 +546,7 @@ winkstart.module('cluster', 'deploy_mgr',
             }, function(reply) {
                 /* Clear out the center part of the window - get ready to put our own content in there */
                 $('#ws-content').empty();
+                $('#ws-content').css('margin-left','5%');
 
                 /* Draw our base template into the window */
                 THIS.templates.index.tmpl().appendTo( $('#ws-content') );

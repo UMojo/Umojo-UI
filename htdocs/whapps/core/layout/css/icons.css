@@ -17,14 +17,21 @@
     height: 32px;
     margin-top: -1px;
     padding-right: 6px;
-    background-image: url(../images/icons_32x32_gradient.png); /* This is the default - darkgrey */
+    background-image: url(../images/icons/icons_32x32_gradient.png);
     background-repeat: no-repeat;
+    background-position: center center;
     vertical-align: middle;
 }
 
+.icon.medium {
+    width: 24px;
+    height: 24px;
+    background-image: url(../images/icons/icons_24x24_gradient.png);
+}
+
 /* Color overrides */
-.current {
-    background-image: url(../images/icons_32x32_blue.png); /* Default for current is blue */
+.icon.gradient {
+    background-image: url(../images/icons/icons_32x32_gradient.png);
 }
 
 .icon.blue {
@@ -51,18 +58,21 @@
     background-image: url(../images/icons_32x32_white.png);
 }
 
-.icon.small_white {
-    background-image: url(../images/icons_16x16_white.png);
-}
-
-.icon.small_lightgrey {
-    background-image: url(../images/icons_16x16_lightgrey.png);
-}
-
 .icon.yellow {
     background-image: url(../images/icons_32x32_yellow.png);
 }
 
+.icon.medium.blue {
+    background-image: url(../images/icons_24x24_blue.png);
+}
+
+.icon.medium.red {
+    background-image: url(../images/icons_24x24_blue.png);
+}
+
+.icon.medium.gradient {
+    background-image: url(../images/icons_24x24_blue.png);
+}
 
 /************** ICONS APPNAV *****/
 
@@ -97,7 +107,7 @@
 }
 
 .icon.conference { /* 14, 3 */
-    background-position: -448px -96px;
+    background-position: -448px -101px;
 }
 
 .icon.device { /* 16, 5 */

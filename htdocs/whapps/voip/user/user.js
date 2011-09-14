@@ -330,6 +330,7 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
+                form_data.call_forward.substitute = !form_data.call_forward.substitute;
                 //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
