@@ -9,6 +9,7 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
+                <li><a href="#">Caller-ID</a></li>
                 {{if data.id}}
                 <!--    <li><a href="#">Equipment</a></li>
                     <li><a href="#">Phone Numbers</a></li>
@@ -65,6 +66,47 @@
 
                     <div class="clear"></div>
                 </div> <!-- end basic settings -->
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for In-House Calls.<br/>If not defined, then the Caller ID Name of the account will be used.">
+                                    <span class="tooltip"/><label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Numver of this User for In-House Calls.<br/>If not defined, then the Caller ID Number of the account will be used.">
+                                    <span class="tooltip"/><label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Name of the account will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Number of the account will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
 
             </div>
 
@@ -78,9 +120,8 @@
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
-                        <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
                         <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Call Forward</a></li>
-                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Password management</a></li>
+                        <li><a href="#"><span  class="icon sip" style="padding-bottom: 5px;"/>Password management</a></li>
                     </ul>
                 </span>
 
@@ -125,48 +166,7 @@
                     <div class="clear"></div>
 
                 </div>
-                <div id="caller_id">
-                    <fieldset>
-                        <legend>In-House Calls</legend>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for In-House Calls.<br/>If not defined, then the Caller ID Name of the account will be used.">
-                                    <span class="tooltip"/><label for="caller_id_name_internal">Caller ID Name:</label>
-                                </span>
-                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text"  value="${data.caller_id.internal.name}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Numver of this User for In-House Calls.<br/>If not defined, then the Caller ID Number of the account will be used.">
-                                    <span class="tooltip"/><label for="caller_id_number_internal">Caller ID Number:</label>
-                                </span>
-                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text"  value="${data.caller_id.internal.number}" />
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Outbound Calls</legend>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Name of the account will be used.">
-                                    <span class="tooltip"/>
-                                    <label for="caller_id_name_external">Caller ID Name:</label>
-                                </span>
-                                <input id="caller_id_name_external" name="caller_id.external.name" type="text"  value="${data.caller_id.external.name}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Number of the account will be used.">
-                                    <span class="tooltip"/>
-                                    <label for="caller_id_number_external">Caller ID Number:</label>
-                                </span>
-                                <input id="caller_id_number_external" name="caller_id.external.number" type="text"  value="${data.caller_id.external.number}" />
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div>
-                <div id="call_forward">
+                                <div id="call_forward">
                     <fieldset>
                         <ul class="controls">
                             <li>
