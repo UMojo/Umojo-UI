@@ -57,6 +57,8 @@ winkstart.module('connect', 'credits',
                 title: 'Add credits to your account',
                 resizable: false
             });
+            
+            dialogDiv.css('overflow', 'hidden');
 
             $('.credits.add', dialogDiv).click(function() {
                 add_credits = $('input[name=add_credits]:checked', '#credit_form').val();
