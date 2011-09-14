@@ -221,7 +221,7 @@ winkstart.module('voip', 'media',
             var media_id = form_data.data.id;
 
             //Dirty hack...
-            if(form_data.data.description.substr(0,12) == 'C:\\fakepath\\') {
+            if(form_data.data.description != undefined && form_data.data.description.substr(0,12) == 'C:\\fakepath\\') {
                 form_data.data.description = form_data.data.description.substr(12);
             }
 
