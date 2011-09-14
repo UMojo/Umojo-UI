@@ -380,16 +380,20 @@ winkstart.module('cluster', 'deploy_mgr',
                 $.each(logs, function() {
                     var classLog = "";
 
-                    if(this.status == "running")
+                    if(this.status == "running"){
                         classLog = "logrunning";
-                    else if (this.status == "ok")
+                    }
+                    else if (this.status == "ok"){
                         classLog = "thumb_up";
-                    else if (this.status == "ko")
+                    }
+                    else if (this.status == "ko"){
                         classLog = "thumb_down";
-                    else
+                    }
+                    else{
                         classLog = "";
+                    }
 
-                    logListContent += "<div>"+this.name+" : <div class='"+classLog+"'></div></div>";
+                    logListContent += "<div class='"+this.status+"'>"+this.name+" : <div class='"+classLog+"'></div></div>";
                 });
             }
             
