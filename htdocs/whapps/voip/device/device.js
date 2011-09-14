@@ -168,7 +168,7 @@ winkstart.module('voip', 'device',
 
         {
             name : '#sip_realm', 
-            regex : /^[0-9A-Za-z\-\.\:]+$/
+            regex : /^[0-9A-Za-z\-\.\:\_]+$/
         },
 
         {
@@ -419,24 +419,16 @@ winkstart.module('voip', 'device',
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 }, function (json, xhr) {
-                    var listUsers = [];
-                    if(json.data.length > 0) {
-                        _.each(json.data, function(elem){
-                            var title = elem.first_name + ' ' + elem.last_name;
-                            listUsers.push({
-                                owner_id: elem.id,
-                                title: title
-                            });
-                        });
-                        
-                        form_data.field_data.users = listUsers;
-                    } else {
+                    var listUsers = [{owner_id: '', title: 'None'}];
+                    _.each(json.data, function(elem){
+                        var title = elem.first_name + ' ' + elem.last_name;
                         listUsers.push({
-                            owner_id: '!', 
-                            title: 'none'
+                            owner_id: elem.id,
+                            title: title
                         });
-                        form_data.field_data.users = listUsers;
-                    }
+                    });
+                    
+                    form_data.field_data.users = listUsers;
                     if (data && data.id) {
                         /* This is an existing device - Grab JSON data from server for device_id */
                         winkstart.getJSON('device.get', {

@@ -171,7 +171,7 @@ function(args) {
             form_data.field_data = THIS.config.formData;
             form_data.field_data.users = [];
             winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                    var listUsers = [];
+                    var listUsers = [{owner_id: '', title: 'None'}];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
                             var title = elem.first_name + ' ' + elem.last_name;
