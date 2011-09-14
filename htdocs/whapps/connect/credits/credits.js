@@ -1,6 +1,10 @@
 winkstart.module('connect', 'credits',
     /* Start module resource definitions */
     {
+        css: [
+            'css/credits.css'
+        ],
+        
         /* What HTML templates will we be using? */
         templates: {
             manage_credits: 'tmpl/manage_credits.html'
