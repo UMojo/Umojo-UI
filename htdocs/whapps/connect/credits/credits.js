@@ -55,7 +55,7 @@ winkstart.module('connect', 'credits',
             var THIS = this;
             dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.apps['connect'].account), {
                 title: 'Add credits to your account',
-                resizable: false,
+                resizable: false
             });
 
             $('.credits.add', dialogDiv).click(function() {
