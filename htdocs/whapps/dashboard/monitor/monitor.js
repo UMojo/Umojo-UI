@@ -25,12 +25,6 @@ winkstart.module('dashboard', 'monitor',
 
     /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        winkstart.publish('subnav.add', {
-            whapp: 'dashboard',
-            module: this.__module,
-            label: 'Monitor',
-            icon: 'registration'
-        });
     }, // End initialization routine
 
 
