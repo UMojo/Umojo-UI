@@ -187,6 +187,16 @@
                                 <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
                             </li>
                             <li>
+                                <span class="tooltip-wrapper" tooltip="Also ring the user SIP device?">
+                                    <span class="tooltip"/><label for="call_forward_substitute">Also ring user's VOIP phone:</label>
+                                </span>
+                                {{if data.call_forward.substitute == false}}
+                                <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="Do you want this user to press a key to answer a call that has been call-forwarded?">
                                     <span class="tooltip"/><label for="require_keypress">Require Key Press?</label>
                                 </span>
