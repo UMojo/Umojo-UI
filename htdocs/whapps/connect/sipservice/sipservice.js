@@ -1,4 +1,4 @@
-winkstart.module('connect', 'sipservice', 
+winkstart.module('connect', 'sipservice',
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -26,7 +26,7 @@ winkstart.module('connect', 'sipservice',
 
             /* Number Management */
             order_history: 'tmpl/order_history.html',
-            
+
             edit_server: 'tmpl/edit_server.html'
         },
 
@@ -149,7 +149,7 @@ winkstart.module('connect', 'sipservice',
 
         refresh: function() {
             var THIS = this;
-            
+
             var account = winkstart.apps['connect'].account;
 
             winkstart.log('Redrawing...');
@@ -193,7 +193,7 @@ winkstart.module('connect', 'sipservice',
             $("#ws-content .drop_area:not(.ui-droppable").droppable({
                 drop: function(event, ui) {
                     winkstart.publish('numbers.map_number', {
-                        did : $(ui.draggable).dataset(), 
+                        did : $(ui.draggable).dataset(),
                         new_server : $(this).dataset()
                     });
                 },
@@ -242,7 +242,7 @@ winkstart.module('connect', 'sipservice',
 
         confirm_billing: function(args) {
             alert('Confirming billing...');
-            
+
         },
 
 
@@ -264,13 +264,13 @@ winkstart.module('connect', 'sipservice',
                 THIS.load_account();
             } else {
                 // Show landing page
-                
+
                 /* Draw our base template into the window */
                 THIS.templates.index.tmpl().appendTo( $('#ws-content') );
 
                 $('#ws-content a#signup_button').click(function() {
                     THIS.create_account();
-                    
+
                     THIS.main_menu();
                 });
 

@@ -7,12 +7,12 @@
 /* Edit Server */
 
 #edit_server .form p {
-    float:left; 
+    float:left;
     margin: 5px -20px 20px 5px;
 }
 
 #edit_server .lbl_server {
-   width: auto; 
+   width: auto;
 }
 
 
@@ -24,6 +24,6 @@
 
 
 #edit_billing .lbl_fill {
-    
+
     margin-top: 2px;
 }

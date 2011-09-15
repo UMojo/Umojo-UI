@@ -1,5 +1,5 @@
 /* CSS RESET */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, 
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del,
 dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
 	margin: 0;
 	padding: 0;
@@ -7,7 +7,7 @@ dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b,
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -33,10 +33,10 @@ table {
 /************************************************/
 /*************** START FORM CSS *****************/
 
-.container_resize { 
+.container_resize {
     color: #424242;
-    height: auto; 
-    min-height: 100%; 
+    height: auto;
+    min-height: 100%;
 }
 
 .container_resize .resize {
@@ -205,16 +205,16 @@ table {
 	background-position: 0 -15px;
 }
 
-.container_resize .focusField{  
-	border: solid 1px #09F;  
-	background: #FFF;  
-	color: #000;  
-}  
-.container_resize .idleField{  
-	background: #EEE;  
-	color: #BEBEBE;  
+.container_resize .focusField{
+	border: solid 1px #09F;
+	background: #FFF;
+	color: #000;
+}
+.container_resize .idleField{
+	background: #EEE;
+	color: #BEBEBE;
 	border: solid 1px #999 !important;
-}  
+}
 
 /* ----------- stylized ----------- */
 .container_resize .myform h1 {
@@ -240,16 +240,16 @@ table {
 	border: solid 1px #09f;
 	width: 200px;
 	margin: 2px 0 5px 10px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 .container_resize input.field_round {
 	width: 50px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	padding: 4px 2px;
 }
 
@@ -259,9 +259,9 @@ table {
 	border: solid 1px #09f;
 	width: 200px;
 	margin: 2px 0 5px 10px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 
@@ -353,9 +353,9 @@ table {
 	width: 200px;
 	margin: 4px 0 0 1px;
 	/*border: 1px solid #424242;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 */
 }
 
@@ -405,7 +405,7 @@ table {
 	width: 50px;
 }
 
-.container_resize .col { 
+.container_resize .col {
 	width: 100px;
 }
 

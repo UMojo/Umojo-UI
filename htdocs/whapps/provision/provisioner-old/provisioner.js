@@ -460,7 +460,7 @@ winkstart.module('provision', 'provisioner', {
  *****************************************************************************/
    _clone: function (obj) {
       if (obj == null || typeof(obj) != 'object') return obj;
-      var o = new obj.constructor(); 
+      var o = new obj.constructor();
       for (var key in obj) o[key] = this._clone(obj[key]);
       return o;
    }

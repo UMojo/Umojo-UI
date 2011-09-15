@@ -71,7 +71,7 @@ winkstart.module('voip', 'media',
     {
         validateForm: function(state) {
             var THIS = this;
-            
+
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -95,7 +95,7 @@ winkstart.module('voip', 'media',
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
                 rest_data.data = form_data;
-                
+
                 /* Is this a create or edit? See if there's a known ID */
                 if (media_id) {
                     /* EDIT */
@@ -107,7 +107,7 @@ winkstart.module('voip', 'media',
                         media_id: media_id
                     }, function(json, xhr) {
                         if($('#upload_span').is(":visible") && $('#file').val() != ''){
-                            rest_data.data.description = rest_data.data.upload_media; 
+                            rest_data.data.description = rest_data.data.upload_media;
                         } else {
                             rest_data.data.description = json.data.description;
                         }
@@ -153,7 +153,7 @@ winkstart.module('voip', 'media',
                 });
             });
         },
-        
+
         /*
          * Create/Edit media properties (don't pass an ID field to cause a create instead of an edit)
          */
@@ -162,7 +162,7 @@ winkstart.module('voip', 'media',
             var THIS = this;
             var form_data = {
                 auth_token: winkstart.apps['voip'].auth_token,
-                data: { streamable: true },   
+                data: { streamable: true },
                 field_data: THIS.config.formData,
                 value: {}
             };
@@ -178,7 +178,7 @@ winkstart.module('voip', 'media',
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
 
-                    // Dirty hack because of the erlangers!! On creation, crossbar store streamable as a string, and as a boolean on update 
+                    // Dirty hack because of the erlangers!! On creation, crossbar store streamable as a string, and as a boolean on update
                     // And as we're using the same template for both behaviors, we need the same kind of data.
                     // To delete once this bug is fixed!
                     if(form_data.data.streamable == "false") {
@@ -193,12 +193,12 @@ winkstart.module('voip', 'media',
                 /* This is a new media - pass along empty params */
                 THIS.renderMedia(form_data);
             }
-            
+
         },
 
         deleteMedia: function(media_id) {
             var THIS = this;
-            
+
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -292,7 +292,7 @@ winkstart.module('voip', 'media',
 
                 return false;
             });
-            
+
             $.each($('body').find('*[tooltip]'), function(){
                 $(this).tooltip({attach:'body'});
             });
@@ -360,7 +360,7 @@ winkstart.module('voip', 'media',
                 label: 'Media Management',
                 module: this.__module
             });
-            
+
             $('.edit-media').live({
                 click: function(evt){
                     var target = evt.currentTarget;
@@ -373,6 +373,6 @@ winkstart.module('voip', 'media',
 
             THIS.renderList();
         },
-        
+
     }
 );

@@ -72,15 +72,15 @@
     color: #29abe1;
 }
 
-#settings-view .focusField {  
-    background: #FFF; 
-    border: solid 1px #09f; 
-    color: #000;  
-} 
- 
-#settings-view .idleField {  
-    background: #BBB;  
-    color: #000;  
+#settings-view .focusField {
+    background: #FFF;
+    border: solid 1px #09f;
+    color: #000;
+}
+
+#settings-view .idleField {
+    background: #BBB;
+    color: #000;
     border: solid 1px #999 !important;
-}  
+}
 

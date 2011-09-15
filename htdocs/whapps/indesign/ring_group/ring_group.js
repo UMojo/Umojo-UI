@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'ring_group', 
+winkstart.module('indesign', 'ring_group',
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -56,8 +56,8 @@ winkstart.module('indesign', 'ring_group',
                 label: 'Ring Group',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
-            
-            
+
+
             $('.group_list').jScrollPane();
             $('.list_container').jScrollPane();
             $("ul.advanced_tabs").tabs("div.advanced_pane > div");
@@ -66,9 +66,9 @@ winkstart.module('indesign', 'ring_group',
                 $clicked = $(this);
                 $clicked.css("background-color","#0097bb");
                 // reset the other buttons to default style
-                $clicked.siblings(".list_container li").css("background-color","#808080");         	
-            });			
-			
+                $clicked.siblings(".list_container li").css("background-color","#808080");
+            });
+
         }
     } // End function definitions
 

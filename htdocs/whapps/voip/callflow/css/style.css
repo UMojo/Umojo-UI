@@ -171,19 +171,19 @@
     background: #525252;
     margin-top: -43px;
     margin-right: 0px;
-    margin-left: 0px; 
+    margin-left: 0px;
     padding: 0;
     float: left;
 }
-#ws_callflow .children > .child:first-child > .div_line { 
-    display: inline-block; 
-    height: 5px; 
-    width: 50%; 
+#ws_callflow .children > .child:first-child > .div_line {
+    display: inline-block;
+    height: 5px;
+    width: 50%;
     background: #525252;
     margin-top: -43px;
     margin-right: 0px;
-    margin-left: 0px; 
-    padding: 0; 
+    margin-left: 0px;
+    padding: 0;
     float: right;
 }
 #ws_callflow .children > .child:last-child > .div_line {
@@ -193,7 +193,7 @@
     background: #525252;
     margin-top: -43px;
     margin-right: 0px;
-    margin-left: 0px; 
+    margin-left: 0px;
     padding: 0;
     float: left;
 }
@@ -203,18 +203,18 @@
 }
 
 #ws_callflow .span_arrow {
-    display: inline-block; 
-    height: 38px; 
-    width: 145px; 
-    background-image: url(images/arrow_grey.png); 
-    margin: 5px 0px 5px; 
-    padding: 0; 
-    position: relative; 
+    display: inline-block;
+    height: 38px;
+    width: 145px;
+    background-image: url(images/arrow_grey.png);
+    margin: 5px 0px 5px;
+    padding: 0;
+    position: relative;
 }
 
 #ws_callflow .span_arrow.large {
-    height: 55px; 
-    background-image: url(images/arrow_grey_large.png); 
+    height: 55px;
+    background-image: url(images/arrow_grey_large.png);
 }
 #ws_callflow .a_link_option { color: #FFFFFF;}
 #ws_callflow .div_option { display: inline-block; height: 15px; width: 131px; background-color: #727272; margin: 0; padding: 0; border: 1px solid #323232; }

@@ -5,20 +5,20 @@
 ----GENERAL---------
 *******************/
 
-html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td { 
-  margin: 0; 
-  padding: 0; 
-  border: 0;	
-  outline: 0;	
-  font-weight: inherit;	
-  font-style: inherit; 
-  font-size: 100%; 
-  font-family: inherit; 
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
 }
 
 :focus { outline: 0;}
 
-.clear { 
+.clear {
 	clear: both;
 }
 
@@ -64,7 +64,7 @@ h2
 
 a {
 	color: #EBEBEB;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:hover {
@@ -73,7 +73,7 @@ a:hover {
 }
 
 a:active {
-	color: #05addc;	
+	color: #05addc;
 }
 
 .selected {
@@ -160,7 +160,7 @@ a:active {
 }
 
 ul.universal_nav {
-	float: left;	
+	float: left;
 	/*width: 240px;*/
 	list-style: none;
 	position: absolute;
@@ -234,12 +234,12 @@ ul.universal_nav li a.logout {
 	border-right-color: #FFF;
 	border-bottom-color: #FFF;
 	border-left-color: #FFF;
-	
+
 }
 
 .add_element{
 	height: 70px;
-	background-color: #4d4d4d;	
+	background-color: #4d4d4d;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #FFF;
@@ -247,7 +247,7 @@ ul.universal_nav li a.logout {
 
 .add_element p{
 	text-transform: uppercase;
-	line-height:70px;	
+	line-height:70px;
 }
 
 .plus_btn{
@@ -271,22 +271,22 @@ ul.universal_nav li a.logout {
 	padding-top:7px;
 }
 
-.searchsubmit1 { 
+.searchsubmit1 {
 	float: left;
 	margin-left: 5px;
-	
+
 }
-.searchsubmit2 { 
+.searchsubmit2 {
 	float: left;
-	
+
 }
 
-.searchfield { 
+.searchfield {
 	background: url(../images/search_mid.png) repeat-x;
- 	border: medium none;
-  	float: left; 
- 	height: 20px; 
- 	width: 130px;
+	border: medium none;
+	float: left;
+	height: 20px;
+	width: 130px;
 	color: #666;
 }
 
@@ -302,7 +302,7 @@ ul.universal_nav li a.logout {
 
 .elements ul{
 	background-color:#989898;
-	
+
 }
 
 .elements ul li{
@@ -310,7 +310,7 @@ ul.universal_nav li a.logout {
 	line-height:27px;
 	border-bottom: 1px solid #E3E3E3;
 	border-top: 1px solid #8b8a8a;
-	list-style-type: none;	
+	list-style-type: none;
 }
 
 .elements ul li a{
@@ -357,11 +357,11 @@ a.detailed_listing{
 	background-position: 0px 0px;
 	line-height: 26px;
 	color: #EBEBEB;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a.detailed_listing:hover{
-	background-position: 0px -26px;	
+	background-position: 0px -26px;
 }
 
 
@@ -414,7 +414,7 @@ ul.buttons a:hover{
     color: #EBEBEB;
     padding: 2em;
 
-    background-color: #999999; 
+    background-color: #999999;
     border: 1px;
     border-radius: 1em;
     box-shadow: 3px 3px 3px #333333;

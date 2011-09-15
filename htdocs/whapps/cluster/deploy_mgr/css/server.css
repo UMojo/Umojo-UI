@@ -43,7 +43,7 @@
 
     background-color: white;
 
-    overflow: auto; 
+    overflow: auto;
 }
 
 .server_content li{
@@ -126,7 +126,7 @@
 }
 
 .Update {
-    color: greenyellow;    
+    color: greenyellow;
 }
 
 .Deploy {

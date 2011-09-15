@@ -723,7 +723,7 @@ ul.monitor_navs li .percent_circle {
     float:left;
 }
 
-.dns_icon {  
+.dns_icon {
     background-image: url(../img/dns_icon.png);
     margin: -2px 0 0 19px;
     width:29px;

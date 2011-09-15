@@ -3,11 +3,11 @@ winkstart.module('userportal', 'cdr', {
 	'css/style.css'
 	//'css/jquery-ui-1.8.8.custom.css'
 	],
-				
+
 	templates: {
 		cdr: 'tmpl/cdr.html'
 	},
-		
+
 	subscribe: {
 		'cdr.activate': 'activate',
 		'cdr.deactivate': 'deactivate'
@@ -40,12 +40,12 @@ function(args) {
 {
 	deactivate: function(data) {
 		var THIS = this;
-        
+
 		$.fn.dataTableExt.afnFiltering.pop();
 	},
 	activate: function(data) {
 		var THIS = this;
-    
+
 		$('#ws-content').empty();
 
 		this.templates.cdr.tmpl({}).appendTo( $('#ws-content') );
@@ -105,7 +105,7 @@ function(args) {
 			'sTitle': 'Date'
 		}
 		];
-    
+
 		winkstart.table.create('cdr', $('#cdr-grid'), columns, {}, {
 			sDom: '<"date">frtlip'
 		});
@@ -124,18 +124,18 @@ function(args) {
 
 		$('#startDate').datepicker();
 		$('#endDate').datepicker();
-		
-		
+
+
 		function noData(data){
 			if(data == null || data == undefined){
 				data = '-';
 			}
-			
+
 			return data;
 		}
 
 		winkstart.getJSON('cdr.list', {
-			crossbar: true, 
+			crossbar: true,
 			account_id: winkstart.apps['userportal'].account_id,
 		    user_id: winkstart.apps['userportal'].user_id,
             api_url: winkstart.apps['userportal'].api_url
@@ -144,8 +144,8 @@ function(args) {
 				var cdr_id = this.id;
 
 				winkstart.getJSON('cdr.read', {
-					crossbar: true, 
-					account_id: winkstart.apps['userportal'].account_id, 
+					crossbar: true,
+					account_id: winkstart.apps['userportal'].account_id,
 		            user_id: winkstart.apps['userportal'].user_id,
                     api_url: winkstart.apps['userportal'].api_url,
 					cdr_id: cdr_id
@@ -167,20 +167,20 @@ function(args) {
 					var day = date.getDate();
 					var humanDate = month+'/'+day+'/'+year;
 					var humanTime = date.toLocaleTimeString();
-                    
+
                     var humanFullDate = humanDate + ' ' + humanTime;
-                    
+
 					if(caller_id_name && caller_id_number && callee_id_name && callee_id_number){
 						winkstart.table.cdr.fnAddData([
-							noData(caller_id_name), 
-							noData(caller_id_number), 
-							noData(callee_id_name), 
-							noData(callee_id_number), 
-							noData(duration), 
+							noData(caller_id_name),
+							noData(caller_id_number),
+							noData(callee_id_name),
+							noData(callee_id_number),
+							noData(duration),
 							noData(humanFullDate)]);
 					}
 				});
-			}); 
+			});
 		});
 
 		winkstart.publish('layout.updateLoadedModule', {

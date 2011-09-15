@@ -30,7 +30,7 @@
 
 .content .add_flow{
 	height: 70px;
-	background-color: #4d4d4d;	
+	background-color: #4d4d4d;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #FFF;
@@ -41,7 +41,7 @@
 	line-height:70px;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12px;
-	color: #fff;        
+	color: #fff;
 }
 
 .content .plus_btn{
@@ -65,7 +65,7 @@
 	padding-top:7px;
 }
 
-.searchsubmit1 { 
+.searchsubmit1 {
 	float: left;
 	margin-left: 5px;
         background: url(../images/search_left.png) no-repeat;
@@ -73,19 +73,19 @@
         height: 20px;
 }
 
-.searchsubmit2 { 
+.searchsubmit2 {
 	float: left;
         background: url(../images/search_right.png) no-repeat;
         width: 26px;
         height: 20px;
 }
 
-.searchfield { 
+.searchfield {
 	background: url(../images/search_mid.png) repeat-x;
- 	border: medium none;
-  	float: left; 
- 	height: 20px; 
- 	width: 130px;
+	border: medium none;
+	float: left;
+	height: 20px;
+	width: 130px;
 	color: #666;
 }
 
@@ -101,7 +101,7 @@
 
 .account_list ul{
 	background-color:#989898;
-	
+
 }
 
 .account_list ul li{
@@ -109,7 +109,7 @@
 	line-height:27px;
 	border-bottom: 1px solid #E3E3E3;
 	border-top: 1px solid #8b8a8a;
-	list-style-type: none;	
+	list-style-type: none;
 }
 
 .account_list ul li a{
@@ -156,11 +156,11 @@ a.detailed_listing{
 	background-position: 0px 0px;
 	line-height: 26px;
 	color: #fff;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a.detailed_listing:hover{
-	background-position: 0px -26px;	
+	background-position: 0px -26px;
 }
 
 /*************************************
@@ -178,7 +178,7 @@ a.detailed_listing:hover{
 
 .media_list ul{
 	background-color:#989898;
-	
+
 }
 
 .media_list ul li{
@@ -188,7 +188,7 @@ a.detailed_listing:hover{
 	border-top: 1px solid #8b8a8a;
 	list-style-type: none;
 	width: 190px;
-	
+
 }
 
 .media_list ul li a{
@@ -201,7 +201,7 @@ a.detailed_listing:hover{
 	color: #474747;
 	text-decoration: none;
 	background-color:#989898;
-	border-right: 1px solid #7a7a7a;	
+	border-right: 1px solid #7a7a7a;
 }
 
 .media_list ul li a:hover{
@@ -223,7 +223,7 @@ a.detailed_listing:hover{
 
 .group_list ul{
 	background-color:#989898;
-	
+
 }
 
 .group_list ul li{
@@ -233,7 +233,7 @@ a.detailed_listing:hover{
 	border-top: 1px solid #8b8a8a;
 	list-style-type: none;
 	width: 190px;
-	
+
 }
 
 .group_list ul li a{
@@ -262,15 +262,15 @@ a.detailed_listing:hover{
 .main_content{
 	width: 832px;
 	float: left;
-	/*border-left: 1px solid #282828;	*/	
+	/*border-left: 1px solid #282828;	*/
 }
 
-h1.page_name{	
+h1.page_name{
 	color: #05AFDC;
 	font-size: 30px;
 	display: block;
-	line-height: 30px;	
-	padding: 27px 0 0 18px;		
+	line-height: 30px;
+	padding: 27px 0 0 18px;
 }
 
 /**************************
@@ -293,7 +293,7 @@ ul.account_tabs li {
 
 ul.account_tabs li:hover {
 	background-position: 0px -23px;
-	
+
 }
 
 ul.account_tabs a {
@@ -303,7 +303,7 @@ ul.account_tabs a {
 	background-position: 0px 0px;
 	height: 23px;
 	width: 155px;
-	line-height: 23px; 
+	line-height: 23px;
 	position: relative;
 	color: #fff;
 }
@@ -313,8 +313,8 @@ ul.account_tabs a:hover {
 }
 
 ul.account_tabs a.current, ul.account_tabs a.current:hover, ul.account_tabs li.current a {
-	background-position: 0px -23px;		
-	cursor:default !important; 
+	background-position: 0px -23px;
+	cursor:default !important;
 	color:#fff !important;
 }
 
@@ -322,8 +322,8 @@ ul.account_tabs a.current, ul.account_tabs a.current:hover, ul.account_tabs li.c
 	width:760px;
 	border: 1px solid #727272;
 	margin-left: 18px;
-	padding: 20px;	
-	background-color: #a3a3a3;	
+	padding: 20px;
+	background-color: #a3a3a3;
 }
 
 
@@ -334,10 +334,10 @@ ul.account_tabs a.current, ul.account_tabs a.current:hover, ul.account_tabs li.c
 *******************/
 
 .advance-setting_box{
-	background-image:url(../images/advacnce_settings_box.png);	
+	background-image:url(../images/advacnce_settings_box.png);
 	width: 800px;
 	height: 30px;
-	margin:12px 0 0 18px;	
+	margin:12px 0 0 18px;
 }
 
 .advance-setting_box h2{
@@ -370,7 +370,7 @@ ul.advanced_tabs a{
 	color: #fff;
 	text-decoration: none;
 	height:30px;
-	display: block;	
+	display: block;
 }
 
 ul.advanced_tabs a:hover{
@@ -388,9 +388,9 @@ ul.advanced_tabs a.current, ul.advanced_tabs a.current:hover, ul.advanced_tabs l
 .advanced_pane{
 	width:760px;
 	margin-left: 18px;
-	padding: 20px;	
+	padding: 20px;
 	color: #5e5f61;
-	background-color: #c7c7c7;	
+	background-color: #c7c7c7;
 }
 
 /*******************************
@@ -400,15 +400,15 @@ ul.advanced_tabs a.current, ul.advanced_tabs a.current:hover, ul.advanced_tabs l
 ul.remove_save_btn{
 	display: block;
 	list-style-type: none;
-	margin: 21px 0 0 645px;	
-	
+	margin: 21px 0 0 645px;
+
 }
 
 ul.remove_save_btn li{
 	float: left;
 	text-align: center;
 	padding-right: 3px;
-	
+
 }
 
 ul.remove_save_btn a{
@@ -433,20 +433,20 @@ ul.remove_save_btn a:hover{
 
 .ring_group_container{
 	width: 800px;
-	margin: 21px 0 0 18px;	
+	margin: 21px 0 0 18px;
 }
 
 .ring_group_container .group_column{
 	width: 340px;
 	float: left;
-	position: relative;	
+	position: relative;
 }
 
 .ring_group_container .group_column .column_name{
 	width: 340px;
 	height: 28px;
 	background-color: #858585;
-	margin-bottom: 8px;	
+	margin-bottom: 8px;
 }
 
 .ring_group_container .group_column .column_name p{
@@ -465,7 +465,7 @@ ul.remove_save_btn a:hover{
 }
 
 .ring_group_container .group_column .list_container ul{
-	background-color: #808080;	
+	background-color: #808080;
 }
 
 .ring_group_container .group_column .list_container ul li{
@@ -473,7 +473,7 @@ ul.remove_save_btn a:hover{
 	line-height:22px;
 	border-bottom: 1px solid #dedede;
 	border-top: 1px solid #5f5f5f;
-	list-style-type: none;	
+	list-style-type: none;
 	display: block;
 	background-color:#808080;
 	position:relative;

@@ -26,7 +26,7 @@ winkstart.module('core', 'layout', {
     /* Bootstrap */
     function(args) {
         var THIS = this;
-        
+
         THIS.parent = args.parent || $('body');
 
         THIS.attach();
@@ -48,7 +48,7 @@ winkstart.module('core', 'layout', {
 
             // We need to hide this by defualt but keep our display: inline-block in the css
             $('#ws-notification-bar').hide();
-            
+
             $("#loading").ajaxStart(function(){
                 $(this).show();
              }).ajaxStop(function(){

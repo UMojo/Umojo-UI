@@ -97,7 +97,7 @@ winkstart.module('voip', 'callflow', {
             $('#ws-content').empty();
             THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
 
-            THIS.renderList(function() { 
+            THIS.renderList(function() {
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
             });
 
@@ -207,13 +207,13 @@ winkstart.module('voip', 'callflow', {
 
             function branch(actionName) {
                 var that = this;
-                this.id = -1;  
+                this.id = -1;
                 this.actionName = actionName;
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
                 this.children = {};
-                this.data = { 
+                this.data = {
                     data: $.extend(true, {}, THIS.actions[this.actionName].data)
                 };
                 this.caption = '';
@@ -471,7 +471,7 @@ winkstart.module('voip', 'callflow', {
                             branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
 
                             if (target.addChild(branch)) {
-                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
                                     branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
                                 }
 
@@ -486,7 +486,7 @@ winkstart.module('voip', 'callflow', {
                                 // If we move a node, destroy its key
                                 branch.key = '_';
 
-                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
                                     branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
                                 }
 
@@ -543,7 +543,7 @@ winkstart.module('voip', 'callflow', {
                     display_key: branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])
                 }),
                 children;
-            
+
             if(branch.parent && ('key_edit' in THIS.actions[branch.parent.actionName])) {
                 $('.div_option', flow).click(function() {
                     THIS.actions[branch.parent.actionName].key_edit(branch, function() {
@@ -595,7 +595,7 @@ winkstart.module('voip', 'callflow', {
                     $('.arrow_category', $(this)).removeClass('inactiveArrow').addClass('activeArrow');
                     $('.text_category', $(this)).removeClass('inactiveText').addClass('activeText');
                 }
-                
+
 
                 while(current.next().hasClass('tool') || current.next().hasClass('app_list_nav') || current.next().hasClass('clear')) {
                     current = current.next();
@@ -606,7 +606,7 @@ winkstart.module('voip', 'callflow', {
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
-                }, 
+                },
                 function () {
                     $(this).removeClass('active');
                 }
@@ -638,7 +638,7 @@ winkstart.module('voip', 'callflow', {
             $('.action', tools).each(function() {
                 action($(this));
             });
-                
+
             target = $(THIS.config.elements.tools).empty();
             target.append(tools);
         },
@@ -769,15 +769,15 @@ winkstart.module('voip', 'callflow', {
 
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
-                
+
             $.extend(callflow_nodes, {
                 'root': {
                     name: 'Root',
-                    rules: [ 
+                    rules: [
                         {
                             type: 'quantity',
                             maxSize: '1'
-                        } 
+                        }
                     ],
                     isUsable : 'false'
                 },
@@ -808,7 +808,7 @@ winkstart.module('voip', 'callflow', {
                             },
                             function(data, status) {
                                 var popup, popup_html;
-                                
+
                                 popup_html = THIS.templates.edit_dialog.tmpl({
                                     parameter: {
                                         name: 'timeout',
@@ -1534,7 +1534,7 @@ winkstart.module('voip', 'callflow', {
                             }
                         );
                     }
-                }, 
+                },
                 'ring_group[]': {
                     name: 'Ring Group',
                     icon: 'ring_group',
@@ -1568,7 +1568,7 @@ winkstart.module('voip', 'callflow', {
                                     // we also need to clone to preven managing of objects
                                     $.each($.extend(true, {}, endpoints), function(i, obj) {
                                         obj.name = 'Undefined';
-                                        selected_endpoints[obj.id] = obj; 
+                                        selected_endpoints[obj.id] = obj;
                                     });
 
                                     $.each(data.data, function(i, obj) {
@@ -1597,7 +1597,7 @@ winkstart.module('voip', 'callflow', {
                                         name: node.getMetadata('name') || '',
                                         strategy: {
                                             items: [
-                                                {   
+                                                {
                                                     id: 'simultaneous',
                                                     name: 'At the same time'
                                                 },

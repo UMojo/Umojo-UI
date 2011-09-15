@@ -32,19 +32,19 @@ winkstart.module('voip', 'voip', {
     {
         /* A modules object is required for the loading routine.
          * The format is as follows:
-         * <module name>: <initialization status> 
+         * <module name>: <initialization status>
          */
         modules: {
-            'account': false, 
-            'media': false, 
-            'device': false, 
-            'callflow': false, 
-            'conference': false, 
-            'user': false, 
-            'vmbox': false, 
-            'menu': false, 
-            'registration': false, 
-            'resource': false, 
+            'account': false,
+            'media': false,
+            'device': false,
+            'callflow': false,
+            'conference': false,
+            'user': false,
+            'vmbox': false,
+            'menu': false,
+            'registration': false,
+            'resource': false,
             'timeofday': false
         },
 
@@ -67,7 +67,7 @@ winkstart.module('voip', 'voip', {
 
             THIS.setup_page();
         },
-            
+
         activate: function() {
             var THIS = this;
 
@@ -87,7 +87,7 @@ winkstart.module('voip', 'voip', {
                         winkstart.module.loadModule(THIS.__module, k, function() {
                             this.init(function() {
                                 winkstart.log(THIS.__module + ': Initialized ' + k);
-                                    
+
                                 if(!--THIS.uninitialzed_count) {
                                     winkstart.publish(THIS.__module + '.initialized', {});
                                 }
@@ -98,7 +98,7 @@ winkstart.module('voip', 'voip', {
             } else {
                 THIS.setup_page();
             }
-            
+
         },
 
         module_activate: function(args) {
@@ -138,11 +138,11 @@ winkstart.module('voip', 'voip', {
 
         // A setup_page function is required for the copy and paste code
         setup_page: function() {
-            var THIS = this; 
+            var THIS = this;
 
             $('#ws-content').empty();
             THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
-            
+
             $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
 
             // Link the main buttons

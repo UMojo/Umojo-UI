@@ -24,7 +24,7 @@ winkstart.module('skel', 'skel', {
     {
         /* A modules object is required for the loading routine.
          * The format is as follows:
-         * <module name>: <initialization status> 
+         * <module name>: <initialization status>
          */
         modules: {
             //skel: false
@@ -122,7 +122,7 @@ winkstart.module('skel', 'skel', {
          * or when it is activated (and is already initialized).
          */
         setup_page: function() {
-            var THIS = this; 
+            var THIS = this;
 
             // Do something here
         }

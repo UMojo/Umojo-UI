@@ -24,7 +24,7 @@
 }
 
 .user_nav_container ul.user_nav li a:hover {
-    background-position: 0 -23px; 
+    background-position: 0 -23px;
     color: #fff;
 }
 
@@ -56,11 +56,11 @@
     display: block;
     float: left;
     text-align: right;
-    width: 150px; 
+    width: 150px;
     margin-top: 3px;
     color: #424242;
     font-weight: bold;
-    letter-spacing: 0.02em;    
+    letter-spacing: 0.02em;
 }
 
 .cluster_container input {
@@ -275,7 +275,7 @@ select.styled {
     background-color: #D9DADC;
     background-image: -moz-linear-gradient(#D9DADC, #B8B9B9);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D1D1D1), to(#B8B9B9));
-    background-image: -webkit-linear-gradient(#D1D1D1, #B8B9B9); 
+    background-image: -webkit-linear-gradient(#D1D1D1, #B8B9B9);
     background-image: -o-linear-gradient(#D1D1D1, #B8B9B9);
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#D1D1D1, endColorstr=#B8B9B9);
     -moz-box-shadow: 2px 3px #424242;
@@ -289,7 +289,7 @@ select.styled {
     background-color: #05AFDC;
     background-image: -moz-linear-gradient(#05d3ec, #05AFDC);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#05d3ec), to(#05AFDC));
-    background-image: -webkit-linear-gradient(#05d3ec, #05AFDC); 
+    background-image: -webkit-linear-gradient(#05d3ec, #05AFDC);
     background-image: -o-linear-gradient(#05d3ec, #05AFDC);
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#05d3ec, endColorstr=#05AFDC);
 }

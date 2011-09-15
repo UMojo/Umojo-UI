@@ -52,7 +52,7 @@ a{ text-decoration: none;}
 #ws_prov_ep_cats li a { display: block; float: left;  padding: 0 35px;}
 #ws_prov_ep_cats li a:link, #ws_prov_ep_cats li a:visited  { color: #fff;}
 #ws_prov_ep_cats li a:hover, #ws_prov_ep_cats li a:active  { color: #ccc;}
-#ws_prov_ep_cats li.current a { color:#FFFFFF; background:url(../images/btm_tab_active.jpg) no-repeat center top;} 
+#ws_prov_ep_cats li.current a { color:#FFFFFF; background:url(../images/btm_tab_active.jpg) no-repeat center top;}
 #ws_prov_ep_cats li a:hover { color:#FFFFFF; background: url(../images/btm_tab_active.jpg) no-repeat center top;}
 
 #ws_prov_ep_cats li a em { display:block; float:left; padding-top: 16px; height:40px;}
@@ -158,39 +158,39 @@ form { margin: 20px 0;}
 #slider_frame { background: #8d8d8d; height: 26px; padding: 0 10px;}
 
 /* slider root element */
-.slider { 
-	
-	height:5px; 
-	position:relative; 
+.slider {
+
+	height:5px;
+	position:relative;
 	cursor:pointer;
 	border:1px solid #666;
 	width:375px;
-	float:left; 
+	float:left;
 	clear:right;
 	margin-top:10px;
-	-moz-border-radius:5px; 
-	-webkit-border-radius:5px; 
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
 	/* -moz-box-shadow:inset 0 0 8px #000; */
 }
 
 
 /* progress bar (enabled with progress: true) */
 .progress {
-	background: url(../images/form/h30.png) repeat-x 0 0; 
-	height:5px; 
-	background-color:#3aa0cb; 
+	background: url(../images/form/h30.png) repeat-x 0 0;
+	height:5px;
+	background-color:#3aa0cb;
 	display:none;
 	opacity:0.6;
 }
 
 /* drag handle */
-.handle { 
-	background:url(../images/form/slider_handle.jpg) no-repeat 0 0; 
+.handle {
+	background:url(../images/form/slider_handle.jpg) no-repeat 0 0;
 	height:16px;
 	width:8px;
 	top:-7px;
-	position:absolute; 
-	display:block; 
+	position:absolute;
+	display:block;
 	margin-top:1px;
 	/* border:1px solid #000; */
 	cursor:move;
@@ -198,7 +198,7 @@ form { margin: 20px 0;}
 -moz-box-shadow:0 0 6px #000;
 	-webkit-box-shadow:0 0 6px #000;
 	-moz-border-radius:14px;
-	-webkit-border-radius:14px; 
+	-webkit-border-radius:14px;
 */
 
 }
@@ -219,9 +219,9 @@ form { margin: 20px 0;}
 	text-align:center;
 	width:40px;
 	/*
--moz-border-radius:5px; 
-	-webkit-border-radius:5px; 
-*/		
+-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+*/
 }
 
 
@@ -230,9 +230,9 @@ form { margin: 20px 0;}
 div.multiselect { margin-top: 20px;}
 div.multiselect select { color: #666; width: 100%; min-height: 100px;}
 
-    
-    
-    
+
+
+
 
 <!--
 #iconselect {

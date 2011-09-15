@@ -30,7 +30,7 @@ winkstart.module('voip', 'account',
                 {name : '#vm_to_email_support_number', regex : /^[\+]?[0-9]*$/},
                 {name : '#vm_to_email_support_email', regex : /^(([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/},
         ],
-        
+
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
@@ -79,7 +79,7 @@ winkstart.module('voip', 'account',
     {
         validateForm: function(state) {
             var THIS = this;
-            
+
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -137,7 +137,7 @@ winkstart.module('voip', 'account',
             $('#account-view').empty();
             var THIS = this;
             var form_data = {
-                data: { caller_id: { internal: { }, external: {} }, vm_to_email: {}},   
+                data: { caller_id: { internal: { }, external: {} }, vm_to_email: {}},
                 field_data: THIS.config.formData,
                 value: {}
             };
@@ -156,12 +156,12 @@ winkstart.module('voip', 'account',
                 /* This is a new account - pass along empty params */
                 THIS.renderAccount(form_data);
             }
-            
+
         },
 
         deleteAccount: function(account_id) {
             var THIS = this;
-            
+
             var rest_data = {
                 crossbar: true,
                 account_id: account_id,
@@ -180,7 +180,7 @@ winkstart.module('voip', 'account',
         renderAccount: function(form_data){
             var THIS = this;
             var account_id = form_data.data.id;
-            
+
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editAccount.tmpl(form_data).appendTo( $('#account-view') );
             winkstart.cleanForm();
@@ -191,7 +191,7 @@ winkstart.module('voip', 'account',
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
             $('#name').focus();
-            
+
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
 
@@ -232,7 +232,7 @@ winkstart.module('voip', 'account',
 
                 return false;
             });
-            
+
             $('.account-switch').click(function(event) {
                 event.preventDefault();
 
@@ -243,8 +243,8 @@ winkstart.module('voip', 'account',
                     alert('You\'re now using '+form_data.data.name+'\'s account');
                 }
                 else {
-                } 
- 
+                }
+
                 return false;
             });
 
@@ -253,12 +253,12 @@ winkstart.module('voip', 'account',
 
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
-                
+
                 THIS.deleteAccount(account_id);
 
                 return false;
             });
-            
+
             $.each($('body').find('*[tooltip]'), function(){
                 $(this).tooltip({attach:'body'});
             });
@@ -292,7 +292,7 @@ winkstart.module('voip', 'account',
                         if(a.title == undefined) a.title = 'undefined';
                         if(b.title == undefined) b.title = 'undefined';
                         a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                        
+
                         return answer;
                     });
                     return new_list;

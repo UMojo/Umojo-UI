@@ -3,14 +3,14 @@
 /************************************************/
 /*************** START FORM CSS *****************/
 
-html, body, .container_resize { 
-	height: 100%; 
-	
+html, body, .container_resize {
+	height: 100%;
+
 }
 
-body>.container_resize { 
-	height: auto; 
-	min-height: 100%; 
+body>.container_resize {
+	height: auto;
+	min-height: 100%;
         color: #424242;
 }
 
@@ -190,16 +190,16 @@ a.register_btn {
 	background-position: 0 -15px;
 }
 
-.focusField{  
-	border: solid 1px #09F;  
-	background: #FFF;  
-	color: #000;  
-}  
-.idleField{  
-	background: #EEE;  
-	color: #BEBEBE;  
+.focusField{
+	border: solid 1px #09F;
+	background: #FFF;
+	color: #000;
+}
+.idleField{
+	background: #EEE;
+	color: #BEBEBE;
 	border: solid 1px #999 !important;
-}  
+}
 
 /* ----------- stylized ----------- */
 .myform h1 {
@@ -225,16 +225,16 @@ a.register_btn {
 	border: solid 1px #09f;
 	width: 200px;
 	margin: 2px 0 5px 10px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 input.field_round {
 	width: 50px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	padding: 4px 2px;
 }
 
@@ -244,9 +244,9 @@ input.field_round {
 	border: solid 1px #09f;
 	width: 200px;
 	margin: 2px 0 5px 10px;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 
@@ -333,9 +333,9 @@ select.styled {
 	width: 200px;
 	margin: 4px 0 0 1px;
 	/*border: 1px solid #424242;
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 */
 }
 
@@ -385,7 +385,7 @@ select.styled {
 	width: 50px;
 }
 
-.col { 
+.col {
 	width: 100px;
 }
 

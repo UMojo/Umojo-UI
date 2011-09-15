@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'skeleton', 
+winkstart.module('indesign', 'skeleton',
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */

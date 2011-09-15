@@ -16,7 +16,7 @@ winkstart.module('voip', 'registration',
 		},
 
 		formData: {
-    
+
 		},
 
 		validation : [
@@ -41,7 +41,7 @@ winkstart.module('voip', 'registration',
 	function(args) {
 		/* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
 		winkstart.registerResources(this.__whapp, this.config.resources);
-        
+
 		winkstart.publish('subnav.add', {
 			whapp: 'voip',
 			module: this.__module,
@@ -59,29 +59,29 @@ winkstart.module('voip', 'registration',
 		activate: function(data) {
 			$('#ws-content').empty();
 			var THIS = this;
-            
+
 			winkstart.loadFormHelper('forms');
 
 			this.templates.registration.tmpl({}).appendTo( $('#ws-content') );
-            
+
 			var num_rows = 0;
-            
+
 			//winkstart.getJSON('registration.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(reply) {
 			winkstart.getJSON('registration.list', {
-				crossbar: true, 
+				crossbar: true,
 				account_id: winkstart.apps['voip'].account_id,
                 api_url: winkstart.apps['voip'].api_url
 			}, function(reply) {
 				THIS.setup_table();
 				$.each(reply.data, function() {
 					var registration_id = this.id;
-                    
+
 					num_rows = num_rows+1;
 
 					//winkstart.getJSON('registration.read',{crossbar: true, account_id: winkstart.apps['voip'].account_id, registration_id: registration_id}, function(reply) {
 					winkstart.getJSON('registration.read',{
-						crossbar: true, 
-						account_id: winkstart.apps['voip'].account_id, 
+						crossbar: true,
+						account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
 						registration_id: registration_id
 					}, function(reply) {
@@ -158,16 +158,16 @@ winkstart.module('voip', 'registration',
 						}
 						if(reply.data['Username'] != undefined) {
 							reply.data.username = reply.data['Username'];
-						}                       
+						}
 
 						var friendlyDate = new Date((reply.data.event_timestamp - 62167219200)*1000);
 						var humanDate = friendlyDate.toLocaleDateString();
-						var humanTime = friendlyDate.toLocaleTimeString(); 
-                                
+						var humanTime = friendlyDate.toLocaleTimeString();
+
 						winkstart.log(reply.data);
-     
+
 						var stringToDisplay = 'Details of Registration\\n';
-						stringToDisplay += '\\nid: ' + reply.data.id; 
+						stringToDisplay += '\\nid: ' + reply.data.id;
 						stringToDisplay += '\\nApp-Name: ' + reply.data.app_name;
 						stringToDisplay += '\\nApp-Version: ' + reply.data.app_version;
 						stringToDisplay += '\\nCall-ID: ' + reply.data.call_id;
@@ -196,7 +196,7 @@ winkstart.module('voip', 'registration',
 						winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
 					});
 				});
-                
+
 				//Hack to hide pagination if number of rows < 10
 				if(num_rows < 10){
 					$('body').find('.dataTables_paginate').hide();
@@ -243,14 +243,14 @@ winkstart.module('voip', 'registration',
 
 			winkstart.table.create('registration', $('#registration-grid'), columns);
 			$('#registration-grid_filter input[type=text]').first().focus();
-			
+
 			$('.cancel-search').click(function(){
 				$('#registration-grid_filter input[type=text]').val('');
 				winkstart.table.registration.fnFilter('');
 			});
-            
-            
-            
+
+
+
 		}
 	}
 	);

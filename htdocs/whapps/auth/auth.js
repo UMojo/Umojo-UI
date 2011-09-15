@@ -53,7 +53,7 @@ winkstart.module('auth', 'auth',
     },
     function() {
         winkstart.registerResources(this.__whapp, this.config.resources);
-        
+
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
                alert('You are now registered! Please log in.');
@@ -62,7 +62,7 @@ winkstart.module('auth', 'auth',
                     winkstart.apps['auth'].auth_token = data.auth_token;
                     winkstart.apps['auth'].user_id = data.data.user.id;
                     winkstart.apps['auth'].realm = data.data.account.realm;
-                    
+
                     winkstart.publish('auth.load_account');
                }
             });
@@ -79,7 +79,7 @@ winkstart.module('auth', 'auth',
 
         register: function() {
             var THIS = this;
-            
+
             var dialogRegister = winkstart.dialog(THIS.templates.register.tmpl({}), {
                 title: 'Register a New Account',
                 resizable : false
@@ -137,7 +137,7 @@ winkstart.module('auth', 'auth',
 
         login: function() {
             var THIS = this;
-            
+
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({}), {
                 title : 'Login',
                 resizable : false,
@@ -157,7 +157,7 @@ winkstart.module('auth', 'auth',
                 } else {
                     realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
                 }
-                
+
                 // If realm was set in the URL, override all
                 if('realm' in URL_DATA) {
                     realm = URL_DATA['realm'];
@@ -166,8 +166,8 @@ winkstart.module('auth', 'auth',
                 var rest_data = {
                     crossbar : true,
                     data : {
-                        'credentials': hashed_creds, 
-                        'realm': realm 
+                        'credentials': hashed_creds,
+                        'realm': realm
                     }
                 };
 
@@ -178,10 +178,10 @@ winkstart.module('auth', 'auth',
                         winkstart.apps['auth'].realm = realm;
 
                         $(dialogDiv).dialog('close');
-                        
+
                         // Deleting the welcome message
                         $('#ws-content').empty();
-                        
+
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
@@ -232,7 +232,7 @@ winkstart.module('auth', 'auth',
                     if(!v.account_id) {
                         winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
                     }
-                    
+
                     // TODO: This is a hack. This should not be done - instead, a failback routine should go into the core
                     /*winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
                     winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
@@ -265,7 +265,7 @@ winkstart.module('auth', 'auth',
             get_user_fn = function(auth_token, app_name, callback) {
                 var options = {
                     crossbar: true,
-                    account_id: winkstart.apps['auth'].account_id, 
+                    account_id: winkstart.apps['auth'].account_id,
                     api_url : winkstart.apps['auth'].api_url,
                     user_id: winkstart.apps['auth'].user_id
                 };
@@ -286,7 +286,7 @@ winkstart.module('auth', 'auth',
             if(winkstart.apps['auth'].api_url != winkstart.apps[args.app_name].api_url) {
                 winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
                     // If this is successful, we'll get a server-specific auth token back
-                    get_user_fn(json.auth_token, args.app_name, args.callback);    
+                    get_user_fn(json.auth_token, args.app_name, args.callback);
                 });
             }
             else {
@@ -316,7 +316,7 @@ winkstart.module('auth', 'auth',
                 alert('User authenticated');
             });
         },
-        
+
         init: function() {
             // Check if we already have a session stored in a cookie
             var auth = $.cookie('winkstart');
@@ -349,7 +349,7 @@ winkstart.module('auth', 'auth',
                         winkstart.apps[k].user_id = null;
                         winkstart.apps[k].account_id = null;
                     });
-                    
+
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
                     $('a#my_account').hide();
