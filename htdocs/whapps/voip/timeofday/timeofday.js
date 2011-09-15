@@ -290,7 +290,9 @@ winkstart.module('voip', 'timeofday',
             
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
-            
+
+            delete form_data.time; 
+           
             return form_data;
         },
 
