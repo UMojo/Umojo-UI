@@ -120,8 +120,9 @@
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
-                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px;"/>Call Forward</a></li>
+                        <li><a href="#"><span  class="icon cdr" style="padding-bottom: 5px;"/>Call Forward</a></li>
                         <li><a href="#"><span  class="icon sip" style="padding-bottom: 5px;"/>Password management</a></li>
+                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px"/>Hot Desking</a></li>
                     </ul>
                 </span>
 
@@ -166,7 +167,7 @@
                     <div class="clear"></div>
 
                 </div>
-                                <div id="call_forward">
+                <div id="call_forward">
                     <fieldset>
                         <ul class="controls">
                             <li>
@@ -233,6 +234,56 @@
                             <li>
                                 <label for="pwd_reco_pwd2">Confirm password: </label>
                                 <input id="pwd_mngt_pwd2" name="pwd_mngt_pwd2" type="password" value="fakePassword"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    
+                    <div class="clear"></div>
+                </div>
+                <div id="hot_desking">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want to enable Hot Desking?">
+                                    <span class="tooltip"/><label for="hotdesk_enable">Enable Hot Desking?</label>
+                                </span>
+                                {{if data.hotdesk.enable}}
+                                <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN.">
+                                    <span class="tooltip"/><label for="hotdesk_id">ID: </label>
+                                </span>
+                                <input id="hotdesk_id" name="hotdesk.id" type="text" value="${data.hotdesk.id}"/>
+                            </li>                           
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Does it require a PIN?">
+                                    <span class="tooltip"/><label for="hotdesk_require_pin">Require PIN?</label>
+                                </span>
+                                {{if data.hotdesk.require_pin}}
+                                <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li id="pin_wrapper">
+                                <span class="tooltip-wrapper" tooltip="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN.">
+                                    <span class="tooltip"/><label for="hotdesk_pin">PIN:</label>
+                                </span>
+                                <input id="hotdesk_pin" name="hotdesk.pin" type="text" value="${data.hotdesk.pin}"/>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick if you want to stay logged in on your other devices">
+                                    <span class="tooltip"/><label for="hotdesk_keep_logged_in_elsewhere">Keep logged in elsewhere?</label>
+                                </span>
+                                {{if data.hotdesk.keep_logged_in_elsewhere}}
+                                <input id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" type="checkbox"/>
+                                {{/if}}
                             </li>
                         </ul>
                     </fieldset>
