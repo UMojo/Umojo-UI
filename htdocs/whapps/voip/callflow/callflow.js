@@ -13,6 +13,7 @@ winkstart.module('voip', 'callflow', {
             tools: 'tmpl/tools.html',
             root: 'tmpl/root.html',
             node: 'tmpl/node.html',
+            num_row: 'tmpl/num_row.html',
             add_number: 'tmpl/add_number.html',
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
@@ -135,7 +136,7 @@ winkstart.module('voip', 'callflow', {
                             THIS.flow.root = THIS.buildFlow(json.data.flow, THIS.flow.root, 0, '_');
                         }
 
-                        THIS.flow.numbers = json.data.numbers;
+                        THIS.flow.numbers = json.data.numbers || [];
                         THIS.renderFlow();
                     }
                 );
@@ -404,40 +405,60 @@ winkstart.module('voip', 'callflow', {
             );
 
             $('.node', layout).each(function() {
-                var node_html, node = THIS.flow.nodes[$(this).attr('id')], $node = $(this);
+                var node = THIS.flow.nodes[$(this).attr('id')],
+                    $node = $(this),
+                    node_html;
 
                 if (node.actionName == 'root') {
                     $node.removeClass('icons_black root');
 
-                    node_html = THIS.templates.root.tmpl({ numbers: THIS.flow.numbers.toString() });
+                    node_html = THIS.templates.root.tmpl({});
 
-                    $('.btn_plus_sm', node_html).click(function() {
-                        var dialog = THIS.templates.add_number.tmpl({}).dialog({
-                            width: 400,
-                            title: 'Add a number',
-                            resizable: 'false'
-                        });
+                    for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+                        x = i * 2;
+                        THIS.templates.num_row.tmpl({
+                            numbers: THIS.flow.numbers.slice(x, (x + 2 < size) ? x + 2 : size)
+                        }).appendTo($('.content', node_html));
+                    }
 
-                        $('.submit_btn', dialog).click(function() {
-                            THIS.flow.numbers.push(dialog.find('#add_number_text').val());
+                    $('.number_column.empty', node_html).click(function() {
+                        var popup_html = THIS.templates.add_number.tmpl({}),
+                            popup;
 
-                            dialog.dialog('close');
+                        popup = winkstart.dialog(popup_html, { title: 'Add number' });
+
+                        $('.submit_btn', popup).click(function() {
+                            THIS.flow.numbers.push($('#add_number_text', popup).val());
+
+                            popup.dialog('close');
+
                             THIS.renderFlow();
                         });
                     });
 
-                    $('.save', node_html).click(function() {
+                    $('.number_column .delete', node_html).click(function() {
+                        var number = $(this).parent('.number_column').dataset('number'),
+                            index = $.inArray(number, THIS.flow.numbers);
+
+                        if(index >= 0) {
+                            THIS.flow.numbers.splice(index, 1);
+                        }
+
+                        THIS.renderFlow();
+                    });
+
+                    $('.bottom_bar .save', node_html).click(function() {
                         THIS.save();
                     });
 
-                    $('.trash', node_html).click(function() {
+                    $('.bottom_bar .delete', node_html).click(function() {
                         winkstart.deleteJSON('callflow.delete', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
                                 callflow_id: THIS.flow.id
                             },
                             function() {
-                                $('#ws_callflow').empty();
+                                $('#ws_cf_flow').empty();
                                 THIS.renderList();
                                 THIS._resetFlow();
                             }
@@ -734,7 +755,7 @@ winkstart.module('voip', 'callflow', {
                             _.each(crossbar_data, function(elem){
                                 new_list.push({
                                     id: elem.id,
-                                    title: elem.numbers.toString()
+                                    title: (elem.numbers) ? elem.numbers.toString() : ''
                                 });
                             });
                         }

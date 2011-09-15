@@ -1,52 +1,121 @@
-#ws_callflow blockquote:before, blockquote:after,q:before, q:after {	content: "";}
-#ws_callflow blockquote, q {	quotes: "" ""; }
+#ws_callflow {
+    width: 1024px;
+    margin: 0 auto 10px;
+}
 
-#ws_callflow .clear { clear: both;}
+#ws_callflow > .callflow {
+    float: left;
+    width: 85%;
+}
+#ws_callflow .callflow .root {
+    width: 322px;
+}
 
-#ws_callflow .btn_plus { background: url(images/btn_plus.png) no-repeat; display: block; height: 27px; line-height: 26px;}
-#ws_callflow .btn_plus_sm { background: url(images/btn_plus_sm.png) no-repeat; display: block; height: 17px; line-height: 18px;}
+#ws_callflow .callflow .root > .top_bar {
+    background-image: url(../images/blue_bar.png);
+    height: 25px;
+}
 
-#ws_callflow { color: #fff; font-family: Arial, Helvetica, sans-serif;}
-#ws_callflow { /*background: url(images/bg_container.jpg) repeat-x;*/ width: 1024px; margin: 0 auto 10px;}
-#header { border-bottom: 1px solid #fff; width: 1024px; margin: auto;}
+#ws_callflow .callflow .root > .top_bar > span {
+    line-height: 25px;
+}
 
-#ws_callflow #left_col { border-right: 1px solid #fff; /*width: 192px; */height: 100%; float: left;}
-#ws_callflow #left_col #add_flow { border-bottom: 1px solid #999; background: #4D4D4D; width: 182px; height: 39px; padding: 20px 0 10px 10px; text-align: center;}
-#ws_callflow #left_col #add_flow .btn_plus { background: url(images/btn_plus.png) no-repeat; display: block; height: 27px; line-height: 26px;}
-#ws_callflow #left_col #add_flow .btn_plus a { color: #fff;}
-#ws_callflow #left_col #add_flow .btn_plus a:hover { color: #ccc;}
+#ws_callflow .callflow .root > .top_bar .name {
+    float: left;
+}
 
-#ws_callflow #search { border-bottom: 1px solid #fff; padding: 9px;}
-#ws_callflow #search #searchsubmit { float: left;}
-#ws_callflow #search #searchfield { background: url(images/search_mid.png) repeat-x; border: medium none; float: left; height: 20px; width: 120px;}
+#ws_callflow .callflow .root > .top_bar .add_number {
+    float: right;
+}
 
-#ws_callflow > .callflow { float: left; width: 85%;}
-#ws_callflow .callflow.add_num {  width: 830px;}
-#ws_callflow .callflow.app_tree { width: 638px;}
-#ws_callflow .callflow #add_new_number { background: url(images/bg_add_number.png) no-repeat; width: 239px; height: 152px; margin: 100px auto 0;}
-#ws_callflow .callflow #add_new_number h2 { text-align: center; padding-top: 5px;}
-#ws_callflow .callflow #add_new_number input.number_field { background: none; border: medium none; color: #FFFFFF; display: block; margin: 24px auto 0; padding: 4px 0; width: 150px;}
-#ws_callflow .callflow #add_new_number #addNum_btn {  float: right; padding: 10px 35px 10px 0;}
-#ws_callflow .callflow #add_new_number #addNum_btn input { cursor: pointer; float: left; margin: 0 2px;}
-#ws_callflow .callflow input.ltgray_btn { background: url(images/btn_lightGrey.png) no-repeat; border: none; color: #666666; display: block; font-size: 12px; height: 18px; line-height: 20px; text-align: center; width: 73px;}
-#ws_callflow .callflow #addNum_btn { display: inline;}
-#ws_callflow .callflow #add_new_number .add_number { float: right; font-size: 12px; padding: 18px 35px 0 0;}
+#ws_callflow .callflow .root > .content {
+    background-color: #424242;
+}
 
-/*#ws_callflow .callflow .root { background: url(images/bg_callFlow_num.png) no-repeat; width: 239px; height: 152px;}*/
-#ws_callflow .callflow .root { background: url(images/bg_callFlow_num_2.png) no-repeat; width: 288px; height: 180px;}
-#ws_callflow .callflow .root h2 { padding: 10px 0 12px; text-align: center;}
-#ws_callflow .callflow .root .number_list { height: 86px; margin: auto; overflow: auto; width: 180px;}
-#ws_callflow .callflow .root .number_list ul { padding-left: 10px;}
-#ws_callflow .callflow .root .number_list ul li { font-size: 12px; padding: 5px 0;}
-#ws_callflow .callflow .root .add_number .btn_plus_sm { float: left; font-size: 12px; margin: 22px 0 0 10px; padding-left: 20px;}
+#ws_callflow .callflow .root > .content .number_row {
+    background-image: url(../../../core/layout/images/nav_line_horizontal.jpg);
+    background-position: bottom;
+    background-repeat: repeat-x;
+    height: 32px;
+}
 
-#ws_callflow .callflow .root .trash { background: url(images/trash.png) no-repeat; float: right; width: 12px; height: 16px; margin: 22px 10px 0; text-indent: -10000px;}
-#ws_callflow .callflow .root .save { background: url(images/small_save.png) no-repeat; float: right; width: 16px; height: 16px; margin: 22px 0px 0; text-indent: -10000px;}
+#ws_callflow .callflow .root > .content .number_row:last-child {
+    background: none;
+    height: 30px;
+}
 
-/*.callflow .node { width: 112px; height: 84px; }*/
-#ws_callflow .callflow .node { display: inline-block; }
-#ws_callflow .callflow .node .delete { background: url(images/btn_delete.png) no-repeat; width: 6px; height: 6px; display: block; text-indent: -10000px; left: 5px; top: 5px; position: relative; float: right; margin-right:10px;}
-#ws_callflow .callflow .node .dragndrop { background: url(images/dragndrop.png) no-repeat 12px 5px; float: left; width: 95px; height: 15px; display: block;}
+#ws_callflow .callflow .root > .content .number_column {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    font-size: 11px;
+    text-indent: 15px;
+    text-align: left;
+    position: relative;
+}
+
+#ws_callflow .callflow .root > .content .number_column.empty {
+    color: #A0A0A0;
+}
+
+#ws_callflow .callflow .root > .content .number_column:first-child {
+    width: 159px;
+}
+
+#ws_callflow .callflow .root > .content .number_column .delete {
+    background: url(images/btn_delete.png) no-repeat;
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+#ws_callflow .callflow .root > .content .number_column:nth-last-child(2) {
+    background-image: url(../../../core/layout/images/nav_line.jpg);
+    background-position: left;
+    background-repeat: repeat-y;
+    width: 163px;
+}
+
+#ws_callflow .callflow .root > .bottom_bar {
+    background-image: url(../images/black_bar.png);
+    height: 24px;
+}
+
+#ws_callflow .callflow .root > .bottom_bar > span {
+    line-height: 24px;
+}
+
+#ws_callflow .callflow .root > .bottom_bar .btn {
+    float: right;
+}
+
+#ws_callflow .callflow .node {
+    display: inline-block;
+}
+#ws_callflow .callflow .node .node-options .delete { 
+    background: url(images/btn_delete.png) no-repeat;
+    width: 6px;
+    height: 6px;
+    display: block;
+    text-indent: -10000px;
+    left: 5px;
+    top: 5px;
+    position: relative;
+    float: right;
+    margin-right: 10px;
+}
+
+#ws_callflow .callflow .node .dragndrop {
+    background: url(images/dragndrop.png) no-repeat 12px 5px;
+    float: left;
+    width: 95px;
+    height: 15px;
+    display: block;
+}
 
 #ws_callflow .callflow .node .edit {
     float: right;
@@ -59,35 +128,20 @@
     right: 0px;
 }
 
-#ws_callflow .callflow .app_btn { clear: both; display: block; height: 56px; width: 112px;}
-
-#ws_callflow .callflow .app_menu { background: url(images/icons_black/menu.png) no-repeat; }
-#ws_callflow .callflow .app_answer { background: url(images/icons_black/answer.png) no-repeat; }
-#ws_callflow .callflow .app_play_tone { background: url(images/icons_black/play_tone.png) no-repeat; }
-#ws_callflow .callflow .app_voicemail { background: url(images/icons_black/voicemail.png) no-repeat; }
-#ws_callflow .callflow .app_auto_attendent { background: url(images/icons_black/auto_attendent.png) no-repeat; }
-#ws_callflow .callflow .app_hang_up { background: url(images/icons_black/hang_up.png) no-repeat; }
-
-#ws_callflow .callflow .editable_text { background: url(images/editable_text.png) no-repeat; width: 50px; height: 23px; display: block; float: left; left: 70px; position: relative; top: 24px;}
-#ws_callflow .callflow .drag_here { background: url(images/drag_here.png) no-repeat; float: left; position: relative; top: 40px; left: 30px;}
-
-/* APP LIST */
-#ws_callflow .callflow .icons_black.node { width: 143px; height: 84px; background: url(images/icons_black/box.png) no-repeat;}
-#ws_callflow .callflow .icons_black .node .delete { background: url(images/btn_delete.png) no-repeat; width: 6px; height: 6px; display: block; text-indent: -100000px; left: 5px; top: 5px; position: relative; float: left;}
-#ws_callflow .callflow .icons_black .node .dragndrop { background: url(images/dragndrop.png) no-repeat 12px 5px; float: left; width: 95px; height: 15px; display: block;}
-#ws_callflow .callflow .icons_black .node .edit { background: url(images/btn_edit.png) no-repeat; float: right; clear: both; width: 9px; height: 7px; display: block; margin-right: 5px;}
-#ws_callflow .callflow .icons_black .app_btn { clear: both; display: block; height: 56px; width: 112px;}
-
-/*.callflow .icons_white { width: 106px; padding: 20px;}*/
-#ws_callflow .tool .icon.app_sm {
+#ws_callflow .tool .icon {
     margin: 4px;
     display: inline-block;
     margin-top: 10px;
 }
 
-#ws_callflow .callflow .drag_here { background: url(images/drag_here.png) no-repeat; float: left; position: relative; top: 40px; left: 30px;}
-#ws_callflow .toolbox { width: 160px; }
-#ws_callflow .tools { background: #3D3D3D; float: left;}
+#ws_callflow .toolbox {
+    width: 160px;
+}
+
+#ws_callflow .tools {
+    background: #3D3D3D;
+    float: left;
+}
 
 #ws_callflow .tools .category {
     height: 20px;
@@ -99,11 +153,6 @@
     position: relative;
     left: 0px;
     font-size: 14px;
-    /*-webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    -ms-transform: rotate(270deg);
-    -o-transform: rotate(270deg);
-    transform: rotate(270deg);*/
 }
 
 #ws_callflow .activeArrow{
@@ -130,28 +179,29 @@
     width: 18px;
 }
 
-#ws_callflow .tools ul { background: #6A6A6A;}
-/*#ws_callflow .tools ul li { background: #898989; border: 1px solid #6A6A6A; float: left; height: 94px; width: 94px;}*/
-#ws_callflow .tools .tool { background: #3D3D3D; border: 1px solid #6A6A6A; float: left; height: 75px; width: 88px;}
-#ws_callflow .tools .tool .action { z-index: 9000;}
-#ws_callflow .tools .app_list_nav { background: #3D3D3D; padding: 5px; border-top: 1px solid #6A6A6A;}
-#ws_callflow .tools .app_list_nav p { text-align: center; font-size: 14px; float: left; padding: 0 45px;}
-#ws_callflow .tools .app_list_nav .left_arrow { background: url(images/arrow_left.png) no-repeat; width: 20px; height: 16px; float: left;}
-#ws_callflow .tools .app_list_nav .right_arrow { background: url(images/arrow_right.png) no-repeat; width: 20px; height: 16px; float: left;}
+#ws_callflow .tools .tool {
+    background: #3D3D3D;
+    border: 1px solid #6A6A6A;
+    float: left;
+    height: 75px;
+    width: 88px;
+}
 
-#ws_callflow #number_list { height: 400px;}
-#ws_callflow #number_list ul { background: #B3B3B3; font-family: Myriad Pro, Arial, Helvetica, sans-serif; font-size: 12px;}
-#ws_callflow #number_list ul li { padding: 10px 0 5px 30px; border-bottom: 1px solid #E9E9E9; border-top: 1px solid #A4A4A4;}
-#ws_callflow #number_list ul li.selected { color: #4D4D4D;}
+#ws_callflow .tools .tool .action { 
+    z-index: 9000;
+}
 
-#ws_callflow .tools .voicemail_apps { background: url(images/btn_detailed_listing.png) no-repeat; width: 189px; height: 26px; display: block; text-align: center; line-height: 25px; margin: 2px auto; font-size: 13px;}
-#ws_callflow .tools .ringtone_apps { background: url(images/btn_detailed_listing.png) no-repeat; width: 189px; height: 26px; display: block; text-align: center; line-height: 25px; margin: 2px auto; font-size: 13px;}
-#ws_callflow .tools .recording_apps { background: url(images/btn_detailed_listing.png) no-repeat; width: 189px; height: 26px; display: block; text-align: center; line-height: 25px; margin: 2px auto; font-size: 13px;}
+#ws_callflow .tools .app_list_nav {
+    background: #3D3D3D;
+    padding: 5px;
+    border-top: 1px solid #6A6A6A;
+}
 
-#ws_callflow #footer { width: 1024px; margin: 0 auto 20px; font-size: 12px;}
-#ws_callflow #footer a { float: left; margin-right: 10px;}
-#ws_callflow #footer a.detailed_listing { background: url(images/btn_detailed_listing.png) no-repeat; width: 189px; height: 26px; display: block; text-align: center; line-height: 25px;}
-#ws_callflow #footer a.gray_btn { background: url(images/btn_darkGrey.png) no-repeat; width: 81px; height: 28px; display: block; text-align: center; line-height: 25px;}
+#ws_callflow .callflow .icons_black.node {
+    width: 143px;
+    height: 84px;
+    background: url(images/icons_black/box.png) no-repeat;
+}
 
 /* This will blow your mind */
 #ws_callflow #ws_cf_flow .children .child:last-child:not(:first-child) {
@@ -251,4 +301,12 @@
     text-align: center;
 }
 
-#ws_callflow .details { display: inline-block; font-size: 10px; margin-left: 30px; margin-top: -5px; color: #dddddd; width: 110px; height: 15px;}
+#ws_callflow .details {
+    display: inline-block;
+    font-size: 10px;
+    margin-left: 30px;
+    margin-top: -5px;
+    color: #dddddd;
+    width: 110px;
+    height: 15px;
+}
