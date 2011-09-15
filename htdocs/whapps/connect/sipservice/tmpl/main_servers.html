@@ -6,7 +6,7 @@
             <span class="name">${server_name}</span>
 <!--            <span class="status">Monitoring is <span class="state-${monitor.monitor_enabled}">{{if monitor.monitor_enabled}}On{{else}}Off{{/if}}</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>
             <span class="status">Monitoring is <span class="state-false">Off</span><span class="diag_tools">(<a href="#">Ping</a> <a href="#">Media Test</a>)</span></span>-->
-            <span class="status"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Defaults</a></span>
+            <span class="status"><a href="#" class="modifyServerDefaults" data-serverid="${s}">Update</a> - <a href="#" class="deleteServer" data-serverid="${s}">Delete</a></span>
         </div>
         <div class="sip" style="display:none;">
             {{if auth.auth_method == "IP"}}
