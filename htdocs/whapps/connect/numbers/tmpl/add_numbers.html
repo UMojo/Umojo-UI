@@ -26,11 +26,9 @@
  -->
                      
                 <form id="sdidform" action="" onsubmit="return false;">
-                    <span id="ACspan">Area Code:</span>
-                    <span id="COCspan">Central Office Code:</span>
-                    <div>
-                        <input type="text" id="sdid_npa" name="NPA" maxlength="3" pattern="^[2-9][0-8][0-9]$" />&nbsp;
-                        <input type="text" id="sdid_nxx"  name="NXX" maxlength="3" pattern="^[2-9]\d\d$" />&nbsp;
+                    <div id="sdiddiv">
+                        <span id="ACspan">(</span><input type="text" id="sdid_npa" name="NPA" maxlength="3" pattern="^[2-9][0-8][0-9]$" />&nbsp;
+                        <span id="COCspan">) -</span><input type="text" id="sdid_nxx"  name="NXX" maxlength="3" pattern="^[2-9]\d\d$" />&nbsp;
                         <span id="help_did_add_dids" class="help_bt">&nbsp;</span>
                     </div>
                 </form>

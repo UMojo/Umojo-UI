@@ -1,21 +1,16 @@
 #sdidform #sdid_npa {
-    width: 4em;
-    margin-left: 190px;
+    width: 2em;
+    float: none;
 }
 
 #sdidform #sdid_nxx {
-    width: 4em;
-    margin-left: 80px;
+    width: 2em;
+    float: none;
 }
 
-#sdidform #ACspan {
-    display: inline-block;
-    margin-left: 178px;
-}
-
-#sdidform #COCspan {
-    display: inline-block;
-    margin-left: 10px;
+#sdiddiv {
+    display: block;
+    text-align: center;
 }
 
 .foundDID {
