@@ -465,7 +465,6 @@ winkstart.module('voip', 'device',
             });
         },
         cleanFormData: function(form_data) {
-            console.log(form_data);
             if(form_data.device_type == 'sip_device') {
                 var audioCodecs = [];
                 var videoCodecs = [];
@@ -603,7 +602,6 @@ winkstart.module('voip', 'device',
                     var new_list = [];
                     if(crossbar_data.length > 0) {
                         _.each(crossbar_data, function(elem){
-                            console.log(elem);
                             new_list.push({
                                 id: elem.id,
                                 title: elem.name 
