@@ -630,7 +630,6 @@ winkstart.module('voip', 'device',
                 $("#device-listpanel").empty();
                 $("#device-listpanel").listpanel(options);
                 
-                
                 winkstart.getJSON('device.status', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
@@ -638,10 +637,8 @@ winkstart.module('voip', 'device',
                 }, function (json, xhr) {
                     $.each(json.data, function(i,o){
                         if(o.registered == true){
-                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/green.png" width="16" height="16"/>');
-                        }else{
-                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/red.png" width="16" height="16"/>');
-                        }
+                            $('#'+o.device_id ,'#device-listpanel').addClass('registered');
+                        } 
                     });
                 
                 });
