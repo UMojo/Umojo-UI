@@ -5,7 +5,21 @@
         debug: false,
 
         //was winkstart.realm_suffix
-        realm_suffix: '.sip.2600hz.com'
+        realm_suffix: '.sip.2600hz.com',
+
+        //What applications is available for a user that just registered
+        register_apps: {
+            "cluster": {
+               "label": "Cluster Manager",
+               "icon": "cluster_manager",
+               "api_url": "http://apps.2600hz.com:8000/v1"
+            },
+            "voip": {
+                'label': 'Trial PBX',
+                'icon': 'phone',
+                'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+            }
+        }
     };
 
     winkstart.apps = {
