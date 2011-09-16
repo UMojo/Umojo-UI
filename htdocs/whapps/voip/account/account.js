@@ -22,7 +22,7 @@ winkstart.module('voip', 'account',
 
         validation : [
                 {name : '#name', regex : /^.+$/},
-                {name : '#realm', regex : /^[0-9a-zA-Z\.]+$/},
+                {name : '#realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
                 {name : '#caller_id_name_external', regex : /^.*$/},
                 {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
