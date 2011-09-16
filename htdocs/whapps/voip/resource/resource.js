@@ -97,7 +97,7 @@ winkstart.module('voip', 'resource',
     {
         validateForm: function(state) {
             var THIS = this;
-
+            
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -164,7 +164,7 @@ winkstart.module('voip', 'resource',
 
             var generatedUsername = "user_" + THIS.generateRandomString(6);
             var generatedPassword = THIS.generateRandomString(12);
-
+            
 
             winkstart.getJSON('account.get', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function(json, xhr) {
                 var account_realm = json.data.realm;
@@ -205,7 +205,7 @@ winkstart.module('voip', 'resource',
 
         deleteResource: function(resource_id) {
             var THIS = this;
-
+            
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -347,18 +347,18 @@ winkstart.module('voip', 'resource',
         },
         cleanFormData: function(form_data) {
             var audioCodecs;
-
+            
             $.each(form_data.gateways, function(indexGateway, gateway) {
                 audioCodecs = [];
                 $.each(gateway.codecs, function(indexCodec, codec) {
                     if(codec)
                     {
                         audioCodecs.push(codec);
-                    }
+                    }    
                 });
                 form_data.gateways[indexGateway].codecs = audioCodecs;
             });
-
+            
             return form_data;
         },
         /* This runs when this module is first loaded - you should register to any events at this time and clear the screen

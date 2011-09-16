@@ -57,7 +57,7 @@ winkstart.module('connect', 'channels',
 
         promo: function(promoCode) {
             // Lookup a promotion & display it, add it to the order if they submit
-
+            
         },
 
         edit: function() {
@@ -97,7 +97,7 @@ winkstart.module('connect', 'channels',
 
                 var new_account = {};
                 $.extend(new_account, winkstart.apps['connect'].account, form_data);
-
+                
                 // Otherwise commit the change immediately
                 save();
             });

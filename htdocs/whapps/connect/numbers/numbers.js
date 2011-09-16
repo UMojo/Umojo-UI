@@ -9,7 +9,7 @@
  *   #numbers.unused_numbers - A list of all numbers currently unused/available for mapping
  *   #numbers.unused_numbers_count - A count of how many numbers are currently unused/available for mapping
  *
- *
+ * 
  */
 
 winkstart.module('connect', 'numbers',
@@ -24,7 +24,7 @@ winkstart.module('connect', 'numbers',
             edit_e911: 'tmpl/edit_e911.html',
             add_numbers: 'tmpl/add_numbers.html',
             search_dids_results: 'tmpl/search_dids_results.html'
-
+            
         },
 
         /* What events do we listen for, in the browser? */
@@ -804,7 +804,7 @@ winkstart.module('connect', 'numbers',
 	            function(json) {
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                             winkstart.apps['connect'].account = json.data;
-
+                        
                             winkstart.publish('numbers.refresh');
                             if (args.success)
                                 args.success();
@@ -819,11 +819,11 @@ winkstart.module('connect', 'numbers',
                     }
 	        );
         },
-
+        
         unassign: function(data) {
             var did = data.did;
             var serverid = data.serverid;
-            /*
+            /* 
             	not sure about this code:
 
             delete(THIS.account.servers[serverid].DIDs[did]);

@@ -15,10 +15,10 @@ function() {
 {
     initialized :   false,
     modules :       ['ctt', 'monitor'],
-
+        
     activate: function() {
         var THIS = this;
-
+            
         if (!THIS.initialized) {
             // Load the modules
             $.each(THIS.modules, function(k, v) {
@@ -42,7 +42,7 @@ function() {
             });
 
             THIS.initialized = true;
-        }
+        } 
     }
 }
 );

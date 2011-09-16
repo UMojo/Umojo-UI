@@ -75,7 +75,7 @@ winkstart.module('voip', 'menu',
     {
         validateForm: function(state) {
             var THIS = this;
-
+            
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -117,8 +117,8 @@ winkstart.module('voip', 'menu',
                     winkstart.putJSON('menu.create', rest_data, function (json, xhr) {
                         if(popup != undefined) {
                             popup.dialog("close");
-                            popup.remove();
-
+                            popup.remove(); 
+                            
                         } else {
                             THIS.renderList();
                             THIS.editMenu({
@@ -131,7 +131,7 @@ winkstart.module('voip', 'menu',
                 alert('Please correct errors that you have on the form.');
             }
         },
-
+        
         popupMenu: function(data) {
             var THIS = this;
             var form_data = {
@@ -139,7 +139,7 @@ winkstart.module('voip', 'menu',
                 field_data: {},
                 value: {}
             };
-
+            
             THIS.renderMenu(form_data, true);
         },
 
@@ -150,7 +150,7 @@ winkstart.module('voip', 'menu',
             $('#menu-view').empty();
             var THIS = this;
             var form_data = {
-                data: { retries: "3", timeout: "10000", media: {}},
+                data: { retries: "3", timeout: "10000", media: {}},   
                 field_data: {},
                 value: {}
             };
@@ -166,7 +166,7 @@ winkstart.module('voip', 'menu',
                     listMedias.push({media_id: '', title: '- Not set -'});
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem) {
-                            var title = elem.name;
+                            var title = elem.name;  
                             listMedias.push({
                                 media_id: elem.id,
                                 title: title
@@ -174,7 +174,7 @@ winkstart.module('voip', 'menu',
                         });
                     }
                     form_data.field_data.medias = listMedias;
-
+    
                      if (data && data.id) {
                         /* This is an existing menu - Grab JSON data from server for menu_id */
                         winkstart.getJSON('menu.get', {
@@ -199,7 +199,7 @@ winkstart.module('voip', 'menu',
 
         deleteMenu: function(menu_id) {
             var THIS = this;
-
+            
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -228,7 +228,7 @@ winkstart.module('voip', 'menu',
             winkstart.log(form_data);
             //Hack to display time in seconds for the user.
             form_data.data.timeout = form_data.data.timeout / 1000;
-            // Paint the template with HTML of form fields onto the page
+            // Paint the template with HTML of form fields onto the page 
             if(popup==true) {
                 var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#callflow-view')).dialog({width:800});
                 //var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#childForm'));
@@ -239,7 +239,7 @@ winkstart.module('voip', 'menu',
 
             winkstart.cleanForm();
 
-            // Initialize form field validation
+            // Initialize form field validation 
             THIS.validateForm();
 
             $("ul.settings1").tabs("div.pane > div");
@@ -264,24 +264,24 @@ winkstart.module('voip', 'menu',
                 }
             });
 
-            // Listen for the submit event (i.e. they click "save")
+            // Listen for the submit event (i.e. they click "save") 
             $('.menu-save').click(function(event) {
-                // Save the data after they've clicked save
+                // Save the data after they've clicked save 
 
-                // Ignore the normal behavior of a submit button and do our stuff instead
+                // Ignore the normal behavior of a submit button and do our stuff instead 
                 event.preventDefault();
 
-                // Grab all the form field data
+                // Grab all the form field data 
                 var form_data = form2object('menu-form');
                 winkstart.log(form_data);
-
+            
                 if(form_data.record_pin != undefined && (form_data.max_extension_length == undefined || form_data.max_extension_length < form_data.record_pin.length)) {
                     form_data.max_extension_length = form_data.record_pin.length;
                 }
 
                 // Hack to put timeout in ms in database.
                 form_data.timeout = form_data.timeout * 1000;
-
+                
                 THIS.saveMenu(menu_id, form_data, dialog);
 
                 return false;
@@ -289,7 +289,7 @@ winkstart.module('voip', 'menu',
 
             $('.menu-cancel').click(function(event) {
                 event.preventDefault();
-                // Cheat - just delete the main content area. Nothing else needs doing really
+                // Cheat - just delete the main content area. Nothing else needs doing really 
                 if(popup == false) {
                     $('#menu-view').empty();
                 } else {
@@ -300,9 +300,9 @@ winkstart.module('voip', 'menu',
             });
 
             $('.menu-delete').click(function(event) {
-                // Save the data after they've clicked save
+                // Save the data after they've clicked save 
 
-                // Ignore the normal behavior of a submit button and do our stuff instead
+                // Ignore the normal behavior of a submit button and do our stuff instead 
                 event.preventDefault();
 
                 THIS.deleteMenu(menu_id);

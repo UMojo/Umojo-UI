@@ -22,7 +22,7 @@
 
 .media_list ul{
 	background-color:#989898;
-
+	
 }
 
 .media_list ul li{
@@ -32,7 +32,7 @@
 	border-top: 1px solid #8b8a8a;
 	list-style-type: none;
 	width: 190px;
-
+	
 }
 
 .media_list ul li a{
@@ -46,8 +46,8 @@
 	text-decoration: none;
 	background-color:#989898;
 	border-right: 1px solid #7a7a7a;
-
-
+	
+	
 }
 
 .media_list ul li a:hover{
@@ -62,19 +62,19 @@
 	background-color: #848484;
 	width: 788px;
 	height: 130px;
-	margin: 50px 0 0 18px;
+	margin: 50px 0 0 18px; 
 	padding: 0 6px;
-	position:relative;
+	position:relative;	
 	z-index:600;
-
+	
 }
 
 .buttons{
 	width: 191px;
 	height: 130px;
-	float: left;
+	float: left; 
 	position: relative;
-	margin: 0 3px;
+	margin: 0 3px;	
 }
 
 .buttons a.upload{
@@ -82,7 +82,7 @@
 	height: 130px;
 	display: block;
 	background-image:url(../images/uploadfile_btn.png);
-	background-position: 0px 0px;
+	background-position: 0px 0px;		
 }
 
 .buttons a.audio{
@@ -90,7 +90,7 @@
 	height: 130px;
 	display: block;
 	background-image:url(../images/audiostream_btn.png);
-	background-position: 0px 0px;
+	background-position: 0px 0px;		
 }
 
 .buttons a.text{
@@ -98,7 +98,7 @@
 	height: 130px;
 	display: block;
 	background-image:url(../images/texttospeech_btn.png);
-	background-position: 0px 0px;
+	background-position: 0px 0px;		
 }
 
 .buttons a.record{
@@ -106,16 +106,16 @@
 	height: 130px;
 	display: block;
 	background-image:url(../images/record_btn.png);
-	background-position: 0px 0px;
+	background-position: 0px 0px;		
 }
 
 .buttons a:hover{
-	background-position: 0px -130px;
+	background-position: 0px -130px;		
 }
 
 .buttons a.current, .buttons a.current:hover{
-	background-position: 0px -130px;
-	cursor:default !important;
+	background-position: 0px -130px;		
+	cursor:default !important; 
 	-moz-box-shadow: 3px 5px 10px #383838;
 	-webkit-box-shadow: 3px 5px 10px #383838;
 	box-shadow: 3px 5px 10px #383838;
@@ -144,7 +144,7 @@
 }
 
 .media_pane form input{
-	border: 1px solid #7d7d7d;
+	border: 1px solid #7d7d7d;	
 	height: 25px;
 	width: 184px;
 }
@@ -152,14 +152,14 @@
 	margin-left: 40px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 5px;	
 }
 
 .media_pane form input.record_file_name{
 	margin-left: 10px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 5px;	
 }
 
 .control_btns{
@@ -170,7 +170,7 @@
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	border: 2px solid #7dbad4;
-	margin-left: 86px;
+	margin-left: 86px;	
 }
 
 .control_btns a.record_red_btn{
@@ -180,7 +180,7 @@
 	display: block;
 	margin: 7px 0 0 59px;
 	float: left;
-
+		
 }
 
 .control_btns .controler_bar{
@@ -189,7 +189,7 @@
 	height: 26px;
 	float: left;
 	margin: 42px 0 0 45px;
-
+	
 }
 
 .controler_bar a.play_btn{

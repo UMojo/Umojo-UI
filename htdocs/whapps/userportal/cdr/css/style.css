@@ -52,7 +52,7 @@
 #cdr-view .date input{
     font-size: 11px;
     padding: 4px 2px;
-    border: solid 1px #999;
+    border: solid 1px #999; 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;

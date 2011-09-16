@@ -131,7 +131,7 @@
             $('.options #voicemail').click(function() {
                 winkstart.publish('voicemail.activate');
             });
-
+    
             //We want to load the voicemail module as the opening page of the userportal
             winkstart.publish('voicemail.activate');
         }

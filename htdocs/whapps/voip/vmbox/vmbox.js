@@ -80,7 +80,7 @@ winkstart.module('voip', 'vmbox',
     {
         validateForm: function(state) {
             var THIS = this;
-
+            
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -138,7 +138,7 @@ winkstart.module('voip', 'vmbox',
             $('#vmbox-view').empty();
             var THIS = this;
             var form_data = {
-                data: { require_pin: true, check_if_owner: true, media: {}},
+                data: { require_pin: true, check_if_owner: true, media: {}},   
                 //field_data: THIS.config.formData,
                 field_data: {},
                 value: {}
@@ -203,7 +203,7 @@ winkstart.module('voip', 'vmbox',
 
         deleteVmbox: function(vmbox_id) {
             var THIS = this;
-
+            
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -225,7 +225,7 @@ winkstart.module('voip', 'vmbox',
             var THIS = this,
                 vmbox_id = form_data.data.id,
                 vmbox_html;
-
+            
             /* Paint the template with HTML of form fields onto the page */
             vmbox_html = THIS.templates.editVmbox.tmpl(form_data).appendTo( $('#vmbox-view') );
             winkstart.timezone.populate_dropdown($('#timezone', vmbox_html), form_data.data.timezone);
@@ -242,8 +242,8 @@ winkstart.module('voip', 'vmbox',
 
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
-
-            $("#advanced_settings_link").click(function(event) {
+            
+            $("#advanced_settings_link").click(function(event) { 
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
                     $(".advanced_pane").slideToggle(function(event) {
@@ -258,7 +258,7 @@ winkstart.module('voip', 'vmbox',
                 }
             });
 
-            $('#owner_id', '#vmbox-view').change(function() {
+            $('#owner_id', '#vmbox-view').change(function() { 
                 winkstart.getJSON('user.get', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,

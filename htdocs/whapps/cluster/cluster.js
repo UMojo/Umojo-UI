@@ -5,7 +5,7 @@ winkstart.module('cluster', 'cluster', {
             'cluster.initialized' : 'initialized',
             'cluster.module_activate': 'module_activate'
         },
-
+        
         resources: {
             "cluster.listservers": {
                 url: winkstart.apps['cluster'].api_url + '/accounts/{account_id}/servers',
@@ -26,7 +26,7 @@ winkstart.module('cluster', 'cluster', {
                 winkstart.publish('appnav.add', { 'name' : THIS.__module });
             }
         });
-
+        
         winkstart.registerResources(this.__whapp, this.config.resources);
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
@@ -34,7 +34,7 @@ winkstart.module('cluster', 'cluster', {
     {
         /* A modules object is required for the loading routine.
          * The format is as follows:
-         * <module name>: <initialization status>
+         * <module name>: <initialization status> 
          */
         modules: {
             'deploy_mgr': false
@@ -129,7 +129,7 @@ winkstart.module('cluster', 'cluster', {
 
         // A setup_page function is required for the copy and paste code
         setup_page: function() {
-            var THIS = this;
+            var THIS = this; 
 
             winkstart.publish('cluster.module_activate', {name: 'deploy_mgr'});
         }

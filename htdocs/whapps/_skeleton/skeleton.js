@@ -1,4 +1,4 @@
-winkstart.module('skeleton', 'skeleton',
+winkstart.module('skeleton', 'skeleton', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -58,7 +58,7 @@ winkstart.module('skeleton', 'skeleton',
             $('#skeleton-view').empty();
 
             // Go get data from the server
-            winkstart.getJSON('skeleton.list',
+            winkstart.getJSON('skeleton.list', 
                 /* Arguments to pass to the other server, or config parameters on HOW to pass to the server */
                 {
                     crossbar: true,

@@ -234,7 +234,7 @@ winkstart.module('voip', 'timeofday',
 
         deleteTimeofday: function(timeofday_id) {
             var THIS = this;
-
+            
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -267,7 +267,7 @@ winkstart.module('voip', 'timeofday',
                 }
             });
             form_data.wdays = wdays;
-
+    
             delete form_data.weekday;
 
             if(form_data.cycle == "weekly") {
@@ -285,12 +285,12 @@ winkstart.module('voip', 'timeofday',
                     delete form_data.days;
                 }
             }
-
+            
             form_data.start_date = new Date(form_data.start_date).getTime()/1000 + 62167219200;
-
+            
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
-
+            
             return form_data;
         },
 
@@ -339,7 +339,7 @@ winkstart.module('voip', 'timeofday',
             $('#ordinal', '#timeofday-form').hide();
             $('#days_checkboxes', '#timeofday-form').hide();
             $('#weekdays', '#timeofday-form').hide();
-            $('#specific_day', '#timeofday-form').hide();
+            $('#specific_day', '#timeofday-form').hide();   
 
             if(timeofday_id == undefined) {
                 $('#weekly_every', '#timeofday-form').show();
@@ -391,8 +391,8 @@ winkstart.module('voip', 'timeofday',
                 to: 86400,
                 step: 900,
                 dimension: '',
-                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am',
-                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am',
+                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am', 
+                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am', 
                         '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm',
                         '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am'],
                 limits: false,
@@ -401,7 +401,7 @@ winkstart.module('voip', 'timeofday',
                         mins = (val - hours * 3600) / 60,
                         meridiem = (hours < 12) ? 'am' : 'pm';
 
-                    hours = hours % 12;
+                    hours = hours % 12;                    
 
                     if (hours == 0)
                         hours = 12;
@@ -431,7 +431,7 @@ winkstart.module('voip', 'timeofday',
                 $('#specific_day', '#timeofday-form').hide();
 
                 switch($(this).val()) {
-                    case 'yearly':
+                    case 'yearly': 
                         $('#yearly_every', '#timeofday-form').show();
                         $('#ordinal', '#timeofday-form').show();
                         if($('#ordinal','#timeofday-form').val() == 'day') {
@@ -442,8 +442,8 @@ winkstart.module('voip', 'timeofday',
                             $('#specific_day', '#timeofday-form').hide();
                         }
                         break;
-
-                    case 'monthly':
+                        
+                    case 'monthly': 
                         $('#monthly_every', '#timeofday-form').show();
                         $('#ordinal', '#timeofday-form').show();
                         if($('#ordinal','#timeofday-form').val() == 'day') {
@@ -455,7 +455,7 @@ winkstart.module('voip', 'timeofday',
                         }
                         break;
 
-                    case 'weekly':
+                    case 'weekly': 
                         $('#weekly_every', '#timeofday-form').show();
                         $('#days_checkboxes', '#timeofday-form').show();
                         break;
@@ -474,12 +474,12 @@ winkstart.module('voip', 'timeofday',
 
                 form_data.wdays = [];
                 $('.fake_checkbox.checked','#timeofday-form').each(function() {
-                    form_data.wdays.push($(this).attr('data-value'));
+                    form_data.wdays.push($(this).attr('data-value'));                    
                 });
-
+    
                 form_data.interval = $('#cycle','#timeofday-form').val() == 'monthly' ? $('#interval_month', '#timeofday-form').val() : $('#interval_week', '#timeofday-form').val();
 
-                form_data = THIS.cleanFormData(form_data);
+                form_data = THIS.cleanFormData(form_data); 
 
                 THIS.saveTimeofday(timeofday_id, form_data);
 

@@ -9,7 +9,7 @@ winkstart.module('core', 'appnav', {
             item:    'item.html',
             subitem: 'subitem.html'
         },
-
+        
         subscribe: {
             'appnav.add'        : 'add',
             'appnav.activate'   : 'activate',
@@ -18,15 +18,15 @@ winkstart.module('core', 'appnav', {
             'subnav.show'       : 'show_menu',
             'subnav.hide'       : 'hide_menu'
         }
-
+        
     },
 
     /* Init */
     function() {
         var THIS = this;
-
+        
         this.templates.appnav.tmpl({}).appendTo( $('div.header .main_nav') );
-
+        
         // Set up the Module Click handlers
         $('div.header .main_nav').delegate('li', 'click', function() {
             winkstart.publish('appnav.activate', $(this).attr('module-name'));
@@ -37,7 +37,7 @@ winkstart.module('core', 'appnav', {
     },
 
         /* Methods */
-    {
+    {   
         add: function(args) {
             var list_node = $('div.header .main_nav').find('ul'),
                 item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.apps[args.name] }).appendTo(list_node);
@@ -56,7 +56,7 @@ winkstart.module('core', 'appnav', {
                 }
             });
 
-            $(item).click( function() {
+            $(item).click( function() { 
                 $('div.header .main_nav .whapp a').removeClass('selected');
                 $('.whapp a', $(this)).addClass('selected');
             });
@@ -95,7 +95,7 @@ winkstart.module('core', 'appnav', {
 
             if(winkstart.apps[app_name].auth_token != null) {
                 THIS._activate(app_name);
-            }
+            } 
         },
 
         _activate: function(app_name) {
@@ -139,7 +139,7 @@ winkstart.module('core', 'appnav', {
                         return false;
                     }
                 });
-            }
+            } 
         }
 
     }

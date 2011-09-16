@@ -3,7 +3,7 @@ winkstart.module('indesign', 'indesign', {
 /*        templates: {
                 indesign: 'empty.html'
         },*/
-
+        
         subscribe: {
             'indesign.activate' : 'activate'
         }
@@ -24,16 +24,16 @@ winkstart.module('indesign', 'indesign', {
     {
         initialized :   false,
         modules :       ['ring_group', 'media_mgr', 'popups', 'user_mgmt'],     // <-- ADD YOUR IN-PROGRESS MODULES HERE!!!
-
+        
         activate: function() {
             var THIS = this;
-
+            
             if (!THIS.initialized) {
                 // We only initialize once
                 THIS.initialized = true;
 
                 winkstart.log('In-Design: Initialized Top Navigation');
-
+                
                 // Display the navbar
                 $('#ws-content').empty();
 //                THIS.templates.indesign.tmpl({}).appendTo( $('#ws-content') );

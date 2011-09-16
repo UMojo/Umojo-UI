@@ -75,7 +75,7 @@ winkstart.module('voip', 'user',
     {
         validateForm: function(state) {
             var THIS = this;
-
+            
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -98,7 +98,7 @@ winkstart.module('voip', 'user',
 
                     /* Is this a create or edit? See if there's a known ID */
                     if (user_id) {
-
+                        
                         winkstart.getJSON('user.get', {
                             crossbar: true,
                             account_id: winkstart.apps['voip'].account_id,
@@ -106,12 +106,12 @@ winkstart.module('voip', 'user',
                             user_id: user_id
                         }, function(data, status){
                             delete data.data.id;
-
+                            
                             // If there is no apps object
                             if (!("apps" in data.data)) {
                                 data.data.apps = {};
                             }
-
+                            
                             // If the user is an admin
                             if (form_data.user_level == "admin") {
                                 if (!("voip" in data.data.apps)) {
@@ -121,7 +121,7 @@ winkstart.module('voip', 'user',
                                         "api_url": winkstart.apps['voip'].api_url
                                     };
                                 }
-
+                                
                                 if ("userportal" in data.data.apps) {
                                     delete data.data.apps.userportal;
                                 }
@@ -133,30 +133,30 @@ winkstart.module('voip', 'user',
                                         "api_url": winkstart.apps['voip'].api_url
                                     };
                                 }
-
+                                
                                 if ("voip" in data.data.apps) {
                                     delete data.data.apps.voip;
                                 }
                             }
-
+                            
                             delete form_data.pwd_mngt_pwd1;
                             delete form_data.pwd_mngt_pwd2;
                             delete form_data.user_level;
-
+                            
                             var newform_data = $.extend(true, {}, data.data, form_data);
-
+                            
                             var rest_data = {};
                             rest_data.crossbar = true;
                             rest_data.account_id = winkstart.apps['voip'].account_id,
                             rest_data.api_url = winkstart.apps['voip'].api_url,
                             rest_data.user_id = user_id;
                             rest_data.data = newform_data;
-
+                            
                             // If another password is set ("fakePassword" is the default value)
                             if (tmpPassword != "fakePassword") {
                                 rest_data.data.password = tmpPassword;
                             }
-
+            
                             /* EDIT */
                             winkstart.postJSON('user.update', rest_data, function (json, xhr) {
                                 /* Refresh the list and the edit content */
@@ -166,13 +166,13 @@ winkstart.module('voip', 'user',
                                 });
                             });
                         });
-
-
+                        
+                        
                     } else {
                         /* CREATE */
-
+                        
                         form_data.apps = {};
-
+                        
                         if (form_data.user_level == "admin") {
                             form_data.apps.voip = {
                                 "label": "VoIP Services",
@@ -186,13 +186,13 @@ winkstart.module('voip', 'user',
                                 "api_url": winkstart.apps['voip'].api_url
                             }
                         }
-
+                        
                         var tmpPassword = form_data.pwd_mngt_pwd1;
-
+                        
                         delete form_data.user_level;
                         delete form_data.pwd_mngt_pwd1;
                         delete form_data.pwd_mngt_pwd2;
-
+                        
                         // If another password is set ("fakePassword" is the default value)
                         if (tmpPassword != "fakePassword") {
                             form_data.password = tmpPassword;
@@ -219,9 +219,9 @@ winkstart.module('voip', 'user',
                 alert('Please confirm your password');
             }
 
+            
 
-
-
+            
         },
 
         /*
@@ -260,7 +260,7 @@ winkstart.module('voip', 'user',
 
         deleteUser: function(user_id) {
             var THIS = this;
-
+            
             var rest_data = {
                 crossbar: true,
                 account_id: winkstart.apps['voip'].account_id,
@@ -282,7 +282,7 @@ winkstart.module('voip', 'user',
             var THIS = this,
                 user_id = form_data.data.id,
                 user_html;
-
+            
             // If the voip whapps is present, then it's an admin'
             if ('apps' in form_data.data && 'voip' in form_data.data.apps) {
                 form_data.priv_level = 'admin';
@@ -302,7 +302,7 @@ winkstart.module('voip', 'user',
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
             $("#first_name").focus();
-
+            
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
 
@@ -355,7 +355,7 @@ winkstart.module('voip', 'user',
 
                 return false;
             });
-
+            
             $.each($('body').find('*[tooltip]'), function(){
                 $(this).tooltip({attach:'body'});
             });

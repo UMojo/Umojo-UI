@@ -1,11 +1,11 @@
-winkstart.module('connect', 'endpoint',
+winkstart.module('connect', 'endpoint', 
     /* Start module resource definitions */
     {
          /* What CSS stylesheets do you want automatically loaded? */
         css: [
         'css/style.css',
         ],
-
+        
         /* What HTML templates will we be using? */
         templates: {
 /*            edit_auth: 'tmpl/edit_auth.html',
@@ -208,7 +208,7 @@ winkstart.module('connect', 'endpoint',
             /* Draw our base template into the window */
             THIS.templates.index.tmpl(winkstart.apps['connect'].account).appendTo( $('#my_servers') );
         }
-
+        
     } // End function definitions
 
     );  // End module

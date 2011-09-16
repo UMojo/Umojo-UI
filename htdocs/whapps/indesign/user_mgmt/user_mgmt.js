@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'user_mgmt',
+winkstart.module('indesign', 'user_mgmt', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -56,7 +56,7 @@ winkstart.module('indesign', 'user_mgmt',
                 label: 'User Management',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
-
+            
             $('.group_list').jScrollPane();
             $('.list_container').jScrollPane();
             $("ul.advanced_tabs").tabs("div.advanced_pane > div");
@@ -65,14 +65,14 @@ winkstart.module('indesign', 'user_mgmt',
                 $clicked = $(this);
                 $clicked.css("background-color","#0097bb");
                 // reset the other buttons to default style
-                $clicked.siblings(".list_container li").css("background-color","#808080");
-            });
-
+                $clicked.siblings(".list_container li").css("background-color","#808080");         	
+            });		
+            
             $('.elements').jScrollPane();
             $("ul.user_nav").tabs("div.cluster_pane > div.cluster");
-
-
-
+								
+			
+            
         }
     } // End function definitions
 

@@ -17,7 +17,7 @@ winkstart.module('voip', 'conference', {
 
     formData: {
     },
-
+    
     resources: {
         "conference.list": {
             url: '{api_url}/accounts/{account_id}/conferences',
@@ -68,7 +68,7 @@ function(args) {
         weight: '05'
     });
 },
-{
+{	
     validateForm: function(state) {
         var THIS = this;
 
@@ -82,7 +82,7 @@ function(args) {
     },
     _getPinNumber: function(start_pin) {
         var finalPinMember = '';
-
+        
         $.each(start_pin, function(index, value) {
             if(!(isNaN(value))) {
                 finalPinMember += value;
@@ -106,7 +106,7 @@ function(args) {
                 }
             }
         })
-
+        
         return finalPinMember;
     },
     saveConference: function(conference_id, form_data) {
@@ -121,10 +121,10 @@ function(args) {
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
-
+                
                 form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
                 form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
-
+                
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -180,7 +180,7 @@ function(args) {
                     listUsers.push({owner_id: '!', title: 'none'});
                     form_data.field_data.users = listUsers;
                 }
-
+                
                 if (data && data.id) {
                 /* This is an existing conference - Grab JSON data from server for conference_id */
                 winkstart.getJSON('conference.get', {

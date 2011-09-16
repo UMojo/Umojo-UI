@@ -327,7 +327,7 @@ span.ip_list_ip { display:block; z-index:5;}
 
 /*.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
 .ui-dialog .ui-dialog-titlebar { background: #2280a2;  position: relative; background-image: url(/../images/ui-dialog-title-bar-bkgd.png); height: 22px; }
-.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;}
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;} 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }

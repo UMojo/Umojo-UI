@@ -106,7 +106,7 @@ body {
 	width: 318px;
 	float: left;
 	margin-right: 19px;
-	border-right: 1px solid #CCC;
+	border-right: 1px solid #CCC; 
 }
 
 .ts_container .ts_content .ts_width .ts_col {
@@ -129,7 +129,7 @@ body {
 	color: #05AFDC;
 	font-weight: bold;
 	line-height: 23px;
-	font-size: 13px;
+	font-size: 13px;	
 }
 
 .ts_container .ts_content .arrow_green {
@@ -143,7 +143,7 @@ body {
 	width: 318px;
 	float: left;
 	margin-right: 19px;
-	border-right: 1px solid #CCC;
+	border-right: 1px solid #CCC; 
 	margin-left: 20px;
 }
 

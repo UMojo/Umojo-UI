@@ -1,4 +1,4 @@
-/*
+/* 
     Document   : tabs
     Created on : Jun 5, 2011, 11:49:22 PM
     Author     : dman
@@ -79,7 +79,7 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 	line-height: 30px;
 	padding-left: 18px;
 	float: left;
-	display: block;
+	display: block; 
     width: 124px;
     margin: 0;
 }
@@ -98,7 +98,7 @@ ul.advanced_tabs {
 	line-height: 30px;
 }
 
-ul.advanced_tabs li {
+ul.advanced_tabs li {   
 	float: left;
 	margin: 0;
 /*	padding-left: 28px;*/

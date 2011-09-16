@@ -51,7 +51,7 @@
 #ws_prov #endpoint #categories li a { display: block; float: left;  padding: 0 35px;}
 #ws_prov #endpoint #categories li a:link, #ws_prov#endpoint #categories li a:visited  { color: #fff;}
 #ws_prov #endpoint #categories li a:hover, #ws_prov#endpoint #categories li a:active  { color: #ccc;}
-#ws_prov #endpoint #categories li.current a { color:#FFFFFF; background:url(../images/btm_tab_active.jpg) no-repeat center top;}
+#ws_prov #endpoint #categories li.current a { color:#FFFFFF; background:url(../images/btm_tab_active.jpg) no-repeat center top;} 
 #ws_prov #endpoint #categories li a:hover { color:#FFFFFF; background: url(../images/btm_tab_active.jpg) no-repeat center top;}
 
 #ws_prov #endpoint #categories li a em { display:block; float:left; padding-top: 16px; height:40px;}

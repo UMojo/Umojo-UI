@@ -1,4 +1,4 @@
-winkstart.module('indesign', 'popups',
+winkstart.module('indesign', 'popups', 
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -8,7 +8,7 @@ winkstart.module('indesign', 'popups',
 
         /* What HTML templates will we be using? */
         templates: {
-            index: 'tmpl/login.html',
+            index: 'tmpl/login.html', 
             thankyou: 'tmpl/thankyou.html',
             service_loc: 'tmpl/service_loc.html',
             service_limits: 'tmpl/service_limits.html',
@@ -72,7 +72,7 @@ winkstart.module('indesign', 'popups',
                 label: 'Login',              // <-- THIS UPDATES THE BREADCRUMB TO SHOW WHERE YOU ARE
                 module: this.__module
             });
-
+            
             $(function(){
                     $('.resize')
                             .draggable()
@@ -96,7 +96,7 @@ winkstart.module('indesign', 'popups',
                     }
                 });
             });
-
+            
         }
     } // End function definitions
 

@@ -181,7 +181,7 @@ winkstart.module('core', 'myaccount',
 
         display: function() {
             var THIS = this;
-
+            
             THIS.templates.myaccount.tmpl().dialog({
                 height: '600',
                 width: '500',

@@ -87,7 +87,7 @@ button.jqTransformButton_click span { background-position: right -66px ; }
 	line-height: 18px;
 	vertical-align: middle;
 	height: 31px;
-	color:#404040;
+	color:#404040;	
 	border: none;
 	padding: 8px 0px 0px 0px;
 	margin: 0px;
@@ -127,7 +127,7 @@ button.jqTransformButton_click span { background-position: right -66px ; }
 	position: absolute;
 	top: -10px;
 	left: -2px;
-	height: 42px;
+	height: 42px; 
 	padding-left: 4px;
 }
 
@@ -256,7 +256,7 @@ a.jqTransformChecked { background-position: center bottom;}
 }
 
 .jqTransformSelectWrapper div span {
-
+	
 	font-size: 12px;
 	float: none;
 	position: absolute;
