@@ -1,13 +1,14 @@
 <div>
     <div class="node-options">
-        <a href="javascript:" name="close" id="${node.id}" class="delete">X</a>
+        <div id="${node.id}" class="delete"/>
         <div class="module">
             <div class="div_icon">
                 <span class="icon ${callflow.icon}"/>
                 <span class="module_name">${callflow.name}</span>
             </div>
-            <div class="details">${node.caption.substr(0,20)}</div>
+            <div class="details">${node.caption.substr(0,28)}</div>
         </div>
+        <div class="clear"/>
     </div>
 </div>
 

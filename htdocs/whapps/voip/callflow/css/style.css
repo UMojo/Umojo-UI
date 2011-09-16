@@ -22,6 +22,8 @@
 
 #ws_callflow .callflow .root > .top_bar .name {
     float: left;
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 #ws_callflow .callflow .root > .top_bar .add_number {
@@ -63,7 +65,8 @@
 }
 
 #ws_callflow .callflow .root > .content .number_column .delete {
-    background: url(images/btn_delete.png) no-repeat;
+    background-image: url(../images/btn_delete.png);
+    background-repeat: no-repeat;
     width: 6px;
     height: 6px;
     display: inline-block;
@@ -71,6 +74,10 @@
     top: 5px;
     right: 5px;
     cursor: pointer;
+}
+
+#ws_callflow .callflow .root > .content .number_column .delete:hover {
+    background-image: url(../images/btn_delete_blue.png);
 }
 
 #ws_callflow .callflow .root > .content .number_column:nth-last-child(2) {
@@ -91,41 +98,32 @@
 
 #ws_callflow .callflow .root > .bottom_bar .btn {
     float: right;
+    margin-right: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#ws_callflow .callflow .root > .bottom_bar .btn:hover {
+    color: #05ADDC;
 }
 
 #ws_callflow .callflow .node {
     display: inline-block;
 }
 #ws_callflow .callflow .node .node-options .delete { 
-    background: url(images/btn_delete.png) no-repeat;
+    background-image: url(../images/btn_delete.png);
+    background-repeat: no-repeat;
     width: 6px;
     height: 6px;
-    display: block;
-    text-indent: -10000px;
-    left: 5px;
-    top: 5px;
-    position: relative;
-    float: right;
-    margin-right: 10px;
-}
-
-#ws_callflow .callflow .node .dragndrop {
-    background: url(images/dragndrop.png) no-repeat 12px 5px;
-    float: left;
-    width: 95px;
-    height: 15px;
-    display: block;
-}
-
-#ws_callflow .callflow .node .edit {
-    float: right;
-    clear: both;
-    width: 16px;
-    height: 16px;
-    display: block;
     position: absolute;
-    bottom: 5px;
-    right: 0px;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+#ws_callflow .callflow .node .node-options .delete:hover { 
+    background-image: url(../images/btn_delete_blue.png);
 }
 
 #ws_callflow .tool .icon {
@@ -144,39 +142,26 @@
 }
 
 #ws_callflow .tools .category {
-    height: 20px;
+    height: 26px;
     text-align: center;
-    background: url(images/background_category.png) no-repeat;
+    background: url(../images/background_category.png) no-repeat;
 }
 
 #ws_callflow .tools .open {
-    position: relative;
-    left: 0px;
-    font-size: 14px;
+    font-size: 12px;
+    height: 26px;
+    line-height: 26px;
+    background-repeat: no-repeat;
+    background-position: 5px center;
 }
 
-#ws_callflow .activeArrow{
-    background-position: -18px 0px;
+#ws_callflow .tools .open.active{
+    background-image: url(../images/arrow_active.png);
+    color: #05ADDC;
 }
 
-#ws_callflow .inactiveArrow{
-    background-position: 0px 0px;
-}
-
-#ws_callflow .inactiveText {
-    color: #FFFFFF;
-}
-
-#ws_callflow .activeText {
-    color: #11A0C8;
-}
-
-#ws_callflow .tools .arrow_category {
-    background-image: url(images/arrow_category.png);
-    float: left;
-    margin-left: 10px;
-    height: 18px;
-    width: 18px;
+#ws_callflow .tools .open.inactive{
+    background-image: url(../images/arrow_inactive.png);
 }
 
 #ws_callflow .tools .tool {
@@ -200,7 +185,7 @@
 #ws_callflow .callflow .icons_black.node {
     width: 143px;
     height: 84px;
-    background: url(images/icons_black/box.png) no-repeat;
+    background: url(../images/black_box.png) no-repeat;
 }
 
 /* This will blow your mind */
@@ -284,29 +269,27 @@
 }
 
 #ws_callflow .div_icon {
+    height: 50px;
+}
+
+#ws_callflow .div_icon > span {
     display: inline-block;
-    margin-top: 20px;
-    width: 143px;
+    max-width: 100px;
+    vertical-align: middle;
 }
 
 #ws_callflow .module {
-    display: inline-block;
-    font-size: 14px;
-    height: 74px;
+    font-size: 13px;
+    height: 59px;
+    padding-top: 25px;
 }
 
-#ws_callflow .module_name {
-    color: #dddddd;
+#ws_callflow .div_icon .module_name {
     text-transform: uppercase;
     text-align: center;
 }
 
 #ws_callflow .details {
-    display: inline-block;
     font-size: 10px;
-    margin-left: 30px;
-    margin-top: -5px;
-    color: #dddddd;
-    width: 110px;
-    height: 15px;
+    margin-top: -10px;
 }

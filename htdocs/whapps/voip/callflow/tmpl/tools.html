@@ -1,7 +1,9 @@
 <div>
     <div>
         {{each(category, actions) categories}}
-            <div id="${category.toLowerCase()}" name="${category.toLowerCase()}" class="category"><div class="open"><span class="arrow_category inactiveArrow"/><div class="text_category inactiveText">${category}</div></div></div>
+            <div id="${category.toLowerCase()}" name="${category.toLowerCase()}" class="category">
+                <div class="open inactive">${category}</div>
+            </div>
 
             {{each(i, action) actions}}
                 <div class="tool">

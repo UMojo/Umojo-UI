@@ -608,13 +608,11 @@ winkstart.module('voip', 'callflow', {
             $('.category', tools).click(function () {
                 var current = $(this);
 
-                if($('.arrow_category', $(this)).hasClass('activeArrow')) {
-                    $('.arrow_category', $(this)).removeClass('activeArrow').addClass('inactiveArrow')
-                    $('.text_category', $(this)).removeClass('activeText').addClass('inactiveText')
+                if($('.open', $(this)).hasClass('active')) {
+                    $('.open', $(this)).removeClass('active').addClass('inactive')
                 }
                 else {
-                    $('.arrow_category', $(this)).removeClass('inactiveArrow').addClass('activeArrow');
-                    $('.text_category', $(this)).removeClass('inactiveText').addClass('activeText');
+                    $('.open', $(this)).removeClass('inactive').addClass('active');
                 }
                 
 
