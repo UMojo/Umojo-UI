@@ -1,0 +1,189 @@
+
+<div>
+    {{if type == "0"}}
+    {{if servers[0] == "Own"}}
+    <form id="dev" class="servers">
+        <br/>
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Type: </label>
+        </span>
+        <input id="type" name="type" type="text"value="${servers[0]}" disabled="disabled"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Hostname: </label>
+        </span>
+        <input id="hostname" name="hostname" type="text"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">IP: </label>
+        </span>
+        <input id="ip" type="text" name="ip"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">SSH Port: </label>
+        </span>
+        <input id="ssh_port" type="text" name="ssh_port"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="Main password on the server.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Root Password: </label>
+        </span>
+        <input id="root_password" type="password" name="password"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">OS: </label>
+        </span>
+        <select name="os">
+            <option value="centos5-gems">CentOS 5</option>
+        </select><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Roles: </label>
+        </span>
+        <input id="roles" name="roles" class="roles" type="checkbox" value="all_in_one" checked="checked" disabled="disabled"/>All in one<div class="clear"/>
+
+        <a class="save_btnServer" href="#">Deploy</a>
+    </form>
+    {{else}}
+    <form id="dev" class="servers">
+        <br/>
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Type: </label>
+        </span>
+        <input id="type" name="type" type="text"value="${servers[0]}" disabled="disabled"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="API Key from Rackspace or Amazon.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">API Key: </label>
+        </span>
+        <input id="key" name="key" type="text"/><div class="clear"/>
+        
+        <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">OS: </label>
+        </span>
+        <select name="os">
+            <option value="centos5-gems">CentOS 5</option>
+        </select><div class="clear"/> 
+
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Roles: </label>
+        </span>
+        <input id="roles" name="roles" type="checkbox" class="roles" value="all_in_one" checked="checked" disabled="disabled"/>All in one<div class="clear"/>
+
+        <a class="save_btnServer" href="#">Deploy</a>
+    </form>
+    {{/if}}
+    {{else type == "1"}}
+    {{if servers[0] != "Own"}}
+    <form id="dev" class="servers">
+        <br/>
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Type: </label>
+        </span>
+        <input id="type" name="type" type="text"value="${servers[0]}" disabled="disabled"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="API Key from Rackspace or Amazon.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">API Key: </label>
+        </span>
+        <input id="key" name="key" type="text"/><div class="clear"/>
+        
+        <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">OS: </label>
+        </span>
+        <select name="os">
+            <option value="centos5-gems">CentOS 5</option>
+        </select><div class="clear"/> 
+        <input id="number" name="number" type="hidden" value="7"/>
+
+        <a class="save_btnServer" href="#">Deploy</a>
+    </form>
+    {{else}}
+    <p class="note_box">For this option select 7 differents servers</p>
+    {{/if}}
+    {{else type == "2"}}
+    {{each servers}}
+    <h3>Server ${$index +1}</h3>
+    {{if $value != 'Choose type:'}}
+    <form class="servers" id="${$index +1}_serv">
+        <span class="tooltip-wrapper" tooltip="Server Type.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Type: </label>
+        </span>
+        <input id="type" name="type" type="text"value="${$value}" disabled="disabled"/><div class="clear"/>     
+        {{/if}}
+        {{if $value == "Own"}}
+        <span class="tooltip-wrapper" tooltip="A hostname is a name assigned to the server connected to a network in order identify it.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Hostname: </label>
+        </span>
+        <input id="hostname" name="hostname" type="text"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="An Internet Protocol address (IP address) is a numerical address assigned to each server.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">IP: </label>
+        </span>
+        <input id="ip" type="text" name="ip"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="SSH is a network protocol that allows users to create a secure channel in order to be remotely connected to a server.<br/>By default, the port is 22.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">SSH Port: </label>
+        </span>
+        <input id="ssh_port" type="text" name="ssh_port"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="Main password on the server.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Root Password: </label>
+        </span>
+        <input id="root_password" type="password" name="password"/><div class="clear"/>
+
+        <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">OS: </label>
+        </span>
+        <select name="os">
+            <option value="centos5-gems">CentOS 5</option>
+        </select><div class="clear"/> 
+        {{else $value == 'Choose type:'}}
+        <h3>Choose a server type</h3>      
+        {{else}}
+        <span class="tooltip-wrapper" tooltip="API Key from Rackspace or Amazon.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">API Key: </label>
+        </span>
+        <input id="key" name="key" type="text"/><div class="clear"/>  
+        
+        <span class="tooltip-wrapper" tooltip="An operating system (OS) is software, consisting of programs and data, that runs on computers or servers.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">OS: </label>
+        </span>
+        <select name="os">
+            <option value="centos5-gems">CentOS 5</option>
+        </select><div class="clear"/> 
+        {{/if}}
+        {{each roles[$index]}}
+        <span class="tooltip-wrapper" tooltip="Server Role.">
+            <span class="tooltip"/>
+            <label class="newServerLbl">Roles: </label>
+        </span>
+        <input class="roles" id="${$index}" name="roles" type="checkbox" value="${$value}" checked="checked" disabled="disabled"/>${$value}<div class="clear"/>
+        {{/each}}
+        {{if $value != 'Choose type:'}}
+    </form>
+    {{/if}}
+    <hr/>
+    {{/each}}
+    <a class="save_btnServer" href="#">Deploy</a>
+    {{/if}}
+</div>

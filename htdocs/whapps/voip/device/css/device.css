@@ -1,7 +1,11 @@
-/* Add your custom CSS here */
-ul.buttons.devices {
-    margin-left: 570px;
-    width: 300px;
+#device-listpanel ul .list-element {
+    background-image: url(../images/red.png);
+    background-position: left;
+    background-repeat: no-repeat;
+}
+
+#device-listpanel ul .list-element.registered {
+    background-image: url(../images/green.png);
 }
 
 /* If you are building a widget that could be used by EVERYONE, please consider adding your CSS

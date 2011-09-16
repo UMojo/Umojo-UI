@@ -68,7 +68,7 @@
 #my_servers .server .title .status { font-size:11px; font-weight:bold; float:right; margin:8px 15px 0 0;  }
 #my_servers .server .title .status .state { margin: 0 3px 0 2px; color:#d93636; font-size:14px; }
 #my_servers .server .title .status a { color:#4e4d4d; }
-#my_servers .server .title .status a:hover { text-decoration:none; }
+#my_servers .server .title .status a:hover { text-decoration:none; color:#2AB9E1; }
 
 /* server area -> SIP */
 #my_servers .server .sip { height:59px; width:425px; background:url(../images/bg_server_sip.jpg) top left no-repeat; font-size:12px; }
@@ -325,7 +325,7 @@ span.ip_list_ip { display:block; z-index:5;}
 
 /* jQuery UI 2600hz edits */
 
-.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
+/*.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
 .ui-dialog .ui-dialog-titlebar { background: #2280a2;  position: relative; background-image: url(/../images/ui-dialog-title-bar-bkgd.png); height: 22px; }
 .ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;} 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
@@ -336,7 +336,7 @@ span.ip_list_ip { display:block; z-index:5;}
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
 .ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
-.ui-draggable .ui-dialog-titlebar { cursor: move; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }*/
 
 
 
@@ -515,4 +515,9 @@ input[type="search"] {
     -moz-border-radius: 0.8em;
     padding: 0px .8em;
 
+}
+
+#edit_server .icon {
+    margin-left: -20px;
+    margin-top: -10px;
 }

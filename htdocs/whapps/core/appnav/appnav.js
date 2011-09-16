@@ -56,22 +56,9 @@ winkstart.module('core', 'appnav', {
                 }
             });
 
-            $(item).hover( 
-                function() { 
-                    $('.whapp .icon', $(this)).addClass('blue');
-                }, 
-                function() { 
-                    if(!($('a', $(this)).is('.selected'))) {
-                        $('.whapp .icon', $(this)).removeClass('blue');
-                    }
-                }
-            );
-            
             $(item).click( function() { 
                 $('div.header .main_nav .whapp a').removeClass('selected');
                 $('.whapp a', $(this)).addClass('selected');
-                $('.main_nav li .whapp .icon').removeClass('blue');
-                $('.whapp .icon', $(this)).addClass('blue');
             });
 
             winkstart.log('AppNav: Adding navigation item ' + args.name);
@@ -80,8 +67,6 @@ winkstart.module('core', 'appnav', {
             $('.dropdown .content', item).delegate('.module', 'click', function() {
                 $('div.header .main_nav .whapp a').removeClass('selected');
                 $('.whapp a', $(this).parents('li')).addClass('selected');
-                $('.main_nav li .whapp .icon').removeClass('blue');
-                $('.whapp .icon', $(this).parents('li')).addClass('blue');
                 winkstart.publish(args.name + '.module_activate', { name: $(this).attr('module-name') });
 
                 return false;

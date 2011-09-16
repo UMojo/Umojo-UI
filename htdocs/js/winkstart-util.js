@@ -1,7 +1,8 @@
 ( function(winkstart, amplify, $) {
 
     winkstart.log = function(data) {
-        if (winkstart.debug) {
+        //if (winkstart.debug) {
+        if(winkstart.config.debug) {
             console.log(data);
         }
     };
@@ -29,6 +30,7 @@
             width : 'auto',
             show : { effect : 'fade', duration : 200 },
             hide : { effect : 'fade', duration : 200 },
+            modal : true,
 
             // By default, don't long-live dialogs - kill them after they're closed. Normal jquery default is just to hide them.
             close : function() {

@@ -178,7 +178,7 @@ winkstart.module('voip', 'media',
                     /* On success, take JSON and merge with default/empty fields */
                     $.extend(true, form_data, json);
 
-                    // Dirty hack because of the erlangers!! On creation, crossbar store streamable as a string, and as a boolean on update 
+                    // On creation, crossbar store streamable as a string, and as a boolean on update 
                     // And as we're using the same template for both behaviors, we need the same kind of data.
                     // To delete once this bug is fixed!
                     if(form_data.data.streamable == "false") {
@@ -219,6 +219,12 @@ winkstart.module('voip', 'media',
         renderMedia: function(form_data){
             var THIS = this;
             var media_id = form_data.data.id;
+
+            //Dirty hack...
+            if(form_data.data.description != undefined && form_data.data.description.substr(0,12) == 'C:\\fakepath\\') {
+                form_data.data.description = form_data.data.description.substr(12);
+            }
+
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editMedia.tmpl(form_data).appendTo( $('#media-view') );
 

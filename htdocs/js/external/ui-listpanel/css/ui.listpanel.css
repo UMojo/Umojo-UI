@@ -21,7 +21,7 @@
     background-color: #4d4d4d;  
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #FFF;
+    border-bottom-color: #A0A0A0;
 }
 
 .add_flow div{
@@ -89,13 +89,18 @@
 
 .list-panel-anchor ul li{
     height:27px;
-    line-height:27px;
     border-bottom: 1px solid #E3E3E3;
     border-top: 1px solid #8b8a8a;
     list-style-type: none;  
+    background-color:#989898; 
+}
+
+.list-panel-anchor ul li:hover {
+    background-color: #bebebe;
 }
 
 .list-panel-anchor ul li a{
+    line-height:26px;
     float: left;
     display:block;
     color: #464747;
@@ -104,13 +109,9 @@
     padding-left: 35px;
     color: #474747;
     text-decoration: none;
-    background-color:#989898;
     /*border-right: 1px solid #7a7a7a;*/
 }
 
-.list-panel-anchor ul li a:hover{
-    background-color:#bebebe;
-}
 
 .list-panel-anchor ul li .row_arrow a{
     display: block;

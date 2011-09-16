@@ -19,13 +19,13 @@ winkstart.module('voip', 'timeofday',
 
         formData: {
             wdays: [
+                "Sunday",
                 "Monday",
                 "Tuesday",
                 "Wednesday",
                 "Thursday",
                 "Friday",
-                "Saturday",
-                "Sunday"
+                "Saturday"
             ],
             day: [
                 "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
@@ -40,17 +40,15 @@ winkstart.module('voip', 'timeofday',
             }, {
                 id: 'yearly',
                 value:'Yearly'
-            }/*, {
-                id: 'date',
-                value: 'Date'
-            }*/
+            }
             ],
             ordinals: [
                 {id: 'first', value: 'First'},
                 {id: 'second', value: 'Second'},
                 {id: 'third', value: 'Third'},
                 {id: 'fourth', value: 'Fourth'},
-                {id: 'last', value: 'Last'}
+                {id: 'last', value: 'Last'},
+                {id: 'day', value: 'Day'},
             ],
             months: [
                 {id: 1, value: 'January'},
@@ -67,9 +65,38 @@ winkstart.module('voip', 'timeofday',
                 {id: 12, value: 'December'}
             ]
         },
+        validationWeekly : [
+            {
+                name: '#name',
+                regex: /^[a-zA-Z0-9\s_']+$/
+            },
+            {
+                name: '#interval_week',
+                regex: /^[0-9]+$/
+            }
+        ],
+        validationMonthly : [
+            {
+                name: '#name',
+                regex: /^[a-zA-Z0-9\s_']+$/
+            },
+            {
+                name: '#interval_month',
+                regex: /^[0-9]+$/
+            }
+        ],
 
-        validation : [
-            {name: '#name', regex: /^[a-zA-Z0-9\s_]+$/} 
+        validationYearly : [
+            {
+                name: '#name',
+                regex: /^[a-zA-Z0-9\s_']+$/
+            }
+        ],
+        validation: [
+            {
+                name: '#name',
+                regex: /^[a-zA-Z0-9\s_']+$/
+            }
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -119,7 +146,7 @@ winkstart.module('voip', 'timeofday',
     {
         validateForm: function(state) {
             var THIS = this;
-            
+
             $(THIS.config.validation).each(function(k, v) {
                 if(state == undefined) {
                     winkstart.validate.add($(v.name), v.regex);
@@ -127,6 +154,7 @@ winkstart.module('voip', 'timeofday',
                     winkstart.validate.save($(v.name), v.regex);
                 }
             });
+
         },
 
         saveTimeofday: function(timeofday_id, form_data) {
@@ -175,13 +203,14 @@ winkstart.module('voip', 'timeofday',
             $('#timeofday-view').empty();
             var THIS = this;
 
+
             var form_data = {
                 data : {
                     time_window_start: 0,
                     time_window_stop: 0,
-                    //cycle: 'weekly',
                     wdays: [],
-                    days: []
+                    days: [],
+                    interval: 1
                 },
                 field_data: THIS.config.formData
             };
@@ -223,6 +252,11 @@ winkstart.module('voip', 'timeofday',
             var wdays = [],
                 times = form_data.time.split(';');
 
+            if(form_data.cycle != "weekly" && form_data.weekday != undefined) {
+                form_data.wdays = [];
+                form_data.wdays.push(form_data.weekday);
+            }
+
             $.each(form_data.wdays, function(i, val) {
                 if(val) {
                     // Check for spelling ;)
@@ -232,27 +266,33 @@ winkstart.module('voip', 'timeofday',
                     wdays.push(val);
                 }
             });
+            form_data.wdays = wdays;
     
-            if($('#checkbox_date_type').attr('checked') == 'checked') {
-                form_data.days = form_data.day;
-                delete form_data.wdays;
-                delete form_data.ordinal;
-            } else {
-                form_data.wdays = wdays;
-                delete form_data.days;
-            }
+            delete form_data.weekday;
 
-            delete form_data.day;
-            delete form_data.type_day;
-            delete form_data.time;
+            if(form_data.cycle == "weekly") {
+                delete form_data.ordinal;
+                delete form_data.days;
+                delete form_data.month;
+            } else {
+                if(form_data.cycle == "yearly") {
+                    delete form_data.interval;
+                } else {
+                    delete form_data.month;
+                }
+
+                if(form_data.ordinal != 'day') {
+                    delete form_data.days;
+                }
+            }
+            
+            form_data.start_date = new Date(form_data.start_date).getTime()/1000 + 62167219200;
+            
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
 
-            if($('#cycle').val() != 'weekly') {
-                delete form_data.time_window_start;
-                delete form_data.time_window_stop;
-            }
-            
+            delete form_data.time; 
+           
             return form_data;
         },
 
@@ -269,6 +309,16 @@ winkstart.module('voip', 'timeofday',
                 form_data.data.wdays[wday] = 'wednesday';
             }
 
+            if(form_data.data.wdays != undefined && form_data.data.cycle != 'weekly') {
+                form_data.data.weekday = form_data.data.wdays[0];
+            }
+            var tmp_date;
+            form_data.data.start_date == undefined ? tmp_date = new Date() : tmp_date = new Date((form_data.data.start_date - 62167219200)* 1000);
+            var month = tmp_date.getMonth()+1 < 10 ? '0'+(tmp_date.getMonth()+1) : tmp_date.getMonth()+1;
+            var day = tmp_date.getDate() < 10 ? '0'+tmp_date.getDate() : tmp_date.getDate();
+            tmp_date = month + '/' + day + '/'  + tmp_date.getFullYear();
+            form_data.data.start_date = tmp_date;
+
             /* Paint the template with HTML of form fields onto the page */
             var form = THIS.templates.editTimeofday.tmpl(form_data).appendTo( $('#timeofday-view') );
 
@@ -277,55 +327,45 @@ winkstart.module('voip', 'timeofday',
             /* Initialize form field validation */
             THIS.validateForm();
 
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-            $("#name").focus();
+            $('ul.settings1').tabs('div.pane > div');
+            $('ul.settings2').tabs('div.advanced_pane > div');
+            $('#name').focus();
+            $('#start_date', '#timeofday-form').datepicker();
 
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
 
-            $('#hours_slider').hide();
-            $('#days_checkbox').hide();
-            $('#ordinal_day').hide();
-            $('#month_picker').hide();
-            $('#date_picker').hide();
-            $('#day_fixed').hide();
-            $('#type_date').hide();
-           
-            $('#checkbox_date_type').click(function() {
-                if($(this).attr('checked')) {
-                    $('#days_checkbox').hide();
-                    $('#ordinal_day').hide();
-                    $('#day_fixed').show();
-                } else {
-                    $('#day_fixed').hide();
-                    $('#days_checkbox').show();
-                    $('#ordinal_day').show();
-                }
-            });
-            
+            $('#yearly_every', '#timeofday-form').hide();
+            $('#monthly_every', '#timeofday-form').hide();
+            $('#weekly_every', '#timeofday-form').hide();
+            $('#ordinal', '#timeofday-form').hide();
+            $('#days_checkboxes', '#timeofday-form').hide();
+            $('#weekdays', '#timeofday-form').hide();
+            $('#specific_day', '#timeofday-form').hide();   
+
             if(timeofday_id == undefined) {
-                $('#days_checkbox').show();
-                $('#hours_slider').show();
+                $('#weekly_every', '#timeofday-form').show();
+                $('#days_checkboxes', '#timeofday-form').show();
             } else {
                 if(form_data.data.cycle == "monthly") {
-                    $('#days_checkbox').show();
-                    $('#ordinal_day').show();
-                } else if(form_data.data.cycle == "yearly") {
-                    $('#month_picker').show();
-                    $('#type_date').show();
+                    $('#monthly_every', '#timeofday-form').show();
+                    $('#ordinal', '#timeofday-form').show();
                     if(form_data.data.days != undefined && form_data.data.days[0] != undefined) {
-                        $('#day_fixed').show();
-                        $('#checkbox_date_type').attr('checked', 'true');
+                        $('#specific_day', '#timeofday-form').show();
                     } else {
-                        $('#days_checkbox').show();
-                        $('#ordinal_day').show();
+                        $('#weekdays', '#timeofday-form').show();
                     }
-                } else if(form_data.data.cycle == "date") {
-                    $('#date_picker').show();
+                } else if(form_data.data.cycle == "yearly") {
+                    $('#yearly_every', '#timeofday-form').show();
+                    $('#ordinal', '#timeofday-form').show();
+                    if(form_data.data.days != undefined && form_data.data.days[0] != undefined) {
+                        $('#specific_day', '#timeofday-form').show();
+                    } else {
+                        $('#weekdays', '#timeofday-form').show();
+                    }
                 } else if(form_data.data.cycle = "weekly") {
-                    $('#hours_slider').show();
-                    $('#days_checkbox').show();
+                    $('#weekly_every', '#timeofday-form').show();
+                    $('#days_checkboxes', '#timeofday-form').show();
                 }
             }
 
@@ -342,6 +382,10 @@ winkstart.module('voip', 'timeofday',
                         $(".advanced_pane").slideToggle();
                     });
                 }
+            });
+
+            $('.fake_checkbox', '#timeofday-form').click(function() {
+                $(this).toggleClass('checked');
             });
 
             $("#time", form).slider({
@@ -368,32 +412,55 @@ winkstart.module('voip', 'timeofday',
                 },
                 onstatechange: function () {}
             });
-            
-            $('#cycle').change(function(event) {
-                    $('#date_picker', '#timeofday-form').hide();
-                    $('#ordinal_day', '#timeofday-form').hide();
-                    $('#month_picker', '#timeofday-form').hide();
-                    $('#type_date', '#timeofday-form').hide();
-                    $('#day_fixed', '#timeofday-form').hide();
-                    $('#hours_slider', '#timeofday-form').hide();
-                    $('#days_checkbox', '#timeofday-form').hide();
-                if($(this).val() == 'weekly') {
-                    $('#hours_slider', '#timeofday-form').show();
-                    $('#days_checkbox', '#timeofday-form').show();
-                } else if($(this).val() == 'yearly') {
-                    $('#type_date', '#timeofday-form').show();
-                    $('#month_picker', '#timeofday-form').show();
-                    if($('#checkbox_date_type').attr('checked') == 'checked') {
-                        $('#day_fixed').show();
-                    } else {
-                        $('#days_checkbox').show();
-                        $('#ordinal_day').show();
-                    }
-                } else if($(this).val() == 'monthly') {
-                    $('#days_checkbox').show();
-                    $('#ordinal_day').show();
-                } else if($(this).val() == 'date') {
-                    $('#date_picker').show();
+
+            $('#ordinal', '#timeofday-form').change(function() {
+                if($(this).val() == 'day') {
+                    $('#weekdays', '#timeofday-form').hide();
+                    $('#specific_day', '#timeofday-form').show();
+                } else {
+                    $('#weekdays', '#timeofday-form').show();
+                    $('#specific_day', '#timeofday-form').hide();
+                }
+            });
+
+            $('#cycle', '#timeofday-form').change(function() {
+                $('#yearly_every', '#timeofday-form').hide();
+                $('#monthly_every', '#timeofday-form').hide();
+                $('#weekly_every', '#timeofday-form').hide();
+                $('#ordinal', '#timeofday-form').hide();
+                $('#days_checkboxes', '#timeofday-form').hide();
+                $('#weekdays', '#timeofday-form').hide();
+                $('#specific_day', '#timeofday-form').hide();
+
+                switch($(this).val()) {
+                    case 'yearly': 
+                        $('#yearly_every', '#timeofday-form').show();
+                        $('#ordinal', '#timeofday-form').show();
+                        if($('#ordinal','#timeofday-form').val() == 'day') {
+                            $('#weekdays', '#timeofday-form').hide();
+                            $('#specific_day', '#timeofday-form').show();
+                        } else {
+                            $('#weekdays', '#timeofday-form').show();
+                            $('#specific_day', '#timeofday-form').hide();
+                        }
+                        break;
+                        
+                    case 'monthly': 
+                        $('#monthly_every', '#timeofday-form').show();
+                        $('#ordinal', '#timeofday-form').show();
+                        if($('#ordinal','#timeofday-form').val() == 'day') {
+                            $('#weekdays', '#timeofday-form').hide();
+                            $('#specific_day', '#timeofday-form').show();
+                        } else {
+                            $('#weekdays', '#timeofday-form').show();
+                            $('#specific_day', '#timeofday-form').hide();
+                        }
+                        break;
+
+                    case 'weekly': 
+                        $('#weekly_every', '#timeofday-form').show();
+                        $('#days_checkboxes', '#timeofday-form').show();
+                        break;
                 }
             });
 
@@ -406,6 +473,14 @@ winkstart.module('voip', 'timeofday',
 
                 /* Grab all the form field data */
                 var form_data = form2object('timeofday-form');
+
+                form_data.wdays = [];
+                $('.fake_checkbox.checked','#timeofday-form').each(function() {
+                    form_data.wdays.push($(this).dataset('value'));                    
+                });
+    
+                form_data.interval = $('#cycle','#timeofday-form').val() == 'monthly' ? $('#interval_month', '#timeofday-form').val() : $('#interval_week', '#timeofday-form').val();
+
                 form_data = THIS.cleanFormData(form_data); 
 
                 THIS.saveTimeofday(timeofday_id, form_data);

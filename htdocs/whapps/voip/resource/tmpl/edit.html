@@ -32,7 +32,7 @@
                                 <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="If resource routing rules overlap, the hightest weight will take precedence">
+                                <span class="tooltip-wrapper" tooltip="If resource routing rules overlap, the lowest weight will take precedence">
                                     <span class="tooltip"/>
                                     <label for="weight_cost">Weight Cost:</label>
                                 </span>
@@ -119,14 +119,15 @@
                     <div class="clear"></div>
                 </div>
             </div>
-
-        <ul class="buttons right resources">
-            <li><a class="resource-save save-btn" href="#">Save</a></li>
-            {{if data.id}}
-                <li><a class="resource-delete delete-btn" href="#">Delete</a></li>
-            {{/if}}
-            <li><a class="resource-cancel" href="#">Cancel</a></li>
-        </ul>
+        <div class="buttons_wrapper">
+            <ul class="buttons right resources">
+                <li><a class="resource-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="resource-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+                <li><a class="resource-cancel" href="#">Cancel</a></li>
+            </ul>
+        </div>
             
         </form>
     </div>

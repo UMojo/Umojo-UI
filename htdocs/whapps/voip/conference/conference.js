@@ -51,10 +51,11 @@ winkstart.module('voip', 'conference', {
         }
     },
     validation: [
-        {name: '#name', regex: /^.*$/},
-        {name: '#member_pins', regex: /^[0-9]+$/},
-        {name: '#moderator_pins', regex: /^[0-9]+$/}
-    ],
+        {name: '#name', regex: /^.+$/},
+        {name: '#member_pins', regex: /^[a-z0-9A-Z]*$/},
+        {name: '#conference_numbers', regex: /^[0-9]+$/},
+        {name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/}
+    ]
 },
 function(args) {
     /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
@@ -80,6 +81,35 @@ function(args) {
             }
         });
     },
+    _getPinNumber: function(start_pin) {
+        var finalPinMember = '';
+        
+        $.each(start_pin, function(index, value) {
+            if(!(isNaN(value))) {
+                finalPinMember += value;
+            } else {
+                if(value.match(/^[aAbBcC]$/)) {
+                    finalPinMember += 2
+                } else if(value.match(/^[dDeEfF]$/)) {
+                    finalPinMember += 3
+                } else if(value.match(/^[gGhHiI]$/)) {
+                    finalPinMember += 4
+                } else if(value.match(/^[jJkKlL]$/)) {
+                    finalPinMember += 5
+                } else if(value.match(/^[mMnNoO]$/)) {
+                    finalPinMember += 6
+                } else if(value.match(/^[pPqQrRsS]$/)) {
+                    finalPinMember += 7
+                } else if(value.match(/^[tTuUvV]$/)) {
+                    finalPinMember += 8
+                } else if(value.match(/^[wWxXyYzZ]$/)) {
+                    finalPinMember += 9
+                }
+            }
+        })
+        
+        return finalPinMember;
+    },
     saveConference: function(conference_id, form_data) {
             var THIS = this;
 
@@ -92,6 +122,14 @@ function(args) {
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
+               
+                if(form_data.member != undefined) { 
+                    form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
+                }
+                if(form_data.moderator != undefined) {
+                    form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
+                }
+                
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -127,13 +165,13 @@ function(args) {
             $('#conference-view').empty();
             var THIS = this;
             var form_data = {
-                data: { moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
+                data: {moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
             };
 
             form_data.field_data = THIS.config.formData;
             form_data.field_data.users = [];
             winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                    var listUsers = [];
+                    var listUsers = [{owner_id: '', title: 'None'}];
                     if(json.data.length > 0) {
                         _.each(json.data, function(elem){
                             var title = elem.first_name + ' ' + elem.last_name;
