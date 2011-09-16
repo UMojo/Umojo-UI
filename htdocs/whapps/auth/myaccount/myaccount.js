@@ -1,4 +1,4 @@
-winkstart.module('core', 'myaccount',
+winkstart.module('auth', 'myaccount',
     /* Start module resource definitions */
     {
         /* What CSS stylesheets do you want automatically loaded? */
@@ -48,7 +48,6 @@ winkstart.module('core', 'myaccount',
         // Tell winkstart about the APIs you are going to be using (see top of this file, under resources
         winkstart.registerResources(this.__whapp, this.config.resources);
 
-        // This app is slightly invasive - it assumes it should always be bound to an element named my_account anywhere on the page
         $('#my_account').live('click', function() {
             if(winkstart.apps['auth'].auth_token != '') {
                 winkstart.publish('myaccount.display');
@@ -60,6 +59,7 @@ winkstart.module('core', 'myaccount',
         $('a#my_logout').live('click', function() {
             winkstart.publish('auth.activate');
         });
+
     }, // End initialization routine
 
 
@@ -185,7 +185,7 @@ winkstart.module('core', 'myaccount',
             
             var tmpl = {
                 api:['Linode', 'Rackspace', 'Amazon']
-                };
+            };
             
             THIS.templates.myaccount.tmpl().dialog({
                 height: '600',
@@ -199,5 +199,4 @@ winkstart.module('core', 'myaccount',
                 }
             });
         }
-    }
-    );  // End module
+    });  // End module
