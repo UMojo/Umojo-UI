@@ -420,9 +420,6 @@ winkstart.module('voip', 'device',
                         }, function(json, xhr) {
                             /* On success, take JSON and merge with default/empty fields */
                             $.extend(true, form_data, json);
-<<<<<<< HEAD:htdocs/whapps/voip/device/device.js
-                            THIS.renderDevice(form_data, $('#device-view'));
-=======
 
                             // Perform some migrations:
                             if('default' in form_data.data.caller_id) {
@@ -434,14 +431,15 @@ winkstart.module('voip', 'device',
                                 delete form_data.data.caller_id.emergency;
                             }
 
-                            THIS.renderDevice(form_data);
->>>>>>> origin/master:htdocs/whapps/voip/device/device.js
+                            THIS.renderDevice(form_data, $('#device-view', '#ws-content'));
                         });
                     } else {
                         /* This is a new device - pass along empty params */
                         create_html = THIS.templates.generalEditDevice.tmpl().appendTo($('#device-view'));
 
                         $('.media_tabs .buttons', create_html).click(function() {
+                            $('.media_tabs .buttons.current').removeClass('current');
+                            $(this).addClass('current');
                             $clicked = $(this);
                             $clicked.animate({top:"40px"}, 300 );
                             $clicked.siblings(".buttons").animate({top:"0"}, 300 );
