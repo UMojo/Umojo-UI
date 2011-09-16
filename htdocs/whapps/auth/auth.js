@@ -101,7 +101,7 @@ winkstart.module('auth', 'auth',
                     if(THIS.request_realm) {
                         realm = $('#realm', dialogRegister).val();
                     } else {
-                        realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
+                        realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
                     }
 
                     // If realm was set in the URL, override all
@@ -168,7 +168,7 @@ winkstart.module('auth', 'auth',
                 if (THIS.request_realm) {
                     realm = $('#realm', dialogDiv).val();
                 } else {
-                    realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
+                    realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
                 }
                 
                 // If realm was set in the URL, override all

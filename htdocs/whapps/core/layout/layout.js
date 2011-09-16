@@ -1,6 +1,7 @@
 winkstart.module('core', 'layout', {
         //		requires: {'core' : 'nav'},
         css: [
+        '../../../config/css/welcome.css',
         'css/layout.css',
         'css/tabs.css',
         'css/icons.css',
@@ -10,7 +11,7 @@ winkstart.module('core', 'layout', {
 
         templates: {
             layout: 'tmpl/layout.html',
-            welcome: 'tmpl/welcome.html'
+            welcome: '../../../config/tmpl/welcome.html'
         },
 
         subscribe: {

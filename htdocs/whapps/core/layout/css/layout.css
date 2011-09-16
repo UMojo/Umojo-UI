@@ -108,7 +108,7 @@ a:active {
 .logo .img {
 	width: 100%;
 	height: 100%;
-	background-image: url(../images/logo.png);
+	background-image: url(../../../../config/images/logo.png);
 	background-repeat: no-repeat;
     background-position: center center;
 	text-indent: -9999px;
@@ -206,16 +206,6 @@ ul.universal_nav li a.logout {
     z-index: -1000;
     position: relative;
 }
-
-.welcomediv {
-    background-image: url(../images/AppStore_welcomePage.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    margin-top: 15px;
-	width: 100%;
-    height: 465px;
-}
-
 
 /*************************************
 -------------DATA LIST---------------
@@ -409,9 +399,7 @@ ul.buttons a{
 
 ul.buttons a:hover{
         color: #29abe1;
-
 }
-
 
 #loading {
     font-size: large;
