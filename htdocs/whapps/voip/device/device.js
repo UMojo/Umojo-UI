@@ -7,7 +7,9 @@ winkstart.module('voip', 'device',
         /* What HTML templates will we be using? */
         templates: {
             device: 'tmpl/device.html',
-            editDevice: 'tmpl/edit.html'
+            editDevice: 'tmpl/edit.html',
+            generalEditDevice: 'tmpl/general_edit.html',
+            cellphone: 'tmpl/cellphone.html'
         },
 
         /* What events do we listen for, in the browser? */
@@ -135,56 +137,21 @@ winkstart.module('voip', 'device',
             }]
         },
 
-        validation : [
-        {
-            name : '#name', 
-            regex : /^[a-zA-Z0-9\s_']+$/
-        },
-
-        {
-            name : '#mac_address', 
-            regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/
-        },
-
-        {
-            name : '#caller_id_name_internal', 
-            regex : /^.*$/
-        },
-
-        {
-            name : '#caller_id_number_internal', 
-            regex : /^[\+]?[0-9]*$/
-        },
-
-        {
-            name : '#caller_id_name_external', 
-            regex : /^.*$/
-        },
-
-        {
-            name : '#caller_id_number_external', 
-            regex : /^[\+]?[0-9]*$/
-        },
-
-        {
-            name : '#sip_realm', 
-            regex : /^[0-9A-Za-z\-\.\:\_]+$/
-        },
-
-        {
-            name : '#sip_username', 
-            regex : /^[^\s]+$/
-        },
-
-        {
-            name : '#sip_password', 
-            regex : /^[^\s]+$/
-        },
-
-        {
-            name : '#sip_expire_seconds', 
-            regex : /^[0-9]+$/
-        }
+        validation_sip_device : [
+            {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
+            {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
+            {name : '#caller_id_name_internal', regex : /^.*$/},
+            {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
+            {name : '#caller_id_name_external', regex : /^.*$/},
+            {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
+            {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
+            {name : '#sip_username', regex : /^[^\s]+$/},
+            {name : '#sip_password', regex : /^[^\s]+$/},
+            {name : '#sip_expire_seconds', regex : /^[0-9]+$/},
+        ],
+        validation_cell_phone : [
+            {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
+            {name : '#call_forward_number', regex : /^[\+]?[0-9]*$/},
         ],
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -241,7 +208,6 @@ winkstart.module('voip', 'device',
             }
         }
     },
-
     /* Bootstrap routine - run when the module is first loaded */
     function(args) {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
@@ -257,23 +223,32 @@ winkstart.module('voip', 'device',
     },
 
     {
-        validateForm: function(state) {
+        validateForm: function(device_type, state) {
             var THIS = this;
-            
-            $(THIS.config.validation).each(function(k, v) {
-                if(state == undefined) {
-                    winkstart.validate.add($(v.name), v.regex);
-                } else if (state == 'save') {
-                    winkstart.validate.save($(v.name), v.regex);
-                }
-            });
+            if(device_type == 'cell_phone') {
+                $(THIS.config.validation_cell_phone).each(function(k, v) {
+                    if(state == undefined) {
+                        winkstart.validate.add($(v.name), v.regex);
+                    } else if (state == 'save') {
+                        winkstart.validate.save($(v.name), v.regex);
+                    }
+                });
+            } else {
+                $(THIS.config.validation_sip_device).each(function(k, v) {
+                    if(state == undefined) {
+                        winkstart.validate.add($(v.name), v.regex);
+                    } else if (state == 'save') {
+                        winkstart.validate.save($(v.name), v.regex);
+                    }
+                });
+            }
         },
 
         saveDevice: function(device_id, form_data) {
             var THIS = this;
 
             /* Check validation before saving */
-            THIS.validateForm('save');
+            THIS.validateForm(form_data.device_type, 'save');
 
             if(!$('.invalid').size()) {
                 /* Construct the JSON we're going to send */
@@ -377,6 +352,8 @@ winkstart.module('voip', 'device',
             var generatedPassword = THIS.generateRandomString(12); 
             var generatedUsername = "user_" + THIS.generateRandomString(6); 
             
+            var create_html;
+ 
             winkstart.getJSON('account.get', {
                 crossbar: true, 
                 account_id: winkstart.apps['voip'].account_id,
@@ -408,6 +385,10 @@ winkstart.module('voip', 'device',
                             username: generatedUsername, 
                             password: generatedPassword, 
                             expire_seconds: "360"
+                        },
+                        call_forward: {
+                            require_keypress: "true",
+                            keep_caller_id: "true"
                         }
                     }
                 };
@@ -450,11 +431,23 @@ winkstart.module('voip', 'device',
                                 delete form_data.data.caller_id.emergency;
                             }
 
-                            THIS.renderDevice(form_data);
+                            THIS.renderDevice(form_data, $('#device-view', '#ws-content'));
                         });
                     } else {
                         /* This is a new device - pass along empty params */
-                        THIS.renderDevice(form_data);
+                        create_html = THIS.templates.generalEditDevice.tmpl().appendTo($('#device-view'));
+
+                        $('.media_tabs .buttons', create_html).click(function() {
+                            $('.media_tabs .buttons.current').removeClass('current');
+                            $(this).addClass('current');
+                            $clicked = $(this);
+                            $clicked.animate({top:"40px"}, 300 );
+                            $clicked.siblings(".buttons").animate({top:"0"}, 300 );
+
+                            $('.media_pane', create_html).empty();
+                            form_data.data.device_type = $(this).attr('device_type');
+                            THIS.renderDevice(form_data, $('.media_pane', create_html));
+                        });
                     }
                 });
             });
@@ -478,44 +471,55 @@ winkstart.module('voip', 'device',
             });
         },
         cleanFormData: function(form_data) {
-            var audioCodecs = [];
-            var videoCodecs = [];
-            $.each(form_data.media.audio.codecs, function(index, obj) {
-                if(obj)
-                {
-                    audioCodecs.push(obj);
-                }
-            });
-            $.each(form_data.media.video.codecs, function(index, obj) {
-                if(obj)
-                {
-                    videoCodecs.push(obj);
-                }
-            });
-            if(form_data.owner_id == '!') {
-                form_data.field_data.users = null;
-            } 
-            form_data.media.audio.codecs = audioCodecs;
-            form_data.media.video.codecs = videoCodecs;
-            
+            if(form_data.device_type == 'sip_device') {
+                var audioCodecs = [];
+                var videoCodecs = [];
+                $.each(form_data.media.audio.codecs, function(index, obj) {
+                    if(obj)
+                    {
+                        audioCodecs.push(obj);
+                    }
+                });
+                $.each(form_data.media.video.codecs, function(index, obj) {
+                    if(obj)
+                    {
+                        videoCodecs.push(obj);
+                    }
+                });
+                form_data.media.audio.codecs = audioCodecs;
+                form_data.media.video.codecs = videoCodecs;
+                if(form_data.owner_id == '!') {
+                    form_data.field_data.users = null;
+                } 
+            } else if(form_data.device_type == 'cell_phone') {
+                if(form_data.owner_id == '!') {
+                    form_data.field_data.users = null;
+                } 
+            }
+
             return form_data;
         },
 
         /**
      * Draw device fields/template and populate data, add validation. Works for both create & edit
      */
-        renderDevice: function(form_data){
+        renderDevice: function(form_data, parent){
             var THIS = this;
             var device_id = form_data.data.id;
 
             winkstart.log(form_data);
             /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editDevice.tmpl(form_data).appendTo( $('#device-view') );
+            //TODO: We need a if statement depending on the device type
+            if(form_data.data.device_type == 'cell_phone') {
+                THIS.templates.cellphone.tmpl(form_data).appendTo(parent);
+            } else {
+                THIS.templates.editDevice.tmpl(form_data).appendTo(parent);
+            }
 
             winkstart.cleanForm();
 
             /* Initialize form field validation */
-            THIS.validateForm();
+            THIS.validateForm(form_data.data.device_type);
 
             $("ul.settings1").tabs("div.pane > div");
             $("ul.settings2").tabs("div.advanced_pane > div");
@@ -606,7 +610,7 @@ winkstart.module('voip', 'device',
                         _.each(crossbar_data, function(elem){
                             new_list.push({
                                 id: elem.id,
-                                title: elem.name
+                                title: elem.name 
                             });
                         });
                     }
@@ -630,7 +634,6 @@ winkstart.module('voip', 'device',
                 $("#device-listpanel").empty();
                 $("#device-listpanel").listpanel(options);
                 
-                
                 winkstart.getJSON('device.status', {
                     crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
@@ -638,10 +641,8 @@ winkstart.module('voip', 'device',
                 }, function (json, xhr) {
                     $.each(json.data, function(i,o){
                         if(o.registered == true){
-                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/green.png" width="16" height="16"/>');
-                        }else{
-                            $('#'+o.device_id ,'#device-listpanel').find('a').prepend('<img src="whapps/voip/device/css/images/red.png" width="16" height="16"/>');
-                        }
+                            $('#'+o.device_id ,'#device-listpanel').addClass('registered');
+                        } 
                     });
                 
                 });

@@ -103,6 +103,10 @@ winkstart.module('cluster', 'deploy_mgr',
                         $(serverDialog).dialog({
                             width: 550
                         });
+                        
+                        $(serverDialog).dialog({
+                            position: ['center', 'top']
+                        });
                         var data = {
                             servers: [],
                             type: $('.serverType option:selected').val()
@@ -151,7 +155,7 @@ winkstart.module('cluster', 'deploy_mgr',
                     $(this).dialog({
                         width: 200
                     });
-                    
+                            
                     $('.serverType', firstServerDialog).each(function(){
                         var select = this;
                         $.each(THIS.serverTypes,function(i, v){
@@ -163,6 +167,7 @@ winkstart.module('cluster', 'deploy_mgr',
                         $(firstServerDialog).dialog({
                             width: 200
                         });
+                        
                         $('.type').each(function(){
                             $(this).hide();
                         });
@@ -175,6 +180,10 @@ winkstart.module('cluster', 'deploy_mgr',
                         $('.serverType', $(div)).change(function(){
                             $(firstServerDialog).dialog({
                                 width: 550
+                            });
+                            
+                            $(firstServerDialog).dialog({
+                                position: ['center', 'top']
                             });
                             var data = {
                                 servers: [],

@@ -234,6 +234,8 @@ a.save_btnServer:hover {
 .content_form {
     float: right;
     width: 60%;
+    max-height: 500px;
+    overflow: auto;
 }
 
 h3 {

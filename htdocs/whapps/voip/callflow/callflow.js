@@ -1817,6 +1817,126 @@ winkstart.module('voip', 'callflow', {
                     },
                     edit: function(node, callback) {
                     }
+                },
+                'hotdesk[id=*,action=call]': {
+                    name: 'Hot Desking',
+                    icon: 'v_phone',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'call',
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var name = node.getMetadata('name');
+                        
+                        return (name) ? name : '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+                                $.each(data.data, function() {
+                                    this.name = this.first_name + ' ' + this.last_name;
+                                });
+                                popup_html = THIS.templates.edit_dialog.tmpl({
+                                    objects: {
+                                        type: 'user',
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Select Hot Desking User' });
+
+                                $('.submit_btn', popup).click(function() {
+                                    node.setMetadata('id', $('#object-selector', popup).val());
+                                    node.setMetadata('name', $('#object-selector option:selected', popup).text());
+
+                                    node.caption = $('#object-selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'hotdesk[action=login]': {
+                    name: 'Hot Desk login',
+                    icon: 'hotdesk_login',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'login'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[action=logout]': {
+                    name: 'Hot Desk logout',
+                    icon: 'hotdesk_logout',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'logout'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[action=toggle]': {
+                    name: 'Hot Desk toggle',
+                    icon: 'hotdesk_toggle',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'toggle'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
                 }
             });
         }

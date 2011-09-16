@@ -1,7 +1,8 @@
 ( function(winkstart, amplify, $) {
 
     winkstart.log = function(data) {
-        if (winkstart.debug) {
+        //if (winkstart.debug) {
+        if(winkstart.config.debug) {
             console.log(data);
         }
     };

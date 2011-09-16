@@ -317,6 +317,22 @@
     background-position: -895px -424px;
 }
 
+.icon.v_phone {
+    background-position: -448px -163px;
+}
+
+.icon.hotdesk_login {
+    background-position: -64px -288px;
+}
+
+.icon.hotdesk_logout {
+    background-position: 0 -288px;
+}
+
+.icon.hotdesk_toggle {
+    background-position: -288px 0px;
+}
+
 /*.icon.close {
     background-image: url("../../whapps/core/layout/images/icons_16x16_white.png");
     background-position: -480px -16px;

@@ -47,7 +47,7 @@
     
 }
 
-#apykey a {
+#apikey a {
     background-image: url(../images/regular_btn.png);
     width: 81px;
     height: 27px;
@@ -61,7 +61,7 @@
     margin-top: 10px
 }
 
-#apykey a:hover {
+#apikey a:hover {
     color: #05AFDC;
     cursor: pointer;
 }

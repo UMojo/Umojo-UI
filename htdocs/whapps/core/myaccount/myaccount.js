@@ -12,12 +12,14 @@ winkstart.module('core', 'myaccount',
             billing: 'tmpl/billing.html',
             apps: 'tmpl/apps.html',
             userlevel: 'tmpl/userlevel.html',
-            apykey: 'tmpl/apykey.html'
+            apikey: 'tmpl/apikey.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'myaccount.display' : 'display'
+            'myaccount.display' : 'display',
+            'nav.my_account_click' : 'my_account_click',
+            'nav.my_logout_click' : 'my_logout_click'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -47,25 +49,22 @@ winkstart.module('core', 'myaccount',
     function(args) {
         // Tell winkstart about the APIs you are going to be using (see top of this file, under resources
         winkstart.registerResources(this.__whapp, this.config.resources);
+    }, // End initialization routine
+    
 
-        // This app is slightly invasive - it assumes it should always be bound to an element named my_account anywhere on the page
-        $('#my_account').live('click', function() {
+    /* Define the functions for this module */
+    {
+        my_account_click: function() {
             if(winkstart.apps['auth'].auth_token != '') {
                 winkstart.publish('myaccount.display');
             }
             else {
                 winkstart.publish('auth.activate');
             }
-        });
-        $('a#my_logout').live('click', function() {
+        },
+        my_logout_click: function() {
             winkstart.publish('auth.activate');
-        });
-    }, // End initialization routine
-
-
-
-    /* Define the functions for this module */
-    {
+        },
         add_creditCard: function(frm) {
             winkstart.postJSON('sipservice.billing.put',
             {
@@ -184,7 +183,7 @@ winkstart.module('core', 'myaccount',
             var THIS = this;
             
             var tmpl = {
-                apy:['Linode', 'Rackspace', 'Amazon']
+                api:['Linode', 'Rackspace', 'Amazon']
                 };
             
             THIS.templates.myaccount.tmpl().dialog({
@@ -194,7 +193,7 @@ winkstart.module('core', 'myaccount',
                 open:function(){
                     THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
                     THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
-                    THIS.templates.apykey.tmpl(tmpl).appendTo('.myaccount_popup #apykey');
+                    THIS.templates.apikey.tmpl(tmpl).appendTo('.myaccount_popup #apikey');
                     THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
                 }
             });

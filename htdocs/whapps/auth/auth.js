@@ -101,7 +101,7 @@ winkstart.module('auth', 'auth',
                     if(THIS.request_realm) {
                         realm = $('#realm', dialogRegister).val();
                     } else {
-                        realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
+                        realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
                     }
 
                     // If realm was set in the URL, override all
@@ -122,21 +122,11 @@ winkstart.module('auth', 'auth',
                                 'first_name': $('#first_name', dialogRegister).val() ,
                                 'last_name':$('#last_name', dialogRegister).val(),
                                 'email': $('#email', dialogRegister).val(),
-                                'apps': {
-                                    "cluster": {
-                                       "label": "Cluster Manager",
-                                       "icon": "cluster_manager",
-                                       "api_url": "http://apps.2600hz.com:8000/v1"
-                                    },
-                                    "voip": {
-                                        'label': 'Trial PBX',
-                                        'icon': 'phone',
-                                        'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
-                                    }
-                                 }
+                                'apps': winkstart.config.register_apps
                             }
                         }
                     };
+                    console.log(rest_data);
                     winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
                         alert('Registered successfully. Please check your e-mail to activate your account!');
                         dialogRegister.dialog('close');
@@ -168,7 +158,7 @@ winkstart.module('auth', 'auth',
                 if (THIS.request_realm) {
                     realm = $('#realm', dialogDiv).val();
                 } else {
-                    realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
+                    realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
                 }
                 
                 // If realm was set in the URL, override all

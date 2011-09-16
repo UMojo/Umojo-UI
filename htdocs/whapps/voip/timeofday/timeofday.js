@@ -476,7 +476,7 @@ winkstart.module('voip', 'timeofday',
 
                 form_data.wdays = [];
                 $('.fake_checkbox.checked','#timeofday-form').each(function() {
-                    form_data.wdays.push($(this).attr('data-value'));                    
+                    form_data.wdays.push($(this).dataset('value'));                    
                 });
     
                 form_data.interval = $('#cycle','#timeofday-form').val() == 'monthly' ? $('#interval_month', '#timeofday-form').val() : $('#interval_week', '#timeofday-form').val();
