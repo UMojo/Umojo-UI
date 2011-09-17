@@ -35,43 +35,43 @@
 }
 
 .icon.blue {
-    background-image: url(../images/icons_32x32_blue.png);
+    background-image: url(../images/icons/icons_32x32_blue.png);
 }
 
 .icon.darkgrey {
-    background-image: url(../images/icons_32x32_darkgrey.png);
+    background-image: url(../images/icons/icons_32x32_darkgrey.png);
 }
 
 .icon.green {
-    background-image: url(../images/icons_32x32_green.png);
+    background-image: url(../images/icons/icons_32x32_green.png);
 }
 
 .icon.lightgrey {
-    background-image: url(../images/icons_32x32_lightgrey.png);
+    background-image: url(../images/icons/icons_32x32_lightgrey.png);
 }
 
 .icon.red {
-    background-image: url(../images/icons_32x32_red.png);
+    background-image: url(../images/icons/icons_32x32_red.png);
 }
 
 .icon.white {
-    background-image: url(../images/icons_32x32_white.png);
+    background-image: url(../images/icons/icons_32x32_white.png);
 }
 
 .icon.yellow {
-    background-image: url(../images/icons_32x32_yellow.png);
+    background-image: url(../images/icons/icons_32x32_yellow.png);
 }
 
 .icon.medium.blue {
-    background-image: url(../images/icons_24x24_blue.png);
+    background-image: url(../images/icons/icons_24x24_blue.png);
 }
 
 .icon.medium.red {
-    background-image: url(../images/icons_24x24_blue.png);
+    background-image: url(../images/icons/icons_24x24_blue.png);
 }
 
 .icon.medium.gradient {
-    background-image: url(../images/icons_24x24_blue.png);
+    background-image: url(../images/icons/icons_24x24_blue.png);
 }
 
 /************** ICONS APPNAV *****/

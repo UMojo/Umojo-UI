@@ -387,6 +387,7 @@ winkstart.module('voip', 'device',
                             expire_seconds: "360"
                         },
                         call_forward: {
+                            enabled: "true",
                             require_keypress: "true",
                             keep_caller_id: "true"
                         }
