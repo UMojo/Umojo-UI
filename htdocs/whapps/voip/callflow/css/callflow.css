@@ -7,18 +7,65 @@
     margin-top: 30px;
 }
 
-#ws_callflow #ws_cf_flow { width: 100%; overflow-x: auto; min-height: 400px; padding-top: 20px; margin-top: 10px; text-align: center; }
+#ws_callflow #ws_cf_flow { 
+    width: 100%;
+    overflow-x: auto;
+    min-height: 400px;
+    padding-top: 20px;
+    margin-top: 10px;
+    text-align: center;
+}
 
-#ws_callflow table.callflow { width: 100%; /*border: solid 1px;*/ }
-#ws_callflow table.callflow span { vertical-align: top; display:inline-block;}
-#ws_callflow span.flow { width: 80%; }
+#ws_callflow span.flow { 
+    width: 80%;
+}
 
-#ws_callflow .child { display: inline-block; vertical-align: top; text-align: center; white-space: normal; }
-#ws_callflow .branch { display: block; text-align: center; }
-#ws_callflow .node.active { background-color: #fff; }
-#ws_callflow .node.inactive { filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5; }
-#ws_callflow .children { display: block; white-space: pre; }
-#ws_callflow div.tools { width: 180px; right:0%; top:150px; margin-top: 0px; display:inline-block; position:fixed; }
-#ws_callflow .tool { text-align: center; vertical-align: middle; }
-#ws_callflow .tool_name { text-transform: capitalize;}
-#ws_callflow .tool .action.inactive { display: none; }
+#ws_callflow .child {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    white-space: normal;
+}
+
+#ws_callflow .branch {
+    display: block;
+    text-align: center;
+}
+
+#ws_callflow .node.active {
+    background-color: #fff;
+}
+
+#ws_callflow .node.inactive {
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+
+#ws_callflow .children {
+    display: block;
+    white-space: pre;
+}
+
+#ws_callflow div.tools {
+    width: 180px;
+    right:0%;
+    top:150px;
+    margin-top: 0px;
+    display:inline-block;
+    position:fixed;
+}
+
+#ws_callflow .tool { 
+    text-align: center;
+    vertical-align: middle;
+}
+
+#ws_callflow .tool_name {
+    text-transform: capitalize;
+}
+
+#ws_callflow .tool .action.inactive {
+    display: none;
+}

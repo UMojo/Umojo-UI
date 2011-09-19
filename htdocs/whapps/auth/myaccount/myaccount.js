@@ -21,7 +21,9 @@ winkstart.module('auth', 'myaccount',
             'myaccount.display' : 'display',
             'myaccount.updatePwd' : 'updatePwd',
             'myaccount.updateEmail' : 'updateEmail',
-            'myaccount.selectApp' : 'selectApp'
+            'myaccount.selectApp' : 'selectApp',
+            'nav.my_account_click' : 'my_account_click',
+            'nav.my_logout_click' : 'my_logout_click'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -51,25 +53,24 @@ winkstart.module('auth', 'myaccount',
     function(args) {
         // Tell winkstart about the APIs you are going to be using (see top of this file, under resources
         winkstart.registerResources(this.__whapp, this.config.resources);
+    }, // End initialization routine
+    
 
-        $('#my_account').live('click', function() {
+    /* Define the functions for this module */
+    {
+        my_account_click: function() {
             if(winkstart.apps['auth'].auth_token != '') {
                 winkstart.publish('myaccount.display');
             }
             else {
                 winkstart.publish('auth.activate');
             }
-        });
-        $('a#my_logout').live('click', function() {
+        },
+        
+        my_logout_click: function() {
             winkstart.publish('auth.activate');
-        });
+        },
 
-    }, // End initialization routine
-
-
-
-    /* Define the functions for this module */
-    {
         add_creditCard: function(frm) {
             winkstart.postJSON('sipservice.billing.put',
             {

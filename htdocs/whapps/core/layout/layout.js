@@ -41,6 +41,36 @@ winkstart.module('core', 'layout', {
             winkstart.publish('auth.register');
         });
 
+        $('#my_account', '.universal_nav').click(function() {
+            winkstart.publish('nav.my_account_click');
+        });
+
+        $('#my_help', '.universal_nav').click(function() {
+            winkstart.publish('nav.my_help_click');
+        });
+
+        $('#my_logout', '.universal_nav').click(function() {
+            winkstart.publish('nav.my_logout_click');
+        });
+
+        if('nav' in winkstart.config) {
+            if('my_account' in winkstart.config.nav) {
+                $('#my_account', '.universal_nav').unbind('click')
+                                                  .attr('href', winkstart.config.nav.my_account);
+            }
+            
+            if('my_help' in winkstart.config.nav) {
+                $('#my_help', '.universal_nav').unbind('click')
+                                               .attr('href', winkstart.config.nav.my_help);
+            }
+
+            if('my_logout' in winkstart.config.nav) {
+                $('#my_logout', '.universal_nav').unbind('click')
+                                                 .attr('href', winkstart.config.nav.my_logout);
+            }
+
+        }
+
         winkstart.log ('Layout: Initialized layout.');
     },
 

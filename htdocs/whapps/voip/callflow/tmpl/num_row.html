@@ -1,0 +1,21 @@
+<div>
+    <div class="number_row">
+        {{if numbers[0]}} 
+            <div class="number_column" data-number="${numbers[0]}">
+                ${numbers[0]}
+                <span class="delete"/>
+            </div>
+        {{else}}
+            <div class="number_column empty">Click to add number</div>
+        {{/if}}
+        {{if numbers[1]}} 
+            <div class="number_column" data-number="${numbers[1]}">
+                ${numbers[1]}
+                <span class="delete"/>
+            </div>
+        {{else}}
+            <div class="number_column empty">Click to add number</div>
+        {{/if}}
+        <div class="clear"/>
+    </div>
+</div>

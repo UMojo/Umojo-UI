@@ -2,9 +2,7 @@
     <div class="inner">
         <form id="device-form" action="" method="post" class="niceform">
             {{if data.id}}
-                <h1>Edit Device</h1>
-            {{else}}
-                <h1>Create Device</h1>
+                <h1>Edit SIP Device</h1>
             {{/if}}
 
             <ul class="settings_tabs settings1">
@@ -51,9 +49,9 @@
                                 <input id="mac_address" name="mac_address" type="text" value="${data.mac_address}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want this device to be enabled once its setup is done">
+                                <span class="tooltip-wrapper" tooltip="Do you want this device enabled?">
                                     <span class="tooltip"/>
-                                    <label for="status">Enabled</label>
+                                    <label for="status">Enabled:</label>
                                 </span>
                                 {{if data.status == true}}
                                 <input type="checkbox" id="status" name="status" checked="checked"/>
@@ -298,6 +296,7 @@
                                 <span>(Requires a T.38 Capable Device)</span>
                             </li>
                         </ul>
+                        <input type="hidden" value="${data.device_type}" name="device_type"/>
                     </fieldset>
                     
                     <div class="clear"></div>
@@ -306,15 +305,16 @@
 
             </div>
 
-        <div class="buttons_wrapper">
-            <ul class="buttons right devices">
-                <li><a class="device-save save-btn" href="#">Save</a></li>
-                {{if data.id}}
-                    <li><a class="device-delete delete-btn" href="#">Delete</a></li>
-                {{/if}}
-                <li><a class="device-cancel" href="#">Cancel</a></li>
-            </ul>
-        </div>
+            <div class="buttons_wrapper">
+                <ul class="buttons right devices">
+                    <li><a class="device-save save-btn" href="#">Save</a></li>
+                    {{if data.id}}
+                        <li><a class="device-delete delete-btn" href="#">Delete</a></li>
+                    {{/if}}
+                    <li><a class="device-cancel" href="#">Cancel</a></li>
+                </ul>
+                <div class="clear"/>
+            </div>
             
         </form>
     </div>
