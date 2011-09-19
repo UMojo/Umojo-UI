@@ -12,12 +12,16 @@ winkstart.module('auth', 'myaccount',
             billing: 'tmpl/billing.html',
             apps: 'tmpl/apps.html',
             userlevel: 'tmpl/userlevel.html',
-            apikey: 'tmpl/apikey.html'
+            apikey: 'tmpl/apikey.html',
+            personalinfos: 'tmpl/personalinfos.html'
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
-            'myaccount.display' : 'display'
+            'myaccount.display' : 'display',
+            'myaccount.updatePwd' : 'updatePwd',
+            'myaccount.updateEmail' : 'updateEmail',
+            'myaccount.selectApp' : 'selectApp'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -77,8 +81,7 @@ winkstart.module('auth', 'myaccount',
                     display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                 }
 
-            }
-            )
+            });
         },
 
         delCreditCard: function(tid) {
@@ -93,9 +96,7 @@ winkstart.module('auth', 'myaccount',
                 if (msg && msg.errs && msg.errs[0]) {
                     display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                 }
-
-            }
-            );
+            });
         },
 
         addPromoCode: function(pc) {
@@ -111,9 +112,7 @@ winkstart.module('auth', 'myaccount',
                 if (msg && msg.errs && msg.errs[0]) {
                     display_errs(msg.errs, null, eval(msg.errs[0].cb) );
                 }
-
-            }
-            );
+            });
         },
 
         edit_billing: function() {
@@ -178,7 +177,67 @@ winkstart.module('auth', 'myaccount',
             });
         },
 
+        updateEmail: function() {
+            winkstart.getJSON('myaccount.user_get', {
+                crossbar: true,
+                account_id: winkstart.apps['auth'].account_id,
+                api_url: winkstart.apps['auth'].api_url,
+                user_id: winkstart.apps['auth'].user_id
+            }, function(data, status) {
 
+                data.data.email = $('#infos_email').val();
+
+                winkstart.postJSON('myaccount.user_update', {
+                    crossbar: true,
+                    account_id: winkstart.apps['auth'].account_id,
+                    api_url: winkstart.apps['auth'].api_url,
+                    user_id: winkstart.apps['auth'].user_id,
+                    data: data.data
+                }, function(data, status) {
+                    alert('Email changed successfully !');
+                })
+            });
+        },
+        
+        updatePwd: function() {
+            var THIS = this;
+            
+            if($('#infos_pwd1').val() == $('#infos_pwd2').val()) {
+                winkstart.getJSON('myaccount.user_get', {
+                    crossbar: true,
+                    account_id: winkstart.apps['auth'].account_id,
+                    api_url: winkstart.apps['auth'].api_url,
+                    user_id: winkstart.apps['auth'].user_id
+                }, function(data, status) {
+
+                    data.data.password = $('#infos_pwd1').val();
+
+                    winkstart.postJSON('myaccount.user_update', {
+                        crossbar: true,
+                        account_id: winkstart.apps['auth'].account_id,
+                        api_url: winkstart.apps['auth'].api_url,
+                        user_id: winkstart.apps['auth'].user_id,
+                        data: data.data
+                    }, function(data, status) {
+                        alert('Password changed successfully !');
+                    })
+                });
+            } else {
+                alert('Please, confirm your password');
+            }
+        },
+        
+        selectApp: function() {
+            var THIS = this;
+            
+            // For all the user's current apps 
+            $.each(winkstart.apps, function(index, value) {
+                // Creating the item object we want to get
+                var $itm = $('#'+index+' a');
+                // Applying the right class if in the list
+                $('#tabs1 .apps ul').find($itm).addClass('active');
+            });
+        },
 
         display: function() {
             var THIS = this;
@@ -187,16 +246,45 @@ winkstart.module('auth', 'myaccount',
                 api:['Linode', 'Rackspace', 'Amazon']
             };
             
-            THIS.templates.myaccount.tmpl().dialog({
-                height: '600',
-                width: '500',
-                title: 'My account',
-                open:function(){
-                    THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
-                    THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
-                    THIS.templates.apikey.tmpl(tmpl).appendTo('.myaccount_popup #apikey');
-                    THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
+            $('#ws-content').empty();
+            
+            THIS.templates.myaccount.tmpl().appendTo( '#ws-content' );
+            
+            $("#tabs ul").tabs("#tabs .pane > div");
+            
+            THIS.templates.apps.tmpl().appendTo('.pane #tabs1');
+            THIS.templates.billing.tmpl().appendTo('.pane #tabs2');
+            THIS.templates.personalinfos.tmpl().appendTo('.pane #tabs3');
+            THIS.templates.apikey.tmpl(tmpl).appendTo('.pane #tabs3');
+            
+            $('#tabs1 li a').click(function() {
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active');
                 }
             });
+            
+            winkstart.publish('myaccount.selectApp');
+            
+            $('#btnEmail').click(function() {
+                winkstart.publish('myaccount.updateEmail');
+            });
+            
+            $('#btnPwd').click(function() {
+                winkstart.publish('myaccount.updatePwd');
+            });
+            
+//            THIS.templates.myaccount.tmpl().dialog({
+//                height: '600',
+//                width: '500',
+//                title: 'My account',
+//                open:function(){
+//                    THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
+//                    THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
+//                    THIS.templates.apikey.tmpl(tmpl).appendTo('.myaccount_popup #apikey');
+//                    THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
+//                }
+//            });
         }
     });  // End module
