@@ -4,6 +4,7 @@ winkstart.module('auth', 'myaccount',
         /* What CSS stylesheets do you want automatically loaded? */
         css: [
         'css/style.css',
+        'css/popups.css'
         ],
 
         /* What HTML templates will we be using? */
