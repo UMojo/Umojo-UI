@@ -23,7 +23,9 @@ winkstart.module('auth', 'myaccount',
             'myaccount.updateEmail' : 'updateEmail',
             'myaccount.selectApp' : 'selectApp',
             'nav.my_account_click' : 'my_account_click',
-            'nav.my_logout_click' : 'my_logout_click'
+            'nav.my_logout_click' : 'my_logout_click',
+            'myaccount.activateApp' : 'activateApp',
+            'myaccount.deactivateApp' : 'deactivateApp'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -43,6 +45,16 @@ winkstart.module('auth', 'myaccount',
                 url: 'https://store.2600hz.com/v1/billing',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            "myaccount.user.get": {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            "myaccount.user.update": {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'POST'
             }
         }
     }, // End module resource definitions
@@ -58,6 +70,7 @@ winkstart.module('auth', 'myaccount',
 
     /* Define the functions for this module */
     {
+
         my_account_click: function() {
             if(winkstart.apps['auth'].auth_token != '') {
                 winkstart.publish('myaccount.display');
@@ -234,9 +247,90 @@ winkstart.module('auth', 'myaccount',
             // For all the user's current apps 
             $.each(winkstart.apps, function(index, value) {
                 // Creating the item object we want to get
-                var $itm = $('#'+index+' a');
+                var $itm = $('#'+index+' a img');
                 // Applying the right class if in the list
                 $('#tabs1 .apps ul').find($itm).addClass('active');
+            });
+        },
+        
+        activateApp: function(data) {
+            winkstart.getJSON('myaccount.user.get', {
+                crossbar: true,
+                account_id: winkstart.apps['voip'].account_id,
+                api_url: winkstart.apps['voip'].api_url,
+                user_id: winkstart.apps['auth'].user_id
+            }, function(json, xhr) {
+                
+                newapp = {};
+                if(data.whapp == "voip") {
+                    newapp = { "apps": {"voip": {
+                        "label": "VoIP Services",
+                        "icon": "phone",
+                        "api_url": "http://apps.2600hz.com:8000/v1"
+                    }}};
+                } else if (data.whapp == "cluster") {
+                    newapp = { "apps": {"cluster": {
+                        "label": "Cluster Manager",
+                        "icon": "cluster_manager",
+                        "api_url": "http://apps.2600hz.com:8000/v1"
+                    }}};
+                } else if (data.whapp == "userportal") {
+                    newapp = { "apps": {"userportal": {
+                        "label": "User Portal",
+                        "icon": "user_portal",
+                        "api_url": "http://apps.2600hz.com:8000/v1"
+                    }}};
+                } else if (data.whapp == "connect") {
+                    newapp = { "apps": {"connect": {
+                        "label": "Connect Tool",
+                        "icon": "connectivity",
+                        "api_url": "http://store.2600hz.com/v1"
+                    }}};
+                }
+                
+                final_data = $.extend(true, {}, json.data, newapp);
+
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = winkstart.apps['auth'].account_id,
+                rest_data.api_url = winkstart.apps['auth'].api_url,
+                rest_data.user_id = winkstart.apps['auth'].user_id;
+                rest_data.data = final_data;
+                
+                winkstart.postJSON('myaccount.user.update', rest_data, function (json, xhr) {});
+                
+                alert('Please REFRESH the page in order to apply the changes');
+            });
+        },
+        
+        deactivateApp: function(data) {
+            winkstart.getJSON('myaccount.user.get', {
+                crossbar: true,
+                account_id: winkstart.apps['auth'].account_id,
+                api_url: winkstart.apps['auth'].api_url,
+                user_id: winkstart.apps['auth'].user_id
+            }, function(json, xhr) {
+
+                if(data.whapp == "voip") {
+                    delete json.data.apps.voip;
+                } else if (data.whapp == "cluster") {
+                    delete json.data.apps.cluster;
+                } else if (data.whapp == "userportal") {
+                    delete json.data.apps.userportal;
+                } else if (data.whapp == "connect") {
+                    delete json.data.apps.connect;
+                }
+
+                var rest_data = {};
+                rest_data.crossbar = true;
+                rest_data.account_id = winkstart.apps['auth'].account_id,
+                rest_data.api_url = winkstart.apps['auth'].api_url,
+                rest_data.user_id = winkstart.apps['auth'].user_id;
+                rest_data.data = json.data;
+                
+                winkstart.postJSON('myaccount.user.update', rest_data, function (json, xhr) {});
+                
+                alert('Please REFRESH the page in order to apply the changes');
             });
         },
 
@@ -247,34 +341,46 @@ winkstart.module('auth', 'myaccount',
                 api:['Linode', 'Rackspace', 'Amazon']
             };
             
-            $('#ws-content').empty();
+            dialogDiv = winkstart.dialog(THIS.templates.myaccount.tmpl(), {
+                height: '600',
+                width: '570',
+                title: 'My account',
+                open:function(){
+                    $("#tabs ul").tabs("#tabs .pane > div");
             
-            THIS.templates.myaccount.tmpl().appendTo( '#ws-content' );
-            
-            $("#tabs ul").tabs("#tabs .pane > div");
-            
-            THIS.templates.apps.tmpl().appendTo('.pane #tabs1');
-            THIS.templates.billing.tmpl().appendTo('.pane #tabs2');
-            THIS.templates.personalinfos.tmpl().appendTo('.pane #tabs3');
-            THIS.templates.apikey.tmpl(tmpl).appendTo('.pane #tabs3');
-            
-            $('#tabs1 li a').click(function() {
-                if($(this).hasClass('active')) {
-                    $(this).removeClass('active');
-                } else {
-                    $(this).addClass('active');
+                    THIS.templates.apps.tmpl().appendTo('.pane #tabs1');
+                    THIS.templates.billing.tmpl().appendTo('.pane #tabs2');
+                    THIS.templates.personalinfos.tmpl().appendTo('.pane #tabs3');
+                    THIS.templates.apikey.tmpl(tmpl).appendTo('.pane #tabs3');
+
+                    $('#tabs1 li a img').click(function() {
+                        if($(this).hasClass('active')) {
+                            $(this).removeClass('active');
+                            winkstart.publish('myaccount.deactivateApp', {
+                                whapp: $(this).parent().attr('id')
+                            });
+                        } else {
+                            $(this).addClass('active');
+                            winkstart.publish('myaccount.activateApp', {
+                                whapp: $(this).parent().attr('id')
+                            });
+                        }
+                    });
+
+                    winkstart.publish('myaccount.selectApp');
+
+                    $('#btnEmail').click(function() {
+                        winkstart.publish('myaccount.updateEmail');
+                    });
+
+                    $('#btnPwd').click(function() {
+                        winkstart.publish('myaccount.updatePwd');
+                    });
                 }
             });
             
-            winkstart.publish('myaccount.selectApp');
-            
-            $('#btnEmail').click(function() {
-                winkstart.publish('myaccount.updateEmail');
-            });
-            
-            $('#btnPwd').click(function() {
-                winkstart.publish('myaccount.updatePwd');
-            });
+            dialogDiv.css('overflow', 'hidden');
+            dialogDiv.css('overflow-y', 'auto');
             
 //            THIS.templates.myaccount.tmpl().dialog({
 //                height: '600',

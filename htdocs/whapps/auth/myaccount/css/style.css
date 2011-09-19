@@ -9,9 +9,13 @@
     cursor: pointer;
 }
 
+#tabs .pane {
+    width: 520px;
+}
+
 .active {
-  border : 2px inset #27470e;
-  background-color : #27470e;
+  border : 2px inset black;
+  background-color : #A3A3A3;
   color : #999;
   padding : 2px 11px 4px 9px;
 }
@@ -21,6 +25,11 @@
     margin-bottom: 10px;
     margin-top: 5px;
     font-weight: bold;
+}
+
+.apps .cpl li {
+    display: inline;
+    list-style-type: none;
 }
 
 #billing a {
