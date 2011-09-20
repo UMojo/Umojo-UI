@@ -1,0 +1,14 @@
+<div> 
+    <div class="module_list_wrapper">
+        <div class="module_list">
+        {{each(i, module) field_data.modules}}
+            {{if $.inArray(module, field_data.selected_apps) != -1}}
+                <input type="checkbox" checked="checked" data-value="${module}">${module}</div>
+            {{else}}
+                <input type="checkbox" data-value="${module}">${module}</div>
+            {{/if}}
+            ${module}
+        {{/each}}
+        </div>
+    </div>
+</div>
