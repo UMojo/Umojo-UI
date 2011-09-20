@@ -10,7 +10,89 @@
 }
 
 #tabs .pane {
-    width: 530px;
+    background-color: #3D3D3D;
+    width: 650px;
+}
+
+#account_title {
+    margin-top: 10px;
+}
+
+ul.settings_tabs {
+    margin-top: 0px;
+}
+
+#account_title .header3 {
+    font-size: 16px;
+}
+
+.pane {
+    color: #2CB9E1;
+    margin: 0px;
+}
+
+#accnt_free_app {
+    margin-top: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+    background-color: #787878;
+    padding: 10px;
+    font-size: 8px;
+}
+
+#accnt_prem_app {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+    margin-top: 30px;
+    background-color: #787878;
+    padding: 10px;
+}
+
+.app_holder {
+    float: left;
+    margin: 5px;
+    /*background-color: red;*/
+    height: 95px;
+    width: 200px;
+}
+
+.apps .img_app {
+    margin: auto;
+}
+
+.apps .app_text {
+    display: inline-block;
+    float: left;
+    width: 120px;
+}
+
+.apps .img_container {
+    float: left;
+    height: 95px;
+    width: 80px;
+    
+    padding-top: 10%;
+}
+
+.apps .app_text .head_app_text {
+    display: inline-block;
+    width: 120px;
+    font-size: 14px;
+    margin-top: 30%;
+}
+
+.apps .app_text .app_desc {
+    display: inline-block;
+    width: 120px;
+    font-size: 14px;
+    margin-top: 30%;
+}
+
+.apps .img_container img {
+    margin-left: -10px;
+    margin-right: -5px;
 }
 
 .active {
