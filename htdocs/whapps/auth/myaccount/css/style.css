@@ -9,29 +9,29 @@
     cursor: pointer;
 }
 
-#tabs .pane {
+#myaccount_popup #tabs .pane {
     background-color: #3D3D3D;
-    width: 650px;
+    width: 670px;
 }
 
-#account_title {
+#myaccount_popup #account_title {
     margin-top: 10px;
 }
 
-ul.settings_tabs {
+#myaccount_popup ul.settings_tabs {
     margin-top: 0px;
 }
 
-#account_title .header3 {
+#myaccount_popup #account_title .header3 {
     font-size: 16px;
 }
 
-.pane {
+#myaccount_popup .pane {
     color: #2CB9E1;
     margin: 0px;
 }
 
-#accnt_free_app {
+#myaccount_popup #accnt_free_app {
     margin-top: 10px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -41,7 +41,7 @@ ul.settings_tabs {
     font-size: 8px;
 }
 
-#accnt_prem_app {
+#myaccount_popup #accnt_prem_app {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px; 
@@ -50,25 +50,26 @@ ul.settings_tabs {
     padding: 10px;
 }
 
-.app_holder {
+#myaccount_popup .app_holder {
     float: left;
-    margin: 5px;
+    margin: 4px;
     /*background-color: red;*/
-    height: 95px;
+    height: 100px;
     width: 200px;
+    cursor: pointer;
 }
 
-.apps .img_app {
+#myaccount_popup .apps .img_app {
     margin: auto;
 }
 
-.apps .app_text {
+#myaccount_popup .apps .app_text {
     display: inline-block;
     float: left;
     width: 120px;
 }
 
-.apps .img_container {
+#myaccount_popup .apps .img_container {
     float: left;
     height: 95px;
     width: 80px;
@@ -76,45 +77,44 @@ ul.settings_tabs {
     padding-top: 10%;
 }
 
-.apps .app_text .head_app_text {
+#myaccount_popup .apps .app_text .head_app_text {
     display: inline-block;
     width: 120px;
     font-size: 14px;
     margin-top: 30%;
 }
 
-.apps .app_text .app_desc {
+#myaccount_popup .apps .app_text .app_desc {
     display: inline-block;
     width: 120px;
     font-size: 14px;
     margin-top: 30%;
 }
 
-.apps .img_container img {
+#myaccount_popup .apps .img_container img {
     margin-left: -10px;
     margin-right: -5px;
 }
 
-.active {
-  border : 2px inset black;
+#myaccount_popup .active {
+  border : 1px inset black;
   background-color : #A3A3A3;
-  color : #999;
-  padding : 2px 11px 4px 9px;
+  height: 98px;
 }
 
-.myaccount_popup h3 {
+#myaccount_popup .myaccount_popup h3 {
     text-align: center;
     margin-bottom: 10px;
     margin-top: 5px;
     font-weight: bold;
 }
 
-.apps .cpl li {
+#myaccount_popup .apps .cpl li {
     display: inline;
     list-style-type: none;
 }
 
-#billing a {
+#myaccount_popup #billing a {
     background-image: url(../images/regular_btn.png);
     width: 81px;
     height: 27px;
@@ -128,24 +128,24 @@ ul.settings_tabs {
     margin-top: 10px
 }
 
-#billing a:hover {
+#myaccount_popup #billing a:hover {
     color: #05AFDC;
     cursor: pointer;
 }
 
-#billing p.note_box {
+#myaccount_popup #billing p.note_box {
     background-color: #E7E7E7;
     padding: 15px 10px;
     font-size: 10px;
     line-height: 15px;
 }
 
-.myaccount_popup .apps li{
+#myaccount_popup .myaccount_popup .apps li{
     margin-left: 20px;
     
 }
 
-#apikey a {
+#myaccount_popup #apikey a {
     background-image: url(../images/regular_btn.png);
     width: 81px;
     height: 27px;
@@ -159,7 +159,7 @@ ul.settings_tabs {
     margin-top: 10px
 }
 
-#apikey a:hover {
+#myaccount_popup #apikey a:hover {
     color: #05AFDC;
     cursor: pointer;
 }

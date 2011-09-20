@@ -248,9 +248,9 @@ winkstart.module('auth', 'myaccount',
             // For all the user's current apps 
             $.each(winkstart.apps, function(index, value) {
                 // Creating the item object we want to get
-                var $itm = $('#'+index+' a img');
+                var $itm = $('#'+index);
                 // Applying the right class if in the list
-                $('#tabs1 .apps ul').find($itm).addClass('active');
+                $('#tabs1 .apps').find($itm).addClass('active');
             });
         },
         
@@ -354,16 +354,16 @@ winkstart.module('auth', 'myaccount',
                     THIS.templates.personalinfos.tmpl().appendTo('.pane #tabs3');
                     THIS.templates.apikey.tmpl(tmpl).appendTo('.pane #tabs3');
 
-                    $('#tabs1 li a img').click(function() {
+                    $('#tabs1 .app_holder').click(function() {
                         if($(this).hasClass('active')) {
                             $(this).removeClass('active');
                             winkstart.publish('myaccount.deactivateApp', {
-                                whapp: $(this).parent().parent().attr('id')
+                                whapp: $(this).attr('id')
                             });
                         } else {
                             $(this).addClass('active');
                             winkstart.publish('myaccount.activateApp', {
-                                whapp: $(this).parent().parent().attr('id')
+                                whapp: $(this).attr('id')
                             });
                         }
                     });
