@@ -358,12 +358,12 @@ winkstart.module('auth', 'myaccount',
                         if($(this).hasClass('active')) {
                             $(this).removeClass('active');
                             winkstart.publish('myaccount.deactivateApp', {
-                                whapp: $(this).parent().attr('id')
+                                whapp: $(this).parent().parent().attr('id')
                             });
                         } else {
                             $(this).addClass('active');
                             winkstart.publish('myaccount.activateApp', {
-                                whapp: $(this).parent().attr('id')
+                                whapp: $(this).parent().parent().attr('id')
                             });
                         }
                     });
