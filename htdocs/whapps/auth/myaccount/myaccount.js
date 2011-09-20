@@ -343,7 +343,7 @@ winkstart.module('auth', 'myaccount',
             };
             
             dialogDiv = winkstart.dialog(THIS.templates.myaccount.tmpl(), {
-                height: '600',
+                height: '640',
                 width: '570',
                 title: 'My account',
                 open:function(){
