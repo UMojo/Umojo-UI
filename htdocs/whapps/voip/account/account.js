@@ -119,12 +119,25 @@ winkstart.module('voip', 'account',
                     /* CREATE */
                     rest_data.account_id = winkstart.apps['voip'].account_id;
 
-                    winkstart.putJSON('account.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editAccount({
-                            id: json.data.id
-                        });
-                    });
+                    winkstart.putJSON('account.create', rest_data, function(data, status) {
+                            THIS.renderList();
+                            THIS.editAccount({
+                                id: data.data.id
+                            });
+                        },
+                        function(data, status) {
+                            /* Default back to the old way of doing things */
+                            rest_data.account_id = '';
+                            delete rest_data.json_string;
+
+                            winkstart.putJSON('account.create', rest_data, function(data, status) {
+                                THIS.renderList();
+                                THIS.editAccount({
+                                    id: data.data.id
+                                });
+                            });
+                        }
+                    );
                 }
             } else {
                 alert('Please correct errors that you have on the form.');
