@@ -128,7 +128,6 @@ winkstart.module('voip', 'featurecode', {
             );
         },
         update_list_featurecodes: function(form_data) {
-            console.log(form_data);
             var THIS = this;
 
             $.each(form_data.created_callflows, function() {
