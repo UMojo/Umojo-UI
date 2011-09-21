@@ -12,14 +12,32 @@ winkstart.module('skel', 'skel', {
     function() {
         var THIS = this;
 
+        if('modules' in winkstart.apps[THIS.__module]) {
+            if('whitelist' in winkstart.apps[THIS.__module].modules) {
+                THIS.modules = {};
+
+                $.each(winkstart.apps[THIS.__module].modules.whitelist, function(k, v) {
+                    THIS.modules[v] = false;
+                });
+            }
+
+            if('blacklist' in winkstart.apps[THIS.__module].modules) {
+                $.each(winkstart.apps[THIS.__module].modules.blacklist, function(k, v) {
+                    if(v in THIS.modules) {
+                        delete THIS.modules[v];
+                    }
+                });
+            }
+        }
+
+        THIS.uninitialized_count = THIS._count(THIS.modules);
+
         winkstart.publish ('auth.shared_auth', {
             app_name: THIS.__module,
             callback: function() {
                 winkstart.publish('appnav.add', { 'name' : THIS.__module });
             }
         });
-
-        THIS.uninitialized_count = THIS._count(THIS.modules);
     },
     {
         /* A modules object is required for the loading routine.
@@ -70,7 +88,7 @@ winkstart.module('skel', 'skel', {
                             this.init(function() {
                                 winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                                if(!--THIS.uninitialzed_count) {
+                                if(!--THIS.uninitialized_count) {
                                     winkstart.publish(THIS.__module + '.initialized', {});
                                 }
                             });
