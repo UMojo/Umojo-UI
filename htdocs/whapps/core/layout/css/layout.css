@@ -175,25 +175,36 @@ ul.universal_nav li {
 	font-size: 10px;
 }
 
-ul.universal_nav li a {
-	background-repeat: no-repeat;
-	padding-top: 2px;
+ul.universal_nav li.my_account_wrapper {
+    visibility: hidden;
 }
 
-ul.universal_nav li a.my_account {
-	background-image: url(../images/account_icon.png);
-    display: none;  /* Don't show this by default */
-	padding-left: 25px;
+ul.universal_nav li > span {
+    display: inline-block;
+    line-height: 10px;
+    text-align: center;
+    vertical-align: middle;
 }
 
-ul.universal_nav li a.help {
-	background-image: url(../images/help_icon.png);
-	padding-left: 16px;
+ul.universal_nav li span.my_account_icon {
+	background: url(../images/account_icon.png) no-repeat;
+    height: 15px;
+    width: 17px;
+    margin-right: 5px;
 }
 
-ul.universal_nav li a.logout {
-	background-image: url(../images/logout_icon.png);
-	padding-left: 18px;
+ul.universal_nav li span.my_help_icon {
+	background: url(../images/help_icon.png) no-repeat;
+    height: 14px;
+	width: 10px;
+    margin-right: 5px;
+}
+
+ul.universal_nav li span.my_logout_icon {
+	background: url(../images/logout_icon.png) no-repeat;
+	height: 15px;
+    width: 11px;
+    margin-right: 5px;
 }
 
 /*************************************

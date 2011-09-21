@@ -1798,33 +1798,13 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                     }
                 },
-                /* This is not the correct callflow node... Need this for migrations */
-                'resource[]': {
-                    name: 'Resource',
-                    icon: 'resource',
-                    module: 'resources',
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '0'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        alert('This callflow is outdated, please resave this callflow before continuing.');
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                    }
-                },
-                'hotdesk[id=*,action=call]': {
+                'hotdesk[id=*,action=bridge]': {
                     name: 'Hot Desking',
                     icon: 'v_phone',
                     category: 'hotdesk',
                     module: 'hotdesk',
                     data: {
-                        action: 'call',
+                        action: 'bridge',
                         id: 'null'
                     },
                     rules: [
@@ -1933,6 +1913,54 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                }
+            });
+
+            /* Migration callflows, fixes our goofs. To be removed eventually */
+            $.extend(callflow_nodes, {
+                'resource[]': {
+                    name: 'Resource',
+                    icon: 'resource',
+                    module: 'resources',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[id=*,action=call]': {
+                    name: 'Hot Desking',
+                    icon: 'v_phone',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'bridge',
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        //Migration here:
+                        node.setMetadata('action', 'bridge');
+
+                        alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {

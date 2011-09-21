@@ -72,7 +72,7 @@ winkstart.module('auth', 'auth',
 
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
         if(winkstart.apps['auth'].auth_token) {
-            $('a#my_account').show();
+            $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
         }
 
         if(cookie_data = $.cookie('c_winkstart_auth')) {
@@ -80,6 +80,14 @@ winkstart.module('auth', 'auth',
             eval('winkstart.apps["auth"] = ' + cookie_data);
             winkstart.publish('auth.load_account');
         }
+        
+                                // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+                                winkstart.module.loadModule('auth', 'myaccount', function() {
+                                    this.init();
+                                    winkstart.log('Core: Loaded My Account manager');
+                                });
+
+        
     },
 
     {
@@ -226,9 +234,9 @@ winkstart.module('auth', 'auth',
             }
 
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                $('a#my_logout').html("Logout");
-                $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name).show();
-                $('.homepage').html('');
+                $('.universal_nav #my_logout').html("Logout");
+                $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
+                $('.universal_nav #my_account').html(json.data.first_name + ' ' + json.data.last_name);
 
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
@@ -359,7 +367,7 @@ winkstart.module('auth', 'auth',
                     
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
-                    $('a#my_account').hide();
+                    $('.universal_nav .my_account_wrapper').hide();
 
                     // Temporary hack until module unloading works properly
                     window.location.reload();
