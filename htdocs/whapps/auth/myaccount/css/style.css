@@ -48,6 +48,7 @@
     margin-top: 30px;
     background-color: #787878;
     padding: 10px;
+    font-size: 8px;
 }
 
 #myaccount_popup .app_holder {
@@ -57,6 +58,19 @@
     height: 100px;
     width: 200px;
     cursor: pointer;
+    color: white;
+}
+
+#myaccount_popup ul.settings_tabs a.current, #myaccount_popup ul.settings_tabs a.current:hover, #myaccount_popup ul.settings_tabs li.current a {
+    background-position: 0 -23px;
+    color: #FFFFFF !important;
+    cursor: default !important;
+}
+
+ul.settings_tabs a {
+    background-image: url("../images/settings_tabs.png");
+    background-position: 0 0;
+    width: 218px;
 }
 
 #myaccount_popup .apps .img_app {
