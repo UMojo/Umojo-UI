@@ -128,7 +128,9 @@ winkstart.module('voip', 'featurecode', {
             );
         },
         update_list_featurecodes: function(form_data) {
-            var THIS = this;
+            var THIS = this,
+                count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
+
 
             $.each(form_data.created_callflows, function() {
                 winkstart.putJSON('featurecode.create', {
@@ -145,8 +147,9 @@ winkstart.module('voip', 'featurecode', {
                         }
                     }, 
                     function(data, status) {
-                        winkstart.publish('featurecode.activate');
-                        //THIS.render_featurecodes();
+                        if(!--count) {
+                            winkstart.publish('featurecode.activate');
+                        }
                     }
                 );
             });
@@ -166,8 +169,9 @@ winkstart.module('voip', 'featurecode', {
                         }
                     },
                     function(data, status) {
-                        winkstart.publish('featurecode.activate');
-                        //THIS.render_featurecodes();
+                        if(!--count) {
+                            winkstart.publish('featurecode.activate');
+                        }
                     }
                 );
             });
@@ -180,8 +184,9 @@ winkstart.module('voip', 'featurecode', {
                         featurecode_id: this.id
                     },
                     function() {
-                        winkstart.publish('featurecode.activate');
-                        //THIS.render_featurecodes();
+                        if(!--count) {
+                            winkstart.publish('featurecode.activate');
+                        }
                     }
                 );
             });
@@ -227,7 +232,7 @@ winkstart.module('voip', 'featurecode', {
                     children: {}
                 }; 
                 callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
-
+                
                 form_data.created_callflows.push(callflow);
             });
 
