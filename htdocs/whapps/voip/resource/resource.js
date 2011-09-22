@@ -41,7 +41,7 @@ winkstart.module('voip', 'resource',
             {name : '#gateways_realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
             {name : '#gateways_username', regex : /^\w+$/},
             {name : '#gateways_password', regex : /^[^\s]*$/},
-            {name : '#gateways_prefix', regex : /^[\+]?[0-9]*$/},
+            {name : '#gateways_prefix', regex : /^[\+]?[\#0-9]*$/},
             {name : '#gateways_suffix', regex : /^[0-9]*$/},
         ],
 
@@ -170,7 +170,7 @@ winkstart.module('voip', 'resource',
                 var account_realm = json.data.realm;
 
                 var form_data = {
-                    data: { weight_cost: "100", gateways: [{ realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: { type: "external"}, flags: []},
+                    data: { weight_cost: "100", enabled: true, gateways: [{ realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: { type: "external"}, flags: []},
                     field_data: THIS.config.formData,
                     value: {}
                 };

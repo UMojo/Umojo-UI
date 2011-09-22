@@ -218,6 +218,13 @@ winkstart.module('connect', 'sipservice',
                     }
                 });
             });
+            
+            $('.deleteServer').click(function(){
+                if(confirm('Delete this server ?')){
+                    alert('coming soon...');
+                }
+            });
+            
         },
 
         load_account : function(){

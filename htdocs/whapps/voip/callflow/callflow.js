@@ -13,6 +13,7 @@ winkstart.module('voip', 'callflow', {
             tools: 'tmpl/tools.html',
             root: 'tmpl/root.html',
             node: 'tmpl/node.html',
+            num_row: 'tmpl/num_row.html',
             add_number: 'tmpl/add_number.html',
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
@@ -135,7 +136,7 @@ winkstart.module('voip', 'callflow', {
                             THIS.flow.root = THIS.buildFlow(json.data.flow, THIS.flow.root, 0, '_');
                         }
 
-                        THIS.flow.numbers = json.data.numbers;
+                        THIS.flow.numbers = json.data.numbers || [];
                         THIS.renderFlow();
                     }
                 );
@@ -404,40 +405,60 @@ winkstart.module('voip', 'callflow', {
             );
 
             $('.node', layout).each(function() {
-                var node_html, node = THIS.flow.nodes[$(this).attr('id')], $node = $(this);
+                var node = THIS.flow.nodes[$(this).attr('id')],
+                    $node = $(this),
+                    node_html;
 
                 if (node.actionName == 'root') {
                     $node.removeClass('icons_black root');
 
-                    node_html = THIS.templates.root.tmpl({ numbers: THIS.flow.numbers.toString() });
+                    node_html = THIS.templates.root.tmpl({});
 
-                    $('.btn_plus_sm', node_html).click(function() {
-                        var dialog = THIS.templates.add_number.tmpl({}).dialog({
-                            width: 400,
-                            title: 'Add a number',
-                            resizable: 'false'
-                        });
+                    for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+                        x = i * 2;
+                        THIS.templates.num_row.tmpl({
+                            numbers: THIS.flow.numbers.slice(x, (x + 2 < size) ? x + 2 : size)
+                        }).appendTo($('.content', node_html));
+                    }
 
-                        $('.submit_btn', dialog).click(function() {
-                            THIS.flow.numbers.push(dialog.find('#add_number_text').val());
+                    $('.number_column.empty', node_html).click(function() {
+                        var popup_html = THIS.templates.add_number.tmpl({}),
+                            popup;
 
-                            dialog.dialog('close');
+                        popup = winkstart.dialog(popup_html, { title: 'Add number' });
+
+                        $('.submit_btn', popup).click(function() {
+                            THIS.flow.numbers.push($('#add_number_text', popup).val());
+
+                            popup.dialog('close');
+
                             THIS.renderFlow();
                         });
                     });
 
-                    $('.save', node_html).click(function() {
+                    $('.number_column .delete', node_html).click(function() {
+                        var number = $(this).parent('.number_column').dataset('number'),
+                            index = $.inArray(number, THIS.flow.numbers);
+
+                        if(index >= 0) {
+                            THIS.flow.numbers.splice(index, 1);
+                        }
+
+                        THIS.renderFlow();
+                    });
+
+                    $('.bottom_bar .save', node_html).click(function() {
                         THIS.save();
                     });
 
-                    $('.trash', node_html).click(function() {
+                    $('.bottom_bar .delete', node_html).click(function() {
                         winkstart.deleteJSON('callflow.delete', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
                                 callflow_id: THIS.flow.id
                             },
                             function() {
-                                $('#ws_callflow').empty();
+                                $('#ws_cf_flow').empty();
                                 THIS.renderList();
                                 THIS._resetFlow();
                             }
@@ -587,13 +608,11 @@ winkstart.module('voip', 'callflow', {
             $('.category', tools).click(function () {
                 var current = $(this);
 
-                if($('.arrow_category', $(this)).hasClass('activeArrow')) {
-                    $('.arrow_category', $(this)).removeClass('activeArrow').addClass('inactiveArrow')
-                    $('.text_category', $(this)).removeClass('activeText').addClass('inactiveText')
+                if($('.open', $(this)).hasClass('active')) {
+                    $('.open', $(this)).removeClass('active').addClass('inactive')
                 }
                 else {
-                    $('.arrow_category', $(this)).removeClass('inactiveArrow').addClass('activeArrow');
-                    $('.text_category', $(this)).removeClass('inactiveText').addClass('activeText');
+                    $('.open', $(this)).removeClass('inactive').addClass('active');
                 }
                 
 
@@ -734,7 +753,7 @@ winkstart.module('voip', 'callflow', {
                             _.each(crossbar_data, function(elem){
                                 new_list.push({
                                     id: elem.id,
-                                    title: elem.numbers.toString()
+                                    title: (elem.numbers) ? elem.numbers.toString() : ''
                                 });
                             });
                         }
@@ -1760,11 +1779,11 @@ winkstart.module('voip', 'callflow', {
                     edit: function(node, callback) {
                     }
                 },
-                'resource[]': {
+                'resources[]': {
                     name: 'Resource',
                     icon: 'resource',
                     category: 'basic',
-                    module: 'resource',
+                    module: 'resources',
                     data: {},
                     rules: [
                         {
@@ -1774,6 +1793,174 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[id=*,action=bridge]': {
+                    name: 'Hot Desking',
+                    icon: 'v_phone',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'bridge',
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var name = node.getMetadata('name');
+                        
+                        return (name) ? name : '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.getJSON('user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+                                $.each(data.data, function() {
+                                    this.name = this.first_name + ' ' + this.last_name;
+                                });
+                                popup_html = THIS.templates.edit_dialog.tmpl({
+                                    objects: {
+                                        type: 'user',
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, { title: 'Select Hot Desking User' });
+
+                                $('.submit_btn', popup).click(function() {
+                                    node.setMetadata('id', $('#object-selector', popup).val());
+                                    node.setMetadata('name', $('#object-selector option:selected', popup).text());
+
+                                    node.caption = $('#object-selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+
+                                    if(typeof callback == 'function') {
+                                        callback();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'hotdesk[action=login]': {
+                    name: 'Hot Desk login',
+                    icon: 'hotdesk_login',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'login'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[action=logout]': {
+                    name: 'Hot Desk logout',
+                    icon: 'hotdesk_logout',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'logout'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[action=toggle]': {
+                    name: 'Hot Desk toggle',
+                    icon: 'hotdesk_toggle',
+                    category: 'hotdesk',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'toggle'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                }
+            });
+
+            /* Migration callflows, fixes our goofs. To be removed eventually */
+            $.extend(callflow_nodes, {
+                'resource[]': {
+                    name: 'Resource',
+                    icon: 'resource',
+                    module: 'resources',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                    }
+                },
+                'hotdesk[id=*,action=call]': {
+                    name: 'Hot Desking',
+                    icon: 'v_phone',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'bridge',
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        //Migration here:
+                        node.setMetadata('action', 'bridge');
+
+                        alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {

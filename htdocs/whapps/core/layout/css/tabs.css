@@ -137,5 +137,6 @@ ul.advanced_tabs a.current,ul.advanced_tabs a.current:hover,ul.advanced_tabs li.
 	padding: 20px;
 	color: #5e5f61;
 	background-color: #c7c7c7;
+    border: 1px solid #727272
 }
 

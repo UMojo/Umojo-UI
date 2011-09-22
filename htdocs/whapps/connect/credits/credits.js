@@ -1,6 +1,10 @@
 winkstart.module('connect', 'credits',
     /* Start module resource definitions */
     {
+        css: [
+            'css/credits.css'
+        ],
+        
         /* What HTML templates will we be using? */
         templates: {
             manage_credits: 'tmpl/manage_credits.html'
@@ -51,8 +55,10 @@ winkstart.module('connect', 'credits',
             var THIS = this;
             dialogDiv = winkstart.dialog(THIS.templates.manage_credits.tmpl(winkstart.apps['connect'].account), {
                 title: 'Add credits to your account',
-                resizable: false,
+                resizable: false
             });
+            
+            dialogDiv.css('overflow', 'hidden');
 
             $('.credits.add', dialogDiv).click(function() {
                 add_credits = $('input[name=add_credits]:checked', '#credit_form').val();

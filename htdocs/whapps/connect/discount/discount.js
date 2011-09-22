@@ -1,6 +1,10 @@
 winkstart.module('connect', 'discount',
     /* Start module resource definitions */
     {
+        css: [
+            'css/discount.css'
+        ],
+        
         /* What HTML templates will we be using? */
         templates: {
             edit_discount: 'tmpl/edit_discount.html'
@@ -42,7 +46,8 @@ winkstart.module('connect', 'discount',
     {
         edit: function() {
             var dialogDiv = winkstart.dialog(this.templates.edit_discount.tmpl(winkstart.apps['connect'].account), {
-                title: 'Edit Discount'
+                title: 'Edit Discount',
+                resizable: false
             });
 
             $('.submit_btn', dialogDiv).click(function() {

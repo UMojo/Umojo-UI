@@ -52,6 +52,8 @@ winkstart.module('auth', 'auth',
         }
     },
     function() {
+        var cookie_data;
+
         winkstart.registerResources(this.__whapp, this.config.resources);
         
         if(URL_DATA['activation_key']) {
@@ -70,8 +72,22 @@ winkstart.module('auth', 'auth',
 
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
         if(winkstart.apps['auth'].auth_token) {
-            $('a#my_account').show();
+            $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
         }
+
+        if(cookie_data = $.cookie('c_winkstart_auth')) {
+            $('#ws-content').empty();
+            eval('winkstart.apps["auth"] = ' + cookie_data);
+            winkstart.publish('auth.load_account');
+        }
+        
+                                // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+                                winkstart.module.loadModule('auth', 'myaccount', function() {
+                                    this.init();
+                                    winkstart.log('Core: Loaded My Account manager');
+                                });
+
+        
     },
 
     {
@@ -87,51 +103,46 @@ winkstart.module('auth', 'auth',
 
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
-
-                var realm;
-                if(THIS.request_realm) {
-                    realm = $('#realm', dialogRegister).val();
-                } else {
-                    realm = $('#username', dialogRegister).val() + winkstart.realm_suffix;
-                }
-
-                // If realm was set in the URL, override all
-                if('realm' in URL_DATA) {
-                    realm = URL_DATA['realm'];
-                }
-
-                var rest_data = {
-                    crossbar : true,
-                    data : {
-                        'account': {
-                            'realm': realm,
-                            'app_url': window.location.href.replace(/#/, '')
-                        },
-                        'user': {
-                            'username':$('#username', dialogRegister).val(),
-                            'password' : $('#password', dialogRegister).val(),
-                            'first_name': $('#first_name', dialogRegister).val() ,
-                            'last_name':$('#last_name', dialogRegister).val(),
-                            'email': $('#email', dialogRegister).val(),
-                            'apps': {
-                                "cluster": {
-                                   "label": "Cluster Manager",
-                                   "icon": "cluster_manager",
-                                   "api_url": "http://apps.2600hz.com:8000/v1"
-                                },
-                                "voip": {
-                                    'label': 'Trial PBX',
-                                    'icon': 'phone',
-                                    'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
-                                }
-                             }
-                        }
+                
+                if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
+                    var realm;
+                    if(THIS.request_realm) {
+                        realm = $('#realm', dialogRegister).val();
+                    } else {
+                        realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
                     }
-                };
-                winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                    alert('Registered successfully. Please check your e-mail to activate your account!');
-                    dialogRegister.dialog('close');
-                });
+
+                    // If realm was set in the URL, override all
+                    if('realm' in URL_DATA) {
+                        realm = URL_DATA['realm'];
+                    }
+
+                    var rest_data = {
+                        crossbar : true,
+                        data : {
+                            'account': {
+                                'realm': realm,
+                                'app_url': window.location.href.replace(/#/, '')
+                            },
+                            'user': {
+                                'username':$('#username', dialogRegister).val(),
+                                'password' : $('#password', dialogRegister).val(),
+                                'first_name': $('#first_name', dialogRegister).val() ,
+                                'last_name':$('#last_name', dialogRegister).val(),
+                                'email': $('#email', dialogRegister).val(),
+                                'apps': winkstart.config.register_apps
+                            }
+                        }
+                    };
+                    console.log(rest_data);
+                    winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                        alert('Registered successfully. Please check your e-mail to activate your account!');
+                        dialogRegister.dialog('close');
+                    });
+                }
+                else {
+                    alert('Please confirm your password');
+                }
             });
         },
 
@@ -155,7 +166,7 @@ winkstart.module('auth', 'auth',
                 if (THIS.request_realm) {
                     realm = $('#realm', dialogDiv).val();
                 } else {
-                    realm = $('#login', dialogDiv).val() + winkstart.realm_suffix;
+                    realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
                 }
                 
                 // If realm was set in the URL, override all
@@ -181,6 +192,8 @@ winkstart.module('auth', 'auth',
                         
                         // Deleting the welcome message
                         $('#ws-content').empty();
+
+                        $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
                         
                         winkstart.publish('auth.load_account');
                     },
@@ -221,9 +234,9 @@ winkstart.module('auth', 'auth',
             }
 
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                $('a#my_logout').html("Logout");
-                $('a#my_account').html(json.data.first_name + ' ' + json.data.last_name).show();
-                $('.homepage').html('');
+                $('.universal_nav #my_logout').html("Logout");
+                $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
+                $('.universal_nav #my_account').html(json.data.first_name + ' ' + json.data.last_name);
 
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
@@ -349,10 +362,12 @@ winkstart.module('auth', 'auth',
                         winkstart.apps[k].user_id = null;
                         winkstart.apps[k].account_id = null;
                     });
+
+                    $.cookie('c_winkstart_auth', null);
                     
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
-                    $('a#my_account').hide();
+                    $('.universal_nav .my_account_wrapper').hide();
 
                     // Temporary hack until module unloading works properly
                     window.location.reload();

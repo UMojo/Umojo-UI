@@ -15,12 +15,6 @@ winkstart.module('core', 'core',
                         // We don't use this sub nav any more
                         //winkstart.module.loadModule('core', 'subnav', function() {
                             //this.init({ parent: $('body') }, function() {
-                                // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
-                                winkstart.module.loadModule('core', 'myaccount', function() {
-                                    this.init();
-                                    winkstart.log('Core: Loaded My Account manager');
-                                });
-
                                 // Now move onto apps
                                 winkstart.log('WhApps: Loading WhApps...');
 
@@ -30,7 +24,7 @@ winkstart.module('core', 'core',
                                     winkstart.module.loadApp(k, function() {
                                         this.init();
                                         winkstart.log('WhApps: Initializing ' + k);
-                                    })
+                                    });
                                 });
 
                                 winkstart.log('WhApps: Finished Loading WhApps');

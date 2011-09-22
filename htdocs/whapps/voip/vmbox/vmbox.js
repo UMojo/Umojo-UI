@@ -90,6 +90,17 @@ winkstart.module('voip', 'vmbox',
             });
         },
 
+        //Function to generate PINs
+        generateRandomString: function(pLength){
+            var chars = "0123456789";
+            var sRandomString = "";
+            for (var i=0; i<pLength; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                sRandomString += chars.substring(rnum,rnum+1);
+            }
+            return sRandomString;
+        },
+
         saveVmbox: function(vmbox_id, form_data) {
             var THIS = this;
 
@@ -137,8 +148,11 @@ winkstart.module('voip', 'vmbox',
         editVmbox: function(data){
             $('#vmbox-view').empty();
             var THIS = this;
+
+            var generated_PIN = THIS.generateRandomString(4);
+
             var form_data = {
-                data: { require_pin: true, check_if_owner: true, media: {}},   
+                data: { require_pin: true, check_if_owner: true, pin: generated_PIN, media: {}},   
                 //field_data: THIS.config.formData,
                 field_data: {},
                 value: {}
@@ -161,21 +175,16 @@ winkstart.module('voip', 'vmbox',
                 form_data.field_data.medias = listMedias;
 
                 winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                    var listUsers = [];
-                    if(json.data.length > 0) {
-                        _.each(json.data, function(elem){
-                            var title = elem.first_name + ' ' + elem.last_name;
-                            listUsers.push({
-                                owner_id: elem.id,
-                                title: title
-                            });
+                    var listUsers = [{owner_id: '', title: 'None'}];
+                    _.each(json.data, function(elem){
+                        var title = elem.first_name + ' ' + elem.last_name;
+                        listUsers.push({
+                            owner_id: elem.id,
+                            title: title
                         });
+                    });
 
-                        form_data.field_data.users = listUsers;
-                    } else {
-                        listUsers.push({owner_id: '!', title: 'none'});
-                        form_data.field_data.users = listUsers;
-                    }
+                    form_data.field_data.users = listUsers;
                      if (data && data.id) {
                         /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
                         winkstart.getJSON('vmbox.get', {

@@ -20,11 +20,13 @@ winkstart.module('voip', 'user',
         validation : [
                 {name : '#first_name', regex : /^[a-zA-Z\s\-]+$/},
                 {name : '#last_name', regex : /^[a-zA-Z\s\-]+$/},
-                {name : '#email', regex: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
+                {name : '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
                 {name : '#caller_id_number_internal', regex: /^[\+]?[0-9]*$/},
                 {name : '#caller_id_name_internal', regex: /^.*$/},
                 {name : '#caller_id_number_external', regex: /^[\+]?[0-9]*$/},
                 {name : '#caller_id_name_external', regex: /^.*/},
+                {name : '#hotdesk_id', regex: /^[0-9\+\#\*]*$/},
+                {name : '#hotdesk_pin', regex: /^[0-9]*$/},
                 {name : '#call_forward_number', regex: /^[\+]?[0-9]*$/}
         ],
 
@@ -54,6 +56,11 @@ winkstart.module('voip', 'user',
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            "hotdesk.list": {
+                url: '{api_url}/accounts/{account_id}/user/{user_id}/hotdesk',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -138,13 +145,18 @@ winkstart.module('voip', 'user',
                                     delete data.data.apps.voip;
                                 }
                             }
-                            
                             delete form_data.pwd_mngt_pwd1;
                             delete form_data.pwd_mngt_pwd2;
                             delete form_data.user_level;
+                        
+                            if(form_data.hotdesk == undefined) {
+                                delete data.data.hotdesk;
+                            } else if(form_data.hotdesk.require_pin == false){
+                                delete data.data.hotdesk.pin;
+                                delete form_data.hotdesk.pin;
+                            }
                             
                             var newform_data = $.extend(true, {}, data.data, form_data);
-                            
                             var rest_data = {};
                             rest_data.crossbar = true;
                             rest_data.account_id = winkstart.apps['voip'].account_id,
@@ -218,10 +230,6 @@ winkstart.module('voip', 'user',
             } else {
                 alert('Please confirm your password');
             }
-
-            
-
-            
         },
 
         /*
@@ -234,7 +242,8 @@ winkstart.module('voip', 'user',
             var form_data = {
                 data : {
                     call_forward: {},
-                    caller_id: {internal: { }, external: { }}
+                    caller_id: {internal: { }, external: { }},
+                    hotdesk: {}
                 },
                 field_data: {}
             };
@@ -289,7 +298,10 @@ winkstart.module('voip', 'user',
             } else {
                 form_data.priv_level = 'user';
             }
-
+            if(form_data.data.hotdesk.require_pin != undefined) {
+                form_data.data.hotdesk.enable = true;
+            }
+        
             /* Paint the template with HTML of form fields onto the page */
             user_html = THIS.templates.editUser.tmpl(form_data).appendTo( $('#user-view') );
             winkstart.timezone.populate_dropdown($('#timezone', user_html), form_data.data.timezone);
@@ -306,6 +318,11 @@ winkstart.module('voip', 'user',
             $(".advanced_pane").hide();
             $(".advanced_tabs_wrapper").hide();
 
+            if(form_data.data.hotdesk.require_pin == undefined || form_data.data.hotdesk.require_pin == false) {
+                $('#pin_wrapper', user_html).hide();
+            }
+            
+
             $("#advanced_settings_link").click(function(event) {
                 if($(this).attr("enabled")=="true") {
                     $(this).attr("enabled", "false");
@@ -320,6 +337,10 @@ winkstart.module('voip', 'user',
                     });
                 }
             });
+        
+            $('#hotdesk_require_pin',user_html).change(function() {
+                $('#pin_wrapper',user_html).toggle();
+            });
 
             /* Listen for the submit event (i.e. they click "save") */
             $('.user-save').click(function(event) {
@@ -330,6 +351,9 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
+                form_data.hotdesk.enable == false ? delete form_data.hotdesk : delete form_data.hotdesk.enable;
+                form_data.call_forward.substitute = !form_data.call_forward.substitute;
+
                 //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
@@ -339,7 +363,6 @@ winkstart.module('voip', 'user',
             $('.user-cancel').click(function(event) {
                 event.preventDefault();
 
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
                 $('#user-view').empty();
 
                 return false;

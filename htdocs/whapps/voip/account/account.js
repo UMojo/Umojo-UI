@@ -22,20 +22,20 @@ winkstart.module('voip', 'account',
 
         validation : [
                 {name : '#name', regex : /^.+$/},
-                {name : '#realm', regex : /^[0-9a-zA-Z\.]+$/},
+                {name : '#realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
                 {name : '#caller_id_name_external', regex : /^.*$/},
                 {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
                 {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
                 {name : '#vm_to_email_support_number', regex : /^[\+]?[0-9]*$/},
-                {name : '#vm_to_email_support_email', regex : /^(([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/},
+                {name : '#vm_to_email_support_email', regex : /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/},
         ],
         
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "account.list": {
-                url: '{api_url}/accounts/' + winkstart.apps['voip'].account_id + '/children',
+                url: '{api_url}/accounts/{account_id}/children',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -45,7 +45,7 @@ winkstart.module('voip', 'account',
                 verb: 'GET'
             },
             "account.create": {
-                url: '{api_url}/accounts/',
+                url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
@@ -117,13 +117,27 @@ winkstart.module('voip', 'account',
                     });
                 } else {
                     /* CREATE */
+                    rest_data.account_id = winkstart.apps['voip'].account_id;
 
-                    winkstart.putJSON('account.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editAccount({
-                            id: json.data.id
-                        });
-                    });
+                    winkstart.putJSON('account.create', rest_data, function(data, status) {
+                            THIS.renderList();
+                            THIS.editAccount({
+                                id: data.data.id
+                            });
+                        },
+                        function(data, status) {
+                            /* Default back to the old way of doing things */
+                            rest_data.account_id = '';
+                            delete rest_data.json_string;
+
+                            winkstart.putJSON('account.create', rest_data, function(data, status) {
+                                THIS.renderList();
+                                THIS.editAccount({
+                                    id: data.data.id
+                                });
+                            });
+                        }
+                    );
                 }
             } else {
                 alert('Please correct errors that you have on the form.');
@@ -171,6 +185,41 @@ winkstart.module('voip', 'account',
             winkstart.deleteJSON('account.delete', rest_data, function (json, xhr) {
                 THIS.renderList();
                 $('#account-view').empty();
+            });
+        },
+
+        masquerade_account: function(account_name) {
+            var THIS = this;
+
+            $('.universal_nav .my_account_wrapper .label .other')
+                .html('<br>as<br>' + account_name + '<br><a href="#" class="masquerade">(restore)</a>');
+
+            $('.universal_nav .my_account_wrapper .masquerade').click(function() {
+                var id = winkstart.apps['voip'].masquerade.pop();
+
+                if(winkstart.apps['voip'].masquerade.length) {
+                    winkstart.getJSON('account.get', {
+                            api_url: winkstart.apps['voip'].api_url,
+                            account_id: id
+                        },
+                        function(data, status) {
+                            winkstart.apps['voip'].account_id = data.data.id;
+                            
+                            THIS.masquerade_account(data.data.name);
+
+                            winkstart.publish('voip.activate');
+                        }
+                    );
+                }
+                else {
+                    winkstart.apps['voip'].account_id = id;
+
+                    $('.universal_nav .my_account_wrapper .label .other').empty();
+
+                    delete winkstart.apps['voip'].masquerade;
+
+                    winkstart.publish('voip.activate');
+                }
             });
         },
 
@@ -237,10 +286,20 @@ winkstart.module('voip', 'account',
                 event.preventDefault();
 
                 /* Cheat - just delete the main content area. Nothing else needs doing really */
-                if(confirm('Do you really want to use : '+form_data.data.name+'\'s account?')) {
+                if(confirm('Do you really want to use ' + form_data.data.name + '\'s account?')) {
+                    if(!('masquerade' in winkstart.apps['voip'])) {
+                        winkstart.apps['voip'].masquerade = [];
+                    }
+
+                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
+
                     winkstart.apps['voip'].account_id = form_data.data.id;
-                    //$('#my_account').html("&nbsp;"+form_data.data.name);
-                    alert('You\'re now using '+form_data.data.name+'\'s account');
+
+                    THIS.masquerade_account(form_data.data.name); 
+
+                    alert('You are now using ' + form_data.data.name + '\'s account');
+
+                    winkstart.publish('account.activate');
                 }
                 else {
                 } 
@@ -273,7 +332,8 @@ winkstart.module('voip', 'account',
 
             winkstart.getJSON('account.list', {
                 crossbar: true,
-                api_url: winkstart.apps['voip'].api_url
+                api_url: winkstart.apps['voip'].api_url,
+                account_id: winkstart.apps['voip'].account_id
             }, function (json, xhr) {
 
                 // List Data that would be sent back from server
