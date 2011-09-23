@@ -106,6 +106,17 @@
                                 </select>
                             </li>
                             <li>
+                                <span class="tooltip-wrapper" tooltip="Is this voicemail box already considered initialized?<br>If not, the first time the user logs in they will be forced to change their PIN and setup a greeting.">
+                                    <span class="tooltip"/>
+                                    <label for="initialized">Already Setup?</label>
+                                </span>
+                                {{if data.is_setup}}
+                                <input id="is_setup" name="is_setup" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="is_setup" name="is_setup" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="Does this voicemail require a PIN?">
                                     <span class="tooltip"/>
                                     <label for="require_pin">Require PIN?</label>
