@@ -266,6 +266,11 @@ winkstart.module('voip', 'timeofday',
                     wdays.push(val);
                 }
             });
+
+            //Hack in order not to have sunday as the first day in the weekday list, needs to be the last one
+            if(wdays.length > 0 && wdays[0] == 'sunday') {
+                wdays.push(wdays.shift());
+            }
             form_data.wdays = wdays;
     
             delete form_data.weekday;
