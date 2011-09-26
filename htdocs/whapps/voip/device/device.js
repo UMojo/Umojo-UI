@@ -139,7 +139,8 @@ winkstart.module('voip', 'device',
 
         validation_sip_device : [
             {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
-            {name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
+            {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$|^$/},
+            //{name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
             {name : '#caller_id_name_internal', regex : /^.*$/},
             {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
             {name : '#caller_id_name_external', regex : /^.*$/},

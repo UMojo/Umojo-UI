@@ -142,9 +142,9 @@
 }
 
 #ws_callflow .tools .category {
-    height: 26px;
     text-align: center;
     background: url(../images/background_category.png) no-repeat;
+    background-position: top center;
 }
 
 #ws_callflow .tools .open {
@@ -155,12 +155,12 @@
     background-position: 5px center;
 }
 
-#ws_callflow .tools .open.active{
+#ws_callflow .tools .active .open {
     background-image: url(../images/arrow_active.png);
     color: #05ADDC;
 }
 
-#ws_callflow .tools .open.inactive{
+#ws_callflow .tools .inactive .open{
     background-image: url(../images/arrow_inactive.png);
 }
 
