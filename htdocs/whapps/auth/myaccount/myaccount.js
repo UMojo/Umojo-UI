@@ -257,8 +257,8 @@ winkstart.module('auth', 'myaccount',
         activateApp: function(data) {
             winkstart.getJSON('myaccount.user.get', {
                 crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url,
+                account_id: winkstart.apps['auth'].account_id,
+                api_url: winkstart.apps['auth'].api_url,
                 user_id: winkstart.apps['auth'].user_id
             }, function(json, xhr) {
                 
@@ -296,6 +296,7 @@ winkstart.module('auth', 'myaccount',
                 rest_data.account_id = winkstart.apps['auth'].account_id,
                 rest_data.api_url = winkstart.apps['auth'].api_url,
                 rest_data.user_id = winkstart.apps['auth'].user_id;
+                rest_data.auth_token = winkstart.apps['auth'].auth_token;
                 rest_data.data = final_data;
                 
                 winkstart.postJSON('myaccount.user.update', rest_data, function (json, xhr) {});
@@ -327,6 +328,7 @@ winkstart.module('auth', 'myaccount',
                 rest_data.account_id = winkstart.apps['auth'].account_id,
                 rest_data.api_url = winkstart.apps['auth'].api_url,
                 rest_data.user_id = winkstart.apps['auth'].user_id;
+                rest_data.auth_token = winkstart.apps['auth'].auth_token;
                 rest_data.data = json.data;
                 
                 winkstart.postJSON('myaccount.user.update', rest_data, function (json, xhr) {});
