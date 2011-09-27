@@ -48,6 +48,7 @@
     margin-top: 30px;
     background-color: #787878;
     padding: 10px;
+    font-size: 8px;
 }
 
 #myaccount_popup .app_holder {
@@ -57,6 +58,19 @@
     height: 100px;
     width: 200px;
     cursor: pointer;
+    color: white;
+}
+
+#myaccount_popup ul.settings_tabs a.current, #myaccount_popup ul.settings_tabs a.current:hover, #myaccount_popup ul.settings_tabs li.current a {
+    background-position: 0 -23px;
+    color: #FFFFFF !important;
+    cursor: default !important;
+}
+
+#myaccount_popup ul.settings_tabs a {
+    background-image: url("../images/settings_tabs.png");
+    background-position: 0 0;
+    width: 218px;
 }
 
 #myaccount_popup .apps .img_app {
@@ -96,9 +110,29 @@
     margin-right: -5px;
 }
 
+#myaccount_popup .pane .app_htitle {
+    background-image: url("../images/AppTitle_BG.png");
+    background-repeat: no-repeat;
+    width: 210px;
+    height: 26px;
+    text-align: center;
+    color: white;
+    padding-top: 5px;
+    float: right;
+}
+
+#myaccount_popup .pane .app_htitle#free_app {
+    margin-top: -16px;
+}
+
+#myaccount_popup .pane .app_htitle#premium_app {
+    margin-top: 4px;
+    color: #2CB9E1;
+}
+
 #myaccount_popup .active {
   border : 1px inset black;
-  background-color : #A3A3A3;
+  background-color : #666666;
   height: 98px;
 }
 
@@ -107,11 +141,6 @@
     margin-bottom: 10px;
     margin-top: 5px;
     font-weight: bold;
-}
-
-#myaccount_popup .apps .cpl li {
-    display: inline;
-    list-style-type: none;
 }
 
 #myaccount_popup #billing a {

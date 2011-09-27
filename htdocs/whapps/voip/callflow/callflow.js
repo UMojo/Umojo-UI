@@ -603,23 +603,20 @@ winkstart.module('voip', 'callflow', {
                 nodes: THIS.actions
             });
 
-            $('.tool, .app_list_nav, .clear', tools).hide();
+            $('.content', tools).hide();
 
-            $('.category', tools).click(function () {
+            // Set the basic drawer to open
+            $('#basic', tools).removeClass('inactive').addClass('active');
+            $('#basic .content', tools).show();
+
+            $('.category .open', tools).click(function () {
                 var current = $(this);
 
-                if($('.open', $(this)).hasClass('active')) {
-                    $('.open', $(this)).removeClass('active').addClass('inactive')
-                }
-                else {
-                    $('.open', $(this)).removeClass('inactive').addClass('active');
-                }
-                
+                $('.category .content', tools).hide();
+                $('.category', tools).removeClass('active').addClass('inactive');
 
-                while(current.next().hasClass('tool') || current.next().hasClass('app_list_nav') || current.next().hasClass('clear')) {
-                    current = current.next();
-                    current.toggle();
-                }
+                $(this).parent('.category').removeClass('inactive').addClass('active');
+                $(this).siblings('.content').show();
             });
 
             $('.tool', tools).hover(
@@ -803,7 +800,7 @@ winkstart.module('voip', 'callflow', {
                 'device[id=*]': {
                     name: 'Device',
                     icon: 'phone',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'device',
                     data: {
                         id: 'null'
@@ -861,7 +858,7 @@ winkstart.module('voip', 'callflow', {
                 'conference[]': {
                     name: 'Conference Server',
                     icon: 'conference',
-                    category: 'advanced',
+                    category: 'Advanced',
                     module: 'conference',
                     data: {},
                     rules: [
@@ -880,7 +877,7 @@ winkstart.module('voip', 'callflow', {
                 'conference[id=*]': {
                     name: 'Conference',
                     icon: 'conference',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'conference',
                     data: {
                         id: 'null'
@@ -933,7 +930,7 @@ winkstart.module('voip', 'callflow', {
                 'callflow[id=*]': {
                     name: 'Callflow',
                     icon: 'callflow',
-                    category: 'basic',
+                    category: 'Advanced',
                     module: 'callflow',
                     data: {
                         id: 'null'
@@ -994,7 +991,7 @@ winkstart.module('voip', 'callflow', {
                 'voicemail[id=*]': {
                     name: 'Voicemail',
                     icon: 'voicemail',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'voicemail',
                     data: {
                         id: 'null'
@@ -1047,7 +1044,7 @@ winkstart.module('voip', 'callflow', {
                 'voicemail[action=check]': {
                     name: 'Check Voicemail',
                     icon: 'voicemail',
-                    category: 'advanced',
+                    category: 'Advanced',
                     module: 'voicemail',
                     data: {
                         action: 'check'
@@ -1068,7 +1065,7 @@ winkstart.module('voip', 'callflow', {
                 'play[id=*]': {
                     name: 'Play Media',
                     icon: 'play',
-                    category: 'advanced',
+                    category: 'Advanced',
                     module: 'play',
                     data: {
                         id: 'null'
@@ -1121,7 +1118,7 @@ winkstart.module('voip', 'callflow', {
                 'menu[id=*]': {
                     name: 'Menu',
                     icon: 'menu',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'menu',
                     data: {
                         id: 'null'
@@ -1204,7 +1201,7 @@ winkstart.module('voip', 'callflow', {
                 'temporal_route[]': {
                     name: 'Time of Day',
                     icon: 'temporal_route',
-                    category: 'basic',
+                    category: 'Time Of Day',
                     module: 'temporal_route',
                     data: {},
                     rules: [
@@ -1287,7 +1284,7 @@ winkstart.module('voip', 'callflow', {
                 'temporal_route[action=enable]': {
                     name: 'Enable Time of Day',
                     icon: 'temporal_route',
-                    category: 'advanced',
+                    category: 'Time Of Day',
                     module: 'temporal_route',
                     data: {
                         action: 'enable',
@@ -1377,7 +1374,7 @@ winkstart.module('voip', 'callflow', {
                 'temporal_route[action=disable]': {
                     name: 'Disable Time of Day',
                     icon: 'temporal_route',
-                    category: 'advanced',
+                    category: 'Time Of Day',
                     module: 'temporal_route',
                     data: {
                         action: 'disable',
@@ -1467,7 +1464,7 @@ winkstart.module('voip', 'callflow', {
                 'temporal_route[action=reset]': {
                     name: 'Reset Time of Day',
                     icon: 'temporal_route',
-                    category: 'advanced',
+                    category: 'Time Of Day',
                     module: 'temporal_route',
                     data: {
                         action: 'reset',
@@ -1557,7 +1554,7 @@ winkstart.module('voip', 'callflow', {
                 'ring_group[]': {
                     name: 'Ring Group',
                     icon: 'ring_group',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'ring_group',
                     data: {
                         name: ''
@@ -1700,7 +1697,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=activate]': {
                     name: 'Enable call forwarding',
                     icon: 'rightarrow',
-                    category: 'advanced',
+                    category: 'Call Forwarding',
                     module: 'call_forward',
                     data: {
                         action: 'activate'
@@ -1721,7 +1718,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=deactivate]': {
                     name: 'Disable call forwarding',
                     icon: 'rightarrow',
-                    category: 'advanced',
+                    category: 'Call Forwarding',
                     module: 'call_forward',
                     data: {
                         action: 'deactivate'
@@ -1742,7 +1739,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=update]': {
                     name: 'Update call forwarding',
                     icon: 'rightarrow',
-                    category: 'advanced',
+                    category: 'Call Forwarding',
                     module: 'call_forward',
                     data: {
                         action: 'update'
@@ -1763,7 +1760,7 @@ winkstart.module('voip', 'callflow', {
                 'offnet[]': {
                     name: 'Global Resource',
                     icon: 'offnet',
-                    category: 'basic',
+                    category: 'Advanced',
                     module: 'offnet',
                     data: {},
                     rules: [
@@ -1782,7 +1779,7 @@ winkstart.module('voip', 'callflow', {
                 'resources[]': {
                     name: 'Resource',
                     icon: 'resource',
-                    category: 'basic',
+                    category: 'Basic',
                     module: 'resources',
                     data: {},
                     rules: [
@@ -1801,7 +1798,7 @@ winkstart.module('voip', 'callflow', {
                 'hotdesk[id=*,action=bridge]': {
                     name: 'Hot Desking',
                     icon: 'v_phone',
-                    category: 'hotdesk',
+                    category: 'Hotdesking',
                     module: 'hotdesk',
                     data: {
                         action: 'bridge',
@@ -1858,7 +1855,7 @@ winkstart.module('voip', 'callflow', {
                 'hotdesk[action=login]': {
                     name: 'Hot Desk login',
                     icon: 'hotdesk_login',
-                    category: 'hotdesk',
+                    category: 'Hotdesking',
                     module: 'hotdesk',
                     data: {
                         action: 'login'
@@ -1879,7 +1876,7 @@ winkstart.module('voip', 'callflow', {
                 'hotdesk[action=logout]': {
                     name: 'Hot Desk logout',
                     icon: 'hotdesk_logout',
-                    category: 'hotdesk',
+                    category: 'Hotdesking',
                     module: 'hotdesk',
                     data: {
                         action: 'logout'
@@ -1900,7 +1897,7 @@ winkstart.module('voip', 'callflow', {
                 'hotdesk[action=toggle]': {
                     name: 'Hot Desk toggle',
                     icon: 'hotdesk_toggle',
-                    category: 'hotdesk',
+                    category: 'Hotdesking',
                     module: 'hotdesk',
                     data: {
                         action: 'toggle'

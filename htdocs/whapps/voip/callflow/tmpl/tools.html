@@ -1,19 +1,20 @@
 <div>
     <div>
         {{each(category, actions) categories}}
-            <div id="${category.toLowerCase()}" name="${category.toLowerCase()}" class="category">
-                <div class="open inactive">${category}</div>
-            </div>
+            <div id="${category.toLowerCase().replace(/\s/,'')}" name="${category.toLowerCase().replace(/\s/,'')}" class="category inactive">
+                <div class="open">${category}</div>
+                <div class="content">
+                    {{each(i, action) actions}}
+                        <div class="tool">
+                            <div href="#" name="${action}" class="action icon app_sm ${nodes[action].icon}"></div>
+                            <div class="tool_name">${nodes[action].name}</div>
+                        </div>
+                    {{/each}}
 
-            {{each(i, action) actions}}
-                <div class="tool">
-                    <div href="#" name="${action}" class="action icon app_sm ${nodes[action].icon}"></div>
-                    <div class="tool_name">${nodes[action].name}</div>
+                    <div class="clear"></div>
+                    <div class="app_list_nav"></div>
                 </div>
-            {{/each}}
-
-            <div class="clear"></div>
-            <div class="app_list_nav"></div>
+            </div>
         {{/each}}
     </div>
 </div>

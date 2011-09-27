@@ -63,7 +63,7 @@
             
             this.pane_wrapper = $('<div class="left_side_bar"></div>').appendTo(this.element);
            
-            this.flow_div = $('<div class="add_flow"><a class="plus_btn" href="#"><div>'+ this.options.new_entity_label +'</div></a></div>').appendTo(this.pane_wrapper); 
+            this.flow_div = $('<div class="add_flow"><span class="plus_btn" href="#"/><span class="add_flow_text">'+ this.options.new_entity_label +'</span></div>').appendTo(this.pane_wrapper); 
 			
             var search_html = '';
             search_html += '<div class="search_box">';
@@ -89,7 +89,7 @@
             
             //set up click events
             this._registerViewEvents(this.listContainer.find('li'));
-            this._registerAddEvents(this.flow_div.find('.plus_btn'));
+            this._registerAddEvents(this.flow_div);
 
             // set up livesearch
             if (this.options.searchable) {

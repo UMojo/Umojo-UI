@@ -34,7 +34,7 @@
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Chose the owner of this voicemail box">
                                     <span class="tooltip"/>
-                                    <label for="owner_id">Belongs To:</label>
+                                    <label for="owner_id">Assign To:</label>
                                 </span>
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
@@ -98,12 +98,23 @@
                         <legend>Options</legend>
                         <ul class="controls">
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Select the timezone of this voicemail box">
+                                <span class="tooltip-wrapper" tooltip="Select the time zone of this voicemail box">
                                     <span class="tooltip"/>
-                                    <label for="timezone">Timezone:</label>
+                                    <label for="timezone">Time zone:</label>
                                 </span>
                                 <select name="timezone" id="timezone">
                                 </select>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Is this voicemail box already considered initialized?<br>If not, the first time the user logs in they will be forced to change their PIN and setup a greeting.">
+                                    <span class="tooltip"/>
+                                    <label for="initialized">Already Setup?</label>
+                                </span>
+                                {{if data.is_setup}}
+                                <input id="is_setup" name="is_setup" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="is_setup" name="is_setup" type="checkbox"/>
+                                {{/if}}
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Does this voicemail require a PIN?">

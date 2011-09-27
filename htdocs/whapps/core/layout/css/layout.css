@@ -255,15 +255,19 @@ ul.universal_nav li span.my_logout_icon {
 	background-image: url(../images/plus_btn.png);
 	width: 25px;
 	height: 25px;
-	float: left;
 	background-position: 0px 0px;
-	margin-left: 25px;
-	margin-top: 22px;
-	margin-right: 20px;
 }
 
-.plus_btn:hover{
+.add_flow{
+    cursor: pointer;
+}
+
+.add_flow:hover .plus_btn{ 
 	background-position: 0px -25px;
+}
+
+.add_flow:hover .add_flow_text{
+    color: #05ADDC;
 }
 
 .searchbox{
