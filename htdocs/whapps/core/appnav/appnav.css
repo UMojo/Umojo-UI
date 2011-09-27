@@ -25,7 +25,9 @@
     filter: alpha(opacity=95);
     width: 100%;
     height: 100%;
-    border: 1px #05ADDC solid;
+    border-right: 1px #05ADDC solid;
+    border-left: 1px #05ADDC solid;
+    border-bottom: 1px #05ADDC solid;
     z-index: -100; 
 }
 
