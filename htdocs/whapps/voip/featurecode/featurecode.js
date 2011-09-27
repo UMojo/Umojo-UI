@@ -131,6 +131,7 @@ winkstart.module('voip', 'featurecode', {
             var THIS = this,
                 count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
+            console.log(form_data);
 
             $.each(form_data.created_callflows, function() {
                 winkstart.putJSON('featurecode.create', {
@@ -140,6 +141,7 @@ winkstart.module('voip', 'featurecode', {
                         data: {
                             flow: this.flow,
                             patterns: this.patterns, 
+                            numbers: this.numbers,
                             featurecode: {
                                 name: this.action,
                                 number: this.number
@@ -162,6 +164,7 @@ winkstart.module('voip', 'featurecode', {
                         data: {
                             flow: this.flow,
                             patterns: this.patterns,
+                            numbers: this.numbers,
                             featurecode: {
                                 name: this.action,
                                 number: this.number
@@ -231,8 +234,8 @@ winkstart.module('voip', 'featurecode', {
                     module: THIS.actions[callflow.action].module,
                     children: {}
                 }; 
-                callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
-                
+                callflow.type += 's';
+                callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
                 form_data.created_callflows.push(callflow);
             });
 
@@ -249,7 +252,9 @@ winkstart.module('voip', 'featurecode', {
                          children: {}
                      };
 
-                callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
+                //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
+                callflow.type += 's';
+                callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
 
                 form_data.updated_callflows.push(callflow);
                 }
@@ -279,6 +284,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'pattern',
                     data: {
                         action: 'enable'
                     },
@@ -294,6 +300,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'number',
                     data: {
                         action: 'disable'
                     },
@@ -301,14 +308,15 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '73',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
-                'call_forward[action="toggle"]': {
+                'call_forward[action=toggle]': {
                     name: 'Toggle Call-Forward',
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'number',
                     data: {
                         action: 'toggle'
                     },
@@ -316,7 +324,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '74',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'call_forward[action=on_busy_enable]': {
@@ -324,6 +332,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'pattern',
                     data: {
                         action: 'on_busy_enable'
                     },
@@ -339,6 +348,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'number',
                     data: {
                         action: 'on_busy_disable'
                     },
@@ -346,7 +356,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '91',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'call_forward[action=no_answer_enable]': {
@@ -354,6 +364,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'pattern',
                     data: {
                         action: 'no_answer_enable'
                     },
@@ -369,6 +380,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
+                    number_type: 'number',
                     data: {
                         action: 'no_answer_disable'
                     },
@@ -376,7 +388,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '52',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'donotdisturb[action="enable"]': {
@@ -384,6 +396,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Do not disturb',
                     module: 'do_not_disturb',
+                    number_type: 'pattern',
                     data: {
                         action: 'enable'
                     },
@@ -399,6 +412,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Do not disturb',
                     module: 'do_not_disturb',
+                    number_type: 'number',
                     data: {
                         action: 'disable'
                     },
@@ -406,7 +420,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '79',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'donotdisturb[action="toggle"]': {
@@ -414,6 +428,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Do not disturb',
                     module: 'do_not_disturb',
+                    number_type: 'pattern',
                     data: {
                         action: 'toggle'
                     },
@@ -429,6 +444,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'directory',
+                    number_type: 'pattern',
                     data: {
                         action: ''
                     },
@@ -444,6 +460,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'time',
+                    number_type: 'pattern',
                     data: {
                         action: ''
                     },
@@ -459,6 +476,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'call_waiting',
+                    number_type: 'pattern',
                     data: {
                         action: 'enable'
                     },
@@ -474,14 +492,15 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'call_waiting',
+                    number_type: 'number',
                     data: {
-                        action: 'enable'
+                        action: 'disable'
                     },
                     enabled: false,
                     default_number: '71',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'hot_desking[action=enable]': {
@@ -489,6 +508,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'hot_desking',
+                    number_type: 'pattern',
                     data: {
                         action: 'enable'
                     },
@@ -504,6 +524,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'hot_desking',
+                    number_type: 'number',
                     data: {
                         action: 'disable'
                     },
@@ -511,7 +532,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '12',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
                 'sound_test_service': {
@@ -519,6 +540,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: '',
+                    number_type: 'pattern',
                     data: {
                         action: ''
                     },
@@ -534,6 +556,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'voicemail',
+                    number_type: 'pattern',
                     data: {
                         action: 'check'
                     },
@@ -549,6 +572,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Miscellaneous',
                     module: 'call_recording',
+                    number_type: 'pattern',
                     data: {
                         action: ''
                     },
