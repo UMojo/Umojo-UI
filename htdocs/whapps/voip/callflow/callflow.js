@@ -748,10 +748,12 @@ winkstart.module('voip', 'callflow', {
 
                         if(crossbar_data.length > 0) {
                             _.each(crossbar_data, function(elem){
-                                new_list.push({
-                                    id: elem.id,
-                                    title: (elem.numbers) ? elem.numbers.toString() : ''
-                                });
+                                if(elem.featurecode == false) {
+                                    new_list.push({
+                                        id: elem.id,
+                                        title: (elem.numbers) ? elem.numbers.toString() : ''
+                                    });
+                                }
                             });
                         }
 
