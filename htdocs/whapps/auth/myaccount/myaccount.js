@@ -26,7 +26,8 @@ winkstart.module('auth', 'myaccount',
             'nav.my_account_click' : 'my_account_click',
             'nav.my_logout_click' : 'my_logout_click',
             'myaccount.activateApp' : 'activateApp',
-            'myaccount.deactivateApp' : 'deactivateApp'
+            'myaccount.deactivateApp' : 'deactivateApp',
+            'myaccount.billing.fillBillingForm' : 'fillBillingForm'
         },
 
         /* What API URLs are we going to be calling? Variables are in { }s */
@@ -38,7 +39,7 @@ winkstart.module('auth', 'myaccount',
                 verb: 'PUT'
             },
             "billing.get": {
-                url: 'https://store.2600hz.com/v1/billing',
+                url: '{api_url}/accounts/{account_id}/braintree/customer',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -83,113 +84,6 @@ winkstart.module('auth', 'myaccount',
         
         my_logout_click: function() {
             winkstart.publish('auth.activate');
-        },
-
-        add_creditCard: function(frm) {
-            winkstart.postJSON('sipservice.billing.put',
-            {
-                key: key,
-                json: JSON.stringify(frm.serializeObject())
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-
-            });
-        },
-
-        delCreditCard: function(tid) {
-            winkstart.postJSON('sipservice.billing.delete',
-            {
-                key: key,
-                json: JSON.stringify({
-                    token: tid
-                })
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-            });
-        },
-
-        addPromoCode: function(pc) {
-
-            winkstart.postJSON('sipservice.billing.put',
-            {
-                key: key,
-                json: JSON.stringify({
-                    promo_code: pc
-                })
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-            });
-        },
-
-        edit_billing: function() {
-            var THIS = this;
-
-            //var dialogDiv = winkstart.dialog(THIS.templates.add_credits.tmpl(), { title : 'Add Credits' } );
-            var dialogDiv = THIS.templates.edit_billing.tmpl({}).dialog({
-                title: 'Add Billing Account',
-                position: 'center',
-                height: 700,
-                width: 620
-            });
-
-            winkstart.publish('sipservice.input_css');
-
-            $(dialogDiv).find('.submit_btn').click(function() {
-                winkstart.publish('sipservice.post_billing', {
-                    card_number : 8969756879,
-                    car_name: 'John Doe',
-                    address: '123, Some Street NoWhereCity Ca',
-                    success : function() {
-                        dialogDiv.dialog('close');
-                    }
-                });
-
-            });
-        },
-
-        post_billing: function(data) {
-
-            winkstart.postJSON('sipservice.billing.put',
-            {
-                data: {
-                    card_number: data.card_number,
-                    car_name: data.car_name,
-                    address: data.address
-                }
-            },
-            function(json){
-                if (json && json.errs && json.errs[0]) {
-                    display_errs(json.errs, null, eval(json.errs[0].cb) );
-                    redraw(json.data);
-                }
-            });
-        },
-
-        showMyAccountPrompt: function(opts) {
-            if (typeof opts != 'object') {
-                opts = new Object();
-            }
-            winkstart.getJSON("sipservice.billing.get",
-            {
-                key: key,
-                json: JSON.stringify({})
-            }, function(jdata) {
-                jdata.tmplOpts = typeof opts.tmplOpts == 'object' ? opts.tmplOpts : {} ;
-                jdata.fa = typeof opts.fa == 'object' ? opts.fa : {} ;
-                //winkstart.log(JSON.stringify(jdata));
-                winkstart.dialog($('#tmpl_display_acct_info').tmpl(jdata), {
-                    title: 'Account Billing Information'
-                });
-            });
         },
 
         updateEmail: function() {
@@ -339,6 +233,18 @@ winkstart.module('auth', 'myaccount',
                 alert('Please REFRESH the page in order to apply the changes');
             });
         },
+        
+        fillBillingForm: function() {
+            // This is for test only. DON'T FORGET TO PUT THE AUTH_TOKEN when everything is finish
+            billing_rest_data = {};
+            billing_rest_data.api_url = 'http://apps002-dev-ord.2600hz.com:8000/v1';
+            billing_rest_data.account_id = 'c0705d7474ea0160c10a351b2544006b';
+            billing_rest_data.crossbar = true;
+
+            winkstart.getJSON('billing.get', billing_rest_data, function(data, status) {
+                console.log(data);
+            });
+        },
 
         display: function() {
             var THIS = this;
@@ -359,6 +265,7 @@ winkstart.module('auth', 'myaccount',
                     THIS.templates.personalinfos.tmpl().appendTo('.pane #tabs3');
                     THIS.templates.apikey.tmpl(tmpl).appendTo('.pane #tabs3');
 
+                    // Apps
                     $('#tabs1 .app_holder').click(function() {
                         if($(this).hasClass('active')) {
                             $(this).removeClass('active');
@@ -382,22 +289,13 @@ winkstart.module('auth', 'myaccount',
                     $('#btnPwd').click(function() {
                         winkstart.publish('myaccount.updatePwd');
                     });
+                    
+                    // Billing
+                    winkstart.publish('myaccount.billing.fillBillingForm');
                 }
             });
             
             dialogDiv.css('overflow', 'hidden');
             dialogDiv.css('overflow-y', 'auto');
-            
-//            THIS.templates.myaccount.tmpl().dialog({
-//                height: '600',
-//                width: '500',
-//                title: 'My account',
-//                open:function(){
-//                    THIS.templates.userlevel.tmpl().appendTo('.myaccount_popup #userlevel');
-//                    THIS.templates.apps.tmpl().appendTo('.myaccount_popup #apps');
-//                    THIS.templates.apikey.tmpl(tmpl).appendTo('.myaccount_popup #apikey');
-//                    THIS.templates.billing.tmpl().appendTo('.myaccount_popup #billing');
-//                }
-//            });
         }
     });  // End module
