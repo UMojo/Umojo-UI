@@ -22,11 +22,11 @@ winkstart.module('auth', 'myaccount',
             'myaccount.display' : 'display',
             'myaccount.updatePwd' : 'updatePwd',
             'myaccount.updateEmail' : 'updateEmail',
-            'myaccount.selectApp' : 'selectApp',
+            'myaccount.app.selectApp' : 'selectApp',
             'nav.my_account_click' : 'my_account_click',
             'nav.my_logout_click' : 'my_logout_click',
-            'myaccount.activateApp' : 'activateApp',
-            'myaccount.deactivateApp' : 'deactivateApp',
+            'myaccount.app.activateApp' : 'activateApp',
+            'myaccount.app.deactivateApp' : 'deactivateApp',
             'myaccount.billing.fillBillingForm' : 'fillBillingForm'
         },
 
@@ -242,7 +242,7 @@ winkstart.module('auth', 'myaccount',
             billing_rest_data.crossbar = true;
 
             winkstart.getJSON('billing.get', billing_rest_data, function(data, status) {
-                console.log(data);
+
             });
         },
 
@@ -269,18 +269,18 @@ winkstart.module('auth', 'myaccount',
                     $('#tabs1 .app_holder').click(function() {
                         if($(this).hasClass('active')) {
                             $(this).removeClass('active');
-                            winkstart.publish('myaccount.deactivateApp', {
+                            winkstart.publish('myaccount.app.deactivateApp', {
                                 whapp: $(this).attr('id')
                             });
                         } else {
                             $(this).addClass('active');
-                            winkstart.publish('myaccount.activateApp', {
+                            winkstart.publish('myaccount.app.activateApp', {
                                 whapp: $(this).attr('id')
                             });
                         }
                     });
 
-                    winkstart.publish('myaccount.selectApp');
+                    winkstart.publish('myaccount.app.selectApp');
 
                     $('#btnEmail').click(function() {
                         winkstart.publish('myaccount.updateEmail');
