@@ -263,11 +263,14 @@ winkstart.module('auth', 'myaccount',
             }, function(json, xhr) {
                 
                 newapp = {};
+                
+                
+                
                 if(data.whapp == "voip") {
                     newapp = { "apps": {"voip": {
                         "label": "VoIP Services",
                         "icon": "phone",
-                        "api_url": "http://apps.2600hz.com:8000/v1"
+                        "api_url": "http://apps001-demo-ord.2600hz.com:8000/v1"
                     }}};
                 } else if (data.whapp == "cluster") {
                     newapp = { "apps": {"cluster": {
@@ -279,7 +282,7 @@ winkstart.module('auth', 'myaccount',
                     newapp = { "apps": {"userportal": {
                         "label": "User Portal",
                         "icon": "user_portal",
-                        "api_url": "http://apps.2600hz.com:8000/v1"
+                        "api_url": "http://apps001-demo-ord.2600hz.com:8000/v1"
                     }}};
                 } else if (data.whapp == "connect") {
                     newapp = { "apps": {"connect": {
