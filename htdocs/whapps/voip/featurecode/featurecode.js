@@ -279,30 +279,30 @@ winkstart.module('voip', 'featurecode', {
             var THIS = this;
                 
             $.extend(featurecodes, {
-               'call_forward[action=enable]': {
+               'call_forward[action=activate]': {
                     name: 'Enable Call-Forward',
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
-                    number_type: 'pattern',
+                    number_type: 'number',
                     data: {
-                        action: 'enable'
+                        action: 'activate'
                     },
                     enabled: false,
                     default_number: '72',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '*'+number;
                     }
                 },
-                'call_forward[action=disable]': {
+                'call_forward[action=deactivate]': {
                     name: 'Disable Call-Forward',
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
                     number_type: 'number',
                     data: {
-                        action: 'disable'
+                        action: 'deactivate'
                     },
                     enabled: false,
                     default_number: '73',
@@ -327,7 +327,103 @@ winkstart.module('voip', 'featurecode', {
                         return '*'+number;
                     }
                 },
-                'call_forward[action=on_busy_enable]': {
+                'call_forward[action=update]': {
+                    name: 'Update Call-Forward',
+                    icon: 'phone',
+                    category: 'Call-Forward',
+                    module: 'call_forward',
+                    number_type: 'number',
+                    data: {
+                        action: 'update'
+                    },
+                    enabled: false,
+                    default_number: '56',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                
+                'hotdesk[action=login]': {
+                    name: 'Enable Hot Desking',
+                    icon: 'phone',
+                    category: 'Hot Desking',
+                    module: 'hotdesk',
+                    number_type: 'number',
+                    data: {
+                        action: 'login'
+                    },
+                    enabled: false,
+                    default_number: '11',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                'hotdesk[action=logout]': {
+                    name: 'Disable Hot Desking',
+                    icon: 'phone',
+                    category: 'Hot Desking',
+                    module: 'hotdesk',
+                    number_type: 'number',
+                    data: {
+                        action: 'logout'
+                    },
+                    enabled: false,
+                    default_number: '12',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                'hotdesk[action=toggle]': {
+                    name: 'Toggle Hot Desking',
+                    icon: 'phone',
+                    category: 'Hot Desking',
+                    module: 'hotdesk',
+                    number_type: 'number',
+                    data: {
+                        action: 'toggle'
+                    },
+                    enabled: false,
+                    default_number: '13',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                'voicemail[action=check]': {
+                    name: 'Check Voicemail',
+                    icon: 'phone',
+                    category: 'Miscellaneous',
+                    module: 'voicemail',
+                    number_type: 'number',
+                    data: {
+                        action: 'check'
+                    },
+                    enabled: false,
+                    default_number: '97',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                'intercom': {
+                    name: 'Intercom',
+                    icon: 'phone',
+                    category: 'Miscellaneous',
+                    module: 'intercom',
+                    number_type: 'pattern',
+                    data: {
+                    },
+                    enabled: false,
+                    default_number: '0',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
+                    }
+                }
+                /*'call_forward[action=on_busy_enable]': {
                     name: 'Enable Call-Forward on Busy',
                     icon: 'phone',
                     category: 'Call-Forward',
@@ -503,38 +599,7 @@ winkstart.module('voip', 'featurecode', {
                         return '*'+number;
                     }
                 },
-                'hot_desking[action=enable]': {
-                    name: 'Enable Hot Desking',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'hot_desking',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'enable'
-                    },
-                    enabled: false,
-                    default_number: '11',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'hot_desking[action=disable]': {
-                    name: 'Disable Hot Desking',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'hot_desking',
-                    number_type: 'number',
-                    data: {
-                        action: 'disable'
-                    },
-                    enabled: false,
-                    default_number: '12',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
+                
                 'sound_test_service': {
                     name: 'Sound Test Service',
                     icon: 'phone',
@@ -551,22 +616,7 @@ winkstart.module('voip', 'featurecode', {
                         return '^\\*'+number+'([0-9]*)$';
                     }
                 },
-                'voicemail[action=check]': {
-                    name: 'Check Voicemail',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'voicemail',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'check'
-                    },
-                    enabled: false,
-                    default_number: '97',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
+                
                 'call_recording': {
                     name: 'Call Recording',
                     icon: 'phone',
@@ -582,7 +632,7 @@ winkstart.module('voip', 'featurecode', {
                     build_regex: function(number) {
                         return '^\\*'+number+'([0-9]*)$';
                     }
-                }
+                }*/
             });
         }
     }
