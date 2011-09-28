@@ -166,7 +166,7 @@ function(args) {
             }
         });
 
-        $('#save-voicemail-link, #delete-voicemail-link').click(function() {
+        $('#save-voicemail-link, #delete-voicemail-link, #new-voicemail-link').click(function() {
             var vmboxes, action = $(this).attr('action');
             if($('.select-checkbox:checked').size()) {
                 if(action == 'delete' && !confirm('Are you sure that you want to delete the selected voicemail message(s)?')) {
@@ -206,6 +206,8 @@ function(args) {
                                 }
                                 else if(action == 'delete') {
                                     reply.data.messages[msg_index].folder = 'deleted';
+                                } else if(action == 'new') {
+                                    reply.data.messages[msg_index].folder = 'new';
                                 }
                             }
                         );
@@ -221,6 +223,9 @@ function(args) {
                                 $.each(rows, function(i, row) {
                                     if(action == "save") {
                                         winkstart.table.voicemail.fnUpdate('saved', row, 5); 
+                                    } 
+                                    else if(action == "new") {
+                                        winkstart.table.voicemail.fnUpdate('new', row, 5); 
                                     }
                                     else if(action == "delete") {
                                         //winkstart.table.voicemail.fnUpdate('deleted', row, 6);
@@ -228,6 +233,7 @@ function(args) {
                                     }
                                 });
                                 $('.select-checkbox').removeAttr('checked');
+                                $('#select_all', '#voicemail-view').removeAttr('checked');
                             }
                         );
                     });
