@@ -40,11 +40,6 @@
             'user_id': null
         }
     };
-    
-    // General apps object
-    winkstart.allApps = {
-        
-    };
 
     amplify.cache = false;
     
