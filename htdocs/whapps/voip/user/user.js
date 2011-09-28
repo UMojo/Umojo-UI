@@ -114,6 +114,37 @@ winkstart.module('voip', 'user',
                         }, function(data, status){
                             delete data.data.id;
                             
+                            // If there is no apps object
+                            if (!("apps" in data.data)) {
+                                data.data.apps = {};
+                            }
+                            
+                            // If the user is an admin
+                            if (form_data.user_level == "admin") {
+                                if (!("voip" in data.data.apps)) {
+                                    data.data.apps.voip = {
+                                        "label": "VoIP Services",
+                                        "icon": "phone",
+                                        "api_url": winkstart.apps['voip'].api_url
+                                    };
+                                }
+                                
+                                if ("userportal" in data.data.apps) {
+                                    delete data.data.apps.userportal;
+                                }
+                            } else { // If the user is a "simple" user.
+                                if (!("userportal" in data.data.apps)) {
+                                    data.data.apps.userportal = {
+                                        "label": "User Portal",
+                                        "icon": "userportal",
+                                        "api_url": winkstart.apps['voip'].api_url
+                                    };
+                                }
+                                
+                                if ("voip" in data.data.apps) {
+                                    delete data.data.apps.voip;
+                                }
+                            }
                             delete form_data.pwd_mngt_pwd1;
                             delete form_data.pwd_mngt_pwd2;
                             delete form_data.user_level;
@@ -126,7 +157,6 @@ winkstart.module('voip', 'user',
                             }
                             
                             var newform_data = $.extend(true, {}, data.data, form_data);
-                            newform_data.apps = form_data.apps;
                             var rest_data = {};
                             rest_data.crossbar = true;
                             rest_data.account_id = winkstart.apps['voip'].account_id,
@@ -138,6 +168,7 @@ winkstart.module('voip', 'user',
                             if (tmpPassword != "fakePassword") {
                                 rest_data.data.password = tmpPassword;
                             }
+            
                             /* EDIT */
                             winkstart.postJSON('user.update', rest_data, function (json, xhr) {
                                 /* Refresh the list and the edit content */
@@ -151,6 +182,22 @@ winkstart.module('voip', 'user',
                         
                     } else {
                         /* CREATE */
+                        
+                        form_data.apps = {};
+                        
+                        if (form_data.user_level == "admin") {
+                            form_data.apps.voip = {
+                                "label": "VoIP Services",
+                                "icon": "phone",
+                                "api_url": winkstart.apps['voip'].api_url
+                            };
+                        } else {
+                            form_data.apps.userportal = {
+                                "label": "User Portal",
+                                "icon": 'userportal',
+                                "api_url": winkstart.apps['voip'].api_url
+                            }
+                        }
                         
                         var tmpPassword = form_data.pwd_mngt_pwd1;
                         
@@ -196,16 +243,10 @@ winkstart.module('voip', 'user',
                 data : {
                     call_forward: {},
                     caller_id: {internal: { }, external: { }},
-                    hotdesk: {},
+                    hotdesk: {}
                 },
                 field_data: {}
             };
-
-            form_data.field_data.whapps = winkstart.config.available_list;
-
-            $.each(winkstart.config.available_list, function() {
-                delete this.use;
-            });
 
             if (data && data.id) {
                 /* This is an existing user - Grab JSON data from server for user_id */
@@ -216,15 +257,8 @@ winkstart.module('voip', 'user',
                     user_id: data.id
                 }, function(json, xhr) {
                     /* On success, take JSON and merge with default/empty fields */
-                    for(var key in form_data.field_data.whapps) {
-                        if(json.data.apps[key] != undefined) {
-                            form_data.field_data.whapps[key].use = 'true';
-                        } else {
-                            delete winkstart.config.available_list[key].use;
-                        } 
-                   }
-
                     $.extend(true, form_data, json);
+
                     THIS.renderUser(form_data);
                 });
             } else {
@@ -267,6 +301,7 @@ winkstart.module('voip', 'user',
             if(form_data.data.hotdesk.require_pin != undefined) {
                 form_data.data.hotdesk.enable = true;
             }
+        
             /* Paint the template with HTML of form fields onto the page */
             user_html = THIS.templates.editUser.tmpl(form_data).appendTo( $('#user-view') );
             winkstart.timezone.populate_dropdown($('#timezone', user_html), form_data.data.timezone);
@@ -286,10 +321,7 @@ winkstart.module('voip', 'user',
             if(form_data.data.hotdesk.require_pin == undefined || form_data.data.hotdesk.require_pin == false) {
                 $('#pin_wrapper', user_html).hide();
             }
-
-            $('.fake_checkbox', '#user-form').click(function() {
-                $(this).toggleClass('checked');
-            });            
+            
 
             $("#advanced_settings_link").click(function(event) {
                 if($(this).attr("enabled")=="true") {
@@ -321,10 +353,6 @@ winkstart.module('voip', 'user',
                 var form_data = form2object('user-form');
                 form_data.hotdesk.enable == false ? delete form_data.hotdesk : delete form_data.hotdesk.enable;
                 form_data.call_forward.substitute = !form_data.call_forward.substitute;
-                form_data.apps = {};
-                $('.checked','#whapp_checkboxes').each(function() { 
-                    form_data.apps[$(this).dataset('value')] = winkstart.config.available_list[$(this).dataset('value')];
-                });
 
                 //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);

@@ -48,18 +48,18 @@
                                 <input id="email" name="email" type="text" value="${data.email}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Select the whapps that your user is going to have access to:">
-                                    <span class="tooltip"/><label for="user_level">Whapps list:</label>
+                                <span class="tooltip-wrapper" tooltip="The user privilege level">
+                                    <span class="tooltip"/><label for="user_level">User privilege level:</label>
                                 </span>
-                                <span id="whapp_checkboxes">
-                                {{each(i, whapp) field_data.whapps}}
-                                    {{if whapp.use == 'true'}}
-                                        <div class="fake_checkbox checked" data-value="${i}">${whapp.label}</div>
+                                <select id="user_level" name="user_level">
+                                    {{if priv_level == 'admin'}} 
+                                    <option value="admin" selected>Administrator</option>
+                                    <option value="user">User</option>
                                     {{else}}
-                                        <div class="fake_checkbox" data-value="${i}">${whapp.label}</div>
+                                    <option value="admin">Administrator</option>
+                                    <option value="user" selected>User</option>
                                     {{/if}}
-                                {{/each}}
-                                </span>
+                                </select>
                             </li>
                         </ul>
                     </fieldset>
