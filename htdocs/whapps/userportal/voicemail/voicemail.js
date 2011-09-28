@@ -139,12 +139,12 @@ function(args) {
                          '&song_title=voicemail&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="150" height="17"></embed>' +
                          '</object>';
             }},
-            { 'sTitle': 'Download',
+            { 'sTitle': 'Actions',
               'sWidth': '70px',
               'bSortable': false,
               'fnRender': function(obj) {
                   var msg_uri = obj.aData[obj.iDataColumn];
-                  return '<a href="' + THIS.voicemail_uri(msg_uri)  + '"><img src="whapps/core/layout/images/download_icon.png" alt="Download"/></a>';
+                  return '<a href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a><span id="'+msg_uri+'" class="icon medium trash clickable delete_message" alt="Delete"/></a>';
             }}
         ];
 
@@ -165,6 +165,39 @@ function(args) {
                 $('.select-checkbox').attr('checked', true);
             }
         });
+
+        $('.delete_message', '#voicemail-view').live('click',function() {
+            var tabId = $(this).attr('id').split(/[\/]+/);
+            var vmbox_id = tabId[0];
+            var msg_id = tabId[2];
+            var row = $(this).parents('tr')[0];
+
+            winkstart.getJSON('vmbox.read', {
+                    crossbar: true,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url,
+                    vmbox_id: vmbox_id
+                },
+                function(reply) {
+                    if(reply.data.messages == undefined) {
+                        return false;
+                    }
+                    var msg_index = winkstart.table.voicemail.fnGetData(row, 1);
+                    reply.data.messages[msg_index].folder = 'deleted';
+
+                    winkstart.postJSON('vmbox.update', {
+                            crossbar: true,
+                            account_id: winkstart.apps['userportal'].account_id,
+                            api_url: winkstart.apps['userportal'].api_url,
+                            vmbox_id: vmbox_id,
+                            data: reply.data
+                        },
+                        function() {
+                            winkstart.table.voicemail.fnDeleteRow(row);
+                        }
+                    );
+            });
+        }); 
 
         $('#save-voicemail-link, #delete-voicemail-link, #new-voicemail-link').click(function() {
             var vmboxes, action = $(this).attr('action');
