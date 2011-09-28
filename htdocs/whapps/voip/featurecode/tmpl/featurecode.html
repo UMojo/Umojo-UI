@@ -1,0 +1,48 @@
+<div> 
+    <div id="featurecode-view-wrapper">
+        <div id="featurecode-view">
+            <h1>Feature Codes</h1>
+            <div>
+                <span class="featurecode_wrapper">
+                    {{each(i, actions) categories}}
+                    <div>
+                        <h2>${i}</h2>
+                        <div class="action_wrapper">
+                            <div class="action_name title">Name</div>
+                            <div class="action_fields">
+                                <span class="number_field title">Number</span>
+                                <span class="enabled_field title">Enabled?</span>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+
+                        {{each(j, action) actions}}
+                        <div class="action_wrapper" data-id=${id} data-action=${tag} data-number=${number} data-type=${number_type} data-enabled=${enabled}>
+                            <div class="action_name">${name}</div>
+                            <div class="action_fields">
+                                <span class="number_field">
+                                    <div class="star">*</div><input type="text" class="featurecode_number" value=${number} size="2"/>
+                                </span>
+                                <span class="enabled_field">
+                                {{if enabled}}
+                                    <input type="checkbox" class="featurecode_enabled" checked="CHECKED">
+                                {{else}}
+                                    <input type="checkbox" class="featurecode_enabled">
+                                {{/if}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                        {{/each}}
+                    </div>
+                    {{/each}}
+                </span>
+            </div>
+            <div class="featurecodes_buttons">
+                <ul class="buttons right featurecodes">
+                    <li><a class="featurecode-save save-btn" href="#">Save</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

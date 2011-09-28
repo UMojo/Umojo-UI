@@ -48,6 +48,6 @@
 
     amplify.cache = false;
     
-    document.title = "2600hz Winkstart";
+    document.title = "2600hz WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
