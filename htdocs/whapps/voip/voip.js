@@ -40,11 +40,8 @@ winkstart.module('voip', 'voip', {
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
-        winkstart.publish ('auth.shared_auth', {
-            app_name: THIS.__module,
-            callback: function() {
-                winkstart.publish('appnav.add', { 'name' : THIS.__module });
-            }
+        THIS.whapp_auth(function() {
+            winkstart.publish('appnav.add', { 'name' : THIS.__module });
         });
     },
     {
@@ -117,7 +114,6 @@ winkstart.module('voip', 'voip', {
             } else {
                 THIS.setup_page();
             }
-            
         },
 
         module_activate: function(args) {
@@ -131,14 +127,14 @@ winkstart.module('voip', 'voip', {
         whapp_auth: function(callback) {
             var THIS = this;
 
-            if('auth_token' in winkstart.apps[THIS.__module] && !winkstart.apps[THIS.__module].auth_token) {
+            if('auth_token' in winkstart.apps[THIS.__module] && winkstart.apps[THIS.__module].auth_token) {
+                callback();
+            }
+            else {
                 winkstart.publish('auth.shared_auth', {
                     app_name: THIS.__module,
                     callback: (typeof callback == 'function') ? callback : undefined
                 });
-            }
-            else {
-                callback();
             }
         },
 
