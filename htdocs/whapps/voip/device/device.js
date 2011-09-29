@@ -139,7 +139,7 @@ winkstart.module('voip', 'device',
 
         validation_sip_device : [
             {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
-            {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$|^$/},
+            {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$|^$/},
             //{name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
             {name : '#caller_id_name_internal', regex : /^.*$/},
             {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
@@ -263,14 +263,32 @@ winkstart.module('voip', 'device',
                 if (device_id) {
                     /* EDIT */
                     rest_data.device_id = device_id;
-                    winkstart.postJSON('device.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editDevice({
-                            id: device_id
-                        });
+                    winkstart.getJSON('device.filter', {
+                        crossbar: true,
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        mac_address: form_data.mac_address
+                    }, function (json, xhr) {
+                        var currentDevice = false;
+                        if(json.data.length == 1) {
+                            if(json.data[0].id == device_id) {
+                                currentDevice = true;
+                            }
+                        }
+                        if(json.data.length == 0 || currentDevice == true) {
+                            winkstart.postJSON('device.update', rest_data, function (json, xhr) {
+                                /* Refresh the list and the edit content */
+                                THIS.renderList();
+                                THIS.editDevice({
+                                    id: device_id
+                                });
+                            });
+                        } else {
+                            alert('MAC Address already used');
+                        }
                     });
                 } else {
+                    console.log(form_data.mac_address);
                     winkstart.getJSON('device.filter', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
@@ -473,6 +491,16 @@ winkstart.module('voip', 'device',
             });
         },
         cleanFormData: function(form_data) {
+            //Save mac address in a consistent way
+            form_data.mac_address = form_data.mac_address.toLowerCase();
+
+            if(form_data.mac_address.match(/^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$/)) {
+                form_data.mac_address = form_data.mac_address.replace(/-/g,":");
+            }
+            else if(form_data.mac_address.match(/^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/)) {
+                form_data.mac_address = form_data.mac_address.replace(/(.{2})/g,"$1:").slice(0, -1);
+            }
+
             if(form_data.device_type == 'sip_device') {
                 var audioCodecs = [];
                 var videoCodecs = [];
