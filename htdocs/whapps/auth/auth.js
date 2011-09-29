@@ -242,15 +242,14 @@ winkstart.module('auth', 'auth',
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
                     winkstart.apps[k] = v;
 
-                    if(!v.account_id) {
+                    if(!('account_id' in v)) {
                         winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
                     }
-                    
-                    // TODO: This is a hack. This should not be done - instead, a failback routine should go into the core
-                    /*winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
-                    winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
-                    winkstart.apps[k].auth_token = winkstart.apps['auth'].auth_token;*/
 
+                    if(!('user_id' in v)) {
+                        winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
+                    }
+                    
                     winkstart.module.loadApp(k, function() {
                         this.init();
                         winkstart.log('WhApps: Initializing ' + k);

@@ -192,6 +192,14 @@
     background-position: -368px -64px;
 }
 
+.icon.download {
+    background-position: -732px -0px;
+}
+
+.icon.trash {
+    background-position: -32px -64px;
+}
+
 .icon.support {
     background-position: -416px -195px;
 }

@@ -38,3 +38,7 @@
     color: #000;
     border: solid 1px #999 !important;
 }
+
+#voicemail-view .clickable {
+    cursor: pointer;
+}

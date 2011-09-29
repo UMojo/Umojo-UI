@@ -139,12 +139,12 @@ function(args) {
                          '&song_title=voicemail&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="150" height="17"></embed>' +
                          '</object>';
             }},
-            { 'sTitle': 'Download',
+            { 'sTitle': 'Actions',
               'sWidth': '70px',
               'bSortable': false,
               'fnRender': function(obj) {
                   var msg_uri = obj.aData[obj.iDataColumn];
-                  return '<a href="' + THIS.voicemail_uri(msg_uri)  + '"><img src="whapps/core/layout/images/download_icon.png" alt="Download"/></a>';
+                  return '<a href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a><span id="'+msg_uri+'" class="icon medium trash clickable delete_message" alt="Delete"/></a>';
             }}
         ];
 
@@ -156,7 +156,7 @@ function(args) {
     page_setup: function() {
         var THIS = this;
         $('#ws-content').empty();
-        THIS.templates.voicemail.tmpl({}).appendTo( $('#ws-content') );
+        var html = THIS.templates.voicemail.tmpl({}).appendTo( $('#ws-content') );
 
         $('#select_all').live('click', function() {
             if($('#select_all').attr('checked') == false) {
@@ -166,7 +166,43 @@ function(args) {
             }
         });
 
-        $('#save-voicemail-link, #delete-voicemail-link').click(function() {
+        $(html).delegate('.delete_message','click',function() {
+            if(confirm('Are you sure that you want to delete this voicemail?')) {
+                console.log($(this));
+                var tabId = $(this).attr('id').split(/[\/]+/);
+                var vmbox_id = tabId[0];
+                var msg_id = tabId[2];
+                var row = $(this).parents('tr')[0];
+
+                winkstart.getJSON('vmbox.read', {
+                        crossbar: true,
+                        account_id: winkstart.apps['userportal'].account_id,
+                        api_url: winkstart.apps['userportal'].api_url,
+                        vmbox_id: vmbox_id
+                    },
+                    function(reply) {
+                        if(reply.data.messages == undefined) {
+                            return false;
+                        }
+                        var msg_index = winkstart.table.voicemail.fnGetData(row, 1);
+                        reply.data.messages[msg_index].folder = 'deleted';
+
+                        winkstart.postJSON('vmbox.update', {
+                                crossbar: true,
+                                account_id: winkstart.apps['userportal'].account_id,
+                                api_url: winkstart.apps['userportal'].api_url,
+                                vmbox_id: vmbox_id,
+                                data: reply.data
+                            },
+                            function() {
+                                winkstart.table.voicemail.fnDeleteRow(row);
+                            }
+                        );
+                });
+            }
+        }); 
+
+        $('#save-voicemail-link, #delete-voicemail-link, #new-voicemail-link').click(function() {
             var vmboxes, action = $(this).attr('action');
             if($('.select-checkbox:checked').size()) {
                 if(action == 'delete' && !confirm('Are you sure that you want to delete the selected voicemail message(s)?')) {
@@ -206,6 +242,8 @@ function(args) {
                                 }
                                 else if(action == 'delete') {
                                     reply.data.messages[msg_index].folder = 'deleted';
+                                } else if(action == 'new') {
+                                    reply.data.messages[msg_index].folder = 'new';
                                 }
                             }
                         );
@@ -221,6 +259,9 @@ function(args) {
                                 $.each(rows, function(i, row) {
                                     if(action == "save") {
                                         winkstart.table.voicemail.fnUpdate('saved', row, 5); 
+                                    } 
+                                    else if(action == "new") {
+                                        winkstart.table.voicemail.fnUpdate('new', row, 5); 
                                     }
                                     else if(action == "delete") {
                                         //winkstart.table.voicemail.fnUpdate('deleted', row, 6);
@@ -228,6 +269,7 @@ function(args) {
                                     }
                                 });
                                 $('.select-checkbox').removeAttr('checked');
+                                $('#select_all', '#voicemail-view').removeAttr('checked');
                             }
                         );
                     });

@@ -93,9 +93,7 @@ winkstart.module('core', 'appnav', {
             var THIS = this;
             // TODO: De-activate current app & unload it
 
-            if(winkstart.apps[app_name].auth_token != null) {
-                THIS._activate(app_name);
-            } 
+            THIS._activate(app_name);
         },
 
         _activate: function(app_name) {

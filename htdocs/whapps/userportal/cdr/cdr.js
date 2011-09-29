@@ -141,7 +141,7 @@ function(args) {
             api_url: winkstart.apps['userportal'].api_url
 		}, function(reply) {
 			$.each(reply.data, function() {
-				var cdr_id = this.id;
+				var cdr_id = this.cid || this.id;
 
 				winkstart.getJSON('cdr.read', {
 					crossbar: true, 
@@ -154,7 +154,7 @@ function(args) {
 					var caller_id_number = reply.data.caller_id_number;
 					var callee_id_name = reply.data.callee_id_name;
 					var callee_id_number = reply.data.callee_id_number;
-					var duration = reply.data.duration_seconds;
+					var duration = reply.data.billing_seconds;
 					var seconds = duration % 60;
 					var minutes = (duration-seconds) / 60;
 					if(seconds < 10) {
