@@ -291,7 +291,7 @@ winkstart.module('auth', 'myaccount',
                                     "locality":"",
                                     "region":"",
                                     "postal_code":"",
-                                    "country_code_three":"",
+                                    "country_code_three":""
                                  }
                               }] 
                            }
