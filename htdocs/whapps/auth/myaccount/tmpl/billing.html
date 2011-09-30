@@ -42,9 +42,11 @@
                     <label for="cvv">CVV</label>
                     <input type="text" name="credit_card.cvv" id="cvv" value="${data.credit_cards[0].cvv}" /><div class="clear"></div>
                     
+                    <div id="credit_id_container">
                     {{if data.credit_cards[0].id}}
                         <input type="hidden" id="update_existing" name="credit_card.update_existing" value="${data.credit_cards[0].id}" />
                     {{/if}}
+                    </div>
                     
                 <div class="clear"></div>
                 
@@ -77,9 +79,11 @@
                     <label for="country_code">Country Code</label>
                     <input type="text" name="credit_card.billing_address.country_code_three" id="country_code" value="${data.credit_cards[0].billing_address.country_code_three}" /><div class="clear"></div>
                     
+                    <div id="billing_address_existing">
                     {{if data.credit_cards[0].billing_address.street_address}}
                         <input type="hidden" name="credit_card.billing_address.update_existing" id="update_existing" value="true" />
                     {{/if}}
+                    </div>
 
                     <a class="ctr_btn save-btn" id="save-billing" href="#">Save</a>
                 </form>
