@@ -47,32 +47,57 @@ winkstart.module('voip', 'resource',
 
         /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "resource.list": {
-                url: '{api_url}/accounts/{account_id}/resources',
+            'local_resource.list': {
+                url: '{api_url}/accounts/{account_id}/local_resources',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "resource.get": {
-                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
+            'local_resource.get': {
+                url: '{api_url}/accounts/{account_id}/local_resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "resource.create": {
-                url: '{api_url}/accounts/{account_id}/resources',
+            'local_resource.create': {
+                url: '{api_url}/accounts/{account_id}/local_resources',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "resource.update": {
-                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
+            'local_resource.update': {
+                url: '{api_url}/accounts/{account_id}/local_resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "resource.delete": {
-                url: '{api_url}/accounts/{account_id}/resources/{resource_id}',
+            'local_resource.delete': {
+                url: '{api_url}/accounts/{account_id}/local_resources/{resource_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
-            "account.get": {
+            'global_resource.list': {
+                url: '{api_url}/accounts/{account_id}/global_resources',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'global_resource.get': {
+                url: '{api_url}/accounts/{account_id}/global_resources/{resource_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'global_resource.create': {
+                url: '{api_url}/accounts/{account_id}/global_resources',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'global_resource.update': {
+                url: '{api_url}/accounts/{account_id}/global_resources/{resource_id}',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            'global_resource.delete': {
+                url: '{api_url}/accounts/{account_id}/global_resources/{resource_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
+            },
+            'account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
@@ -107,9 +132,9 @@ winkstart.module('voip', 'resource',
             });
         },
 
-        saveResource: function(resource_id, form_data) {
+        saveResource: function(resource_id, type, form_data) {
             var THIS = this;
-
+                
             /* Check validation before saving */
             THIS.validateForm('save');
 
@@ -124,20 +149,22 @@ winkstart.module('voip', 'resource',
                 if (resource_id) {
                     /* EDIT */
                     rest_data.resource_id = resource_id;
-                    winkstart.postJSON('resource.update', rest_data, function (json, xhr) {
+                    winkstart.postJSON(type + '_resource.update', rest_data, function (json, xhr) {
                         /* Refresh the list and the edit content */
                         THIS.renderList();
                         THIS.editResource({
-                            id: resource_id
+                            id: resource_id,
+                            type: type
                         });
                     });
                 } else {
                     /* CREATE */
 
-                    winkstart.putJSON('resource.create', rest_data, function (json, xhr) {
+                    winkstart.putJSON(type + '_resource.create', rest_data, function (json, xhr) {
                         THIS.renderList();
                         THIS.editResource({
-                            id: json.data.id
+                            id: json.data.id,
+                            type: type
                         });
                     });
                 }
@@ -147,8 +174,8 @@ winkstart.module('voip', 'resource',
         },
         //Function to generate random usernames and passwords
         generateRandomString: function(pLength){
-            var chars = "0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz";
-            var sRandomString = "";
+            var chars = '0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz';
+            var sRandomString = '';
             for (var i=0; i<pLength; i++) {
                 var rnum = Math.floor(Math.random() * chars.length);
                 sRandomString += chars.substring(rnum,rnum+1);
@@ -162,7 +189,7 @@ winkstart.module('voip', 'resource',
             $('#resource-view').empty();
             var THIS = this;
 
-            var generatedUsername = "user_" + THIS.generateRandomString(6);
+            var generatedUsername = 'user_' + THIS.generateRandomString(6);
             var generatedPassword = THIS.generateRandomString(12);
             
 
@@ -170,25 +197,24 @@ winkstart.module('voip', 'resource',
                 var account_realm = json.data.realm;
 
                 var form_data = {
-                    data: { weight_cost: "100", enabled: true, gateways: [{ realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: "+1",  codecs: ["PCMU", "PCMA"]}], rules: [], caller_id_options: { type: "external"}, flags: []},
+                    data: { weight_cost: '100', enabled: true, gateways: [{ realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: '+1',  codecs: ['PCMU', 'PCMA']}], rules: [], caller_id_options: { type: 'external'}, flags: []},
                     field_data: THIS.config.formData,
                     value: {}
                 };
 
-                if (data && data.id) {
-                    /* This is an existing resource - Grab JSON data from server for resource_id */
+                if (data && data.id && data.type) {
                     form_data = {
                         data: { gateways: [{ codecs: []}], rules: [], caller_id_options: {}, flags: []},
                         field_data: THIS.config.formData,
-                        value: {}
+                        value: {},
+                        type: data.type
                     };
-                    winkstart.getJSON('resource.get', {
+                    winkstart.getJSON(data.type + '_resource.get', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         resource_id: data.id
                     }, function(json, xhr) {
-                        /* On success, take JSON and merge with default/empty fields */
                         $.extend(true, form_data, json);
                         if(form_data.data.gateways[0].codecs == undefined) {
                             form_data.data.gateways[0].codecs = {};
@@ -196,14 +222,17 @@ winkstart.module('voip', 'resource',
                         THIS.renderResource(form_data);
                     });
                 } else {
-                    /* This is a new resource - pass along empty params */
+                    if(!('admin' in winkstart.apps['voip']) || !winkstart.apps['voip'].admin) {
+                       form_data.type = 'local'; 
+                    }
+
                     THIS.renderResource(form_data);
                 }
 
             });
         },
 
-        deleteResource: function(resource_id) {
+        deleteResource: function(resource_id, type) {
             var THIS = this;
             
             var rest_data = {
@@ -214,7 +243,7 @@ winkstart.module('voip', 'resource',
             };
 
             /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('resource.delete', rest_data, function (json, xhr) {
+            winkstart.deleteJSON(type + '_resource.delete', rest_data, function (json, xhr) {
                 THIS.renderList();
                 $('#resource-view').empty();
             });
@@ -224,8 +253,10 @@ winkstart.module('voip', 'resource',
          * Draw resource fields/template and populate data, add validation. Works for both create & edit
          */
         renderResource: function(form_data){
-            var THIS = this;
-            var resource_id = form_data.data.id;
+            var THIS = this,
+                resource_id = form_data.data.id,
+                type = form_data.type || 'local';
+
             /* Paint the template with HTML of form fields onto the page */
             THIS.templates.editResource.tmpl(form_data).appendTo( $('#resource-view') );
             $.each(form_data.data.gateways, function(i, obj) {
@@ -237,29 +268,29 @@ winkstart.module('voip', 'resource',
             /* Initialize form field validation */
             THIS.validateForm();
 
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-            $("#name").focus();
+            $('ul.settings1').tabs('div.pane > div');
+            $('ul.settings2').tabs('div.advanced_pane > div');
+            $('#name').focus();
 
-            $(".advanced_pane").hide();
-            $(".advanced_tabs_wrapper").hide();
+            $('.advanced_pane').hide();
+            $('.advanced_tabs_wrapper').hide();
 
-            $("#advanced_settings_link").click(function(event) {
-                if($(this).attr("enabled")=="true") {
-                    $(this).attr("enabled", "false");
-                    $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
+            $('#advanced_settings_link').click(function(event) {
+                if($(this).attr('enabled')=='true') {
+                    $(this).attr('enabled', 'false');
+                    $('.advanced_pane').slideToggle(function(event) {
+                        $('.advanced_tabs_wrapper').animate({width: 'toggle'});
                     });
                 }
                 else {
-                    $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
-                        $(".advanced_pane").slideToggle();
+                    $(this).attr('enabled', 'true');
+                    $('.advanced_tabs_wrapper').animate({width: 'toggle'}, function(event) {
+                        $('.advanced_pane').slideToggle();
                     });
                 }
             });
 
-            /* Listen for the submit event (i.e. they click "save") */
+            /* Listen for the submit event (i.e. they click 'save') */
             $('.resource-save').click(function(event) {
                 /* Save the data after they've clicked save */
 
@@ -268,8 +299,13 @@ winkstart.module('voip', 'resource',
 
                 /* Grab all the form field data */
                 var form_data = form2object('resource-form');
+
+                if(!resource_id) {
+                    type = form_data.type;
+                }
+
                 form_data = THIS.cleanFormData(form_data);
-                THIS.saveResource(resource_id, form_data);
+                THIS.saveResource(resource_id, type, form_data);
 
                 return false;
             });
@@ -289,7 +325,7 @@ winkstart.module('voip', 'resource',
                 /* Ignore the normal behavior of a submit button and do our stuff instead */
                 event.preventDefault();
 
-                THIS.deleteResource(resource_id);
+                THIS.deleteResource(resource_id, type);
 
                 return false;
             });
@@ -299,54 +335,93 @@ winkstart.module('voip', 'resource',
             });
         },
 
-        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
-        renderList: function(){
-            var THIS = this;
-
-            winkstart.getJSON('resource.list', {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-            }, function (json, xhr) {
-
-                // List Data that would be sent back from server
-                function map_crossbar_data(crossbar_data){
-                    var new_list = [];
-                    if(crossbar_data.length > 0) {
-                        _.each(crossbar_data, function(elem){
-                            new_list.push({
-                                id: elem.id,
-                                title: elem.name
-                            });
-                        });
+        list_local_resources: function(callback) {
+            winkstart.getJSON('local_resource.list', {
+                    crossbar: true,
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    if(typeof callback == 'function') {
+                        callback(data);
                     }
-                    new_list.sort(function(a, b) {
+                }
+            );
+        },
+
+        list_global_resources: function(callback) {
+            winkstart.getJSON('global_resource.list', {
+                    crossbar: true,
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    if(typeof callback == 'function') {
+                        callback(data);
+                    }
+                }
+            );
+        },
+
+        renderList: function(){
+            var THIS = this,
+                setup_list = function (local_data, global_data) {
+                    var resources;
+                    function map_crossbar_data(crossbar_data, type){
+                        var new_list = [];
+                        if(crossbar_data.length > 0) {
+                            _.each(crossbar_data, function(elem){
+                                new_list.push({
+                                    id: elem.id,
+                                    title: elem.name,
+                                    type: type
+                                });
+                            });
+                        }
+
+                        return new_list;
+                    }
+
+                    var options = {};
+                    options.label = 'Resources Module';
+                    options.identifier = 'resource-module-listview';
+                    options.new_entity_label = 'Add Resource';
+
+                    resources = [].concat(map_crossbar_data(local_data, 'local'), map_crossbar_data(global_data, 'global'));
+                    resources.sort(function(a, b) {
                         var answer;
                         a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
                         return answer;
                     });
 
-                    return new_list;
-                }
+                    options.data = resources;
+                    options.publisher = winkstart.publish;
+                    options.notifyMethod = 'resource.list-panel-click';
+                    options.notifyCreateMethod = 'resource.edit-resource';  /* Edit with no ID = Create */
 
-                var options = {};
-                options.label = 'Resources Module';
-                options.identifier = 'resource-module-listview';
-                options.new_entity_label = 'Add Resource';
-                options.data = map_crossbar_data(json.data);
-                options.publisher = winkstart.publish;
-                options.notifyMethod = 'resource.list-panel-click';
-                options.notifyCreateMethod = 'resource.edit-resource';  /* Edit with no ID = Create */
+                    $('#resource-listpanel').empty();
+                    $('#resource-listpanel').listpanel(options);
+                };
 
-                $("#resource-listpanel").empty();
-                $("#resource-listpanel").listpanel(options);
-
-            });
+            if('admin' in winkstart.apps['voip'] && winkstart.apps['voip'].admin === true) {
+                THIS.list_global_resources(function(global_data) {
+                    THIS.list_local_resources(function(local_data) {
+                        setup_list(local_data.data, global_data.data);
+                    });
+                });
+            }
+            else {
+                THIS.list_local_resources(function(local_data) {
+                    setup_list(local_data.data, []);
+                });
+            }
         },
         cleanFormData: function(form_data) {
             var audioCodecs;
+
+            if('type' in form_data) {
+                delete form_data.type;
+            }
             
             $.each(form_data.gateways, function(indexGateway, gateway) {
                 audioCodecs = [];
