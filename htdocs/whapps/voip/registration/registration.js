@@ -194,7 +194,6 @@ winkstart.module('voip', 'registration',
 						stringToDisplay += '\\nDate: ' + humanDate;
 						stringToDisplay += '\\nTime: ' + humanTime;
 
-                        console.log(reply.data.contact);
 
 						winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
 					});

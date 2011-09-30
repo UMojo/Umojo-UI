@@ -288,7 +288,6 @@ winkstart.module('voip', 'device',
                         }
                     });
                 } else {
-                    console.log(form_data.mac_address);
                     winkstart.getJSON('device.filter', {
                         crossbar: true,
                         account_id: winkstart.apps['voip'].account_id,
