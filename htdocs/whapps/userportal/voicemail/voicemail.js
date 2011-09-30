@@ -156,7 +156,7 @@ function(args) {
     page_setup: function() {
         var THIS = this;
         $('#ws-content').empty();
-        THIS.templates.voicemail.tmpl({}).appendTo( $('#ws-content') );
+        var html = THIS.templates.voicemail.tmpl({}).appendTo( $('#ws-content') );
 
         $('#select_all').live('click', function() {
             if($('#select_all').attr('checked') == false) {
@@ -166,37 +166,40 @@ function(args) {
             }
         });
 
-        $('.delete_message', '#voicemail-view').live('click',function() {
-            var tabId = $(this).attr('id').split(/[\/]+/);
-            var vmbox_id = tabId[0];
-            var msg_id = tabId[2];
-            var row = $(this).parents('tr')[0];
+        $(html).delegate('.delete_message','click',function() {
+            if(confirm('Are you sure that you want to delete this voicemail?')) {
+                console.log($(this));
+                var tabId = $(this).attr('id').split(/[\/]+/);
+                var vmbox_id = tabId[0];
+                var msg_id = tabId[2];
+                var row = $(this).parents('tr')[0];
 
-            winkstart.getJSON('vmbox.read', {
-                    crossbar: true,
-                    account_id: winkstart.apps['userportal'].account_id,
-                    api_url: winkstart.apps['userportal'].api_url,
-                    vmbox_id: vmbox_id
-                },
-                function(reply) {
-                    if(reply.data.messages == undefined) {
-                        return false;
-                    }
-                    var msg_index = winkstart.table.voicemail.fnGetData(row, 1);
-                    reply.data.messages[msg_index].folder = 'deleted';
-
-                    winkstart.postJSON('vmbox.update', {
-                            crossbar: true,
-                            account_id: winkstart.apps['userportal'].account_id,
-                            api_url: winkstart.apps['userportal'].api_url,
-                            vmbox_id: vmbox_id,
-                            data: reply.data
-                        },
-                        function() {
-                            winkstart.table.voicemail.fnDeleteRow(row);
+                winkstart.getJSON('vmbox.read', {
+                        crossbar: true,
+                        account_id: winkstart.apps['userportal'].account_id,
+                        api_url: winkstart.apps['userportal'].api_url,
+                        vmbox_id: vmbox_id
+                    },
+                    function(reply) {
+                        if(reply.data.messages == undefined) {
+                            return false;
                         }
-                    );
-            });
+                        var msg_index = winkstart.table.voicemail.fnGetData(row, 1);
+                        reply.data.messages[msg_index].folder = 'deleted';
+
+                        winkstart.postJSON('vmbox.update', {
+                                crossbar: true,
+                                account_id: winkstart.apps['userportal'].account_id,
+                                api_url: winkstart.apps['userportal'].api_url,
+                                vmbox_id: vmbox_id,
+                                data: reply.data
+                            },
+                            function() {
+                                winkstart.table.voicemail.fnDeleteRow(row);
+                            }
+                        );
+                });
+            }
         }); 
 
         $('#save-voicemail-link, #delete-voicemail-link, #new-voicemail-link').click(function() {
