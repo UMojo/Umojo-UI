@@ -142,9 +142,9 @@ winkstart.module('voip', 'device',
             {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$|^$/},
             //{name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
             {name : '#caller_id_name_internal', regex : /^.*$/},
-            {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
+            {name : '#caller_id_number_internal', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
             {name : '#caller_id_name_external', regex : /^.*$/},
-            {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
+            {name : '#caller_id_number_external', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
             {name : '#sip_realm', regex : /^[0-9A-Za-z\-\.\:]+$/},
             {name : '#sip_username', regex : /^[^\s]+$/},
             {name : '#sip_password', regex : /^[^\s]+$/},
@@ -498,6 +498,14 @@ winkstart.module('voip', 'device',
             }
             else if(form_data.mac_address.match(/^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/)) {
                 form_data.mac_address = form_data.mac_address.replace(/(.{2})/g,"$1:").slice(0, -1);
+            }
+
+            if(form_data.caller_id.internal != undefined) {
+                form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+            }
+
+            if(form_data.caller_id.external != undefined) {
+                form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
             }
 
             if(form_data.device_type == 'sip_device') {

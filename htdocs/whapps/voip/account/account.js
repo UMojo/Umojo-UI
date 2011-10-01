@@ -24,9 +24,9 @@ winkstart.module('voip', 'account',
                 {name : '#name', regex : /^.+$/},
                 {name : '#realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
                 {name : '#caller_id_name_external', regex : /^.*$/},
-                {name : '#caller_id_number_external', regex : /^[\+]?[0-9]*$/},
+                {name : '#caller_id_number_external', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
                 {name : '#caller_id_name_internal', regex : /^.*$/},
-                {name : '#caller_id_number_internal', regex : /^[\+]?[0-9]*$/},
+                {name : '#caller_id_number_internal', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
                 {name : '#vm_to_email_support_number', regex : /^[\+]?[0-9]*$/},
                 {name : '#vm_to_email_support_email', regex : /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/},
         ],
@@ -226,6 +226,19 @@ winkstart.module('voip', 'account',
         /**
          * Draw account fields/template and populate data, add validation. Works for both create & edit
          */
+
+        cleanFormData: function(form_data) {
+            if(form_data.caller_id.internal != undefined) {
+                form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+            }
+
+            if(form_data.caller_id.external != undefined) {
+                form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
+            } 
+
+            return form_data;
+        },
+
         renderAccount: function(form_data){
             var THIS = this;
             var account_id = form_data.data.id;
@@ -268,6 +281,9 @@ winkstart.module('voip', 'account',
 
                 /* Grab all the form field data */
                 var form_data = form2object('account-form');
+        
+                form_data = THIS.cleanFormData(form_data);    
+    
                 THIS.saveAccount(account_id, form_data);
 
                 return false;
