@@ -10,7 +10,6 @@ winkstart.module('userportal', 'cdr', {
 		
 	subscribe: {
 		'cdr.activate': 'activate',
-		'cdr.deactivate': 'deactivate'
 	},
 
 	resources: {
@@ -38,11 +37,6 @@ function(args) {
 	});
 },
 {
-	deactivate: function(data) {
-		var THIS = this;
-        
-		$.fn.dataTableExt.afnFiltering.pop();
-	},
 	activate: function(data) {
 		var THIS = this;
     
@@ -109,6 +103,7 @@ function(args) {
 		winkstart.table.create('cdr', $('#cdr-grid'), columns, {}, {
 			sDom: '<"date">frtlip'
 		});
+		$.fn.dataTableExt.afnFiltering.pop();
 		$('div.date').html('Start Date: <input id="startDate" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search" id="searchLink" href="#">Filter</a>');
 
 		$('#startDate, #endDate').focus(function() {

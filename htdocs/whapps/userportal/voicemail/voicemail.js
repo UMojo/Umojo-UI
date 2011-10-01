@@ -151,6 +151,7 @@ function(args) {
         winkstart.table.create('voicemail', $('#voicemail-grid'), columns, {}, {
             sDom: 'frtlip'
         }); 
+		$.fn.dataTableExt.afnFiltering.pop();
     },
 
     page_setup: function() {
@@ -168,7 +169,6 @@ function(args) {
 
         $(html).delegate('.delete_message','click',function() {
             if(confirm('Are you sure that you want to delete this voicemail?')) {
-                console.log($(this));
                 var tabId = $(this).attr('id').split(/[\/]+/);
                 var vmbox_id = tabId[0];
                 var msg_id = tabId[2];
