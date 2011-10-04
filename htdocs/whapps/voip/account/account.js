@@ -228,13 +228,15 @@ winkstart.module('voip', 'account',
          */
 
         cleanFormData: function(form_data) {
-            if(form_data.caller_id.internal != undefined) {
-                form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
-            }
+            if(form_data.caller_id != undefined) {
+                if(form_data.caller_id.internal != undefined) {
+                    form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+                }
 
-            if(form_data.caller_id.external != undefined) {
-                form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
-            } 
+                if(form_data.caller_id.external != undefined) {
+                    form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
+                } 
+            }
 
             return form_data;
         },

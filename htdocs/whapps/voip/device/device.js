@@ -500,12 +500,14 @@ winkstart.module('voip', 'device',
                 form_data.mac_address = form_data.mac_address.replace(/(.{2})/g,"$1:").slice(0, -1);
             }
 
-            if(form_data.caller_id.internal != undefined) {
-                form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
-            }
+            if(form_data.caller_id != undefined) {
+                if(form_data.caller_id.internal != undefined) {
+                    form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+                }
 
-            if(form_data.caller_id.external != undefined) {
-                form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
+                if(form_data.caller_id.external != undefined) {
+                    form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
+                }
             }
 
             if(form_data.device_type == 'sip_device') {
