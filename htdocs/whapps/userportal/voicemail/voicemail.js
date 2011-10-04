@@ -110,7 +110,7 @@ function(args) {
     setup_table: function() {
         var THIS = this;
         var columns = [
-            { 'sTitle': '<div style="margin-left: 8px;"><input type="checkbox" id="select_all"/></div>',
+            { 'sTitle': '<div style="margin-left: 8px;"><input type="checkbox" id="select_all_voicemails"/></div>',
               'sWidth': '40px',
               'bSortable': false,
               'fnRender': function(obj) {
@@ -158,14 +158,7 @@ function(args) {
         $('#ws-content').empty();
         var html = THIS.templates.voicemail.tmpl({}).appendTo( $('#ws-content') );
 
-        $('#select_all').live('click', function() {
-            if($('#select_all').attr('checked') == false) {
-                $('.select-checkbox').removeAttr('checked');
-            } else {
-                $('.select-checkbox').attr('checked', true);
-            }
-        });
-
+        
         $(html).delegate('.delete_message','click',function() {
             if(confirm('Are you sure that you want to delete this voicemail?')) {
                 console.log($(this));
@@ -268,8 +261,8 @@ function(args) {
                                         winkstart.table.voicemail.fnDeleteRow(row);
                                     }
                                 });
-                                $('.select-checkbox').removeAttr('checked');
-                                $('#select_all', '#voicemail-view').removeAttr('checked');
+                                $('.select-checkbox', '#voicemail-grid').prop('checked', false);
+                                $('#select_all_voicemails', '#voicemail-grid').prop('checked', false);
                             }
                         );
                     });
@@ -278,6 +271,11 @@ function(args) {
         });
 
         THIS.setup_table();
+        
+        $('#select_all_voicemails', '#voicemail-grid').change(function() {
+            $('.select-checkbox', '#voicemail-grid').prop('checked', $('#select_all_voicemails').attr('checked') != undefined);
+        });
+
     },
 
     voicemail_uri: function(msg_uri) {
