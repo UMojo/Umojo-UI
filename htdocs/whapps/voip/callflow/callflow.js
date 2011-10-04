@@ -829,7 +829,7 @@ winkstart.module('voip', 'callflow', {
                                 
                                 popup_html = THIS.templates.edit_dialog.tmpl({
                                     parameter: {
-                                        name: 'timeout',
+                                        name: 'timeout (s)',
                                         value: node.getMetadata('timeout') || '20'
                                     },
                                     objects: {
