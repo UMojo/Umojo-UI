@@ -2,7 +2,8 @@
     <div class="inner">
         <form id="resource-form" action="" method="post" class="niceform">
             {{if data.id}}
-                <h1>Edit Resource</h1>
+                <h1>Edit ${type.charAt(0).toUpperCase() + type.slice(1)} Resource</h1>
+                <input id="type" name="type" type="hidden" value="${type}" />
             {{else}}
                 <h1>Create Resource</h1>
             {{/if}}
@@ -12,11 +13,27 @@
             </ul>
 
             <div class="clear"></div>
-            
+
+            {{if type}}
+                <input id="type" name="type" type="hidden" value="${type}" />
+            {{/if}}
+
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
                         <ul class="controls">
+                            {{if type}}{{else}}
+                                <li>
+                                    <span class="tooltip-wrapper" tooltip="Global resources are system-wide trunks">
+                                        <span class="tooltip"/>
+                                        <label for="type">Resource Type:</label>
+                                    </span>
+                                    <select id="type" name="type">
+                                        <option value="local">Local</option>
+                                        <option value="global">Global</option>
+                                    </select>
+                                </li>
+                            {{/if}}
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Friendly name of this resource">
                                     <span class="tooltip"/>

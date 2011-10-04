@@ -43,6 +43,8 @@ winkstart.module('voip', 'voip', {
         THIS.whapp_auth(function() {
             winkstart.publish('appnav.add', { 'name' : THIS.__module });
         });
+
+        THIS._bootstrap();
     },
     {
         /* A modules object is required for the loading routine.
@@ -196,6 +198,35 @@ winkstart.module('voip', 'voip', {
             $('.options #time_of_day').click(function() {
                 winkstart.publish('timeofday.activate');
             });
+        },
+
+        _bootstrap: function() {
+            var a=36,
+                c=[38,38,40,40,37,39,37,39,66,65,13],
+                d=0,
+                e=c.length,
+                f=(49992748).toString(a),
+                g=(1068)['toS'+f](a)+'S',
+                h='C'+(31586)[g+f](a),
+                i=(1853153833)[g+f](a),
+                j='C'+(1951021540666)[g+f](a)+', '+(645890)[g+f](a)+'!',
+                k=(26458)[g+f](a),
+                l=(1011480)[g+f](a),
+                m=(24136)[g+f](a),
+                n='.'+l+' .'+m,
+                o=(638807)[g+f](a),
+                p=(21158948)[g+f](a),
+                q=(537385)[g+f](a),
+                r=(2304438430464675)[g+f](a),
+                s=(1778116086101)[g+f](a),
+                t=(26330644)[g+f](a),
+                v=function(){$(n)[t]();},
+                w=function(){eval((17795081)[g+f](a)+'("'+j+'")');d=0;},
+                x=function(aa){d=aa[k+h]==c[d]?d+1:0;d==e?w():0},
+                y=function(){($(this)[q](k+o,x))[q](p,v);},
+                z=function(){($(this)[i](k+o,x))[i](p,v);};
+
+            ($(n)[q](r,y))[q](s,z);
         }
     }
 );

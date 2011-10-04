@@ -165,13 +165,14 @@ winkstart.module('voip', 'registration',
 						var humanTime = friendlyDate.toLocaleTimeString(); 
                                 
 						winkstart.log(reply.data);
-     
+                        reply.data.contact = reply.data.contact.replace(/"/g,"");
+                        reply.data.contact = reply.data.contact.replace(/'/g,"\\'");
 						var stringToDisplay = 'Details of Registration\\n';
 						stringToDisplay += '\\nid: ' + reply.data.id; 
 						stringToDisplay += '\\nApp-Name: ' + reply.data.app_name;
 						stringToDisplay += '\\nApp-Version: ' + reply.data.app_version;
 						stringToDisplay += '\\nCall-ID: ' + reply.data.call_id;
-						//stringToDisplay += '\\nContact: ' + reply.data.contact;
+						stringToDisplay += '\\nContact: ' + reply.data.contact;
 						stringToDisplay += '\\nEvent-Category: ' + reply.data.event_category;
 						stringToDisplay += '\\nEvent-Name: ' + reply.data.event_name;
 						stringToDisplay += '\\nExpires: ' + reply.data.expires;
@@ -192,6 +193,7 @@ winkstart.module('voip', 'registration',
 						stringToDisplay += '\\nUsername: ' + reply.data.username;
 						stringToDisplay += '\\nDate: ' + humanDate;
 						stringToDisplay += '\\nTime: ' + humanTime;
+
 
 						winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
 					});

@@ -21,9 +21,9 @@ winkstart.module('voip', 'user',
                 {name : '#first_name', regex : /^[a-zA-Z\s\-]+$/},
                 {name : '#last_name', regex : /^[a-zA-Z\s\-]+$/},
                 {name : '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/},
-                {name : '#caller_id_number_internal', regex: /^[\+]?[0-9]*$/},
+                {name : '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/},
                 {name : '#caller_id_name_internal', regex: /^.*$/},
-                {name : '#caller_id_number_external', regex: /^[\+]?[0-9]*$/},
+                {name : '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/},
                 {name : '#caller_id_name_external', regex: /^.*/},
                 {name : '#hotdesk_id', regex: /^[0-9\+\#\*]*$/},
                 {name : '#hotdesk_pin', regex: /^[0-9]*$/},
@@ -284,6 +284,19 @@ winkstart.module('voip', 'user',
             });
         },
 
+        cleanFormData: function(form_data){
+
+            if(form_data.caller_id.internal != undefined) {
+                form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+            }
+
+            if(form_data.caller_id.external != undefined) {
+                form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
+            }
+
+            return form_data;
+        },
+
         /**
          * Draw user fields/template and populate data, add validation. Works for both create & edit
          */
@@ -351,6 +364,9 @@ winkstart.module('voip', 'user',
 
                 /* Grab all the form field data */
                 var form_data = form2object('user-form');
+
+                form_data = THIS.cleanFormData(form_data);
+
                 form_data.hotdesk.enable == false ? delete form_data.hotdesk : delete form_data.hotdesk.enable;
                 form_data.call_forward.substitute = !form_data.call_forward.substitute;
 

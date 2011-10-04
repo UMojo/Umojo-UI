@@ -65,6 +65,10 @@
     vertical-align: middle;
 }
 
+#cdr-view .date a:hover{
+    color: #29abe1;
+}
+
 #cdr-view .date input[type="text"] {
     height: 12px;
     width: 100px;
