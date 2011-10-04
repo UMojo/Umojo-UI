@@ -233,7 +233,7 @@
     padding: 2px 2px;
     border: solid 1px #A2A2A2;
     width: 145px;
-    /*margin: 2px 0 5px 10px;*/
+    margin: 0;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
