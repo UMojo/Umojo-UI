@@ -61,8 +61,22 @@
     height: 22px;
     line-height: 22px;
     list-style-type: none;
+    overflow: hidden;
     position: relative;
 }
+
+#two_columns .item_name {
+    float:left;
+    overflow: hidden;
+    height: 22px;
+    line-height: 22px;
+    width: 180px;
+    white-space: nowrap;
+}
+#two_columns .item_name.right {
+    width: 110px;
+}
+
 #two_columns .wrapper li:hover {
     background-color: #0097BB;
 }

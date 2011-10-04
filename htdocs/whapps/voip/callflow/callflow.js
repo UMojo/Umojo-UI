@@ -1648,7 +1648,10 @@ winkstart.module('voip', 'callflow', {
 
                                 popup = winkstart.dialog(popup_html, { title: 'Ring Group' });
 
-                                $('.scrollable', popup).jScrollPane();
+                                $('.scrollable', popup).jScrollPane({
+                                    horizontalDragMinWidth: 0,
+                                    horizontalDragMaxWidth: 0
+                                });
 
                                 $('.connect', popup).sortable({
                                     connectWith: $('.connect', popup),
@@ -1658,9 +1661,11 @@ winkstart.module('voip', 'callflow', {
                                     receive: function(ev, ui) {
                                         if($(this).parents('.column').hasClass('left')) {
                                             $('.options', ui.item).hide();
+                                            $('.item_name', ui.item).removeClass('right');
                                         }
                                         else {
                                             $('.options', ui.item).show();
+                                            $('.item_name', ui.item).addClass('right');
                                         }
 
                                         $('.scrollable', popup).data('jsp').reinitialise();
