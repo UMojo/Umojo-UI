@@ -1,6 +1,7 @@
 (function(winkstart, amplify, undefined) {
+    var locked_requests = {};
 	
-	winkstart.registerResources = function(app_name, resources){
+	winkstart.registerResources = function(app_name, resources) {
 		var THIS = this;
 
 		for(var key in resources){
@@ -8,7 +9,7 @@
 			
 			amplify.request.define( key, "ajax", {
 				url: resource.url,
-				decoder: function(data, status, ampXHR, success, error){
+				decoder: function(data, status, ampXHR, success, error) {
                     if(status == 'success') {
 					    success(data, ampXHR.status);
                     }
@@ -17,7 +18,7 @@
                             var _data = null;
 
                             try {
-                                _data = eval('(' + ampXHR.responseText + ')');
+                                _data = JSON.parse(ampXHR.responseText);
                             }
                             catch(err) {}
 
@@ -30,12 +31,26 @@
                 contentType: resource.contentType || 'application/json',
                 dataType: 'json',
                 type: resource.verb,
-                //jQuery is setting this wrong
-                //accepts: 'application/json',
                 processData: resource.verb == "GET",
                 cache: false,
-                beforeSend: function(jqXHR, settings){
-                    jqXHR.setRequestHeader('X-Auth-Token', THIS.getAuthToken(app_name));
+                beforeSend: function(ampXHR, settings) {
+                    ampXHR.setRequestHeader('X-Auth-Token', winkstart.apps[app_name]['auth_token']);
+
+                    if(typeof settings.data == 'object' && 'headers' in settings.data) {
+                        $.each(settings.data.headers, function(key, val) {
+                            ampXHR.setRequestHeader(key, val);
+                        });
+
+                        delete settings.data.header;
+                    }
+
+                    if(settings.type == 'PUT' || settings.type == 'POST') {
+                            settings.data.verb = settings.type;
+                            settings.data = JSON.stringify(settings.data);
+                    }
+                    else if(settings.type =='GET' || settings.type == 'DELETE') {
+                            settings.data = "";
+                    }
 
                     // Without returning true, our decoder will not run.
                     return true;
@@ -44,7 +59,29 @@
 		}
 	};
 	
-    winkstart.request = function(resource_name, params, success, error){
+    winkstart.request = function(locking, resource_name, params, success, error) {
+        if(typeof locking !== 'boolean') {
+            error = success;
+            success = params;
+            params = resource_name;
+            resource_name = locking;
+            locking = false;
+        }
+
+        // Delete the lame crossbar param if it exists
+        if('crossbar' in params) {
+            delete params.crossbar;
+        }
+		
+        if(locking === true) {
+            if(resource_name in locked_requests) {
+                return false;
+            }
+            else {
+                locked_requests[resource_name] = true;
+            }
+        }
+
         amplify.request({
             resourceId: resource_name,
             data: params,
@@ -52,56 +89,37 @@
                 if(typeof success == 'function') {
                     success(data, status);
                 }
+
+                if(locking === true) {
+                    delete locked_requests[resource_name];
+                }
             },
             error: function(data, status) {
                 if(typeof error == 'function') {
                     error(data, status);
                 }
+
+                if(locking === true) {
+                    delete locked_requests[resource_name];
+                }
             }
         });
     };
 
-	winkstart.getAuthToken = function(app_name){
-        return winkstart.apps[app_name]['auth_token'];
+	winkstart.getJSON = function(locking, resource_name, params, success, error) {
+		winkstart.request(locking, resource_name, params, success, error);
 	};
 	
-	winkstart.normalizeRequest = function(params){
-		//We were placing this in the params to denote a call to crossbar
-		delete params.crossbar;
-		//params['auth-token'] = winkstart.getAuthToken();
-		return params;
-	};
-
-	winkstart.getJSON = function(resource_name, params, success, error) {
-		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params);
-
-		winkstart.request(resource_name, norm_params, success, error);
+	winkstart.postJSON = function(locking, resource_name, params, success, error) {
+		winkstart.request(locking, resource_name, params, success, error);
 	};
 	
-	winkstart.postJSON = function(resource_name, params, success, error) {
-		
-		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params);
-        norm_params.verb = 'post';
-		norm_params.json_string = JSON.stringify(norm_params);
-		
-		winkstart.request(resource_name, norm_params, success, error);
+	winkstart.deleteJSON = function(locking, resource_name, params, success, error) {
+		winkstart.request(locking, resource_name, params, success, error);
 	};
 	
-	winkstart.deleteJSON = function(resource_name, params, success, error) {
-		
-		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params);
-		norm_params.verb = 'delete';
-        norm_params.json_string = "";
-		
-		winkstart.request(resource_name, norm_params, success, error);
-	};
-	
-	winkstart.putJSON = function(resource_name, params, success, error) {
-		var norm_params = ('crossbar' in params ? winkstart.normalizeRequest(params) : params);
-		norm_params.verb = 'put';
-		norm_params.json_string = JSON.stringify(norm_params);
-		
-		winkstart.request(resource_name, norm_params, success, error);
+	winkstart.putJSON = function(locking, resource_name, params, success, error) {
+		winkstart.request(locking, resource_name, params, success, error);
 	};
 
 })(	window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {});
