@@ -292,4 +292,5 @@
 #ws_callflow .details {
     font-size: 10px;
     margin-top: -10px;
+    overflow: hidden;
 }
