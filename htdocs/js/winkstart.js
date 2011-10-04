@@ -1,7 +1,39 @@
 (function(winkstart, amplify, undefined) {
-	var modules = {}, loading = {};
+	var modules = {},
+        loading = {},
+        locked_topics = {},
+        slice = [].slice;
 	
-	winkstart.publish     = amplify.publish;
+	winkstart.publish = function(locking) {
+        var args = arguments,
+            ret;
+
+        if(locking === true) {
+            args = slice.call(arguments, 1);
+
+            if(!args.length) {
+                return false;
+            }
+
+            if(args[0] in locked_topics) {
+                return false;
+            }
+            else {
+                locked_topics[args[0]] = true;
+            }
+        }
+
+        ret = amplify.publish.apply(null, args);
+
+        if(locking === true) {
+            if(args[0] in locked_topics) {
+                delete locked_topics[args[0]];
+            }
+        }
+
+        return ret;
+    }
+
 	winkstart.subscribe   = amplify.subscribe;
 	winkstart.unsubscribe = amplify.unsubscribe;
 	

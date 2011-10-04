@@ -179,7 +179,7 @@
         _registerViewEvents: function(elements) {
             var self = this;
         	elements.click(function(){
-            	self.options.publisher(self.options.notifyMethod, $.data(this, 'data'));
+            	self.options.publisher(true, self.options.notifyMethod, $.data(this, 'data'));
                 return false;
             });
         },
@@ -187,7 +187,7 @@
         _registerAddEvents: function(elements) {
         	var self = this;
         	elements.click(function(){
-        		self.options.publisher(self.options.notifyCreateMethod, {});
+        		self.options.publisher(true, self.options.notifyCreateMethod, {});
         		return false;
         	});
         },
