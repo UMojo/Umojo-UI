@@ -251,11 +251,10 @@ winkstart.module('voip', 'timeofday',
         cleanFormData: function(form_data) {
             var wdays = [],
                 times = form_data.time.split(';');
-
             if(form_data.cycle != "weekly" && form_data.weekday != undefined) {
                 form_data.wdays = [];
                 form_data.wdays.push(form_data.weekday);
-            }
+            } 
 
             $.each(form_data.wdays, function(i, val) {
                 if(val) {
@@ -288,7 +287,7 @@ winkstart.module('voip', 'timeofday',
 
                 if(form_data.ordinal != 'day') {
                     delete form_data.days;
-                }
+                } else delete form_data.wdays;
             }
             
             form_data.start_date = new Date(form_data.start_date).getTime()/1000 + 62167219200;

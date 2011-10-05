@@ -213,6 +213,26 @@ winkstart.module('voip', 'menu',
                 $('#menu-view').empty();
             });
         },
+        cleanFormData: function(form_data) {
+             
+            if(form_data.record_pin.length == 0) {
+                form_data.max_extension_length = 5;
+                delete form_data.record_pin;
+            }   
+            else if(form_data.max_extension_length < form_data.record_pin.length) {
+                form_data.max_extension_length = form_data.record_pin.length;
+            } 
+
+            if(form_data.hunt_allow == '') delete form_data.hunt_allow;
+            if(form_data.hunt_deny == '') delete form_data.hunt_deny;
+            
+            if(form_data.media.greeting == '') delete form_data.media.greeting;
+
+            // Hack to put timeout in ms in database.
+            form_data.timeout = form_data.timeout * 1000;
+
+            return form_data;
+        }, 
 
         /**
          * Draw menu fields/template and populate data, add validation. Works for both create & edit
@@ -273,15 +293,10 @@ winkstart.module('voip', 'menu',
 
                 // Grab all the form field data 
                 var form_data = form2object('menu-form');
-                winkstart.log(form_data);
             
-                if(form_data.record_pin != undefined && (form_data.max_extension_length == undefined || form_data.max_extension_length < form_data.record_pin.length)) {
-                    form_data.max_extension_length = form_data.record_pin.length;
-                }
+                form_data = THIS.cleanFormData(form_data);
 
-                // Hack to put timeout in ms in database.
-                form_data.timeout = form_data.timeout * 1000;
-                
+                                
                 THIS.saveMenu(menu_id, form_data, dialog);
 
                 return false;

@@ -212,6 +212,11 @@ winkstart.module('voip', 'media',
                 $('#media-view').empty();
             });
         },
+        cleanFormData: function(form_data) {
+            form_data.description = form_data.upload_media;
+
+            return form_data;
+        },
 
         /**
          * Draw media fields/template and populate data, add validation. Works for both create & edit
@@ -272,8 +277,10 @@ winkstart.module('voip', 'media',
                 event.preventDefault();
                 /* Grab all the form field data */
                 var form_data = form2object('media-form');
-                form_data.description = form_data.upload_media;
-                //delete form_data.upload_media;
+
+                form_data = THIS.cleanFormData(form_data);
+
+
                 THIS.saveMedia(media_id, form_data);
 
                 return false;

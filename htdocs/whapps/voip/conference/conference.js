@@ -122,14 +122,6 @@ function(args) {
                 rest_data.crossbar = true;
                 rest_data.account_id = winkstart.apps['voip'].account_id;
                 rest_data.api_url = winkstart.apps['voip'].api_url;
-               
-                if(form_data.member != undefined) { 
-                    form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
-                }
-                if(form_data.moderator != undefined) {
-                    form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
-                }
-                
                 rest_data.data = form_data;
 
                 /* Is this a create or edit? See if there's a known ID */
@@ -222,6 +214,19 @@ function(args) {
                 $('#conference-view').empty();
             });
         },
+        cleanFormData: function(form_data){
+            var THIS = this;
+
+            if(form_data.member.pins[0] != '') { 
+                form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
+            } else delete form_data.member;
+
+            if(form_data.moderator.pins[0] != '') {
+                form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
+            } else delete form_data.moderator;   
+
+            return form_data;
+        },
         renderConference: function(form_data){
             var THIS = this;
             var conference_id = form_data.data.id;
@@ -265,6 +270,8 @@ function(args) {
 
                 /* Grab all the form field data */
                 var form_data = form2object('conference-form');
+
+                form_data = THIS.cleanFormData(form_data);
 
                 THIS.saveConference(conference_id, form_data);
 

@@ -149,14 +149,12 @@ winkstart.module('voip', 'user',
                             delete form_data.pwd_mngt_pwd2;
                             delete form_data.user_level;
                         
-                            if(form_data.hotdesk == undefined) {
-                                delete data.data.hotdesk;
-                            } else if(form_data.hotdesk.require_pin == false){
-                                delete data.data.hotdesk.pin;
-                                delete form_data.hotdesk.pin;
-                            }
-                            
                             var newform_data = $.extend(true, {}, data.data, form_data);
+
+                            if(form_data.hotdesk == undefined) delete newform_data.hotdesk;
+                            if(form_data.caller_id.internal == undefined) delete newform_data.caller_id.internal;
+                            if(form_data.caller_id.external == undefined) delete newform_data.caller_id.external;
+
                             var rest_data = {};
                             rest_data.crossbar = true;
                             rest_data.account_id = winkstart.apps['voip'].account_id,
@@ -286,15 +284,18 @@ winkstart.module('voip', 'user',
 
         cleanFormData: function(form_data){
 
-            if(form_data.caller_id != undefined) {
-                if(form_data.caller_id.internal != undefined) {
-                    form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
-                }
+            form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
+            form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
 
-                if(form_data.caller_id.external != undefined) {
-                    form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
-                }
+            if(form_data.caller_id.internal.number == '' && form_data.caller_id.internal.name == '') delete form_data.caller_id.internal;
+            if(form_data.caller_id.external.number == '' && form_data.caller_id.external.name == '') delete form_data.caller_id.external;
+
+            if(form_data.hotdesk.require_pin == false) {
+                delete form_data.hotdesk.pin
             }
+            form_data.hotdesk.enable == false ? delete form_data.hotdesk : delete form_data.hotdesk.enable;
+            form_data.call_forward.substitute = !form_data.call_forward.substitute;
+
             return form_data;
         },
 
@@ -368,10 +369,6 @@ winkstart.module('voip', 'user',
 
                 form_data = THIS.cleanFormData(form_data);
 
-                form_data.hotdesk.enable == false ? delete form_data.hotdesk : delete form_data.hotdesk.enable;
-                form_data.call_forward.substitute = !form_data.call_forward.substitute;
-
-                //form_data.username = form_data.email;
                 THIS.saveUser(user_id, form_data);
 
                 return false;

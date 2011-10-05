@@ -44,7 +44,7 @@
 		for (var i = 0; i < formValues.length; i++)
 		{
 			var value = formValues[i].value;
-			if (value === '') continue;
+			//if (value === '') continue;
 
 			var name = formValues[i].name;
 			var nameParts = name.split(delimiter);
