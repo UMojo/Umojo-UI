@@ -47,4 +47,16 @@
         return $(newDiv);       // Return the new div as an object, so that the caller can destroy it when they're ready.'
     };
 
+    winkstart.random_string = function(length, _chars) {
+        var chars = _chars || "0123456789abcdefghijklmnopqrstuvwxyz",
+            chars_length = chars.length,
+            random_string = '';
+
+        for(var i = length; i > 0; i--) {
+            random_string += chars.charAt(Math.floor(Math.random() * chars.length)); 
+        }
+
+        return random_string;
+    };
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
