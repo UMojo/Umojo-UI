@@ -202,7 +202,7 @@ winkstart.module('voip', 'vmbox', {
             $('ul.settings1', vmbox_html).tabs($('.pane > div', vmbox_html)); 
             $('ul.settings2', vmbox_html).tabs($('.advanced_pane > div', vmbox_html));
 
-            $('#name', vmbox_html);
+            $('#name', vmbox_html).focus();
 
             $('.advanced_pane', vmbox_html).hide();
             $('.advanced_tabs_wrapper', vmbox_html).hide();
