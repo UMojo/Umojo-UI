@@ -73,9 +73,8 @@ winkstart.module('voip', 'vmbox', {
     },
 
     {
-        save_vmbox: function(form_data, data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        save_vmbox: function(form_data, data, success, error) {
+            var THIS = this;
 
             if(typeof data.data == 'object' && 'id' in data.data) {
                 winkstart.request(true, 'vmbox.update', {
@@ -85,9 +84,14 @@ winkstart.module('voip', 'vmbox', {
                         data: $.extend(true, {}, data.data, form_data) 
                     },
                     function(_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
                 );
             }
@@ -98,17 +102,43 @@ winkstart.module('voip', 'vmbox', {
                         data: form_data
                     },
                     function(_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'create');
+                        }
                     }
                 );
             }
         },
 
-        edit_vmbox: function(data, _parent){
+        edit_vmbox: function(data, _parent, _target, _callbacks){
             var THIS = this,
                 parent = _parent || $('#vmbox-content'),
+                target = _target || $('#vmbox-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                            THIS.render_list(parent);
+
+                            THIS.edit_vmbox({ id: _data.data.id }, parent, target, callbacks);
+                    },
+
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function(_data) {
+                        target.empty();
+
+                        THIS.render_list(parent);
+                    },
+
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
                 defaults = {
                     data: {
                         require_pin: true,
@@ -154,12 +184,20 @@ winkstart.module('voip', 'vmbox', {
                                         vmbox_id: data.id
                                     },
                                     function(_data, status) {
-                                        THIS.render_vmbox($.extend(true, defaults, _data), parent);
+                                        THIS.render_vmbox($.extend(true, defaults, _data), target, callbacks);
+
+                                        if(typeof callbacks.after_render == 'function') {
+                                            callbacks.after_render();
+                                        }
                                     }
                                 );
                             }
                             else {
-                                THIS.render_vmbox(defaults, parent);
+                                THIS.render_vmbox(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
                             }
                         }
                     );
@@ -167,9 +205,8 @@ winkstart.module('voip', 'vmbox', {
             );
         },
 
-        delete_vmbox: function(data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        delete_vmbox: function(data, success, error) {
+            var THIS = this;
 
             if('id' in data.data) {
                 winkstart.request(true, 'vmbox.delete', {
@@ -177,25 +214,29 @@ winkstart.module('voip', 'vmbox', {
                         api_url: winkstart.apps['voip'].api_url,
                         vmbox_id: data.data.id
                     },
-                    function(data, status) {
-                        $('#vmbox-view', parent).empty();
-
-                        THIS.render_list(parent);
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
                     }
                 );
             }
         },
 
-        render_vmbox: function(data, _parent) {
+        render_vmbox: function(data, target, callbacks) {
             var THIS = this,
-                parent = _parent || $('#vmbox-content'),
                 vmbox_html = THIS.templates.edit.tmpl(data);
 
             winkstart.timezone.populate_dropdown($('#timezone', vmbox_html), data.data.timezone);
             
             winkstart.validate.set(THIS.config.validation, vmbox_html);
 
-            $.each($('*[tooltip]', vmbox_html), function() {
+            $('*[tooltip]', vmbox_html).each(function() {
                 $(this).tooltip({ attach: vmbox_html });
             });
 
@@ -254,7 +295,7 @@ winkstart.module('voip', 'vmbox', {
                             delete data.field_data;
                         }
 
-                        THIS.save_vmbox(form_data, data, parent);
+                        THIS.save_vmbox(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -265,10 +306,10 @@ winkstart.module('voip', 'vmbox', {
             $('.vmbox-delete', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_vmbox(data, parent);
+                THIS.delete_vmbox(data, callbacks.delete_success, callbacks.save_success);
             });
 
-            $('#vmbox-view', parent)
+            (target)
                 .empty()
                 .append(vmbox_html);
         },
@@ -277,9 +318,8 @@ winkstart.module('voip', 'vmbox', {
             
         },
 
-        render_list: function(_parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        render_list: function(parent) {
+            var THIS = this;
 
             winkstart.request(true, 'vmbox.list', {
                     account_id: winkstart.apps['voip'].account_id,
