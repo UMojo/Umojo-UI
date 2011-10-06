@@ -246,11 +246,15 @@ winkstart.module('voip', 'vmbox', {
                 ev.preventDefault();
 
                 winkstart.validate.is_valid(THIS.config.validation, vmbox_html, function() {
+                        var form_data = form2object('vmbox-form');
+    
+                        /* THIS.clean_form_data(form_data); */
+                        
                         if('field_data' in data) {
                             delete data.field_data;
                         }
 
-                        THIS.save_vmbox(form2object('vmbox-form'), data, parent);
+                        THIS.save_vmbox(form_data, data, parent);
                     },
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -267,6 +271,10 @@ winkstart.module('voip', 'vmbox', {
             $('#vmbox-view', parent)
                 .empty()
                 .append(vmbox_html);
+        },
+
+        clean_form_data: function(form_data) {
+            
         },
 
         render_list: function(_parent) {
