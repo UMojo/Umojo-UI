@@ -139,7 +139,7 @@ winkstart.module('voip', 'device',
 
         validation_sip_device : [
             {name : '#name', regex : /^[a-zA-Z0-9\s_']+$/},
-            {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$|^$/},
+            {name : '#mac_address', regex : /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/},
             //{name : '#mac_address', regex : /^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$/},
             {name : '#caller_id_name_internal', regex : /^.*$/},
             {name : '#caller_id_number_internal', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
@@ -329,7 +329,6 @@ winkstart.module('voip', 'device',
             
             var form_data = {
                 data : {
-                    mac_address: "12:34:56:78:9A:BC",
                     caller_id : {
                         external: { }, 
                         internal: { }
@@ -380,7 +379,6 @@ winkstart.module('voip', 'device',
                 winkstart.log(json.data.realm);
                 var form_data = {
                     data : {
-                        mac_address: "12:34:56:78:9A:BC",
                         status: true,
                         caller_id : {
                             external: { }, 
