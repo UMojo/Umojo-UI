@@ -1,61 +1,56 @@
-winkstart.module('voip', 'vmbox',
-    {
+winkstart.module('voip', 'vmbox', {
         css: [
             'css/vmbox.css'
         ],
 
-        /* What HTML templates will we be using? */
         templates: {
             vmbox: 'tmpl/vmbox.html',
-            editVmbox: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
             'vmbox.activate' : 'activate',
-            'vmbox.list-panel-click' : 'editVmbox',
-            'vmbox.edit-vmbox' : 'editVmbox'
+            'vmbox.edit' : 'edit_vmbox'
         },
 
         validation : [
-                {name : '#name', regex: /^[a-zA-Z0-9\s_']+$/},
-                {name : '#mailbox', regex : /^[0-9]+$/},
-                {name : '#pin', regex : /^[0-9]+$/},
+            { name: '#name',    regex: /^[a-zA-Z0-9\s_']+$/ },
+            { name: '#mailbox', regex: /^[0-9]+$/ },
+            { name: '#pin',     regex: /^[0-9]+$/ }
         ],
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "vmbox.list": {
+            'vmbox.list': {
                 url: '{api_url}/accounts/{account_id}/vmboxes',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "vmbox.get": {
+            'vmbox.get': {
                 url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "vmbox.create": {
+            'vmbox.create': {
                 url: '{api_url}/accounts/{account_id}/vmboxes',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "vmbox.update": {
+            'vmbox.update': {
                 url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "vmbox.delete": {
+            'vmbox.delete': {
                 url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
-            "user.list": {
+            'user.list': {
                 url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "user.get": {
+            'user.get': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'GET'
@@ -63,14 +58,14 @@ winkstart.module('voip', 'vmbox',
         }
     },
 
-    /* Bootstrap routine - run when the module is first loaded */
     function(args) {
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Voicemail Boxes',
             icon: 'vmbox',
             weight: '30'
@@ -78,321 +73,255 @@ winkstart.module('voip', 'vmbox',
     },
 
     {
-        validateForm: function(state) {
-            var THIS = this;
-            
-            $(THIS.config.validation).each(function(k, v) {
-                if(state == undefined) {
-                    winkstart.validate.add($(v.name), v.regex);
-                } else if (state == 'save') {
-                    winkstart.validate.save($(v.name), v.regex);
-                }
-            });
-        },
-
-        //Function to generate PINs
-        generateRandomString: function(pLength){
-            var chars = "0123456789";
-            var sRandomString = "";
-            for (var i=0; i<pLength; i++) {
-                var rnum = Math.floor(Math.random() * chars.length);
-                sRandomString += chars.substring(rnum,rnum+1);
-            }
-            return sRandomString;
-        },
-
-        saveVmbox: function(vmbox_id, form_data) {
-            var THIS = this;
-
-            /* Check validation before saving */
-            THIS.validateForm('save');
-
-            if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.account_id = winkstart.apps['voip'].account_id;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-                rest_data.data = form_data;
-
-                /* Is this a create or edit? See if there's a known ID */
-                if (vmbox_id) {
-                    /* EDIT */
-                    rest_data.vmbox_id = vmbox_id;
-                    winkstart.postJSON('vmbox.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editVmbox({
-                            id: vmbox_id
-                        });
-                    });
-                } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('vmbox.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editVmbox({
-                            id: json.data.id
-                        });
-                    });
-                }
-            } else {
-                alert('Please correct errors that you have on the form.');
-            }
-        },
-
-        /*
-         * Create/Edit vmbox properties (don't pass an ID field to cause a create instead of an edit)
-         */
-        editVmbox: function(data){
-            $('#vmbox-view').empty();
-            var THIS = this;
-
-            var generated_PIN = THIS.generateRandomString(4);
-
-            var form_data = {
-                data: { require_pin: true, check_if_owner: true, pin: generated_PIN, media: {}},   
-                //field_data: THIS.config.formData,
-                field_data: {},
-                value: {}
-            };
-
-            form_data.field_data.users = [];
-            form_data.field_data.medias = [];
-            winkstart.getJSON('media.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                var listMedias = [];
-                listMedias.push({media_id: '', title: '- Not set -'});
-                if(json.data.length > 0) {
-                    _.each(json.data, function(elem){
-                        var title = elem.name;
-                        listMedias.push({
-                            media_id: elem.id,
-                            title: title
-                        });
-                    });
-                }
-                form_data.field_data.medias = listMedias;
-
-                winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                    var listUsers = [{owner_id: '', title: 'None'}];
-                    _.each(json.data, function(elem){
-                        var title = elem.first_name + ' ' + elem.last_name;
-                        listUsers.push({
-                            owner_id: elem.id,
-                            title: title
-                        });
-                    });
-
-                    form_data.field_data.users = listUsers;
-                     if (data && data.id) {
-                        /* This is an existing vmbox - Grab JSON data from server for vmbox_id */
-                        winkstart.getJSON('vmbox.get', {
-                            crossbar: true,
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url,
-                            vmbox_id: data.id
-                        }, function(json, xhr) {
-                            /* On success, take JSON and merge with default/empty fields */
-                            $.extend(true, form_data, json);
-
-                            THIS.renderVmbox(form_data);
-                        });
-                    } else {
-                        /* This is a new vmbox - pass along empty params */
-                        THIS.renderVmbox(form_data);
-                    }
-
-                    $.each($('body').find('*[tooltip]'), function(){
-                        $(this).tooltip({attach:'body'});
-                    });
-                });
-            });
-        },
-
-        deleteVmbox: function(vmbox_id) {
-            var THIS = this;
-            
-            var rest_data = {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url,
-                vmbox_id: vmbox_id
-            };
-
-            /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('vmbox.delete', rest_data, function (json, xhr) {
-                THIS.renderList();
-                $('#vmbox-view').empty();
-            });
-        },
-
-        /**
-         * Draw vmbox fields/template and populate data, add validation. Works for both create & edit
-         */
-        renderVmbox: function(form_data){
+        save_vmbox: function(form_data, data, _parent) {
             var THIS = this,
-                vmbox_id = form_data.data.id,
-                vmbox_html;
+                parent = _parent || $('#vmbox-content');
+
+            if(typeof data.data == 'object' && 'id' in data.data) {
+                winkstart.request(true, 'vmbox.update', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        vmbox_id: data.data.id,
+                        data: $.extend(true, {}, data.data, form_data) 
+                    },
+                    function(_data, status) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                    }
+                );
+            }
+            else {
+                winkstart.request(true, 'vmbox.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: form_data
+                    },
+                    function(_data, status) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                    }
+                );
+            }
+        },
+
+        edit_vmbox: function(data, _parent){
+            var THIS = this,
+                parent = _parent || $('#vmbox-content'),
+                defaults = {
+                    data: {
+                        require_pin: true,
+                        check_if_owner: true,
+                        pin: winkstart.random_string(4, '0123456789'),
+                        media: {}
+                    },
+                    field_data: {
+                        users: [],
+                        media: []
+                    }
+                };
+
+            winkstart.request(true, 'media.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    _data.data.unshift({
+                        id: '',
+                        name: '- Not set -'
+                    });
+
+                    defaults.field_data.media = _data.data;
+
+                    winkstart.request(true, 'user.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            _data.data.unshift({
+                                id: '',
+                                first_name: '- No',
+                                last_name: 'owner -'
+                            });
+
+                            defaults.field_data.users = _data.data;
+
+                            if(typeof data == 'object' && 'id' in data) {
+                                winkstart.request(true, 'vmbox.get', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url,
+                                        vmbox_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        THIS.render_vmbox($.extend(true, defaults, _data), parent);
+                                    }
+                                );
+                            }
+                            else {
+                                THIS.render_vmbox(defaults, parent);
+                            }
+                        }
+                    );
+                }
+            );
+        },
+
+        delete_vmbox: function(data, _parent) {
+            var THIS = this,
+                parent = _parent || $('#vmbox-content');
+
+            if('id' in data.data) {
+                winkstart.request(true, 'vmbox.delete', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        vmbox_id: data.data.id
+                    },
+                    function(data, status) {
+                        $('#vmbox-view', parent).empty();
+
+                        THIS.render_list(parent);
+                    }
+                );
+            }
+        },
+
+        render_vmbox: function(data, _parent) {
+            var THIS = this,
+                parent = _parent || $('#vmbox-content'),
+                vmbox_html = THIS.templates.edit.tmpl(data);
+
+            winkstart.timezone.populate_dropdown($('#timezone', vmbox_html), data.data.timezone);
             
-            /* Paint the template with HTML of form fields onto the page */
-            vmbox_html = THIS.templates.editVmbox.tmpl(form_data).appendTo( $('#vmbox-view') );
-            winkstart.timezone.populate_dropdown($('#timezone', vmbox_html), form_data.data.timezone);
+            winkstart.validate.set(THIS.config.validation, vmbox_html);
 
-            winkstart.cleanForm();
+            $.each($('*[tooltip]', vmbox_html), function() {
+                $(this).tooltip({ attach: vmbox_html });
+            });
 
-            /* Initialize form field validation */
-            THIS.validateForm();
+            $('ul.settings1', vmbox_html).tabs($('pane > div', vmbox_html)); 
+            $('ul.settings2', vmbox_html).tabs($('advanced_pane > div', vmbox_html));
 
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
+            $('#name', vmbox_html);
 
-            $("#name").focus();
+            $('.advanced_pane', vmbox_html).hide();
+            $('.advanced_tabs_wrapper', vmbox_html).hide();
 
-            $(".advanced_pane").hide();
-            $(".advanced_tabs_wrapper").hide();
-            
-            $("#advanced_settings_link").click(function(event) { 
-                if($(this).attr("enabled")=="true") {
-                    $(this).attr("enabled", "false");
-                    $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
+            $('#advanced_settings_link', vmbox_html).click(function() {
+                if($(this).attr('enabled') === 'true') {
+                    $(this).attr('enabled', 'false');
+
+                    $('.advanced_pane', vmbox_html).slideToggle(function() {
+                        $('.advanced_tabs_wrapper').animate({ width: 'toggle' });
                     });
                 }
                 else {
-                    $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
-                        $(".advanced_pane").slideToggle();
-                    });
+                    $(this).attr('enabled', 'true');
+                    
+                    $('.advanced_tabs_wrapper').animate({
+                            width: 'toggle' 
+                        },
+                        function() {
+                            $('.advanced_pane').slideToggle();
+                        }
+                    );
                 }
             });
 
-            $('#owner_id', '#vmbox-view').change(function() { 
-                winkstart.getJSON('user.get', {
-                    crossbar: true,
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    user_id: $('#owner_id').val()
-                }, function(json, xhr) {
-                    $('#timezone', '#vmbox-view').val(json.data.timezone);
-                });
-            });
-
-            /* Listen for the submit event (i.e. they click "save") */
-            $('.vmbox-save').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                /* Grab all the form field data */
-                var form_data = form2object('vmbox-form');
-                THIS.saveVmbox(vmbox_id, form_data);
-
-                return false;
-            });
-
-            $('.vmbox-cancel').click(function(event) {
-                event.preventDefault();
-
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
-                $('#vmbox-view').empty();
-
-                return false;
-            });
-
-            $('.vmbox-delete').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                THIS.deleteVmbox(vmbox_id);
-
-                return false;
-            });
-
-            $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
-            });
-        },
-
-        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
-        renderList: function(){
-            var THIS = this;
-
-            winkstart.getJSON('vmbox.list', {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-            }, function (json, xhr) {
-
-                // List Data that would be sent back from server
-                function map_crossbar_data(crossbar_data){
-                    var new_list = [];
-                    if(crossbar_data.length > 0) {
-                        _.each(crossbar_data, function(elem){
-                            new_list.push({
-                                id: elem.id,
-                                title: elem.name
-                            });
-                        });
+            $('#owner_id', vmbox_html).change(function() {
+                winkstart.request(true, 'user.get', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        user_id: $(this).val()
+                    },
+                    function(data, status) {
+                        if('timezone' in data.data) {
+                            $('#timezone', vmbox_html).val(data.data.timezone);
+                        }
                     }
-                    new_list.sort(function(a, b) {
-                        var answer = 1;
-                        if(a.title == undefined) a.title = 'undefined';
-                        if(b.title == undefined) b.title = 'undefined';
-                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                        return answer;
-                    });
-
-                    return new_list;
-                }
-
-                var options = {};
-                options.label = 'Voicemail Boxes Module';
-                options.identifier = 'vmbox-module-listview';
-                options.new_entity_label = 'Add Voicemail Box';
-                options.data = map_crossbar_data(json.data);
-                options.publisher = winkstart.publish;
-                options.notifyMethod = 'vmbox.list-panel-click';
-                options.notifyCreateMethod = 'vmbox.edit-vmbox';  /* Edit with no ID = Create */
-
-                $("#vmbox-listpanel").empty();
-                $("#vmbox-listpanel").listpanel(options);
-
+                );
             });
+
+            $('.vmbox-save', vmbox_html).click(function(ev) {
+                ev.preventDefault();
+
+                winkstart.validate.is_valid(THIS.config.validation, vmbox_html, function() {
+                        if('field_data' in data) {
+                            delete data.field_data;
+                        }
+
+                        THIS.save_vmbox(form2object('vmbox-form'), data, parent);
+                    },
+                    function() {
+                        alert('There were errors on the form, please correct!');
+                    }
+                );
+            });
+
+            $('.vmbox-delete', vmbox_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.delete_vmbox(data, parent);
+            });
+
+            $('#vmbox-view', parent)
+                .empty()
+                .append(vmbox_html);
         },
 
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
-        activate: function(data) {
-            $('#ws-content').empty();
-            var THIS = this;
-            this.templates.vmbox.tmpl({}).appendTo( $('#ws-content') );
+        render_list: function(_parent) {
+            var THIS = this,
+                parent = _parent || $('#vmbox-content');
 
-            winkstart.loadFormHelper('forms');
+            winkstart.request(true, 'vmbox.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    var map_crossbar_data = function(data) {
+                        var new_list = [];
 
-            winkstart.publish('layout.updateLoadedModule', {
-                label: 'Voicemail Boxes Management',
-                module: this.__module
-            });
+                        if(data.length > 0) {
+                            $.each(data, function(key, val) {
+                                new_list.push({
+                                    id: val.id,
+                                    title: val.name || '(no name)'
+                                });
+                            });
+                        }
 
-            $('.edit-vmbox').live({
-                click: function(evt){
-                    var target = evt.currentTarget;
-                    var vmbox_id = target.getAttribute('rel');
-                    winkstart.publish('vmbox.edit-vmbox', {
-                        'vmbox_id' : vmbox_id
-                    });
+                        new_list.sort(function(a, b) {
+                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+                        });
+
+                        return new_list;
+                    };
+
+                    $('#vmbox-listpanel', parent)
+                        .empty()
+                        .listpanel({
+                            label: 'Voicemail Boxes',
+                            identifier: 'vmbox-listview',
+                            new_entity_label: 'Add Voicemail Box',
+                            data: map_crossbar_data(data.data),
+                            publisher: winkstart.publish,
+                            notifyMethod: 'vmbox.edit',
+                            notifyCreateMethod: 'vmbox.edit',
+                            notifyParent: parent
+                        });
                 }
-            });
+            );
+        },
 
-            THIS.renderList();
+        activate: function(parent) {
+            var THIS = this,
+                vmbox_html = THIS.templates.vmbox.tmpl();
+
+            (parent || $('#ws-content'))
+                .empty()
+                .append(vmbox_html);
+
+            THIS.render_list(vmbox_html);
         }
     }
 );

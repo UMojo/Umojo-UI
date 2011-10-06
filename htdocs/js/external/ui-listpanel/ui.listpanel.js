@@ -179,7 +179,13 @@
         _registerViewEvents: function(elements) {
             var self = this;
         	elements.click(function(){
-            	self.options.publisher(true, self.options.notifyMethod, $.data(this, 'data'));
+                if('notifyParent' in self.options) {
+                    self.options.publisher(true, self.options.notifyMethod, $.data(this, 'data'), self.options.notifyParent);
+                }
+                else {
+                    self.options.publisher(true, self.options.notifyMethod, $.data(this, 'data'));
+                }
+                        
                 return false;
             });
         },
@@ -187,7 +193,13 @@
         _registerAddEvents: function(elements) {
         	var self = this;
         	elements.click(function(){
-        		self.options.publisher(true, self.options.notifyCreateMethod, {});
+                if('notifyParent' in self.options) {
+        		    self.options.publisher(true, self.options.notifyCreateMethod, {}, self.options.notifyParent);
+                }
+                else {
+        		    self.options.publisher(true, self.options.notifyCreateMethod, {});
+                }
+
         		return false;
         	});
         },

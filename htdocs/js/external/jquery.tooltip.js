@@ -94,10 +94,9 @@
 					$(s.attach).after(html);
 				}
 				
-	
 				//Put the tooltip arround the mouse
-				$('.'+s.tooltip_class).css('top', e.pageY + s.yMove );
-				$('.'+s.tooltip_class).css('left', e.pageX + s.xMove );
+				$('.'+s.tooltip_class).css('top', e.layerY + s.yMove );
+				$('.'+s.tooltip_class).css('left', e.layerX + s.xMove );
 
 				$('.'+s.tooltip_class).fadeIn('slow');         
 			});
@@ -113,8 +112,8 @@
 				$('.'+s.tooltip_class).css('z-index', 9999);
 				
 				//Put the tooltip arround the mouse
-				$('.'+s.tooltip_class).css('top', e.pageY + s.yMove );
-				$('.'+s.tooltip_class).css('left', e.pageX + s.xMove );
+				$('.'+s.tooltip_class).css('top', e.layerY + s.yMove );
+				$('.'+s.tooltip_class).css('left', e.layerX + s.xMove );
 				
 				//Set the size of the tooltip
 				if(s.width != 0){

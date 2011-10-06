@@ -38,10 +38,10 @@
                                 </span>
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
-                                    {{if data.owner_id == owner_id}}
-                                    <option value="${owner_id}" selected="selected">${title}</option>
+                                    {{if data.owner_id == id}}
+                                        <option value="${id}" selected="selected">${first_name} ${last_name}</option>
                                     {{else}}
-                                    <option value="${owner_id}">${title}</option>
+                                        <option value="${id}">${first_name} ${last_name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
@@ -59,11 +59,11 @@
                                     <label for="media_unavailable">Unavailable Message:</label>
                                 </span>
                                 <select name="media.unavailable" id="media_unavailable">
-                                {{each field_data.medias}}
-                                    {{if data.media.unavailable == media_id}}
-                                    <option value="${media_id}" selected="selected">${title}</option>
+                                {{each field_data.media}}
+                                    {{if data.media.unavailable == id}}
+                                        <option value="${id}" selected="selected">${name}</option>
                                     {{else}}
-                                    <option value="${media_id}">${title}</option>
+                                        <option value="${id}">${name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
