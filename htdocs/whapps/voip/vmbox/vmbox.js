@@ -199,8 +199,8 @@ winkstart.module('voip', 'vmbox', {
                 $(this).tooltip({ attach: vmbox_html });
             });
 
-            $('ul.settings1', vmbox_html).tabs($('pane > div', vmbox_html)); 
-            $('ul.settings2', vmbox_html).tabs($('advanced_pane > div', vmbox_html));
+            $('ul.settings1', vmbox_html).tabs($('.pane > div', vmbox_html)); 
+            $('ul.settings2', vmbox_html).tabs($('.advanced_pane > div', vmbox_html));
 
             $('#name', vmbox_html);
 
