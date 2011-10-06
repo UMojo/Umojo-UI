@@ -48,11 +48,11 @@
                                     <label for="media_greeting">Greeting Message:</label>
                                 </span>
                                 <select name="media.greeting" id="media_greeting">
-                                {{each field_data.medias}}
-                                    {{if data.media.greeting == media_id}}
-                                    <option value="${media_id}" selected="selected">${title}</option>
+                                {{each field_data.media}}
+                                    {{if data.media.greeting == id}}
+                                    <option value="${id}" selected="selected">${name}</option>
                                     {{else}}
-                                    <option value="${media_id}">${title}</option>
+                                    <option value="${id}">${name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
@@ -74,8 +74,8 @@
 
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon sip"/>Extension Dialing</a></li>
-                        <li><a href="#">Options</a></li>
+                        <li><a href="#"><span class="icon dial_pad2"/>Extension Dialing</a></li>
+                        <li><a href="#"><span class="icon wrench_screw"/>Options</a></li>
                     </ul>
                 </span>
 
@@ -124,7 +124,7 @@
                                     <span class="tooltip"/>
                                     <label for="timeout">Timeout for dialing (s):</label>
                                 </span>
-                                <input id="timeout" name="timeout" type="text" value="${data.timeout}" />
+                                <input id="timeout" name="timeout" type="text" value="${data.timeout / 1000}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="The maximum length of an extension. By default, it is set to the Record PIN number length.">
@@ -146,7 +146,6 @@
                 {{if data.id}}
                     <li><a class="menu-delete delete-btn" href="#">Delete</a></li>
                 {{/if}}
-                <li><a class="menu-cancel" href="#">Cancel</a></li>
             </ul>
         </div>
             

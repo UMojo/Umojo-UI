@@ -1,56 +1,50 @@
-winkstart.module('voip', 'menu',
-    {
+winkstart.module('voip', 'menu', {
         css: [
             'css/menu.css'
         ],
 
-        /* What HTML templates will we be using? */
         templates: {
             menu: 'tmpl/menu.html',
-            editMenu: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
-            'menu.activate' : 'activate',
-            'menu.list-panel-click' : 'editMenu',
-            'menu.edit-menu' : 'editMenu',
-            'menu.popup' : 'popupMenu'
+            'menu.activate': 'activate',
+            'menu.edit': 'edit_menu',
         },
 
-        validation : [
-                {name : '#name', regex: /^.*/},
-                {name : '#retries', regex : /^[0-9]+$/},
-                {name : '#record_pin', regex : /^[0-9]*$/},
-                {name : '#timeout', regex : /^[0-9]+$/},
-                {name : '#max_extension_length', regex : /^[0-9]*$/},
-                {name : '#hunt_allow', regex : /^.*$/},
-                {name : '#hunt_deny', regex : /^.*$/},
+        validation: [
+            { name: '#name',                 regex: /^.*/ },
+            { name: '#retries',              regex: /^[0-9]+$/ },
+            { name: '#record_pin',           regex: /^[0-9]*$/ },
+            { name: '#timeout',              regex: /^[0-9]+$/ },
+            { name: '#max_extension_length', regex: /^[0-9]*$/ },
+            { name: '#hunt_allow',           regex: /^.*$/ },
+            { name: '#hunt_deny',            regex: /^.*$/ }
         ],
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "menu.list": {
+            'menu.list': {
                 url: '{api_url}/accounts/{account_id}/menus',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "menu.get": {
+            'menu.get': {
                 url: '{api_url}/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "menu.create": {
+            'menu.create': {
                 url: '{api_url}/accounts/{account_id}/menus',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "menu.update": {
+            'menu.update': {
                 url: '{api_url}/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "menu.delete": {
+            'menu.delete': {
                 url: '{api_url}/accounts/{account_id}/menus/{menu_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
@@ -58,14 +52,14 @@ winkstart.module('voip', 'menu',
         }
     },
 
-    /* Bootstrap routine - run when the module is first loaded */
     function(args) {
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Menus',
             icon: 'menu',
             weight: '40'
@@ -73,148 +67,173 @@ winkstart.module('voip', 'menu',
     },
 
     {
-        validateForm: function(state) {
-            var THIS = this;
-            
-            $(THIS.config.validation).each(function(k, v) {
-                if(state == undefined) {
-                    winkstart.validate.add($(v.name), v.regex);
-                } else if (state == 'save') {
-                    winkstart.validate.save($(v.name), v.regex);
-                }
-            });
-        },
+        save_menu: function(form_data, data, _parent) {
+            var THIS = this,
+                parent = _parent || $('#menu-content');
 
-        saveMenu: function(menu_id, form_data, popup) {
-            var THIS = this;
+            if (typeof data.data == 'object' && 'id' in data.data) {
+                winkstart.request(true, 'menu.update', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        menu_id: data.data.id,
+                        data: $.extend(true, {}, data.data, form_data)
+                    },
+                    function (_data, status) {
+                        THIS.render_list(parent);
 
-            /* Check validation before saving */
-            THIS.validateForm('save');
+                        THIS.edit_menu({ id: _data.data.id }, parent);
+                    }
+                );
+            } 
+            else {
+                winkstart.request(true, 'menu.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: form_data
+                    },
+                    function (_data, status) {
+                        THIS.render_list(parent);
 
-            if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.account_id = winkstart.apps['voip'].account_id;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-                rest_data.data = form_data;
-
-                /* Is this a create or edit? See if there's a known ID */
-                if (menu_id) {
-                    /* EDIT */
-                    rest_data.menu_id = menu_id;
-                    winkstart.postJSON('menu.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editMenu({
-                            id: menu_id
-                        });
-                    });
-                } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('menu.create', rest_data, function (json, xhr) {
-                        if(popup != undefined) {
-                            popup.dialog("close");
-                            popup.remove(); 
-                            
-                        } else {
-                            THIS.renderList();
-                            THIS.editMenu({
-                                id: json.data.id
-                            });
-                        }
-                    });
-                }
-            } else {
-                alert('Please correct errors that you have on the form.');
+                        THIS.edit_menu({ id: _data.data.id }, parent);
+                    }
+                );
             }
         },
-        
-        popupMenu: function(data) {
-            var THIS = this;
-            var form_data = {
-                data: { retries: "3", timeout: "10000" },
-                field_data: {},
-                value: {}
-            };
-            
-            THIS.renderMenu(form_data, true);
-        },
 
-        /*
-         * Create/Edit menu properties (don't pass an ID field to cause a create instead of an edit)
-         */
-        editMenu: function(data){
-            $('#menu-view').empty();
-            var THIS = this;
-            var form_data = {
-                data: { retries: "3", timeout: "10000", media: {}},   
-                field_data: {},
-                value: {}
-            };
-            form_data.field_data.medias = [];
+        edit_menu: function(data, _parent){
+            var THIS = this,
+                parent = _parent || $('#menu-content'),
+                defaults = {
+                    data: {
+                        retries: '3',
+                        timeout: '10000',
+                        media: {}
+                    },
+                    field_data: {
+                        media: []
+                    }
+                };
 
-            winkstart.getJSON('media.list', {
-                    crossbar: true,
+            winkstart.request(true, 'media.list', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 },
-                function(json, xhr) {
-                    var listMedias = [];
-                    listMedias.push({media_id: '', title: '- Not set -'});
-                    if(json.data.length > 0) {
-                        _.each(json.data, function(elem) {
-                            var title = elem.name;  
-                            listMedias.push({
-                                media_id: elem.id,
-                                title: title
-                            });
-                        });
-                    }
-                    form_data.field_data.medias = listMedias;
-    
-                     if (data && data.id) {
-                        /* This is an existing menu - Grab JSON data from server for menu_id */
-                        winkstart.getJSON('menu.get', {
-                            crossbar: true,
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url,
-                            menu_id: data.id
-                        }, function(json, xhr) {
-                            /* On success, take JSON and merge with default/empty fields */
-                            $.extend(true, form_data, json);
+                function(_data, status) {
+                    _data.data.unshift({
+                        id: '',
+                        name: '- Not set -'
+                    });
 
-                            THIS.renderMenu(form_data);
-                        });
-                    } else {
-                        /* This is a new menu - pass along empty params */
-                        THIS.renderMenu(form_data);
-                    }
+                    defaults.field_data.media = _data.data;
 
+                    if(typeof data == 'object' && 'id' in data) {
+                        winkstart.request(true, 'menu.get', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                menu_id: data.id
+                            },
+                            function(_data, status) {
+                                THIS.render_menu($.extend(true, defaults, _data), parent);
+                            }
+                        );
+                    }   
+                    else {
+                        THIS.render_menu(defaults, parent);
+                    }
                 }
             );
         },
 
-        deleteMenu: function(menu_id) {
+        delete_menu: function(data, _parent) {
             var THIS = this;
+                parent = _parent || $('#menu-content');
             
-            var rest_data = {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url,
-                menu_id: menu_id
-            };
+            if('id' in data.data) {
+                winkstart.request(true, 'menu.delete', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        menu_id: data.data.id
+                    },
+                    function(_data, status) {
+                        $('#menu-view', parent).empty();
 
-            /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('menu.delete', rest_data, function (json, xhr) {
-                THIS.renderList();
-                $('#menu-view').empty();
-            });
+                        THIS.render_list(parent);
+                    }
+                );
+            }
         },
-        cleanFormData: function(form_data) {
-             
+
+        render_menu: function(data, _parent){
+            var THIS = this,
+                parent = _parent || $('#menu-content'),
+                menu_html = THIS.templates.edit.tmpl(data);
+
+            winkstart.validate.set(THIS.config.validation, menu_html);
+
+            $('*[tooltip]', menu_html).each(function() {
+                $(this).tooltip({ attach: menu_html });
+            });
+
+            $('ul.settings1', menu_html).tabs($('.pane > div', menu_html));
+            $('ul.settings2', menu_html).tabs($('.advanced_pane > div', menu_html));
+
+            $('#name', menu_html).focus();
+
+            $('.advanced_pane', menu_html).hide();
+            $('.advanced_tabs_wrapper', menu_html).hide();
+
+            $('#advanced_settings_link', menu_html).click(function() {
+                if($(this).attr('enabled')=='true') {
+                    $(this).attr('enabled', 'false');
+
+                    $('.advanced_pane', menu_html).slideToggle(function() {
+                        $('.advanced_tabs_wrapper').animate({ width: 'toggle' });
+                    });
+                }
+                else {
+                    $(this).attr('enabled', 'true');
+
+                    $('.advanced_tabs_wrapper').animate({
+                        width: 'toggle'
+                    }, function() {
+                        $('.advanced_pane').slideToggle();
+                    });
+                }
+            });
+
+            $('.menu-save', menu_html).click(function(ev) {
+                ev.preventDefault();
+        
+                winkstart.validate.is_valid(THIS.config.validation, menu_html, function() {
+                        var form_data = form2object('menu-form');
+
+                        THIS.clean_form_data(form_data);
+
+                        if('field_data' in data) {
+                            delete data.field_data;
+                        }
+                                        
+                        THIS.save_menu(form_data, data, parent);    
+                    }, 
+                    function() {
+                        alert('There were errors on the form, please correct!');
+                    } 
+                );
+            });
+
+            $('.menu-delete', menu_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.delete_menu(data, parent);
+            });
+
+            $('#menu-view', parent)
+                .empty()
+                .append(menu_html);
+        },
+
+        clean_form_data: function(form_data) {
+
             if(form_data.record_pin.length == 0) {
                 form_data.max_extension_length = 5;
                 delete form_data.record_pin;
@@ -223,187 +242,75 @@ winkstart.module('voip', 'menu',
                 form_data.max_extension_length = form_data.record_pin.length;
             } 
 
-            if(form_data.hunt_allow == '') delete form_data.hunt_allow;
-            if(form_data.hunt_deny == '') delete form_data.hunt_deny;
-            
-            if(form_data.media.greeting == '') delete form_data.media.greeting;
+            if(form_data.hunt_allow == '') {
+                delete form_data.hunt_allow;
+            }
 
-            // Hack to put timeout in ms in database.
+            if(form_data.hunt_deny == '') {
+                delete form_data.hunt_deny;
+            }
+            
+            if(form_data.media.greeting == '') {
+                delete form_data.media.greeting;
+            }
+
+            /* Hack to put timeout in ms in database. */
             form_data.timeout = form_data.timeout * 1000;
-
-            return form_data;
-        }, 
-
-        /**
-         * Draw menu fields/template and populate data, add validation. Works for both create & edit
-         */
-        renderMenu: function(form_data, popup){
-            var THIS = this;
-
-            if(typeof(popup) == undefined) {
-                popup = false;
-            }
-
-            var menu_id = form_data.data.id;
-            winkstart.log(form_data);
-            //Hack to display time in seconds for the user.
-            form_data.data.timeout = form_data.data.timeout / 1000;
-            // Paint the template with HTML of form fields onto the page 
-            if(popup==true) {
-                var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#callflow-view')).dialog({width:800});
-                //var dialog = THIS.templates.editMenu.tmpl(form_data).appendTo($('#childForm'));
-            }
-            else {
-                THIS.templates.editMenu.tmpl(form_data).appendTo( $('#menu-view') );
-            }
-
-            winkstart.cleanForm();
-
-            // Initialize form field validation 
-            THIS.validateForm();
-
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-            $("#name").focus();
-
-            $(".advanced_pane").hide();
-            $(".advanced_tabs_wrapper").hide();
-
-            $("#advanced_settings_link").click(function(event) {
-                if($(this).attr("enabled")=="true") {
-                    $(this).attr("enabled", "false");
-                    $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
-                    });
-                }
-                else {
-                    $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
-                        $(".advanced_pane").slideToggle();
-                    });
-                }
-            });
-
-            // Listen for the submit event (i.e. they click "save") 
-            $('.menu-save').click(function(event) {
-                // Save the data after they've clicked save 
-
-                // Ignore the normal behavior of a submit button and do our stuff instead 
-                event.preventDefault();
-
-                // Grab all the form field data 
-                var form_data = form2object('menu-form');
-            
-                form_data = THIS.cleanFormData(form_data);
-
-                                
-                THIS.saveMenu(menu_id, form_data, dialog);
-
-                return false;
-            });
-
-            $('.menu-cancel').click(function(event) {
-                event.preventDefault();
-                // Cheat - just delete the main content area. Nothing else needs doing really 
-                if(popup == false) {
-                    $('#menu-view').empty();
-                } else {
-                    dialog.dialog("close");
-                }
-
-                return false;
-            });
-
-            $('.menu-delete').click(function(event) {
-                // Save the data after they've clicked save 
-
-                // Ignore the normal behavior of a submit button and do our stuff instead 
-                event.preventDefault();
-
-                THIS.deleteMenu(menu_id);
-
-                return false;
-            });
-
-            $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
-            });
         },
 
-        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
-        renderList: function(){
-            var THIS = this;
+        render_list: function(_parent){
+            var THIS = this,
+                parent = _parent || $('#menu-content');;
 
-            winkstart.getJSON('menu.list', {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-            }, function (json, xhr) {
-
-                // List Data that would be sent back from server
-                function map_crossbar_data(crossbar_data){
-                    var new_list = [];
-                    if(crossbar_data.length > 0) {
-                        _.each(crossbar_data, function(elem){
-                            new_list.push({
-                                id: elem.id,
-                                title: elem.name
+            winkstart.request(true, 'menu.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                }, 
+                function (data, status) {
+                    var map_crossbar_data = function(data) {
+                       var new_list = [];
+        
+                        if(data.length > 0) {
+                            $.each(data, function(key, val) {
+                                new_list.push({
+                                    id: val.id,
+                                    title: val.name || '(no name)'
+                                });
                             });
+                        }
+                        
+                        new_list.sort(function(a, b) {
+                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
                         });
-                    }
-                    new_list.sort(function(a, b) {
-                        var answer;
-                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                        return answer;
-                    });
 
-                    return new_list;
+                        return new_list;
+                    };
+
+                    $('#menu-listpanel', parent)
+                        .empty()
+                        .listpanel({
+                            label: 'Menus',
+                            identifier: 'menu-listview',
+                            new_entity_label: 'Add Menu',
+                            data: map_crossbar_data(data.data),
+                            publisher: winkstart.publish,
+                            notifyMethod: 'menu.edit',
+                            notifyCreateMethod: 'menu.edit',
+                            notifyParent: parent             
+                        });
                 }
-
-                var options = {};
-                options.label = 'Menu Module';
-                options.identifier = 'menu-module-listview';
-                options.new_entity_label = 'Add Menu';
-                options.data = map_crossbar_data(json.data);
-                options.publisher = winkstart.publish;
-                options.notifyMethod = 'menu.list-panel-click';
-                options.notifyCreateMethod = 'menu.edit-menu';  /* Edit with no ID = Create */
-
-                $("#menu-listpanel").empty();
-                $("#menu-listpanel").listpanel(options);
-
-            });
+            );
         },
 
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
-        activate: function(data) {
-            $('#ws-content').empty();
-            var THIS = this;
-            this.templates.menu.tmpl({}).appendTo( $('#ws-content') );
+        activate: function(parent) {
+            var THIS = this,
+                menu_html = THIS.templates.menu.tmpl();
 
-            winkstart.loadFormHelper('forms');
+            (parent || $('#ws-content'))
+                .empty()
+                .append(menu_html);
 
-            winkstart.publish('layout.updateLoadedModule', {
-                label: 'Menus Management',
-                module: this.__module
-            });
-
-            $('.edit-menu').live({
-                click: function(evt){
-                    var target = evt.currentTarget;
-                    var vmbox_id = target.getAttribute('rel');
-                    winkstart.publish('menu.edit-menu', {
-                        'menu_id' : menu_id
-                    });
-                }
-            });
-
-            THIS.renderList();
+            THIS.render_list(menu_html);
         }
     }
 );
