@@ -76,7 +76,7 @@ winkstart.module('voip', 'vmbox', {
         save_vmbox: function(form_data, data, success, error) {
             var THIS = this;
 
-            if(typeof data.data == 'object' && 'id' in data.data) {
+            if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'vmbox.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -129,7 +129,7 @@ winkstart.module('voip', 'vmbox', {
 
                     save_error: _callbacks.save_error,
 
-                    delete_success: _callbacks.delete_success || function(_data) {
+                    delete_success: _callbacks.delete_success || function() {
                         target.empty();
 
                         THIS.render_list(parent);
@@ -177,7 +177,7 @@ winkstart.module('voip', 'vmbox', {
 
                             defaults.field_data.users = _data.data;
 
-                            if(typeof data == 'object' && 'id' in data) {
+                            if(typeof data == 'object' && data.id) {
                                 winkstart.request(true, 'vmbox.get', {
                                         account_id: winkstart.apps['voip'].account_id,
                                         api_url: winkstart.apps['voip'].api_url,
@@ -208,7 +208,7 @@ winkstart.module('voip', 'vmbox', {
         delete_vmbox: function(data, success, error) {
             var THIS = this;
 
-            if('id' in data.data) {
+            if(data.data.id) {
                 winkstart.request(true, 'vmbox.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
