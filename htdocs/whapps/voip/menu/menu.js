@@ -67,21 +67,25 @@ winkstart.module('voip', 'menu', {
     },
 
     {
-        save_menu: function(form_data, data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#menu-content');
+        save_menu: function(form_data, data, success, error) {
+            var THIS = this;
 
-            if (typeof data.data == 'object' && 'id' in data.data) {
+            if (typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'menu.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         menu_id: data.data.id,
                         data: $.extend(true, {}, data.data, form_data)
                     },
-                    function (_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_menu({ id: _data.data.id }, parent);
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
                 );
             } 
@@ -92,17 +96,44 @@ winkstart.module('voip', 'menu', {
                         data: form_data
                     },
                     function (_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_menu({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
+
                 );
             }
         },
 
-        edit_menu: function(data, _parent){
+        edit_menu: function(data, _parent, _target, _callbacks){
             var THIS = this,
                 parent = _parent || $('#menu-content'),
+                target = _target || $('#menu-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_menu({ id: _data.data.id }, parent, target, callbacks);
+                    },
+                    
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function() {
+                        target.empty();
+
+                        THIS.render_list(parent);
+                    },
+
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
                 defaults = {
                     data: {
                         retries: '3',
@@ -126,46 +157,57 @@ winkstart.module('voip', 'menu', {
 
                     defaults.field_data.media = _data.data;
 
-                    if(typeof data == 'object' && 'id' in data) {
+                    if(typeof data == 'object' && data.id) {
                         winkstart.request(true, 'menu.get', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
                                 menu_id: data.id
                             },
                             function(_data, status) {
-                                THIS.render_menu($.extend(true, defaults, _data), parent);
+                                THIS.render_menu($.extend(true, defaults, _data), target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
                             }
                         );
                     }   
                     else {
-                        THIS.render_menu(defaults, parent);
+                        THIS.render_menu(defaults, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
                     }
                 }
             );
         },
 
-        delete_menu: function(data, _parent) {
+        delete_menu: function(data, success, error) {
             var THIS = this;
-                parent = _parent || $('#menu-content');
             
-            if('id' in data.data) {
+            if(data.data.id) {
                 winkstart.request(true, 'menu.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         menu_id: data.data.id
                     },
                     function(_data, status) {
-                        $('#menu-view', parent).empty();
-
-                        THIS.render_list(parent);
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
                     }
                 );
             }
         },
 
-        render_menu: function(data, _parent){
+        render_menu: function(data, target, callbacks){
             var THIS = this,
-                parent = _parent || $('#menu-content'),
                 menu_html = THIS.templates.edit.tmpl(data);
 
             winkstart.validate.set(THIS.config.validation, menu_html);
@@ -213,7 +255,7 @@ winkstart.module('voip', 'menu', {
                             delete data.field_data;
                         }
                                         
-                        THIS.save_menu(form_data, data, parent);    
+                        THIS.save_menu(form_data, data, callbacks.save_success, callbacks.save_error);    
                     }, 
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -224,10 +266,10 @@ winkstart.module('voip', 'menu', {
             $('.menu-delete', menu_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_menu(data, parent);
+                THIS.delete_menu(data, callbacks.delete_success, callbacks.delete_error);
             });
 
-            $('#menu-view', parent)
+            (target)
                 .empty()
                 .append(menu_html);
         },
