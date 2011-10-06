@@ -1824,7 +1824,7 @@ winkstart.module('voip', 'callflow', {
                         return (name) ? name : '';
                     },
                     edit: function(node, callback) {
-                        winkstart.getJSON('user.list', {
+                        winkstart.getJSON('hotdesk.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },

@@ -58,7 +58,7 @@ winkstart.module('voip', 'user',
                 verb: 'DELETE'
             },
             "hotdesk.list": {
-                url: '{api_url}/accounts/{account_id}/user/{user_id}/hotdesk',
+                url: '{api_url}/accounts/{account_id}/users/hotdesks',
                 contentType: 'application/json',
                 verb: 'GET'
             }
