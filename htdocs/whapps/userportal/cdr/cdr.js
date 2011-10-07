@@ -150,12 +150,23 @@ function(args) {
 					var callee_id_name = reply.data.callee_id_name;
 					var callee_id_number = reply.data.callee_id_number;
 					var duration = reply.data.billing_seconds;
-					var seconds = duration % 60;
-					var minutes = (duration-seconds) / 60;
-					if(seconds < 10) {
-						seconds = '0'+seconds;
-					}
-					duration = minutes+':'+seconds;
+                    var seconds = duration % 60;
+                    var minutes = (duration-seconds) / 60;
+                    if(minutes > 59) { 
+                        minutes -= 60; 
+                    }
+                    var hours = (duration - (minutes*60) - seconds) / 3600;
+                    console.log(hours, minutes, seconds);
+                    if(hours < 10) {
+                        hours = '0' + hours;
+                    }
+                    if(minutes < 10) {
+                        minutes = '0' + minutes;
+                    }
+                    if(seconds < 10) {
+                        seconds = '0' + seconds;
+                    }
+                    duration = hours+':'+minutes+':'+seconds;
 					var date = new Date((reply.data.timestamp - 62167219200)*1000);
 					var month = date.getMonth() +1;
 					var year = date.getFullYear();
