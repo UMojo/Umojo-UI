@@ -5,12 +5,14 @@ winkstart.module('voip', 'vmbox', {
 
         templates: {
             vmbox: 'tmpl/vmbox.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            vmbox_callflow: 'tmpl/vmbox_callflow.html'
         },
 
         subscribe: {
-            'vmbox.activate' : 'activate',
-            'vmbox.edit' : 'edit_vmbox'
+            'vmbox.activate': 'activate',
+            'vmbox.edit': 'edit_vmbox',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation : [
@@ -370,6 +372,140 @@ winkstart.module('voip', 'vmbox', {
                 .append(vmbox_html);
 
             THIS.render_list(vmbox_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'voicemail[id=*]': {
+                    name: 'Voicemail',
+                    icon: 'voicemail',
+                    category: 'Basic',
+                    module: 'voicemail',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'vmbox.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.vmbox_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#vmbox_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    popup.dialog('close');
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+
+                                    node.caption = $('#vmbox_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Voicemail',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }    
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('vmbox.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
+                                });
+                            }
+                        });
+                    }
+                },
+
+                'voicemail[action=check]': {
+                    name: 'Check Voicemail',
+                    icon: 'voicemail',
+                    category: 'Advanced',
+                    module: 'voicemail',
+                    data: {
+                        action: 'check'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }
+            });
         }
+
     }
 );
