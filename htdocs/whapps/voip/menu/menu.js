@@ -5,12 +5,15 @@ winkstart.module('voip', 'menu', {
 
         templates: {
             menu: 'tmpl/menu.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            menu_callflow: 'tmpl/menu_callflow.html',
+            menu_key_callflow: 'tmpl/menu_key_callflow.html'
         },
 
         subscribe: {
             'menu.activate': 'activate',
             'menu.edit': 'edit_menu',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation: [
@@ -353,6 +356,158 @@ winkstart.module('voip', 'menu', {
                 .append(menu_html);
 
             THIS.render_list(menu_html);
-        }
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'menu[id=*]': {
+                    name: 'Menu',
+                    icon: 'menu',
+                    category: 'Basic',
+                    module: 'menu',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '9'
+                        }
+                    ],
+                    isUsable: 'true',
+                    key_caption: function(child_node, caption_map) {
+                        var key = child_node.key;
+
+                        return (key != '_') ? key : 'Default action';
+                    },
+                    key_edit: function(child_node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.menu_key_callflow.tmpl({
+                            items: {
+                                '_': 'Default action',
+                                '0': '0',
+                                '1': '1',
+                                '2': '2',
+                                '3': '3',
+                                '4': '4',
+                                '5': '5',
+                                '6': '6',
+                                '7': '7',
+                                '8': '8',
+                                '9': '9',
+                                '*': '*',
+                                '#': '#'
+                            },
+                            selected: child_node.key
+                        });
+
+                        $('.submit_btn', popup_html).click(function() {
+                            child_node.key = $('#menu_key_selector', popup).val();
+
+                            child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Menu Option',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    }, 
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'menu.list',  {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.menu_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#menu_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    popup.dialog('close');
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#menu_selector', popup).val());
+
+                                    node.caption = $('#menu_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Menu',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish(true, 'menu.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit menu' : 'Create menu'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }   
     }
 );
