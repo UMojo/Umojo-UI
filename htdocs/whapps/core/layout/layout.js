@@ -38,7 +38,7 @@ winkstart.module('core', 'layout', {
         }
 
         $('#ws-content .welcomediv').click(function() {
-            winkstart.publish('auth.register');
+            winkstart.publish('nav.my_logout_click');
         });
 
         $('#my_account', '.universal_nav').click(function() {
