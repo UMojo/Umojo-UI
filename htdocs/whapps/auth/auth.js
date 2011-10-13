@@ -148,7 +148,6 @@ winkstart.module('auth', 'auth',
 
         login: function(args) {
             var THIS = this;
-            console.log(args);
             var username = args == undefined ? '' : args.username;
             
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {

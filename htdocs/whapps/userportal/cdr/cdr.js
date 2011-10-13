@@ -156,7 +156,6 @@ function(args) {
                         minutes -= 60; 
                     }
                     var hours = (duration - (minutes*60) - seconds) / 3600;
-                    console.log(hours, minutes, seconds);
                     if(hours < 10) {
                         hours = '0' + hours;
                     }
