@@ -60,7 +60,7 @@ winkstart.module('auth', 'auth',
             winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
                alert('You are now registered! Please log in.');
                
-               winkstart.publish('nav.my_logout_click');
+               winkstart.publish('auth.login', {username: data.data.user.username});
                if(data.auth_token != '' && data.auth_token != 'null'){
                     winkstart.apps['auth'].account_id = data.data.account.id;
                     winkstart.apps['auth'].auth_token = data.auth_token;
@@ -146,14 +146,20 @@ winkstart.module('auth', 'auth',
             });
         },
 
-        login: function() {
+        login: function(args) {
             var THIS = this;
+            console.log(args);
+            var username = args == undefined ? '' : args.username;
             
-            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({}), {
+            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
                 title : 'Login',
                 resizable : false,
                 modal: true
             });
+
+            if(username != '') {
+                $('#password', dialogDiv).focus();
+            }
 
             $('button.login', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
