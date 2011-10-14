@@ -104,6 +104,25 @@ winkstart.module('voip', 'featurecode', {
                         }
                     });
 
+                    $.each($('body').find('*[tooltip]'), function(){
+                            $(this).tooltip({attach:'body'});
+                    });
+
+                    $('.arrow:not(:first)', featurecode_html).parents('.category_header').siblings('.featurecode_list').hide();
+                    $('.arrow:not(:first)', featurecode_html).removeClass('down_arrow_circle')
+                                                             .addClass('right_arrow_circle');
+
+                    $('.arrow', featurecode_html).click(function() {
+                        $(this).parents('.category_header').siblings('.featurecode_list').toggle();
+                        if($(this).hasClass('right_arrow_circle')) {
+                            $(this).removeClass('right_arrow_circle')
+                                   .addClass('down_arrow_circle');;
+                        } else {
+                            $(this).removeClass('down_arrow_circle')
+                                   .addClass('right_arrow_circle');;
+                        }
+                    });
+
                     $('.featurecode_enabled', featurecode_html).change(function() {
                         var action_wrapper = $(this).parents('.action_wrapper');
                         if(!$(this).is(':checked') && action_wrapper.dataset('enabled') == 'true') {
@@ -216,6 +235,8 @@ winkstart.module('voip', 'featurecode', {
                     var data = {'categories': THIS.categories, 'label':'data' };
                     $('#ws-content').empty();
                     var featurecode_html = THIS.templates.featurecode.tmpl(data).appendTo($('#ws-content'));
+
+                    
             });
         },
         clean_form_data: function() {
