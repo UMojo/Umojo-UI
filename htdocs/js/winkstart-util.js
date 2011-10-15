@@ -27,20 +27,21 @@
         var newDiv = $(document.createElement('div')).html(content);
 
         defaults = {
-            width : 'auto',
-            show : { effect : 'fade', duration : 200 },
-            hide : { effect : 'fade', duration : 200 },
-            modal : true,
+            width: 'auto',
+            show: { effect : 'fade', duration : 200 },
+            hide: { effect : 'fade', duration : 200 },
+            modal: true,
+            resizable: false,
 
             // By default, don't long-live dialogs - kill them after they're closed. Normal jquery default is just to hide them.
-            close : function() {
+            close: function() {
                 $(newDiv).dialog('destroy');    // Destroy the dialog utilizing the div and associated events
                 $(newDiv).remove(); // Remove the div
             }
         };
 
         // Overwrite any defaults with settings passed in
-        $.extend(options, defaults);
+        $.extend(options || {}, defaults);
 
         $(newDiv).dialog(options);
 

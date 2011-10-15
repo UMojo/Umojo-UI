@@ -146,21 +146,6 @@
     padding: 0 1em;
 }
 
-.ui-dialog .ui-dialog-titlebar-close {
-    background-image: url("../images/cancel_btn.png");
-    background-position: 0 0;
-    display: block;
-    float: right;
-    height: 15px;
-    width: 15px;
-    text-indent: -9999px;
-}
-
-
-
-
-
-
 .popup .myform{
     margin: 0 auto;
     padding: 5px;

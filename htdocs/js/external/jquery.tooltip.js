@@ -45,7 +45,8 @@
 		footer_class: 'tooltip_footer',     //Class of the tooltip footer
 		header: null,                   //Text in the header
 		footer: null,                   //Text in the footer
-		attach: null                    //Place where you want to attach the html code default:after the current obj
+		attach: null,                   //Place where you want to attach the html code default:after the current obj
+        relative: true
 	};
 	
 	var methods = {
@@ -95,8 +96,8 @@
 				}
 				
 				//Put the tooltip arround the mouse
-				$('.'+s.tooltip_class).css('top', e.layerY + s.yMove );
-				$('.'+s.tooltip_class).css('left', e.layerX + s.xMove );
+				$('.'+s.tooltip_class).css('top', (s.relative ? e.layerY : e.pageY) + s.yMove );
+				$('.'+s.tooltip_class).css('left', (s.relative ? e.layerX : e.pageX) + s.xMove );
 
 				$('.'+s.tooltip_class).fadeIn('slow');         
 			});
@@ -112,8 +113,8 @@
 				$('.'+s.tooltip_class).css('z-index', 9999);
 				
 				//Put the tooltip arround the mouse
-				$('.'+s.tooltip_class).css('top', e.layerY + s.yMove );
-				$('.'+s.tooltip_class).css('left', e.layerX + s.xMove );
+				$('.'+s.tooltip_class).css('top', (s.relative ? e.layerY : e.pageY) + s.yMove );
+				$('.'+s.tooltip_class).css('left', (s.relative ? e.layerX : e.pageX) + s.xMove );
 				
 				//Set the size of the tooltip
 				if(s.width != 0){

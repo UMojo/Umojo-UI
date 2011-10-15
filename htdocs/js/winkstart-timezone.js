@@ -385,12 +385,9 @@
             "Pacific/Yap"
         ],
 
-        populate_dropdown: function(dropdown, selected) {
-            var THIS = this;
-
-            if(selected == undefined) {
-                selected = jstz.determine_timezone().name();
-            }
+        populate_dropdown: function(dropdown, _selected) {
+            var THIS = this,
+                selected = _selected || jstz.determine_timezone().name();
 
             $.each(THIS.list, function(i, data) {
                 if(selected == data) { 

@@ -5,12 +5,15 @@ winkstart.module('voip', 'menu', {
 
         templates: {
             menu: 'tmpl/menu.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            menu_callflow: 'tmpl/menu_callflow.html',
+            menu_key_callflow: 'tmpl/menu_key_callflow.html'
         },
 
         subscribe: {
             'menu.activate': 'activate',
             'menu.edit': 'edit_menu',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation: [
@@ -67,21 +70,25 @@ winkstart.module('voip', 'menu', {
     },
 
     {
-        save_menu: function(form_data, data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#menu-content');
+        save_menu: function(form_data, data, success, error) {
+            var THIS = this;
 
-            if (typeof data.data == 'object' && 'id' in data.data) {
+            if (typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'menu.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         menu_id: data.data.id,
                         data: $.extend(true, {}, data.data, form_data)
                     },
-                    function (_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_menu({ id: _data.data.id }, parent);
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
                 );
             } 
@@ -92,17 +99,44 @@ winkstart.module('voip', 'menu', {
                         data: form_data
                     },
                     function (_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_menu({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
+
                 );
             }
         },
 
-        edit_menu: function(data, _parent){
+        edit_menu: function(data, _parent, _target, _callbacks){
             var THIS = this,
                 parent = _parent || $('#menu-content'),
+                target = _target || $('#menu-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_menu({ id: _data.data.id }, parent, target, callbacks);
+                    },
+                    
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function() {
+                        target.empty();
+
+                        THIS.render_list(parent);
+                    },
+
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
                 defaults = {
                     data: {
                         retries: '3',
@@ -126,46 +160,57 @@ winkstart.module('voip', 'menu', {
 
                     defaults.field_data.media = _data.data;
 
-                    if(typeof data == 'object' && 'id' in data) {
+                    if(typeof data == 'object' && data.id) {
                         winkstart.request(true, 'menu.get', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
                                 menu_id: data.id
                             },
                             function(_data, status) {
-                                THIS.render_menu($.extend(true, defaults, _data), parent);
+                                THIS.render_menu($.extend(true, defaults, _data), target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
                             }
                         );
                     }   
                     else {
-                        THIS.render_menu(defaults, parent);
+                        THIS.render_menu(defaults, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
                     }
                 }
             );
         },
 
-        delete_menu: function(data, _parent) {
+        delete_menu: function(data, success, error) {
             var THIS = this;
-                parent = _parent || $('#menu-content');
             
-            if('id' in data.data) {
+            if(data.data.id) {
                 winkstart.request(true, 'menu.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         menu_id: data.data.id
                     },
                     function(_data, status) {
-                        $('#menu-view', parent).empty();
-
-                        THIS.render_list(parent);
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
                     }
                 );
             }
         },
 
-        render_menu: function(data, _parent){
+        render_menu: function(data, target, callbacks){
             var THIS = this,
-                parent = _parent || $('#menu-content'),
                 menu_html = THIS.templates.edit.tmpl(data);
 
             winkstart.validate.set(THIS.config.validation, menu_html);
@@ -213,7 +258,7 @@ winkstart.module('voip', 'menu', {
                             delete data.field_data;
                         }
                                         
-                        THIS.save_menu(form_data, data, parent);    
+                        THIS.save_menu(form_data, data, callbacks.save_success, callbacks.save_error);    
                     }, 
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -224,10 +269,10 @@ winkstart.module('voip', 'menu', {
             $('.menu-delete', menu_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_menu(data, parent);
+                THIS.delete_menu(data, callbacks.delete_success, callbacks.delete_error);
             });
 
-            $('#menu-view', parent)
+            (target)
                 .empty()
                 .append(menu_html);
         },
@@ -311,6 +356,158 @@ winkstart.module('voip', 'menu', {
                 .append(menu_html);
 
             THIS.render_list(menu_html);
-        }
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'menu[id=*]': {
+                    name: 'Menu',
+                    icon: 'menu',
+                    category: 'Basic',
+                    module: 'menu',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '9'
+                        }
+                    ],
+                    isUsable: 'true',
+                    key_caption: function(child_node, caption_map) {
+                        var key = child_node.key;
+
+                        return (key != '_') ? key : 'Default action';
+                    },
+                    key_edit: function(child_node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.menu_key_callflow.tmpl({
+                            items: {
+                                '_': 'Default action',
+                                '0': '0',
+                                '1': '1',
+                                '2': '2',
+                                '3': '3',
+                                '4': '4',
+                                '5': '5',
+                                '6': '6',
+                                '7': '7',
+                                '8': '8',
+                                '9': '9',
+                                '*': '*',
+                                '#': '#'
+                            },
+                            selected: child_node.key
+                        });
+
+                        $('.submit_btn', popup_html).click(function() {
+                            child_node.key = $('#menu_key_selector', popup).val();
+
+                            child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Menu Option',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    }, 
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'menu.list',  {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.menu_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#menu_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    popup.dialog('close');
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#menu_selector', popup).val());
+
+                                    node.caption = $('#menu_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Menu',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish(true, 'menu.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit menu' : 'Create menu'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }   
     }
 );

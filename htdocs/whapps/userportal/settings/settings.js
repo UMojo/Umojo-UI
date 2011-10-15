@@ -11,9 +11,9 @@ winkstart.module('userportal', 'settings', {
         'settings.activate': 'activate'
     },
     validation : [
-                {name : '#vm-to-email-txt', regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/},
-                {name : '#ring-number-txt', regex: /^(([\+]?[0-9]{7,11})|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+))$/}
-        ],
+        { name : '#vm-to-email-txt', regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/ },
+        { name : '#ring-number-txt', regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/ }
+    ],
 
     resources: {
         'settings.get': {
@@ -41,20 +41,19 @@ function(args) {
 },
 {	
     validateForm: function(state) {
-            var THIS = this;
-
-            $(THIS.config.validation).each(function(k, v) {
-                if(state == undefined) {
-                    winkstart.validate.add($(v.name), v.regex);
-                } else if (state == 'save') {
-                    winkstart.validate.save($(v.name), v.regex);
-                }
-            });
-        },
-
-    activate: function(data) {
         var THIS = this;
-        
+
+        $(THIS.config.validation).each(function(k, v) {
+            if(state == undefined) {
+                winkstart.validate.add($(v.name), v.regex);
+            } else if (state == 'save') {
+                winkstart.validate.save($(v.name), v.regex);
+            }
+        });
+    },
+    
+    render_settings: function() {
+        var THIS = this;
         winkstart.getJSON('settings.get', {
                 crossbar: true,
                 account_id: winkstart.apps['userportal'].account_id,
@@ -95,6 +94,12 @@ function(args) {
                 THIS.validateForm();
             }
         );
+    },
+
+    activate: function(data) {
+        var THIS = this;
+        
+        THIS.render_settings();
 
         winkstart.publish('layout.updateLoadedModule', {
             label: 'My Settings',
@@ -103,43 +108,50 @@ function(args) {
 
     },
     update_user_settings: function(data) {
-        var post_data = {  
-            crossbar: true,
-            account_id: winkstart.apps['userportal'].account_id,
-            api_url: winkstart.apps['userportal'].api_url,
-            user_id: winkstart.apps['auth'].user_id,
-        }
-        winkstart.getJSON('settings.get', {
-                crossbar: true, 
-                account_id: winkstart.apps['userportal'].account_id, 
-                api_url: winkstart.apps['userportal'].api_url,
-                user_id: winkstart.apps['auth'].user_id
-            }, 
-            function(reply) {
-                if(data.email != undefined) {
-                    reply.data.email = data.email;
-                }
-            
-                if(data.vm_to_email_enabled != undefined) {
-                    reply.data.vm_to_email_enabled = data.vm_to_email_enabled;
-                }
-    
-                if(data.call_forward != undefined) {
-                    reply.data.call_forward = data.call_forward;
-                    reply.data.call_forward.keep_caller_id = true;
-                    reply.data.call_forward.require_keypress = true;
-                }
-            
-                post_data.data = reply.data;
-                delete post_data.data.id;
-                winkstart.postJSON('settings.post', post_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                    alert('Settings saved');
-                });
 
-//                winkstart.postJSON('settings.post', post_data, function () {});
+        var THIS = this;
+
+        if(!$('.invalid').size()) {
+            var post_data = {  
+                crossbar: true,
+                account_id: winkstart.apps['userportal'].account_id,
+                api_url: winkstart.apps['userportal'].api_url,
+                user_id: winkstart.apps['auth'].user_id,
             }
-        );
+            winkstart.getJSON('settings.get', {
+                    crossbar: true, 
+                    account_id: winkstart.apps['userportal'].account_id, 
+                    api_url: winkstart.apps['userportal'].api_url,
+                    user_id: winkstart.apps['auth'].user_id
+                }, 
+                function(reply) {
+                    if(data.email != undefined) {
+                        reply.data.email = data.email;
+                    }
+                
+                    if(data.vm_to_email_enabled != undefined) {
+                        reply.data.vm_to_email_enabled = data.vm_to_email_enabled;
+                    }
+        
+                    if(data.call_forward != undefined) {
+                        reply.data.call_forward = data.call_forward;
+                        reply.data.call_forward.keep_caller_id = true;
+                        reply.data.call_forward.require_keypress = true;
+                    }
+                
+                    post_data.data = reply.data;
+                    delete post_data.data.id;
+                    winkstart.postJSON('settings.post', post_data, function (json, xhr) {
+                            /* Refresh the list and the edit content */
+                        THIS.render_settings();
+                    });
+
+    //                winkstart.postJSON('settings.post', post_data, function () {});
+                }
+            );
+        } else {
+            alert('Please correct errors that you have on the form!');
+        }
     },
     setup_page: function() {
         var THIS = this;
@@ -181,8 +193,12 @@ function(args) {
                 data.email = $('#vm-to-email-txt').val();
             }
             
+            var replaced_number = $('#ring-number-txt').val();
+            if(replaced_number.match(/^[\+]?[0-9\s\-\.\(\)]{7,20}$/)) {
+                replaced_number = replaced_number.replace(/\s|\(|\)|\-|\./g,'');
+            }
             data.call_forward = {
-                number: $('#ring-number-txt').val(),
+                number: replaced_number,
                 enabled: false
             };
             if(data.call_forward.number != '') { 

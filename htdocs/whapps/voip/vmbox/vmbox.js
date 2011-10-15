@@ -5,12 +5,14 @@ winkstart.module('voip', 'vmbox', {
 
         templates: {
             vmbox: 'tmpl/vmbox.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            vmbox_callflow: 'tmpl/vmbox_callflow.html'
         },
 
         subscribe: {
-            'vmbox.activate' : 'activate',
-            'vmbox.edit' : 'edit_vmbox'
+            'vmbox.activate': 'activate',
+            'vmbox.edit': 'edit_vmbox',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation : [
@@ -73,11 +75,10 @@ winkstart.module('voip', 'vmbox', {
     },
 
     {
-        save_vmbox: function(form_data, data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        save_vmbox: function(form_data, data, success, error) {
+            var THIS = this;
 
-            if(typeof data.data == 'object' && 'id' in data.data) {
+            if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'vmbox.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -85,9 +86,14 @@ winkstart.module('voip', 'vmbox', {
                         data: $.extend(true, {}, data.data, form_data) 
                     },
                     function(_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
                     }
                 );
             }
@@ -98,17 +104,43 @@ winkstart.module('voip', 'vmbox', {
                         data: form_data
                     },
                     function(_data, status) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_vmbox({ id: _data.data.id }, parent);
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'create');
+                        }
                     }
                 );
             }
         },
 
-        edit_vmbox: function(data, _parent){
+        edit_vmbox: function(data, _parent, _target, _callbacks){
             var THIS = this,
                 parent = _parent || $('#vmbox-content'),
+                target = _target || $('#vmbox-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                            THIS.render_list(parent);
+
+                            THIS.edit_vmbox({ id: _data.data.id }, parent, target, callbacks);
+                    },
+
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function() {
+                        target.empty();
+
+                        THIS.render_list(parent);
+                    },
+
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
                 defaults = {
                     data: {
                         require_pin: true,
@@ -147,19 +179,27 @@ winkstart.module('voip', 'vmbox', {
 
                             defaults.field_data.users = _data.data;
 
-                            if(typeof data == 'object' && 'id' in data) {
+                            if(typeof data == 'object' && data.id) {
                                 winkstart.request(true, 'vmbox.get', {
                                         account_id: winkstart.apps['voip'].account_id,
                                         api_url: winkstart.apps['voip'].api_url,
                                         vmbox_id: data.id
                                     },
                                     function(_data, status) {
-                                        THIS.render_vmbox($.extend(true, defaults, _data), parent);
+                                        THIS.render_vmbox($.extend(true, defaults, _data), target, callbacks);
+
+                                        if(typeof callbacks.after_render == 'function') {
+                                            callbacks.after_render();
+                                        }
                                     }
                                 );
                             }
                             else {
-                                THIS.render_vmbox(defaults, parent);
+                                THIS.render_vmbox(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
                             }
                         }
                     );
@@ -167,35 +207,38 @@ winkstart.module('voip', 'vmbox', {
             );
         },
 
-        delete_vmbox: function(data, _parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        delete_vmbox: function(data, success, error) {
+            var THIS = this;
 
-            if('id' in data.data) {
+            if(data.data.id) {
                 winkstart.request(true, 'vmbox.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         vmbox_id: data.data.id
                     },
-                    function(data, status) {
-                        $('#vmbox-view', parent).empty();
-
-                        THIS.render_list(parent);
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
                     }
                 );
             }
         },
 
-        render_vmbox: function(data, _parent) {
+        render_vmbox: function(data, target, callbacks) {
             var THIS = this,
-                parent = _parent || $('#vmbox-content'),
                 vmbox_html = THIS.templates.edit.tmpl(data);
 
             winkstart.timezone.populate_dropdown($('#timezone', vmbox_html), data.data.timezone);
             
             winkstart.validate.set(THIS.config.validation, vmbox_html);
 
-            $.each($('*[tooltip]', vmbox_html), function() {
+            $('*[tooltip]', vmbox_html).each(function() {
                 $(this).tooltip({ attach: vmbox_html });
             });
 
@@ -254,7 +297,7 @@ winkstart.module('voip', 'vmbox', {
                             delete data.field_data;
                         }
 
-                        THIS.save_vmbox(form_data, data, parent);
+                        THIS.save_vmbox(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -265,10 +308,10 @@ winkstart.module('voip', 'vmbox', {
             $('.vmbox-delete', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_vmbox(data, parent);
+                THIS.delete_vmbox(data, callbacks.delete_success, callbacks.save_success);
             });
 
-            $('#vmbox-view', parent)
+            (target)
                 .empty()
                 .append(vmbox_html);
         },
@@ -277,9 +320,8 @@ winkstart.module('voip', 'vmbox', {
             
         },
 
-        render_list: function(_parent) {
-            var THIS = this,
-                parent = _parent || $('#vmbox-content');
+        render_list: function(parent) {
+            var THIS = this;
 
             winkstart.request(true, 'vmbox.list', {
                     account_id: winkstart.apps['voip'].account_id,
@@ -330,6 +372,140 @@ winkstart.module('voip', 'vmbox', {
                 .append(vmbox_html);
 
             THIS.render_list(vmbox_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'voicemail[id=*]': {
+                    name: 'Voicemail',
+                    icon: 'voicemail',
+                    category: 'Basic',
+                    module: 'voicemail',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'vmbox.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.vmbox_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#vmbox_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    popup.dialog('close');
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+
+                                    node.caption = $('#vmbox_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Voicemail',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }    
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('vmbox.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
+                                });
+                            }
+                        });
+                    }
+                },
+
+                'voicemail[action=check]': {
+                    name: 'Check Voicemail',
+                    icon: 'voicemail',
+                    category: 'Advanced',
+                    module: 'voicemail',
+                    data: {
+                        action: 'check'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }
+            });
         }
+
     }
 );
