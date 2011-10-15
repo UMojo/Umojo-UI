@@ -295,7 +295,7 @@ winkstart.module('voip', 'conference', {
             $('.conference-delete', conference_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_conference(data, callbacks.delete_success, callbacks.save_success);
+                THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
             });
             
             (target)
