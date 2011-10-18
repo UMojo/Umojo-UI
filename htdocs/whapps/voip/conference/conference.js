@@ -10,8 +10,8 @@ winkstart.module('voip', 'conference', {
         },
 
         subscribe: {
-            'conference.activate' : 'activate',
-            'conference.edit' : 'edit_conference',
+            'conference.activate': 'activate',
+            'conference.edit': 'edit_conference',
         },
 
         resources: {
@@ -46,11 +46,12 @@ winkstart.module('voip', 'conference', {
                 verb: 'GET'
             }
         },
+
         validation: [
-            {name: '#name', regex: /^.+$/},
-            {name: '#member_pins', regex: /^[a-z0-9A-Z]*$/},
-            {name: '#conference_numbers', regex: /^[0-9]+$/},
-            {name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/}
+            { name: '#name', regex: /^.+$/ },
+            { name: '#member_pins', regex: /^[a-z0-9A-Z]*$/ },
+            { name: '#conference_numbers', regex: /^[0-9]+$/ },
+            { name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/ }
         ]
     },
     function(args) {
@@ -302,19 +303,27 @@ winkstart.module('voip', 'conference', {
                 .empty()
                 .append(conference_html);
         },
+
         clean_form_data: function(form_data){
             var THIS = this;
 
             if(form_data.member.pins[0] != '') { 
                 form_data.member.pins[0] = THIS.get_pin_number(form_data.member.pins[0].split(''));
-            } else delete form_data.member;
+            }
+            else {
+                delete form_data.member;
+            }
 
             if(form_data.moderator.pins[0] != '') {
                 form_data.moderator.pins[0] = THIS.get_pin_number(form_data.moderator.pins[0].split(''));
-            } else delete form_data.moderator;   
+            } 
+            else {
+                delete form_data.moderator;   
+            }
 
             return form_data;
         },
+
         render_list: function(parent){
             var THIS = this;
 
