@@ -31,8 +31,8 @@
                                 </span>
                                 {{if data.id }}
                                 <span id="player_file">
-                                    <label>${data.description}</label>
                                     <input type="button" id="change_link" value="Change File"/>
+                                    <div class="description">${data.description}</div>
                                 </span>
                                 {{/if}}
                                 <span id="upload_span">
@@ -98,7 +98,6 @@
                     {{if data.id}}
                         <li><a class="media-delete delete-btn" href="#">Delete</a></li>
                     {{/if}}
-                    <li><a class="media-cancel" href="#">Cancel</a></li>
                 </ul>
             </div>
         </form>
