@@ -1,60 +1,51 @@
-winkstart.module('voip', 'account',
-    {
+winkstart.module('voip', 'account', {
         css: [
             'css/account.css'
         ],
 
-        /* What HTML templates will we be using? */
         templates: {
             account: 'tmpl/account.html',
-            editAccount: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
             'account.activate' : 'activate',
-            'account.list-panel-click' : 'editAccount',
-            'account.edit-account' : 'editAccount'
+            'account.edit' : 'edit_account'
         },
 
-        formData: {
-        },
-
-        validation : [
-                {name : '#name', regex : /^.+$/},
-                {name : '#realm', regex : /^[0-9A-Za-z\-\.\:\_]+$/},
-                {name : '#caller_id_name_external', regex : /^.*$/},
-                {name : '#caller_id_number_external', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
-                {name : '#caller_id_name_internal', regex : /^.*$/},
-                {name : '#caller_id_number_internal', regex : /^[\+]?[0-9\s\-\.\(\)]*$/},
-                {name : '#vm_to_email_support_number', regex : /^[\+]?[0-9]*$/},
-                {name : '#vm_to_email_support_email', regex : /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/},
+        validation: [
+                { name: '#name',                       regex: /^.+$/ },
+                { name: '#realm',                      regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
+                { name: '#caller_id_name_external',    regex: /^.*$/ },
+                { name: '#caller_id_number_external',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_internal',    regex: /^.*$/ },
+                { name: '#caller_id_number_internal',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#vm_to_email_support_number', regex: /^[\+]?[0-9]*$/ },
+                { name: '#vm_to_email_support_email',  regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
         ],
-        
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            "account.list": {
+            'account.list': {
                 url: '{api_url}/accounts/{account_id}/children',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "account.get": {
+            'account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "account.create": {
+            'account.create': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "account.update": {
+            'account.update': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "account.delete": {
+            'account.delete': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
@@ -62,14 +53,14 @@ winkstart.module('voip', 'account',
         }
     },
 
-    /* Bootstrap routine - run when the module is first loaded */
     function(args) {
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Accounts',
             icon: 'account',
             weight: '0'
@@ -77,115 +68,298 @@ winkstart.module('voip', 'account',
     },
 
     {
-        validateForm: function(state) {
-            var THIS = this;
-            
-            $(THIS.config.validation).each(function(k, v) {
-                if(state == undefined) {
-                    winkstart.validate.add($(v.name), v.regex);
-                } else if (state == 'save') {
-                    winkstart.validate.save($(v.name), v.regex);
-                }
-            });
+        save_account: function(form_data, data, success, error) {
+            var THIS = this,
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+
+            if(typeof data.data == 'object' && data.data.id) {
+                winkstart.request(true, 'account.update', {
+                        account_id: data.data.id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: normalized_data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
+                    }
+                );
+            }
+            else {
+                winkstart.request(true, 'account.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: normalized_data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'create');
+                        }
+                    }
+                );
+            }
         },
 
-        saveAccount: function(account_id, form_data) {
+        edit_account: function(data, _parent, _target, _callback) {
+            var THIS = this,
+                parent = _parent || $('#account-content'),
+                target = _target || $('#account-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_account({ id: _data.data.id }, parent, target, callbacks);
+                    },
+
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function() {
+                        target.empty();
+
+                        THIS.render_list(parent);
+                    },
+
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
+                defaults = {
+                    data: {
+                        caller_id: {
+                            internal: {},
+                            external: {}
+                        },
+                        vm_to_email: {}
+                    },
+                    field_data: {}
+                };
+
+            if(typeof data == 'object' && data.id) {
+                winkstart.request(true, 'account.get', {
+                        account_id: data.id,
+                        api_url: winkstart.apps['voip'].api_url
+                    },
+                    function(_data, status) {
+                        THIS.render_account($.extend(true, defaults, _data), target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
+                    }
+                );
+            }
+            else {
+                THIS.render_account(defaults, target, callbacks);
+
+                if(typeof callbacks.after_render == 'function') {
+                    callbacks.after_render();
+                }
+            }
+        },
+
+        delete_account: function(data, success, error) {
             var THIS = this;
 
-            /* Check validation before saving */
-            THIS.validateForm('save');
-
-            if(!$('.invalid').size()) {
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.data = form_data;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-
-                /* Is this a create or edit? See if there's a known ID */
-                if (account_id) {
-                    /* EDIT */
-                    rest_data.account_id = account_id;
-                    winkstart.postJSON('account.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editAccount({
-                            id: account_id
-                        });
-                        if(account_id == winkstart.apps['voip'].account_id) {
-                            $('#my_account').html('&nbsp;'+json.data.name);
+            if(typeof data.data == 'object' && data.data.id) {
+                winkstart.request(true, 'account.delete', {
+                        account_id: data.data.id,
+                        api_url: winkstart.apps['voip'].api_url
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
                         }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
+            }
+        },
+
+        clean_form_data: function(form_data) {
+            form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g, '');
+
+            form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g, '');
+
+            return form_data;
+        },
+
+        normalize_data: function(data) {
+            $.each(data.caller_id, function(key, val) {
+                $.each(val, function(_key, _val) {
+                    if(_val == '') {
+                        delete val[_key];
+                    }
+                });
+
+                if($.isEmptyObject(val)) {
+                    delete data.caller_id[key];
+                }
+            });
+
+            if($.isEmptyObject(data.caller_id)) {
+                delete data.caller_id;
+            }
+
+            $.each(data.vm_to_email, function(key, val) {
+                if(val == '') {
+                    delete data.vm_to_email[key];
+                }
+            });
+
+            if($.isEmptyObject(data.vm_to_email)) {
+                delete data.vm_to_email;
+            }
+
+            return data;
+        },
+
+        render_account: function(data, target, callbacks) {
+            var THIS = this,
+                account_html = THIS.templates.edit.tmpl(data);
+
+            winkstart.validate.set(THIS.config.validation, account_html);
+
+            $('*[tooltip]', account_html).each(function() {
+                $(this).tooltip({ attach: account_html });
+            });
+
+            $('ul.settings1', account_html).tabs($('.pane > div', account_html));
+            $('ul.settings2', account_html).tabs($('.advanced_pane > div', account_html));
+
+            $('#name', account_html).focus();
+
+            $('.advanced_pane', account_html).hide();
+            $('.advanced_tabs_wrapper', account_html).hide();
+
+            $('#advanced_settings_link', account_html).click(function() {
+                if($(this).attr('enabled') === 'true') {
+                    $(this).attr('enabled', 'false');
+
+                    $('.advanced_pane', account_html).slideToggle(function() {
+                        $('.advanced_tabs_wrapper', account_html).animate({ width: 'toggle' });
                     });
-                } else {
-                    /* CREATE */
-                    rest_data.account_id = winkstart.apps['voip'].account_id;
+                }
+                else {
+                    $(this).attr('enabled', 'true');
 
-                    winkstart.putJSON('account.create', rest_data, function(data, status) {
-                            THIS.renderList();
-                            THIS.editAccount({
-                                id: data.data.id
-                            });
+                    $('.advanced_tabs_wrapper', account_html).animate({
+                            width: 'toggle'
                         },
-                        function(data, status) {
-                            /* Default back to the old way of doing things */
-                            rest_data.account_id = '';
-                            delete rest_data.json_string;
-
-                            winkstart.putJSON('account.create', rest_data, function(data, status) {
-                                THIS.renderList();
-                                THIS.editAccount({
-                                    id: data.data.id
-                                });
-                            });
+                        function() {
+                            $('.advanced_pane', account_html).slideToggle();
                         }
                     );
                 }
-            } else {
-                alert('Please correct errors that you have on the form.');
-            }
-        },
-
-        /*
-         * Create/Edit account properties (don't pass an ID field to cause a create instead of an edit)
-         */
-        editAccount: function(data){
-            $('#account-view').empty();
-            var THIS = this;
-            var form_data = {
-                data: { caller_id: { internal: { }, external: {} }, vm_to_email: {}},   
-                field_data: THIS.config.formData,
-                value: {}
-            };
-
-            if (data && data.id) {
-                winkstart.getJSON('account.get', {
-                    crossbar: true,
-                    account_id: data.id,
-                    api_url: winkstart.apps['voip'].api_url,
-                }, function(json, xhr) {
-                    $.extend(true, form_data, json);
-
-                    THIS.renderAccount(form_data);
-                });
-            } else {
-                /* This is a new account - pass along empty params */
-                THIS.renderAccount(form_data);
-            }
-            
-        },
-
-        deleteAccount: function(account_id) {
-            var THIS = this;
-            
-            var rest_data = {
-                crossbar: true,
-                account_id: account_id,
-                api_url: winkstart.apps['voip'].api_url
-            };
-
-            winkstart.deleteJSON('account.delete', rest_data, function (json, xhr) {
-                THIS.renderList();
-                $('#account-view').empty();
             });
+
+            $('.account-save', account_html).click(function(ev) {
+                ev.preventDefault();
+
+                winkstart.validate.is_valid(THIS.config.validation, account_html, function() {
+                        var form_data = form2object('account-form');
+
+                        THIS.clean_form_data(form_data);
+
+                        if('field_data' in data) {
+                            delete data.field_data;
+                        }
+
+                        THIS.save_account(form_data, data, callbacks.save_success, callbacks.save_error);
+                    },
+                    function() {
+                        alert('There were errors on the form, please correct!');
+                    }
+                );
+            });
+
+            $('.account-delete', account_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+            });
+
+            $('.account-switch', account_html).click(function(ev) {
+                ev.preventDefault();
+
+                if(confirm('Do you really want to use ' + data.data.name + '\'s account?')) {
+                    if(!('masquerade' in winkstart.apps['voip'])) {
+                        winkstart.apps['voip'].masquerade = [];
+                    }
+
+                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
+
+                    winkstart.apps['voip'].account_id = data.data.id;
+
+                    THIS.masquerade_account(data.data.name);
+
+                    alert('You are now using ' + data.data.name + '\'s account');
+
+                    winkstart.publish('account.activate');
+                }
+            });
+
+            (target)
+                .empty()
+                .append(account_html);
+        },
+
+        render_list: function(parent) {
+            var THIS = this;
+
+            winkstart.request('account.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    var map_crossbar_data = function(data) {
+                        var new_list = [];
+
+                        if(data.length > 0) {
+                            $.each(data, function(key, val) {
+                                new_list.push({
+                                    id: val.id,
+                                    title: val.name || '(no name)'
+                                });
+                            });
+                        }
+
+                        new_list.sort(function(a, b) {
+                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+                        });
+
+                        return new_list;
+                    };
+
+                    $('#account-listpanel', parent)
+                        .empty()
+                        .listpanel({
+                            label: 'Accounts',
+                            identifier: 'account-listview',
+                            new_entity_label: 'Add Account',
+                            data: map_crossbar_data(data.data),
+                            publisher: winkstart.publish,
+                            notifyMethod: 'account.edit',
+                            notifyCreateMethod: 'account.edit',
+                            notifyParent: parent
+                        });
+
+                }
+            );
         },
 
         masquerade_account: function(account_name) {
@@ -204,7 +378,7 @@ winkstart.module('voip', 'account',
                         },
                         function(data, status) {
                             winkstart.apps['voip'].account_id = data.data.id;
-                            
+
                             THIS.masquerade_account(data.data.name);
 
                             winkstart.publish('voip.activate');
@@ -223,201 +397,15 @@ winkstart.module('voip', 'account',
             });
         },
 
-        /**
-         * Draw account fields/template and populate data, add validation. Works for both create & edit
-         */
+        activate: function(parent) {
+            var THIS = this,
+                account_html = THIS.templates.account.tmpl();
 
-        cleanFormData: function(form_data) {
+            (parent || $('#ws-content'))
+                .empty()
+                .append(account_html);
 
-            form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,"");
-            form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,"");
-    
-            if(form_data.caller_id.internal.number == '' && form_data.caller_id.internal.name == '') delete form_data.caller_id.internal;
-            if(form_data.caller_id.external.number == '' && form_data.caller_id.external.name == '') delete form_data.caller_id.external;
-
-            return form_data;
-        },
-
-        renderAccount: function(form_data){
-            var THIS = this;
-            var account_id = form_data.data.id;
-            
-            /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editAccount.tmpl(form_data).appendTo( $('#account-view') );
-            winkstart.cleanForm();
-
-            /* Initialize form field validation */
-            THIS.validateForm();
-
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-            $('#name').focus();
-            
-            $(".advanced_pane").hide();
-            $(".advanced_tabs_wrapper").hide();
-
-            $("#advanced_settings_link").click(function(event) {
-                if($(this).attr("enabled")=="true") {
-                    $(this).attr("enabled", "false");
-                    $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
-                    });
-                }
-                else {
-                    $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
-                        $(".advanced_pane").slideToggle();
-                    });
-                }
-            });
-
-            /* Listen for the submit event (i.e. they click "save") */
-            $('.account-save').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                /* Grab all the form field data */
-                var form_data = form2object('account-form');
-        
-                form_data = THIS.cleanFormData(form_data);    
-    
-                THIS.saveAccount(account_id, form_data);
-
-                return false;
-            });
-
-            $('.account-cancel').click(function(event) {
-                event.preventDefault();
-
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
-                $('#account-view').empty();
-
-                return false;
-            });
-            
-            $('.account-switch').click(function(event) {
-                event.preventDefault();
-
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
-                if(confirm('Do you really want to use ' + form_data.data.name + '\'s account?')) {
-                    if(!('masquerade' in winkstart.apps['voip'])) {
-                        winkstart.apps['voip'].masquerade = [];
-                    }
-
-                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
-
-                    winkstart.apps['voip'].account_id = form_data.data.id;
-
-                    THIS.masquerade_account(form_data.data.name); 
-
-                    alert('You are now using ' + form_data.data.name + '\'s account');
-
-                    winkstart.publish('account.activate');
-                }
-                else {
-                } 
- 
-                return false;
-            });
-
-            $('.account-delete').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-                
-                THIS.deleteAccount(account_id);
-
-                return false;
-            });
-            
-            $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
-            });
-
-        },
-
-        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
-        renderList: function(){
-            var THIS = this;
-
-            winkstart.getJSON('account.list', {
-                crossbar: true,
-                api_url: winkstart.apps['voip'].api_url,
-                account_id: winkstart.apps['voip'].account_id
-            }, function (json, xhr) {
-
-                // List Data that would be sent back from server
-                function map_crossbar_data(crossbar_data){
-                    var new_list = [];
-                    if(crossbar_data.length > 0) {
-                        _.each(crossbar_data, function(elem){
-                            new_list.push({
-                                id: elem.id,
-                                title: elem.name
-                            });
-                        });
-                    }
-                    new_list.sort(function(a, b) {
-                        var answer = 1;
-                        if(a.title == undefined) a.title = 'undefined';
-                        if(b.title == undefined) b.title = 'undefined';
-                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                        
-                        return answer;
-                    });
-                    return new_list;
-                }
-
-                var options = {};
-                options.label = 'Accounts Module';
-                options.identifier = 'account-module-listview';
-                options.new_entity_label = 'Add Account';
-                options.data = map_crossbar_data(json.data);
-                options.publisher = winkstart.publish;
-                options.notifyMethod = 'account.list-panel-click';
-                options.notifyCreateMethod = 'account.edit-account';  /* Edit with no ID = Create */
-
-                $("#account-listpanel").empty();
-                $("#account-listpanel").listpanel(options);
-
-            });
-        },
-
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
-        activate: function(data) {
-            $('#ws-content').empty();
-            var THIS = this;
-            if(winkstart.apps['voip'].auth_token != null)
-            {
-                this.templates.account.tmpl({}).appendTo( $('#ws-content') );
-
-                winkstart.loadFormHelper('forms');
-
-                winkstart.publish('layout.updateLoadedModule', {
-                    label: 'Accounts Management',
-                    module: this.__module
-                });
-
-                $('.edit-account').live({
-                    click: function(evt){
-                        var target = evt.currentTarget;
-                        var account_id = target.getAttribute('rel');
-                        winkstart.publish('account.edit-account', {
-                            'account_id' : account_id
-                        });
-                    }
-                });
-
-                THIS.renderList();
-            }
+            THIS.render_list(account_html);
         }
     }
 );
