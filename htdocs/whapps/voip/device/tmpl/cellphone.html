@@ -26,10 +26,10 @@
                                     </span>
                                     <select name="owner_id" id="owner_id">
                                     {{each field_data.users}}
-                                        {{if data.owner_id == owner_id}}
-                                        <option value="${owner_id}" selected="selected">${title}</option>
+                                        {{if data.owner_id == id}}
+                                            <option value="${id}" selected="selected">${first_name} ${last_name}</option>
                                         {{else}}
-                                        <option value="${owner_id}">${title}</option>
+                                            <option value="${id}">${first_name} ${last_name}</option>
                                         {{/if}}
                                     {{/each}}
                                     </select>
@@ -53,6 +53,7 @@
                                     {{/if}}
                                 </li>
                             </ul>
+                            <input type="hidden" value="${data.device_type}" name="device_type"/>
                         </fieldset>
 
                         <div class="clear"></div>
@@ -100,7 +101,6 @@
                                         <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
                                         {{/if}}
                                     </li>
-                                    <input type="hidden" value="${data.device_type}" name="device_type"/>
                                 </ul>
 
                             </fieldset>
@@ -115,7 +115,6 @@
                         {{if data.id}}
                             <li><a class="device-delete delete-btn" href="#">Delete</a></li>
                         {{/if}}
-                        <li><a class="device-cancel" href="#">Cancel</a></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
