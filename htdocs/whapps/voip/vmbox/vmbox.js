@@ -117,7 +117,7 @@ winkstart.module('voip', 'vmbox', {
             }
         },
 
-        edit_vmbox: function(data, _parent, _target, _callbacks){
+        edit_vmbox: function(data, _parent, _target, _callbacks) {
             var THIS = this,
                 parent = _parent || $('#vmbox-content'),
                 target = _target || $('#vmbox-view', parent),
@@ -210,7 +210,7 @@ winkstart.module('voip', 'vmbox', {
         delete_vmbox: function(data, success, error) {
             var THIS = this;
 
-            if(data.data.id) {
+            if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'vmbox.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -255,17 +255,17 @@ winkstart.module('voip', 'vmbox', {
                     $(this).attr('enabled', 'false');
 
                     $('.advanced_pane', vmbox_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper').animate({ width: 'toggle' });
+                        $('.advanced_tabs_wrapper', vmbox_html).animate({ width: 'toggle' });
                     });
                 }
                 else {
                     $(this).attr('enabled', 'true');
                     
-                    $('.advanced_tabs_wrapper').animate({
+                    $('.advanced_tabs_wrapper', vmbox_html).animate({
                             width: 'toggle' 
                         },
                         function() {
-                            $('.advanced_pane').slideToggle();
+                            $('.advanced_pane', vmbox_html).slideToggle();
                         }
                     );
                 }
@@ -308,7 +308,7 @@ winkstart.module('voip', 'vmbox', {
             $('.vmbox-delete', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_vmbox(data, callbacks.delete_success, callbacks.save_success);
+                THIS.delete_vmbox(data, callbacks.delete_success, callbacks.delete_error);
             });
 
             (target)
