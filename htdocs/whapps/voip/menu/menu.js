@@ -189,7 +189,7 @@ winkstart.module('voip', 'menu', {
         delete_menu: function(data, success, error) {
             var THIS = this;
             
-            if(data.data.id) {
+            if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'menu.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
