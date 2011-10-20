@@ -1,380 +1,380 @@
 winkstart.module('voip', 'conference', {
-    css: [
-    'css/style.css'
-    ],
+        css: [
+            'css/style.css'
+        ],
 
-    templates: {
-        conference: 'tmpl/conference.html',
-        editConference: 'tmpl/edit.html',
-    },
+        templates: {
+            conference: 'tmpl/conference.html',
+            edit: 'tmpl/edit.html'
+            //conference_callflow: 'tmpl/conference_callflow.html'
+        },
 
-    subscribe: {
-        'conference.activate' : 'activate',
-        'conference.list-panel-click' : 'editConference',
-        'conference.create-conference' : 'createConference',
-        'conference.edit-conference' : 'editConference'
-    },
+        subscribe: {
+            'conference.activate': 'activate',
+            'conference.edit': 'edit_conference',
+        },
 
-    formData: {
-    },
-    
-    resources: {
-        "conference.list": {
-            url: '{api_url}/accounts/{account_id}/conferences',
-            contentType: 'application/json',
-            verb: 'GET'
+        resources: {
+            'conference.list': {
+                url: '{api_url}/accounts/{account_id}/conferences',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'conference.get': {
+                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'conference.create': {
+                url: '{api_url}/accounts/{account_id}/conferences',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'conference.update': {
+                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            'conference.delete': {
+                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
+            },
+            'user.list': {
+                url: '{api_url}/accounts/{account_id}/users',
+                contentType: 'application/json',
+                verb: 'GET'
+            }
         },
-        "conference.get": {
-            url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'application/json',
-            verb: 'GET'
-        },
-        "conference.create": {
-            url: '{api_url}/accounts/{account_id}/conferences',
-            contentType: 'application/json',
-            verb: 'PUT'
-        },
-        "conference.update": {
-            url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'application/json',
-            verb: 'POST'
-        },
-        "conference.delete": {
-            url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-            contentType: 'application/json',
-            verb: 'DELETE'
-        },
-        "user.list": {
-            url: '{api_url}/accounts/{account_id}/users',
-            contentType: 'application/json',
-            verb: 'GET'
-        }
-    },
-    validation: [
-        {name: '#name', regex: /^.+$/},
-        {name: '#member_pins', regex: /^[a-z0-9A-Z]*$/},
-        {name: '#conference_numbers', regex: /^[0-9]+$/},
-        {name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/}
-    ]
-},
-function(args) {
-    /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-    winkstart.registerResources(this.__whapp, this.config.resources);
 
-    winkstart.publish('subnav.add', {
-        whapp: 'voip',
-        module: this.__module,
-        label: 'Conferences',
-        icon: 'conference',
-        weight: '05'
-    });
-},
-{	
-    validateForm: function(state) {
+        validation: [
+            { name: '#name', regex: /^.+$/ },
+            { name: '#member_pins', regex: /^[a-z0-9A-Z]*$/ },
+            { name: '#conference_numbers', regex: /^[0-9]+$/ },
+            { name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/ }
+        ]
+    },
+    function(args) {
         var THIS = this;
 
-        $(THIS.config.validation).each(function(k, v) {
-            if(state == undefined) {
-               winkstart.validate.add($(v.name), v.regex);
-            } else if (state == 'save') {
-               winkstart.validate.save($(v.name), v.regex);
-            }
+        winkstart.registerResources(this.__whapp, this.config.resources);
+
+        winkstart.publish('subnav.add', {
+            whapp: 'voip',
+            module: this.__module,
+            label: 'Conferences',
+            icon: 'conference',
+            weight: '05'
         });
     },
-    _getPinNumber: function(start_pin) {
-        var finalPinMember = '';
-        
-        $.each(start_pin, function(index, value) {
-            if(!(isNaN(value))) {
-                finalPinMember += value;
-            } else {
-                if(value.match(/^[aAbBcC]$/)) {
-                    finalPinMember += 2
-                } else if(value.match(/^[dDeEfF]$/)) {
-                    finalPinMember += 3
-                } else if(value.match(/^[gGhHiI]$/)) {
-                    finalPinMember += 4
-                } else if(value.match(/^[jJkKlL]$/)) {
-                    finalPinMember += 5
-                } else if(value.match(/^[mMnNoO]$/)) {
-                    finalPinMember += 6
-                } else if(value.match(/^[pPqQrRsS]$/)) {
-                    finalPinMember += 7
-                } else if(value.match(/^[tTuUvV]$/)) {
-                    finalPinMember += 8
-                } else if(value.match(/^[wWxXyYzZ]$/)) {
-                    finalPinMember += 9
+    {	
+        get_pin_number: function(start_pin) {
+            var finalPinMember = '';
+            
+            $.each(start_pin, function(index, value) {
+                if(!(isNaN(value))) {
+                    finalPinMember += value;
+                } else {
+                    if(value.match(/^[aAbBcC]$/)) {
+                        finalPinMember += 2
+                    } else if(value.match(/^[dDeEfF]$/)) {
+                        finalPinMember += 3
+                    } else if(value.match(/^[gGhHiI]$/)) {
+                        finalPinMember += 4
+                    } else if(value.match(/^[jJkKlL]$/)) {
+                        finalPinMember += 5
+                    } else if(value.match(/^[mMnNoO]$/)) {
+                        finalPinMember += 6
+                    } else if(value.match(/^[pPqQrRsS]$/)) {
+                        finalPinMember += 7
+                    } else if(value.match(/^[tTuUvV]$/)) {
+                        finalPinMember += 8
+                    } else if(value.match(/^[wWxXyYzZ]$/)) {
+                        finalPinMember += 9
+                    }
                 }
-            }
-        })
-        
-        return finalPinMember;
-    },
-    saveConference: function(conference_id, form_data) {
+            })
+            
+            return finalPinMember;
+        },
+
+        save_conference: function(form_data, data, success, error) {
             var THIS = this;
 
-            /* Check validation before saving */
-            THIS.validateForm('save');
-
-            if(!$('.invalid').size()) {
-                /* Construct the JSON we're going to send */
-                var rest_data = {};
-                rest_data.crossbar = true;
-                rest_data.account_id = winkstart.apps['voip'].account_id;
-                rest_data.api_url = winkstart.apps['voip'].api_url;
-                rest_data.data = form_data;
-
-                /* Is this a create or edit? See if there's a known ID */
-                if (conference_id) {
-                    /* EDIT */
-                    rest_data.conference_id = conference_id;
-                    winkstart.postJSON('conference.update', rest_data, function (json, xhr) {
-                        /* Refresh the list and the edit content */
-                        THIS.renderList();
-                        THIS.editConference({
-                            id: conference_id
-                        });
-                    });
-                } else {
-                    /* CREATE */
-
-                    /* Actually send the JSON data to the server */
-                    winkstart.putJSON('conference.create', rest_data, function (json, xhr) {
-                        THIS.renderList();
-                        THIS.editConference({
-                            id: json.data.id
-                        });
-                    });
-                }
-            } else {
-                alert('Please correct errors that you have on the form.');
+            if(typeof data.data == 'object' && data.data.id) {
+                winkstart.request(true, 'conference.update', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        conference_id: data.data.id,
+                        data: $.extend(true, {}, data.data, form_data)
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'update');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'update');
+                        }
+                    }
+                );
+            }
+            else {
+                winkstart.request(true, 'conference.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: form_data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status, 'create');
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status, 'create');
+                        }
+                    }
+                );
             }
         },
-        /*
-         * Create/Edit conference properties (don't pass an ID field to cause a create instead of an edit)
-         */
-        editConference: function(data){
-            $('#conference-view').empty();
-            var THIS = this;
-            var form_data = {
-                data: {moderator_play_name: "true", member_play_name: "true", member: {pins:[]}, moderator: {pins:[]}, conference_numbers:[]},
-            };
 
-            form_data.field_data = THIS.config.formData;
-            form_data.field_data.users = [];
-            winkstart.getJSON('user.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id, api_url: winkstart.apps['voip'].api_url}, function (json, xhr) {
-                    var listUsers = [{owner_id: '', title: 'None'}];
-                    if(json.data.length > 0) {
-                        _.each(json.data, function(elem){
-                            var title = elem.first_name + ' ' + elem.last_name;
-                            listUsers.push({
-                                owner_id: elem.id,
-                                title: title
-                            });
-                        });
-                        form_data.field_data.users = listUsers;
-                } else {
-                    listUsers.push({owner_id: '!', title: 'none'});
-                    form_data.field_data.users = listUsers;
-                }
+        edit_conference: function(data, _parent, _target, _callbacks){
+            var THIS = this,
+                parent = _parent || $('#conference-content'),
+                target = _target || $('#conference-view', parent),
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    save_success: _callbacks.save_success || function(_data) {
+                        THIS.render_list(parent);
+
+                        THIS.edit_conference({ id: _data.data.id }, parent, target, callbacks);
+                    },
+                    
+                    save_error: _callbacks.save_error,
+
+                    delete_success: _callbacks.delete_success || function() {
+                        target.empty(),
+        
+                        THIS.render_list(parent);
+                    },
+            
+                    delete_error: _callbacks.delete_error,
+
+                    after_render: _callbacks.after_render
+                },
+                defaults = {
+                    data: {
+                        moderator_play_name: true, 
+                        member_play_name: true, 
+                        member: { pins: [] }, 
+                        moderator: { pins: [] }, 
+                        conference_numbers: []
+                    },
+                    field_data: {
+                        users: [],
+                    }
+                };
                 
-                if (data && data.id) {
-                /* This is an existing conference - Grab JSON data from server for conference_id */
-                winkstart.getJSON('conference.get', {
-                    crossbar: true,
+            winkstart.request(true, 'user.list', {
                     account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    conference_id: data.id
-                }, function(json, xhr) {
-                    /* On success, take JSON and merge with default/empty fields */
-                    $.extend(true, form_data, json);
-                    THIS.renderConference(form_data);
-                });
-                } else {
-                /* This is a new conference - pass along empty params */
-                THIS.renderConference(form_data);
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    _data.data.unshift({
+                        id: '',
+                        first_name: '- No',
+                        last_name: 'owner -'
+                    });
+
+                    defaults.field_data.users = _data.data;
+
+                    if(typeof data == 'object' && data.id) {
+                        winkstart.request(true, 'conference.get', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                conference_id: data.id
+                            },
+                            function(_data, status) {
+                                THIS.render_conference($.extend(true, defaults, _data), target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        THIS.render_conference(defaults, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();            
+                        } 
+                    }                            
                 }
+            );
+        },
 
+        delete_conference: function(data, success, error) {
+            var THIS = this;
+
+            if(data.data.id) {
+                winkstart.request(true, 'conference.delete', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        conference_id: data.data.id
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        } 
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
+            }                     
+        },
+
+        render_conference: function(data, target, callbacks){
+            var THIS = this,
+                conference_html = THIS.templates.edit.tmpl(data);
+
+            winkstart.validate.set(THIS.config.validation, conference_html);
+
+            $('*[tooltip]', conference_html).each(function() {
+                $(this).tooltip({ attach: conference_html });
             });
 
-        },
-         deleteConference: function(conference_id) {
-            var THIS = this;
+            $('ul.settings1', conference_html).tabs($('.pane > div', conference_html));
+            $('ul.settings2', conference_html).tabs($('.advanced_pane > div', conference_html));
 
-            var rest_data = {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url,
-                conference_id: conference_id
-            };
+            $('#name', conference_html).focus();
+            
+            $('.advanced_pane', conference_html).hide();
+            $('.advanced_tabs_wrapper', conference_html).hide();
 
-            /* Actually send the JSON data to the server */
-            winkstart.deleteJSON('conference.delete', rest_data, function (json, xhr) {
-                THIS.renderList();
-                $('#conference-view').empty();
-            });
-        },
-        cleanFormData: function(form_data){
-            var THIS = this;
-
-            if(form_data.member.pins[0] != '') { 
-                form_data.member.pins[0] = THIS._getPinNumber(form_data.member.pins[0].split(''));
-            } else delete form_data.member;
-
-            if(form_data.moderator.pins[0] != '') {
-                form_data.moderator.pins[0] = THIS._getPinNumber(form_data.moderator.pins[0].split(''));
-            } else delete form_data.moderator;   
-
-            return form_data;
-        },
-        renderConference: function(form_data){
-            var THIS = this;
-            var conference_id = form_data.data.id;
-
-            /* Paint the template with HTML of form fields onto the page */
-            THIS.templates.editConference.tmpl(form_data).appendTo( $('#conference-view') );
-
-            winkstart.cleanForm();
-
-            /* Initialize form field validation */
-            THIS.validateForm();
-
-            $("ul.settings1").tabs("div.pane > div");
-            $("ul.settings2").tabs("div.advanced_pane > div");
-            $('#name').focus();
-
-            $(".advanced_pane").hide();
-            $(".advanced_tabs_wrapper").hide();
-
-            $("#advanced_settings_link").click(function(event) {
-                if($(this).attr("enabled")=="true") {
-                    $(this).attr("enabled", "false");
-                    $(".advanced_pane").slideToggle(function(event) {
-                        $(".advanced_tabs_wrapper").animate({width: 'toggle'});
+            $('#advanced_settings_link', conference_html).click(function() {
+                if($(this).attr('enabled') === 'true') {
+                    $(this).attr('enabled', 'false');
+                    $('.advanced_pane', conference_html).slideToggle(function() {
+                        $('.advanced_tabs_wrapper', conference_html).animate({width: 'toggle'});
                     });
                 }
                 else {
-                    $(this).attr("enabled", "true");
-                    $(".advanced_tabs_wrapper").animate({width: 'toggle'}, function(event) {
-                        $(".advanced_pane").slideToggle();
+                    $(this).attr('enabled', 'true');
+
+                    $('.advanced_tabs_wrapper', conference_html).animate({width: 'toggle'}, function() {
+                        $('.advanced_pane', conference_html).slideToggle();
                     });
                 }
             });
 
-            /* Listen for the submit event (i.e. they click "save") */
-            $('.conference-save').click(function(event) {
-                /* Save the data after they've clicked save */
+            $('.conference-save', conference_html).click(function(ev) {
+                ev.preventDefault();
+            
+                winkstart.validate.is_valid(THIS.config.validation, conference_html, function() {
+                        var form_data = form2object('conference-form');
 
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                /* Grab all the form field data */
-                var form_data = form2object('conference-form');
-
-                form_data = THIS.cleanFormData(form_data);
-
-                THIS.saveConference(conference_id, form_data);
-
-                return false;
-            });
-
-            $('.conference-cancel').click(function(event) {
-                event.preventDefault();
-
-                /* Cheat - just delete the main content area. Nothing else needs doing really */
-                $('#conference-view').empty();
-
-                return false;
-            });
-
-            $('.conference-delete').click(function(event) {
-                /* Save the data after they've clicked save */
-
-                /* Ignore the normal behavior of a submit button and do our stuff instead */
-                event.preventDefault();
-
-                THIS.deleteConference(conference_id);
-
-                return false;
-            });
-
-            $.each($('body').find('*[tooltip]'), function(){
-                $(this).tooltip({attach:'body'});
-            });
-        },
-        /* Builds the generic data list on the left hand side. It's responsible for gathering the data from the server
-         * and populating into our standardized data list "thing".
-         */
-        renderList: function(){
-            var THIS = this;
-
-            winkstart.getJSON('conference.list', {
-                crossbar: true,
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-            }, function (json, xhr) {
-
-                // List Data that would be sent back from server
-                function map_crossbar_data(crossbar_data){
-                    var new_list = [];
-                    if(crossbar_data.length > 0) {
-                        _.each(crossbar_data, function(elem){
-                            new_list.push({
-                                id: elem.id,
-                                title: elem.name
-                            });
-                        });
+                        THIS.clean_form_data(form_data);
+    
+                        if('field_data' in data) {
+                            delete data.field_data;
+                        }
+        
+                        THIS.save_conference(form_data, data, callbacks.save_success, callbacks.save_error);
+                    },
+                    function() {
+                        alert('There were errors on the form, please correct!');
                     }
-                    new_list.sort(function(a, b) {
-                        var answer;
-                        a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
-                        return answer;
-                    });
-
-                    return new_list;
-                }
-
-                var options = {};
-                options.label = 'Conference Module';
-                options.identifier = 'conference-module-listview';
-                options.new_entity_label = 'Add Conference';
-                options.data = map_crossbar_data(json.data);
-                options.publisher = winkstart.publish;
-                options.notifyMethod = 'conference.list-panel-click';
-                options.notifyCreateMethod = 'conference.edit-conference';  /* Edit with no ID = Create */
-
-                $("#conference-listpanel").empty();
-                $("#conference-listpanel").listpanel(options);
-
+                );
             });
+
+            $('.conference-delete', conference_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
+            });
+            
+            (target)
+                .empty()
+                .append(conference_html);
         },
-        /* This runs when this module is first loaded - you should register to any events at this time and clear the screen
-         * if appropriate. You should also attach to any default click items you want to respond to when people click
-         * on them. Also register resources.
-         */
-        activate: function(data) {
-            $('#ws-content').empty();
+
+        clean_form_data: function(form_data){
             var THIS = this;
-            this.templates.conference.tmpl({}).appendTo( $('#ws-content') );
 
-            winkstart.loadFormHelper('forms');
+            if(form_data.member.pins[0] != '') { 
+                form_data.member.pins[0] = THIS.get_pin_number(form_data.member.pins[0].split(''));
+            }
+            else {
+                delete form_data.member;
+            }
 
-            winkstart.publish('layout.updateLoadedModule', {
-                label: 'Conference Management',
-                module: this.__module
-            });
+            if(form_data.moderator.pins[0] != '') {
+                form_data.moderator.pins[0] = THIS.get_pin_number(form_data.moderator.pins[0].split(''));
+            } 
+            else {
+                delete form_data.moderator;   
+            }
 
-            $('.edit-conference').live({
-                click: function(evt){
-                    var target = evt.currentTarget;
-                    var conference_id = target.getAttribute('rel');
-                    winkstart.publish('conference.edit-conference', {
-                        'conference_id' : conference_id
+            return form_data;
+        },
+
+        render_list: function(parent){
+            var THIS = this;
+
+            winkstart.request(true, 'conference.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    var map_crossbar_data = function(data) {
+                        var new_list = [];
+
+                        if(data.length > 0) {
+                            $.each(data, function(key, val) {
+                                new_list.push({
+                                    id: val.id,
+                                    title: val.name || '(name)'
+                                });
+                            });
+                        }
+                    
+                        new_list.sort(function(a, b) {
+                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+                        });
+
+                        return new_list;
+                };
+
+                $('#conference-listpanel', parent) 
+                    .empty()
+                    .listpanel({
+                        label: 'Conferences',
+                        identifier: 'conference-listview',
+                        new_entity_label: 'Add Conference',
+                        data: map_crossbar_data(data.data),
+                        publisher: winkstart.publish,
+                        notifyMethod: 'conference.edit',
+                        notifyCreateMethod: 'conference.edit',
+                        notifyParent: parent
                     });
-                }
-            });
+               });
+        },
+               
+        activate: function(parent) {
+            var THIS = this,
+                conference_html = THIS.templates.conference.tmpl();
 
-            THIS.renderList();
+            (parent || $('#ws-content'))
+                .empty()
+                .append(conference_html);
+
+            THIS.render_list(conference_html);
         }
     }
 );

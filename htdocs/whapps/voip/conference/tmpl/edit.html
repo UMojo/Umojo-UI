@@ -34,10 +34,10 @@
                                 </span>
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
-                                    {{if data.owner_id == owner_id}}
-                                    <option value="${owner_id}" selected="selected">${title}</option>
+                                    {{if data.owner_id == id}}
+                                    <option value="${id}" selected="selected">${first_name} ${last_name}</option>
                                     {{else}}
-                                    <option value="${owner_id}">${title}</option>
+                                    <option value="${id}">${first_name} ${last_name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
@@ -179,7 +179,6 @@
                 {{if data.id}}
                     <li><a class="conference-delete delete-btn" href="#">Delete</a></li>
                 {{/if}}
-                <li><a class="conference-cancel" href="#">Cancel</a></li>
             </ul>
         </div>
             
