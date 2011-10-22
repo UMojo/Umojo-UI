@@ -29,7 +29,13 @@
                     <label for="gateways_invite_format">Invite Format</label>
                 </span>
                 <select name="gateways[${index}].invite_format" id="gateways_invite_format">
-                    {{tmpl(field_data.invite_format, {selectedVal: data.invite_format }) "#optionList"}}
+                    {{each(key, val) field_data.gateways.invite_formats}}
+                        {{if data.invite_format == key}}
+                            <option value="${key}" selected="selected">${val}</option>
+                        {{else}}
+                            <option value="${key}">${val}</option>
+                        {{/if}}
+                    {{/each}}
                 </select>
             </li>
             <li>

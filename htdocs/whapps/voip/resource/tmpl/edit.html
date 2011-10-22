@@ -41,7 +41,7 @@
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
-                            <li>    
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="The destination server domain or IP">
                                     <span class="tooltip"/>
                                     <label for="gateways_server">Server</label>
@@ -94,7 +94,7 @@
                     <h2 id="advanced_settings_link">Advanced Settings</h2>
                 </span>
 
-                <span class="advanced_tabs_wrapper">  
+                <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon sip"/>Gateway</a></li>
                         <li><a href="#"><span  class="icon audio"/>Gateways Codecs</a></li>
@@ -113,12 +113,20 @@
                     <fieldset>
                         <legend>Audio Codecs</legend>
                         <ul class="controls">
-                            {{tmpl(field_data.codecs, {selectedValues: data.gateways[0].codecs }) "#checkboxList"}}
+                            {{each(key, val) field_data.gateways.codecs}}
+                            <li>
+                                {{if functions.inArray(key, data.gateways[0].codecs)}}
+                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}" checked="checked"/>${val}
+                                {{else}}
+                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}"/>${val}
+                                {{/if}}
+                            </li>
+                            {{/each}}
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
-                </div> 
+                </div>
                 <div id="caller_id_options">
                     <fieldset>
                         <ul class="controls">
@@ -128,7 +136,13 @@
                                     <label for="caller_id_options_type">Type</label>
                                 </span>
                                 <select name="caller_id_options.type" id="caller_id_options_type">
-                                    {{tmpl(field_data.caller_id_options_type, {selectedVal: data.caller_id_options.type }) "#optionList"}}
+                                    {{each(key, val) field_data.caller_id_options.type}}
+                                        {{if data.caller_id_options.type == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
                                 </select>
                             </li>
                         </ul>
@@ -142,10 +156,9 @@
                 {{if data.id}}
                     <li><a class="resource-delete delete-btn" href="#">Delete</a></li>
                 {{/if}}
-                <li><a class="resource-cancel" href="#">Cancel</a></li>
             </ul>
         </div>
-            
+
         </form>
     </div>
 </div>
