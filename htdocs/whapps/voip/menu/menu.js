@@ -91,7 +91,7 @@ winkstart.module('voip', 'menu', {
                         }
                     }
                 );
-            } 
+            }
             else {
                 winkstart.request(true, 'menu.create', {
                         account_id: winkstart.apps['voip'].account_id,
@@ -124,7 +124,7 @@ winkstart.module('voip', 'menu', {
 
                         THIS.edit_menu({ id: _data.data.id }, parent, target, callbacks);
                     },
-                    
+
                     save_error: _callbacks.save_error,
 
                     delete_success: _callbacks.delete_success || function() {
@@ -174,7 +174,7 @@ winkstart.module('voip', 'menu', {
                                 }
                             }
                         );
-                    }   
+                    }
                     else {
                         THIS.render_menu(defaults, target, callbacks);
 
@@ -188,7 +188,7 @@ winkstart.module('voip', 'menu', {
 
         delete_menu: function(data, success, error) {
             var THIS = this;
-            
+
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'menu.delete', {
                         account_id: winkstart.apps['voip'].account_id,
@@ -248,7 +248,7 @@ winkstart.module('voip', 'menu', {
 
             $('.menu-save', menu_html).click(function(ev) {
                 ev.preventDefault();
-        
+
                 winkstart.validate.is_valid(THIS.config.validation, menu_html, function() {
                         var form_data = form2object('menu-form');
 
@@ -257,12 +257,12 @@ winkstart.module('voip', 'menu', {
                         if('field_data' in data) {
                             delete data.field_data;
                         }
-                                        
-                        THIS.save_menu(form_data, data, callbacks.save_success, callbacks.save_error);    
-                    }, 
+
+                        THIS.save_menu(form_data, data, callbacks.save_success, callbacks.save_error);
+                    },
                     function() {
                         alert('There were errors on the form, please correct!');
-                    } 
+                    }
                 );
             });
 
@@ -282,10 +282,10 @@ winkstart.module('voip', 'menu', {
             if(form_data.record_pin.length == 0) {
                 form_data.max_extension_length = 5;
                 delete form_data.record_pin;
-            }   
+            }
             else if(form_data.max_extension_length < form_data.record_pin.length) {
                 form_data.max_extension_length = form_data.record_pin.length;
-            } 
+            }
 
             if(form_data.hunt_allow == '') {
                 delete form_data.hunt_allow;
@@ -294,7 +294,7 @@ winkstart.module('voip', 'menu', {
             if(form_data.hunt_deny == '') {
                 delete form_data.hunt_deny;
             }
-            
+
             if(form_data.media.greeting == '') {
                 delete form_data.media.greeting;
             }
@@ -310,11 +310,11 @@ winkstart.module('voip', 'menu', {
             winkstart.request(true, 'menu.list', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
-                }, 
+                },
                 function (data, status) {
                     var map_crossbar_data = function(data) {
                        var new_list = [];
-        
+
                         if(data.length > 0) {
                             $.each(data, function(key, val) {
                                 new_list.push({
@@ -323,7 +323,7 @@ winkstart.module('voip', 'menu', {
                                 });
                             });
                         }
-                        
+
                         new_list.sort(function(a, b) {
                             return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
                         });
@@ -341,7 +341,7 @@ winkstart.module('voip', 'menu', {
                             publisher: winkstart.publish,
                             notifyMethod: 'menu.edit',
                             notifyCreateMethod: 'menu.edit',
-                            notifyParent: parent             
+                            notifyParent: parent
                         });
                 }
             );
@@ -425,7 +425,7 @@ winkstart.module('voip', 'menu', {
                         var id = node.getMetadata('id');
 
                         return (id) ? caption_map[id].name : '';
-                    }, 
+                    },
                     edit: function(node, callback) {
                         var _this = this;
 
@@ -508,6 +508,6 @@ winkstart.module('voip', 'menu', {
                     }
                 }
             });
-        }   
+        }
     }
 );
