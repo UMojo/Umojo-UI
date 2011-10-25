@@ -1,5 +1,4 @@
-winkstart.module('voip', 'resource',
-    {
+winkstart.module('voip', 'resource', {
         css: [
             'css/resource.css'
         ],
@@ -12,21 +11,21 @@ winkstart.module('voip', 'resource',
 
         subscribe: {
             'resource.activate': 'activate',
-            'resource.edit': 'edit_resource',
+            'resource.edit': 'edit_resource'
         },
 
         validation: [
-            { name: '#name', regex: /^\w+$/ },
-            { name: '#weight_cost', regex: /^[0-9]+$/ },
-            { name: '#rules', regex: /^.*$/ },
-            { name: '#flags', regex: /^.*$/ },
+            { name: '#name',                   regex: /^\w+$/ },
+            { name: '#weight_cost',            regex: /^[0-9]+$/ },
+            { name: '#rules',                  regex: /^.*$/ },
+            { name: '#flags',                  regex: /^.*$/ },
             { name: '#caller_id_options_type', regex: /^\w*$/ },
-            { name: '#gateways_server', regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-            { name: '#gateways_realm', regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-            { name: '#gateways_username', regex: /^\w+$/ },
-            { name: '#gateways_password', regex: /^[^\s]*$/ },
-            { name: '#gateways_prefix', regex: /^[\+]?[\#0-9]*$/ },
-            { name: '#gateways_suffix', regex: /^[0-9]*$/ },
+            { name: '#gateways_server',        regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
+            { name: '#gateways_realm',         regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
+            { name: '#gateways_username',      regex: /^\w+$/ },
+            { name: '#gateways_password',      regex: /^[^\s]*$/ },
+            { name: '#gateways_prefix',        regex: /^[\+]?[\#0-9]*$/ },
+            { name: '#gateways_suffix',        regex: /^[0-9]*$/ }
         ],
 
         resources: {
@@ -84,16 +83,18 @@ winkstart.module('voip', 'resource',
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
-            },
+            }
         }
     },
 
     function(args) {
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Resources',
             icon: 'resource',
             weight: '35'
@@ -101,23 +102,23 @@ winkstart.module('voip', 'resource',
     },
 
     {
-        save_resource: function(form_data, data, success, error, type) {
-            var THIS = this;
-            if(typeof data.data == 'object' && data.data.id && data.type) {
-                 winkstart.request(true, data.type + '_resource.update', {
+        save_resource: function(form_data, data, success, error) {
+            var THIS = this,
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+
+            if(typeof data.data == 'object' && data.data.id) {
+                 winkstart.request(true, normalized_data.type + '_resource.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         resource_id: data.data.id,
-                        data: $.extend(true, {}, data.data, form_data)
+                        data: normalized_data
                     },
                     function(_data, status) {
-                        _data.data.type = data.type;
                         if(typeof success == 'function') {
                             success(_data, status, 'update');
                         }
                     },
                     function(_data, status) {
-                        _data.data.type = data.type;
                         if(typeof error == 'function') {
                             error(_data, status, 'update');
                         }
@@ -125,19 +126,17 @@ winkstart.module('voip', 'resource',
                 );
             }
             else {
-                winkstart.request(true, type + '_resource.create', {
+                winkstart.request(true, normalized_data.type + '_resource.create', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        data: form_data
+                        data: normalized_data
                     },
                     function(_data, status) {
-                        _data.data.type = data.type;
                         if(typeof success == 'function') {
                             success(_data, status, 'create');
                         }
                     },
                     function(_data, status) {
-                        _data.data.type = data.type;
                         if(typeof error == 'function') {
                             error(_data, status, 'create');
                         }
@@ -146,20 +145,8 @@ winkstart.module('voip', 'resource',
             }
         },
 
-        generateRandomString: function(pLength){
-            var chars = '0123456789ABCDEFGHIJKLMNPQRSTUVWXTZabcdefghiklmnpqrstuvwxyz';
-            var sRandomString = '';
-            for (var i=0; i<pLength; i++) {
-                var rnum = Math.floor(Math.random() * chars.length);
-                sRandomString += chars.substring(rnum,rnum+1);
-            }
-            return sRandomString;
-        },
-
         edit_resource: function(data, _parent, _target, _callbacks, data_defaults) {
             var THIS = this,
-                generatedUsername = 'user_' + THIS.generateRandomString(6),
-                generatedPassword = THIS.generateRandomString(12),
                 parent = _parent || $('#resource-content'),
                 target = _target || $('#resource-view', parent),
                 _callbacks = _callbacks || {},
@@ -181,99 +168,89 @@ winkstart.module('voip', 'resource',
                     delete_error: _callbacks.delete_error,
 
                     after_render: _callbacks.after_render
-                };
-
-             winkstart.request(true, 'account.get', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                }, function(_data, status) {
-                    var account_realm = _data.data.realm;
-
-                    var defaults = {
-                        data: $.extend(true, {
-                            weight_cost: '100',
-                            enabled: true,
-                            gateways: [
-                                { realm: account_realm, username: generatedUsername, password: generatedPassword, prefix: '+1', codecs: ['PCMU', 'PCMA'] }
-                            ],
-                            rules: [],
-                            caller_id_options: { type: 'external' },
-                            flags: []
-                        }, data_defaults || {}),
-                        field_data: {
-                            caller_id_options: {
-                                type: {
-                                    'external': 'external',
-                                    'internal': 'internal',
-                                    'emergency': 'emergency'
-                                }
-                            },
-                            gateways: {
-                                codecs: {
-                                    'G729': 'G729 - 8kbps (Requires License)',
-                                    'PCMU': 'G711u / PCMU - 64kbps (North America)',
-                                    'PCMA': 'G711a / PCMA - 64kbps (Elsewhere)',
-                                    'G722_16': 'G722 (HD) @ 16kHz',
-                                    'G722_32': 'G722.1 (HD) @ 32kHz',
-                                    'CELT_48': 'Siren (HD) @ 48kHz',
-                                    'CELT_64': 'Siren (HD) @ 64kHz'
-                                },
-
-                                invite_formats: {
-                                    'username': 'Username',
-                                    'npan': 'NPA NXX XXXX',
-                                    'e164': 'E. 164'
-                                }
+                },
+                defaults = {
+                    data: $.extend(true, {
+                        weight_cost: '100',
+                        enabled: true,
+                        gateways: [
+                            {
+                                prefix: '+1',
+                                codecs: ['PCMU', 'PCMA']
+                            }
+                        ],
+                        rules: [],
+                        caller_id_options: {
+                            type: 'external'
+                        },
+                        flags: []
+                    }, data_defaults || {}),
+                    field_data: {
+                        caller_id_options: {
+                            type: {
+                                'external': 'external',
+                                'internal': 'internal',
+                                'emergency': 'emergency'
                             }
                         },
-                        value: {},
-                        functions: {
-                            inArray: function(value, array) {
-                                return ($.inArray(value, array) == -1) ? false : true;
-                            }
-                        }
-                    };
-
-                    if(typeof data == 'object' && data.id && data.type) {
-                        winkstart.request(true, data.type + '_resource.get', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                resource_id: data.id
+                        gateways: {
+                            codecs: {
+                                'G729': 'G729 - 8kbps (Requires License)',
+                                'PCMU': 'G711u / PCMU - 64kbps (North America)',
+                                'PCMA': 'G711a / PCMA - 64kbps (Elsewhere)',
+                                'G722_16': 'G722 (HD) @ 16kHz',
+                                'G722_32': 'G722.1 (HD) @ 32kHz',
+                                'CELT_48': 'Siren (HD) @ 48kHz',
+                                'CELT_64': 'Siren (HD) @ 64kHz'
                             },
-                            function(_data, status) {
-                                _data.type = data.type;
-                                $.extend(true, defaults, _data);
-                                if(defaults.data.gateways[0].codecs == undefined) {
-                                    defaults.data.gateways[0].codecs = {};
-                                }
-
-                                THIS.render_resource(defaults, target, callbacks);
-
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
-                                }
+                            invite_formats: {
+                                'username': 'Username',
+                                'npan': 'NPA NXX XXXX',
+                                'e164': 'E. 164'
                             }
-                        );
+                        }
+                    },
+                    functions: {
+                        inArray: function(value, array) {
+                            return ($.inArray(value, array) == -1) ? false : true;
+                        }
                     }
-                    else {
-                        if(!('admin' in winkstart.apps['voip']) || !winkstart.apps['voip'].admin) {
-                            defaults.type = 'local';
-                        }
-                        THIS.render_resource(defaults, target, callbacks);
+                };
 
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                if(typeof data == 'object' && data.id && data.type) {
+                    winkstart.request(true, data.type + '_resource.get', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            resource_id: data.id
+                        },
+                        function(_data, status) {
+                            _data.data.type = data.type;
+
+                            THIS.render_resource($.extend(true, defaults, _data), target, callbacks);
+
+                            if(typeof callbacks.after_render == 'function') {
+                                callbacks.after_render();
+                            }
                         }
+                    );
+                }
+                else {
+                    if(!('admin' in winkstart.apps['voip']) || !winkstart.apps['voip'].admin) {
+                        defaults.data.type = 'local';
+                    }
+                    THIS.render_resource(defaults, target, callbacks);
+
+                    if(typeof callbacks.after_render == 'function') {
+                        callbacks.after_render();
                     }
                 }
-            );
         },
 
         delete_resource: function(data, success, error) {
             var THIS = this;
 
             if(data.data.id) {
-                winkstart.request(true, data.type + '_resource.delete', {
+                winkstart.request(true, data.data.type + '_resource.delete', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         resource_id: data.data.id
@@ -293,19 +270,16 @@ winkstart.module('voip', 'resource',
         },
 
         render_resource: function(data, target, callbacks) {
-
             var THIS = this,
-                gateway_data,
-                type = data.type || 'local',
-                resource_id = data.data.id;
                 resource_html = THIS.templates.edit.tmpl(data);
 
             $.each(data.data.gateways, function(i, obj) {
-                gateway_data = {
+                var gateway_data = {
                     data: obj,
                     field_data: data.field_data,
                     index: i
                 };
+
                 THIS.templates.gateway.tmpl(gateway_data).appendTo($('#gateways', resource_html));
             });
 
@@ -357,11 +331,7 @@ winkstart.module('voip', 'resource',
                             delete data.field_data;
                         }
 
-                        if(!resource_id) {
-                            type = form_data.type;
-                        }
-
-                        THIS.save_resource(form_data, data, callbacks.save_success, callbacks.save_error, type);
+                        THIS.save_resource(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -379,6 +349,10 @@ winkstart.module('voip', 'resource',
                 .empty()
                 .append(resource_html);
 
+        },
+
+        normalize_data: function(data) {
+            return data;
         },
 
         list_local_resources: function(callback) {
@@ -462,21 +436,17 @@ winkstart.module('voip', 'resource',
                 });
             }
         },
+
         clean_form_data: function(form_data) {
-            var audioCodecs;
-
-            /*if('type' in form_data) {
-                //delete form_data.type;
-            }*/
-
             $.each(form_data.gateways, function(indexGateway, gateway) {
-                audioCodecs = [];
+                var audioCodecs = [];
+
                 $.each(gateway.codecs, function(indexCodec, codec) {
-                    if(codec)
-                    {
+                    if(codec) {
                         audioCodecs.push(codec);
                     }
                 });
+
                 form_data.gateways[indexGateway].codecs = audioCodecs;
             });
 
