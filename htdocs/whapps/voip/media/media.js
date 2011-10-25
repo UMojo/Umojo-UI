@@ -6,17 +6,15 @@ winkstart.module('voip', 'media', {
         templates: {
             media: 'tmpl/media.html',
             edit: 'tmpl/edit.html'
-            //media_calflow: 'tmpl/media_callflow.html'
         },
 
         subscribe: {
             'media.activate': 'activate',
             'media.edit': 'edit_media'
-            //'media.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation : [
-            { name: '#name', regex : /^.+$/ },
+            { name: '#name', regex: /^.+$/ }
         ],
 
         resources: {
@@ -49,11 +47,13 @@ winkstart.module('voip', 'media', {
     },
 
     function(args) {
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Media',
             icon: 'media',
             weight: '45'
@@ -106,8 +106,9 @@ winkstart.module('voip', 'media', {
 
         _hijackForm: function(media_id, media_html, callback) {
             var THIS = this;
+
             $('#media-form', media_html).submit(function() {
-                //Mad hax
+                /* Mad hax */
                 $('#media-form', media_html).attr('target', 'upload_target');
 
                 $('#upload_target', media_html).load(function() {
@@ -149,10 +150,9 @@ winkstart.module('voip', 'media', {
                     data: {
                         streamable: true
                     },
-                    auth_token: winkstart.apps['voip'].auth_token,
-                    value: {}
+                    auth_token: winkstart.apps['voip'].auth_token
                 };
-                
+
             if(typeof data == 'object' && data.id) {
                 winkstart.request(true, 'media.get', {
                         account_id: winkstart.apps['voip'].account_id,
@@ -160,8 +160,8 @@ winkstart.module('voip', 'media', {
                         media_id: data.id
                     },
                     function(_data, status) {
-                        _data = THIS.format_data(_data);
-                        
+                        THIS.format_data(_data);
+
                         THIS.render_media($.extend(true, defaults, _data), target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
@@ -252,7 +252,7 @@ winkstart.module('voip', 'media', {
 
             $('.media-save', media_html).click(function(ev) {
                 ev.preventDefault();
-            
+
                 winkstart.validate.is_valid(THIS.config.validation, media_html, function() {
                         var form_data = form2object('media-form');
 
@@ -260,20 +260,20 @@ winkstart.module('voip', 'media', {
 
                         THIS.save_media(form_data, data, function(_data, status) {
                                 if($('#upload_span', media_html).is(':visible') && $('#file').val() != '') {
-                                    THIS._hijackForm(_data.data.id, media_html, function() { 
+                                    THIS._hijackForm(_data.data.id, media_html, function() {
                                         if(typeof callbacks.save_success == 'function') {
                                             callbacks.save_success(_data, status);
                                         }
                                     });
-                                } 
-                                else {
-                                    THIS.render_list($('#media-content'));
-                            
-                                    THIS.edit_media({ id: _data.data.id }, $('#media-content'), target, callbacks);
                                 }
-                            }, 
+                                else {
+                                    if(typeof callbacks.save_success == 'function') {
+                                        callbacks.save_success(_data, status);
+                                    }
+                                }
+                            },
                             callbacks.save_error
-                        );  
+                        );
                     },
                     function() {
                         alert('There were errors on the form, please correct!');
@@ -286,7 +286,7 @@ winkstart.module('voip', 'media', {
 
                 THIS.delete_media(data, callbacks.delete_success, callbacks.delete_error);
             });
-            
+
             (target)
                 .empty()
                 .append(media_html);
@@ -303,9 +303,9 @@ winkstart.module('voip', 'media', {
         },
 
         format_data: function(data) {
-            /* On creation, crossbar store streamable as a string, and as a boolean on update 
+            /* On creation, crossbar store streamable as a string, and as a boolean on update
             * And as we're using the same template for both behaviors, we need the same kind of data.
-            * TODO: delete once this bug is fixed! 
+            * TODO: delete once this bug is fixed!
             */
             if(data.data.streamable == 'false') {
                  data.data.streamable = false;
@@ -384,6 +384,6 @@ winkstart.module('voip', 'media', {
 
             THIS.render_list(media_html);
         },
-        
+
     }
 );
