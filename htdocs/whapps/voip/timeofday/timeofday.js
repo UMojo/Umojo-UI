@@ -11,7 +11,7 @@ winkstart.module('voip', 'timeofday', {
 
         subscribe: {
             'timeofday.activate': 'activate',
-            'timeofday.edit': 'edit_timeofday',
+            'timeofday.edit': 'edit_timeofday'
         },
 
         formData: {
@@ -42,7 +42,7 @@ winkstart.module('voip', 'timeofday', {
                 { id: 'third', value: 'Third' },
                 { id: 'fourth', value: 'Fourth' },
                 { id: 'last', value: 'Last' },
-                { id: 'day', value: 'Day' },
+                { id: 'day', value: 'Day' }
             ],
 
             months: [
@@ -95,11 +95,13 @@ winkstart.module('voip', 'timeofday', {
     },
 
     function(args) {
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('subnav.add', {
             whapp: 'voip',
-            module: this.__module,
+            module: THIS.__module,
             label: 'Time Of Day',
             icon: 'timeofday',
             weight: '25'
@@ -135,7 +137,7 @@ winkstart.module('voip', 'timeofday', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         data: normalized_data
-                    },  
+                    },
                     function(_data, status) {
                         if(typeof success == 'function') {
                             success(_data, status, 'create');
@@ -175,7 +177,7 @@ winkstart.module('voip', 'timeofday', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {     
+                    data: {
                         time_window_start: 0,
                         time_window_stop: 0,
                         wdays: [],
@@ -184,7 +186,7 @@ winkstart.module('voip', 'timeofday', {
                     },
                     field_data: THIS.config.formData
                 };
-            
+
             if(typeof data == 'object' && data.id) {
                 winkstart.request(true, 'timeofday.get', {
                         account_id: winkstart.apps['voip'].account_id,
@@ -192,9 +194,10 @@ winkstart.module('voip', 'timeofday', {
                         timeofday_id: data.id
                     },
                     function(_data, status) {
-                        _data = THIS.format_data(_data);
-                        _data = THIS.migrate_data(_data);
-                    
+                        THIS.migrate_data(_data);
+
+                        THIS.format_data(_data);
+
                         THIS.render_timeofday($.extend(true, defaults, _data), target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
@@ -236,7 +239,7 @@ winkstart.module('voip', 'timeofday', {
         },
 
         render_timeofday: function(data, target, callbacks){
-            
+
             var THIS = this,
                 wday,
                 timeofday_html = THIS.templates.edit.tmpl(data);
@@ -336,7 +339,7 @@ winkstart.module('voip', 'timeofday', {
                 $('#specific_day', timeofday_html).hide();
 
                 switch($(this).val()) {
-                    case 'yearly': 
+                    case 'yearly':
                         $('#yearly_every', timeofday_html).show();
                         $('#ordinal', timeofday_html).show();
                         if($('#ordinal', timeofday_html).val() == 'day') {
@@ -347,8 +350,8 @@ winkstart.module('voip', 'timeofday', {
                             $('#specific_day', timeofday_html).hide();
                         }
                         break;
-                        
-                    case 'monthly': 
+
+                    case 'monthly':
                         $('#monthly_every', timeofday_html).show();
                         $('#ordinal', timeofday_html).show();
                         if($('#ordinal', timeofday_html).val() == 'day') {
@@ -360,7 +363,7 @@ winkstart.module('voip', 'timeofday', {
                         }
                         break;
 
-                    case 'weekly': 
+                    case 'weekly':
                         $('#weekly_every', timeofday_html).show();
                         $('#days_checkboxes', timeofday_html).show();
                         break;
@@ -376,9 +379,9 @@ winkstart.module('voip', 'timeofday', {
                         form_data.wdays = [];
 
                         $('.fake_checkbox.checked', timeofday_html).each(function() {
-                            form_data.wdays.push($(this).dataset('value'));                    
+                            form_data.wdays.push($(this).dataset('value'));
                         });
-            
+
                         form_data.interval = $('#cycle', timeofday_html).val() == 'monthly' ? $('#interval_month', timeofday_html).val() : $('#interval_week', timeofday_html).val();
 
                         form_data = THIS.clean_form_data(form_data);
@@ -406,8 +409,8 @@ winkstart.module('voip', 'timeofday', {
                 to: 86400,
                 step: 900,
                 dimension: '',
-                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am', 
-                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am', 
+                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am',
+                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am',
                         '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm',
                         '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am'],
                 limits: false,
@@ -416,7 +419,7 @@ winkstart.module('voip', 'timeofday', {
                         mins = (val - hours * 3600) / 60,
                         meridiem = (hours < 12) ? 'am' : 'pm';
 
-                    hours = hours % 12;                    
+                    hours = hours % 12;
 
                     if (hours == 0)
                         hours = 12;
@@ -430,10 +433,11 @@ winkstart.module('voip', 'timeofday', {
         clean_form_data: function(form_data) {
             var wdays = [],
                 times = form_data.time.split(';');
+
             if(form_data.cycle != 'weekly' && form_data.weekday != undefined) {
                 form_data.wdays = [];
                 form_data.wdays.push(form_data.weekday);
-            } 
+            }
 
             $.each(form_data.wdays, function(i, val) {
                 if(val) {
@@ -447,13 +451,14 @@ winkstart.module('voip', 'timeofday', {
             if(wdays.length > 0 && wdays[0] == 'sunday') {
                 wdays.push(wdays.shift());
             }
+
             form_data.wdays = wdays;
-            
+
             form_data.start_date = new Date(form_data.start_date).getTime()/1000 + 62167219200;
-            
+
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
-           
+
             return form_data;
         },
 
@@ -462,13 +467,13 @@ winkstart.module('voip', 'timeofday', {
                 delete form_data.ordinal;
                 delete form_data.days;
                 delete form_data.month;
-            } 
+            }
             else {
                 form_data.cycle == 'yearly' ? delete form_data.interval : delete form_data.month;
                 form_data.ordinal != 'day' ? delete form_data.days : delete form_data.wdays;
             }
 
-            delete form_data.time; 
+            delete form_data.time;
             delete form_data.weekday;
 
             return form_data;
@@ -488,7 +493,7 @@ winkstart.module('voip', 'timeofday', {
 
             return data;
         },
-    
+
         migrate_data: function(data) {
             // Check for spelling ;)
             if('wdays' in data.data && (wday = $.inArray('wensday', data.data.wdays)) > -1) {
@@ -529,7 +534,7 @@ winkstart.module('voip', 'timeofday', {
                         .empty()
                         .listpanel({
                             label: 'Time of Day',
-                            identifier: 'timeofday-listview', 
+                            identifier: 'timeofday-listview',
                             new_entity_label: 'Add Time of Day',
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
