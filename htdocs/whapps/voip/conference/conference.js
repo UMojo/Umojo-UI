@@ -6,12 +6,11 @@ winkstart.module('voip', 'conference', {
         templates: {
             conference: 'tmpl/conference.html',
             edit: 'tmpl/edit.html'
-            //conference_callflow: 'tmpl/conference_callflow.html'
         },
 
         subscribe: {
             'conference.activate': 'activate',
-            'conference.edit': 'edit_conference',
+            'conference.edit': 'edit_conference'
         },
 
         resources: {
@@ -48,10 +47,9 @@ winkstart.module('voip', 'conference', {
         },
 
         validation: [
-            { name: '#name', regex: /^.+$/ },
-            { name: '#member_pins', regex: /^[a-z0-9A-Z]*$/ },
-            { name: '#conference_numbers', regex: /^[0-9]+$/ },
-            { name: '#moderator_pins', regex: /^[a-z0-9A-Z]*$/ }
+            { name: '#name',                  regex: /^.+$/ },
+            { name: '#member_pins_string',    regex: /^[a-z0-9A-Z,\s]*$/ },
+            { name: '#member_numbers_string', regex: /^[0-9,\s]+$/ }
         ]
     },
     function(args) {
@@ -67,46 +65,53 @@ winkstart.module('voip', 'conference', {
             weight: '05'
         });
     },
-    {	
-        get_pin_number: function(start_pin) {
-            var finalPinMember = '';
-            
-            $.each(start_pin, function(index, value) {
-                if(!(isNaN(value))) {
-                    finalPinMember += value;
-                } else {
-                    if(value.match(/^[aAbBcC]$/)) {
-                        finalPinMember += 2
-                    } else if(value.match(/^[dDeEfF]$/)) {
-                        finalPinMember += 3
-                    } else if(value.match(/^[gGhHiI]$/)) {
-                        finalPinMember += 4
-                    } else if(value.match(/^[jJkKlL]$/)) {
-                        finalPinMember += 5
-                    } else if(value.match(/^[mMnNoO]$/)) {
-                        finalPinMember += 6
-                    } else if(value.match(/^[pPqQrRsS]$/)) {
-                        finalPinMember += 7
-                    } else if(value.match(/^[tTuUvV]$/)) {
-                        finalPinMember += 8
-                    } else if(value.match(/^[wWxXyYzZ]$/)) {
-                        finalPinMember += 9
-                    }
+    {
+        letters_to_numbers: function(string) {
+            var result = '';
+
+            $.each(string.split(''), function(index, value) {
+                if(value.match(/^[aAbBcC]$/)) {
+                    result += '2';
                 }
-            })
-            
-            return finalPinMember;
+                else if(value.match(/^[dDeEfF]$/)) {
+                    result += '3';
+                }
+                else if(value.match(/^[gGhHiI]$/)) {
+                    result += '4';
+                }
+                else if(value.match(/^[jJkKlL]$/)) {
+                    result += '5';
+                }
+                else if(value.match(/^[mMnNoO]$/)) {
+                    result += '6';
+                }
+                else if(value.match(/^[pPqQrRsS]$/)) {
+                    result += '7';
+                }
+                else if(value.match(/^[tTuUvV]$/)) {
+                    result += '8';
+                }
+                else if(value.match(/^[wWxXyYzZ]$/)) {
+                    result += '9';
+                }
+                else {
+                    result += value;
+                }
+            });
+
+            return result;
         },
 
         save_conference: function(form_data, data, success, error) {
-            var THIS = this;
+            var THIS = this,
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
 
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'conference.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         conference_id: data.data.id,
-                        data: $.extend(true, {}, data.data, form_data)
+                        data: normalized_data
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
@@ -124,7 +129,7 @@ winkstart.module('voip', 'conference', {
                 winkstart.request(true, 'conference.create', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        data: form_data
+                        data: normalized_data
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
@@ -151,32 +156,29 @@ winkstart.module('voip', 'conference', {
 
                         THIS.edit_conference({ id: _data.data.id }, parent, target, callbacks);
                     },
-                    
+
                     save_error: _callbacks.save_error,
 
                     delete_success: _callbacks.delete_success || function() {
                         target.empty(),
-        
+
                         THIS.render_list(parent);
                     },
-            
+
                     delete_error: _callbacks.delete_error,
 
                     after_render: _callbacks.after_render
                 },
                 defaults = {
                     data: {
-                        moderator_play_name: true, 
-                        member_play_name: true, 
-                        member: { pins: [] }, 
-                        moderator: { pins: [] }, 
-                        conference_numbers: []
+                        member_play_name: true,
+                        member: {}
                     },
                     field_data: {
-                        users: [],
+                        users: []
                     }
                 };
-                
+
             winkstart.request(true, 'user.list', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
@@ -197,6 +199,10 @@ winkstart.module('voip', 'conference', {
                                 conference_id: data.id
                             },
                             function(_data, status) {
+                                THIS.migrate_data(_data);
+
+                                THIS.format_data(_data);
+
                                 THIS.render_conference($.extend(true, defaults, _data), target, callbacks);
 
                                 if(typeof callbacks.after_render == 'function') {
@@ -209,9 +215,9 @@ winkstart.module('voip', 'conference', {
                         THIS.render_conference(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();            
-                        } 
-                    }                            
+                            callbacks.after_render();
+                        }
+                    }
                 }
             );
         },
@@ -228,7 +234,7 @@ winkstart.module('voip', 'conference', {
                     function(_data, status) {
                         if(typeof success == 'function') {
                             success(_data, status);
-                        } 
+                        }
                     },
                     function(_data, status) {
                         if(typeof error == 'function') {
@@ -236,7 +242,7 @@ winkstart.module('voip', 'conference', {
                         }
                     }
                 );
-            }                     
+            }
         },
 
         render_conference: function(data, target, callbacks){
@@ -253,7 +259,7 @@ winkstart.module('voip', 'conference', {
             $('ul.settings2', conference_html).tabs($('.advanced_pane > div', conference_html));
 
             $('#name', conference_html).focus();
-            
+
             $('.advanced_pane', conference_html).hide();
             $('.advanced_tabs_wrapper', conference_html).hide();
 
@@ -275,16 +281,16 @@ winkstart.module('voip', 'conference', {
 
             $('.conference-save', conference_html).click(function(ev) {
                 ev.preventDefault();
-            
+
                 winkstart.validate.is_valid(THIS.config.validation, conference_html, function() {
                         var form_data = form2object('conference-form');
 
                         THIS.clean_form_data(form_data);
-    
+
                         if('field_data' in data) {
                             delete data.field_data;
                         }
-        
+
                         THIS.save_conference(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
@@ -298,28 +304,77 @@ winkstart.module('voip', 'conference', {
 
                 THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
             });
-            
+
             (target)
                 .empty()
                 .append(conference_html);
         },
 
+        migrate_data: function(data) {
+            if($.isArray(data.data.conference_numbers)) {
+                data.data.member.numbers = data.data.conference_numbers;
+
+                delete data.data.conference_numbers;
+            }
+
+            return data;
+        },
+
+        format_data: function(data) {
+            if(typeof data.data.member == 'object') {
+                if($.isArray(data.data.member.pins)) {
+                    data.data.member.pins_string = data.data.member.pins.join(', ');
+                }
+
+                if($.isArray(data.data.member.numbers)) {
+                    data.data.member.numbers_string = data.data.member.numbers.join(', ');
+                }
+            }
+
+            return data;
+        },
+
+        normalize_data: function(data) {
+            if(!data.member.pins.length) {
+                delete data.member.pins;
+            }
+
+            if(!data.member.numbers.length) {
+                delete data.member.numbers;
+            }
+
+            delete data.member.pins_string;
+            delete data.member.numbers_string;
+
+            return data;
+        },
+
         clean_form_data: function(form_data){
             var THIS = this;
 
-            if(form_data.member.pins[0] != '') { 
-                form_data.member.pins[0] = THIS.get_pin_number(form_data.member.pins[0].split(''));
-            }
-            else {
-                delete form_data.member;
-            }
+            form_data.member.pins_string = THIS.letters_to_numbers(form_data.member.pins_string);
 
-            if(form_data.moderator.pins[0] != '') {
-                form_data.moderator.pins[0] = THIS.get_pin_number(form_data.moderator.pins[0].split(''));
-            } 
-            else {
-                delete form_data.moderator;   
-            }
+            form_data.member.pins = $.map(form_data.member.pins_string.split(','), function(val) {
+                var pin = $.trim(val);
+
+                if(pin != '') {
+                    return pin;
+                }
+                else {
+                    return null;
+                }
+            });
+
+            form_data.member.numbers = $.map(form_data.member.numbers_string.split(','), function(val) {
+                var number = $.trim(val);
+
+                if(number != '') {
+                    return number;
+                }
+                else {
+                    return null;
+                }
+            });
 
             return form_data;
         },
@@ -343,7 +398,7 @@ winkstart.module('voip', 'conference', {
                                 });
                             });
                         }
-                    
+
                         new_list.sort(function(a, b) {
                             return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
                         });
@@ -351,7 +406,7 @@ winkstart.module('voip', 'conference', {
                         return new_list;
                 };
 
-                $('#conference-listpanel', parent) 
+                $('#conference-listpanel', parent)
                     .empty()
                     .listpanel({
                         label: 'Conferences',
@@ -365,7 +420,7 @@ winkstart.module('voip', 'conference', {
                     });
                });
         },
-               
+
         activate: function(parent) {
             var THIS = this,
                 conference_html = THIS.templates.conference.tmpl();

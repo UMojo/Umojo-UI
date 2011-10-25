@@ -15,7 +15,7 @@
             </ul>
 
             <div class="clear"></div>
-            
+
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
@@ -27,7 +27,7 @@
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}"/>
                             </li>
-                            <li>    
+                            <li>
                                 <span class="tooltip-wrapper" tooltip="Select the user who owns this conference">
                                     <span class="tooltip"/>
                                     <label for="owner_id">Belongs To:</label>
@@ -43,31 +43,24 @@
                                 </select>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Number(s) of this conference, used to access this conference from a conference server for example">
+                                <span class="tooltip-wrapper" tooltip="A comma separated list of numbers, that will be assigned to the conference.<br>Unless you plan to use the 'Conference Service' callflow node - don't worry about this field">
                                     <span class="tooltip"/>
-                                    <label for="conference_numbers">Conference Numbers:</label>
+                                    <label for="member_numbers_string">Numbers:</label>
                                 </span>
-                                <input id="conference_numbers" name="conference_numbers[0]" type="text" value="${data.conference_numbers[0]}"/>
+                                <input id="member_numbers_string" name="member.numbers_string" type="text" value="${data.member.numbers_string}"/>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Type the PIN code that the members will enter to join this conference">
+                                <span class="tooltip-wrapper" tooltip="A comma separated list of pins, that can be entered to join the conference.">
                                     <span class="tooltip"/>
-                                    <label for="member_pins">Members PIN:</label>
+                                    <label for="member_pins_string">PINs:</label>
                                 </span>
-                                <input id="member_pins" name="member.pins[0]" type="text" value="${data.member.pins[0]}"/>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Type the PIN code that the moderators will enter to join this conference">
-                                    <span class="tooltip"/>
-                                    <label for="moderator_pins">Moderators PIN:</label>
-                                </span>
-                                <input id="moderator_pins" name="moderator.pins[0]" type="text" value="${data.moderator.pins[0]}"/>
+                                <input id="member_pins_string" name="member.pins_string" type="text" value="${data.member.pins_string}"/>
                             </li>
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
-                </div> 
+                </div>
             </div>
 
             <div class="clear"></div>
@@ -88,90 +81,44 @@
             </span>
 
             <div class="advanced_pane">
-
                 <div id="options">
-                    <fieldset>
-                        <legend>Moderators</legend>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to play name of moderators when they enters the conference?">
-                                    <span class="tooltip"/>
-                                    <label for="moderator_play_name">Play name upon entry?</label>
-                                </span>
-                                {{if data.moderator_play_name }}
-                                <input id="moderator_play_name" name="moderator_play_name" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="moderator_play_name" name="moderator_play_name" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want the moderators to join the conference muted by default?">
-                                    <span class="tooltip"/>
-                                    <label for="moderator_join_muted">Join the conference muted?</label>
-                                </span>
-                                {{if data.moderator_join_muted }}
-                                <input id="moderator_join_muted" name="moderator_join_muted" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="moderator_join_muted" name="moderator_join_muted" type="checkbox"/>
-                                {{/if}} 
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want moderators to join the conference deaf by default">
-                                    <span class="tooltip"/>
-                                    <label for="moderator_join_deaf">Join the conference deaf?</label>
-                                </span>
-                                {{if data.moderator_join_deaf }}
-                                <input id="moderator_join_deaf" name="moderator_join_deaf" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="moderator_join_deaf" name="moderator_join_deaf" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </fieldset>
-                        
-                    <fieldset>
-                        <legend>Members</legend>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to play names of members when they enter the conference">
-                                    <span class="tooltip"/>
-                                    <label for="member_play_name">Play name upon entry?</label>
-                                </span>
-                                {{if data.member_play_name }}
-                                <input id="member_play_name" name="member_play_name" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="member_play_name" name="member_play_name" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference muted by default?">
-                                    <span class="tooltip"/>
-                                    <label for="member_join_muted">Join the conference muted?</label>
-                                </span>
-                                {{if data.member_join_muted }}
-                                <input id="member_join_muted" name="member_join_muted" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="member_join_muted" name="member_join_muted" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference deaf by default?">   
-                                    <span class="tooltip"/>
-                                    <label for="member_join_deaf">Join the conference deaf?</label>
-                                </span>
-                                {{if data.member_join_deaf }}
-                                <input id="member_join_deaf" name="member_join_deaf" type="checkbox" checked="checked"/>        
-                                {{else}}
-                                <input id="member_join_deaf" name="member_join_deaf" type="checkbox"/>        
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </fieldset>
- 
+                    <ul class="controls">
+                        <li>
+                            <span class="tooltip-wrapper" tooltip="Do you want to play names of members when they enter the conference">
+                                <span class="tooltip"/>
+                                <label for="member_play_name">Play name upon entry?</label>
+                            </span>
+                            {{if data.member_play_name }}
+                            <input id="member_play_name" name="member_play_name" type="checkbox" checked="checked"/>
+                            {{else}}
+                            <input id="member_play_name" name="member_play_name" type="checkbox"/>
+                            {{/if}}
+                        </li>
+                        <li>
+                            <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference muted by default?">
+                                <span class="tooltip"/>
+                                <label for="member_join_muted">Join the conference muted?</label>
+                            </span>
+                            {{if data.member_join_muted }}
+                            <input id="member_join_muted" name="member_join_muted" type="checkbox" checked="checked"/>
+                            {{else}}
+                            <input id="member_join_muted" name="member_join_muted" type="checkbox"/>
+                            {{/if}}
+                        </li>
+                        <li>
+                            <span class="tooltip-wrapper" tooltip="Do you want the members to join the conference deaf by default?">
+                                <span class="tooltip"/>
+                                <label for="member_join_deaf">Join the conference deaf?</label>
+                            </span>
+                            {{if data.member_join_deaf }}
+                            <input id="member_join_deaf" name="member_join_deaf" type="checkbox" checked="checked"/>
+                            {{else}}
+                            <input id="member_join_deaf" name="member_join_deaf" type="checkbox"/>
+                            {{/if}}
+                        </li>
+                    </ul>
                     <div class="clear"></div>
-
                 </div>
-
             </div>
         <div class="buttons_wrapper">
             <ul class="buttons right conferences">
@@ -181,7 +128,7 @@
                 {{/if}}
             </ul>
         </div>
-            
+
         </form>
     </div>
 </div>
