@@ -10,15 +10,10 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Caller-ID</a></li>
-                {{if data.id}}
-                <!--    <li><a href="#">Equipment</a></li>
-                    <li><a href="#">Phone Numbers</a></li>
-                    <li><a href="#">Troubleshooting</a></li> -->
-                {{/if}}
             </ul>
 
             <div class="clear"></div>
-            
+
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
@@ -49,15 +44,15 @@
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="The user privilege level">
-                                    <span class="tooltip"/><label for="user_level">User privilege level:</label>
+                                    <span class="tooltip"/><label for="priv_level">User privilege level:</label>
                                 </span>
-                                <select id="user_level" name="user_level">
-                                    {{if priv_level == 'admin'}} 
-                                    <option value="admin" selected>Administrator</option>
-                                    <option value="user">User</option>
+                                <select id="priv_level" name="priv_level">
+                                    {{if data.priv_level == 'admin'}}
+                                        <option value="admin" selected>Administrator</option>
+                                        <option value="user">User</option>
                                     {{else}}
-                                    <option value="admin">Administrator</option>
-                                    <option value="user" selected>User</option>
+                                        <option value="admin">Administrator</option>
+                                        <option value="user" selected>User</option>
                                     {{/if}}
                                 </select>
                             </li>
@@ -65,7 +60,7 @@
                     </fieldset>
 
                     <div class="clear"></div>
-                </div> <!-- end basic settings -->
+                </div>
                 <div id="caller_id">
                     <fieldset>
                         <legend>In-House Calls</legend>
@@ -116,13 +111,13 @@
                 <span>
                     <h2 id="advanced_settings_link">Advanced Settings</h2>
                 </span>
-                
+
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon fax"/>Options</a></li>
-                        <li><a href="#"><span  class="icon cdr" style="padding-bottom: 5px;"/>Call Forward</a></li>
-                        <li><a href="#"><span  class="icon sip" style="padding-bottom: 5px;"/>Password management</a></li>
-                        <li><a href="#"><span  class="icon phone" style="padding-bottom: 5px"/>Hot Desking</a></li>
+                        <li><a href="#"><span  class="icon cdr" />Call Forward</a></li>
+                        <li><a href="#"><span  class="icon sip" />Password management</a></li>
+                        <li><a href="#"><span  class="icon phone" />Hot Desking</a></li>
                     </ul>
                 </span>
 
@@ -140,9 +135,9 @@
                                     <label for="verified">User has been verified?</label>
                                 </span>
                                 {{if data.verified}}
-                                <input id="verified" name="verified" type="checkbox" checked="checked"/>
+                                    <input id="verified" name="verified" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="verified" name="verified" type="checkbox"/>
+                                    <input id="verified" name="verified" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
@@ -150,9 +145,9 @@
                                     <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
                                 </span>
                                 {{if data.vm_to_email_enabled}}
-                                <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
@@ -163,7 +158,7 @@
                                 </select>
                             </li>
                         </ul>
-                    </fieldset> 
+                    </fieldset>
                     <div class="clear"></div>
 
                 </div>
@@ -188,10 +183,10 @@
                                 <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Also ring the user SIP device?">
-                                    <span class="tooltip"/><label for="call_forward_substitute">Also ring user's VOIP phone:</label>
+                                <span class="tooltip-wrapper" tooltip="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box.">
+                                    <span class="tooltip"/><label for="call_forward_substitute">Bypass user's phones:</label>
                                 </span>
-                                {{if data.call_forward.substitute == false}}
+                                {{if data.call_forward.substitute}}
                                 <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox" checked="checked"/>
                                 {{else}}
                                 <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox"/>
@@ -223,7 +218,7 @@
                     <div class="clear"></div>
 
                 </div>
-                
+
                 <div id="password_management">
                     <fieldset>
                         <ul class="controls">
@@ -237,7 +232,7 @@
                             </li>
                         </ul>
                     </fieldset>
-                    
+
                     <div class="clear"></div>
                 </div>
                 <div id="hot_desking">
@@ -248,9 +243,9 @@
                                     <span class="tooltip"/><label for="hotdesk_enable">Enable Hot Desking?</label>
                                 </span>
                                 {{if data.hotdesk.enable}}
-                                <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox" checked="checked"/>
+                                    <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox"/>
+                                    <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
@@ -258,15 +253,15 @@
                                     <span class="tooltip"/><label for="hotdesk_id">ID: </label>
                                 </span>
                                 <input id="hotdesk_id" name="hotdesk.id" type="text" value="${data.hotdesk.id}"/>
-                            </li>                           
+                            </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Does it require a PIN?">
                                     <span class="tooltip"/><label for="hotdesk_require_pin">Require PIN?</label>
                                 </span>
                                 {{if data.hotdesk.require_pin}}
-                                <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox" checked="checked"/>
+                                    <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox" checked="checked"/>
                                 {{else}}
-                                <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox"/>
+                                    <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li id="pin_wrapper">
@@ -287,7 +282,7 @@
                             </li>
                         </ul>
                     </fieldset>
-                    
+
                     <div class="clear"></div>
                 </div>
             </div>
@@ -297,10 +292,9 @@
                 {{if data.id}}
                     <li><a class="user-delete delete-btn" href="#">Delete</a></li>
                 {{/if}}
-                <li><a class="user-cancel" href="#">Cancel</a></li>
             </ul>
         </div>
-            
+
         </form>
     </div>
 </div>
