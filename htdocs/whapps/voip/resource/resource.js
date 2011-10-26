@@ -321,7 +321,6 @@ winkstart.module('voip', 'resource', {
             $('.resource-save', resource_html).click(function(ev) {
                 ev.preventDefault();
 
-                //TODO: remettre validation
                 winkstart.validate.is_valid(THIS.config.validation, resource_html, function() {
                         var form_data = form2object('resource-form');
 
