@@ -5,12 +5,14 @@ winkstart.module('voip', 'media', {
 
         templates: {
             media: 'tmpl/media.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            media_callflow: 'tmpl/media_callflow.html'
         },
 
         subscribe: {
             'media.activate': 'activate',
-            'media.edit': 'edit_media'
+            'media.edit': 'edit_media',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation : [
@@ -385,5 +387,108 @@ winkstart.module('voip', 'media', {
             THIS.render_list(media_html);
         },
 
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'play[id=*]': {
+                    name: 'Play Media',
+                    icon: 'play',
+                    category: 'Advanced',
+                    module: 'play',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'media.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.media_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#media_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#media_selector', popup_html).val());
+
+                                    node.caption = $('#media_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                     title: 'Media',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('media.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit media' : 'Create media'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 );

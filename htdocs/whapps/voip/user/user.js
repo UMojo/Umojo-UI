@@ -5,12 +5,14 @@ winkstart.module('voip', 'user', {
 
         templates: {
             user: 'tmpl/user.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            hotdesk_callflow: 'tmpl/hotdesk_callflow.html'
         },
 
         subscribe: {
             'user.activate': 'activate',
-            'user.edit': 'edit_user'
+            'user.edit': 'edit_user',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation : [
@@ -436,6 +438,144 @@ winkstart.module('voip', 'user', {
                 .append(user_html);
 
             THIS.render_list(user_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                 'hotdesk[id=*,action=bridge]': {
+                    name: 'Hot Desking',
+                    icon: 'v_phone',
+                    category: 'Hotdesking',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'bridge',
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var name = node.getMetadata('name');
+
+                        return (name) ? name : '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request(true, 'hotdesk.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                $.each(data.data, function() {
+                                    this.name = this.first_name + ' ' + this.last_name;
+                                });
+
+                                popup_html = THIS.templates.hotdesk_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#hotdesk_selector', popup_html).val());
+                                    node.setMetadata('name', $('#hotdesk_selector option:selected', popup_html).text());
+
+                                    node.caption = $('#hotdesk_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Select Hot Desking User',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'hotdesk[action=login]': {
+                    name: 'Hot Desk login',
+                    icon: 'hotdesk_login',
+                    category: 'Hotdesking',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'login'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'hotdesk[action=logout]': {
+                    name: 'Hot Desk logout',
+                    icon: 'hotdesk_logout',
+                    category: 'Hotdesking',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'logout'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'hotdesk[action=toggle]': {
+                    name: 'Hot Desk toggle',
+                    icon: 'hotdesk_toggle',
+                    category: 'Hotdesking',
+                    module: 'hotdesk',
+                    data: {
+                        action: 'toggle'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }
+            });
         }
     }
 );

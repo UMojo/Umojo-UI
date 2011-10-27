@@ -84,7 +84,7 @@ winkstart.module('voip', 'callflow', {
             $('#ws-content').empty();
             THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
 
-            THIS.renderList(function() { 
+            THIS.renderList(function() {
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
             });
 
@@ -194,13 +194,13 @@ winkstart.module('voip', 'callflow', {
 
             function branch(actionName) {
                 var that = this;
-                this.id = -1;  
+                this.id = -1;
                 this.actionName = actionName;
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
                 this.children = {};
-                this.data = { 
+                this.data = {
                     data: $.extend(true, {}, THIS.actions[this.actionName].data)
                 };
                 this.caption = '';
@@ -478,7 +478,7 @@ winkstart.module('voip', 'callflow', {
                             branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
 
                             if (target.addChild(branch)) {
-                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
                                     branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
 
                                     THIS.actions[branch.parent.actionName].key_edit(branch, function() {
@@ -493,7 +493,7 @@ winkstart.module('voip', 'callflow', {
                                     });
                                 }
 
-                                //This is just in case something goes wrong with the dialog 
+                                //This is just in case something goes wrong with the dialog
                                 THIS.renderFlow();
                             }
                         }
@@ -505,7 +505,7 @@ winkstart.module('voip', 'callflow', {
                                 // If we move a node, destroy its key
                                 branch.key = '_';
 
-                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) { 
+                                if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
                                     branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
                                 }
 
@@ -562,7 +562,7 @@ winkstart.module('voip', 'callflow', {
                     display_key: branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])
                 }),
                 children;
-            
+
             if(branch.parent && ('key_edit' in THIS.actions[branch.parent.actionName])) {
                 $('.div_option', flow).click(function() {
                     THIS.actions[branch.parent.actionName].key_edit(branch, function() {
@@ -620,7 +620,7 @@ winkstart.module('voip', 'callflow', {
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
-                }, 
+                },
                 function () {
                     $(this).removeClass('active');
                 }
@@ -652,7 +652,7 @@ winkstart.module('voip', 'callflow', {
             $('.action', tools).each(function() {
                 action($(this));
             });
-                
+
             target = $(THIS.config.elements.tools).empty();
             target.append(tools);
         },
@@ -785,157 +785,19 @@ winkstart.module('voip', 'callflow', {
 
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
-                
+
             $.extend(callflow_nodes, {
                 'root': {
                     name: 'Root',
-                    rules: [ 
+                    rules: [
                         {
                             type: 'quantity',
                             maxSize: '1'
-                        } 
+                        }
                     ],
                     isUsable : 'false'
                 },
-                'device[id=*]': {
-                    name: 'Device',
-                    icon: 'phone',
-                    category: 'Basic',
-                    module: 'device',
-                    data: {
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
 
-                        return (id && id != '') ? caption_map[id].name : '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'device.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-                                
-                                popup_html = THIS.templates.edit_dialog.tmpl({
-                                    parameter: {
-                                        name: 'timeout (s)',
-                                        value: node.getMetadata('timeout') || '20'
-                                    },
-                                    objects: {
-                                        type: 'device',
-                                        items: data.data,
-                                        selected: node.getMetadata('id') || ''
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    node.setMetadata('id', $('#object-selector', popup_html).val());
-                                    node.setMetadata('timeout', $('#parameter_input', popup_html).val());
-
-                                    node.caption = $('#object-selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Device',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-                'conference[]': {
-                    name: 'Conference Service',
-                    icon: 'conference',
-                    category: 'Advanced',
-                    module: 'conference',
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'conference[id=*]': {
-                    name: 'Conference',
-                    icon: 'conference',
-                    category: 'Basic',
-                    module: 'conference',
-                    data: {
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
-
-                        return (id && id != '') ? caption_map[id].name : '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'conference.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                popup_html = THIS.templates.edit_dialog.tmpl({
-                                    objects: {
-                                        type: 'conference',
-                                        items: data.data,
-                                        selected: node.getMetadata('id') || '!'
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    node.setMetadata('id', $('#object-selector', popup_html).val());
-
-                                    node.caption = $('#object-selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Conference',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
                 'callflow[id=*]': {
                     name: 'Callflow',
                     icon: 'callflow',
@@ -1000,439 +862,7 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
-                'play[id=*]': {
-                    name: 'Play Media',
-                    icon: 'play',
-                    category: 'Advanced',
-                    module: 'play',
-                    data: {
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
 
-                        return (id) ? caption_map[id].name : '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'media.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                popup_html = THIS.templates.edit_dialog.tmpl({
-                                    objects: {
-                                        type: 'media',
-                                        items: data.data,
-                                        selected: node.getMetadata('id') || ''
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    node.setMetadata('id', $('#object-selector', popup_html).val());
-
-                                    node.caption = $('#object-selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Play Media',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-                'temporal_route[]': {
-                    name: 'Time of Day',
-                    icon: 'temporal_route',
-                    category: 'Time Of Day',
-                    module: 'temporal_route',
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '9'
-                        }
-                    ],
-                    isUsable: 'true',
-                    key_caption: function(child_node, caption_map) {
-                        var key = child_node.key;
-
-                        return (key != '_') ? caption_map[key].name : 'All other times';
-                    },
-                    key_edit: function(child_node, callback) {
-                        winkstart.request(true, 'timeofday.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                data.data.push({ id: '_', name: 'All other times' });
-
-                                popup_html = THIS.templates.edit_dialog.tmpl({
-                                    objects: {
-                                        type: 'temporal rule',
-                                        items: data.data,
-                                        selected: child_node.key
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    child_node.key = $('#object-selector', popup_html).val();
-
-                                    child_node.key_caption = $('#object-selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Time of Day',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    },
-                    caption: function(node, caption_map) {
-                        return node.getMetadata('timezone') || '';
-                    },
-                    edit: function(node, callback) {
-                        var popup, popup_html;
-
-                        popup_html = THIS.templates.edit_dialog.tmpl({
-                            objects: {
-                                type: 'timezone',
-                                items: {},
-                                selected: {}
-                            }
-                        });
-
-                        winkstart.timezone.populate_dropdown($('#object-selector', popup_html), node.getMetadata('timezone'));
-
-                        $('.submit_btn', popup_html).click(function() {
-                            node.setMetadata('timezone', $('#object-selector', popup_html).val());
-
-                            node.caption = $('#object-selector option:selected', popup_html).text();
-
-                            popup.dialog('close');
-                        });
-
-                        popup = winkstart.dialog(popup_html, {
-                            title: 'Time of Day',
-                            beforeClose: function() {
-                                if(typeof callback == 'function') {
-                                    callback();
-                                }
-                            }
-                        });
-                    }
-                },
-                'temporal_route[action=enable]': {
-                    name: 'Enable Time of Day',
-                    icon: 'temporal_route',
-                    category: 'Time Of Day',
-                    module: 'temporal_route',
-                    data: {
-                        action: 'enable',
-                        rules: []
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'timeofday.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html, rules,
-                                    unselected_rules = [],
-                                    selected_rules = [];
-
-                                if(rules = node.getMetadata('rules')) {
-                                    $.each(data.data, function(i, obj) {
-                                        if($.inArray(obj.id, rules) != -1) {
-                                            selected_rules.push(obj);
-                                        }
-                                        else {
-                                            unselected_rules.push(obj);
-                                        }
-                                    });
-                                }
-                                else {
-                                    unselected_rules = data.data;
-                                }
-
-                                popup_html = THIS.templates.two_column.tmpl({
-                                    left: {
-                                        title: 'Unselected time of day rules',
-                                        items: unselected_rules
-                                    },
-                                    right: {
-                                        title: 'Selected time of day rules',
-                                        items: selected_rules
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    var _rules = [];
-
-                                    $('.right .connect li', popup_html).each(function() {
-                                        _rules.push($(this).dataset('id'));
-                                    });
-
-                                    node.setMetadata('rules', _rules);
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Enable Time of Day rules',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-
-                                /* Initialize the scrollpane AFTER it has rendered */
-
-                                $('.scrollable', popup).jScrollPane();
-
-                                $('.connect', popup).sortable({
-                                    connectWith: $('.connect', popup),
-                                    zIndex: 2000,
-                                    helper: 'clone',
-                                    appendTo: $('.wrapper', popup),
-                                    scroll: false,
-                                    receive: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    },
-                                    remove: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-                'temporal_route[action=disable]': {
-                    name: 'Disable Time of Day',
-                    icon: 'temporal_route',
-                    category: 'Time Of Day',
-                    module: 'temporal_route',
-                    data: {
-                        action: 'disable',
-                        rules: []
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'timeofday.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html, rules,
-                                    unselected_rules = [],
-                                    selected_rules = [];
-
-                                if(rules = node.getMetadata('rules')) {
-                                    $.each(data.data, function(i, obj) {
-                                        if($.inArray(obj.id, rules) != -1) {
-                                            selected_rules.push(obj);
-                                        }
-                                        else {
-                                            unselected_rules.push(obj);
-                                        }
-                                    });
-                                }
-                                else {
-                                    unselected_rules = data.data;
-                                }
-
-                                popup_html = THIS.templates.two_column.tmpl({
-                                    left: {
-                                        title: 'Unselected time of day rules',
-                                        items: unselected_rules
-                                    },
-                                    right: {
-                                        title: 'Selected time of day rules',
-                                        items: selected_rules
-                                    }
-                                });
-                                
-                                $('.submit_btn', popup_html).click(function() {
-                                    var _rules = [];
-
-                                    $('.right .connect li', popup_html).each(function() {
-                                        _rules.push($(this).dataset('id'));
-                                    });
-
-                                    node.setMetadata('rules', _rules);
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Disable Time of Day rules',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-
-                                /* Initialize the scrollpane AFTER it has rendered */
-
-                                $('.scrollable', popup).jScrollPane();
-
-                                $('.connect', popup).sortable({
-                                    connectWith: $('.connect', popup),
-                                    zIndex: 2000,
-                                    helper: 'clone',
-                                    appendTo: $('.wrapper', popup),
-                                    scroll: false,
-                                    receive: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    },
-                                    remove: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-                'temporal_route[action=reset]': {
-                    name: 'Reset Time of Day',
-                    icon: 'temporal_route',
-                    category: 'Time Of Day',
-                    module: 'temporal_route',
-                    data: {
-                        action: 'reset',
-                        rules: []
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'timeofday.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html, rules,
-                                    unselected_rules = [],
-                                    selected_rules = [];
-
-                                if(rules = node.getMetadata('rules')) {
-                                    $.each(data.data, function(i, obj) {
-                                        if($.inArray(obj.id, rules) != -1) {
-                                            selected_rules.push(obj);
-                                        }
-                                        else {
-                                            unselected_rules.push(obj);
-                                        }
-                                    });
-                                }
-                                else {
-                                    unselected_rules = data.data;
-                                }
-
-                                popup_html = THIS.templates.two_column.tmpl({
-                                    left: {
-                                        title: 'Unselected time of day rules',
-                                        items: unselected_rules
-                                    },
-                                    right: {
-                                        title: 'Selected time of day rules',
-                                        items: selected_rules
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    var _rules = [];
-
-                                    $('.right .connect li', popup_html).each(function() {
-                                        _rules.push($(this).dataset('id'));
-                                    });
-
-                                    node.setMetadata('rules', _rules);
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Reset Time of Day rules',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-
-                                /* Initialize the scrollpane AFTER it has rendered */
-
-                                $('.scrollable', popup).jScrollPane();
-
-                                $('.connect', popup).sortable({
-                                    connectWith: $('.connect', popup),
-                                    zIndex: 2000,
-                                    helper: 'clone',
-                                    appendTo: $('.wrapper', popup),
-                                    scroll: false,
-                                    receive: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    },
-                                    remove: function() {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    }
-                                });
-                            }
-                        );
-                    }
-                }, 
                 'ring_group[]': {
                     name: 'Ring Group',
                     icon: 'ring_group',
@@ -1466,7 +896,7 @@ winkstart.module('voip', 'callflow', {
                                     // we also need to clone to prevent managing of objects
                                     $.each($.extend(true, {}, endpoints), function(i, obj) {
                                         obj.name = 'Undefined';
-                                        selected_endpoints[obj.id] = obj; 
+                                        selected_endpoints[obj.id] = obj;
                                     });
 
                                     $.each(data.data, function(i, obj) {
@@ -1495,7 +925,7 @@ winkstart.module('voip', 'callflow', {
                                         name: node.getMetadata('name') || '',
                                         strategy: {
                                             items: [
-                                                {   
+                                                {
                                                     id: 'simultaneous',
                                                     name: 'At the same time'
                                                 },
@@ -1639,184 +1069,6 @@ winkstart.module('voip', 'callflow', {
                     module: 'call_forward',
                     data: {
                         action: 'update'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'offnet[]': {
-                    name: 'Global Resource',
-                    icon: 'offnet',
-                    category: 'Advanced',
-                    module: 'offnet',
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '0'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'resources[]': {
-                    name: 'Resource',
-                    icon: 'resource',
-                    category: 'Basic',
-                    module: 'resources',
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '0'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'hotdesk[id=*,action=bridge]': {
-                    name: 'Hot Desking',
-                    icon: 'v_phone',
-                    category: 'Hotdesking',
-                    module: 'hotdesk',
-                    data: {
-                        action: 'bridge',
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var name = node.getMetadata('name');
-                        
-                        return (name) ? name : '';
-                    },
-                    edit: function(node, callback) {
-                        winkstart.request(true, 'hotdesk.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                $.each(data.data, function() {
-                                    this.name = this.first_name + ' ' + this.last_name;
-                                });
-
-                                popup_html = THIS.templates.edit_dialog.tmpl({
-                                    objects: {
-                                        type: 'user',
-                                        items: data.data,
-                                        selected: node.getMetadata('id') || ''
-                                    }
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    node.setMetadata('id', $('#object-selector', popup_html).val());
-                                    node.setMetadata('name', $('#object-selector option:selected', popup_html).text());
-
-                                    node.caption = $('#object-selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Select Hot Desking User',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-                'hotdesk[action=login]': {
-                    name: 'Hot Desk login',
-                    icon: 'hotdesk_login',
-                    category: 'Hotdesking',
-                    module: 'hotdesk',
-                    data: {
-                        action: 'login'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'hotdesk[action=logout]': {
-                    name: 'Hot Desk logout',
-                    icon: 'hotdesk_logout',
-                    category: 'Hotdesking',
-                    module: 'hotdesk',
-                    data: {
-                        action: 'logout'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'hotdesk[action=toggle]': {
-                    name: 'Hot Desk toggle',
-                    icon: 'hotdesk_toggle',
-                    category: 'Hotdesking',
-                    module: 'hotdesk',
-                    data: {
-                        action: 'toggle'
                     },
                     rules: [
                         {

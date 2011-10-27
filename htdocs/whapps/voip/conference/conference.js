@@ -5,12 +5,14 @@ winkstart.module('voip', 'conference', {
 
         templates: {
             conference: 'tmpl/conference.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            conference_callflow: 'tmpl/conference_callflow.html'
         },
 
         subscribe: {
             'conference.activate': 'activate',
-            'conference.edit': 'edit_conference'
+            'conference.edit': 'edit_conference',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         resources: {
@@ -430,6 +432,133 @@ winkstart.module('voip', 'conference', {
                 .append(conference_html);
 
             THIS.render_list(conference_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'conference[id=*]': {
+                    name: 'Conference',
+                    icon: 'conference',
+                    category: 'Basic',
+                    module: 'conference',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id && id != '') ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'conference.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.conference_callflow.tmpl({
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || '!'
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#conference_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#conference_selector', popup_html).val());
+
+                                    node.caption = $('#conference_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                     title: 'Conference',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('conference.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit conference' : 'Create conference'
+                                });
+                            }
+                        });
+                    }
+                },
+
+                'conference[]': {
+                    name: 'Conference Service',
+                    icon: 'conference',
+                    category: 'Advanced',
+                    module: 'conference',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }
+            });
         }
     }
 );

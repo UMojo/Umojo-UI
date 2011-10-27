@@ -7,7 +7,8 @@ winkstart.module('voip', 'device', {
             device: 'tmpl/device.html',
             general_edit: 'tmpl/general_edit.html',
             cellphone: 'tmpl/cellphone.html',
-            sip_device: 'tmpl/edit.html'
+            sip_device: 'tmpl/edit.html',
+            device_callflow: 'tmpl/device_callflow.html'
         },
 
         subscribe: {
@@ -79,7 +80,7 @@ winkstart.module('voip', 'device', {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
-            } 
+            }
         }
     },
 
@@ -153,8 +154,8 @@ winkstart.module('voip', 'device', {
                         mac_address: form_data.mac_address
                     },
                     function(_data, status) {
-                        if(_data.data.length == 0 || (_data.data.length == 1 && _data.data[0].id == id)) { 
-                            save(); 
+                        if(_data.data.length == 0 || (_data.data.length == 1 && _data.data[0].id == id)) {
+                            save();
                         }
                         else {
                             if(typeof error == 'function') {
@@ -219,7 +220,7 @@ winkstart.module('voip', 'device', {
                             },
                             fax: {
                                 option: 'auto'
-                            }   
+                            }
                         },
                         sip: {
                             method: 'password',
@@ -242,7 +243,7 @@ winkstart.module('voip', 'device', {
                                 'password': 'Password'
                             },
                             invite_formats: {
-                                'username': 'Username', 
+                                'username': 'Username',
                                 'npan': 'NPA NXX XXXX',
                                 'e164': 'E. 164'
                             }
@@ -262,7 +263,7 @@ winkstart.module('voip', 'device', {
                             },
                             audio: {
                                 codecs: {
-                                    'G729': 'G729 - 8kbps (Requires License)', 
+                                    'G729': 'G729 - 8kbps (Requires License)',
                                     'PCMU': 'G711u / PCMU - 64kbps (North America)',
                                     'PCMA': 'G711a / PCMA - 64kbps (Elsewhere)',
                                     'G722_16': 'G722 (HD) @ 16kHz',
@@ -319,7 +320,7 @@ winkstart.module('voip', 'device', {
                                         defaults.data.device_type = 'sip_device';
 
                                         THIS.migrate_data(_data);
-                                            
+
                                         THIS.render_device($.extend(true, defaults, _data), target, callbacks);
 
                                         if(typeof callbacks.after_render == 'function') {
@@ -449,7 +450,7 @@ winkstart.module('voip', 'device', {
                     ev.preventDefault();
 
                     THIS.delete_device(data, callbacks.delete_success, callbacks.delete_error);
-                }); 
+                });
             }
             else {
                 device_html = THIS.templates.general_edit.tmpl();
@@ -485,7 +486,7 @@ winkstart.module('voip', 'device', {
                     data.data.caller_id.internal = data.data.caller_id.emergency;
                     delete data.data.caller_id.emergency;
                 }
-            }   
+            }
 
             if(data.data.device_type == 'cell_phone') {
                 data.data.device_type = 'cellphone';
@@ -549,7 +550,7 @@ winkstart.module('voip', 'device', {
                 function (data, status) {
                     var map_crossbar_data = function(data) {
                         var new_list = [];
-                            
+
                         if(data.length > 0) {
                             $.each(data, function(key, val){
                                 new_list.push({
@@ -586,7 +587,7 @@ winkstart.module('voip', 'device', {
                         function(_data, status) {
                             $.each(_data.data, function(key, val) {
                                 $('#' + val.device_id, $('#device-listpanel', parent)).addClass('registered');
-                            }); 
+                            });
                         }
                     );
                 }
@@ -602,6 +603,120 @@ winkstart.module('voip', 'device', {
                 .append(device_html);
 
             THIS.render_list(device_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'device[id=*]': {
+                    name: 'Device',
+                    icon: 'phone',
+                    category: 'Basic',
+                    module: 'device',
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id && id != '') ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+                        winkstart.request(true, 'device.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.device_callflow.tmpl({
+                                    parameter: {
+                                        name: 'timeout (s)',
+                                        value: node.getMetadata('timeout') || '20'
+                                    },
+                                    objects: {
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#device_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    popup.dialog('close');
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    node.setMetadata('id', $('#device_selector', popup_html).val());
+                                    node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+
+                                    node.caption = $('#device_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Device',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                             callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('device.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit device' : 'Create device'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 );

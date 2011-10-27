@@ -447,16 +447,12 @@ winkstart.module('voip', 'menu', {
 
                                     ev.preventDefault();
 
-                                    popup.dialog('close');
-
                                     _this.inline_edit(_data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
 
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
+                                        popup.dialog('close');
                                     });
                                 });
 

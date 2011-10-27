@@ -11,7 +11,8 @@ winkstart.module('voip', 'resource', {
 
         subscribe: {
             'resource.activate': 'activate',
-            'resource.edit': 'edit_resource'
+            'resource.edit': 'edit_resource',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
         validation: [
@@ -461,6 +462,57 @@ winkstart.module('voip', 'resource', {
                 .append(resource_html);
 
             THIS.render_list(resource_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'offnet[]': {
+                    name: 'Global Resource',
+                    icon: 'offnet',
+                    category: 'Advanced',
+                    module: 'offnet',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'resources[]': {
+                    name: 'Resource',
+                    icon: 'resource',
+                    category: 'Basic',
+                    module: 'resources',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }
+            });
         }
     }
 );

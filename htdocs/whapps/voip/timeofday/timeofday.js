@@ -5,16 +5,19 @@ winkstart.module('voip', 'timeofday', {
 
         templates: {
             timeofday: 'tmpl/timeofday.html',
-            edit: 'tmpl/edit.html'
-            //timeofday_callflow: 'tmpl/conference_timeofday.html'
+            edit: 'tmpl/edit.html',
+            timeofday_callflow: 'tmpl/timeofday_callflow.html',
+            timeofday_key_dialog: 'tmpl/timeofday_key_dialog.html',
+            two_column: 'tmpl/two_column.html'
         },
 
         subscribe: {
             'timeofday.activate': 'activate',
-            'timeofday.edit': 'edit_timeofday'
+            'timeofday.edit': 'edit_timeofday',
+            'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
-        formData: {
+        /*formData: {
             wdays: [
                 'Sunday',
                 'Monday',
@@ -59,7 +62,7 @@ winkstart.module('voip', 'timeofday', {
                 { id: 11, value: 'November' },
                 { id: 12, value: 'December' }
             ]
-        },
+        },*/
 
         validation: [
             { name: '#name', regex: /^[a-zA-Z0-9\s_']+$/ }
@@ -184,8 +187,54 @@ winkstart.module('voip', 'timeofday', {
                         days: [],
                         interval: 1
                     },
-                    field_data: THIS.config.formData
+                    field_data: {
+                        wdays: [
+                            'Sunday',
+                            'Monday',
+                            'Tuesday',
+                            'Wednesday',
+                            'Thursday',
+                            'Friday',
+                            'Saturday'
+                        ],
+
+                        day: [
+                            '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
+                            '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'
+                        ],
+
+                        cycle: [
+                            { id: 'weekly', value: 'Weekly' },
+                            { id: 'monthly', value:'Monthly' },
+                            { id: 'yearly', value:'Yearly' }
+                        ],
+
+                        ordinals: [
+                            { id: 'first', value: 'First' },
+                            { id: 'second', value: 'Second' },
+                            { id: 'third', value: 'Third' },
+                            { id: 'fourth', value: 'Fourth' },
+                            { id: 'last', value: 'Last' },
+                            { id: 'day', value: 'Day' }
+                        ],
+
+                        months: [
+                            { id: 1, value: 'January' },
+                            { id: 2, value: 'February' },
+                            { id: 3, value: 'March' },
+                            { id: 4, value: 'April' },
+                            { id: 5, value: 'May' },
+                            { id: 6, value: 'June' },
+                            { id: 7, value: 'July' },
+                            { id: 8, value: 'August' },
+                            { id: 9, value: 'September' },
+                            { id: 10, value: 'October' },
+                            { id: 11, value: 'November' },
+                            { id: 12, value: 'December' }
+                        ]
+                    }
                 };
+
 
             if(typeof data == 'object' && data.id) {
                 winkstart.request(true, 'timeofday.get', {
@@ -239,7 +288,6 @@ winkstart.module('voip', 'timeofday', {
         },
 
         render_timeofday: function(data, target, callbacks){
-
             var THIS = this,
                 wday,
                 timeofday_html = THIS.templates.edit.tmpl(data);
@@ -555,6 +603,427 @@ winkstart.module('voip', 'timeofday', {
                 .append(timeofday_html);
 
             THIS.render_list(timeofday_html);
+        },
+
+        define_callflow_nodes: function(callflow_nodes) {
+            var THIS = this;
+
+            $.extend(callflow_nodes, {
+                'temporal_route[]': {
+                    name: 'Time of Day',
+                    icon: 'temporal_route',
+                    category: 'Time Of Day',
+                    module: 'temporal_route',
+                    data: {},
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '9'
+                        }
+                    ],
+                    isUsable: 'true',
+                    key_caption: function(child_node, caption_map) {
+                        var key = child_node.key;
+
+                        return (key != '_') ? caption_map[key].name : 'All other times';
+                    },
+                    key_edit: function(child_node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                data.data.push({ id: '_', name: 'All other times' });
+
+                                popup_html = THIS.templates.timeofday_key_dialog.tmpl({
+                                    items: data.data,
+                                    selected: child_node.key
+                                });
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#timeofday_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    _this.inline_edit(_data, function(_data) {
+                                        child_node.key = _data.data.id || 'null';
+
+                                        child_node.key_caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    child_node.key = $('#timeofday_selector', popup_html).val();
+
+                                    child_node.key_caption = $('#timeofday_selector option:selected', popup_html).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Time of Day',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    },
+                    inline_edit: function(data, callback) {
+                        var popup, popup_html;
+
+                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+                        winkstart.publish('timeofday.edit', data, popup_html, $('.inline_content', popup_html), {
+                            save_success: function(_data) {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback(_data);
+                                }
+                            },
+                            delete_success: function() {
+                                popup.dialog('close');
+
+                                if(typeof callback == 'function') {
+                                    callback({ data: {} });
+                                }
+                            },
+                            after_render: function() {
+                                popup = winkstart.dialog(popup_html, {
+                                    title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
+                                });
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('timezone') || '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.timeofday_callflow.tmpl({
+                            items: {},
+                            selected: {}
+                        });
+
+                        winkstart.timezone.populate_dropdown($('#timezone_selector', popup_html), node.getMetadata('timezone'));
+
+                        $('.submit_btn', popup_html).click(function() {
+                            node.setMetadata('timezone', $('#timezone_selector', popup_html).val());
+
+                            node.caption = $('#timezone_selector option:selected', popup_html).text();
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Select a Timezone',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    }
+                },
+                'temporal_route[action=disable]': {
+                    name: 'Disable Time of Day',
+                    icon: 'temporal_route',
+                    category: 'Time Of Day',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'disable',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request(true, 'timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+
+                                 popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup_html).each(function() {
+                                        _rules.push($(this).dataset('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Disable Time of Day rules',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+
+                                /* Initialize the scrollpane AFTER it has rendered */
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    scroll: false,
+                                    receive: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'temporal_route[action=enable]': {
+                    name: 'Enable Time of Day',
+                    icon: 'temporal_route',
+                    category: 'Time Of Day',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'enable',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request(true, 'timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+
+                                popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup_html).each(function() {
+                                        _rules.push($(this).dataset('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Enable Time of Day rules',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+
+                                /* Initialize the scrollpane AFTER it has rendered */
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    scroll: false,
+                                    receive: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'temporal_route[action=reset]': {
+                    name: 'Reset Time of Day',
+                    icon: 'temporal_route',
+                    category: 'Time Of Day',
+                    module: 'temporal_route',
+                    data: {
+                        action: 'reset',
+                        rules: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request(true, 'timeofday.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html, rules,
+                                    unselected_rules = [],
+                                    selected_rules = [];
+
+                                if(rules = node.getMetadata('rules')) {
+                                    $.each(data.data, function(i, obj) {
+                                        if($.inArray(obj.id, rules) != -1) {
+                                            selected_rules.push(obj);
+                                        }
+                                        else {
+                                            unselected_rules.push(obj);
+                                        }
+                                    });
+                                }
+                                else {
+                                    unselected_rules = data.data;
+                                }
+                                popup_html = THIS.templates.two_column.tmpl({
+                                    left: {
+                                        title: 'Unselected time of day rules',
+                                        items: unselected_rules
+                                    },
+                                    right: {
+                                        title: 'Selected time of day rules',
+                                        items: selected_rules
+                                    }
+                                });
+
+                                $('.submit_btn', popup_html).click(function() {
+                                    var _rules = [];
+
+                                    $('.right .connect li', popup_html).each(function() {
+                                        _rules.push($(this).dataset('id'));
+                                    });
+
+                                    node.setMetadata('rules', _rules);
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Reset Time of Day rules',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+
+                                /* Initialize the scrollpane AFTER it has rendered */
+
+                                $('.scrollable', popup).jScrollPane();
+
+                                $('.connect', popup).sortable({
+                                    connectWith: $('.connect', popup),
+                                    zIndex: 2000,
+                                    helper: 'clone',
+                                    appendTo: $('.wrapper', popup),
+                                    scroll: false,
+                                    receive: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    },
+                                    remove: function() {
+                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                    }
+                                });
+                            }
+                        );
+                    }
+                }
+            });
         }
     }
 );
