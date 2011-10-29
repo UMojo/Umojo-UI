@@ -72,9 +72,9 @@ winkstart.module('voip', 'featurecode', {
                     THIS.categories[data.category].push(data);
                 }
             });
-            
+
             winkstart.getJSON('featurecode.list', {
-                    crossbar: true, 
+                    crossbar: true,
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 },
@@ -85,7 +85,7 @@ winkstart.module('voip', 'featurecode', {
                                 THIS.actions[this.featurecode.name].id = this.id;
                                 THIS.actions[this.featurecode.name].enabled = true;
                                 THIS.actions[this.featurecode.name].number = this.featurecode.number;
-                            }  
+                            }
                         }
                     });
                     var data = {'categories': THIS.categories, 'label':'data' };
@@ -96,7 +96,7 @@ winkstart.module('voip', 'featurecode', {
                         var action_wrapper = $(this).parents('.action_wrapper');
 
                         action_wrapper.dataset('number', $(this).val());
-                        
+
                         if($(this).val() != THIS.actions[action_wrapper.dataset('action')].number) {
                             action_wrapper.addClass('changed');
                         } else {
@@ -111,6 +111,12 @@ winkstart.module('voip', 'featurecode', {
                     $('.arrow:not(:first)', featurecode_html).parents('.category_header').siblings('.featurecode_list').hide();
                     $('.arrow:not(:first)', featurecode_html).removeClass('down_arrow_circle')
                                                              .addClass('right_arrow_circle');
+
+                    $('.featurecode_enabled', featurecode_html).each(function() {
+                            var action_wrapper = $(this).parents('.action_wrapper');
+                            var number_field = action_wrapper.find('.featurecode_number');
+                            !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
+                    });
 
                     $('.arrow', featurecode_html).click(function() {
                         $(this).parents('.category_header').siblings('.featurecode_list').toggle();
@@ -133,6 +139,10 @@ winkstart.module('voip', 'featurecode', {
                             action_wrapper.removeClass('enabled');
                             action_wrapper.removeClass('disabled');
                         }
+
+                        var number_field = action_wrapper.find('.featurecode_number');
+                        !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
+
                     });
 
                     /* Listen for the submit event (i.e. they click "save") */
@@ -150,7 +160,7 @@ winkstart.module('voip', 'featurecode', {
             var THIS = this,
                 count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
-            if(count == 0) { alert('Nothing to save!') }
+            if(count == 0) { alert('Nothing to save') }
 
             $.each(form_data.created_callflows, function() {
                 winkstart.putJSON('featurecode.create', {
@@ -159,14 +169,14 @@ winkstart.module('voip', 'featurecode', {
                         featurecode_id: this.id,
                         data: {
                             flow: this.flow,
-                            patterns: this.patterns, 
+                            patterns: this.patterns,
                             numbers: this.numbers,
                             featurecode: {
                                 name: this.action,
                                 number: this.number
                             }
                         }
-                    }, 
+                    },
                     function(data, status) {
                         if(!--count) {
                             winkstart.publish('featurecode.activate');
@@ -236,25 +246,25 @@ winkstart.module('voip', 'featurecode', {
                     $('#ws-content').empty();
                     var featurecode_html = THIS.templates.featurecode.tmpl(data).appendTo($('#ws-content'));
 
-                    
+
             });
         },
         clean_form_data: function() {
             var THIS = this;
 
-            var form_data = { 
-                created_callflows: [], 
-                deleted_callflows: [], 
+            var form_data = {
+                created_callflows: [],
+                deleted_callflows: [],
                 updated_callflows: []
             };
 
-            $('.enabled', '#featurecode-view').each(function() { 
+            $('.enabled', '#featurecode-view').each(function() {
                 var callflow = $(this).dataset();
                 callflow.flow = {
                     data: THIS.actions[callflow.action].data,
                     module: THIS.actions[callflow.action].module,
                     children: {}
-                }; 
+                };
                 callflow.type += 's';
                 callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
                 form_data.created_callflows.push(callflow);
@@ -264,6 +274,7 @@ winkstart.module('voip', 'featurecode', {
                 var callflow = $(this).dataset();
                 form_data.deleted_callflows.push(callflow);
             });
+
             $('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
                 if($(this).dataset('enabled') == 'true') {
                     var callflow = $(this).dataset();
@@ -298,7 +309,7 @@ winkstart.module('voip', 'featurecode', {
 
         define_featurecodes: function(featurecodes) {
             var THIS = this;
-                
+
             $.extend(featurecodes, {
                'call_forward[action=activate]': {
                     name: 'Enable Call-Forward',
@@ -364,7 +375,7 @@ winkstart.module('voip', 'featurecode', {
                         return '*'+number;
                     }
                 },
-                
+
                 'hotdesk[action=login]': {
                     name: 'Enable Hot Desking',
                     icon: 'phone',
@@ -620,7 +631,7 @@ winkstart.module('voip', 'featurecode', {
                         return '*'+number;
                     }
                 },
-                
+
                 'sound_test_service': {
                     name: 'Sound Test Service',
                     icon: 'phone',
@@ -637,7 +648,7 @@ winkstart.module('voip', 'featurecode', {
                         return '^\\*'+number+'([0-9]*)$';
                     }
                 },
-                
+
                 'call_recording': {
                     name: 'Call Recording',
                     icon: 'phone',
