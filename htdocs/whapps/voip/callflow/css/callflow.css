@@ -7,7 +7,7 @@
     margin-top: 30px;
 }
 
-#ws_callflow #ws_cf_flow { 
+#ws_callflow #ws_cf_flow {
     width: 100%;
     overflow-x: auto;
     min-height: 400px;
@@ -16,7 +16,7 @@
     text-align: center;
 }
 
-#ws_callflow span.flow { 
+#ws_callflow span.flow {
     width: 80%;
 }
 
@@ -57,13 +57,14 @@
     position:fixed;
 }
 
-#ws_callflow .tool { 
+#ws_callflow .tool {
     text-align: center;
     vertical-align: middle;
 }
 
 #ws_callflow .tool_name {
     text-transform: capitalize;
+    cursor: default;
 }
 
 #ws_callflow .tool .action.inactive {

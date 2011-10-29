@@ -655,6 +655,8 @@ winkstart.module('voip', 'callflow', {
 
             target = $(THIS.config.elements.tools).empty();
             target.append(tools);
+
+            $('#ws_cf_tools', '#callflow-view').disableSelection();
         },
 
         _enableDestinations: function(el) {
