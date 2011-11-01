@@ -659,6 +659,10 @@ winkstart.module('voip', 'timeofday', {
                                     });
                                 });
 
+                                $('#timeofday_selector', popup_html).change(function() {
+                                    $('#timeofday_selector option:selected', popup_html).val() == '_' ? $('#edit_link', popup_html).hide() : $('#edit_link', popup_html).show();
+                                });
+
                                 $('.submit_btn', popup_html).click(function() {
                                     child_node.key = $('#timeofday_selector', popup_html).val();
 
