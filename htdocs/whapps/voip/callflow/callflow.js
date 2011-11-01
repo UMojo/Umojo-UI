@@ -397,8 +397,8 @@ winkstart.module('voip', 'callflow', {
 
                 if (node.actionName == 'root') {
                     $node.removeClass('icons_black root');
-
                     node_html = THIS.templates.root.tmpl({});
+
 
                     for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
                         x = i * 2;
@@ -587,7 +587,7 @@ winkstart.module('voip', 'callflow', {
                 target,
                 tools;
 
-            THIS.categories = {};
+            THIS.categories = { 'Basic': [] };
 
             $.each(THIS.actions, function(i, data) {
                 if('category' in data) {
