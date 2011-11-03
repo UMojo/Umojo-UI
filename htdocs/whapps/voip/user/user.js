@@ -12,7 +12,8 @@ winkstart.module('voip', 'user', {
         subscribe: {
             'user.activate': 'activate',
             'user.edit': 'edit_user',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'user.popup_edit': 'popup_edit_user'
         },
 
         validation : [
@@ -120,7 +121,7 @@ winkstart.module('voip', 'user', {
             }
         },
 
-        edit_user: function(data, _parent, _target, _callbacks) {
+        edit_user: function(data, _parent, _target, _callbacks, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#user-content'),
                 target = _target || $('#user-view', parent),
@@ -145,7 +146,7 @@ winkstart.module('voip', 'user', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         apps: {},
                         call_forward: {},
                         caller_id: {
@@ -153,7 +154,7 @@ winkstart.module('voip', 'user', {
                             external: {}
                         },
                         hotdesk: {}
-                    },
+                    }, data_defaults || {}),
                     field_data: {}
                 };
 
@@ -438,6 +439,34 @@ winkstart.module('voip', 'user', {
                 .append(user_html);
 
             THIS.render_list(user_html);
+        },
+
+        popup_edit_user: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('user.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit User' : 'Create User'
+                    });
+                }
+            });
         },
 
         define_callflow_nodes: function(callflow_nodes) {
