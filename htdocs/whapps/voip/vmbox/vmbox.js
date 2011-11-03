@@ -12,7 +12,8 @@ winkstart.module('voip', 'vmbox', {
         subscribe: {
             'vmbox.activate': 'activate',
             'vmbox.edit': 'edit_vmbox',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'vmbox.popup_edit': 'popup_edit_vmbox'
         },
 
         validation : [
@@ -117,7 +118,7 @@ winkstart.module('voip', 'vmbox', {
             }
         },
 
-        edit_vmbox: function(data, _parent, _target, _callbacks) {
+        edit_vmbox: function(data, _parent, _target, _callbacks, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#vmbox-content'),
                 target = _target || $('#vmbox-view', parent),
@@ -142,12 +143,13 @@ winkstart.module('voip', 'vmbox', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         require_pin: true,
                         check_if_owner: true,
                         pin: winkstart.random_string(4, '0123456789'),
                         media: {}
-                    },
+                    }, data_defaults || {}),
+
                     field_data: {
                         users: [],
                         media: []
@@ -160,7 +162,7 @@ winkstart.module('voip', 'vmbox', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '',
+                        id: '_',
                         name: '- Not set -'
                     });
 
@@ -172,7 +174,7 @@ winkstart.module('voip', 'vmbox', {
                         },
                         function(_data, status) {
                             _data.data.unshift({
-                                id: '',
+                                id: '_',
                                 first_name: '- No',
                                 last_name: 'owner -'
                             });
@@ -285,6 +287,79 @@ winkstart.module('voip', 'vmbox', {
                 );
             });
 
+            if($('#owner_id', vmbox_html).val() == '_') {
+                $('#edit_link', vmbox_html).hide();
+            }
+
+            $('#owner_id', vmbox_html).change(function() {
+                $('#owner_id option:selected', vmbox_html).val() == '_' ? $('#edit_link', vmbox_html).hide() : $('#edit_link', vmbox_html).show();
+            });
+
+            $('.inline_action', vmbox_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#owner_id', vmbox_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('user.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#owner_id', vmbox_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>')
+                        $('#owner_id', vmbox_html).val(_data.data.id);
+
+                        $('#edit_link', vmbox_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#owner_id #'+_data.data.id, vmbox_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#owner_id #'+_id, vmbox_html).remove();
+                            $('#edit_link', vmbox_html).hide();
+                        }
+                    }
+                });
+            });
+
+            if($('#media_unavailable', vmbox_html).val() == '_') {
+                $('#edit_link_media', vmbox_html).hide();
+            }
+
+            $('#media_unavailable', vmbox_html).change(function() {
+                $('#media_unavailable option:selected', vmbox_html).val() == '_' ? $('#edit_link_media', vmbox_html).hide() : $('#edit_link_media', vmbox_html).show();
+            });
+
+            $('.inline_action_media', vmbox_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#media_unavailable', vmbox_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#media_unavailable', vmbox_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#media_unavailable', vmbox_html).val(_data.data.id);
+
+                        $('#edit_link_media', vmbox_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#media_unavailable #'+_data.data.id, vmbox_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#media_unavailable #'+_id, vmbox_html).remove();
+                            $('#edit_link_media', vmbox_html).hide();
+                        }
+                    }
+                });
+            });
+
+
             $('.vmbox-save', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -374,6 +449,34 @@ winkstart.module('voip', 'vmbox', {
             THIS.render_list(vmbox_html);
         },
 
+        popup_edit_vmbox: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('vmbox.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -419,7 +522,7 @@ winkstart.module('voip', 'vmbox', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('vmbox.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
@@ -446,33 +549,6 @@ winkstart.module('voip', 'vmbox', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish('vmbox.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
-                                });
-                            }
-                        });
                     }
                 },
 

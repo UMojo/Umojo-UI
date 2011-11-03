@@ -12,7 +12,7 @@
             </ul>
 
             <div class="clear"></div>
-            
+
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
@@ -39,12 +39,14 @@
                                 <select name="owner_id" id="owner_id">
                                 {{each field_data.users}}
                                     {{if data.owner_id == id}}
-                                        <option value="${id}" selected="selected">${first_name} ${last_name}</option>
+                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
                                     {{else}}
-                                        <option value="${id}">${first_name} ${last_name}</option>
+                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
+                                <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action" data-action="create" href="#">Create</a>
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Enter the PIN Number of this voicemail box">
@@ -61,12 +63,14 @@
                                 <select name="media.unavailable" id="media_unavailable">
                                 {{each field_data.media}}
                                     {{if data.media.unavailable == id}}
-                                        <option value="${id}" selected="selected">${name}</option>
+                                        <option id="${id}" value="${id}" selected="selected">${name}</option>
                                     {{else}}
-                                        <option value="${id}">${name}</option>
+                                        <option id="${id}" value="${id}">${name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
                             </li>
                         </ul>
                     </fieldset>
@@ -86,7 +90,7 @@
                     <ul class="advanced_tabs settings2">
                         <li><a href="#"><span  class="icon wrench_screw"/>Options</a></li>
                     </ul>
-                </span> 
+                </span>
 
                 <div class="clear"></div>
             </span>
@@ -176,7 +180,7 @@
                 {{/if}}
             </ul>
         </div>
-            
+
         </form>
     </div>
 </div>
