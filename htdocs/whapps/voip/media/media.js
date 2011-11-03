@@ -12,7 +12,8 @@ winkstart.module('voip', 'media', {
         subscribe: {
             'media.activate': 'activate',
             'media.edit': 'edit_media',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'media.popup_edit': 'popup_edit_media'
         },
 
         validation : [
@@ -124,7 +125,7 @@ winkstart.module('voip', 'media', {
             $('#media-form', media_html).submit();
         },
 
-        edit_media: function(data, _parent, _target, _callbacks){
+        edit_media: function(data, _parent, _target, _callbacks, data_defaults){
             var THIS = this,
                 parent = _parent || $('#media-content'),
                 target = _target || $('#media-view', parent),
@@ -149,9 +150,9 @@ winkstart.module('voip', 'media', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         streamable: true
-                    },
+                    }, data_defaults || {}),
                     auth_token: winkstart.apps['voip'].auth_token
                 };
 
@@ -387,6 +388,34 @@ winkstart.module('voip', 'media', {
             THIS.render_list(media_html);
         },
 
+        popup_edit_media: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('media.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit media' : 'Create media'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -432,7 +461,7 @@ winkstart.module('voip', 'media', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('media.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
@@ -459,33 +488,6 @@ winkstart.module('voip', 'media', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish('media.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit media' : 'Create media'
-                                });
-                            }
-                        });
                     }
                 }
             });
