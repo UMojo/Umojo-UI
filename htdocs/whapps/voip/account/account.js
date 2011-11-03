@@ -110,7 +110,7 @@ winkstart.module('voip', 'account', {
             }
         },
 
-        edit_account: function(data, _parent, _target, _callback) {
+        edit_account: function(data, _parent, _target, _callback, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#account-content'),
                 target = _target || $('#account-view', parent),
@@ -135,13 +135,13 @@ winkstart.module('voip', 'account', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         caller_id: {
                             internal: {},
                             external: {}
                         },
                         vm_to_email: {}
-                    },
+                    }, data_defaults || {}),
                     field_data: {}
                 };
 
