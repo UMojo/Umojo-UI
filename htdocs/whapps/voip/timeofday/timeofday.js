@@ -244,7 +244,8 @@ winkstart.module('voip', 'timeofday', {
         render_timeofday: function(data, target, callbacks){
             var THIS = this,
                 wday,
-                timeofday_html = THIS.templates.edit.tmpl(data);
+                timeofday_html = THIS.templates.edit.tmpl(data),
+                _after_render;
 
             winkstart.validate.set(THIS.config.validation, timeofday_html);
 
@@ -402,34 +403,43 @@ winkstart.module('voip', 'timeofday', {
                 THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
             });
 
+            _after_render = callbacks.after_render;
+
+            callbacks.after_render = function() {
+                if(typeof _after_render == 'function') {
+                    _after_render();
+                }
+
+                $('#time', timeofday_html).slider({
+                    from: 0,
+                    to: 86400,
+                    step: 900,
+                    dimension: '',
+                    scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am',
+                            '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am',
+                            '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm',
+                            '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am'],
+                    limits: false,
+                    calculate: function(val) {
+                        var hours = Math.floor(val / 3600),
+                            mins = (val - hours * 3600) / 60,
+                            meridiem = (hours < 12) ? 'am' : 'pm';
+
+                        hours = hours % 12;
+
+                        if (hours == 0) {
+                            hours = 12;
+                        }
+
+                        return hours + ':' + (mins ? mins : '0' + mins)  + meridiem;
+                    },
+                    onstatechange: function () {}
+                });
+            };
+
             (target)
                 .empty()
                 .append(timeofday_html);
-
-            $('#time', timeofday_html).slider({
-                from: 0,
-                to: 86400,
-                step: 900,
-                dimension: '',
-                scale: ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am',
-                        '6:00am', '7:00am', '8:00am',  '9:00am', '10:00am', '11:00am',
-                        '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm',
-                        '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am'],
-                limits: false,
-                calculate: function(val) {
-                    var hours = Math.floor(val / 3600),
-                        mins = (val - hours * 3600) / 60,
-                        meridiem = (hours < 12) ? 'am' : 'pm';
-
-                    hours = hours % 12;
-
-                    if (hours == 0)
-                        hours = 12;
-
-                    return hours + ':' + (mins ? mins : '0' + mins)  + meridiem;
-                },
-                onstatechange: function () {}
-            });
         },
 
         clean_form_data: function(form_data) {
