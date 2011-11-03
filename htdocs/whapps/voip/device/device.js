@@ -14,7 +14,8 @@ winkstart.module('voip', 'device', {
         subscribe: {
             'device.activate': 'activate',
             'device.edit': 'edit_device',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'device.popup_edit': 'popup_edit_device'
         },
 
         validation: {
@@ -303,7 +304,7 @@ winkstart.module('voip', 'device', {
                         },
                         function(_data, status) {
                             _data.data.unshift({
-                                id: '',
+                                id: '_',
                                 first_name: '- No',
                                 last_name: 'owner -',
                             });
@@ -424,6 +425,41 @@ winkstart.module('voip', 'device', {
                             }
                         );
                     }
+                });
+
+                if($('#owner_id', device_html).val() == '_') {
+                    $('#edit_link', device_html).hide();
+                }
+
+                $('#owner_id', device_html).change(function() {
+                    $('#owner_id option:selected', device_html).val() == '_' ? $('#edit_link', device_html).hide() : $('#edit_link', device_html).show();
+                });
+
+                $('.inline_action', device_html).click(function(ev) {
+                    var _data = ($(this).dataset('action') == 'edit') ? { id: $('#owner_id', device_html).val() } : {},
+                        _id = _data.id;
+
+                    ev.preventDefault();
+
+                    winkstart.publish('user.popup_edit', _data, function(_data) {
+                        /* Create */
+                        if(!_id) {
+                            $('#owner_id', device_html).append('<option id="'+ _data.data.id  +'" value="' + _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>');
+                            $('#owner_id', device_html).val(_data.data.id);
+                            $('#edit_link', device_html).show();
+                        }
+                        else {
+                            /* Update */
+                            if('id' in _data.data) {
+                                $('#owner_id #'+_data.data.id, device_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+                            }
+                            /* Delete */
+                            else {
+                                $('#owner_id #'+_id, device_html).remove();
+                                $('#edit_link', device_html).hide();
+                            }
+                        }
+                    });
                 });
 
                 $('.device-save', device_html).click(function(ev) {
@@ -605,6 +641,34 @@ winkstart.module('voip', 'device', {
             THIS.render_list(device_html);
         },
 
+        popup_edit_device: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('device.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit Device' : 'Create Device'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -655,7 +719,7 @@ winkstart.module('voip', 'device', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('device.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
@@ -683,33 +747,6 @@ winkstart.module('voip', 'device', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish('device.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit device' : 'Create device'
-                                });
-                            }
-                        });
                     }
                 }
             });
