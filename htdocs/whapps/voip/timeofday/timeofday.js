@@ -14,55 +14,9 @@ winkstart.module('voip', 'timeofday', {
         subscribe: {
             'timeofday.activate': 'activate',
             'timeofday.edit': 'edit_timeofday',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'timeofday.popup_edit': 'popup_edit_timeofday'
         },
-
-        /*formData: {
-            wdays: [
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday'
-            ],
-
-            day: [
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16',
-                '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'
-            ],
-
-            cycle: [
-                { id: 'weekly', value: 'Weekly' },
-                { id: 'monthly', value:'Monthly' },
-                { id: 'yearly', value:'Yearly' }
-            ],
-
-            ordinals: [
-                { id: 'first', value: 'First' },
-                { id: 'second', value: 'Second' },
-                { id: 'third', value: 'Third' },
-                { id: 'fourth', value: 'Fourth' },
-                { id: 'last', value: 'Last' },
-                { id: 'day', value: 'Day' }
-            ],
-
-            months: [
-                { id: 1, value: 'January' },
-                { id: 2, value: 'February' },
-                { id: 3, value: 'March' },
-                { id: 4, value: 'April' },
-                { id: 5, value: 'May' },
-                { id: 6, value: 'June' },
-                { id: 7, value: 'July' },
-                { id: 8, value: 'August' },
-                { id: 9, value: 'September' },
-                { id: 10, value: 'October' },
-                { id: 11, value: 'November' },
-                { id: 12, value: 'December' }
-            ]
-        },*/
 
         validation: [
             { name: '#name', regex: /^[a-zA-Z0-9\s_']+$/ }
@@ -155,7 +109,7 @@ winkstart.module('voip', 'timeofday', {
             }
         },
 
-        edit_timeofday: function(data, _parent, _target, _callbacks) {
+        edit_timeofday: function(data, _parent, _target, _callbacks, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#timeofday-content'),
                 target = _target || $('#timeofday-view', parent)
@@ -180,13 +134,13 @@ winkstart.module('voip', 'timeofday', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         time_window_start: 0,
                         time_window_stop: 0,
                         wdays: [],
                         days: [],
                         interval: 1
-                    },
+                    }, data_defaults || {}),
                     field_data: {
                         wdays: [
                             'Sunday',
@@ -605,6 +559,34 @@ winkstart.module('voip', 'timeofday', {
             THIS.render_list(timeofday_html);
         },
 
+        popup_edit_timeofday: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('timeofday.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -650,7 +632,7 @@ winkstart.module('voip', 'timeofday', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('timeofday.popup_edit', _data, function(_data) {
                                         child_node.key = _data.data.id || 'null';
 
                                         child_node.key_caption = _data.data.name || '';
@@ -685,33 +667,6 @@ winkstart.module('voip', 'timeofday', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish('timeofday.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
-                                });
-                            }
-                        });
                     },
                     caption: function(node, caption_map) {
                         return node.getMetadata('timezone') || '';
