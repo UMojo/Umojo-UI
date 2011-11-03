@@ -209,6 +209,12 @@ winkstart.module('voip', 'resource', {
                                 'npan': 'NPA NXX XXXX',
                                 'e164': 'E. 164'
                             }
+                        },
+                        rules: {
+                            '^\\+{0,1}1{0,1}(\\d{10})$': 'US - 10 digits',
+                            '^(\\d{7})$': 'US - 7 digits',
+                            '.*': 'No match',
+                            'custom': 'Custom'
                         }
                     },
                     functions: {
@@ -345,6 +351,12 @@ winkstart.module('voip', 'resource', {
                 THIS.delete_resource(data, callbacks.delete_success, callbacks.delete_error);
             });
 
+            $('#rules_dropdown', resource_html).change(function() {
+                $('#rules_dropdown', resource_html).val() != 'custom' ? $('#rules', resource_html).hide() : $('#rules', resource_html).val('').show();
+            });
+
+            data.data.rules[0] in data.field_data.rules && data.data.rules[0] != 'custom' ? $('#rules', resource_html).hide() : $('#rules_dropdown', resource_html).val('custom');
+
             (target)
                 .empty()
                 .append(resource_html);
@@ -438,6 +450,12 @@ winkstart.module('voip', 'resource', {
         },
 
         clean_form_data: function(form_data) {
+            if(form_data.rules_dropdown != 'custom') {
+                form_data.rules[0] = form_data.rules_dropdown;
+            }
+
+            delete form_data.rules_dropdown;
+
             $.each(form_data.gateways, function(indexGateway, gateway) {
                 var audioCodecs = [];
 

@@ -59,6 +59,17 @@
                                     <span class="tooltip"/>
                                     <label for="rules">Rules:</label>
                                 </span>
+                                <span class="rules_span">
+                                    <select name="rules_dropdown" id="rules_dropdown">
+                                    {{each(key, val) field_data.rules}}
+                                        {{if data.rules[0] == key}}
+                                            <option id="${key}" value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option id="${key}" value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
+                                </span>
                                 <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
                             </li>
                             <li>
