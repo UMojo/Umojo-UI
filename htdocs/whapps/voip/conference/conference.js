@@ -12,7 +12,8 @@ winkstart.module('voip', 'conference', {
         subscribe: {
             'conference.activate': 'activate',
             'conference.edit': 'edit_conference',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'conference.popup_edit': 'popup_edit_conference'
         },
 
         resources: {
@@ -147,7 +148,7 @@ winkstart.module('voip', 'conference', {
             }
         },
 
-        edit_conference: function(data, _parent, _target, _callbacks){
+        edit_conference: function(data, _parent, _target, _callbacks, data_defaults){
             var THIS = this,
                 parent = _parent || $('#conference-content'),
                 target = _target || $('#conference-view', parent),
@@ -172,10 +173,10 @@ winkstart.module('voip', 'conference', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         member_play_name: true,
                         member: {}
-                    },
+                    }, data_defaults || {}),
                     field_data: {
                         users: []
                     }
@@ -187,7 +188,7 @@ winkstart.module('voip', 'conference', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '',
+                        id: '_',
                         first_name: '- No',
                         last_name: 'owner -'
                     });
@@ -279,6 +280,41 @@ winkstart.module('voip', 'conference', {
                         $('.advanced_pane', conference_html).slideToggle();
                     });
                 }
+            });
+
+            if($('#owner_id', conference_html).val() == '_') {
+                $('#edit_link', conference_html).hide();
+            }
+
+            $('#owner_id', conference_html).change(function() {
+                $('#owner_id option:selected', conference_html).val() == '_' ? $('#edit_link', conference_html).hide() : $('#edit_link', conference_html).show();
+            });
+
+            $('.inline_action', conference_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#owner_id', conference_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('user.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#owner_id', conference_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>');
+                        $('#owner_id', conference_html).val(_data.data.id);
+                        $('#edit_link', conference_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#owner_id #'+_data.data.id, conference_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#owner_id #'+_id, conference_html).remove();
+                            $('#edit_link', conference_html).hide();
+                        }
+                    }
+                });
             });
 
             $('.conference-save', conference_html).click(function(ev) {
@@ -434,6 +470,34 @@ winkstart.module('voip', 'conference', {
             THIS.render_list(conference_html);
         },
 
+        popup_edit_conference: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('conference.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit conference' : 'Create conference'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -479,7 +543,7 @@ winkstart.module('voip', 'conference', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('conference.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
@@ -506,33 +570,6 @@ winkstart.module('voip', 'conference', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish('conference.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit conference' : 'Create conference'
-                                });
-                            }
-                        });
                     }
                 },
 
