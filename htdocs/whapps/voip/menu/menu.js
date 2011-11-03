@@ -13,7 +13,8 @@ winkstart.module('voip', 'menu', {
         subscribe: {
             'menu.activate': 'activate',
             'menu.edit': 'edit_menu',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes'
+            'callflow.define_callflow_nodes': 'define_callflow_nodes',
+            'menu.popup_edit': 'popup_edit_menu'
         },
 
         validation: [
@@ -113,7 +114,7 @@ winkstart.module('voip', 'menu', {
             }
         },
 
-        edit_menu: function(data, _parent, _target, _callbacks){
+        edit_menu: function(data, _parent, _target, _callbacks, data_defaults){
             var THIS = this,
                 parent = _parent || $('#menu-content'),
                 target = _target || $('#menu-view', parent),
@@ -138,11 +139,11 @@ winkstart.module('voip', 'menu', {
                     after_render: _callbacks.after_render
                 },
                 defaults = {
-                    data: {
+                    data: $.extend(true, {
                         retries: '3',
                         timeout: '10000',
                         media: {}
-                    },
+                    }, data_defaults || {}),
                     field_data: {
                         media: []
                     }
@@ -154,7 +155,7 @@ winkstart.module('voip', 'menu', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '',
+                        id: '_',
                         name: '- Not set -'
                     });
 
@@ -232,18 +233,54 @@ winkstart.module('voip', 'menu', {
                     $(this).attr('enabled', 'false');
 
                     $('.advanced_pane', menu_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper').animate({ width: 'toggle' });
+                        $('.advanced_tabs_wrapper', menu_html).animate({ width: 'toggle' });
                     });
                 }
                 else {
                     $(this).attr('enabled', 'true');
 
-                    $('.advanced_tabs_wrapper').animate({
+                    $('.advanced_tabs_wrapper', menu_html).animate({
                         width: 'toggle'
                     }, function() {
-                        $('.advanced_pane').slideToggle();
+                        $('.advanced_pane', menu_html).slideToggle();
                     });
                 }
+            });
+
+            if($('#media_greeting', menu_html).val() == '_') {
+                $('#edit_link_media', menu_html).hide();
+            }
+
+            $('#media_greeting', menu_html).change(function() {
+                $('#media_greeting option:selected', menu_html).val() == '_' ? $('#edit_link_media', menu_html).hide() : $('#edit_link_media', menu_html).show();
+            });
+
+            $('.inline_action_media', menu_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#media_greeting', menu_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#media_greeting', menu_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#media_greeting', menu_html).val(_data.data.id);
+
+                        $('#edit_link_media', menu_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#media_greeting #'+_data.data.id, menu_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#media_greeting #'+_id, menu_html).remove();
+                            $('#edit_link_media', menu_html).hide();
+                        }
+                    }
+                });
             });
 
             $('.menu-save', menu_html).click(function(ev) {
@@ -358,6 +395,34 @@ winkstart.module('voip', 'menu', {
             THIS.render_list(menu_html);
         },
 
+        popup_edit_menu: function(data, callback) {
+            var popup, popup_html;
+
+            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+
+            winkstart.publish('menu.edit', data, popup_html, $('.inline_content', popup_html), {
+                save_success: function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                },
+                delete_success: function() {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                after_render: function() {
+                    popup = winkstart.dialog(popup_html, {
+                        title: (data.id) ? 'Edit Menu' : 'Create Menu'
+                    });
+                }
+            });
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this;
 
@@ -447,7 +512,7 @@ winkstart.module('voip', 'menu', {
 
                                     ev.preventDefault();
 
-                                    _this.inline_edit(_data, function(_data) {
+                                    winkstart.publish('menu.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';
@@ -474,33 +539,6 @@ winkstart.module('voip', 'menu', {
                                 });
                             }
                         );
-                    },
-                    inline_edit: function(data, callback) {
-                        var popup, popup_html;
-
-                        popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
-
-                        winkstart.publish(true, 'menu.edit', data, popup_html, $('.inline_content', popup_html), {
-                            save_success: function(_data) {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback(_data);
-                                }
-                            },
-                            delete_success: function() {
-                                popup.dialog('close');
-
-                                if(typeof callback == 'function') {
-                                    callback({ data: {} });
-                                }
-                            },
-                            after_render: function() {
-                                popup = winkstart.dialog(popup_html, {
-                                    title: (data.id) ? 'Edit menu' : 'Create menu'
-                                });
-                            }
-                        });
                     }
                 }
             });

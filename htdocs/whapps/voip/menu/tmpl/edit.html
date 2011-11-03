@@ -12,7 +12,7 @@
             </ul>
 
             <div class="clear"></div>
-            
+
             <div class="pane">
                 <div id="basic_settings">
                     <fieldset>
@@ -23,7 +23,7 @@
                                     <label for="name">Name:</label>
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
-                            </li> 
+                            </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="PIN to enter in order to allow users to record their own greetings">
                                     <span class="tooltip"/>
@@ -50,12 +50,14 @@
                                 <select name="media.greeting" id="media_greeting">
                                 {{each field_data.media}}
                                     {{if data.media.greeting == id}}
-                                    <option value="${id}" selected="selected">${name}</option>
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
                                     {{else}}
-                                    <option value="${id}">${name}</option>
+                                    <option id="${id}" value="${id}">${name}</option>
                                     {{/if}}
                                 {{/each}}
                                 </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
                             </li>
                         </ul>
                     </fieldset>
@@ -107,7 +109,7 @@
 
                     <div class="clear"></div>
                 </div>
-                
+
                 <div id="options">
                     <fieldset>
                         <legend>Menu Options</legend>
@@ -148,7 +150,7 @@
                 {{/if}}
             </ul>
         </div>
-            
+
         </form>
     </div>
 </div>
