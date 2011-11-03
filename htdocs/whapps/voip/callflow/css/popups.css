@@ -206,10 +206,13 @@
     text-align: right;
     width: 140px;
     float: left;
- /*   margin-top: 8px; */
     padding-right:10px;
-    text-transform: capitalize;
+ /*   margin-top: 8px; */
     clear: both;
+}
+
+.myform label:first-letter {
+    text-transform: capitalize;
 }
 
 .myform input {

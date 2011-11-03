@@ -59,12 +59,13 @@ winkstart.module('auth', 'auth',
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
                alert('You are now registered! Please log in.');
+               
+               winkstart.publish('auth.login', {username: data.data.user.username});
                if(data.auth_token != '' && data.auth_token != 'null'){
                     winkstart.apps['auth'].account_id = data.data.account.id;
                     winkstart.apps['auth'].auth_token = data.auth_token;
                     winkstart.apps['auth'].user_id = data.data.user.id;
                     winkstart.apps['auth'].realm = data.data.account.realm;
-                    
                     winkstart.publish('auth.load_account');
                }
             });
@@ -134,7 +135,6 @@ winkstart.module('auth', 'auth',
                             }
                         }
                     };
-                    console.log(rest_data);
                     winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
                         alert('Registered successfully. Please check your e-mail to activate your account!');
                         dialogRegister.dialog('close');
@@ -146,14 +146,19 @@ winkstart.module('auth', 'auth',
             });
         },
 
-        login: function() {
+        login: function(args) {
             var THIS = this;
+            var username = args == undefined ? '' : args.username;
             
-            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({}), {
+            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
                 title : 'Login',
                 resizable : false,
                 modal: true
             });
+
+            if(username != '') {
+                $('#password', dialogDiv).focus();
+            }
 
             $('button.login', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler

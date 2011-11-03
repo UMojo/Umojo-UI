@@ -3,23 +3,23 @@ winkstart.module('userportal', 'cdr', {
 	'css/style.css'
 	//'css/jquery-ui-1.8.8.custom.css'
 	],
-				
+
 	templates: {
 		cdr: 'tmpl/cdr.html'
 	},
-		
+
 	subscribe: {
 		'cdr.activate': 'activate',
 	},
 
 	resources: {
 		'cdr.list': {
-			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdr',
+			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdrs',
 			contentType: 'application/json',
 			verb: 'GET'
 		},
 		'cdr.read': {
-			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdr/{cdr_id}',
+			url: '{api_url}/accounts/{account_id}/users/{user_id}/cdrs/{cdr_id}',
 			contentType: 'application/json',
 			verb: 'GET'
 		},
@@ -39,7 +39,7 @@ function(args) {
 {
 	activate: function(data) {
 		var THIS = this;
-    
+
 		$('#ws-content').empty();
 
 		this.templates.cdr.tmpl({}).appendTo( $('#ws-content') );
@@ -99,7 +99,7 @@ function(args) {
 			'sTitle': 'Date'
 		}
 		];
-    
+
 		winkstart.table.create('cdr', $('#cdr-grid'), columns, {}, {
 			sDom: '<"date">frtlip'
 		});
@@ -119,18 +119,18 @@ function(args) {
 
 		$('#startDate').datepicker();
 		$('#endDate').datepicker();
-		
-		
+
+
 		function noData(data){
 			if(data == null || data == undefined){
 				data = '-';
 			}
-			
+
 			return data;
 		}
 
 		winkstart.getJSON('cdr.list', {
-			crossbar: true, 
+			crossbar: true,
 			account_id: winkstart.apps['userportal'].account_id,
 		    user_id: winkstart.apps['userportal'].user_id,
             api_url: winkstart.apps['userportal'].api_url
@@ -139,8 +139,8 @@ function(args) {
 				var cdr_id = this.cid || this.id;
 
 				winkstart.getJSON('cdr.read', {
-					crossbar: true, 
-					account_id: winkstart.apps['userportal'].account_id, 
+					crossbar: true,
+					account_id: winkstart.apps['userportal'].account_id,
 		            user_id: winkstart.apps['userportal'].user_id,
                     api_url: winkstart.apps['userportal'].api_url,
 					cdr_id: cdr_id
@@ -150,32 +150,42 @@ function(args) {
 					var callee_id_name = reply.data.callee_id_name;
 					var callee_id_number = reply.data.callee_id_number;
 					var duration = reply.data.billing_seconds;
-					var seconds = duration % 60;
-					var minutes = (duration-seconds) / 60;
-					if(seconds < 10) {
-						seconds = '0'+seconds;
-					}
-					duration = minutes+':'+seconds;
+                    var seconds = duration % 60;
+                    var minutes = (duration-seconds) / 60;
+                    if(minutes > 59) {
+                        minutes -= 60;
+                    }
+                    var hours = (duration - (minutes*60) - seconds) / 3600;
+                    if(hours < 10) {
+                        hours = '0' + hours;
+                    }
+                    if(minutes < 10) {
+                        minutes = '0' + minutes;
+                    }
+                    if(seconds < 10) {
+                        seconds = '0' + seconds;
+                    }
+                    duration = hours+':'+minutes+':'+seconds;
 					var date = new Date((reply.data.timestamp - 62167219200)*1000);
 					var month = date.getMonth() +1;
 					var year = date.getFullYear();
 					var day = date.getDate();
 					var humanDate = month+'/'+day+'/'+year;
 					var humanTime = date.toLocaleTimeString();
-                    
+
                     var humanFullDate = humanDate + ' ' + humanTime;
-                    
+
 					if(caller_id_name && caller_id_number && callee_id_name && callee_id_number){
 						winkstart.table.cdr.fnAddData([
-							noData(caller_id_name), 
-							noData(caller_id_number), 
-							noData(callee_id_name), 
-							noData(callee_id_number), 
-							noData(duration), 
+							noData(caller_id_name),
+							noData(caller_id_number),
+							noData(callee_id_name),
+							noData(callee_id_number),
+							noData(duration),
 							noData(humanFullDate)]);
 					}
 				});
-			}); 
+			});
 		});
 
 		winkstart.publish('layout.updateLoadedModule', {
