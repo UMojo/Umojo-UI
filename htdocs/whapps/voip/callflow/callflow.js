@@ -833,8 +833,8 @@ winkstart.module('voip', 'callflow', {
                                 var popup, popup_html, _data = [];
 
                                 $.each(data.data, function() {
-                                    if(this.id != THIS.flow.id) {
-                                        this.name = this.numbers.toString();
+                                    if(!this.featurecode && this.id != THIS.flow.id) {
+                                        this.name = (this.numbers) ? this.numbers.toString() : '(no numbers)';
 
                                         _data.push(this);
                                     }
