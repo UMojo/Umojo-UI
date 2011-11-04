@@ -230,11 +230,7 @@ winkstart.module('voip', 'device', {
                             password: winkstart.random_string(12),
                             expire_seconds: '360'
                         },
-                        call_forward: {
-                            enabled: 'true',
-                            require_keypress: 'true',
-                            keep_caller_id: 'true'
-                        }
+                        call_forward: {}
                     }, data_defaults || {}),
 
                     field_data: {
@@ -468,6 +464,8 @@ winkstart.module('voip', 'device', {
                     winkstart.validate.is_valid(THIS.config.validation[data.data.device_type], device_html, function() {
                             var form_data = form2object('device-form');
 
+                            console.log(form_data);
+
                             THIS.clean_form_data(form_data);
 
                             if('field_data' in data) {
@@ -546,6 +544,10 @@ winkstart.module('voip', 'device', {
 
             if(data.owner_id == '') {
                 delete data.owner_id;
+            }
+
+            if($.isEmptyObject(data.call_forward)) {
+                delete data.call_forward;
             }
 
             return data;
