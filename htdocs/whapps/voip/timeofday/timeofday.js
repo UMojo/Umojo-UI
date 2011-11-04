@@ -135,8 +135,8 @@ winkstart.module('voip', 'timeofday', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        time_window_start: 0,
-                        time_window_stop: 0,
+                        time_window_start: 32400,
+                        time_window_stop: 61200,
                         wdays: [],
                         days: [],
                         interval: 1
