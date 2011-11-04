@@ -537,6 +537,10 @@ winkstart.module('voip', 'conference', {
                                     selected: node.getMetadata('id') || '!'
                                 });
 
+                                if($('#conference_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
                                 $('.inline_action', popup_html).click(function(ev) {
                                     var _data = ($(this).dataset('action') == 'edit') ?
                                                     { id: $('#conference_selector', popup_html).val() } : {};

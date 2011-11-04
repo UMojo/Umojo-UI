@@ -713,6 +713,10 @@ winkstart.module('voip', 'device', {
                                     }
                                 });
 
+                                if($('#device_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
                                 $('.inline_action', popup_html).click(function(ev) {
                                     var _data = ($(this).dataset('action') == 'edit') ?
                                                     { id: $('#device_selector', popup_html).val() } : {};
