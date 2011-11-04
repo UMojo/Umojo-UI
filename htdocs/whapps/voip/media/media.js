@@ -244,8 +244,13 @@ winkstart.module('voip', 'media', {
                 }
             });
 
-            if(data.data.id != undefined) {
+            if(data.data.id != undefined && data.data.description != '') {
                 $('#upload_span', media_html).hide();
+                $('#player_file', media_html).show();
+            }
+            else {
+                $('#upload_span', media_html).show();
+                $('#player_file', media_html).hide();
             }
 
             $('#change_link', media_html).click(function() {
