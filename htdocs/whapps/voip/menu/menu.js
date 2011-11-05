@@ -72,14 +72,15 @@ winkstart.module('voip', 'menu', {
 
     {
         save_menu: function(form_data, data, success, error) {
-            var THIS = this;
+            var THIS = this,
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
 
             if (typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'menu.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         menu_id: data.data.id,
-                        data: $.extend(true, {}, data.data, form_data)
+                        data: normalized_data
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
@@ -97,7 +98,7 @@ winkstart.module('voip', 'menu', {
                 winkstart.request(true, 'menu.create', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        data: form_data
+                        data: normalized_data
                     },
                     function (_data, status) {
                         if(typeof success == 'function') {
@@ -155,7 +156,7 @@ winkstart.module('voip', 'menu', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '_',
+                        id: '',
                         name: '- Not set -'
                     });
 
@@ -247,12 +248,12 @@ winkstart.module('voip', 'menu', {
                 }
             });
 
-            if($('#media_greeting', menu_html).val() == '_') {
+            if(!$('#media_greeting', menu_html).val()) {
                 $('#edit_link_media', menu_html).hide();
             }
 
             $('#media_greeting', menu_html).change(function() {
-                $('#media_greeting option:selected', menu_html).val() == '_' ? $('#edit_link_media', menu_html).hide() : $('#edit_link_media', menu_html).show();
+                !$('#media_greeting option:selected', menu_html).val() ? $('#edit_link_media', menu_html).hide() : $('#edit_link_media', menu_html).show();
             });
 
             $('.inline_action_media', menu_html).click(function(ev) {
@@ -314,6 +315,14 @@ winkstart.module('voip', 'menu', {
                 .append(menu_html);
         },
 
+        normalize_data: function(form_data) {
+            if(!form_data.media.greeting) {
+                delete form_data.media.greeting;
+            }
+
+            return form_data;
+        },
+
         clean_form_data: function(form_data) {
 
             if(form_data.record_pin.length == 0) {
@@ -330,10 +339,6 @@ winkstart.module('voip', 'menu', {
 
             if(form_data.hunt_deny == '') {
                 delete form_data.hunt_deny;
-            }
-
-            if(form_data.media.greeting == '') {
-                delete form_data.media.greeting;
             }
 
             /* Hack to put timeout in ms in database. */

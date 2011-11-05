@@ -188,7 +188,7 @@ winkstart.module('voip', 'conference', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '_',
+                        id: '',
                         first_name: '- No',
                         last_name: 'owner -'
                     });
@@ -282,12 +282,12 @@ winkstart.module('voip', 'conference', {
                 }
             });
 
-            if($('#owner_id', conference_html).val() == '_') {
+            if(!$('#owner_id', conference_html).val()) {
                 $('#edit_link', conference_html).hide();
             }
 
             $('#owner_id', conference_html).change(function() {
-                $('#owner_id option:selected', conference_html).val() == '_' ? $('#edit_link', conference_html).hide() : $('#edit_link', conference_html).show();
+                !$('#owner_id option:selected', conference_html).val() ? $('#edit_link', conference_html).hide() : $('#edit_link', conference_html).show();
             });
 
             $('.inline_action', conference_html).click(function(ev) {
@@ -379,6 +379,10 @@ winkstart.module('voip', 'conference', {
 
             if(!data.member.numbers.length) {
                 delete data.member.numbers;
+            }
+
+            if(!data.owner_id) {
+                delete data.owner_id;
             }
 
             delete data.member.pins_string;

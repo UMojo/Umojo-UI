@@ -387,16 +387,20 @@
 
         populate_dropdown: function(dropdown, _selected) {
             var THIS = this,
-                selected = _selected || jstz.determine_timezone().name();
+                selected = _selected || THIS.get_locale_timezone();
 
             $.each(THIS.list, function(i, data) {
-                if(selected == data) { 
-                    dropdown.append('<option value="' + data + '" SELECTED>' + data + '</option>');           
+                if(selected == data) {
+                    dropdown.append('<option value="' + data + '" SELECTED>' + data + '</option>');
                 }
                 else {
-                    dropdown.append('<option value="' + data + '">' + data + '</option>');           
+                    dropdown.append('<option value="' + data + '">' + data + '</option>');
                 }
             });
+        },
+
+        get_locale_timezone: function() {
+            return jstz.determine_timezone().name();
         }
     };
 

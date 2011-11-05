@@ -77,14 +77,15 @@ winkstart.module('voip', 'vmbox', {
 
     {
         save_vmbox: function(form_data, data, success, error) {
-            var THIS = this;
+            var THIS = this,
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
 
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'vmbox.update', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         vmbox_id: data.data.id,
-                        data: $.extend(true, {}, data.data, form_data)
+                        data: normalized_data
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
@@ -102,7 +103,7 @@ winkstart.module('voip', 'vmbox', {
                 winkstart.request(true, 'vmbox.create', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        data: form_data
+                        data: normalized_data
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
@@ -162,7 +163,7 @@ winkstart.module('voip', 'vmbox', {
                 },
                 function(_data, status) {
                     _data.data.unshift({
-                        id: '_',
+                        id: '',
                         name: '- Not set -'
                     });
 
@@ -174,7 +175,7 @@ winkstart.module('voip', 'vmbox', {
                         },
                         function(_data, status) {
                             _data.data.unshift({
-                                id: '_',
+                                id: '',
                                 first_name: '- No',
                                 last_name: 'owner -'
                             });
@@ -274,25 +275,33 @@ winkstart.module('voip', 'vmbox', {
             });
 
             $('#owner_id', vmbox_html).change(function() {
-                winkstart.request(true, 'user.get', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        user_id: $(this).val()
-                    },
-                    function(data, status) {
-                        if('timezone' in data.data) {
-                            $('#timezone', vmbox_html).val(data.data.timezone);
+                if($(this).val()) {
+                    winkstart.request(true, 'user.get', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            user_id: $(this).val()
+                        },
+                        function(data, status) {
+                            if('timezone' in data.data) {
+                                $('#timezone', vmbox_html).val(data.data.timezone);
+                            }
                         }
-                    }
-                );
+                    );
+                }
             });
 
-            if($('#owner_id', vmbox_html).val() == '_') {
+            if(!$('#owner_id', vmbox_html).val()) {
                 $('#edit_link', vmbox_html).hide();
             }
 
             $('#owner_id', vmbox_html).change(function() {
-                $('#owner_id option:selected', vmbox_html).val() == '_' ? $('#edit_link', vmbox_html).hide() : $('#edit_link', vmbox_html).show();
+                if(!$('#owner_id option:selected', vmbox_html).val()) {
+                    $('#edit_link', vmbox_html).hide();
+                    $('#timezone', vmbox_html).val(winkstart.timezone.get_locale_timezone());
+                }
+                else {
+                     $('#edit_link', vmbox_html).show();
+                }
             });
 
             $('.inline_action', vmbox_html).click(function(ev) {
@@ -308,27 +317,30 @@ winkstart.module('voip', 'vmbox', {
                         $('#owner_id', vmbox_html).val(_data.data.id);
 
                         $('#edit_link', vmbox_html).show();
+                        $('#timezone', vmbox_html).val(_data.data.timezone);
                     }
                     else {
                         /* Update */
                         if('id' in _data.data) {
                             $('#owner_id #'+_data.data.id, vmbox_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+                            $('#timezone', vmbox_html).val(_data.data.timezone);
                         }
                         /* Delete */
                         else {
                             $('#owner_id #'+_id, vmbox_html).remove();
                             $('#edit_link', vmbox_html).hide();
+                            $('#timezone', vmbox_html).val('America/Los_Angeles');
                         }
                     }
                 });
             });
 
-            if($('#media_unavailable', vmbox_html).val() == '_') {
+            if(!$('#media_unavailable', vmbox_html).val()) {
                 $('#edit_link_media', vmbox_html).hide();
             }
 
             $('#media_unavailable', vmbox_html).change(function() {
-                $('#media_unavailable option:selected', vmbox_html).val() == '_' ? $('#edit_link_media', vmbox_html).hide() : $('#edit_link_media', vmbox_html).show();
+                !$('#media_unavailable option:selected', vmbox_html).val() ? $('#edit_link_media', vmbox_html).hide() : $('#edit_link_media', vmbox_html).show();
             });
 
             $('.inline_action_media', vmbox_html).click(function(ev) {
@@ -389,6 +401,18 @@ winkstart.module('voip', 'vmbox', {
             (target)
                 .empty()
                 .append(vmbox_html);
+        },
+
+        normalize_data: function(form_data) {
+            if(!form_data.owner_id) {
+                delete form_data.owner_id;
+            }
+
+            if(!form_data.media.unavailable) {
+                delete form_data.media.unavailable;
+            }
+
+            return form_data;
         },
 
         clean_form_data: function(form_data) {

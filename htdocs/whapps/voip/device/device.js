@@ -300,7 +300,7 @@ winkstart.module('voip', 'device', {
                         },
                         function(_data, status) {
                             _data.data.unshift({
-                                id: '_',
+                                id: '',
                                 first_name: '- No',
                                 last_name: 'owner -',
                             });
@@ -423,12 +423,12 @@ winkstart.module('voip', 'device', {
                     }
                 });
 
-                if($('#owner_id', device_html).val() == '_') {
+                if(!$('#owner_id', device_html).val()) {
                     $('#edit_link', device_html).hide();
                 }
 
                 $('#owner_id', device_html).change(function() {
-                    $('#owner_id option:selected', device_html).val() == '_' ? $('#edit_link', device_html).hide() : $('#edit_link', device_html).show();
+                    !$('#owner_id option:selected', device_html).val() ? $('#edit_link', device_html).hide() : $('#edit_link', device_html).show();
                 });
 
                 $('.inline_action', device_html).click(function(ev) {
@@ -542,7 +542,7 @@ winkstart.module('voip', 'device', {
                 delete data.caller_id.external;
             }
 
-            if(data.owner_id == '') {
+            if(!data.owner_id) {
                 delete data.owner_id;
             }
 
