@@ -213,6 +213,8 @@ winkstart.module('connect', 'sipservice', {
                 }
             });
 
+            winkstart.publish('credits.render', account, $('#ws-content'));
+            winkstart.publish('channels.render', account, $('#ws-content'));
         },
 
         load_account : function(){
