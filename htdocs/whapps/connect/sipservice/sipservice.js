@@ -1,16 +1,10 @@
-winkstart.module('connect', 'sipservice', 
-    /* Start module resource definitions */
-    {
-        /* What CSS stylesheets do you want automatically loaded? */
+winkstart.module('connect', 'sipservice', {
         css: [
-        'css/style.css',
-        'css/popups.css'
+            'css/style.css',
+            'css/popups.css'
         ],
 
-        /* What HTML templates will we be using? */
         templates: {
-
-            /* Main Page */
             index: 'tmpl/index.html',
             main: 'tmpl/main.html',
 
@@ -24,30 +18,28 @@ winkstart.module('connect', 'sipservice',
             main_servers : 'tmpl/main_servers.html',
             main_services : 'tmpl/main_services.html',
 
-            /* Number Management */
             order_history: 'tmpl/order_history.html',
-            
+
             edit_server: 'tmpl/edit_server.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
             'sipservice.activate' : 'activate',
             'sipservice.confirm_billing' : 'confirm_billing',
             'sipservice.load_account' : 'load_account',
 
-            /* Sub nav HTML pages */
+/*
             'sipservice.legal.activate' : 'legal',
             'sipservice.support.activate' : 'support',
             'sipservice.rates.activate' : 'rates',
             'sipservice.howto.activate' : 'howto',
             'sipservice.apis.activate' : 'apis',
+*/
 
-            'sipservice.index' : 'index',               // Splash screen
-            'sipservice.main_menu' : 'main_menu',       // Main menu, once logged in
-            'sipservice.refresh' : 'refresh',           // Refresh entire screen (should never be used theoretically)
+            'sipservice.index' : 'index',
+            'sipservice.main_menu' : 'main_menu',
+            'sipservice.refresh' : 'refresh',
 
-            // When other modules make a change, they will call their own refresh methods. We want to listen for those.
             'credits.refresh' : 'refresh',
             'channels.refresh' : 'refresh',
             'endpoint.refresh' : 'refresh',
@@ -57,27 +49,25 @@ winkstart.module('connect', 'sipservice',
             'promo.refresh' : 'refresh'
         },
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
             "sipservice.get": {
-                //                url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
+                //url: winkstart.apps['connect'].api_url + '/ts_accounts/{account_id}',
                 url: 'https://store.2600hz.com/v1/{account_id}/get_idoc',
                 verb: 'GET'
             },
 
-            /* Create Ticket */
             "sipservice.createTicket": {
                 url: 'https://store.2600hz.com/v1/createTicket',
                 verb: 'PUT'
             }
         }
-    }, // End module resource definitions
+    },
 
-
-
-    /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        /* Paint the subnav */
+        var THIS = this;
+
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+/*
         winkstart.publish('subnav.add', {
             whapp: 'connect',
             module: 'sipservice.apis',
@@ -119,14 +109,11 @@ winkstart.module('connect', 'sipservice',
             label: 'SIP Services',
             icon: 'active_phone'
         });
+*/
+    },
 
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
-    }, // End initialization routine
-
-
-    /* Define the functions for this module */
     {
+/*
         apis: function() {
             $('#ws-content').html(this.templates.apis.tmpl());
         },
@@ -146,10 +133,11 @@ winkstart.module('connect', 'sipservice',
         howto: function() {
             $('#ws-content').html(this.templates.howto.tmpl());
         },
+*/
 
         refresh: function() {
             var THIS = this;
-            
+
             var account = winkstart.apps['connect'].account;
 
             winkstart.log('Redrawing...');
@@ -193,7 +181,7 @@ winkstart.module('connect', 'sipservice',
             $("#ws-content .drop_area:not(.ui-droppable").droppable({
                 drop: function(event, ui) {
                     winkstart.publish('numbers.map_number', {
-                        did : $(ui.draggable).dataset(), 
+                        did : $(ui.draggable).dataset(),
                         new_server : $(this).dataset()
                     });
                 },
@@ -201,7 +189,7 @@ winkstart.module('connect', 'sipservice',
                 activeClass: 'ui-state-highlight',
                 activate: function(event, ui) {},
                 scope: 'moveDID'
-            }); // End droppable()
+            });
 
             $('.modifyServerDefaults').click(function(){
                 var data = {
@@ -218,13 +206,13 @@ winkstart.module('connect', 'sipservice',
                     }
                 });
             });
-            
+
             $('.deleteServer').click(function(){
                 if(confirm('Delete this server ?')){
                     alert('coming soon...');
                 }
             });
-            
+
         },
 
         load_account : function(){
@@ -242,14 +230,13 @@ winkstart.module('connect', 'sipservice',
         },
 
         main_menu: function() {
-            // Paint the main screen
             $('#ws-content').empty();
             this.templates.main.tmpl().appendTo( $('#ws-content') );
         },
 
         confirm_billing: function(args) {
             alert('Confirming billing...');
-            
+
         },
 
 
@@ -259,30 +246,22 @@ winkstart.module('connect', 'sipservice',
          */
         activate: function() {
             var THIS = this;
-            /* Clear out the center part of the window - get ready to put our own content in there */
             $('#ws-content').empty();
 
-            // If user is already logged in, go ahead and show their trunks & stuff
             if (winkstart.apps['connect'].auth_token) {
-                // Paint various sections on the page. Each individual section is responsible for loading it's own data and
-                // populating it's own area.
                 THIS.main_menu();
 
                 THIS.load_account();
             } else {
-                // Show landing page
-                
-                /* Draw our base template into the window */
                 THIS.templates.index.tmpl().appendTo( $('#ws-content') );
 
                 $('#ws-content a#signup_button').click(function() {
                     THIS.create_account();
-                    
+
                     THIS.main_menu();
                 });
 
             }
         }
-    } // End function definitions
-
-    );  // End module
+    }
+);

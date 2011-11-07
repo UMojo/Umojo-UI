@@ -43,10 +43,7 @@ winkstart.module('connect', 'connect', {
             'channels' : false,
             'credits' : false,
             'endpoint' : false,
-            'fraud' : false,
-            'monitoring' : false,
-            'numbers' : false,
-            'discount' : false
+            'numbers' : false
         },
 
         /* The following code is generic and should be abstracted.
@@ -137,7 +134,9 @@ winkstart.module('connect', 'connect', {
          */
 
         setup_page: function() {
-            winkstart.publish('sipservice.activate');
+            var THIS = this;
+
+            THIS.module_activate({ name: 'sipservice' });
         }
     }
 );

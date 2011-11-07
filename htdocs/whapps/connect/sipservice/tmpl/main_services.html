@@ -6,7 +6,7 @@
 
         <span class="channels num">${account.inbound_trunks}</span>
         <span class="channels detail">Inbound Channels</span>
-        
+
         <span id="addCredsSpan"><a href="#" id="edit_channels" class="button channels edit">Modify</a></span>
     </div>
     <div class="info" style="background-repeat: repeat-y; ">
@@ -14,17 +14,6 @@
 
         <span id="addCredsSpan">
             <a href="#" id="add_prepay_button" class="credits manage button">Manage Credit</a>
-        </span>
-    </div>
-
-    <div class="info">
-        <span class="e_num"></span>
-        <span class="e_detail">
-            {{if account.discount_code }}
-            <span class="edit discount">Discount Code: ${account.discount_code}</span>
-            {{else}}
-            <span class="edit discount">Add Discount Code</span>
-            {{/if}}
         </span>
     </div>
 
