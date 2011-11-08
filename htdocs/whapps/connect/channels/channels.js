@@ -10,7 +10,7 @@ winkstart.module('connect', 'channels', {
 
         resources: {
             "channels.update": {
-                url: 'https://store.2600hz.com/v1/{account_id}/channels',
+                url: '{api_url}/{account_id}/channels',
                 verb: 'POST'
             }
         }
