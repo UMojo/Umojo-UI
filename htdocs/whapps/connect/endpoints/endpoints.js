@@ -11,88 +11,47 @@ winkstart.module('connect', 'endpoints', {
 
         subscribe: {
             'endpoints.render' : 'render_endpoints',
-        },
-
-        resources: {
-            "endpoints.create": {
-                url: '{api_url}/{account_id}/endpoints',
-                contentType: 'application/json',
-                verb: 'PUT'
-            },
-            "endpoints.update": {
-                url: '{api_url}/{account_id}/endpoints',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-            "endpoints.delete": {
-                url: '{api_url}/{account_id}/endpoints',
-                contentType: 'application/json',
-                verb: 'DELETE'
-            }
         }
     },
 
     function() {
-        var THIS = this;
-
-        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
 
     {
-        save_endpoint: function(data, success, error) {
-            var THIS = this;
+        save_endpoint: function(endpoint_data, data, success, error) {
+            var THIS = this,
+                index = endpoint_data.serverid,
+                new_data = $.extend(true, {}, data);
 
-            if(data.serverid) {
-                winkstart.request('endpoints.update', {
-                        account_id: winkstart.apps['connect'].account_id,
-                        api_url: winkstart.apps['connect'].api_url,
-                        data: data
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'update');
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'update');
-                        }
-                    }
-                );
+            THIS.normalize_data(endpoint_data);
+
+            if(index || index === 0) {
+                $.extend(true, new_data.servers[index], endpoint_data);
             }
             else {
-                winkstart.request('endpoints.create', {
-                        account_id: winkstart.apps['connect'].account_id,
-                        api_url: winkstart.apps['connect'].api_url,
-                        data: $.extend(true, {}, data, {
-                            DIDs: {},
-                            options: {
-                                inbound_format: 'e.164',
-                                enabled: true
-                            }
-                        })
+                new_data.servers.push($.extend(true, {
+                    DIDs: {},
+                    options: {
+                        enabled: true,
+                        inbound_format: 'e.164',
+                        international: false,
+                        caller_id: {},
+                        e911_info: {},
+                        failover: {}
                     },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'create');
-                        }
+                    permissions: {
+                        users: []
                     },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'create');
-                        }
+                    monitor: {
+                        monitor_enabled: false
                     }
-                );
+                }, endpoint_data));
             }
-        },
 
-        delete_server: function(data, success, error) {
-            var THIS = this;
-
-            winkstart.request('endpoints.delete', {
+            winkstart.request('trunkstore.update', {
                     account_id: winkstart.apps['connect'].account_id,
                     api_url: winkstart.apps['connect'].api_url,
-                    data: data
+                    data: new_data
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
@@ -107,9 +66,43 @@ winkstart.module('connect', 'endpoints', {
             );
         },
 
-        render_endpoint_dialog: function(data, callback) {
+        delete_endpoint: function(endpoint_data, data, success, error) {
             var THIS = this,
-                popup_html = THIS.templates.endpoint_dialog.tmpl(data),
+                index = endpoint_data.serverid,
+                new_data = $.extend(true, {}, data);
+
+            if(index || index === 0) {
+                new_data.servers.splice(index, 1);
+            }
+
+            winkstart.request('trunkstore.update', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: winkstart.apps['connect'].api_url,
+                    data: new_data
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        normalize_data: function(data) {
+            delete data.serverid;
+            delete data.realm;
+
+            return data;
+        },
+
+        render_endpoint_dialog: function(endpoint_data, data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.endpoint_dialog.tmpl(endpoint_data),
                 popup;
 
             $('.endpoint.edit', popup_html).click(function(ev) {
@@ -117,7 +110,7 @@ winkstart.module('connect', 'endpoints', {
 
                 ev.preventDefault();
 
-                THIS.save_endpoint(form_data, function(_data) {
+                THIS.save_endpoint(form_data, data, function(_data) {
                     popup.dialog('close');
 
                     if(typeof callback == 'function') {
@@ -129,28 +122,28 @@ winkstart.module('connect', 'endpoints', {
             popup = winkstart.dialog(popup_html, { title: 'Edit endpoint' });
         },
 
-        render_endpoint: function(_data, index, target, parent) {
+        render_endpoint: function(data, index, target, parent) {
             var THIS = this,
-                data = $.extend(true, {
+                endpoint_data = $.extend(true, {
                         serverid: index,
-                        realm: _data.account.auth_realm
+                        realm: data.account.auth_realm
                     },
-                    _data.servers[index]
+                    data.servers[index]
                 ),
-                endpoint_html = THIS.templates.endpoint.tmpl(data);
+                endpoint_html = THIS.templates.endpoint.tmpl(endpoint_data);
 
             $('.modifyServerDefaults', endpoint_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.render_endpoint_dialog(data, function(_data) {
-                    THIS.render_endpoint(_data.data, index, target);
+                THIS.render_endpoint_dialog(endpoint_data, data, function(_data) {
+                    THIS.render_endpoints(_data.data, parent);
                 });
             });
 
             $('.deleteServer', endpoint_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_server({ serverid: index }, function(_data) {
+                THIS.delete_endpoint(endpoint_data, data, function(_data) {
                     THIS.render_endpoints(_data.data, parent);
                 });
             });
@@ -181,6 +174,7 @@ winkstart.module('connect', 'endpoints', {
                             e911_info: {}
                         }
                     },
+                    data,
                     function(_data) {
                         THIS.render_endpoints(_data.data, parent);
                     }

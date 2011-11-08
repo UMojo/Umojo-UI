@@ -14,9 +14,9 @@
 
                     <p>Your switch or PBX will connect to our service using a username and password:</p>
                     <label>Register To</label><input type="text" disabled="true" name="realm" value="${realm}" />
-                    <input type="hidden" name="auth_method" value="Password" />
-                    <label>Username</label><input type="text" name="auth_user" value="${auth.auth_user}"/>
-                    <label>Password</label><input type="text" name="auth_password" class="field_last" value="${auth.auth_password}"/>
+                    <input type="hidden" name="auth.auth_method" value="Password" />
+                    <label>Username</label><input type="text" name="auth.auth_user" value="${auth.auth_user}"/>
+                    <label>Password</label><input type="text" name="auth.auth_password" class="field_last" value="${auth.auth_password}"/>
 
                     <div class="clear"/>
 
@@ -24,22 +24,22 @@
                     <div class="clear"></div>
                     <p style="margin-top:4px">The default E911 and service location information:</p>
                     <label>Address</label>
-                    <input type="text" name="Address" value="${options.e911_info.Address}" />
+                    <input type="text" name="options.e911_info.Address" value="${options.e911_info.Address}" />
 
                     <label>City</label>
-                    <input type="text" name="City" value="${options.e911_info.City}" />
+                    <input type="text" name="options.e911_info.City" value="${options.e911_info.City}" />
 
                     <label>State</label>
-                    <input type="text" name="State" value="${options.e911_info.State}" />
+                    <input type="text" name="options.e911_info.State" value="${options.e911_info.State}" />
 
                     <label>Postal Code</label>
-                    <input type="text" name="ZIP" class="field_last" value="${options.e911_info.ZIP}" />
+                    <input type="text" name="options.e911_info.ZIP" class="field_last" value="${options.e911_info.ZIP}" />
 
                     <div class="clear"/>
 
                     <h3>Service Limits</h3><div class="icon limit"></div>
                     <label>Channel Limit</label>
-                    <input id="max_trunks" type="text" name="max_trunks" value="${options.max_trunks}" />
+                    <input id="max_trunks" type="text" name="options.max_trunks" value="${options.max_trunks}" />
 
                     <div class="clear"/>
 

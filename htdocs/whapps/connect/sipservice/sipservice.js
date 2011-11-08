@@ -28,14 +28,6 @@ winkstart.module('connect', 'sipservice', {
             'sipservice.confirm_billing' : 'confirm_billing',
             'sipservice.load_account' : 'load_account',
 
-/*
-            'sipservice.legal.activate' : 'legal',
-            'sipservice.support.activate' : 'support',
-            'sipservice.rates.activate' : 'rates',
-            'sipservice.howto.activate' : 'howto',
-            'sipservice.apis.activate' : 'apis',
-*/
-
             'sipservice.index' : 'index',
             'sipservice.main_menu' : 'main_menu',
             'sipservice.refresh' : 'refresh',
@@ -59,7 +51,23 @@ winkstart.module('connect', 'sipservice', {
             "sipservice.createTicket": {
                 url: 'https://store.2600hz.com/v1/createTicket',
                 verb: 'PUT'
-            }
+            },
+
+            'trunkstore.create': {
+                url: '{api_url}/ts_accounts',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'trunkstore.get': {
+                url: '{api_url}/ts_accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'trunkstore.update': {
+                url: '{api_url}/ts_accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
         }
     },
 
@@ -67,74 +75,9 @@ winkstart.module('connect', 'sipservice', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
-/*
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: 'sipservice.apis',
-            label: 'APIs',
-            icon: 'puzzle'
-        });
-
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: 'sipservice.legal',
-            label: 'Legal',
-            icon: 'legal'
-        });
-
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: 'sipservice.support',
-            label: 'Support',
-            icon: 'support'
-        });
-
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: 'sipservice.rates',
-            label: 'Rates',
-            icon: 'price_tag'
-        });
-
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: 'sipservice.howto',
-            label: 'How to Use',
-            icon: 'book'
-        });
-
-        winkstart.publish('subnav.add', {
-            whapp: 'connect',
-            module: this.__module,
-            label: 'SIP Services',
-            icon: 'active_phone'
-        });
-*/
     },
 
     {
-/*
-        apis: function() {
-            $('#ws-content').html(this.templates.apis.tmpl());
-        },
-
-        legal: function() {
-            $('#ws-content').html(this.templates.legal.tmpl());
-        },
-
-        support: function() {
-            $('#ws-content').html(this.templates.support.tmpl());
-        },
-
-        rates: function() {
-            $('#ws-content').html(this.templates.rates.tmpl());
-        },
-
-        howto: function() {
-            $('#ws-content').html(this.templates.howto.tmpl());
-        },
-*/
-
         refresh: function() {
             var THIS = this;
 
