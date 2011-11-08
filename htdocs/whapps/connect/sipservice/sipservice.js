@@ -15,7 +15,7 @@ winkstart.module('connect', 'sipservice', {
             apis : 'tmpl/apis.html',
 
             main_dids : 'tmpl/main_dids.html',
-            main_servers : 'tmpl/main_servers.html',
+            //main_servers : 'tmpl/main_servers.html',
             main_services : 'tmpl/main_services.html',
 
             order_history: 'tmpl/order_history.html',
@@ -144,7 +144,7 @@ winkstart.module('connect', 'sipservice', {
 
             $('#my_services').html(this.templates.main_services.tmpl(account));
 
-            $('#my_servers').html(this.templates.main_servers.tmpl(account));
+            //$('#my_servers').html(this.templates.main_servers.tmpl(account));
 
             var tmp = account;
 
@@ -191,30 +191,9 @@ winkstart.module('connect', 'sipservice', {
                 scope: 'moveDID'
             });
 
-            $('.modifyServerDefaults').click(function(){
-                var data = {
-                    account: account,
-                    server: account.servers[$(this).attr('data-serverid')]
-                };
-
-                var defaultDialog = winkstart.dialog(THIS.templates.edit_server.tmpl(data), {
-                    open: function(){
-                        $('a.submit_btn', '#edit_server').click(function(){
-                            $(defaultDialog).dialog('close');
-                            alert('Do nothing for now !');
-                        });
-                    }
-                });
-            });
-
-            $('.deleteServer').click(function(){
-                if(confirm('Delete this server ?')){
-                    alert('coming soon...');
-                }
-            });
-
             winkstart.publish('credits.render', account, $('#ws-content'));
             winkstart.publish('channels.render', account, $('#ws-content'));
+            winkstart.publish('endpoints.render', account, $('#ws-content'));
         },
 
         load_account : function(){

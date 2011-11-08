@@ -42,7 +42,7 @@ winkstart.module('connect', 'connect', {
             'admin' : false,
             'channels' : false,
             'credits' : false,
-            'endpoint' : false,
+            'endpoints' : false,
             'numbers' : false
         },
 
