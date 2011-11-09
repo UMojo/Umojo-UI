@@ -6,20 +6,10 @@ winkstart.module('connect', 'channels', {
 
         subscribe: {
             'channels.render': 'render_channels'
-        },
-
-        resources: {
-            "channels.update": {
-                url: '{api_url}/{account_id}/channels',
-                verb: 'POST'
-            }
         }
     },
 
     function(args) {
-        var THIS = this;
-
-        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
 
     {
@@ -28,13 +18,16 @@ winkstart.module('connect', 'channels', {
             inbound_trunks: 4.00
         },
 
-        update_channels: function(data, success, error) {
-            var THIS = this;
+        update_channels: function(channels_data, data, success, error) {
+            var THIS = this,
+                new_data = $.extend(true, {}, data);
 
-            winkstart.request('channels.update', {
+            $.extend(true, new_data.account, channels_data);
+
+            winkstart.request('trunkstore.update', {
                     account_id: winkstart.apps['connect'].account_id,
                     api_url: winkstart.apps['connect'].api_url,
-                    data: data
+                    data: new_data
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
@@ -70,6 +63,7 @@ winkstart.module('connect', 'channels', {
                             trunks: $('#trunks', popup_html).val(),
                             inbound_trunks: $('#inbound_trunks', popup_html).val()
                         },
+                        data,
                         function(_data) {
                             popup.dialog('close');
 
