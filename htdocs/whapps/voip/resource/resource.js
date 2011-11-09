@@ -21,8 +21,6 @@ winkstart.module('voip', 'resource', {
             { name: '#rules',                  regex: /^.*$/ },
             { name: '#flags',                  regex: /^.*$/ },
             { name: '#caller_id_options_type', regex: /^\w*$/ },
-            { name: '#gateways_server',        regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-            { name: '#gateways_realm',         regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
             { name: '#gateways_username',      regex: /^.*$/ },
             { name: '#gateways_password',      regex: /^[^\s]*$/ },
             { name: '#gateways_prefix',        regex: /^[\+]?[\#0-9]*$/ },
