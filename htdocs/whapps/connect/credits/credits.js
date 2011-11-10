@@ -33,7 +33,7 @@ winkstart.module('connect', 'credits', {
 
             winkstart.request('credits.update', {
                     account_id: winkstart.apps['connect'].account_id,
-                    api_url: winkstart.apps['connect'].api_url,
+                    api_url: 'https://store.2600hz.com/v1',
                     data: {
                         'add_credits': credits
                     }
