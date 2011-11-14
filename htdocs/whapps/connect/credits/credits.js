@@ -80,7 +80,7 @@ winkstart.module('connect', 'credits', {
                 ev.preventDefault();
 
                 THIS.render_credits_dialog(data, function(_data) {
-                    THIS.render_credits(_data.data, parent);
+                    winkstart.publish('trunkstore.refresh', _data.data);
                 });
             });
 

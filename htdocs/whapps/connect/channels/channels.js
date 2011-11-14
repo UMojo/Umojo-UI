@@ -90,7 +90,7 @@ winkstart.module('connect', 'channels', {
                 ev.preventDefault();
 
                 THIS.render_channels_dialog(data, function(_data) {
-                    THIS.render_channels(_data.data, parent);
+                    winkstart.publish('trunkstore.refresh', _data.data);
                 });
             });
 

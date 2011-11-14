@@ -122,7 +122,7 @@ winkstart.module('connect', 'endpoints', {
             popup = winkstart.dialog(popup_html, { title: 'Edit endpoint' });
         },
 
-        render_endpoint: function(data, index, target, parent) {
+        render_endpoint: function(data, index, target) {
             var THIS = this,
                 endpoint_data = $.extend(true, {
                         serverid: index,
@@ -136,7 +136,7 @@ winkstart.module('connect', 'endpoints', {
                 ev.preventDefault();
 
                 THIS.render_endpoint_dialog(endpoint_data, data, function(_data) {
-                    THIS.render_endpoints(_data.data, parent);
+                    winkstart.publish('trunkstore.refresh', _data.data);
                 });
             });
 
@@ -144,11 +144,11 @@ winkstart.module('connect', 'endpoints', {
                 ev.preventDefault();
 
                 THIS.delete_endpoint(endpoint_data, data, function(_data) {
-                    THIS.render_endpoints(_data.data, parent);
+                    winkstart.publish('trunkstore.refresh', _data.data);
                 });
             });
 
-            $(target)
+            (target)
                 .empty()
                 .append(endpoint_html);
         },
@@ -161,7 +161,7 @@ winkstart.module('connect', 'endpoints', {
             $.each(data.servers, function(index) {
                 var endpoint = $('<div class="endpoint"/>').appendTo($('#endpoint_list', endpoints_html));
 
-                THIS.render_endpoint(data, index, endpoint, parent);
+                THIS.render_endpoint(data, index, endpoint);
             });
 
             $('#add_server', endpoints_html).click(function(ev) {
