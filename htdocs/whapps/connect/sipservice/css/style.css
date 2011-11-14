@@ -435,10 +435,7 @@ body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em;
 .ui-dialog input.button.info {background-color: #005BE3;}
 .ui-dialog a.button.info:hover {background-color: #0152CA;}
 .ui-dialog input.button.info:hover {background-color: #0152CA;}
-#control_area #numbers .numbers .did-status {display: none;
-                                                max-width: 12em;
-                                                overflow-x: hidden;
-                                                text-overflow: ellipsis;
+#control_area #numbers .numbers .did-status {
                                                 white-space:nowrap;
                                                 color: #999;
                                                 float: left;

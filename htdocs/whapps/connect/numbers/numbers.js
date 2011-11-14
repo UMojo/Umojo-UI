@@ -19,9 +19,10 @@ winkstart.module('connect', 'numbers', {
 
         templates: {
             numbers: 'tmpl/numbers.html',
+            number: 'tmpl/number.html',
+            cancel_dialog: 'tmpl/cancel_dialog.html',
 
             port_number: 'tmpl/port_number.html',
-            cancel_number: 'tmpl/cancel_number.html',
             edit_failover: 'tmpl/edit_failover.html',
             edit_cnam: 'tmpl/edit_cnam.html',
             edit_e911: 'tmpl/edit_e911.html',
@@ -33,11 +34,11 @@ winkstart.module('connect', 'numbers', {
         /* What events do we listen for, in the browser? */
         subscribe: {
             'numbers.render': 'render_numbers',
+
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
             'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
             'numbers.post_number': 'post_number',
-
             'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account (prompts for confirmation)
             'numbers.delete_number' : 'delete_number',     // Immediately delete & cancel a number from account (no prompt)
             'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
@@ -50,11 +51,9 @@ winkstart.module('connect', 'numbers', {
             'numbers.edit_failover' : 'edit_failover',     // Configure Failover
             'numbers.update_failover' : 'update_failover', // Update Failover
             'numbers.unassign' : 'unassign',
-
             'numbers.request_port' : 'request_port',       // Request to port a number
             'numbers.port_number' : 'port_number',         // Submit a port request
             'numbers.post_port_number' : 'post_port_number',
-
             'numbers.search_npa_nxx': 'search_npa_nxx'
         },
 
@@ -100,8 +99,8 @@ winkstart.module('connect', 'numbers', {
                 verb: 'POST'
             },
 
-            "numbers.delete_number": {
-                url: 'https://store.2600hz.com/v1/{account_id}/delDID',
+            "number.delete": {
+                url: '{api_url}/{account_id}/delDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -134,46 +133,6 @@ winkstart.module('connect', 'numbers', {
         /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
         winkstart.registerResources(this.__whapp, this.config.resources);
 
-        // Number manipulation from carrier
-        $('#ws-content').delegate('.numbers.add', 'click', function() {
-            winkstart.publish('numbers.add_number_prompt');
-        });
-
-        $('#ws-content').delegate('.numbers.import', 'click', function() {
-            winkstart.publish('numbers.port_number');
-        });
-
-
-        // Existing number manipulation
-        $('#ws-content').delegate('.numbers .unassign', 'click', function() {
-            winkstart.publish('numbers.unassign', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .edit_failover", "click", function(){
-            winkstart.publish('numbers.edit_failover', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .edit_cnam", "click", function(){
-            winkstart.publish('numbers.edit_cnam', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .edit_e911", "click", function(){
-            winkstart.publish('numbers.edit_e911', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .edit_misc", "click", function(){
-            winkstart.publish('numbers.edit_misc', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .check_port", 'click', function(){
-            winkstart.publish('numbers.check_port', $(this).dataset());
-        });
-
-        $('#ws-content').delegate(".numbers .cancel_number", 'click', function(){
-            winkstart.publish('numbers.cancel_number', $(this).dataset());
-        });
-
-
         // Make numbers draggable
         $('#ws-content .number:not(.ui-draggable)').live('mousemove',function(){
             $(this).draggable({
@@ -189,10 +148,8 @@ winkstart.module('connect', 'numbers', {
 
     }, // End initialization routine
 
-
-
-    /* Define the functions for this module */
     {
+/*
         edit_failover: function(args) {
             var dialogDiv = winkstart.dialog(this.templates.edit_failover.tmpl(args), {
                 title: 'Edit Failover'
@@ -395,7 +352,6 @@ winkstart.module('connect', 'numbers', {
             );
         },
 
-
         cancel_number: function(args) {
             var dialogDiv = winkstart.dialog(this.templates.cancel_number.tmpl(args), {
                 title: 'Cancel Number'
@@ -446,7 +402,7 @@ winkstart.module('connect', 'numbers', {
                 }
             );
         },
-
+*/
 
         defaults: function(info) {
             //	winkstart.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
@@ -866,58 +822,134 @@ winkstart.module('connect', 'numbers', {
         },
 
 
-        listDIDs: function(servers) {
+/* Good stuff starts here */
+        cancel_number: function(number_data, success, error) {
             var THIS = this;
 
-            var DIDs = {};
+            winkstart.request(true, 'number.delete', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: 'https://store.2600hz.com/v1',
+                    data: number_data
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+/*
+        render_server_number: function(number_data, parent) {
+            var THIS = this,
+                number_html = THIS.templates.server_number.tmpl(number_data);
 
-            $(servers.servers).each(function(k, v) {
-                winkstart.log(v);
-                $.extend(DIDs, v.DIDs);
-                winkstart.log(DIDs);
-            });
 
-            winkstart.log(DIDs);
 
-            return DIDs;
+            (parent).append(number_html);
         },
 
-        refresh_dids: function(account) {
-            var THIS = this;
-            var tmp = account;
+        render_server_numbers: function(data, target) {
+            var THIS = this,
+                container = $('<div/>');
 
-            tmp.unassigned = 0;
-            tmp.totalDIDs = 0;
-            if (tmp.DIDs_Unassigned) {
-                $.each(tmp.DIDs_Unassigned, function() {
-                    tmp.unassigned++;
-                    tmp.totalDIDs++;
-                });
-            };
-
-            $.each(tmp.servers, function(k, v) {
-                if (v.DIDs) {
-                    $.each(v.DIDs, function(i, j) {
-                        tmp.totalDIDs++;
-                    });
-                }
+            $.each(data, function(did, options) {
+                THIS.render_server_number({
+                        did: did,
+                        options: options
+                    },
+                    container
+                );
             });
 
-            winkstart.log(tmp);
+            (target)
+                .empty()
+                .append(container.html());
+        },
+*/
+        render_cancel_dialog: function(number_data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.cancel_dialog.tmpl(number_data),
+                popup;
 
-            winkstart.log('Refreshing DIDs...');
-            $('#my_numbers').empty();
-            THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
+            $('.submit_btn', popup_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.cancel_number(number_data, function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                });
+            })
+
+            popup = winkstart.dialog(popup_html, { title: 'Cancel number' });
+        },
+
+        render_number: function(number_data, data, parent) {
+            var THIS = this,
+                number_html = THIS.templates.number.tmpl(number_data);
+
+            if(!('server_name' in data)) {
+                $('.cancel_number', number_html).click(function(ev) {
+                    ev.preventDefault();
+
+                    THIS.render_cancel_dialog(number_data, function(_data) {
+                        winkstart.publish('trunkstore.refresh', _data.data);
+                    });
+                });
+            }
+
+            (parent).append(number_html);
         },
 
         render_numbers: function(data, parent) {
             var THIS = this,
                 target = $('#numbers', parent),
-                numbers_html = THIS.templates.numbers.tmpl();
+                numbers_html = THIS.templates.numbers.tmpl({
+                    unassigned: THIS.count(data.DIDs_Unassigned)
+                });
+
+            $.each(data.servers, function(index, server) {
+                $.each(server.DIDs, function(did, options) {
+                    THIS.render_number({
+                            did: did,
+                            server_name: server.server_name
+                        },
+                        data,
+                        $('#number_list', numbers_html)
+                    );
+                });
+            });
+
+            $.each(data.DIDs_Unassigned, function(did, options) {
+                THIS.render_number({
+                        did: did,
+                        status: 'Unassigned'
+                    },
+                    data,
+                    $('#number_list', numbers_html)
+                );
+            });
 
             (target)
                 .empty()
                 .append(numbers_html);
+        },
+
+        count: function(obj) {
+            var size = 0;
+
+            $.each(obj, function() {
+                size++;
+            });
+
+            return size;
         }
     }
 );
