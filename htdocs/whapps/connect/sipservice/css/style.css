@@ -13,27 +13,27 @@
 #control_area { width:463px; float:left; }
 
 /* my numbers area */
-#control_area #my_numbers { width:423px; margin:0 0 20px 20px; }
-#control_area #my_numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
-#control_area #my_numbers .numbers { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
+#control_area #numbers { width:423px; margin:0 0 20px 20px; }
+#control_area #numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
+#control_area #numbers .numbers { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
 
-#control_area #my_numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
-#control_area #my_numbers .numbers .cancel_number:hover { text-decoration:none; }
+#control_area #numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
+#control_area #numbers .numbers .cancel_number:hover { text-decoration:none; }
 
-#control_area #my_numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
-#control_area #my_numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
+#control_area #numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
+#control_area #numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
 
-#control_area #my_numbers .view { background:url(../images/bg_numbers_li_view.jpg) top left no-repeat; width:423px; height:28px; font-size:12px; }
-#control_area #my_numbers .view .more { color:#d93636; float:right; margin: 6px 25px 0 0; }
-#control_area #my_numbers .view .more:hover { text-decoration:none; }
-#control_area #my_numbers .view .showing { color:#4e4d4d; float:left; margin:6px 0 0 25px; }
+#control_area #numbers .view { background:url(../images/bg_numbers_li_view.jpg) top left no-repeat; width:423px; height:28px; font-size:12px; }
+#control_area #numbers .view .more { color:#d93636; float:right; margin: 6px 25px 0 0; }
+#control_area #numbers .view .more:hover { text-decoration:none; }
+#control_area #numbers .view .showing { color:#4e4d4d; float:left; margin:6px 0 0 25px; }
 
-#control_area #my_numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
-#control_area #my_numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
-#control_area #my_numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
-#control_area #my_numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
-#control_area #my_numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
-#control_area #my_numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
+#control_area #numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
+#control_area #numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
+#control_area #numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
+#control_area #numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
+#control_area #numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
+#control_area #numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
 
 
 /* my services area */
@@ -418,7 +418,7 @@ a.button:hover {
 .edit.discount {cursor:pointer;}
 
 
-#control_area #my_numbers .numbers .unassigned {color: #437B3D;;}
+#control_area #numbers .numbers .unassigned {color: #437B3D;;}
 
 body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em; border-radius: .5em; -moz-border-radius: .5em; -webkit-border-radius: .5em; background: #859ED4; font-weight: bold; cursor: pointer; color: black;}
 
@@ -435,7 +435,7 @@ body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em;
 .ui-dialog input.button.info {background-color: #005BE3;}
 .ui-dialog a.button.info:hover {background-color: #0152CA;}
 .ui-dialog input.button.info:hover {background-color: #0152CA;}
-#control_area #my_numbers .numbers .did-status {display: none;
+#control_area #numbers .numbers .did-status {display: none;
                                                 max-width: 12em;
                                                 overflow-x: hidden;
                                                 text-overflow: ellipsis;
@@ -445,7 +445,7 @@ body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em;
                                                 margin: 10px 0px 0px 20px;
 
 }
-#control_area #my_numbers .numbers:hover .did-status {
+#control_area #numbers .numbers:hover .did-status {
     display: inline;
 }
 /* =================== END jQuery UI 2600hz Edits =================== */

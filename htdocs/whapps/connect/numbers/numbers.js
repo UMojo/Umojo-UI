@@ -9,18 +9,17 @@
  *   #numbers.unused_numbers - A list of all numbers currently unused/available for mapping
  *   #numbers.unused_numbers_count - A count of how many numbers are currently unused/available for mapping
  *
- * 
+ *
  */
 
-winkstart.module('connect', 'numbers',
-    /* Start module resource definitions */
-    {
+winkstart.module('connect', 'numbers', {
         css: [
             'css/numbers.css'
         ],
-        
-        /* What HTML templates will we be using? */
+
         templates: {
+            numbers: 'tmpl/numbers.html',
+
             port_number: 'tmpl/port_number.html',
             cancel_number: 'tmpl/cancel_number.html',
             edit_failover: 'tmpl/edit_failover.html',
@@ -28,11 +27,12 @@ winkstart.module('connect', 'numbers',
             edit_e911: 'tmpl/edit_e911.html',
             add_numbers: 'tmpl/add_numbers.html',
             search_dids_results: 'tmpl/search_dids_results.html'
-            
+
         },
 
         /* What events do we listen for, in the browser? */
         subscribe: {
+            'numbers.render': 'render_numbers',
             'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
             'numbers.find_number' : 'find_number',         // Find new numbers
             'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
@@ -668,18 +668,6 @@ winkstart.module('connect', 'numbers',
 
                 return purchasedDIDs;
             });
-            /*var enoughCredits = true;
-            var purchasedDIDs=new Array();
-            if (enoughCredits) {
-                //purchasedDIDs=addIDs(buyThese);
-                purchasedDIDs=THIS.add(buyThese);
-
-            } else {
-                msgAlert('Not enough credits to add these DIDs');
-                return false;
-            }
-
-            return purchasedDIDs;*/
         },
 
         searchDIDsPrompt: function() {
@@ -808,7 +796,7 @@ winkstart.module('connect', 'numbers',
 	            function(json) {
                         if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
                             winkstart.apps['connect'].account = json.data;
-                        
+
                             winkstart.publish('numbers.refresh');
                             if (args.success)
                                 args.success();
@@ -823,11 +811,11 @@ winkstart.module('connect', 'numbers',
                     }
 	        );
         },
-        
+
         unassign: function(data) {
             var did = data.did;
             var serverid = data.serverid;
-            /* 
+            /*
             	not sure about this code:
 
             delete(THIS.account.servers[serverid].DIDs[did]);
@@ -878,13 +866,9 @@ winkstart.module('connect', 'numbers',
         },
 
 
-        /*************************
-         * DID Display / Listing *
-         *************************/
         listDIDs: function(servers) {
             var THIS = this;
 
-            // Combine all DIDs from all servers
             var DIDs = {};
 
             $(servers.servers).each(function(k, v) {
@@ -926,170 +910,14 @@ winkstart.module('connect', 'numbers',
             THIS.templates.main_dids.tmpl(tmp).appendTo ( $('#my_numbers') );
         },
 
+        render_numbers: function(data, parent) {
+            var THIS = this,
+                target = $('#numbers', parent),
+                numbers_html = THIS.templates.numbers.tmpl();
 
-        /*****************
-         * Other Helpers *
-         *****************/
-        createUploader: function(elm, act, args, cb){
-            var uploader = new qq.FileUploader({
-                allowedExtensions: ['jpg', 'jpeg', 'png','tiff','pdf','psd'],
-                sizeLimit: 10000000,
-                minSizeLimit: 20000,
-
-                onComplete: function(id, fileName, responseJSON){
-                    cb(id, fileName, responseJSON);
-                },
-
-                element: elm,
-                action: act,
-                params: args
-            });
+            (target)
+                .empty()
+                .append(numbers_html);
         }
-    } // End function definitions
-
- );  // End module
-
-
-
-
-
-
-
-
-
-        // '<pre>' + JSON.stringify(did) + '</pre>' +
-/*        failover: function(did) {
-            popup($('#tmpl_fo_prompt').tmpl( did ) , {
-                title: 'Set Failover'
-            }	);
-            $('#fo_button').click(function() {
-                setFailOver({
-                    did: $('#fo_uri').dataset(),
-                    uri: $('#fo_uri').val()
-                } );
-            });
-            $('#fo_uri').blur();
-        },*/
-
-
-
-
-/*        not_used_anymore_searchNPA: function(nbr, cb) {
-            //			$.getJSON('/api/searchNPA', function(data) {
-            //				$('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));			});
-            winkstart.getJSON("searchNPA",
-            {
-                account_id: winkstart.apps['connect'].account_id,
-                data: nbr
-            },
-            function(msg){
-                redraw(msg.data);
-            }
-            );
-        },
-
-
-        not_used_anymore_searchNPANXX: function(nbr, cb) {
-            $.getJSON('/api/searchNPANXX', function(data) {
-                $('#foundDIDList').html($('#tmpl_foundDIDs').tmpl(data));
-            });
-            $.ajax({
-                url: "/api/searchNPANXX",
-                global: true,
-                type: "POST",
-                data: ({
-                    account_id: winkstart.apps['connect'].account_id,
-                    data: nbr
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    redraw(msg.data);
-
-                }
-            }
-            );
-
-        },*/
-
-/*        post_failover: function(data) {
-            var THIS = this;
-            winkstart.log(data);
-            if(data.number == '') {
-                delete  THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover;
-            } else {
-                THIS.account.servers[data.parent.serverid].DIDs[data.parent.did].failover = {
-                    e164: data.number
-                };
-            }
-
-            data.success();
-            THIS.update_account();*/
-        /*$.ajax({
-                url: "#",
-                global: true,
-                type: "POST",
-                data: ({
-                    account_id: winkstart.apps['connect'].account_id,
-                    data: {
-                        number: data.number
-                    }
-                }),
-                dataType: "json",
-                async:true,
-                success: function(msg){
-                    if (msg && msg.errs && msg.errs[0]) {
-                        display_errs(msg.errs);
-                    }
-                    redraw(msg.data);
-                }
-            }
-            );*/
-/*        },*/
-
-
-
-/*
-        updateDIDQtyCosts: function(did, qty) {
-            if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
-                $('#fd_' + did).dataset('qty',  parseInt( qty ));
-                return parseInt( qty );
-            }
-            return -1;
-        },
-
- */
-
-
-
-
-
-/*
- * Old DID Map code
-/*            winkstart.log('DID ', did, ' srv', srv);
-
-            // Is this an unassigned DID?
-            if (THIS.account.DIDs_Unassigned && THIS.account.DIDs_Unassigned[did]) {
-                // Yes! Assign it
-                THIS.account.servers[srv].DIDs[did] = THIS.account.DIDs_Unassigned[did];
-
-                // Remove old DID
-                delete(THIS.account.DIDs_Unassigned[did]);
-            } else {
-                // Nope, already mapped. Need to move it
-                var did_data = {};
-
-                // Look for this DID on any other server. If it's there, remove it
-                $.each(THIS.account.servers, function(k, v) {
-                    if (THIS.account.servers[k].DIDs[did]) {
-                        did_data = THIS.account.servers[k].DIDs[did];
-
-                        // Remove from the old server
-                        delete(THIS.account.servers[k].DIDs[did]);
-                    }
-                });
-
-                // Add whatever we found to the new server
-                THIS.account.servers[srv].DIDs[did] = did_data;
-            }*/
-
+    }
+);

@@ -108,7 +108,7 @@ winkstart.module('connect', 'sipservice', {
                 }
             });
 
-            $('#my_numbers').html(this.templates.main_dids.tmpl(tmp));
+            //$('#my_numbers').html(this.templates.main_dids.tmpl(tmp));
 
             $('#auth_realm').html(account.account.auth_realm);
 
@@ -137,6 +137,7 @@ winkstart.module('connect', 'sipservice', {
             winkstart.publish('credits.render', account, $('#ws-content'));
             winkstart.publish('channels.render', account, $('#ws-content'));
             winkstart.publish('endpoints.render', account, $('#ws-content'));
+            winkstart.publish('numbers.render', account, $('#ws-content'));
         },
 
         load_account : function(){
