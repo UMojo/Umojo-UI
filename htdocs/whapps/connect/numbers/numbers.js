@@ -829,6 +829,14 @@ winkstart.module('connect', 'numbers', {
                 zIndex: 9999
             });
 
+            $('.unassign', number_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.move_number(number_data, {}, data, function(_data) {
+                    winkstart.publish('trunkstore.refresh', _data.data);
+                });
+            });
+
             console.log(number_html);
 
             (parent).append(number_html);
@@ -923,6 +931,7 @@ winkstart.module('connect', 'numbers', {
             $.each(data.DIDs_Unassigned, function(did, options) {
                 THIS.render_number({
                         did: did,
+                        serverid: -1,
                         status: 'Unassigned'
                     },
                     data,
