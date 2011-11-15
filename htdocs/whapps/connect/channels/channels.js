@@ -44,7 +44,7 @@ winkstart.module('connect', 'channels', {
 
         render_channels_dialog: function(data, callback) {
             var THIS = this,
-                popup_html = THIS.templates.channels_dialog.tmpl($.extend(data, { rates: THIS.rates })),
+                popup_html = THIS.templates.channels_dialog.tmpl($.extend({}, data, { rates: THIS.rates })),
                 popup;
 
             $('#trunks, #inbound_trunks', popup_html).bind('keyup change', function() {
