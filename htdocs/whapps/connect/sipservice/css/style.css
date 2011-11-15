@@ -15,7 +15,7 @@
 /* my numbers area */
 #control_area #numbers { width:423px; margin:0 0 20px 20px; }
 #control_area #numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
-#control_area #numbers .numbers { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
+#control_area #numbers .number_entry { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
 
 #control_area #numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
 #control_area #numbers .numbers .cancel_number:hover { text-decoration:none; }
@@ -82,7 +82,7 @@
 #endpoint_list .endpoint p { display:block; margin:6px 0 6px 18px; font-size:14px; }
 
 /* server area -> server numbers */
-#endpoint_list .endpoint .numbers { height:32px; border-bottom:1px solid #ccc; font-size:12px; }
+#endpoint_list .endpoint .number_entry { height:32px; border-bottom:1px solid #ccc; font-size:12px; }
 #endpoint_list .endpoint .numbers span { float:left; margin:12px 0 0 18px;  }
 #endpoint_list .endpoint .numbers a { float:left; margin:1px 0 0 15px; padding:11px 0 0 0; color:#2585a5;  }
 #endpoint_list .endpoint .numbers a:hover { color:#417911; }

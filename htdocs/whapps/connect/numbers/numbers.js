@@ -1,17 +1,3 @@
-/**
- * This module is for managing DIDs assigned to an account. Once loaded, the following DOM areas will be managed:
- *
- * Content Areas:
- *   #numbers.assigned_numbers - A list of all numbers currently assigned numbers for this account (mapped & non-mapped)
- *   #numbers.assigned_numbers_count - A count of how many numbers are assigned to this account total (mapped & non-mapped)
- *   #numbers.active_numbers - A list of all numbers currently mapped/routed on this account
- *   #numbers.active_numbers_count - A count of how many numbers are assigned to this account but not mapped/routed
- *   #numbers.unused_numbers - A list of all numbers currently unused/available for mapping
- *   #numbers.unused_numbers_count - A count of how many numbers are currently unused/available for mapping
- *
- *
- */
-
 winkstart.module('connect', 'numbers', {
         css: [
             'css/numbers.css'
@@ -20,46 +6,17 @@ winkstart.module('connect', 'numbers', {
         templates: {
             numbers: 'tmpl/numbers.html',
             number: 'tmpl/number.html',
-            cancel_dialog: 'tmpl/cancel_dialog.html',
-
-            port_number: 'tmpl/port_number.html',
-            edit_failover: 'tmpl/edit_failover.html',
-            edit_cnam: 'tmpl/edit_cnam.html',
-            edit_e911: 'tmpl/edit_e911.html',
-            add_numbers: 'tmpl/add_numbers.html',
-            search_dids_results: 'tmpl/search_dids_results.html'
-
+            endpoint_number: 'tmpl/endpoint_number.html',
+            cancel_dialog: 'tmpl/cancel_dialog.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
             'numbers.render': 'render_numbers',
-
-            'numbers.get_numbers' : 'get_numbers',         // Get a list of DIDs for this account
-            'numbers.find_number' : 'find_number',         // Find new numbers
-            'numbers.add_number_prompt' : 'add_number_prompt',           // Buy/add a number to this account
-            'numbers.post_number': 'post_number',
-            'numbers.cancel_number' : 'cancel_number',     // Cancel a number from the account (prompts for confirmation)
-            'numbers.delete_number' : 'delete_number',     // Immediately delete & cancel a number from account (no prompt)
-            'numbers.map_number' : 'map_number',           // Map a number to a whApp or PBX/Server (or unmap/map to nothing)
-            'numbers.update_number' : 'update_number',     // Update features / settings for a number
-            'numbers.toggle_fax' : 'toggle_fax',           // Toggle Fax / T.38 support
-            'numbers.edit_cnam' : 'edit_cnam',             // Configure CNAM
-            'numbers.update_cnam' : 'update_cnam',         // Update CNAM
-            'numbers.edit_e911' : 'edit_e911',             // Configure e911
-            'numbers.update_e911' : 'update_e911',         // Update e911
-            'numbers.edit_failover' : 'edit_failover',     // Configure Failover
-            'numbers.update_failover' : 'update_failover', // Update Failover
-            'numbers.unassign' : 'unassign',
-            'numbers.request_port' : 'request_port',       // Request to port a number
-            'numbers.port_number' : 'port_number',         // Submit a port request
-            'numbers.post_port_number' : 'post_port_number',
-            'numbers.search_npa_nxx': 'search_npa_nxx'
+            'numbers.render_endpoint_numbers': 'render_endpoint_numbers',
+            'numbers.render_endpoint_number_dropzone': 'render_endpoint_number_dropzone',
         },
 
-        /* What API URLs are we going to be calling? Variables are in { }s */
         resources: {
-            /* Search DIDs */
             "numbers.search_npa_nxx": {
                 url: 'https://store.2600hz.com/v1/{account_id}/searchNPANXX',
                 contentType: 'application/json',
@@ -84,17 +41,8 @@ winkstart.module('connect', 'numbers', {
                 verb: 'POST'
             },
 
-
-
-            /* DID Management */
             "numbers.add": {
                 url: 'https://store.2600hz.com/v1/{account_id}/addDIDs',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
-            "numbers.map_number": {
-                url: 'https://store.2600hz.com/v1/{account_id}/moveDID',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -111,42 +59,19 @@ winkstart.module('connect', 'numbers', {
                 verb: 'POST'
             },
 
-            "numbers.update_failover": {
-                url: 'https://store.2600hz.com/v1/{account_id}/failover',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
             "numbers.update_cnam": {
                 url: 'https://store.2600hz.com/v1/{account_id}/cnam',
                 contentType: 'application/json',
                 verb: 'POST'
             }
-
         }
-    }, // End module resource definitions
+    },
 
-
-
-    /* Bootstrap routine - runs automatically when the module is first loaded */
     function() {
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
+        var THIS = this;
 
-        // Make numbers draggable
-        $('#ws-content .number:not(.ui-draggable)').live('mousemove',function(){
-            $(this).draggable({
-                cursor: 'pointer',
-                opacity: 0.35,
-                revert: 'invalid',
-                scope: 'moveDID',
-                appendTo: 'body',
-                helper: 'clone',
-                zIndex: 9999
-            });
-        });
-
-    }, // End initialization routine
+        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+    },
 
     {
 /*
@@ -823,6 +748,33 @@ winkstart.module('connect', 'numbers', {
 
 
 /* Good stuff starts here */
+        move_number: function(number_data, endpoint_data, data, success, error) {
+            var THIS = this,
+                did = number_data.did,
+                src_did_list = ('serverid' in number_data) ? data.servers[number_data.serverid].DIDs : data.DIDs_Unassigned,
+                dest_did_list = (endpoint_data && !$.isEmptyObject(endpoint_data)) ? endpoint_data.DIDs : data.DIDs_Unassigned;
+
+            dest_did_list[did] = src_did_list[did];
+            delete src_did_list[did];
+
+            winkstart.request(true, 'trunkstore.update', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: winkstart.apps['connect'].api_url,
+                    data: data
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         cancel_number: function(number_data, success, error) {
             var THIS = this;
 
@@ -843,34 +795,65 @@ winkstart.module('connect', 'numbers', {
                 }
             );
         },
-/*
-        render_server_number: function(number_data, parent) {
+
+        render_endpoint_number_dropzone: function(endpoint_data, data, target) {
             var THIS = this,
-                number_html = THIS.templates.server_number.tmpl(number_data);
+                number_dropzone_html = $('<div class="drop_area"/>');
 
+            (number_dropzone_html).droppable({
+                accept: '.number',
+                drop: function(ev, ui) {
+                    var number_data = ui.draggable.dataset();
 
+                    THIS.move_number(number_data, endpoint_data, data, function(_data) {
+                        winkstart.publish('trunkstore.refresh', _data.data);
+                    });
+                }
+            });
+
+            (target)
+                .empty()
+                .append(number_dropzone_html);
+        },
+
+        render_endpoint_number: function(number_data, data, parent) {
+            var THIS = this,
+                number_html = THIS.templates.endpoint_number.tmpl(number_data);
+
+            $('.number', number_html).draggable({
+                cursor: 'pointer',
+                opacity: 0.35,
+                revert: 'invalid',
+                appendTo: 'body',
+                helper: 'clone',
+                zIndex: 9999
+            });
+
+            console.log(number_html);
 
             (parent).append(number_html);
         },
 
-        render_server_numbers: function(data, target) {
+        render_endpoint_numbers: function(endpoint_data, data, target) {
             var THIS = this,
                 container = $('<div/>');
 
-            $.each(data, function(did, options) {
-                THIS.render_server_number({
+            $.each(endpoint_data.DIDs, function(did, options) {
+                THIS.render_endpoint_number({
                         did: did,
-                        options: options
+                        options: options,
+                        serverid: endpoint_data.serverid
                     },
+                    data,
                     container
                 );
             });
 
             (target)
                 .empty()
-                .append(container.html());
+                .append(container.children());
         },
-*/
+
         render_cancel_dialog: function(number_data, callback) {
             var THIS = this,
                 popup_html = THIS.templates.cancel_dialog.tmpl(number_data),
@@ -905,6 +888,15 @@ winkstart.module('connect', 'numbers', {
                 });
             }
 
+            $('.number', number_html).draggable({
+                cursor: 'pointer',
+                opacity: 0.35,
+                revert: 'invalid',
+                appendTo: 'body',
+                helper: 'clone',
+                zIndex: 9999
+            });
+
             (parent).append(number_html);
         },
 
@@ -919,6 +911,7 @@ winkstart.module('connect', 'numbers', {
                 $.each(server.DIDs, function(did, options) {
                     THIS.render_number({
                             did: did,
+                            serverid: index,
                             server_name: server.server_name
                         },
                         data,

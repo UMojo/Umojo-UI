@@ -122,9 +122,9 @@ winkstart.module('connect', 'endpoints', {
             popup = winkstart.dialog(popup_html, { title: 'Edit endpoint' });
         },
 
-        render_endpoint: function(data, index, target) {
+        render_endpoint: function(data, index, parent) {
             var THIS = this,
-                endpoint_data = $.extend(true, {
+                endpoint_data = $.extend({
                         serverid: index,
                         realm: data.account.auth_realm
                     },
@@ -148,9 +148,10 @@ winkstart.module('connect', 'endpoints', {
                 });
             });
 
-            (target)
-                .empty()
-                .append(endpoint_html);
+            winkstart.publish('numbers.render_endpoint_numbers', endpoint_data, data, $('.did_list', endpoint_html));
+            winkstart.publish('numbers.render_endpoint_number_dropzone', endpoint_data, data, $('.dropzone', endpoint_html));
+
+            (parent).append(endpoint_html);
         },
 
         render_endpoints: function(data, parent) {
@@ -159,9 +160,7 @@ winkstart.module('connect', 'endpoints', {
                 endpoints_html = THIS.templates.endpoints.tmpl(data);
 
             $.each(data.servers, function(index) {
-                var endpoint = $('<div class="endpoint"/>').appendTo($('#endpoint_list', endpoints_html));
-
-                THIS.render_endpoint(data, index, endpoint);
+                THIS.render_endpoint(data, index, $('#endpoint_list', endpoints_html));
             });
 
             $('#add_server', endpoints_html).click(function(ev) {
@@ -176,7 +175,7 @@ winkstart.module('connect', 'endpoints', {
                     },
                     data,
                     function(_data) {
-                        THIS.render_endpoints(_data.data, parent);
+                        winkstart.publish('trunkstore.refresh', _data.data);
                     }
                 );
             });
