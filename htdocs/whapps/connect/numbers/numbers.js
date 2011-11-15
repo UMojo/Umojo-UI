@@ -601,7 +601,8 @@ winkstart.module('connect', 'numbers', {
                 number_dropzone_html = $('<div class="drop_area"/>');
 
             (number_dropzone_html).droppable({
-                accept: '.number',
+                /* The :not([data-serverid...]) bit prevents dropping a DID on the server it's currently assigned to */
+                accept: '.number:not([data-serverid="' + endpoint_data.serverid + '"])',
                 drop: function(ev, ui) {
                     var number_data = ui.draggable.dataset();
 
