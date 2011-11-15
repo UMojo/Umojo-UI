@@ -1,6 +1,6 @@
 <div>
     <div class="number_entry">
-        {{if serverid != -1}}
+        {{if serverid}}
             <span class="number ${status}" data-did="${did}" data-serverid="${serverid}">${did}</span>
         {{else}}
             <span class="number ${status}" data-did="${did}">${did}</span>

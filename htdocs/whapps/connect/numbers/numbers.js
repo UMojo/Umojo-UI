@@ -7,7 +7,8 @@ winkstart.module('connect', 'numbers', {
             numbers: 'tmpl/numbers.html',
             number: 'tmpl/number.html',
             endpoint_number: 'tmpl/endpoint_number.html',
-            cancel_dialog: 'tmpl/cancel_dialog.html'
+            cancel_dialog: 'tmpl/cancel_dialog.html',
+            failover_dialog: 'tmpl/failover_dialog.html'
         },
 
         subscribe: {
@@ -75,57 +76,6 @@ winkstart.module('connect', 'numbers', {
 
     {
 /*
-        edit_failover: function(args) {
-            var dialogDiv = winkstart.dialog(this.templates.edit_failover.tmpl(args), {
-                title: 'Edit Failover'
-            });
-
-            $('.submit_btn', dialogDiv).click(function() {
-                var data = $.extend({}, args, form2object('failover'));     // Grab data from failover form
-
-                // TODO: Validate data here
-
-                // Request an update & provide a callback for success or failure
-                winkstart.publish('numbers.update_failover', {
-                    data : data,
-                    success : function() {
-                        // On success, close the dialog.
-                        dialogDiv.dialog('close');
-
-                        if (args.success) {
-                            args.success(args);
-                        }
-                    },
-                    error : function() {
-                        alert('Failed to save.');
-                    }
-                })
-            });
-        },
-
-        update_failover: function(args) {
-            winkstart.postJSON('numbers.update_failover',
-                {
-                    data: args.data,
-                    account_id : winkstart.apps['connect'].account_id
-                },
-                function(json) {
-                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                        if (args.success)
-                            args.success();
-                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
-                        alert(json.errs[0].msg);
-                    } else {
-                        // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
-                    }
-                }
-            );
-        },
-
-
         edit_cnam: function(args) {
             var dialogDiv = winkstart.dialog(this.templates.edit_cnam.tmpl(args), {
                 title: 'Edit Caller ID Name'
@@ -225,127 +175,7 @@ winkstart.module('connect', 'numbers', {
                 }
             );
         },
-
-
-        edit_fax: function(args) {
-            var dialogDiv = winkstart.dialog(this.templates.edit_fax.tmpl(args), {
-                title: 'Edit Fax Settings'
-            });
-
-            $('.submit_btn', dialogDiv).click(function() {
-                var data = $.extend({}, args, form2object('#fax'));     // Grab data from cnam form
-
-                // TODO: Validate data here
-
-                // Request an update & provide a callback for success or failure
-                winkstart.publish('numbers.update_fax', {
-                    data : data,
-                    success : function() {
-                        // On success, close the dialog.
-                        dialogDiv.dialog('close');
-
-                        if (args.success) {
-                            args.success(args);
-                        }
-                    },
-                    error : function() {
-                        alert('Failed to save.');
-                    }
-                })
-            });
-        },
-
-        update_fax: function(args) {
-            winkstart.postJSON('numbers.update_fax',
-                {
-                    data: args.data,
-                    account_id : winkstart.apps['connect'].account_id
-                },
-                function(json) {
-                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                        if (args.success)
-                            args.success();
-                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
-                        alert(json.errs[0].msg);
-                    } else {
-                        // TODO: Better process XHR here
-                        alert('We had trouble talking to the server. Are you sure you\'re online?');
-                    }
-                }
-            );
-        },
-
-        cancel_number: function(args) {
-            var dialogDiv = winkstart.dialog(this.templates.cancel_number.tmpl(args), {
-                title: 'Cancel Number'
-            });
-
-            $('.submit_btn', dialogDiv).click(function() {
-                // TODO: Validate data here
-
-                // Request an update & provide a callback for success or failure
-                winkstart.publish('numbers.delete_number', {
-                    data : args,
-                    success : function() {
-                        // On success, close the dialog.
-                        dialogDiv.dialog('close');
-
-                        if (args.success) {
-                            args.success(args);
-                        }
-                    },
-                    error : function() {
-                        alert('Failed to save.');
-                    }
-                });
-                dialogDiv.dialog('close');
-            });
-        },
-
-        delete_number: function(args) {
-            winkstart.postJSON('numbers.delete_number',
-                {
-                    data: args.data,
-                    account_id : winkstart.apps['connect'].account_id
-                },
-                function(json) {
-                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                        if (args.success)
-                            args.success();
-                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
-                        alert(json.errs[0].msg);
-                    } else {
-                        // TODO: Better process XHR here
-                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                    }
-                }
-            );
-        },
 */
-
-        defaults: function(info) {
-            //	winkstart.log(JSON.stringify({s: info.serverid, theinfo: acct.servers[info.serverid], 'tst': info}));
-            winkstart.dialog($('#tmpl_modSRVDefs_prompt').tmpl( {
-                s: info.serverid,
-                srv: acct.servers[info.serverid],
-                'fa':info.fa || {}
-            }) , {
-                title: 'Modify Server Defaults for '  + acct.servers[info.serverid].server_name
-            }	);
-
-            $('#modSRV_button').click(function() {
-                setServerDefaults($('#srvDefs_update_form').serializeObject());
-            });
-        },
-
-
-
 
         /*********************
          * Porting Functions *
@@ -362,6 +192,24 @@ winkstart.module('connect', 'numbers', {
                 maxDate: '+3m +1w',
                 minDate: '+1w'
             });
+        },
+
+        LNP_s1: function(frm) {
+            winkstart.putJSON("request_portDID",
+            {
+                account_id: winkstart.apps['connect'].account_id,
+                data: frm.serializeObject()
+            },
+            function(msg){
+                if (msg && msg.errs && msg.errs[0]) {
+                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
+                }
+                else {
+                    LNPPrompt_s2(msg.data);
+                }
+            }
+            );
+
         },
 
         LNPPrompt_s2: function(lnp_f) {
@@ -551,29 +399,6 @@ winkstart.module('connect', 'numbers', {
             });
         },
 
-        searchDIDsPrompt: function() {
-            THIS=this;
-            winkstart.dialog(THIS.templates.tmpl_searchDIDs_prompt.tmpl(), {
-                'title' : 'blah'
-            });
-        //TODO:  display "Add Credits" if it goes negative
-        },
-
-        search_numbers_list: function (elm, list) {
-
-            var filter = $(elm).val();
-            if(filter) {
-                // this finds all links in a list that contain the input,
-                // and hide the ones not containing the input while showing the ones that do
-                $(list).find("span.number:not(:Contains(" + filter + "))").parent().slideUp();
-                $(list).find("span.number:Contains(" + filter + ")").parent().slideDown();
-            } else {
-                $(list).find("div").slideDown();
-            }
-            return false;
-        },
-
-
         add_number_prompt: function(args) {
             var THIS = this;
 
@@ -659,94 +484,6 @@ winkstart.module('connect', 'numbers', {
         },
 
 
-
-
-        /**************************
-         * Managing Owned Numbers *
-         **************************/
-        map_number: function(args) {
-            var THIS = this;
-            srv = args.new_server.serverid;
-            did = args.did.did;
-
-            winkstart.postJSON('numbers.map_number',
-	            {
-	            	data: {"DID" : {"did": did},"server":{"serverid":srv}},
-	            	account_id: winkstart.apps['connect'].account_id
-	            },
-	            function(json) {
-                        if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                            winkstart.apps['connect'].account = json.data;
-
-                            winkstart.publish('numbers.refresh');
-                            if (args.success)
-                                args.success();
-                        } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
-                            alert(json.errs[0].msg);
-                        } else {
-                            // TODO: Better process XHR here
-                            //alert('We had trouble talking to the server. Are you sure you\'re online?');
-                            winkstart.apps['connect'].account = json.data;
-                            winkstart.publish('numbers.refresh');
-                        }
-                    }
-	        );
-        },
-
-        unassign: function(data) {
-            var did = data.did;
-            var serverid = data.serverid;
-            /*
-            	not sure about this code:
-
-            delete(THIS.account.servers[serverid].DIDs[did]);
-            if(THIS.account.DIDs_Unassigned == undefined) {
-                THIS.account.DIDs_Unassigned = {};
-            }
-            THIS.account.DIDs_Unassigned[did] = {};
-            */
-            winkstart.postJSON('numbers.map_number',
-                {
-                    data: {"DID" : {"serverid" : serverid, "did" : did}, "server" : null} ,
-                    account_id : winkstart.apps['connect'].account_id
-                },
-                function(json) {
-                    if (json.errs && json.errs[0] && json.errs[0].type == 'info') {
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                        if (args.success)
-                            args.success();
-                    } else if (json.errs && json.errs[0] && json.errs[0].type == 'error') {
-                        alert(json.errs[0].msg);
-                    } else {
-                        // TODO: Better process XHR here
-                        //alert('We had trouble talking to the server. Are you sure you\'re online?');
-                        winkstart.apps['connect'].account = json.data;
-                        winkstart.publish('numbers.refresh');
-                    }
-                }
-            );
-        },
-
-        LNP_s1: function(frm) {
-            winkstart.putJSON("request_portDID",
-            {
-                account_id: winkstart.apps['connect'].account_id,
-                data: frm.serializeObject()
-            },
-            function(msg){
-                if (msg && msg.errs && msg.errs[0]) {
-                    display_errs(msg.errs, null, eval(msg.errs[0].cb) );
-                }
-                else {
-                    LNPPrompt_s2(msg.data);
-                }
-            }
-            );
-
-        },
-
-
 /* Good stuff starts here */
         move_number: function(number_data, endpoint_data, data, success, error) {
             var THIS = this,
@@ -796,6 +533,69 @@ winkstart.module('connect', 'numbers', {
             );
         },
 
+        update_failover: function(failover_data, number_data, data, success, error) {
+            var THIS = this,
+                failover_did = failover_data.did;
+
+            if(failover_did) {
+                failover_did = failover_did.replace(/^\+?1/, '');
+                failover_did = failover_did.replace(/[\-\.\s\+\(\)]/g, '');
+
+                number_data.options.failover = {
+                    e164: "+1" + failover_did,
+                    type: "E.164"
+                };
+            }
+            else {
+                delete number_data.options.failover;
+            }
+
+            winkstart.request(true, 'trunkstore.update', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: winkstart.apps['connect'].api_url,
+                    data: data
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        render_failover_dialog: function(number_data, data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.failover_dialog.tmpl({
+                    failover: ('failover' in number_data.options) ? number_data.options.failover.e164 : ''
+                }),
+                popup;
+
+            $('.submit_btn', popup_html).click(function(ev) {
+                ev.preventDefault();
+
+                var failover_data = {
+                    did: $('input[name="failover"]', popup_html).val()
+                };
+
+                THIS.update_failover(failover_data, number_data, data, function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                });
+
+                popup.dialog('close');
+            });
+
+            popup = winkstart.dialog(popup_html, { title: 'Edit failover' });
+        },
+
         render_endpoint_number_dropzone: function(endpoint_data, data, target) {
             var THIS = this,
                 number_dropzone_html = $('<div class="drop_area"/>');
@@ -829,6 +629,14 @@ winkstart.module('connect', 'numbers', {
                 zIndex: 9999
             });
 
+            $('.edit_failover', number_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.render_failover_dialog(number_data, data, function(_data) {
+                    winkstart.publish('trunkstore.refresh', _data.data);
+                });
+            });
+
             $('.unassign', number_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -836,8 +644,6 @@ winkstart.module('connect', 'numbers', {
                     winkstart.publish('trunkstore.refresh', _data.data);
                 });
             });
-
-            console.log(number_html);
 
             (parent).append(number_html);
         },
@@ -919,7 +725,7 @@ winkstart.module('connect', 'numbers', {
                 $.each(server.DIDs, function(did, options) {
                     THIS.render_number({
                             did: did,
-                            serverid: index,
+                            serverid: "" + index, /* Gross hack to prevent 0 tripping the false condition in the template */
                             server_name: server.server_name
                         },
                         data,
@@ -931,8 +737,7 @@ winkstart.module('connect', 'numbers', {
             $.each(data.DIDs_Unassigned, function(did, options) {
                 THIS.render_number({
                         did: did,
-                        serverid: -1,
-                        status: 'Unassigned'
+                        status: 'unassigned'
                     },
                     data,
                     $('#number_list', numbers_html)
