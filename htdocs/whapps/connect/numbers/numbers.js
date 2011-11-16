@@ -9,6 +9,8 @@ winkstart.module('connect', 'numbers', {
             endpoint_number: 'tmpl/endpoint_number.html',
             cancel_dialog: 'tmpl/cancel_dialog.html',
             failover_dialog: 'tmpl/failover_dialog.html',
+            cnam_dialog: 'tmpl/cnam_dialog.html',
+            e911_dialog: 'tmpl/e911_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
             add_number_search_results: 'tmpl/add_number_search_results.html'
         },
@@ -390,6 +392,41 @@ winkstart.module('connect', 'numbers', {
             );
         },
 
+        update_cnam: function(cnam_data, number_data, success, error) {
+            var THIS = this;
+
+            winkstart.request(true, 'number.update_cnam', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: 'https://store.2600hz.com/v1',
+                    data: {
+                        did: number_data.did,
+                        cid_number: number_data.did,
+                        cid_name: cnam_data.cid_name
+                    }
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        update_e911: function(e911_data, number_data, data, success, error) {
+            var THIS = this;
+
+            console.log(e911_data);
+
+            if(typeof success == 'function') {
+                success({});
+            }
+        },
+
         search_numbers: function(data, success, error) {
             var THIS = this;
 
@@ -508,6 +545,59 @@ winkstart.module('connect', 'numbers', {
             popup = winkstart.dialog(popup_html, { title: 'Add number' });
         },
 
+        render_e911_dialog: function(number_data, data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.e911_dialog.tmpl(),
+                popup;
+
+            $('.submit_btn', popup_html).click(function(ev) {
+                var e911_data = {
+                    address: $('input[name="address"]', popup_html).val(),
+                    city: $('input[name="city"]', popup_html).val(),
+                    state: $('input[name="state"]', popup_html).val(),
+                    postalcode: $('input[name="postalcode"]', popup_html).val(),
+                }
+
+                ev.preventDefault();
+
+                THIS.update_e911(e911_data, number_data, data, function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                });
+            });
+
+            popup = winkstart.dialog(popup_html, { title: 'Edit e911 Location' });
+        },
+
+        render_cnam_dialog: function(number_data, data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.cnam_dialog.tmpl(number_data.options.caller_id),
+                popup;
+
+            console.log(number_data.options);
+
+            $('.submit_btn', popup_html).click(function(ev) {
+                var cnam_data = {
+                    cid_name: $('input[name="cid_name"]', popup_html).val()
+                }
+
+                ev.preventDefault();
+
+                THIS.update_cnam(cnam_data, number_data, function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                });
+            });
+
+            popup = winkstart.dialog(popup_html, { title: 'Edit CID' });
+        },
+
         render_failover_dialog: function(number_data, data, callback) {
             var THIS = this,
                 popup_html = THIS.templates.failover_dialog.tmpl({
@@ -576,6 +666,23 @@ winkstart.module('connect', 'numbers', {
                 THIS.render_failover_dialog(number_data, data, function(_data) {
                     winkstart.publish('trunkstore.refresh', _data.data);
                 });
+            });
+
+            $('.edit_cnam', number_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.render_cnam_dialog(number_data, data, function(_data) {
+                    winkstart.publish('trunkstore.refresh', _data.data);
+                });
+            });
+
+            $('.edit_e911', number_html).click(function(ev) {
+                ev.preventDefault();
+
+                alert('e911 is coming soon!');
+                //THIS.render_e911_dialog(number_data, data, function(_data) {
+                    //winkstart.publish('trunkstore.refresh', _data.data);
+                //});
             });
 
             $('.unassign', number_html).click(function(ev) {

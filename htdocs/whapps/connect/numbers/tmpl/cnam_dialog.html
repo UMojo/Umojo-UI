@@ -2,9 +2,9 @@
     <div class="popup edit_cnam">
         <div class="stylized myform">
             {{if did}}
-            <h3>Caller ID Name for ${did}</h3>
+                <h3>Caller ID Name for ${did}</h3>
             {{else}}
-            <h3>Default Caller ID Name</h3>
+                <h3>Default Caller ID Name</h3>
             {{/if}}
             <div class="icon caller_id blue"></div>
             <form id="cnam" name="cnam" method="post" action="#">
@@ -12,9 +12,9 @@
 
                 <div>
                     <label>Caller ID Name: </label>
-                    <input type="text" name="cid_name" class="field_last" />
+                    <input type="text" name="cid_name" class="field_last" value="${cid_name}"/>
                 </div>
-                
+
                 <p class="note_box clear">Note: These requests take up to 72 hours to process and can only be placed once every 72 hours.</p>
 
                 <a class="submit_btn ctr" href="#">Submit</a>
