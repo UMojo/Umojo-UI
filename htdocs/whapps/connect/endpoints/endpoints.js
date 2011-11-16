@@ -72,6 +72,9 @@ winkstart.module('connect', 'endpoints', {
                 new_data = $.extend(true, {}, data);
 
             if(index || index === 0) {
+                /* Move the server's dids into the unassigned did list before removal */
+                $.extend(true, new_data.DIDs_Unassigned, new_data.servers[index].DIDs);
+
                 new_data.servers.splice(index, 1);
             }
 
