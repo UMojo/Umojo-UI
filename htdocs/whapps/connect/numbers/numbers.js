@@ -8,7 +8,9 @@ winkstart.module('connect', 'numbers', {
             number: 'tmpl/number.html',
             endpoint_number: 'tmpl/endpoint_number.html',
             cancel_dialog: 'tmpl/cancel_dialog.html',
-            failover_dialog: 'tmpl/failover_dialog.html'
+            failover_dialog: 'tmpl/failover_dialog.html',
+            add_number_dialog: 'tmpl/add_number_dialog.html',
+            add_number_search_results: 'tmpl/add_number_search_results.html'
         },
 
         subscribe: {
@@ -18,32 +20,14 @@ winkstart.module('connect', 'numbers', {
         },
 
         resources: {
-            "numbers.search_npa_nxx": {
-                url: 'https://store.2600hz.com/v1/{account_id}/searchNPANXX',
+            "number.search_npa_nxx": {
+                url: '{api_url}/{account_id}/searchNPANXX',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.search_npa": {
-                url: 'https://store.2600hz.com/v1/{account_id}/searchNPA',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
-            "numbers.port": {
-                url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
-            "numbers.lnp": {
-                url: 'https://store.2600hz.com/v1/{account_id}/getLNPData',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-
-            "numbers.add": {
-                url: 'https://store.2600hz.com/v1/{account_id}/addDIDs',
+            "number.search_npa": {
+                url: '{api_url}/{account_id}/searchNPA',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -54,13 +38,31 @@ winkstart.module('connect', 'numbers', {
                 verb: 'POST'
             },
 
-            "numbers.update_e911": {
+            "number.add": {
+                url: '{api_url}/{account_id}/addDIDs',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+            "number.port": {
+                url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+            "number.lnp": {
+                url: 'https://store.2600hz.com/v1/{account_id}/getLNPData',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+
+            "number.update_e911": {
                 url: 'https://store.2600hz.com/v1/{account_id}/e911',
                 contentType: 'application/json',
                 verb: 'POST'
             },
 
-            "numbers.update_cnam": {
+            "number.update_cnam": {
                 url: 'https://store.2600hz.com/v1/{account_id}/cnam',
                 contentType: 'application/json',
                 verb: 'POST'
@@ -175,11 +177,7 @@ winkstart.module('connect', 'numbers', {
                 }
             );
         },
-*/
 
-        /*********************
-         * Porting Functions *
-         *********************/
         LNPPrompt: function(args) {
             if (typeof args != 'object') {
                 args= new Object();
@@ -298,159 +296,6 @@ winkstart.module('connect', 'numbers', {
             );
         },
 
-
-
-
-        /******************
-         * DID Purchasing *
-         ******************/
-        // This function takes args.data with a { NPA : ###, NXX : ### } as arguments and searches for available phone numbers.
-        //
-        // OTHER THEN A PLEASE WAIT BOX, NO "PAINTING" OF RESULTS COMES FROM THIS FUNCTION.
-        // All results will be passed to args.callback(results) for display/processing
-        search_npa_nxx: function(args) {
-
-            NPA = args.data.NPA;
-            NXX = args.data.NXX;
-
-            // must use toString()
-            if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
-                if (NPA.toString().match('^8(:?00|88|77|66|55)$')) {
-                    $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa',
-                     {
-                    	account_id: winkstart.apps['connect'].account_id,
-	                    data:args.data
-	                   },
-                    function(jdata) {
-                        // Remove please wait
-                        $('#sad_LoadingTime').hide();
-
-                        // Send results to the callback
-                        args.callback(jdata);
-                    });
-
-                } else if (NXX && NXX.toString().match('^[2-9][0-9][0-9]$')) {
-                    $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa_nxx',
-                     {
-                     account_id: winkstart.apps['connect'].account_id,
-                     data:args.data},
-                    function(jdata) {
-                        // Remove please wait
-                        $('#sad_LoadingTime').hide();
-
-                        // Send results to the callback
-                        args.callback(jdata);
-                    });
-
-                } else 	if (NPA.toString().match('^[2-9][0-8][0-9]$')) {
-                    $('#sad_LoadingTime').slideDown();
-                    winkstart.postJSON('numbers.search_npa',
-                     {
-                    	account_id: winkstart.apps['connect'].account_id,
-                     data:args.data},
-                    function(jdata) {
-                        // Remove please wait
-                        $('#sad_LoadingTime').hide();
-
-                        // Send results to the callback
-                        args.callback(jdata);
-                    });
-
-                } else {
-                    return false;
-                }
-
-            }
-            else {
-                return false;
-            }
-        },
-
-
-        purchaseDIDs: function(DIDs) {
-            var THIS = this;
-            var rCost= 0;
-            var oCost= 0;
-            var buyThese = new Array();
-            $.each(DIDs, function(index, elm) {
-                rCost+=$(elm).dataset('recurringCost') *1;
-                oCost+=$(elm).dataset('oneTimeCost') * 1;
-                buyThese.push( $(elm).dataset());
-            //			winkstart.log($(elm).dataset('did'));
-            });
-
-            //TODO: check credits
-            //var enoughCredits=checkCredits( oCost );
-            winkstart.getJSON('credits.get', {crossbar: true, account_id: winkstart.apps['connect'].account_id}, function(json, xhr) {
-                var enoughCredits = oCost < json.data.prepay;
-                var purchasedDIDs=new Array();
-                if (enoughCredits) {
-                    //purchasedDIDs=addIDs(buyThese);
-                    purchasedDIDs=THIS.add(buyThese);
-
-                } else {
-                    alert('Not enough credits to add these DIDs');
-                    return false;
-                }
-
-                return purchasedDIDs;
-            });
-        },
-
-        add_number_prompt: function(args) {
-            var THIS = this;
-
-            var dialogDiv = THIS.templates.add_numbers.tmpl({}).dialog({
-                title: 'Add/Search Numbers',
-                width : '600px'
-            });
-
-            winkstart.publish('sipservice.input_css');
-            $(dialogDiv).find('#sdid_npa').keyup(function() {
-                if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {
-                    $('#sdid_nxx').hide('slow');
-                } else {
-                    $('#sdid_nxx').show('slow');
-                }
-                });
-
-
-
-                $('#search_numbers_button', dialogDiv).click(function() {
-                    var NPA = $('#sdid_npa', dialogDiv).val();
-                    var NXX = $('#sdid_nxx', dialogDiv).val();
-                    winkstart.publish('numbers.search_npa_nxx',
-                    	{
-	                    	account_id: winkstart.apps['connect'].account_id,
-                        	data : {'NPA': NPA, 'NXX': NXX},
-	                        callback: function(results) {
-	                            winkstart.log('Found these #s:', results);
-
-                                // Draw results on screen
-                                $('#foundDIDList', dialogDiv).html(THIS.templates.search_dids_results.tmpl(results));
-
-                                $('.needCreditAdj', dialogDiv).change(function() {
-                                    THIS.updateDIDQtyCosts($(this).attr('data-did'), $(this).val());
-                                });
-
-                                $('.needCreditAdj', dialogDiv).blur(function() {
-                                    THIS.updateDIDQtyCosts($(this).attr('data-did'), $(this).val());
-                                });
-                            }
-                        }
-
-                    );
-                });
-
-                $('#add_numbers_button', dialogDiv).click(function() {
-                    THIS.purchaseDIDs($('#addDIDForm input:checkbox:checked.f_dids'));
-                    dialogDiv.dialog('close');
-                    dialogDiv.remove();
-                });
-
-        },
         updateDIDQtyCosts: function(did, qty) {
             if ( ! isNaN( parseInt( qty ) ) && $('#fd_' + did) ) {
                 $('#fd_' + did).dataset('qty',  parseInt( qty ));
@@ -459,30 +304,7 @@ winkstart.module('connect', 'numbers', {
             return -1;
         },
 
-        add: function(dids) {
-            winkstart.postJSON('numbers.add',
-            {
-                account_id: winkstart.apps['connect'].account_id,
-                data: {
-                    DIDs:dids
-                }
-            },
-            function(msg){
-                if (typeof msg =="object") {
-                    $("body").trigger('addDIDs', msg.data);
-                    if (msg && msg.errs && msg.errs[0]) {
-                        //display_errs(msg.errs);
-                    }
-
-                    if (typeof msg.data == 'object' && typeof msg.data.acct == 'object') {
-                        redraw(msg.data.acct); // note more than just acct is returned
-                    }
-                }
-                winkstart.apps['connect'].account = msg.data.data;
-                winkstart.publish('numbers.refresh');
-            });
-        },
-
+*/
 
 /* Good stuff starts here */
         move_number: function(number_data, endpoint_data, data, success, error) {
@@ -568,6 +390,124 @@ winkstart.module('connect', 'numbers', {
             );
         },
 
+        search_numbers: function(data, success, error) {
+            var THIS = this;
+
+            if('NPA' in data && data.NPA.match(/^8(:?00|88|77|66|55)$/)) {
+                delete data.NXX;
+            }
+
+            if('NXX' in data) {
+                winkstart.request(true, 'number.search_npa_nxx', {
+                        account_id: winkstart.apps['connect'].account_id,
+                        api_url: 'https://store.2600hz.com/v1',
+                        data: data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
+            }
+            else {
+                winkstart.request(true, 'number.search_npa', {
+                        account_id: winkstart.apps['connect'].account_id,
+                        api_url: 'https://store.2600hz.com/v1',
+                        data: data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
+            }
+        },
+
+        add_numbers: function(data, success, error) {
+            var THIS = this;
+
+            winkstart.request('number.add', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: 'https://store.2600hz.com/v1',
+                    data: {
+                        DIDs: data
+                    }
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        render_add_number_dialog: function(data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.add_number_dialog.tmpl(),
+                popup;
+
+            $('#search_numbers_button', popup_html).click(function(ev) {
+                var npa_data = {},
+                    npa = $('#sdid_npa', popup_html).val(),
+                    nxx = $('#sdid_nxx', popup_html).val();
+
+                ev.preventDefault();
+
+                if(npa) {
+                    npa_data.NPA = npa;
+                }
+
+                if(nxx) {
+                    npa_data.NXX = nxx;
+                }
+
+                THIS.search_numbers(npa_data, function(results_data) {
+                    var results_html = THIS.templates.add_number_search_results.tmpl(results_data);
+
+                    $('#foundDIDList', popup_html)
+                        .empty()
+                        .append(results_html);
+                });
+            });
+
+            $('#add_numbers_button', popup_html).click(function(ev) {
+                var numbers_data = [];
+
+                ev.preventDefault();
+
+                $('#foundDIDList .f_dids:checked', popup_html).each(function() {
+                    numbers_data.push($(this).dataset());
+                });
+
+                THIS.add_numbers(numbers_data, function(_data) {
+                    popup.dialog('close');
+
+                    if(typeof callback == 'function') {
+                        callback(_data);
+                    }
+                });
+            });
+
+            popup = winkstart.dialog(popup_html, { title: 'Add number' });
+        },
+
         render_failover_dialog: function(number_data, data, callback) {
             var THIS = this,
                 popup_html = THIS.templates.failover_dialog.tmpl({
@@ -576,11 +516,11 @@ winkstart.module('connect', 'numbers', {
                 popup;
 
             $('.submit_btn', popup_html).click(function(ev) {
-                ev.preventDefault();
-
                 var failover_data = {
                     did: $('input[name="failover"]', popup_html).val()
                 };
+
+                ev.preventDefault();
 
                 THIS.update_failover(failover_data, number_data, data, function(_data) {
                     popup.dialog('close');
@@ -721,6 +661,15 @@ winkstart.module('connect', 'numbers', {
                 numbers_html = THIS.templates.numbers.tmpl({
                     unassigned: THIS.count(data.DIDs_Unassigned)
                 });
+
+            $('.numbers.add', numbers_html).click(function(ev) {
+                ev.preventDefault();
+
+                THIS.render_add_number_dialog(data, function(_data) {
+                    /* For some odd reason, addDIDs likes to return a nest data object. Differs from standard _data.data */
+                    winkstart.publish('trunkstore.refresh', _data.data.data);
+                });
+            });
 
             $.each(data.servers, function(index, server) {
                 $.each(server.DIDs, function(did, options) {
