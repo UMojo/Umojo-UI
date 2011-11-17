@@ -28,11 +28,6 @@ winkstart.module('voip', 'registration',
 				url: '{api_url}/accounts/{account_id}/registrations',
 				contentType: 'application/json',
 				verb: 'GET'
-			},
-			"registration.read": {
-				url: '{api_url}/accounts/{account_id}/registrations/{registration_id}',
-				contentType: 'application/json',
-				verb: 'GET'
 			}
 		}
 	},
@@ -65,150 +60,132 @@ winkstart.module('voip', 'registration',
 			this.templates.registration.tmpl({}).appendTo( $('#ws-content') );
             
 			var num_rows = 0;
-            
-			//winkstart.getJSON('registration.list', {crossbar: true, account_id: winkstart.apps['voip'].account_id}, function(reply) {
-			winkstart.getJSON('registration.list', {
-				crossbar: true, 
-				account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-			}, function(reply) {
-				THIS.setup_table();
-				$.each(reply.data, function() {
-					var registration_id = this.id;
-                    
-					num_rows = num_rows+1;
 
-					//winkstart.getJSON('registration.read',{crossbar: true, account_id: winkstart.apps['voip'].account_id, registration_id: registration_id}, function(reply) {
-					winkstart.getJSON('registration.read',{
-						crossbar: true, 
-						account_id: winkstart.apps['voip'].account_id, 
-                        api_url: winkstart.apps['voip'].api_url,
-						registration_id: registration_id
-					}, function(reply) {
-						if(reply.data == undefined) {
-							return false;
-						}
+		    winkstart.getJSON('registration.list', {
+					  crossbar: true, 
+					  account_id: winkstart.apps['voip'].account_id,
+					  api_url: winkstart.apps['voip'].api_url
+				      }, function(reply) {
+					  THIS.setup_table();
+					  $.each(reply.data, function() {
+						     num_rows = num_rows+1;
 
-						//Dumb hack before crossbar reply is normalized (with lower case and _)
-						if(reply.data['App-Name'] != undefined) {
-							reply.data.app_name = reply.data['App-Name'];
-						}
-						if(reply.data['App-Version'] != undefined) {
-							reply.data.app_version = reply.data['App-Version'];
-						}
-						if(reply.data['Call-ID'] != undefined) {
-							reply.data.call_id = reply.data['Call-ID'];
-						}
-						if(reply.data['Contact'] != undefined) {
-							reply.data.contact = reply.data['Contact'];
-						}
-						if(reply.data['Event-Category'] != undefined) {
-							reply.data.event_category = reply.data['Event-Category'];
-						}
-						if(reply.data['Event-Name'] != undefined) {
-							reply.data.event_name = reply.data['Event-Name'];
-						}
-						if(reply.data['Event-Timestamp'] != undefined) {
-							reply.data.event_timestamp = reply.data['Event-Timestamp'];
-						}
-						if(reply.data['Expires'] != undefined) {
-							reply.data.expires = reply.data['Expires'];
-						}
-						if(reply.data['FreeSWITCH-Hostname'] != undefined) {
-							reply.data.freeswitch_hostname = reply.data['FreeSWITCH-Hostname'];
-						}
-						if(reply.data['From-Host'] != undefined) {
-							reply.data.from_host = reply.data['From-Host'];
-						}
-						if(reply.data['From-User'] != undefined) {
-							reply.data.from_user = reply.data['From-User'];
-						}
-						if(reply.data['Network-IP'] != undefined) {
-							reply.data.network_ip = reply.data['Network-IP'];
-						}
-						if(reply.data['Network-Port'] != undefined) {
-							reply.data.network_port = reply.data['Network-Port'];
-						}
-						if(reply.data['Presence-Hosts'] != undefined) {
-							reply.data.presence_hosts = reply.data['Presence-Hosts'];
-						}
-						if(reply.data['Profile-Name'] != undefined) {
-							reply.data.profile_name = reply.data['Profile-Name'];
-						}
-						if(reply.data['RPid'] != undefined) {
-							reply.data.rpid = reply.data['RPid'];
-						}
-						if(reply.data['Realm'] != undefined) {
-							reply.data.realm = reply.data['Realm'];
-						}
-						if(reply.data['Server-ID'] != undefined) {
-							reply.data.server_id = reply.data['Server-ID'];
-						}
-						if(reply.data['Status'] != undefined) {
-							reply.data.status = reply.data['Status'];
-						}
-						if(reply.data['To-Host'] != undefined) {
-							reply.data.to_host = reply.data['To-Host'];
-						}
-						if(reply.data['To-User'] != undefined) {
-							reply.data.to_user = reply.data['To-User'];
-						}
-						if(reply.data['User-Agent'] != undefined) {
-							reply.data.user_agent = reply.data['User-Agent'];
-						}
-						if(reply.data['Username'] != undefined) {
-							reply.data.username = reply.data['Username'];
-						}                       
+						     //Dumb hack before crossbar reply is normalized (with lower case and _)
+						     if(this['App-Name'] != undefined) {
+							 this.app_name = this['App-Name'];
+						     }
+						     if(this['App-Version'] != undefined) {
+							 this.app_version = this['App-Version'];
+						     }
+						     if(this['Call-ID'] != undefined) {
+							 this.call_id = this['Call-ID'];
+						     }
+						     if(this['Contact'] != undefined) {
+							 this.contact = this['Contact'];
+						     }
+						     if(this['Event-Category'] != undefined) {
+							 this.event_category = this['Event-Category'];
+						     }
+						     if(this['Event-Name'] != undefined) {
+							 this.event_name = this['Event-Name'];
+						     }
+						     if(this['Event-Timestamp'] != undefined) {
+							 this.event_timestamp = this['Event-Timestamp'];
+						     }
+						     if(this['Expires'] != undefined) {
+							 this.expires = this['Expires'];
+						     }
+						     if(this['FreeSWITCH-Hostname'] != undefined) {
+							 this.freeswitch_hostname = this['FreeSWITCH-Hostname'];
+						     }
+						     if(this['From-Host'] != undefined) {
+							 this.from_host = this['From-Host'];
+						     }
+						     if(this['From-User'] != undefined) {
+							 this.from_user = this['From-User'];
+						     }
+						     if(this['Network-IP'] != undefined) {
+							 this.network_ip = this['Network-IP'];
+						     }
+						     if(this['Network-Port'] != undefined) {
+							 this.network_port = this['Network-Port'];
+						     }
+						     if(this['Presence-Hosts'] != undefined) {
+							 this.presence_hosts = this['Presence-Hosts'];
+						     }
+						     if(this['Profile-Name'] != undefined) {
+							 this.profile_name = this['Profile-Name'];
+						     }
+						     if(this['RPid'] != undefined) {
+							 this.rpid = this['RPid'];
+						     }
+						     if(this['Realm'] != undefined) {
+							 this.realm = this['Realm'];
+						     }
+						     if(this['Server-ID'] != undefined) {
+							 this.server_id = this['Server-ID'];
+						     }
+						     if(this['Status'] != undefined) {
+							 this.status = this['Status'];
+						     }
+						     if(this['To-Host'] != undefined) {
+							 this.to_host = this['To-Host'];
+						     }
+						     if(this['To-User'] != undefined) {
+							 this.to_user = this['To-User'];
+						     }
+						     if(this['User-Agent'] != undefined) {
+							 this.user_agent = this['User-Agent'];
+						     }
+						     if(this['Username'] != undefined) {
+							 this.username = this['Username'];
+						     }
 
-						var friendlyDate = new Date((reply.data.event_timestamp - 62167219200)*1000);
-						var humanDate = friendlyDate.toLocaleDateString();
-						var humanTime = friendlyDate.toLocaleTimeString(); 
-                                
-						winkstart.log(reply.data);
-                        reply.data.contact = reply.data.contact.replace(/"/g,"");
-                        reply.data.contact = reply.data.contact.replace(/'/g,"\\'");
-						var stringToDisplay = 'Details of Registration\\n';
-						stringToDisplay += '\\nid: ' + reply.data.id; 
-						stringToDisplay += '\\nApp-Name: ' + reply.data.app_name;
-						stringToDisplay += '\\nApp-Version: ' + reply.data.app_version;
-						stringToDisplay += '\\nCall-ID: ' + reply.data.call_id;
-						stringToDisplay += '\\nContact: ' + reply.data.contact;
-						stringToDisplay += '\\nEvent-Category: ' + reply.data.event_category;
-						stringToDisplay += '\\nEvent-Name: ' + reply.data.event_name;
-						stringToDisplay += '\\nExpires: ' + reply.data.expires;
-						stringToDisplay += '\\nFreeSWITCH-Hostname: ' + reply.data.freeswitch_hostname;
-						stringToDisplay += '\\nFrom-Host: ' + reply.data.from_host;
-						stringToDisplay += '\\nFrom-User: ' + reply.data.from_user;
-						stringToDisplay += '\\nNetwork-IP: ' + reply.data.network_ip;
-						stringToDisplay += '\\nNetwork-Port: ' + reply.data.network_port;
-						stringToDisplay += '\\nPresence-Hosts: ' + reply.data.presence_hosts;
-						stringToDisplay += '\\nProfile-Name: ' + reply.data.profile_name;
-						stringToDisplay += '\\nRPid: ' + reply.data.rpid;
-						stringToDisplay += '\\nRealm: ' + reply.data.realm;
-						stringToDisplay += '\\nServer-ID: ' + reply.data.server_id;
-						stringToDisplay += '\\nStatus: ' + reply.data.status;
-						stringToDisplay += '\\nTo-Host: ' + reply.data.to_host;
-						stringToDisplay += '\\nTo-User: ' + reply.data.to_user;
-						stringToDisplay += '\\nUser-Agent: ' + reply.data.user_agent;
-						stringToDisplay += '\\nUsername: ' + reply.data.username;
-						stringToDisplay += '\\nDate: ' + humanDate;
-						stringToDisplay += '\\nTime: ' + humanTime;
+						     var friendlyDate = new Date((this.event_timestamp - 62167219200)*1000);
+						     var humanDate = friendlyDate.toLocaleDateString();
+						     var humanTime = friendlyDate.toLocaleTimeString(); 
 
+						     this.contact = this.contact.replace(/"/g,"");
+						     this.contact = this.contact.replace(/'/g,"\\'");
+						     var stringToDisplay = 'Details of Registration\\n';
+						     stringToDisplay += '\\nApp-Name: ' + this.app_name;
+						     stringToDisplay += '\\nApp-Version: ' + this.app_version;
+						     stringToDisplay += '\\nCall-ID: ' + this.call_id;
+						     stringToDisplay += '\\nContact: ' + this.contact;
+						     stringToDisplay += '\\nEvent-Category: ' + this.event_category;
+						     stringToDisplay += '\\nEvent-Name: ' + this.event_name;
+						     stringToDisplay += '\\nExpires: ' + this.expires;
+						     stringToDisplay += '\\nFreeSWITCH-Hostname: ' + this.freeswitch_hostname;
+						     stringToDisplay += '\\nFrom-Host: ' + this.from_host;
+						     stringToDisplay += '\\nFrom-User: ' + this.from_user;
+						     stringToDisplay += '\\nNetwork-IP: ' + this.network_ip;
+						     stringToDisplay += '\\nNetwork-Port: ' + this.network_port;
+						     stringToDisplay += '\\nPresence-Hosts: ' + this.presence_hosts;
+						     stringToDisplay += '\\nProfile-Name: ' + this.profile_name;
+						     stringToDisplay += '\\nRPid: ' + this.rpid;
+						     stringToDisplay += '\\nRealm: ' + this.realm;
+						     stringToDisplay += '\\nServer-ID: ' + this.server_id;
+						     stringToDisplay += '\\nStatus: ' + this.status;
+						     stringToDisplay += '\\nTo-Host: ' + this.to_host;
+						     stringToDisplay += '\\nTo-User: ' + this.to_user;
+						     stringToDisplay += '\\nUser-Agent: ' + this.user_agent;
+						     stringToDisplay += '\\nUsername: ' + this.username;
+						     stringToDisplay += '\\nDate: ' + humanDate;
+						     stringToDisplay += '\\nTime: ' + humanTime;
 
-						winkstart.table.registration.fnAddData([reply.data.username, reply.data.network_ip, reply.data.network_port, humanDate, humanTime, stringToDisplay]);
-					});
-				});
+						     winkstart.table.registration.fnAddData([this.username, this.network_ip, this.network_port, humanDate, humanTime, stringToDisplay]);
+						 });
                 
-				//Hack to hide pagination if number of rows < 10
-				if(num_rows < 10){
-					$('body').find('.dataTables_paginate').hide();
-				}
-			});
+					  //Hack to hide pagination if number of rows < 10
+					  if(reply.data.length < 10){
+					      $('body').find('.dataTables_paginate').hide();
+					  }
+				      });
 
-			winkstart.publish('layout.updateLoadedModule', {
-				label: 'Voicemail Boxes Management',
-				module: this.__module
-			});
+		    winkstart.publish('layout.updateLoadedModule', {
+					  label: 'Voicemail Boxes Management',
+					  module: this.__module
+				      });
 		},
 		setup_table: function() {
 			var THIS = this;
