@@ -1,16 +1,3 @@
-/**********************************************
--------------TRUNKSTORE HOMEPAGE---------------
-**********************************************/
-
-body {
-	background-color: #FFF;
-}
-
-.content_container {
-    width: 100%;
-    border-radius: 8px 8px 8px 8px;
-}
-
 /************TS BANNER************/
 .ts_container {
 	float: left;
@@ -96,7 +83,12 @@ body {
 	color: #05AFDC
 }
 
-.ts_container .ts_content .ts_width ul, li, p {
+.ts_container .ts_content .ts_width ul li {
+	color: #888;
+	font-size: 14px;
+}
+
+.ts_container .ts_content .ts_width p {
 	color: #888;
 	font-size: 14px;
 }
@@ -106,7 +98,7 @@ body {
 	width: 318px;
 	float: left;
 	margin-right: 19px;
-	border-right: 1px solid #CCC; 
+	border-right: 1px solid #CCC;
 }
 
 .ts_container .ts_content .ts_width .ts_col {
@@ -129,7 +121,7 @@ body {
 	color: #05AFDC;
 	font-weight: bold;
 	line-height: 23px;
-	font-size: 13px;	
+	font-size: 13px;
 }
 
 .ts_container .ts_content .arrow_green {
@@ -143,7 +135,7 @@ body {
 	width: 318px;
 	float: left;
 	margin-right: 19px;
-	border-right: 1px solid #CCC; 
+	border-right: 1px solid #CCC;
 	margin-left: 20px;
 }
 

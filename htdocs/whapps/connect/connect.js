@@ -1,4 +1,3 @@
-// This is the connectivity management module (VoIP connectivity services like SIP and Google Voice)
 winkstart.module('connect', 'connect', {
         subscribe: {
             'connect.activate' : 'activate',
@@ -32,12 +31,19 @@ winkstart.module('connect', 'connect', {
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
+        THIS.config_whapp();
+
         THIS.whapp_auth(function() {
             winkstart.publish('appnav.add', { 'name' : THIS.__module });
         });
     },
     {
-        modules :       {
+        whapp_vars: {
+            ts_url: 'http://ts001-billing.j-dev.org/v1',
+            billing_system: 'braintree'
+        },
+
+        modules: {
             'sipservice' : false,
             'admin' : false,
             'channels' : false,
@@ -137,6 +143,12 @@ winkstart.module('connect', 'connect', {
             var THIS = this;
 
             THIS.module_activate({ name: 'sipservice' });
+        },
+
+        config_whapp: function() {
+            var THIS = this;
+
+            $.extend(winkstart.apps[THIS.__module], THIS.whapp_vars);
         }
     }
 );

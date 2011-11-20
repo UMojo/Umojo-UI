@@ -46,6 +46,7 @@ winkstart.module('connect', 'numbers', {
                 verb: 'POST'
             },
 
+            /*
             "number.port": {
                 url: 'https://store.2600hz.com/v1/{account_id}/request_portDID',
                 contentType: 'application/json',
@@ -69,6 +70,7 @@ winkstart.module('connect', 'numbers', {
                 contentType: 'application/json',
                 verb: 'POST'
             }
+            */
         }
     },
 
@@ -341,7 +343,7 @@ winkstart.module('connect', 'numbers', {
 
             winkstart.request(true, 'number.delete', {
                     account_id: winkstart.apps['connect'].account_id,
-                    api_url: 'https://store.2600hz.com/v1',
+                    api_url: winkstart.apps['connect'].ts_url,
                     data: number_data
                 },
                 function(data, status) {
@@ -397,7 +399,7 @@ winkstart.module('connect', 'numbers', {
 
             winkstart.request(true, 'number.update_cnam', {
                     account_id: winkstart.apps['connect'].account_id,
-                    api_url: 'https://store.2600hz.com/v1',
+                    api_url: winkstart.apps['connect'].ts_url,
                     data: {
                         did: number_data.did,
                         cid_number: number_data.did,
@@ -437,7 +439,7 @@ winkstart.module('connect', 'numbers', {
             if('NXX' in data) {
                 winkstart.request(true, 'number.search_npa_nxx', {
                         account_id: winkstart.apps['connect'].account_id,
-                        api_url: 'https://store.2600hz.com/v1',
+                        api_url: winkstart.apps['connect'].ts_url,
                         data: data
                     },
                     function(_data, status) {
@@ -455,7 +457,7 @@ winkstart.module('connect', 'numbers', {
             else {
                 winkstart.request(true, 'number.search_npa', {
                         account_id: winkstart.apps['connect'].account_id,
-                        api_url: 'https://store.2600hz.com/v1',
+                        api_url: winkstart.apps['connect'].ts_url,
                         data: data
                     },
                     function(_data, status) {
@@ -477,7 +479,7 @@ winkstart.module('connect', 'numbers', {
 
             winkstart.request('number.add', {
                     account_id: winkstart.apps['connect'].account_id,
-                    api_url: 'https://store.2600hz.com/v1',
+                    api_url: winkstart.apps['connect'].ts_url,
                     data: {
                         DIDs: data
                     }
