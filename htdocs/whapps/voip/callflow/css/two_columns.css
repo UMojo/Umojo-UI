@@ -70,11 +70,12 @@
     overflow: hidden;
     height: 22px;
     line-height: 22px;
-    width: 180px;
+    width: 170px;
+    font-size: 11px;
     white-space: nowrap;
 }
 #two_columns .item_name.right {
-    width: 110px;
+    width: 90px;
 }
 
 #two_columns .wrapper li:hover {
@@ -90,7 +91,7 @@
 
 /* Ring group specific css */
 #two_columns .options {
-    float: right; 
+    float: right;
     margin-right: 2px;
 }
 
