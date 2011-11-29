@@ -86,13 +86,11 @@ winkstart.module('auth', 'auth',
             winkstart.publish('auth.load_account');
         }
 
-                                // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
-                                winkstart.module.loadModule('auth', 'myaccount', function() {
-                                    this.init();
-                                    winkstart.log('Core: Loaded My Account manager');
-                                });
-
-
+        // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+        winkstart.module.loadModule('auth', 'myaccount', function() {
+            this.init();
+            winkstart.log('Core: Loaded My Account manager');
+        });
     },
 
     {
@@ -103,7 +101,8 @@ winkstart.module('auth', 'auth',
 
             var dialogRegister = winkstart.dialog(THIS.templates.register.tmpl({}), {
                 title: 'Register a New Account',
-                resizable : false
+                resizable : false,
+                modal: true
             });
 
             winkstart.validate.set(THIS.config.validation, dialogRegister);
@@ -222,23 +221,24 @@ winkstart.module('auth', 'auth',
                         else {
                             alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
                         }
-                    });
+                    }
+                );
             });
 
             $('a.register', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                $(dialogDiv).dialog('close');   // Close the login dialog
-
                 winkstart.publish('auth.register');
+
+                $(dialogDiv).dialog('close');
             });
 
             $('a.recover_password', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                $(dialogDiv).dialog('close');   // Close the login dialog
-
                 winkstart.publish('auth.recover_password');
+
+                $(dialogDiv).dialog('close');
             });
         },
 
