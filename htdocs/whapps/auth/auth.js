@@ -18,6 +18,10 @@ winkstart.module('auth', 'auth',
             'auth.save_registration' : 'save_registration'
         },
 
+        validation: [
+            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ }
+        ],
+
         resources: {
             "auth.user_auth": {
                 url: winkstart.apps['auth']['api_url'] + '/user_auth',
@@ -55,11 +59,11 @@ winkstart.module('auth', 'auth',
         var cookie_data;
 
         winkstart.registerResources(this.__whapp, this.config.resources);
-        
+
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
                alert('You are now registered! Please log in.');
-               
+
                winkstart.publish('auth.login', {username: data.data.user.username});
                if(data.auth_token != '' && data.auth_token != 'null'){
                     winkstart.apps['auth'].account_id = data.data.account.id;
@@ -81,14 +85,14 @@ winkstart.module('auth', 'auth',
             eval('winkstart.apps["auth"] = ' + cookie_data);
             winkstart.publish('auth.load_account');
         }
-        
+
                                 // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
                                 winkstart.module.loadModule('auth', 'myaccount', function() {
                                     this.init();
                                     winkstart.log('Core: Loaded My Account manager');
                                 });
 
-        
+
     },
 
     {
@@ -96,60 +100,69 @@ winkstart.module('auth', 'auth',
 
         register: function() {
             var THIS = this;
-            
+
             var dialogRegister = winkstart.dialog(THIS.templates.register.tmpl({}), {
                 title: 'Register a New Account',
                 resizable : false
             });
 
+            winkstart.validate.set(THIS.config.validation, dialogRegister);
+
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
-                
-                if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
-                    var realm;
-                    if(THIS.request_realm) {
-                        realm = $('#realm', dialogRegister).val();
-                    } else {
-                        realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
-                    }
+                console.log(winkstart.validate.is_valid(THIS.config.validation, dialogRegister));
 
-                    // If realm was set in the URL, override all
-                    if('realm' in URL_DATA) {
-                        realm = URL_DATA['realm'];
-                    }
-
-                    var rest_data = {
-                        crossbar : true,
-                        data : {
-                            'account': {
-                                'realm': realm,
-                                'app_url': window.location.href.replace(/#/, '')
-                            },
-                            'user': {
-                                'username':$('#username', dialogRegister).val(),
-                                'password' : $('#password', dialogRegister).val(),
-                                'first_name': $('#first_name', dialogRegister).val() ,
-                                'last_name':$('#last_name', dialogRegister).val(),
-                                'email': $('#email', dialogRegister).val(),
-                                'apps': winkstart.config.register_apps
+                winkstart.validate.is_valid(THIS.config.validation, dialogRegister, function() {
+                        if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
+                            var realm;
+                            if(THIS.request_realm) {
+                                realm = $('#realm', dialogRegister).val();
+                            } else {
+                                realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
                             }
+
+                            // If realm was set in the URL, override all
+                            if('realm' in URL_DATA) {
+                                realm = URL_DATA['realm'];
+                            }
+
+                            var rest_data = {
+                                crossbar : true,
+                                data : {
+                                    'account': {
+                                        'realm': realm,
+                                        'app_url': window.location.href.replace(/#/, '')
+                                    },
+                                    'user': {
+                                        'username':$('#username', dialogRegister).val(),
+                                        'password' : $('#password', dialogRegister).val(),
+                                        'first_name': $('#first_name', dialogRegister).val() ,
+                                        'last_name':$('#last_name', dialogRegister).val(),
+                                        'email': $('#email', dialogRegister).val(),
+                                        'apps': winkstart.config.register_apps
+                                    }
+                                }
+                            };
+                            winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                                alert('Registered successfully. Please check your e-mail to activate your account!');
+                                dialogRegister.dialog('close');
+                            });
                         }
-                    };
-                    winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                        alert('Registered successfully. Please check your e-mail to activate your account!');
-                        dialogRegister.dialog('close');
-                    });
-                }
-                else {
-                    alert('Please confirm your password');
-                }
+                        else {
+                            alert('Please confirm your password');
+                        }
+                    },
+                    function() {
+                        alert('Your username is invalid (chars, digits, dashes and underscores only)');
+                    }
+                );
             });
         },
 
         login: function(args) {
             var THIS = this;
             var username = args == undefined ? '' : args.username;
-            
+
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
                 title : 'Login',
                 resizable : false,
@@ -173,7 +186,7 @@ winkstart.module('auth', 'auth',
                 } else {
                     realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
                 }
-                
+
                 // If realm was set in the URL, override all
                 if('realm' in URL_DATA) {
                     realm = URL_DATA['realm'];
@@ -182,8 +195,8 @@ winkstart.module('auth', 'auth',
                 var rest_data = {
                     crossbar : true,
                     data : {
-                        'credentials': hashed_creds, 
-                        'realm': realm 
+                        'credentials': hashed_creds,
+                        'realm': realm
                     }
                 };
 
@@ -194,12 +207,12 @@ winkstart.module('auth', 'auth',
                         winkstart.apps['auth'].realm = realm;
 
                         $(dialogDiv).dialog('close');
-                        
+
                         // Deleting the welcome message
                         $('#ws-content').empty();
 
                         $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
-                        
+
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
@@ -254,7 +267,7 @@ winkstart.module('auth', 'auth',
                     if(!('user_id' in v)) {
                         winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
                     }
-                    
+
                     winkstart.module.loadApp(k, function() {
                         this.init();
                         winkstart.log('WhApps: Initializing ' + k);
@@ -282,7 +295,7 @@ winkstart.module('auth', 'auth',
             get_user_fn = function(auth_token, app_name, callback) {
                 var options = {
                     crossbar: true,
-                    account_id: winkstart.apps['auth'].account_id, 
+                    account_id: winkstart.apps['auth'].account_id,
                     api_url : winkstart.apps['auth'].api_url,
                     user_id: winkstart.apps['auth'].user_id
                 };
@@ -303,7 +316,7 @@ winkstart.module('auth', 'auth',
             if(winkstart.apps['auth'].api_url != winkstart.apps[args.app_name].api_url) {
                 winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
                     // If this is successful, we'll get a server-specific auth token back
-                    get_user_fn(json.auth_token, args.app_name, args.callback);    
+                    get_user_fn(json.auth_token, args.app_name, args.callback);
                 });
             }
             else {
@@ -333,7 +346,7 @@ winkstart.module('auth', 'auth',
                 alert('User authenticated');
             });
         },
-        
+
         init: function() {
             // Check if we already have a session stored in a cookie
             var auth = $.cookie('winkstart');
@@ -368,7 +381,7 @@ winkstart.module('auth', 'auth',
                     });
 
                     $.cookie('c_winkstart_auth', null);
-                    
+
                     $('#ws-content').empty();
                     $('a#my_logout').html("Login");
                     $('.universal_nav .my_account_wrapper').hide();
