@@ -74,30 +74,30 @@ function(args) {
 		};
 
 		var columns = [
-		{
-			'sTitle': 'Caller ID Name',
-            'sWidth': '150px'
-		},
+            {
+                'sTitle': 'Caller ID Name',
+                'sWidth': '150px'
+            },
 
-		{
-			'sTitle': 'Caller ID Number',
-            'sWidth': '150px'
-		},
-		{
-			'sTitle': 'Callee ID Name',
-            'sWidth': '150px'
-		},
-		{
-			'sTitle': 'Callee ID Number',
-            'sWidth': '150px'
-		},
-		{
-			'sTitle': 'Duration',
-            'sWidth': '80px'
-		},
-		{
-			'sTitle': 'Date'
-		}
+            {
+                'sTitle': 'Caller ID Number',
+                'sWidth': '150px'
+            },
+            {
+                'sTitle': 'Callee ID Name',
+                'sWidth': '150px'
+            },
+            {
+                'sTitle': 'Callee ID Number',
+                'sWidth': '150px'
+            },
+            {
+                'sTitle': 'Duration',
+                'sWidth': '80px'
+            },
+            {
+                'sTitle': 'Date'
+            }
 		];
 
 		winkstart.table.create('cdr', $('#cdr-grid'), columns, {}, {
@@ -111,7 +111,6 @@ function(args) {
 			$(this).addClass('focusField');
 		});
 
-
 		$('#searchLink').click(function() {
 			$.fn.dataTableExt.afnFiltering.push(functionFilter);
 			winkstart.table.cdr.fnDraw();
@@ -119,7 +118,6 @@ function(args) {
 
 		$('#startDate').datepicker();
 		$('#endDate').datepicker();
-
 
 		function noData(data){
 			if(data == null || data == undefined){
@@ -135,56 +133,51 @@ function(args) {
 		    user_id: winkstart.apps['userportal'].user_id,
             api_url: winkstart.apps['userportal'].api_url
 		}, function(reply) {
+            console.log(reply);
 			$.each(reply.data, function() {
 				var cdr_id = this.cid || this.id;
+                var caller_id_name = this.caller_id_name;
+                var caller_id_number = this.caller_id_number;
+                var callee_id_name = this.callee_id_name;
+                var callee_id_number = this.callee_id_number;
+                var duration = this.billing_seconds;
+                //var duration = this.duration_seconds;
+                var seconds = duration % 60;
+                var minutes = (duration-seconds) / 60;
 
-				winkstart.getJSON('cdr.read', {
-					crossbar: true,
-					account_id: winkstart.apps['userportal'].account_id,
-		            user_id: winkstart.apps['userportal'].user_id,
-                    api_url: winkstart.apps['userportal'].api_url,
-					cdr_id: cdr_id
-				}, function(reply) {
-					var caller_id_name = reply.data.caller_id_name;
-					var caller_id_number = reply.data.caller_id_number;
-					var callee_id_name = reply.data.callee_id_name;
-					var callee_id_number = reply.data.callee_id_number;
-					var duration = reply.data.billing_seconds;
-                    var seconds = duration % 60;
-                    var minutes = (duration-seconds) / 60;
-                    if(minutes > 59) {
-                        minutes -= 60;
-                    }
-                    var hours = (duration - (minutes*60) - seconds) / 3600;
-                    if(hours < 10) {
-                        hours = '0' + hours;
-                    }
-                    if(minutes < 10) {
-                        minutes = '0' + minutes;
-                    }
-                    if(seconds < 10) {
-                        seconds = '0' + seconds;
-                    }
-                    duration = hours+':'+minutes+':'+seconds;
-					var date = new Date((reply.data.timestamp - 62167219200)*1000);
-					var month = date.getMonth() +1;
-					var year = date.getFullYear();
-					var day = date.getDate();
-					var humanDate = month+'/'+day+'/'+year;
-					var humanTime = date.toLocaleTimeString();
+                if(minutes > 59) {
+                    minutes -= 60;
+                }
+                var hours = (duration - (minutes*60) - seconds) / 3600;
+                if(hours < 10) {
+                    hours = '0' + hours;
+                }
+                if(minutes < 10) {
+                    minutes = '0' + minutes;
+                }
+                if(seconds < 10) {
+                    seconds = '0' + seconds;
+                }
+                duration = hours+':'+minutes+':'+seconds;
+                var date = new Date((this.timestamp - 62167219200)*1000);
+                var month = date.getMonth() +1;
+                var year = date.getFullYear();
+                var day = date.getDate();
+                var humanDate = month+'/'+day+'/'+year;
+                var humanTime = date.toLocaleTimeString();
 
-                    var humanFullDate = humanDate + ' ' + humanTime;
+                var humanFullDate = humanDate + ' ' + humanTime;
 
-					if(caller_id_name && caller_id_number && callee_id_name && callee_id_number){
-						winkstart.table.cdr.fnAddData([
-							noData(caller_id_name),
-							noData(caller_id_number),
-							noData(callee_id_name),
-							noData(callee_id_number),
-							noData(duration),
-							noData(humanFullDate)]);
-					}
-				});
+                if(caller_id_name && caller_id_number && callee_id_name && callee_id_number){
+                    winkstart.table.cdr.fnAddData([
+                        noData(caller_id_name),
+                        noData(caller_id_number),
+                        noData(callee_id_name),
+                        noData(callee_id_number),
+                        noData(duration),
+                        noData(humanFullDate)
+                    ]);
+                }
 			});
 		});
 
