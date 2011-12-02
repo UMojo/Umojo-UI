@@ -661,6 +661,10 @@ winkstart.module('voip', 'callflow', {
             target.append(tools);
 
             $('#ws_cf_tools', '#callflow-view').disableSelection();
+
+            $('*[tooltip]', target).each(function() {
+                $(this).tooltip({ xMove: -80, yMove: -80, height: '40px', width: '100px' });
+            });
         },
 
         _enableDestinations: function(el) {

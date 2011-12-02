@@ -6,8 +6,8 @@
                 <div class="content">
                     {{each(i, action) actions}}
                         <div class="tool">
-                            <div href="#" name="${action}" class="action icon app_sm ${nodes[action].icon}"></div>
-                            <div class="tool_name">${nodes[action].name}</div>
+                            <div name="${action}" class="action icon app_sm ${nodes[action].icon}"></div>
+                            <div class="tool_name" tooltip="${nodes[action].tooltip}">${nodes[action].name}</div>
                         </div>
                     {{/each}}
 
