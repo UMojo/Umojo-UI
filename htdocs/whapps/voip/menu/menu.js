@@ -143,6 +143,7 @@ winkstart.module('voip', 'menu', {
                     data: $.extend(true, {
                         retries: '3',
                         timeout: '10000',
+                        max_extension_length: '4',
                         media: {}
                     }, data_defaults || {}),
                     field_data: {
@@ -326,7 +327,7 @@ winkstart.module('voip', 'menu', {
         clean_form_data: function(form_data) {
 
             if(form_data.record_pin.length == 0) {
-                form_data.max_extension_length = 5;
+                form_data.max_extension_length = 4;
                 delete form_data.record_pin;
             }
             else if(form_data.max_extension_length < form_data.record_pin.length) {
