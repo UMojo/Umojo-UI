@@ -39,7 +39,7 @@ winkstart.module('connect', 'connect', {
     },
     {
         whapp_vars: {
-            ts_url: 'http://ts001-billing.j-dev.org/v1',
+            ts_url: 'https://store.2600hz.com/v1',
             billing_system: 'braintree'
         },
 
