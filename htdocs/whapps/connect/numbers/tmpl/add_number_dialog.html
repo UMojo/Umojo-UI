@@ -3,28 +3,11 @@
         <div class="resize">
             <div class="stylized myform">
                 <p class="note_box">
-                    <!--
-                    Please enter the city name to find related numbers.<br />
-                    If you prefer, you can specify the area code and up to 3 numbers of the local prefix.<br /><br />
-                    -->
                     You can specify the area code and up to 3 numbers of the local prefix.
                     For Toll Free number please enter 800, 888, 877, 866, 855 in the area code.<br /><br />
                     If you order from an area showing only six digits, we'll randomly select a new number in that area.
                 </p>
-                <!--
-                <form name="form" method="post" action="#">
-                    <label for="name">City</label>
-                    <input type="text" name="name" id="name" />
-                    <label class="or">OR</label>
 
-                    <label for="areacode">Area Code</label>
-                    <input type="text" name="areacode" id="areacode" class="field_last" />
-                </form>
-                                     -->
-                                     <!--                      onkeyup=" if($('#sdid_npa').val().match('^8(:?00|88|77|66)$')) {$('#sdid_nxx').hide('slow');} else {$('#sdid_nxx').show('slow');}"
-                     onclick="searchAvailDIDs($('#sdid_npa').val(), $('#sdid_nxx').val() ); return false;"
- -->
-                     
                 <form id="sdidform" action="" onsubmit="return false;">
                     <div id="sdiddiv">
                         <span id="ACspan">(</span><input type="text" id="sdid_npa" name="NPA" maxlength="3" pattern="^[2-9][0-8][0-9]$" />&nbsp;
@@ -36,16 +19,14 @@
                 <a id="search_numbers_button" class="ctr_btn clear" href="#">Search</a>
 
                 <div id="foundDIDList"/>
-                
+
                 <div class="search_icon"/>
 
                 <br /><br />
 
                 <div class="table1"/>
-                
-                <br />
 
-                <!--<p>Pick next number available in:</p>-->
+                <br />
 
                 <div class="table2"/>
 

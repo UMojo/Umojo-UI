@@ -1,115 +1,102 @@
-winkstart.module('connect', 'channels',
-    /* Start module resource definitions */
-    {
-        /* What HTML templates will we be using? */
+winkstart.module('connect', 'channels', {
         templates: {
-            edit_channels: 'tmpl/edit_channels.html'
+            channels: 'tmpl/channels.html',
+            channels_dialog: 'tmpl/channels_dialog.html'
         },
 
-        /* What events do we listen for, in the browser? */
         subscribe: {
-            'channels.edit': 'edit'
-        },
-
-        /* What API URLs are we going to be calling? Variables are in { }s */
-        resources: {
-            /* Circuit Management */
-            "channels.get": {
-                url: 'https://store.2600hz.com/v1/{account_id}/channels',
-                verb: 'GET'
-            },
-            "channels.post": {
-                url: 'https://store.2600hz.com/v1/{account_id}/channels',
-                verb: 'POST'
-            }
+            'channels.render': 'render_channels'
         }
-    }, // End module resource definitions
+    },
 
-
-
-    /* Bootstrap routine - runs automatically when the module is first loaded */
     function(args) {
-        /* Tell winkstart about the APIs you are going to be using (see top of this file, under resources */
-        winkstart.registerResources(this.__whapp, this.config.resources);
+    },
 
-        // Tie to DOM events
-        $('#ws-content').delegate('.channels.edit', 'click', function() {
-            winkstart.publish('channels.edit');
-        });
-
-    }, // End initialization routine
-
-
-
-    /* Define the functions for this module */
     {
-        rates : { trunks : 30.00, inbound_trunks : 4.00 },
-
-        show_estimate: function(dialogDiv) {
-            var THIS = this;
-
-            $('#trunks_rate', dialogDiv).html(THIS.rates.trunks);
-            $('#inbound_trunks_rate', dialogDiv).html(THIS.rates.inbound_trunks);
-
-            $('#trunks_total', dialogDiv).html(THIS.rates.trunks * $('#trunks', dialogDiv).val());
-            $('#inbound_trunks_total', dialogDiv).html(THIS.rates.inbound_trunks * $('#inbound_trunks', dialogDiv).val());
+        rates: {
+            trunks: 30.00,
+            inbound_trunks: 4.00
         },
 
-        promo: function(promoCode) {
-            // Lookup a promotion & display it, add it to the order if they submit
-            
+        update_channels: function(channels_data, data, success, error) {
+            var THIS = this,
+                new_data = $.extend(true, {}, data);
+
+            $.extend(true, new_data.account, channels_data);
+
+            winkstart.request('trunkstore.update', {
+                    account_id: winkstart.apps['connect'].account_id,
+                    api_url: winkstart.apps['connect'].api_url,
+                    data: new_data
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
         },
 
-        edit: function() {
-            var THIS = this;
-            dialogDiv = winkstart.dialog(THIS.templates.edit_channels.tmpl(winkstart.apps['connect'].account), {
-                title: 'Edit Flat-Rate Channels',
-                resizable: false
+        render_channels_dialog: function(data, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.channels_dialog.tmpl($.extend({}, data, { rates: THIS.rates })),
+                popup;
+
+            $('#trunks, #inbound_trunks', popup_html).bind('keyup change', function() {
+                var id = $(this).attr('id');
+
+                $('#' + id + '_total', popup_html).html($(this).val() * THIS.rates[id]);
             });
 
-            THIS.show_estimate(dialogDiv);
+            $('.update_channels_button', popup_html).click(function(ev) {
+                var size = $('input[name="tos_agreed"]:checked', popup_html).size();
 
-            $('#trunks, #inbound_trunks', dialogDiv).bind('keyup change', function() {
-                THIS.show_estimate(dialogDiv);
-            });
+                ev.preventDefault();
 
-            $('.update_channels_button', dialogDiv).click(function() {
-                // Grab data from form
-                var form_data = form2object('channels');
-
-                // Build the save function here, for use with or without a billing confirmation screen (coming up)
-                var save = function() {
-                    winkstart.postJSON('channels.post', {
-                            data : form_data,
-                            account_id : winkstart.apps['connect'].account_id
+                if(size) {
+                    THIS.update_channels({
+                            trunks: $('#trunks', popup_html).val(),
+                            inbound_trunks: $('#inbound_trunks', popup_html).val()
                         },
-                        function(json, xhr) {
-                            // Check the response for errors
+                        data,
+                        function(_data) {
+                            popup.dialog('close');
 
-                            // Close the dialog
-                            dialogDiv.dialog('close');
-
-                            winkstart.apps['connect'].account = json.data;
-                            winkstart.publish('channels.refresh');
+                            if(typeof callback == 'function') {
+                                callback(_data);
+                            }
                         }
                     );
-                };
-
-                var new_account = {};
-                $.extend(new_account, winkstart.apps['connect'].account, form_data);
-                
-                // Otherwise commit the change immediately
-                save();
+                }
+                else {
+                    alert('You must agree to the general Terms and Conditions before continuing!');
+                }
             });
-        }/*,
 
-        refresh: function(dialog) {
-            // TODO - properly populate account
+            popup = winkstart.dialog(popup_html, { title: 'Edit channels' });
+        },
 
-            $('.channels.twoway', dialog).html(this.channels.twoway_channels);
-            $('.channels.inbound', dialog).html(this.channels.inbound_channels);
-        }*/
+        render_channels: function(data, parent) {
+            var THIS = this,
+                target = $('#channels', parent),
+                channels_html = THIS.templates.channels.tmpl(data);
 
-    } // End function definitions
+            $('#edit_channels', channels_html).click(function(ev) {
+                ev.preventDefault();
 
-    );  // End module
+                THIS.render_channels_dialog(data, function(_data) {
+                    winkstart.publish('trunkstore.refresh', _data.data);
+                });
+            });
+
+            (target)
+                .empty()
+                .append(channels_html);
+        }
+    }
+);

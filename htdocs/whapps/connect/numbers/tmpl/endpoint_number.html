@@ -1,0 +1,26 @@
+<div>
+    <div class="number_entry">
+        <span class="number" data-did="${did}" data-serverid="${serverid}">${did}</span>
+
+        {{if options.failover}}
+            <a href="#" class="edit_failover active" title="${options.failover.e164}">Failover #</a>
+        {{else}}
+            <a href="#" class="edit_failover">Failover #</a>
+        {{/if}}
+
+        {{if options.caller_id}}
+            <a href="#" class="edit_cnam active" title="${options.caller_id.cid_name}">CID</a>
+        {{else}}
+            <a href="#" class="edit_cnam" title="Click to Set Outbound Caller ID Name (CNAM)">CID</a>
+        {{/if}}
+
+        {{if options.e911_info}}
+            <a href="#" class="edit_e911 active" title="${options.e911_info.Address}">e911</a>
+        {{else}}
+            <a href="#" class="edit_e911">e911</a>
+        {{/if}}
+
+        <a href="#" class="unassign">Unassign</a>
+        <div class="clear"/>
+    </div>
+</div>

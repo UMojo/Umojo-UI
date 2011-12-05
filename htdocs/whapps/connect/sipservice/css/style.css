@@ -2,38 +2,38 @@
 /* CSS Document */
 
 /* top menu */
-#server_management #auth_realm { color:#4E4D4D; font-weight:bold; font-size: 18px }
-#server_management { width:940px; margin:0px auto; height:39px; }
-#server_management a#add_server { float:right; background:url(../images/button_add_server.jpg) top left no-repeat; display:block; width:99px; height:29px; margin: 5px 15px 0 0; }
-#server_management a#add_server:hover { background-position:0 -29px; }
-#server_management select { float:right; margin:10px 55px 0 5px; }
+#endpoints #auth_realm { color:#4E4D4D; font-weight:bold; font-size: 18px }
+#endpoints { width:940px; margin:0px auto; }
+#endpoints a#add_server { float:right; background:url(../images/button_add_server.jpg) top left no-repeat; display:block; width:99px; height:29px; margin: 5px 15px 0 0; }
+#endpoints a#add_server:hover { background-position:0 -29px; }
+#endpoints select { float:right; margin:10px 55px 0 5px; }
 
 #container { width:940px; margin:0px auto; background-color: #FFFFFF; margin-top: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 8px 8px 8px 8px; }
 
 #control_area { width:463px; float:left; }
 
 /* my numbers area */
-#control_area #my_numbers { width:423px; margin:0 0 20px 20px; }
-#control_area #my_numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
-#control_area #my_numbers .numbers { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
+#control_area #numbers { width:423px; margin:0 0 20px 20px; }
+#control_area #numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
+#control_area #numbers .number_entry { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
 
-#control_area #my_numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
-#control_area #my_numbers .numbers .cancel_number:hover { text-decoration:none; }
+#control_area #numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
+#control_area #numbers .numbers .cancel_number:hover { text-decoration:none; }
 
-#control_area #my_numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
-#control_area #my_numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
+#control_area #numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
+#control_area #numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
 
-#control_area #my_numbers .view { background:url(../images/bg_numbers_li_view.jpg) top left no-repeat; width:423px; height:28px; font-size:12px; }
-#control_area #my_numbers .view .more { color:#d93636; float:right; margin: 6px 25px 0 0; }
-#control_area #my_numbers .view .more:hover { text-decoration:none; }
-#control_area #my_numbers .view .showing { color:#4e4d4d; float:left; margin:6px 0 0 25px; }
+#control_area #numbers .view { background:url(../images/bg_numbers_li_view.jpg) top left no-repeat; width:423px; height:28px; font-size:12px; }
+#control_area #numbers .view .more { color:#d93636; float:right; margin: 6px 25px 0 0; }
+#control_area #numbers .view .more:hover { text-decoration:none; }
+#control_area #numbers .view .showing { color:#4e4d4d; float:left; margin:6px 0 0 25px; }
 
-#control_area #my_numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
-#control_area #my_numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
-#control_area #my_numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
-#control_area #my_numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
-#control_area #my_numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
-#control_area #my_numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
+#control_area #numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
+#control_area #numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
+#control_area #numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
+#control_area #numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
+#control_area #numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
+#control_area #numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
 
 
 /* my services area */
@@ -61,40 +61,40 @@
 #control_area #my_services .buttons li .account {background:url(../images/button_ca_bottom_account.png) top left no-repeat; }
 
 /* server area */
-#my_servers { width:445px; float:left; height:490px; overflow-y: scroll }
-#my_servers .server { width:425px; color:#4e4d4d; margin: 0 0 30px 0; }
-#my_servers .server .title { height:31px; width:425px; background:url(../images/bg_server_title.jpg) top left no-repeat; }
-#my_servers .server .title .name { font-size:14px; float:left; margin:8px 0 0 18px; }
-#my_servers .server .title .status { font-size:11px; font-weight:bold; float:right; margin:8px 15px 0 0;  }
-#my_servers .server .title .status .state { margin: 0 3px 0 2px; color:#d93636; font-size:14px; }
-#my_servers .server .title .status a { color:#4e4d4d; }
-#my_servers .server .title .status a:hover { text-decoration:none; color:#2AB9E1; }
+#endpoint_list { width:445px; float:left; height:490px; overflow-y: scroll }
+#endpoint_list .endpoint { width:425px; color:#4e4d4d; margin: 0 0 30px 0; }
+#endpoint_list .endpoint .title { height:31px; width:425px; background:url(../images/bg_server_title.jpg) top left no-repeat; }
+#endpoint_list .endpoint .title .name { font-size:14px; float:left; margin:8px 0 0 18px; }
+#endpoint_list .endpoint .title .status { font-size:11px; font-weight:bold; float:right; margin:8px 15px 0 0;  }
+#endpoint_list .endpoint .title .status .state { margin: 0 3px 0 2px; color:#d93636; font-size:14px; }
+#endpoint_list .endpoint .title .status a { color:#4e4d4d; }
+#endpoint_list .endpoint .title .status a:hover { text-decoration:none; color:#2AB9E1; }
 
 /* server area -> SIP */
-#my_servers .server .sip { height:59px; width:425px; background:url(../images/bg_server_sip.jpg) top left no-repeat; font-size:12px; }
-#my_servers .server .sip .area { width:100px; margin:0 0 0 20px; float:left; }
-#my_servers .server .sip .area .title { display:block; width:100px; margin:6px 0 0 0; background:none; color:#2585a5; font-weight:bold; height:27px; }
-#my_servers .server .sip .area .info { display:block; width:145px;  max-width: 125px; overflow-x: hidden; text-overflow:ellipsis; font-size:12px; }
-#my_servers .server .sip .area:hover .info  { display:block; width:145px;  max-width: 345px; overflow-x: visible; z-index: 55; font-weight:bold ;   }
-#my_servers .server .sip .area:hover +.area .info  { visibility: hidden;  }
+#endpoint_list .endpoint .sip { height:59px; width:425px; background:url(../images/bg_server_sip.jpg) top left no-repeat; font-size:12px; }
+#endpoint_list .endpoint .sip .area { width:100px; margin:0 0 0 20px; float:left; }
+#endpoint_list .endpoint .sip .area .title { display:block; width:100px; margin:6px 0 0 0; background:none; color:#2585a5; font-weight:bold; height:27px; }
+#endpoint_list .endpoint .sip .area .info { display:block; width:145px;  max-width: 125px; overflow-x: hidden; text-overflow:ellipsis; font-size:12px; }
+#endpoint_list .endpoint .sip .area:hover .info  { display:block; width:145px;  max-width: 345px; overflow-x: visible; z-index: 55; font-weight:bold ;   }
+#endpoint_list .endpoint .sip .area:hover +.area .info  { visibility: hidden;  }
 
 
-#my_servers .server p { display:block; margin:6px 0 6px 18px; font-size:14px; }
+#endpoint_list .endpoint p { display:block; margin:6px 0 6px 18px; font-size:14px; }
 
 /* server area -> server numbers */
-#my_servers .server .numbers { height:32px; border-bottom:1px solid #ccc; font-size:12px; }
-#my_servers .server .numbers span { float:left; margin:12px 0 0 18px;  }
-#my_servers .server .numbers a { float:left; margin:1px 0 0 15px; padding:11px 0 0 0; color:#2585a5;  }
-#my_servers .server .numbers a:hover { color:#417911; }
-#my_servers .server .numbers .unassign { float:right; color:#d93636; margin-right:15px; }
-#my_servers .server .numbers .unassign:hover { color:#d93636; text-decoration:none; }
-#my_servers .server .numbers .active { color:#417911; background:url(../images/button_server_active.jpg) top center no-repeat; }
+#endpoint_list .endpoint .number_entry { height:32px; border-bottom:1px solid #ccc; font-size:12px; }
+#endpoint_list .endpoint .numbers span { float:left; margin:12px 0 0 18px;  }
+#endpoint_list .endpoint .numbers a { float:left; margin:1px 0 0 15px; padding:11px 0 0 0; color:#2585a5;  }
+#endpoint_list .endpoint .numbers a:hover { color:#417911; }
+#endpoint_list .endpoint .numbers .unassign { float:right; color:#d93636; margin-right:15px; }
+#endpoint_list .endpoint .numbers .unassign:hover { color:#d93636; text-decoration:none; }
+#endpoint_list .endpoint .numbers .active { color:#417911; background:url(../images/button_server_active.jpg) top center no-repeat; }
 
 /* server area -> misc */
-#my_servers .server .drop_area { width:425px; height:100px; background:url(../images/bg_server_drag.jpg) top left no-repeat; text-indent:-9999px; }
-#my_servers .server .behavior { width:425px; height:34px; background: url(../images/bg_server_behavior.jpg) 0 -5px no-repeat; font-size:12px; }
-#my_servers .server .behavior a { color:#4e4d4d; padding: 0 0 0 20px; }
-#my_servers .server .behavior a:hover { text-decoration:none; }
+#endpoint_list .endpoint .drop_area { width:425px; height:100px; background:url(../images/bg_server_drag.jpg) top left no-repeat; text-indent:-9999px; }
+#endpoint_list .endpoint .behavior { width:425px; height:34px; background: url(../images/bg_server_behavior.jpg) 0 -5px no-repeat; font-size:12px; }
+#endpoint_list .endpoint .behavior a { color:#4e4d4d; padding: 0 0 0 20px; }
+#endpoint_list .endpoint .behavior a:hover { text-decoration:none; }
 
 
 
@@ -109,12 +109,12 @@
 /* added */
 .sm_info {font-size: smaller;}
 #add_auth_ip_area {margin-left: 1.5em;}
-#my_servers .server .sip .area.ip_auth_area { width:12em;} /* must fit ipv6 */
-#my_servers .server .sip .area span.ip_list.title { width:12em;}
-#my_servers .server .sip .area span.ip_list.info {overflow: hidden; height:1em; width:12em;}
-#my_servers .server .sip .area span.ip_list.info:hover {overflow: visible;  padding: .4em;  }
+#endpoint_list .endpoint .sip .area.ip_auth_area { width:12em;} /* must fit ipv6 */
+#endpoint_list .endpoint .sip .area span.ip_list.title { width:12em;}
+#endpoint_list .endpoint .sip .area span.ip_list.info {overflow: hidden; height:1em; width:12em;}
+#endpoint_list .endpoint .sip .area span.ip_list.info:hover {overflow: visible;  padding: .4em;  }
 span.ip_list_ip { display:block; z-index:5;}
-#my_servers .server .sip .area span.ip_list.info:hover span.ip_list_ip {background-color: rgba(0,0,0,0.75); padding: .3em; color: white; z-index:50; font-weight: bold;}
+#endpoint_list .endpoint .sip .area span.ip_list.info:hover span.ip_list_ip {background-color: rgba(0,0,0,0.75); padding: .3em; color: white; z-index:50; font-weight: bold;}
 
 
 
@@ -130,8 +130,8 @@ span.ip_list_ip { display:block; z-index:5;}
 .helpertext {font-size: smaller; color: gray;}
 
 /* on/off */
-#my_servers .server .numbers a.edit_misc {display:none;}
-/*#my_servers .server .title .status  {display:none;}*/
+#endpoint_list .endpoint .numbers a.edit_misc {display:none;}
+/*#endpoint_list .endpoint .title .status  {display:none;}*/
 
 
 
@@ -156,31 +156,31 @@ span.ip_list_ip { display:block; z-index:5;}
 /* jq vs trans CSS3 */
 /*
 */
-#my_servers .server .sip .area  a:link {
+#endpoint_list .endpoint .sip .area  a:link {
     color: blue;
     text-decoration: none;
     -webkit-transition: color .25s ease-in 0s;
     transition: color .25s ease-out 0s;
 }
 
-#my_servers .server .sip .area  a:hover {
+#endpoint_list .endpoint .sip .area  a:hover {
     color: red;
     -webkit-transition: color .25s ease-in .1s;
     transition: color .25s ease-out .1s;
 }
 
-#my_servers .server .sip .area  a:active {
+#endpoint_list .endpoint .sip .area  a:active {
     color: green;
     transition: color .25s ease;
 }
 
-#my_servers .server .sip .area   ul {
+#endpoint_list .endpoint .sip .area   ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-#server_area .server .sip .area  .title.ip_list:hover {
+#server_area .endpoint .sip .area  .title.ip_list:hover {
     display: block;
     position: fixed;
     /*top: .9em;
@@ -198,12 +198,12 @@ span.ip_list_ip { display:block; z-index:5;}
     z-index: 5000;
 }
 
-#my_servers .server .sip .area   ul.title.ip_list  li {
+#endpoint_list .endpoint .sip .area   ul.title.ip_list  li {
     font-weight: normal;
     list-style: none;
 }
 
-#my_servers .server .sip .area   ul.title.ip_list  li a:link {
+#endpoint_list .endpoint .sip .area   ul.title.ip_list  li a:link {
     font-weight: normal;
     list-style: none;
     font-size: 12px;
@@ -211,7 +211,7 @@ span.ip_list_ip { display:block; z-index:5;}
     padding-left: 0;
 }
 
-#my_servers .server .sip .area   ul.title.ip_list ul li {
+#endpoint_list .endpoint .sip .area   ul.title.ip_list ul li {
     font-weight: normal;
     padding: 5px 0;
     margin:0;
@@ -221,7 +221,7 @@ span.ip_list_ip { display:block; z-index:5;}
     transition: background-color .2s ease;
 }
 
-#0server_area .server .sip .area   .menu_ip_list {
+#0server_area .endpoint .sip .area   .menu_ip_list {
     display: block;
     position: relative;
     height: 0;
@@ -232,14 +232,14 @@ span.ip_list_ip { display:block; z-index:5;}
     transition: opacity .25s linear 0s, height .25s ease-out .1s;
 }
 
-#my_servers .server .sip .area   ul.title.ip_list ul li:hover {
+#endpoint_list .endpoint .sip .area   ul.title.ip_list ul li:hover {
     background-color: rgb(234,234,234);
     -webkit-transition: background-color .5s ease;
     transition: background-color .2s ease;
 }
 
 
-#0server_area .server .sip .area   ul.title.ip_list:hover>.menu_ip_list {
+#0server_area .endpoint .sip .area   ul.title.ip_list:hover>.menu_ip_list {
     height: 140px;
     opacity: 1;
     -webkit-transition: opacity .25s linear 0s,  height .25s linear 0s;
@@ -327,7 +327,7 @@ span.ip_list_ip { display:block; z-index:5;}
 
 /*.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
 .ui-dialog .ui-dialog-titlebar { background: #2280a2;  position: relative; background-image: url(/../images/ui-dialog-title-bar-bkgd.png); height: 22px; }
-.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;} 
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;}
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
@@ -418,7 +418,7 @@ a.button:hover {
 .edit.discount {cursor:pointer;}
 
 
-#control_area #my_numbers .numbers .unassigned {color: #437B3D;;}
+#control_area #numbers .numbers .unassigned {color: #437B3D;;}
 
 body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em; border-radius: .5em; -moz-border-radius: .5em; -webkit-border-radius: .5em; background: #859ED4; font-weight: bold; cursor: pointer; color: black;}
 
@@ -435,17 +435,14 @@ body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em;
 .ui-dialog input.button.info {background-color: #005BE3;}
 .ui-dialog a.button.info:hover {background-color: #0152CA;}
 .ui-dialog input.button.info:hover {background-color: #0152CA;}
-#control_area #my_numbers .numbers .did-status {display: none;
-                                                max-width: 12em;
-                                                overflow-x: hidden;
-                                                text-overflow: ellipsis;
+#control_area #numbers .numbers .did-status {
                                                 white-space:nowrap;
                                                 color: #999;
                                                 float: left;
                                                 margin: 10px 0px 0px 20px;
 
 }
-#control_area #my_numbers .numbers:hover .did-status {
+#control_area #numbers .numbers:hover .did-status {
     display: inline;
 }
 /* =================== END jQuery UI 2600hz Edits =================== */

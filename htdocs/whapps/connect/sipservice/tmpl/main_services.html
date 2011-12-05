@@ -1,39 +1,11 @@
 <div>
     <div class="title">My Paid Services</div>
-    <div class="info" style="clear:both;">
-        <span class="channels num">${account.trunks}</span>
-        <span class="channels detail">Two-Way Channels</span>
 
-        <span class="channels num">${account.inbound_trunks}</span>
-        <span class="channels detail">Inbound Channels</span>
-        
-        <span id="addCredsSpan"><a href="#" id="edit_channels" class="button channels edit">Modify</a></span>
-    </div>
-    <div class="info" style="background-repeat: repeat-y; ">
-        <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span><span class="ppm">per-minute credit</span>
+    <div id="channels"/>
 
-        <span id="addCredsSpan">
-            <a href="#" id="add_prepay_button" class="credits manage button">Manage Credit</a>
-        </span>
-    </div>
+    <div id="credits"/>
 
-    <div class="info">
-        <span class="e_num"></span>
-        <span class="e_detail">
-            {{if account.discount_code }}
-            <span class="edit discount">Discount Code: ${account.discount_code}</span>
-            {{else}}
-            <span class="edit discount">Add Discount Code</span>
-            {{/if}}
-        </span>
-    </div>
+    <div class="addl" style="background-position:0px -40px; height:30px"/>
 
-    <div class="addl" style="background-position:0px -40px; height:30px">
-
-    </div>
-
-    <ul class="buttons">
-<!--        <li><a class="history" href="#">View Order History</a></li>
-        <li><a class="account" href="#">View Call Log</a></li>-->
-    </ul>
+    <ul class="buttons"/>
 </div>
