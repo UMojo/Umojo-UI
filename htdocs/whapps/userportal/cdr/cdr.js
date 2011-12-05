@@ -133,15 +133,14 @@ function(args) {
 		    user_id: winkstart.apps['userportal'].user_id,
             api_url: winkstart.apps['userportal'].api_url
 		}, function(reply) {
-            console.log(reply);
 			$.each(reply.data, function() {
 				var cdr_id = this.cid || this.id;
                 var caller_id_name = this.caller_id_name;
                 var caller_id_number = this.caller_id_number;
                 var callee_id_name = this.callee_id_name;
                 var callee_id_number = this.callee_id_number;
-                var duration = this.billing_seconds;
-                //var duration = this.duration_seconds;
+                //var duration = this.billing_seconds;
+                var duration = this.duration_seconds;
                 var seconds = duration % 60;
                 var minutes = (duration-seconds) / 60;
 
