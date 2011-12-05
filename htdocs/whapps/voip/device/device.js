@@ -225,7 +225,7 @@ winkstart.module('voip', 'device', {
                         },
                         sip: {
                             method: 'password',
-                            invite_format: 'e164',
+                            invite_format: 'username',
                             username: 'user_' + winkstart.random_string(6),
                             password: winkstart.random_string(12),
                             expire_seconds: '360'
