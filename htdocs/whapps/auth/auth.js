@@ -24,7 +24,7 @@ winkstart.module('auth', 'auth',
 
         resources: {
             "auth.user_auth": {
-                url: winkstart.apps['auth']['api_url'] + '/user_auth',
+                url: '{api_url}/user_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
@@ -34,12 +34,12 @@ winkstart.module('auth', 'auth',
                 verb: 'PUT'
             },
             "auth.register": {
-                url: winkstart.apps['auth']['api_url'] + '/signup',
+                url: '{api_url}/signup',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
             "auth.activate": {
-                url: winkstart.apps['auth']['api_url'] + '/signup/{activation_key}',
+                url: '{api_url}/signup/{activation_key}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
@@ -61,7 +61,7 @@ winkstart.module('auth', 'auth',
         winkstart.registerResources(this.__whapp, this.config.resources);
 
         if(URL_DATA['activation_key']) {
-            winkstart.postJSON('auth.activate', {crossbar: true, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
+            winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
                alert('You are now registered! Please log in.');
 
                winkstart.publish('auth.login', {username: data.data.user.username});
@@ -78,6 +78,10 @@ winkstart.module('auth', 'auth',
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
         if(winkstart.apps['auth'].auth_token) {
             $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
+        }
+
+        if('auth_url' in URL_DATA) {
+            winkstart.apps['auth'].api_url = URL_DATA['auth_url'];
         }
 
         if(cookie_data = $.cookie('c_winkstart_auth')) {
@@ -109,7 +113,6 @@ winkstart.module('auth', 'auth',
 
             $('button.register', dialogRegister).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
-                console.log(winkstart.validate.is_valid(THIS.config.validation, dialogRegister));
 
                 winkstart.validate.is_valid(THIS.config.validation, dialogRegister, function() {
                         if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
@@ -127,10 +130,11 @@ winkstart.module('auth', 'auth',
 
                             var rest_data = {
                                 crossbar : true,
+                                api_url : winkstart.apps['auth'].api_url,
                                 data : {
                                     'account': {
                                         'realm': realm,
-                                        'app_url': window.location.href.replace(/#/, '')
+                                        'app_url': URL
                                     },
                                     'user': {
                                         'username':$('#username', dialogRegister).val(),
@@ -193,6 +197,7 @@ winkstart.module('auth', 'auth',
 
                 var rest_data = {
                     crossbar : true,
+                    api_url : winkstart.apps['auth'].api_url,
                     data : {
                         'credentials': hashed_creds,
                         'realm': realm
