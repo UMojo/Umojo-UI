@@ -26,23 +26,25 @@
     winkstart.dialog = function(content, options) {
         var newDiv = $(document.createElement('div')).html(content);
 
-        defaults = {
-            width: 'auto',
+        //Unoverridable options
+        var strict_options = {
             show: { effect : 'fade', duration : 200 },
             hide: { effect : 'fade', duration : 200 },
-            modal: true,
-            resizable: false,
-
-            // By default, don't long-live dialogs - kill them after they're closed. Normal jquery default is just to hide them.
             close: function() {
-                $(newDiv).dialog('destroy');    // Destroy the dialog utilizing the div and associated events
-                $(newDiv).remove(); // Remove the div
+                $(newDiv).dialog('destroy');
+                $(newDiv).remove();
             }
+        },
+
+        //Default values
+        defaults = {
+            width: 'auto',
+            modal: true,
+            resizable: false
         };
 
-        // Overwrite any defaults with settings passed in
-        $.extend(options || {}, defaults);
-
+        //Overwrite any defaults with settings passed in, and then overwrite any attributes with the unoverridable options.
+        options = $.extend(defaults, options || {}, strict_options);
         $(newDiv).dialog(options);
 
         return $(newDiv);       // Return the new div as an object, so that the caller can destroy it when they're ready.'
@@ -54,7 +56,7 @@
             random_string = '';
 
         for(var i = length; i > 0; i--) {
-            random_string += chars.charAt(Math.floor(Math.random() * chars.length)); 
+            random_string += chars.charAt(Math.floor(Math.random() * chars.length));
         }
 
         return random_string;
