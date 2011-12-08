@@ -139,7 +139,7 @@
 }
 
 #ws_callflow .tools {
-    background: #3D3D3D;
+    /*background: #3D3D3D;*/
     float: left;
 }
 
@@ -177,6 +177,8 @@
 
 #ws_callflow .tools .tool .action {
     z-index: 9000;
+    height: 75px;
+    background: #3d3d3d;
 }
 
 #ws_callflow .tools .app_list_nav {

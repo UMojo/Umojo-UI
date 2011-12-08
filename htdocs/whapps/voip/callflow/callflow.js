@@ -411,9 +411,12 @@ winkstart.module('voip', 'callflow', {
                         var popup_html = THIS.templates.add_number.tmpl({}),
                             popup;
 
-                        popup = winkstart.dialog(popup_html, { title: 'Add number' });
+                        popup = winkstart.dialog(popup_html, {
+                                title: 'Add number'
+                        });
 
-                        $('.submit_btn', popup).click(function() {
+                        $('.submit_btn', popup).click(function(event) {
+                            event.preventDefault();
                             THIS.flow.numbers.push($('#add_number_text', popup).val());
 
                             popup.dialog('close');
@@ -624,8 +627,12 @@ winkstart.module('voip', 'callflow', {
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
+                    $('.tool_name', '#callflow-view').removeClass('active');
+                    $('.tool_name', $(this)).addClass('active');
+                    $(this).attr('help') ? $('#help_box', tools).html($(this).attr('help')) : true;
                 },
                 function () {
+                    $('#help_box', tools).html('Drag the following elements and drop them on a callflow item!');
                     $(this).removeClass('active');
                 }
             );

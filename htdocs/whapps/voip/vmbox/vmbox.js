@@ -584,7 +584,7 @@ winkstart.module('voip', 'vmbox', {
                     name: 'Check Voicemail',
                     icon: 'voicemail',
                     category: 'Advanced',
-                    tooltip: 'Voicemail check!',
+                    tip: 'This element allows you to check your voicemail.',
                     module: 'voicemail',
                     data: {
                         action: 'check'

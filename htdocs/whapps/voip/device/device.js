@@ -684,6 +684,7 @@ winkstart.module('voip', 'device', {
                     icon: 'phone',
                     category: 'Basic',
                     module: 'device',
+                    tip: 'Example:Help for the device item!',
                     data: {
                         id: 'null'
                     },
