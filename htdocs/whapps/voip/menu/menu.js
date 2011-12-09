@@ -438,6 +438,7 @@ winkstart.module('voip', 'menu', {
                     icon: 'menu',
                     category: 'Basic',
                     module: 'menu',
+                    tip: 'Ask a caller to push a menu option or dial an extension number',
                     data: {
                         id: 'null'
                     },

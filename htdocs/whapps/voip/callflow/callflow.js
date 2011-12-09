@@ -411,9 +411,12 @@ winkstart.module('voip', 'callflow', {
                         var popup_html = THIS.templates.add_number.tmpl({}),
                             popup;
 
-                        popup = winkstart.dialog(popup_html, { title: 'Add number' });
+                        popup = winkstart.dialog(popup_html, {
+                                title: 'Add number'
+                        });
 
-                        $('.submit_btn', popup).click(function() {
+                        $('.submit_btn', popup).click(function(event) {
+                            event.preventDefault();
                             THIS.flow.numbers.push($('#add_number_text', popup).val());
 
                             popup.dialog('close');
@@ -624,8 +627,12 @@ winkstart.module('voip', 'callflow', {
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
+                    $('.tool_name', '#callflow-view').removeClass('active');
+                    $('.tool_name', $(this)).addClass('active');
+                    $(this).attr('help') ? $('#help_box', tools).html($(this).attr('help')) : true;
                 },
                 function () {
+                    $('#help_box', tools).html('Drag the following elements and drop them on a callflow item!');
                     $(this).removeClass('active');
                 }
             );
@@ -661,6 +668,10 @@ winkstart.module('voip', 'callflow', {
             target.append(tools);
 
             $('#ws_cf_tools', '#callflow-view').disableSelection();
+
+            $('*[tooltip]', target).each(function() {
+                $(this).tooltip({ xMove: -80, yMove: -80, height: '40px', width: '100px' });
+            });
         },
 
         _enableDestinations: function(el) {
@@ -809,6 +820,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'callflow',
                     category: 'Advanced',
                     module: 'callflow',
+                    tip: 'Transfer the call to another call flow',
                     data: {
                         id: 'null'
                     },
@@ -874,6 +886,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'ring_group',
                     category: 'Basic',
                     module: 'ring_group',
+                    tip: 'Ring several VoIP or cell phones in order or at the same time',
                     data: {
                         name: ''
                     },
@@ -1025,6 +1038,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Enable call forwarding (using the last forwaded number)',
                     data: {
                         action: 'activate'
                     },
@@ -1049,6 +1063,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Disable call forwarding',
                     data: {
                         action: 'deactivate'
                     },
@@ -1073,6 +1088,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Update the call forwarding number',
                     data: {
                         action: 'update'
                     },
