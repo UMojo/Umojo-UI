@@ -510,6 +510,7 @@ winkstart.module('voip', 'vmbox', {
                     icon: 'voicemail',
                     category: 'Basic',
                     module: 'voicemail',
+                    tip: 'Direct a caller to leave a voicemail message',
                     data: {
                         id: 'null'
                     },
@@ -584,8 +585,8 @@ winkstart.module('voip', 'vmbox', {
                     name: 'Check Voicemail',
                     icon: 'voicemail',
                     category: 'Advanced',
-                    tip: 'This element allows you to check your voicemail.',
                     module: 'voicemail',
+                    tip: 'Prompt the caller for a mailbox number and password so they can check voicemails',
                     data: {
                         action: 'check'
                     },

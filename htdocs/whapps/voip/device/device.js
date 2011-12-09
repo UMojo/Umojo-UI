@@ -684,7 +684,7 @@ winkstart.module('voip', 'device', {
                     icon: 'phone',
                     category: 'Basic',
                     module: 'device',
-                    tip: 'Example:Help for the device item!',
+                    tip: 'Ring a VoIP or cell phone or other device',
                     data: {
                         id: 'null'
                     },

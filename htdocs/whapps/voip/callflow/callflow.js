@@ -820,6 +820,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'callflow',
                     category: 'Advanced',
                     module: 'callflow',
+                    tip: 'Transfer the call to another call flow',
                     data: {
                         id: 'null'
                     },
@@ -885,6 +886,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'ring_group',
                     category: 'Basic',
                     module: 'ring_group',
+                    tip: 'Ring several VoIP or cell phones in order or at the same time',
                     data: {
                         name: ''
                     },
@@ -1036,6 +1038,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Enable call forwarding (using the last forwaded number)',
                     data: {
                         action: 'activate'
                     },
@@ -1060,6 +1063,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Disable call forwarding',
                     data: {
                         action: 'deactivate'
                     },
@@ -1084,6 +1088,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
+                    tip: 'Update the call forwarding number',
                     data: {
                         action: 'update'
                     },

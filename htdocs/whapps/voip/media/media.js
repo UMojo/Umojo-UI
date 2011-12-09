@@ -430,6 +430,7 @@ winkstart.module('voip', 'media', {
                     icon: 'play',
                     category: 'Advanced',
                     module: 'play',
+                    tip: 'Play an audio file such as a greeting',
                     data: {
                         id: 'null'
                     },

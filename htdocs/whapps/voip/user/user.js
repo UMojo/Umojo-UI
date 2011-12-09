@@ -538,6 +538,7 @@ winkstart.module('voip', 'user', {
                     icon: 'hotdesk_login',
                     category: 'Hotdesking',
                     module: 'hotdesk',
+                    tip: 'Enable Hot desking',
                     data: {
                         action: 'login'
                     },
@@ -562,6 +563,7 @@ winkstart.module('voip', 'user', {
                     icon: 'hotdesk_logout',
                     category: 'Hotdesking',
                     module: 'hotdesk',
+                    tip: 'Disable Hot desking',
                     data: {
                         action: 'logout'
                     },
@@ -586,6 +588,7 @@ winkstart.module('voip', 'user', {
                     icon: 'hotdesk_toggle',
                     category: 'Hotdesking',
                     module: 'hotdesk',
+                    tip: 'Toggle Hot desking',
                     data: {
                         action: 'toggle'
                     },

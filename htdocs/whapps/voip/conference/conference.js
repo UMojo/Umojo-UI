@@ -511,6 +511,7 @@ winkstart.module('voip', 'conference', {
                     icon: 'conference',
                     category: 'Basic',
                     module: 'conference',
+                    tip: 'Connect a caller to a Meet-Me conference bridge',
                     data: {
                         id: 'null'
                     },
@@ -586,6 +587,7 @@ winkstart.module('voip', 'conference', {
                     icon: 'conference',
                     category: 'Advanced',
                     module: 'conference',
+                    tip: 'Transfer the caller to the conference call service, prompting for both a conference number and a pin',
                     data: {},
                     rules: [
                         {
