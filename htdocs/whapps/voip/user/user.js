@@ -6,7 +6,7 @@ winkstart.module('voip', 'user', {
         templates: {
             user: 'tmpl/user.html',
             edit: 'tmpl/edit.html',
-            hotdesk_callflow: 'tmpl/hotdesk_callflow.html'
+            user_callflow: 'tmpl/user_callflow.html'
         },
 
         subscribe: {
@@ -474,13 +474,13 @@ winkstart.module('voip', 'user', {
             var THIS = this;
 
             $.extend(callflow_nodes, {
-                 'hotdesk[id=*,action=bridge]': {
-                    name: 'Hot Desking',
-                    icon: 'v_phone',
-                    category: 'Hotdesking',
-                    module: 'hotdesk',
+                 'user[id=*]': {
+                    name: 'User',
+                    icon: 'user',
+                    category: 'Advanced',
+                    module: 'user',
+                    tip: 'Direct a caller to a specific user',
                     data: {
-                        action: 'bridge',
                         id: 'null'
                     },
                     rules: [
@@ -491,12 +491,13 @@ winkstart.module('voip', 'user', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var name = node.getMetadata('name');
-
-                        return (name) ? name : '';
+                        /*var name = node.getMetadata('name');
+                        return (name) ? name : '';*/
+                        var id = node.getMetadata('id');
+                        return '';//(id && id != '') ? caption_map[id].name : '';
                     },
                     edit: function(node, callback) {
-                        winkstart.request(true, 'hotdesk.list', {
+                        winkstart.request(true, 'user.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
@@ -507,22 +508,43 @@ winkstart.module('voip', 'user', {
                                     this.name = this.first_name + ' ' + this.last_name;
                                 });
 
-                                popup_html = THIS.templates.hotdesk_callflow.tmpl({
+                                popup_html = THIS.templates.user_callflow.tmpl({
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
 
+                                if($('#user_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#user_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('user.popup_edit', _data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = (_data.data.first_name || '') + ' ' + (_data.data.last_name || '');
+                                        //node.setMetadata('name', name);
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
                                 $('.submit_btn', popup_html).click(function() {
-                                    node.setMetadata('id', $('#hotdesk_selector', popup_html).val());
-                                    node.setMetadata('name', $('#hotdesk_selector option:selected', popup_html).text());
-
-                                    node.caption = $('#hotdesk_selector option:selected', popup_html).text();
-
+                                    node.setMetadata('id', $('#user_selector', popup_html).val());
+                                    /*console.log(node);
+                                    console.log($('#user_selector option:selected', popup_html).text());
+                                    node.setMetadata('name', $('#user_selector option:selected', popup_html).text());
+                                    console.log(node);*/
+                                    node.caption = $('#user_selector option:selected', popup_html).text();
                                     popup.dialog('close');
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Select Hot Desking User',
+                                    title: 'Select User',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
