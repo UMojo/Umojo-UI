@@ -494,7 +494,7 @@ winkstart.module('voip', 'user', {
                         /*var name = node.getMetadata('name');
                         return (name) ? name : '';*/
                         var id = node.getMetadata('id');
-                        return '';//(id && id != '') ? caption_map[id].name : '';
+                        return (id && id != '') ? caption_map[id].name : '';
                     },
                     edit: function(node, callback) {
                         winkstart.request(true, 'user.list', {
