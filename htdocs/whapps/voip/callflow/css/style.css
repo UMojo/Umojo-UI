@@ -129,13 +129,13 @@
 }
 
 #ws_callflow .tool .icon {
-    margin: 4px;
+    margin: 2px;
     display: inline-block;
-    margin-top: 10px;
 }
 
 #ws_callflow .toolbox {
-    width: 160px;
+    /* width: 160px; */
+    width: 172px;
 }
 
 #ws_callflow .tools {
@@ -148,6 +148,11 @@
     background: url(../images/background_category.png) no-repeat;
     background-position: top center;
     cursor: default;
+}
+
+#ws_callflow .tools .category .content {
+    background-color: #777777;
+    border: 1px solid #333333;
 }
 
 #ws_callflow .tools .open {
@@ -168,29 +173,34 @@
 }
 
 #ws_callflow .tools .tool {
-    background: #3D3D3D;
-    border: 1px solid #6A6A6A;
+    background: #777777;
     float: left;
-    height: 75px;
-    width: 88px;
+    /* width: 76px; */
+    width: 82px;
+    padding-left: 1px;
+    padding-top: 1px;
+}
+
+#ws_callflow .destination {
+    border-radius:10px;
+    border: 3px solid #05addc;
 }
 
 #ws_callflow .tools .tool .action {
     z-index: 9000;
-    height: 75px;
-    background: #3d3d3d;
+    height:56px;
+    background: url(../images/blackbox_small.png) no-repeat;
 }
 
 #ws_callflow .tools .app_list_nav {
-    background: #3D3D3D;
-    padding: 5px;
-    border-top: 1px solid #6A6A6A;
+    background: #777777;
+    padding-top: 1px;
 }
 
 #ws_callflow .callflow .icons_black.node {
     width: 143px;
     height: 84px;
-    background: url(../images/black_box.png) no-repeat;
+    background: url(../images/blackbox.png) no-repeat;
 }
 
 /* This will blow your mind */
