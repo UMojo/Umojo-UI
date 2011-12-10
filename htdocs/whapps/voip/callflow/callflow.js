@@ -1107,6 +1107,22 @@ winkstart.module('voip', 'callflow', {
                             callback();
                         }
                     }
+                },
+                'dynamic_callerid[]': {
+                    name: 'Dynamic callerid',
+                    icon: 'rightarrow',
+                    category: 'Advanced',
+                    module: 'dynamic_callerid',
+                    tip: 'Set your CallerId by entering it on the phone',
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
                 }
             });
 
