@@ -454,6 +454,54 @@ winkstart.module('voip', 'featurecode', {
                     build_regex: function(number) {
                         return '^\\*'+number+'([0-9]*)$';
                     }
+                },
+                'park_and_retrieve': {
+                    name: 'Park and Retrieve',
+                    icon: 'phone',
+                    category: 'Parking',
+                    module: 'park',
+                    number_type: 'pattern',
+                    data: {
+                        action: 'auto'
+                    },
+                    enabled: false,
+                    default_number: '3',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
+                    }
+                },
+                'valet': {
+                    name: 'Valet',
+                    icon: 'phone',
+                    category: 'Parking',
+                    module: 'park',
+                    number_type: 'number',
+                    data: {
+                        action: 'park'
+                    },
+                    enabled: false,
+                    default_number: '4',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '*'+number;
+                    }
+                },
+                'retrieve': {
+                    name: 'Retrieve',
+                    icon: 'phone',
+                    category: 'Parking',
+                    module: 'park',
+                    number_type: 'pattern',
+                    data: {
+                        action: 'retrieve'
+                    },
+                    enabled: false,
+                    default_number: '5',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
+                    }
                 }
                 /*'call_forward[action=on_busy_enable]': {
                     name: 'Enable Call-Forward on Busy',
