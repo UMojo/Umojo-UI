@@ -477,7 +477,7 @@ winkstart.module('voip', 'user', {
                  'user[id=*]': {
                     name: 'User',
                     icon: 'user',
-                    category: 'Advanced',
+                    category: 'Basic',
                     module: 'user',
                     tip: 'Direct a caller to a specific user',
                     data: {
