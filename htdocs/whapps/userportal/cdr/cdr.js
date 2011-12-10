@@ -167,16 +167,26 @@ function(args) {
 
                 var humanFullDate = humanDate + ' ' + humanTime;
 
-                if(caller_id_name && caller_id_number && callee_id_name && callee_id_number){
-                    winkstart.table.cdr.fnAddData([
-                        noData(caller_id_name),
-                        noData(caller_id_number),
-                        noData(callee_id_name),
-                        noData(callee_id_number),
-                        noData(duration),
-                        noData(humanFullDate)
-                    ]);
+                if (!callee_id_number && this.call_direction == 'outbound') {
+                    callee_id_number = this.from.split('@', 1);
+                } else if (!callee_id_number && this.call_direction == 'inbound') {
+                    callee_id_number = this.to.split('@', 1);
                 }
+
+                if (!caller_id_number && this.call_direction == 'outbound') {
+                    caller_id_number = this.to.split('@', 1);
+                } else if (!caller_id_number && this.call_direction == 'inbound') {
+                    caller_id_number = this.from.split('@', 1);
+                }
+
+                winkstart.table.cdr.fnAddData([
+                    noData(caller_id_name),
+                    noData(caller_id_number),
+                    noData(callee_id_name),
+                    noData(callee_id_number),
+                    noData(duration),
+                    noData(humanFullDate)
+                ]);
 			});
 		});
 
