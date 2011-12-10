@@ -140,32 +140,47 @@ winkstart.module('voip', 'account', {
                             internal: {},
                             external: {}
                         },
-                        vm_to_email: {}
+                        vm_to_email: {},
+                        music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
                 };
 
-            if(typeof data == 'object' && data.id) {
-                winkstart.request(true, 'account.get', {
-                        account_id: data.id,
-                        api_url: winkstart.apps['voip'].api_url
-                    },
-                    function(_data, status) {
-                        THIS.render_account($.extend(true, defaults, _data), target, callbacks);
+             winkstart.request(true, 'media.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    _data.data.unshift({
+                        id: '',
+                        name: '- Not set -'
+                    });
+
+                    defaults.field_data.media = _data.data;
+
+                    if(typeof data == 'object' && data.id) {
+                        winkstart.request(true, 'account.get', {
+                                account_id: data.id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                THIS.render_account($.extend(true, defaults, _data), target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        THIS.render_account(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
                             callbacks.after_render();
                         }
                     }
-                );
-            }
-            else {
-                THIS.render_account(defaults, target, callbacks);
-
-                if(typeof callbacks.after_render == 'function') {
-                    callbacks.after_render();
                 }
-            }
+            );
         },
 
         delete_account: function(data, success, error) {
@@ -220,6 +235,10 @@ winkstart.module('voip', 'account', {
                     delete data.vm_to_email[key];
                 }
             });
+
+            if(!data.music_on_hold.media_id) {
+                delete data.music_on_hold.media_id;
+            }
 
             if($.isEmptyObject(data.vm_to_email)) {
                 delete data.vm_to_email;
@@ -311,6 +330,42 @@ winkstart.module('voip', 'account', {
 
                     winkstart.publish('account.activate');
                 }
+            });
+
+            if(!$('#music_on_hold_media_id', account_html).val()) {
+                $('#edit_link_media', account_html).hide();
+            }
+
+            $('#music_on_hold_media_id', account_html).change(function() {
+                !$('#music_on_hold_media_id option:selected', account_html).val() ? $('#edit_link_media', account_html).hide() : $('#edit_link_media', account_html).show();
+            });
+
+            $('.inline_action_media', account_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#music_on_hold_media_id', account_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#music_on_hold_media_id', account_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#music_on_hold_media_id', account_html).val(_data.data.id);
+
+                        $('#edit_link_media', account_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#music_on_hold_media_id #'+_data.data.id, account_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#music_on_hold_media_id #'+_id, account_html).remove();
+                            $('#edit_link_media', account_html).hide();
+                        }
+                    }
+                });
             });
 
             (target)

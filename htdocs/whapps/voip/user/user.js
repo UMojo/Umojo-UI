@@ -154,37 +154,52 @@ winkstart.module('voip', 'user', {
                             internal: {},
                             external: {}
                         },
-                        hotdesk: {}
+                        hotdesk: {},
+                        music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
                 };
 
-            if(typeof data == 'object' && data.id) {
-                winkstart.request(true, 'user.get', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        user_id: data.id
-                    },
-                    function(_data, status) {
-                        THIS.migrate_data(_data);
+            winkstart.request(true, 'media.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    _data.data.unshift({
+                        id: '',
+                        name: '- Not set -'
+                    });
 
-                        THIS.format_data(_data);
+                    defaults.field_data.media = _data.data;
 
-                        THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+                    if(typeof data == 'object' && data.id) {
+                        winkstart.request(true, 'user.get', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                user_id: data.id
+                            },
+                            function(_data, status) {
+                                THIS.migrate_data(_data);
+
+                                THIS.format_data(_data);
+
+                                THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        THIS.render_user(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
                             callbacks.after_render();
                         }
                     }
-                );
-            }
-            else {
-                THIS.render_user(defaults, target, callbacks);
-
-                if(typeof callbacks.after_render == 'function') {
-                    callbacks.after_render();
                 }
-            }
+            );
         },
 
         delete_user: function(data, success, error) {
@@ -291,6 +306,42 @@ winkstart.module('voip', 'user', {
                 THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
             });
 
+            if(!$('#music_on_hold_media_id', user_html).val()) {
+                $('#edit_link_media', user_html).hide();
+            }
+
+            $('#music_on_hold_media_id', user_html).change(function() {
+                !$('#music_on_hold_media_id option:selected', user_html).val() ? $('#edit_link_media', user_html).hide() : $('#edit_link_media', user_html).show();
+            });
+
+            $('.inline_action_media', user_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#music_on_hold_media_id', user_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#music_on_hold_media_id', user_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#music_on_hold_media_id', user_html).val(_data.data.id);
+
+                        $('#edit_link_media', user_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#music_on_hold_media_id #'+_data.data.id, user_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#music_on_hold_media_id #'+_id, user_html).remove();
+                            $('#edit_link_media', user_html).hide();
+                        }
+                    }
+                });
+            });
+
             (target)
                 .empty()
                 .append(user_html);
@@ -322,7 +373,6 @@ winkstart.module('voip', 'user', {
             if(!form_data.hotdesk.require_pin) {
                 delete form_data.hotdesk.pin;
             }
-
 
             if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
                 form_data.password = form_data.pwd_mngt_pwd1;
@@ -357,6 +407,10 @@ winkstart.module('voip', 'user', {
 
             if(!data.call_forward.enabled) {
                 delete data.call_forward;
+            }
+
+            if(!data.music_on_hold.media_id) {
+                delete data.music_on_hold.media_id;
             }
 
             /* Yes, I am aware that the admin does not lose access to the userportal (if switched) */

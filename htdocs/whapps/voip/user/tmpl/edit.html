@@ -157,6 +157,23 @@
                                 <select name="timezone" id="timezone">
                                 </select>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the media file that you want to be played by default when it\'s not set on a device.">
+                                    <span class="tooltip"/>
+                                    <label for="Music on Hold">Music on hold:</label>
+                                </span>
+                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id">
+                                {{each field_data.media}}
+                                    {{if data.music_on_hold.media_id == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
                         </ul>
                     </fieldset>
                     <div class="clear"></div>
