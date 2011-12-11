@@ -134,6 +134,7 @@ winkstart.module('auth', 'auth',
                                 data : {
                                     'account': {
                                         'realm': realm,
+					'name':$('#name', dialogRegister).val(),
                                         'app_url': URL
                                     },
                                     'user': {
