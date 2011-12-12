@@ -1108,11 +1108,11 @@ winkstart.module('voip', 'callflow', {
                         }
                     }
                 },
-                'dynamic_callerid[]': {
-                    name: 'Dynamic callerid',
+                'dynamic_cid[]': {
+                    name: 'Dynamic cid',
                     icon: 'rightarrow',
                     category: 'Advanced',
-                    module: 'dynamic_callerid',
+                    module: 'dynamic_cid',
                     tip: 'Set your CallerId by entering it on the phone',
                     isUsable: 'true',
                     caption: function(node, caption_map) {
