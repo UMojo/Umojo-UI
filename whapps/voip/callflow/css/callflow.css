@@ -83,7 +83,7 @@
     font-size: 12px;
     height: 25px;
     line-height: 25px;
-    border-radius: 13px 13px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
     text-align: center;
     color: #fff;
     font-weight: bold;
@@ -96,7 +96,7 @@
 #ws_callflow .help_box {
     background-color: #3D3D3D;
     border: 1px solid #333333;
-    border-radius: 0 0 13px 13px;
+    border-radius: 0 0 5px 5px;
     padding: 2px;
     text-align: center;
     font-size: 11px;
