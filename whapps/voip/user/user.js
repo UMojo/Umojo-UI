@@ -157,7 +157,9 @@ winkstart.module('voip', 'user', {
                         hotdesk: {},
                         music_on_hold: {}
                     }, data_defaults || {}),
-                    field_data: {}
+                    field_data: {
+                        whapps: winkstart.config.available_list
+                    }
                 };
 
             winkstart.request(true, 'media.list', {
@@ -179,11 +181,19 @@ winkstart.module('voip', 'user', {
                                 user_id: data.id
                             },
                             function(_data, status) {
+                                for(var key in defaults.field_data.whapps) {
+                                    if(_data.data.apps[key] != undefined) {
+                                        _data.data.apps[key].use = 'true';
+                                    }
+                                }
+
                                 THIS.migrate_data(_data);
 
                                 THIS.format_data(_data);
 
-                                THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+                                var render_data = $.extend(true, defaults, _data);
+
+                                THIS.render_user(render_data, target, callbacks);
 
                                 if(typeof callbacks.after_render == 'function') {
                                     callbacks.after_render();
@@ -270,6 +280,10 @@ winkstart.module('voip', 'user', {
                 $('#pin_wrapper', user_html).hide();
             }
 
+            $('.fake_checkbox', user_html).click(function() {
+                $(this).toggleClass('checked');
+            });
+
             $('#hotdesk_require_pin', user_html).change(function() {
                 $('#pin_wrapper', user_html).toggle();
             });
@@ -290,6 +304,10 @@ winkstart.module('voip', 'user', {
 
                         if('field_data' in data) {
                             delete data.field_data;
+                        }
+
+                        if('apps' in data.data) {
+                            delete data.data.apps;
                         }
 
                         THIS.save_user(form_data, data, callbacks.save_success, callbacks.save_error);
@@ -381,6 +399,12 @@ winkstart.module('voip', 'user', {
             delete form_data.pwd_mngt_pwd1;
             delete form_data.pwd_mngt_pwd2;
 
+            form_data.apps = {};
+
+            $('.checked','#whapp_checkboxes').each(function() {
+                form_data.apps[$(this).dataset('value')] = winkstart.config.available_list[$(this).dataset('value')];
+            });
+
             return form_data;
         },
 
@@ -436,6 +460,10 @@ winkstart.module('voip', 'user', {
                     delete voip;
                 }
             }
+
+            $.each(data.apps, function() {
+                this.use ? delete this.use : delete this;
+            });
 
             return data;
         },
@@ -589,10 +617,6 @@ winkstart.module('voip', 'user', {
 
                                 $('.submit_btn', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
-                                    /*console.log(node);
-                                    console.log($('#user_selector option:selected', popup_html).text());
-                                    node.setMetadata('name', $('#user_selector option:selected', popup_html).text());
-                                    console.log(node);*/
                                     node.caption = $('#user_selector option:selected', popup_html).text();
                                     popup.dialog('close');
                                 });

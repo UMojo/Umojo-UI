@@ -21,6 +21,35 @@
             }
         },
 
+        available_list: {
+            'cluster': {
+               'label': 'Cluster Manager',
+               'icon': 'cluster_manager',
+               'api_url': 'http://apps.2600hz.com:8000/v1'
+            },
+            'voip': {
+                'label': 'Trial PBX',
+                'icon': 'voip_services',
+                'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+            },
+            'connect': {
+               'label': 'Connectivity',
+               'icon': 'connectivity',
+               'api_url': 'http://store.2600hz.com:8000/v1'
+            },
+            'userportal': {
+                'label': 'Userportal',
+                'icon': 'userportal',
+                'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+            },
+            'dashboard': {
+                'label': 'Monitoring tool',
+                'icon': 'phone',
+                'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+            }
+
+        },
+
         //Custom links
         nav: {
             //'my_account':'http://www.google.com/',
@@ -42,7 +71,7 @@
     };
 
     amplify.cache = false;
-    
+
     document.title = "2600hz WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

@@ -1,0 +1,30 @@
+#user-form #whapp_checkboxes .fake_checkbox {
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    padding: 0px 10px;
+    margin: 0px;
+    background-color: #989898;
+    cursor: pointer;
+}
+
+#user-form #whapp_checkboxes .fake_checkbox:first-child {
+    border-radius: 5px 0px 0px 5px;
+}
+
+#user-form #whapp_checkboxes .fake_checkbox:last-child {
+    border-right: 1px solid #000;
+    border-radius: 0px 5px 5px 0px;
+}
+
+#user-form #whapp_checkboxes .fake_checkbox:hover {
+    background-color: #BEBEBE;
+}
+
+#user-form #whapp_checkboxes .fake_checkbox.checked {
+    background-color: #05ADDC;
+}

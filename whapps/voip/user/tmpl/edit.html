@@ -56,6 +56,20 @@
                                     {{/if}}
                                 </select>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the whapps that your user is going to have access to:">
+                                    <span class="tooltip"/><label for="user_level">Whapps list:</label>
+                                </span>
+                                <span id="whapp_checkboxes">
+                                {{each(i, whapp) field_data.whapps}}
+                                    {{if data.apps[i]}}
+                                        <div class="fake_checkbox checked" data-value="${i}">${whapp.label}</div>
+                                    {{else}}
+                                        <div class="fake_checkbox" data-value="${i}">${whapp.label}</div>
+                                    {{/if}}
+                                {{/each}}
+                                </span>
+                            </li>
                         </ul>
                     </fieldset>
 
