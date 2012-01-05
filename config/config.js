@@ -26,6 +26,27 @@
             //'my_account':'http://www.google.com/',
             'my_help': 'http://help.2600hz.com/'
             /*'my_logout':''*/
+        },
+
+        user_roles: {
+            'business': {
+                'template': 'tmpl/role/business.html'
+            },
+            'developer': {
+                'template': 'tmpl/role/developer.html'
+            },
+            'manufacturer': {
+                'template': 'tmpl/role/manufacturer.html'
+            },
+            'minutes_only': {
+                'template': 'tmpl/role/minutes_only.html'
+            },
+            'no_role': {
+                'template': 'tmpl/role/no_role.html'
+            },
+            'var_itsp': {
+                'template': 'tmpl/role/var_itsp.html'
+            }
         }
     };
 
@@ -42,7 +63,7 @@
     };
 
     amplify.cache = false;
-    
+
     document.title = "2600hz WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

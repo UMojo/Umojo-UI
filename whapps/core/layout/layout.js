@@ -9,16 +9,20 @@ winkstart.module('core', 'layout', {
         'css/jquery.override.css'
         ],
 
-        templates: {
-            layout: 'tmpl/layout.html',
-            welcome: '../../../config/tmpl/welcome.html',
-            business: 'tmpl/business.html',
-            developer: 'tmpl/developer.html',
-            manufacturer: 'tmpl/manufacturer.html',
-            minutes_only: 'tmpl/minutes_only.html',
-            var_itsp: 'tmpl/var_itsp.html',
-            no_role: 'tmpl/no_role.html'
-        },
+        templates: function() {
+            var base_templates = {
+                layout: 'tmpl/layout.html',
+                welcome: '../../../config/tmpl/welcome.html'
+            };
+
+            if(typeof winkstart.config.user_roles == 'object') {
+                $.each(winkstart.config.user_roles, function(key, val) {
+                    base_templates[key] = '../../../config/' + val.template;
+                });
+            }
+
+            return base_templates;
+        }(),
 
         subscribe: {
             'layout.updateLoadedModule'    : 'updateModule',
@@ -85,37 +89,19 @@ winkstart.module('core', 'layout', {
     /* Module methods */
     {
         load_role: function(role) {
+            console.log(this.templates);
             var target = $('#ws-content'),
-                container = $('.content_container'),
-                role = URL_DATA['role'] || (role ? role.role : '');
-                THIS = this;
+            container = $('.content_container'),
+            role = URL_DATA['role'] || (role ? role.role : '');
+            THIS = this;
 
             $(target, container).empty();
 
-            switch(role) {
-                case 'business':
-                    $(target, container).append(THIS.templates.business.tmpl());
-                    break;
-
-                case 'developer':
-                    $(target, container).append(THIS.templates.developer.tmpl());
-                    break;
-
-                case 'manufacturer':
-                    $(target, container).append(THIS.templates.manufacturer.tmpl());
-                    break;
-
-                case 'minutes_only':
-                    $(target, container).append(THIS.templates.minutes_only.tmpl());
-                    break;
-
-                case 'var_itsp':
-                    $(target, container).append(THIS.templates.var_itsp.tmpl());
-                    break;
-
-                default:
-                    $(target, container).append(THIS.templates.no_role.tmpl())
-                    break;
+            if(winkstart.config.user_roles && role in winkstart.config.user_roles) {
+                $(target, container).append(THIS.templates[role].tmpl());
+            }
+            else {
+                $(target, container).append(THIS.templates.no_role.tmpl())
             }
        },
 
