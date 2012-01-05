@@ -29,22 +29,28 @@
         },
 
         user_roles: {
+            'no_role': {
+                'label': 'No Role',
+                'template': 'tmpl/role/no_role.html'
+            },
             'business': {
+                'label': 'Standard Business',
                 'template': 'tmpl/role/business.html'
             },
             'developer': {
+                'label': 'Developer',
                 'template': 'tmpl/role/developer.html'
             },
             'manufacturer': {
+                'label': 'Manufacturer',
                 'template': 'tmpl/role/manufacturer.html'
             },
             'minutes_only': {
+                'label': 'Minutes only',
                 'template': 'tmpl/role/minutes_only.html'
             },
-            'no_role': {
-                'template': 'tmpl/role/no_role.html'
-            },
             'var_itsp': {
+                'label': 'VAR/ITSP',
                 'template': 'tmpl/role/var_itsp.html'
             }
         }

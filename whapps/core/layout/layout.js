@@ -88,12 +88,12 @@ winkstart.module('core', 'layout', {
 
     /* Module methods */
     {
-        load_role: function(role) {
+        load_role: function(args) {
             console.log(this.templates);
             var target = $('#ws-content'),
-            container = $('.content_container'),
-            role = URL_DATA['role'] || (role ? role.role : '');
-            THIS = this;
+                container = $('.content_container'),
+                role = URL_DATA['role'] || (args ? args.role : ''),
+                THIS = this;
 
             $(target, container).empty();
 

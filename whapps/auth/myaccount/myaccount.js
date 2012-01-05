@@ -337,15 +337,31 @@ winkstart.module('auth', 'myaccount', {
         },
 
         render_info: function(data, target) {
-            var THIS = this,
-                info_html = THIS.templates.info.tmpl(data);
+            var THIS = this;
+
+            data.field_data = { 'roles': winkstart.config.user_roles };
+
+            var info_html = THIS.templates.info.tmpl(data);
+
+            console.log(data);
 
             $('#btnEmail', info_html).click(function() {
                 THIS.update_acct(data.data, {
                         email: $('#infos_email', info_html).val()
                     },
                     function() {
-                        alert('Email address updated!');
+                        winkstart.alert('info', 'Email address updated!');
+                    }
+                );
+            });
+
+            $('#btnRole', info_html).click(function() {
+                THIS.update_acct(data.data, {
+                        role: $('#infos_role', info_html).val()
+                    },
+                    function() {
+                        winkstart.publish('layout.load_role', { role: $('#infos_role', info_html).val() });
+                        winkstart.alert('info', 'Role updated!');
                     }
                 );
             });
@@ -358,12 +374,12 @@ winkstart.module('auth', 'myaccount', {
                             password: pass
                         },
                         function() {
-                            alert('Password updated!');
+                            winkstart.alert('info', 'Password updated!');
                         }
                     );
                 }
                 else {
-                    alert('Passwords do not match, please retype the passwords.');
+                    winkstart.alert('Passwords do not match, please retype the passwords.');
                 }
             });
 

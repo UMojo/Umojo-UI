@@ -157,7 +157,9 @@ winkstart.module('voip', 'user', {
                         hotdesk: {},
                         music_on_hold: {}
                     }, data_defaults || {}),
-                    field_data: {}
+                    field_data: {
+                        roles: winkstart.config.user_roles
+                    }
                 };
 
             winkstart.request(true, 'media.list', {

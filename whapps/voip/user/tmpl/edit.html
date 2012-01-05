@@ -129,6 +129,23 @@
                 <div id="options">
                     <fieldset>
                         <ul class="controls">
+                            {{if field_data.roles}}
+                                <li>
+                                    <span class="tooltip-wrapper" tooltip="Select the role of this user">
+                                        <span class="tooltip"/>
+                                        <label for="role">Role</label>
+                                    </span>
+                                    <select name="role" id="role">
+                                    {{each(i,val) field_data.roles}}
+                                        {{if data.role == i}}
+                                            <option id="${i}" value="${i}" selected="selected">${val.label}</option>
+                                        {{else}}
+                                            <option id="${i}" value="${i}">${val.label}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
+                                </li>
+                            {{/if}}
                             <li>
                                 <span class="tooltip-wrapper" tooltip="User has been verified?">
                                     <span class="tooltip"/>
