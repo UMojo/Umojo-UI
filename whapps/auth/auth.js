@@ -286,6 +286,8 @@ winkstart.module('auth', 'auth',
                         winkstart.log('WhApps: Initializing ' + k);
                     })
                 });
+
+                winkstart.publish('layout.load_role', { 'role': json.data.role });
             });
 
         },
