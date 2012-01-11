@@ -222,8 +222,9 @@
     text-align: right;
     width: 140px;
     float: left;
-    /* margin-top: 8px; */
     clear: both;
+    height: 30px;
+    line-height: 30px;
 }
 
 .myform input {
@@ -297,8 +298,9 @@
     margin-top: 20px;
 }
 
-.popup .note_box {
-    background-color: #E7E7E7;
+.myaccount_popup .note_box {
+    background-color: #777777;
+    color: #FFFFFF;
     padding: 15px 10px;
     font-size: 12px;
     line-height:15px;
