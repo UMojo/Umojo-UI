@@ -71,7 +71,8 @@ winkstart.module('voip', 'vmbox', {
             module: THIS.__module,
             label: 'Voicemail Boxes',
             icon: 'vmbox',
-            weight: '30'
+            weight: '30',
+            category: 'advanced'
         });
     },
 
@@ -387,7 +388,7 @@ winkstart.module('voip', 'vmbox', {
                         THIS.save_vmbox(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -473,7 +474,7 @@ winkstart.module('voip', 'vmbox', {
             THIS.render_list(vmbox_html);
         },
 
-        popup_edit_vmbox: function(data, callback) {
+        popup_edit_vmbox: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -498,7 +499,7 @@ winkstart.module('voip', 'vmbox', {
                         title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
@@ -560,7 +561,7 @@ winkstart.module('voip', 'vmbox', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#vmbox_selector', popup_html).val());
 
                                     node.caption = $('#vmbox_selector option:selected', popup_html).text();
@@ -570,6 +571,7 @@ winkstart.module('voip', 'vmbox', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Voicemail',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

@@ -199,7 +199,7 @@ winkstart.module('voip', 'callflow', {
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
-                this.children = {};
+                this.children = [];
                 this.data = {
                     data: $.extend(true, {}, THIS.actions[this.actionName].data)
                 };
@@ -220,7 +220,7 @@ winkstart.module('voip', 'callflow', {
 
                         switch (rule.type) {
                             case 'quantity':
-                                if(THIS._count(this.children) >= rule.maxSize) {
+                                if(this.children.length >= rule.maxSize) {
                                     list = [];
                                 }
                                 break;
@@ -248,7 +248,8 @@ winkstart.module('voip', 'callflow', {
                 this.removeChild = function(branch) {
                     $.each(this.children, function(i, child) {
                         if(child.id == branch.id) {
-                            delete that.children[i];
+                            that.children.splice(i,1);
+                            return false;
                         }
                     });
                 }
@@ -268,7 +269,7 @@ winkstart.module('voip', 'callflow', {
 
                     branch.parent = this;
 
-                    this.children[THIS._count(this.children)] = branch;
+                    this.children.push(branch);
 
                     return true;
                 }
@@ -419,15 +420,26 @@ winkstart.module('voip', 'callflow', {
 
                         $('button.add_number', popup).click(function(event) {
                             event.preventDefault();
-                            var number = $('#add_number_text', popup).val();
-                            if(number == '' && !confirm('Are you sure that you want to add an empty number?')) {
-                                return;
+                            var number = $('#add_number_text', popup).val(),
+                                add_number = function() {
+                                    THIS.flow.numbers.push(number);
+                                    popup.dialog('close');
+
+                                    THIS.renderFlow();
+                                };
+
+                            if(number == '') {
+                                winkstart.confirm('Are you sure that you want to add an empty number?', function() {
+                                        add_number();
+                                    },
+                                    function() {
+                                        return;
+                                    }
+                                );
                             }
-                            THIS.flow.numbers.push(number);
-
-                            popup.dialog('close');
-
-                            THIS.renderFlow();
+                            else {
+                                add_number();
+                            }
                         });
 
                         $('#create_no_match', popup).click(function(event) {
@@ -736,7 +748,7 @@ winkstart.module('voip', 'callflow', {
                         callflow_id: THIS.flow.id,
                         data: {
                             numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
                         }
                     },
                     function(json) {
@@ -751,7 +763,7 @@ winkstart.module('voip', 'callflow', {
                         api_url: winkstart.apps['voip'].api_url,
                         data: {
                             numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
                         }
                     },
                     function(json) {
@@ -1163,7 +1175,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {
@@ -1188,7 +1200,7 @@ winkstart.module('voip', 'callflow', {
                         //Migration here:
                         node.setMetadata('action', 'bridge');
 
-                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {

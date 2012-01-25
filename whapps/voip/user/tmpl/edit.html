@@ -10,6 +10,7 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Caller-ID</a></li>
+                <li><a href="#">Equipment</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -56,11 +57,21 @@
                                     {{/if}}
                                 </select>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
+                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                </span>
+                                {{if data.vm_to_email_enabled}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
-
                     <div class="clear"></div>
                 </div>
+
                 <div id="caller_id">
                     <fieldset>
                         <legend>In-House Calls</legend>
@@ -102,7 +113,29 @@
 
                     <div class="clear"></div>
                 </div>
-
+                <div id="equipment">
+                    <div class="help_box">
+                        The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.
+                    </div>
+                    <div id="tab_devices">
+                        <div class="row title">
+                            <div class="column first">Device Name&nbsp;&nbsp;<span class="icon medium device"/></div>
+                            <div class="column second">Status</div>
+                            <div class="column third">Actions&nbsp;&nbsp;<span class="icon medium settings"/></div>
+                        </div>
+                        <div class="rows">
+                        </div>
+                    </div>
+                    <div class="add_device">
+                        <span class="add_device_icon"/>
+                        {{if field_data.new_user}}
+                            <a class="add_device_link" href="javascript:void(0);" data-new_user="${field_data.new_user}">Add a new device for this user</a>
+                        {{else}}
+                            <a class="add_device_link" href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
+                        {{/if}}
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
 
             <div class="clear"></div>
@@ -138,16 +171,6 @@
                                     <input id="verified" name="verified" type="checkbox" checked="checked"/>
                                 {{else}}
                                     <input id="verified" name="verified" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
-                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
-                                </span>
-                                {{if data.vm_to_email_enabled}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
@@ -229,6 +252,16 @@
                                 <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
                                 {{/if}}
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect).">
+                                    <span class="tooltip"/><label for="call_forward_direct_calls_only">Direct Calls Only?</label>
+                                </span>
+                                {{if data.call_forward.direct_calls_only}}
+                                <input id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
 
@@ -305,13 +338,13 @@
             </div>
         <div class="buttons_wrapper">
             <ul class="buttons right users">
-                <li><a class="user-save save-btn" href="#">Save</a></li>
+                <li><a class="user-save save-btn fancy_button green" href="#">Save</a></li>
                 {{if data.id}}
-                    <li><a class="user-delete delete-btn" href="#">Delete</a></li>
+                    <li><a class="user-delete delete-btn fancy_button red" href="#">Delete</a></li>
                 {{/if}}
             </ul>
+            <div class="clear"/>
         </div>
-
         </form>
     </div>
 </div>

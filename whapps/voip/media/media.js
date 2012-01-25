@@ -59,7 +59,8 @@ winkstart.module('voip', 'media', {
             module: THIS.__module,
             label: 'Media',
             icon: 'media',
-            weight: '45'
+            weight: '45',
+            category: 'advanced'
         });
     },
 
@@ -290,7 +291,7 @@ winkstart.module('voip', 'media', {
                         );
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -399,7 +400,7 @@ winkstart.module('voip', 'media', {
             THIS.render_list(media_html);
         },
 
-        popup_edit_media: function(data, callback) {
+        popup_edit_media: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -424,7 +425,7 @@ winkstart.module('voip', 'media', {
                         title: (data.id) ? 'Edit media' : 'Create media'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
@@ -486,7 +487,7 @@ winkstart.module('voip', 'media', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#media_selector', popup_html).val());
 
                                     node.caption = $('#media_selector option:selected', popup_html).text();
@@ -495,7 +496,8 @@ winkstart.module('voip', 'media', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                     title: 'Media',
+                                    title: 'Media',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

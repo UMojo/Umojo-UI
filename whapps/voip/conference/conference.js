@@ -65,7 +65,8 @@ winkstart.module('voip', 'conference', {
             module: this.__module,
             label: 'Conferences',
             icon: 'conference',
-            weight: '05'
+            weight: '05',
+            category: 'advanced'
         });
     },
     {
@@ -332,7 +333,7 @@ winkstart.module('voip', 'conference', {
                         THIS.save_conference(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -474,7 +475,7 @@ winkstart.module('voip', 'conference', {
             THIS.render_list(conference_html);
         },
 
-        popup_edit_conference: function(data, callback) {
+        popup_edit_conference: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -499,7 +500,7 @@ winkstart.module('voip', 'conference', {
                         title: (data.id) ? 'Edit conference' : 'Create conference'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
@@ -561,7 +562,7 @@ winkstart.module('voip', 'conference', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#conference_selector', popup_html).val());
 
                                     node.caption = $('#conference_selector option:selected', popup_html).text();
@@ -570,7 +571,8 @@ winkstart.module('voip', 'conference', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                     title: 'Conference',
+                                    title: 'Conference',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

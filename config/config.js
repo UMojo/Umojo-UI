@@ -4,6 +4,16 @@
         //was winkstart.debug
         debug: false,
 
+        base_urls: {
+            'u.2600hz.com': {
+                /* If this was set to true, Winkstart would look for u_2600hz_com.png in config/images/logos */
+                custom_logo: false
+            },
+            'apps.2600hz.com': {
+                custom_logo: false
+            }
+        },
+
         //was winkstart.realm_suffix
         realm_suffix: '.sip.2600hz.com',
 
@@ -38,11 +48,14 @@
             'account_id': null,
             'auth_token': null,
             'user_id': null
+        },
+        'myaccount': {
+            'api_url': 'http://apps.2600hz.com:8000/v1'
         }
     };
 
     amplify.cache = false;
-    
+
     document.title = "2600hz WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

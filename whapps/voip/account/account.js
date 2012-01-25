@@ -16,9 +16,9 @@ winkstart.module('voip', 'account', {
         validation: [
                 { name: '#name',                       regex: /^.+$/ },
                 { name: '#realm',                      regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-                { name: '#caller_id_name_external',    regex: /^.*$/ },
+                { name: '#caller_id_name_external',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',    regex: /^.*$/ },
+                { name: '#caller_id_name_internal',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#vm_to_email_support_number', regex: /^[\+]?[0-9]*$/ },
                 { name: '#vm_to_email_support_email',  regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
@@ -301,7 +301,7 @@ winkstart.module('voip', 'account', {
                         THIS.save_account(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -309,13 +309,15 @@ winkstart.module('voip', 'account', {
             $('.account-delete', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
+                    THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             $('.account-switch', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                if(confirm('Do you really want to use ' + data.data.name + '\'s account?')) {
+                winkstart.confirm('Do you really want to use ' + data.data.name + '\'s account?', function() {
                     if(!('masquerade' in winkstart.apps['voip'])) {
                         winkstart.apps['voip'].masquerade = [];
                     }
@@ -326,10 +328,10 @@ winkstart.module('voip', 'account', {
 
                     THIS.masquerade_account(data.data.name);
 
-                    alert('You are now using ' + data.data.name + '\'s account');
+                    winkstart.alert('info', 'You are now using ' + data.data.name + '\'s account');
 
                     winkstart.publish('account.activate');
-                }
+                });
             });
 
             if(!$('#music_on_hold_media_id', account_html).val()) {

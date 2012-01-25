@@ -61,7 +61,8 @@ winkstart.module('voip', 'timeofday', {
             module: THIS.__module,
             label: 'Time Of Day',
             icon: 'timeofday',
-            weight: '25'
+            weight: '25',
+            category: 'advanced'
         });
     },
 
@@ -392,7 +393,7 @@ winkstart.module('voip', 'timeofday', {
                         THIS.save_timeofday(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -569,7 +570,7 @@ winkstart.module('voip', 'timeofday', {
             THIS.render_list(timeofday_html);
         },
 
-        popup_edit_timeofday: function(data, callback) {
+        popup_edit_timeofday: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -594,7 +595,7 @@ winkstart.module('voip', 'timeofday', {
                         title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
@@ -659,7 +660,7 @@ winkstart.module('voip', 'timeofday', {
                                     $('#timeofday_selector option:selected', popup_html).val() == '_' ? $('#edit_link', popup_html).hide() : $('#edit_link', popup_html).show();
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     child_node.key = $('#timeofday_selector', popup_html).val();
 
                                     child_node.key_caption = $('#timeofday_selector option:selected', popup_html).text();
@@ -669,6 +670,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Time of Day',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -691,7 +693,7 @@ winkstart.module('voip', 'timeofday', {
 
                         winkstart.timezone.populate_dropdown($('#timezone_selector', popup_html), node.getMetadata('timezone'));
 
-                        $('.submit_btn', popup_html).click(function() {
+                        $('#add', popup_html).click(function() {
                             node.setMetadata('timezone', $('#timezone_selector', popup_html).val());
 
                             node.caption = $('#timezone_selector option:selected', popup_html).text();
@@ -701,6 +703,7 @@ winkstart.module('voip', 'timeofday', {
 
                         popup = winkstart.dialog(popup_html, {
                             title: 'Select a Timezone',
+                            minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                     callback();
@@ -763,7 +766,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -777,6 +780,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Disable Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -859,7 +863,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -873,6 +877,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Enable Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -954,7 +959,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -968,6 +973,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Reset Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

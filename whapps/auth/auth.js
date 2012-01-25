@@ -1,5 +1,9 @@
 winkstart.module('auth', 'auth',
     {
+        css: [
+            'css/auth.css'
+        ],
+
         templates: {
             thankyou: 'tmpl/thankyou.html',
             recover_password: 'tmpl/recover_password.html',
@@ -15,11 +19,17 @@ winkstart.module('auth', 'auth',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
-            'auth.save_registration' : 'save_registration'
+            'auth.save_registration' : 'save_registration',
+            'nav.my_logout_click': 'my_logout_click'
         },
 
         validation: [
-            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ }
+            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
+            { name: '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
+        ],
+
+        validationRecover: [
+            { name: '#username_recover', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
         ],
 
         resources: {
@@ -62,9 +72,11 @@ winkstart.module('auth', 'auth',
 
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
-               alert('You are now registered! Please log in.');
 
-               winkstart.publish('auth.login', {username: data.data.user.username});
+               winkstart.alert('info','You are now registered! Please log in.', function() {
+                   winkstart.publish('auth.login', {username: data.data.user.username});
+               });
+
                if(data.auth_token != '' && data.auth_token != 'null'){
                     winkstart.apps['auth'].account_id = data.data.account.id;
                     winkstart.apps['auth'].auth_token = data.auth_token;
@@ -73,6 +85,9 @@ winkstart.module('auth', 'auth',
                     winkstart.publish('auth.load_account');
                }
             });
+        }
+        else if(URL_DATA['recover_password']) {
+            winkstart.alert('info','You are in the Recover Password tool.');
         }
 
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
@@ -90,11 +105,11 @@ winkstart.module('auth', 'auth',
             winkstart.publish('auth.load_account');
         }
 
-        // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+        /*
         winkstart.module.loadModule('auth', 'myaccount', function() {
             this.init();
             winkstart.log('Core: Loaded My Account manager');
-        });
+        });*/
     },
 
     {
@@ -148,64 +163,106 @@ winkstart.module('auth', 'auth',
                                 }
                             };
                             winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                                alert('Registered successfully. Please check your e-mail to activate your account!');
+                                winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
                                 dialogRegister.dialog('close');
                             });
                         }
                         else {
-                            alert('Please confirm your password');
+                            winkstart.alert('Please confirm your password');
                         }
                     },
                     function() {
-                        alert('Your username is invalid (chars, digits, dashes and underscores only)');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
         },
 
-        login: function(args) {
-            var THIS = this;
-            var username = args == undefined ? '' : args.username;
+        my_logout_click: function() {
+            winkstart.publish('auth.activate');
+        },
 
-            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
+        get_realm_from_url: function() {
+            var realm = '';
+
+            if('realm' in URL_DATA) {
+                realm = URL_DATA['realm'];
+            }
+
+            return realm;
+        },
+
+        get_account_name_from_url: function() {
+            var account_name = '',
+                host,
+                host_parts;
+
+            if('account_name' in URL_DATA) {
+                account_name = URL_DATA['account_name'];
+            }
+            else {
+                host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1];
+                host_parts = host.split('.');
+
+                if(typeof winkstart.config.base_urls == 'object' && host_parts.slice(1).join('.') in winkstart.config.base_urls) {
+                    account_name = host_parts[0];
+                }
+            }
+
+            return account_name;
+        },
+
+        login: function(args) {
+            var THIS = this,
+                username = (typeof args == 'object' && 'username' in args) ? args.username : '',
+                account_name = THIS.get_account_name_from_url(),
+                realm = THIS.get_realm_from_url(),
+                login_html = THIS.templates.login.tmpl({
+                    username: username,
+                    request_account_name: (realm || account_name) ? false : true,
+                    account_name: account_name
+                });
+
+            var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
                 resizable : false,
-                modal: true
+                modal: true,
+                width: '315px'
             });
 
             if(username != '') {
                 $('#password', dialogDiv).focus();
             }
 
-            $('button.login', dialogDiv).click(function(event) {
+            $('.login', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
-                hashed_creds = $.md5(hashed_creds);
+                var login_username = $('#login', dialogDiv).val(),
+                    login_password = $('#password', dialogDiv).val(),
+                    login_account_name = $('#account_name', dialogDiv).val(),
+                    hashed_creds = $.md5(login_username + ':' + login_password),
+                    login_data = {};
 
-                //hash MD5 hashed_creds
-                var realm;
-                if (THIS.request_realm) {
-                    realm = $('#realm', dialogDiv).val();
-                } else {
-                    realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
+                if(realm) {
+                    login_data.realm = realm;
+                }
+                else if(account_name) {
+                    login_data.account_name = account_name;
+                }
+                else if(login_account_name) {
+                    login_data.account_name = login_account_name;
+                }
+                else {
+                    login_data.realm = login_username + winkstart.config.realm_suffix;
                 }
 
-                // If realm was set in the URL, override all
-                if('realm' in URL_DATA) {
-                    realm = URL_DATA['realm'];
-                }
-
-                var rest_data = {
-                    crossbar : true,
-                    api_url : winkstart.apps['auth'].api_url,
-                    data : {
-                        'credentials': hashed_creds,
-                        'realm': realm
-                    }
-                };
-
-                winkstart.putJSON('auth.user_auth', rest_data, function (data, status) {
+                winkstart.putJSON('auth.user_auth', {
+                        api_url: winkstart.apps['auth'].api_url,
+                        data: $.extend(true, {
+                            credentials: hashed_creds
+                        }, login_data)
+                    },
+                    function (data, status) {
                         winkstart.apps['auth'].account_id = data.data.account_id;
                         winkstart.apps['auth'].auth_token = data.auth_token;
                         winkstart.apps['auth'].user_id = data.data.owner_id;
@@ -222,10 +279,10 @@ winkstart.module('auth', 'auth',
                     },
                     function(data, status) {
                         if(status == '401' || status == '403') {
-                            alert('Invalid credentials, please check that your username and password are correct.');
+                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else {
-                            alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
                         }
                     }
                 );
@@ -258,7 +315,7 @@ winkstart.module('auth', 'auth',
             }
 
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                $('.universal_nav #my_logout').html("Logout");
+                $('.universal_nav #my_logout').html('Logout');
                 $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
                 $('.universal_nav #my_account').html(json.data.first_name + ' ' + json.data.last_name);
 
@@ -288,8 +345,7 @@ winkstart.module('auth', 'auth',
         shared_auth: function(args) {
             var THIS = this;
 
-            rest_data = {
-                crossbar : true,
+            var rest_data = {
                 api_url : winkstart.apps[args.app_name].api_url,
                 data: {
                     realm : winkstart.apps['auth'].realm,                     // Treat auth as global
@@ -298,14 +354,14 @@ winkstart.module('auth', 'auth',
                 }
             };
 
-            get_user_fn = function(auth_token, app_name, callback) {
+            var get_user_fn = function(auth_token, app_name, callback) {
                 var options = {
-                    crossbar: true,
                     account_id: winkstart.apps['auth'].account_id,
                     api_url : winkstart.apps['auth'].api_url,
                     user_id: winkstart.apps['auth'].user_id
                 };
 
+                winkstart.apps[app_name] = $.extend(true, {}, options, winkstart.apps[app_name]);
                 winkstart.apps[app_name]['auth_token'] = auth_token;
 
                 winkstart.getJSON('auth.get_user', options, function(json, xhr) {
@@ -317,7 +373,7 @@ winkstart.module('auth', 'auth',
                         callback();
                     }
                 });
-            }
+            };
 
             if(winkstart.apps['auth'].api_url != winkstart.apps[args.app_name].api_url) {
                 winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {
@@ -332,8 +388,55 @@ winkstart.module('auth', 'auth',
 
         recover_password: function(args) {
             var THIS = this;
-            var dialogDiv = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
+
+            var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
                 title: 'Recover Password'
+            });
+
+            winkstart.validate.set(THIS.config.validationRecover, dialogRecover);
+
+            $('.recover_password', dialogRecover).click(function(event) {
+                event.preventDefault(); // Don't run the usual "click" handler
+
+                winkstart.validate.is_valid(THIS.config.validationRecover, dialogRecover, function() {
+                    winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
+                    dialogRecover.dialog('close');
+                });
+                /*winkstart.validate.is_valid(THIS.config.validation, dialogDiv, function() {
+                        var realm;
+                        if(THIS.request_realm) {
+                            realm = $('#realm', dialogRegister).val();
+                        } else {
+                            realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
+                        }
+
+                        if('realm' in URL_DATA) {
+                            realm = URL_DATA['realm'];
+                        }
+
+                        var rest_data = {
+                            crossbar : true,
+                            api_url : winkstart.apps['auth'].api_url,
+                            data : {
+                                'account': {
+                                    'realm': realm,
+                                    'name':$('#name', dialogRegister).val(),
+                                    'app_url': URL
+                                },
+                                'user': {
+                                    'username':$('#username', dialogRegister).val(),
+                                }
+                            }
+                        };
+                        winkstart.putJSON('auth.recover_password', rest_data, function (json, xhr) {
+                            winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
+                            dialogDiv.dialog('close');
+                        });
+                    },
+                    function() {
+                        winkstart.alert('There were errors on the form, please correct!');
+                    }
+                ); */
             });
         },
 
@@ -349,7 +452,7 @@ winkstart.module('auth', 'auth',
                 _t.session.authenticated = true;
                 _t.session.token         = data.auth_token;
                 _t.session.expires       = data.expires;
-                alert('User authenticated');
+                winkstart.alert('User authenticated');
             });
         },
 
@@ -374,8 +477,9 @@ winkstart.module('auth', 'auth',
             else */
             if(winkstart.apps['auth'].auth_token == null) {
                 winkstart.publish('auth.login');
-            } else {
-                if(confirm('Are you sure that you want to log out?')) {
+            }
+            else {
+                winkstart.confirm('Are you sure that you want to log out?', function() {
                     // Remove any individual keys
                     $.each(winkstart.apps, function(k, v) {
                         // TODO: ADD APP UNLOADING CODE HERE. Remove CSS and scripts. This should inherently delete apps.
@@ -396,7 +500,7 @@ winkstart.module('auth', 'auth',
                     window.location.reload();
 
                     //winkstart.publish('auth.activate');
-                }
+                });
             }
         }
     }
