@@ -31,7 +31,7 @@ winkstart.module('voip', 'device', {
             ],
             cellphone: [
                 { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
-                { name: '#call_forward_number', regex: /^[\+]?[0-9]*$/ }
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ]
         },
 
@@ -626,6 +626,11 @@ winkstart.module('voip', 'device', {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
+            if(form_data.device_type == 'cellphone') {
+                form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
+                form_data.enabled = form_data.call_forward.enabled;
+            }
+
             return form_data;
         },
 
@@ -679,6 +684,13 @@ winkstart.module('voip', 'device', {
                             });
                         }
                     );
+
+                    /* Cell Phones are always registered */
+                    $.each(data.data, function(k, v) {
+                        if($.inArray(v.device_type, ['cellphone']) > -1) {
+                            $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                        }
+                    });
                 }
             );
         },
