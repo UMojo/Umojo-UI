@@ -15,5 +15,20 @@
             <a id="btnPwd" class="fancy_button block blue" href="javascript:void(0);">Submit</a>
         </div>
     </div>
+    {{if field_data}}
+        {{if field_data.accounts}}
+        <div class="stylized myform_myaccount">
+            <label for="masquerade_account_select">Use a different account: </label>
+            <select name="masquerade_account_select" id="masquerade_account_select" style="margin-left:5px;">
+                {{each field_data.accounts}}
+                        <option id="${id}" value="${id}">${name}</option>
+                {{/each}}
+            </select>
+            <div class="popup_buttons_wrapper">
+                <a id="btnMasquerade" class="fancy_button block blue" href="javascript:void(0);">Masquerade</a>
+            </div>
+        </div>
+        {{/if}}
+    {{/if}}
     <hr/>
 </div>

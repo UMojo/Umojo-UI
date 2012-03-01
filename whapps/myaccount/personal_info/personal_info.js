@@ -22,6 +22,11 @@ winkstart.module('myaccount', 'personal_info', {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'POST'
+            },
+            'personal_info.list_account': {
+                url: '{api_url}/accounts/{account_id}/children',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -63,7 +68,17 @@ winkstart.module('myaccount', 'personal_info', {
                     user_id: winkstart.apps['myaccount'].user_id
                 },
                 function(data, status) {
-                    THIS.render_info(data, target);
+                    winkstart.request('personal_info.list_account', {
+                            account_id: winkstart.apps['myaccount'].account_id,
+                            api_url: winkstart.apps['myaccount'].api_url
+                        },
+                        function(_data, status) {
+                            data.field_data = data.field_data || {};
+                            data.field_data.accounts = _data.data;
+
+                            THIS.render_info(data, target);
+                        }
+                    );
                 }
             );
         },
@@ -99,9 +114,44 @@ winkstart.module('myaccount', 'personal_info', {
                 }
             });
 
+            $('#btnMasquerade', info_html).click(function() {
+                var account_id = $('#masquerade_account_select', info_html).val(),
+                    account_name = $('#masquerade_account_select option:selected').text();
+
+                $.each(winkstart.apps, function(k, v) {
+                    if(k != 'auth') {
+                        this.masquerade_account_id = this.masquerade_account_id || this.account_id;
+                        this.account_id = account_id;
+                    }
+                });
+
+                THIS.masquerade_whapps(account_name);
+
+                winkstart.alert('info', 'You are now using ' + account_name + '\'s account');
+            });
+
             (target)
                 .empty()
                 .append(info_html);
+        },
+
+        masquerade_whapps: function(account_name) {
+            var THIS = this;
+
+            $('.universal_nav .my_account_wrapper .label .other')
+                .html('<br>as<br>' + account_name + '<br><a href="#" class="masquerade">(restore)</a>');
+
+            $('.universal_nav .my_account_wrapper .masquerade').click(function() {
+                $.each(winkstart.apps, function(k, v) {
+                    if(k != 'auth') {
+                        this.account_id = this.masquerade_account_id;
+
+                        $('.universal_nav .my_account_wrapper .label .other').empty();
+
+                        delete this.masquerade_account_id;
+                    }
+                });
+            });
         },
 
         define_submodules: function(list_submodules) {
