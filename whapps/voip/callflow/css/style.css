@@ -311,3 +311,46 @@
     margin-top: -10px;
     overflow: hidden;
 }
+/* Add Number Popup */
+.add_number_popup {
+    text-align: center;
+    width: 300px;
+}
+
+.add_number_popup .radio_block {
+    padding-top: 15px;
+    padding-left: 30px;
+    text-align: left;
+}
+
+.add_number_popup .radio_block input[type=radio]{
+    margin-right: 5px;
+}
+
+.add_number_popup .radio_block .radio_content_block {
+    padding: 10px 0;
+    margin-left: 18px;
+}
+
+.add_number_popup .radio_block .radio_content_block .row {
+    height: 24px;
+    width: 220px;
+}
+
+.add_number_popup .radio_block .radio_content_block #extension_number {
+    width: 70px;
+}
+
+.add_number_popup .radio_block .radio_content_block #phone_numbers {
+    max-width: 120px;
+    min-width: 120px;
+    margin-left: 13px;
+    float: right;
+    text-align: center;
+}
+
+.add_number_popup .radio_block .radio_content_block #buy_number_link {
+    float: right;
+    color: #05addc;
+    text-decoration: underline;
+}

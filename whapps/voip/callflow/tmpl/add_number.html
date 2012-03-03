@@ -1,25 +1,39 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-
-                <form name="form">
-                    <ul class="controls">
-                        <li>
-                            <label id="add_number_label" for="add_number_text">Number</label>
-                            <input id="add_number_text" placeholder="+12033561234" type="text" name="number" id="number"/>
-                        </li>
-                    </ul>
-                    <div class="clear"/>
-                    <p>
-                        <a id="create_no_match">or click this link if you want to create a catch all route</a>
-                    </p>
-                    <div class="center">
-                        <button class="fancy_button blue add_number" id="add_number_button">Add</button>
+    <div class="add_number_popup">
+        <h1>Add a Number</h1>
+        <h3>What kind of Phone Number do you want to add?</h3>
+        <form name="form">
+            <div class="radio_block">
+                <input type="radio" class="radio_type_number" name="type_number" value="extension" checked="checked"/>Internal Extension Number
+                <div id="block_extension" class="radio_content_block">
+                    <div class="row">
+                        <input type="text" name="extension_number" id="extension_number" placeholder="Extension #"/>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+
+            <div class="radio_block">
+                <input type="radio" class="radio_type_number" name="type_number" value="full_number"/>Public/Full Phone Number
+                <div id="block_phone_numbers" class="radio_content_block">
+                    <div class="row">
+                        Your Numbers:
+                        <select id="phone_numbers">
+                            <option id="_" name="" data-phone_number="_">-- Select --</option>
+                            {{each phone_numbers}}
+                                <option id="" name="" data-phone_number="${value}">${display_value}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <a href="javascript:void(0);" id="buy_number_link">buy another number</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn_wrapper">
+                <button class="fancy_button blue add_number" id="add_number_button">Add</button>
+            </div>
+        </form>
     </div>
 </div>
 

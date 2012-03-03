@@ -417,11 +417,20 @@ winkstart.module('voip', 'callflow', {
                                 title: 'Add number'
                         });
 
+                        $('#block_phone_numbers', popup).hide();
+
+                        $('.radio_type_number', popup).click(function () {
+                            $('.radio_content_block', popup).hide();
+                            $('.radio_content_block', $(this).parent()).show();
+                        });
+
                         $('#add_number_text', popup).blur();
 
                         $('button.add_number', popup).click(function(event) {
                             event.preventDefault();
-                            var number = $('#add_number_text', popup).val(),
+
+                            var type_number = $('input[name=type_number]:checked', popup).val(),
+                                number,
                                 add_number = function() {
                                     THIS.flow.numbers.push(number);
                                     popup.dialog('close');
@@ -429,14 +438,20 @@ winkstart.module('voip', 'callflow', {
                                     THIS.renderFlow();
                                 };
 
-                            if(number == '') {
-                                winkstart.confirm('Are you sure that you want to add an empty number?', function() {
-                                        add_number();
-                                    },
-                                    function() {
-                                        return;
-                                    }
-                                );
+                            if(type_number === 'extension') {
+                                number = $('#extension_number', popup).val();
+                            }
+                            else if(type_number === 'full_number') {
+                                number = $('#phone_numbers option:selected').dataset('phone_number');
+                            }
+
+                            console.log(number);
+
+                            if(number === '_') {
+                                winkstart.alert('Please select a phone number in the list.');
+                            }
+                            else if(number === '') {
+                                winkstart.confirm('Are you sure that you want to add an empty number?', function() { add_number(); });
                             }
                             else {
                                 add_number();
