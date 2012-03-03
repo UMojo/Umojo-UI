@@ -1,0 +1,172 @@
+#buy_number_popup {
+    width: 620px;
+    padding: 50px;
+    background: #333333;
+    background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#666666)) !important;
+    background: -moz-linear-gradient(top,  #333333,  #666666) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#666666') !important;
+}
+
+#buy_number_popup .help_onboarding {
+    font-size: 10px;
+    color: #cccccc;
+    margin-top: 20px;
+}
+
+#buy_number_popup .onboarding_div_left {
+    float: left;
+    width: 160px;
+}
+
+#buy_number_popup .onboarding_div_right {
+    float: left;
+    width: 420px;
+    padding-left: 40px;
+}
+
+#buy_number_popup .onboarding_block {
+    padding-top: 20px;
+}
+
+#buy_number_popup .help_onboarding.link {
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+}
+
+#buy_number_popup .help_onboarding.link:hover {
+    color: #05addc;
+}
+
+#buy_number_popup .wrapping_div {
+    border: 1px solid #333333;
+    background: #555555;
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+}
+
+#buy_number_popup .hr {
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #999999;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#buy_number_popup .onboarding_field {
+    float: left;
+    width: 210px;
+    padding-bottom: 20px;
+}
+
+#buy_number_popup .onboarding_field > label{
+    text-align: left;
+    width: 170px;
+    color: #eeeeee;
+}
+
+#buy_number_popup .onboarding_field select {
+    border: 0 none;
+    border-radius: 5px 5px 5px 5px;
+    float: left;
+    margin: 0 2px 0;
+    max-width: 175px;
+    padding: 6px;
+    width: 175px;
+}
+
+#buy_number_popup .onboarding_field input {
+    border: 0 none;
+    border-radius: 5px 5px 5px 5px;
+    height: 20px;
+    max-width: 170px;
+    width: 170px;
+    padding: 4px;
+}
+/* Individual Steps */
+
+/* Step 1 */
+#buy_number_popup .change_number {
+    background: url('../images/btn_search.png') no-repeat;
+    width: 154px;
+    height: 45px;
+}
+
+#buy_number_popup .change_number:hover {
+    background: url('../images/btn_search_hover.png') no-repeat;
+}
+
+#buy_number_popup #change_number_link {
+    font-size: 14px;
+}
+
+#buy_number_popup .pick_number_left {
+    margin: auto;
+    width: 380px;
+}
+
+#buy_number_popup .pick_number_right {
+    float: left;
+    width: 220px;
+}
+
+#buy_number_popup .area_code_wrapper {
+    float: left;
+    color: #05ADDC;
+    font-size: 35px;
+    font-weight: bold;
+    line-height: 20px;
+    text-shadow: 1px 1px 1px #333333;
+}
+
+#buy_number_popup .area_code_wrapper #area_code {
+    border-radius: 10px 10px 10px 10px;
+    color: #05ADDC;
+    font-size: 28px;
+    font-weight: bold;
+    height: 30px;
+    margin: 0 5px;
+    padding: 5px 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 90px;
+}
+
+#buy_number_popup .area_code_wrapper input::-webkit-input-placeholder {
+    color:    #CCCCCC !important;
+    font-size: 12px !important;
+}
+
+#buy_number_popup .area_code_wrapper input:-moz-placeholder {
+    color:    #CCCCCC !important;
+    font-size: 12px !important;
+}
+
+#buy_number_popup .picked_number {
+    color: #C4DB4C;
+    font-size: 22px;
+    font-weight: bold;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #333333;
+}
+
+#buy_number_popup .help_area_code {
+    float: left;
+}
+
+#buy_number_popup .e911_block {
+    padding-top: 15px;
+}
+
+#buy_number_popup .help_e911 {
+    background-image: url('../images/help_e911.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 133px;
+}
