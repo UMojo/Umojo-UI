@@ -498,8 +498,6 @@ winkstart.module('voip', 'callflow', {
                                         number = $('#phone_numbers option:selected').val();
                                     }
 
-                                    console.log(number);
-
                                     if(number === '_') {
                                         winkstart.alert('Please select a phone number in the list.');
                                     }
@@ -1009,7 +1007,6 @@ winkstart.module('voip', 'callflow', {
                         var number = $('#picked_number', buy_number_html).html().replace(/\s|\-|\(|\)/g,'');
 
                         delete form_data.field_data;
-                        console.log(form_data);
 
                         winkstart.request(true, 'callflow.buy_number', {
                                 api_url: winkstart.apps['voip'].api_url,
