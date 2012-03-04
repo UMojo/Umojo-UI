@@ -24,12 +24,12 @@
                         <div class="hr" style="margin-bottom: 25px;"/>
                         <div class="onboarding_div_left">
                             <div class="help_e911 wrapping_div"/>
-                            <div class="help_onboarding">* Your accurate address is required to make emergency calls (E911). </div>
+                            <div class="help_onboarding">* An accurate address is required to make emergency calls (E911). </div>
                         </div>
                         <div class="onboarding_div_right">
                             <div class="onboarding_field" style="padding-bottom: 8px;">
                                 <label>*Country</label>
-                                <select name="e911.country" id="e911_country">
+                                <select name="dash_e911.country" id="e911_country">
                                     <option value="Other">Other country...</option>
                                     <option value="AD"> Andorra</option>
                                     <option value="AR"> Argentina</option>
@@ -94,29 +94,33 @@
                             </div>
                             <div class="onboarding_field">
                                 <label>*Postal Code</label>
-                                <input type="text" name="e911.postal_code" id="e911_postal_code"/>
+                                <input type="text" name="dash_e911.postal_code" id="e911_postal_code"/>
                             </div>
                             <div class="onboarding_field">
                                 <label>*Address</label>
-                                <input type="text" name="e911.street_address" id="e911_street_address"/>
+                                <input type="text" name="dash_e911.street_address" id="e911_street_address"/>
                             </div>
                             <div class="onboarding_field">
                                 <label>*Apartment/Unit</label>
-                                <input type="text" name="e911.extended_address" id="e911_extended_address"/>
+                                <input type="text" name="dash_e911.extended_address" id="e911_extended_address"/>
                             </div>
                             <div class="onboarding_field">
                                 <label>*State</label>
-                                <input type="text" name="e911.region" id="e911_region" />
+                                <input type="text" name="dash_e911.region" id="e911_region" />
                             </div>
                             <div class="onboarding_field">
                                 <label>*City</label>
-                                <input type="text" name="e911.locality" id="e911_locality" class="field_last"/>
+                                <input type="text" name="dash_e911.locality" id="e911_locality" class="field_last"/>
                             </div>
-                            <div class="clear"/>
                         </div>
                     </div>
                 </div>
             </fieldset>
+            <div class="clear"/>
+            <div class="submit_block">
+                <div class="hr"/>
+                <button id="buy_number_btn" class="fancy_button green">Buy this number</button>
+            </div>
             <div class="clear"/>
         </form>
     </div>

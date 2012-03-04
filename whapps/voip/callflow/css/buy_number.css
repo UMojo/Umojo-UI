@@ -120,6 +120,7 @@
     font-weight: bold;
     line-height: 20px;
     text-shadow: 1px 1px 1px #333333;
+    padding-right: 30px;
 }
 
 #buy_number_popup .area_code_wrapper #area_code {
@@ -169,4 +170,14 @@
     background-repeat: no-repeat;
     height: 80px;
     width: 133px;
+}
+
+#buy_number_popup .submit_block {
+    padding-top: 20px;
+    text-align: center;
+}
+
+#buy_number_popup #buy_number_btn {
+    width: 130px;
+    height: 40px;
 }

@@ -18,9 +18,9 @@
                     <div class="row">
                         Your Numbers:
                         <select id="phone_numbers">
-                            <option id="_" name="" data-phone_number="_">-- Select --</option>
-                            {{each phone_numbers}}
-                                <option id="" name="" data-phone_number="${value}">${display_value}</option>
+                            <option value="_">-- Select --</option>
+                            {{each(k, number) list_numbers}}
+                                <option id="${k}" name="${k}" value="${k}">${number}</option>
                             {{/each}}
                         </select>
                     </div>

@@ -37,6 +37,17 @@ winkstart.module('voip', 'callflow', {
             'callflow.define_callflow_nodes': 'define_callflow_nodes'
         },
 
+        validation: {
+            buy_number : [
+                { name: '#e911_street_address', regex: /^.+$/ },
+                { name: '#e911_extended_address', regex: /^.*$/ },
+                { name: '#e911_region', regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_locality', regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_country', regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_postal_code', regex: /^[0-9\-]{4,10}$/ }
+            ]
+        },
+
         resources: {
             'callflow.list': {
                 url: '{api_url}/accounts/{account_id}/callflows',
@@ -64,14 +75,19 @@ winkstart.module('voip', 'callflow', {
                 verb: 'DELETE'
             },
             'callflow.get_numbers': {
-                url: '{api_url}/accounts/{account_id}/phone_numbers/',
+                url: '{api_url}/accounts/{account_id}/phone_numbers',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            'callflow.create_number': {
+            'callflow.buy_number': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{number}',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'callflow.search_numbers': {
+                url: '{api_url}/phone_numbers?prefix={prefix}&quantity={quantity}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -422,200 +438,81 @@ winkstart.module('voip', 'callflow', {
                     }
 
                     $('.number_column.empty', node_html).click(function() {
-                        var popup_html = THIS.templates.add_number.tmpl({}),
-                            popup;
+                        var list_numbers;
 
-                        popup = winkstart.dialog(popup_html, {
-                                title: 'Add number'
-                        });
+                        winkstart.request('callflow.get_numbers', {
+                                api_url: winkstart.apps['voip'].api_url,
+                                account_id: winkstart.apps['voip'].account_id
+                            },
+                            function(_data, status) {
+                                var list_numbers = {},
+                                    regex = /\+1([0-9]{3})([0-9]{3})([0-9]{4})/,
+                                    formatted_number;
 
-                        $('#block_phone_numbers', popup).hide();
+                                $.each(_data.data.numbers, function(k, v) {
+                                    formatted_number = (''+v).replace(regex, '($1) $2-$3');
+                                    list_numbers[v] = formatted_number;
+                                });
 
-                        $('.radio_type_number', popup).click(function () {
-                            $('.radio_content_block', popup).hide();
-                            $('.radio_content_block', $(this).parent()).show();
-                        });
+                                var popup_html = THIS.templates.add_number.tmpl({ 'list_numbers': list_numbers }),
+                                    popup;
 
-                        $('#buy_number_link', popup).click(function() {
-                            var buy_number_html = THIS.templates.buy_number.tmpl({});
-                            var buy_number_popup = winkstart.dialog(buy_number_html, {
-                                title: 'Buy a number'
-                            });
+                                popup = winkstart.dialog(popup_html, {
+                                        title: 'Add number'
+                                });
 
-                            var current_step = 1,
-                                area_code = '',
-                                number = '',
-                                prev_area_code,
-                                quantity = 15,
-                                nb_result,
-                                random = 0,
-                                prev_random,
-                                list_number;
-                                //onboard_html = parent;
+                                $('#block_phone_numbers', popup).hide();
 
-                            $('.pick_number_right', buy_number_html).hide();
-                            $('#e911_block', buy_number_html).hide();
-                            $('#e911_country_block', buy_number_html).hide();
-                            $('#e911_country', buy_number_html).attr('disabled','disabled');
+                                $('.radio_type_number', popup).click(function () {
+                                    $('.radio_content_block', popup).hide();
+                                    $('.radio_content_block', $(this).parent()).show();
+                                });
 
-                            $('#change_number, #change_number_link', buy_number_html).click(function(ev) {
-                                ev.preventDefault();
-                                area_code = $('#area_code', buy_number_html).val();
-                                $('#e911_block', buy_number_html).hide();
-                                $('.pick_number_right', buy_number_html).hide();
-                                $('.pick_number_left', buy_number_html).css('float', 'none');
+                                $('#buy_number_link', popup).click(function() {
+                                    var buy_number_html = THIS.templates.buy_number.tmpl({});
+                                    var buy_number_popup = winkstart.dialog(buy_number_html, {
+                                        title: 'Buy a number'
+                                    });
 
-                                if(area_code.match(/[0-9]{3}/)) {
-                                    var display_fields = function() {
-                                        $('.pick_number_left', buy_number_html).css('float', 'left');
-                                        $('.pick_number_right', buy_number_html).show();
-                                        $('#e911_block', buy_number_html).show();
-                                        $('#e911_postal_code', buy_number_html).focus();
-                                    };
+                                    THIS.render_buy_number(buy_number_html);
+                                });
 
-                                    //If the list of number is empty or the area code changed, then re-run the request.
-                                    if(!list_number || prev_area_code != area_code) {
-                                        winkstart.request(true, 'phone_number.get', {
-                                                api_url: winkstart.apps['auth'].api_url,
-                                                prefix: area_code,
-                                                quantity: quantity
-                                            },
-                                            function(_data, status) {
-                                                if(_data.data.length > 0) {
-                                                    nb_result = _data.data.length;
-                                                    list_number = _data.data;
-                                                    prev_random = 0;
-                                                    prev_area_code = area_code;
-                                                    number = list_number[0];
-                                                    $('.pick_number_left', buy_number_html).css('float', 'left');
-                                                    $('#picked_number', buy_number_html).attr('data-number', number);
-                                                    $('#picked_number', buy_number_html).show()
-                                                                                     .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                                                    display_fields();
-                                                }
-                                                else {
-                                                    winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
-                                                }
-                                            }
-                                        );
+                                $('#add_number_text', popup).blur();
+
+                                $('button.add_number', popup).click(function(event) {
+                                    event.preventDefault();
+
+                                    var type_number = $('input[name=type_number]:checked', popup).val(),
+                                        number,
+                                        add_number = function() {
+                                            THIS.flow.numbers.push(number);
+                                            popup.dialog('close');
+
+                                            THIS.renderFlow();
+                                        };
+
+                                    if(type_number === 'extension') {
+                                        number = $('#extension_number', popup).val();
+                                    }
+                                    else if(type_number === 'full_number') {
+                                        number = $('#phone_numbers option:selected').val();
+                                    }
+
+                                    console.log(number);
+
+                                    if(number === '_') {
+                                        winkstart.alert('Please select a phone number in the list.');
+                                    }
+                                    else if(number === '') {
+                                        winkstart.confirm('Are you sure that you want to add an empty number?', function() { add_number(); });
                                     }
                                     else {
-                                        if(nb_result > 1) {
-                                            random = Math.floor(Math.random()*nb_result);
-                                            random == prev_random ? (random != 0 ? random-- : random++) : true;
-                                            prev_random = random;
-                                            number = list_number[random];
-                                            $('#picked_number', buy_number_html).attr('data-number', number);
-                                            $('#picked_number', buy_number_html).show()
-                                                                             .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                                            display_fields();
-                                        }
-                                        else {
-                                            winkstart.alert('This number is the only number available for this Area Code at the moment');
-                                        }
+                                        add_number();
                                     }
-                                }
-                                else {
-                                    winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
-                                }
-                            });
+                                });
 
-                            $('#e911_country', buy_number_html).change(function() {
-                                if($(this).val() == 'Other') {
-                                   $('#e911_country_block', buy_number_html).show();
-                                }
-                                else {
-                                   $('#e911_country_block', buy_number_html).hide();
-                                }
-                            });
-
-                            $('#e911_postal_code', buy_number_html).blur(function() {
-                                if($('#e911_country', buy_number_html).val() != 'Other' && $(this).val() != '') {
-                                    $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#e911_country', buy_number_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
-                                        if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                                            $('#e911_locality', buy_number_html).val(response.postalcodes[0].placeName);
-                                            $('#e911_region', buy_number_html).val(response.postalcodes[0].adminName1);
-                                        }
-                                    });
-                                }
-                            });
-
-                            $('#save_account', buy_number_html).unbind().click(function() {
-                                //winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
-                                        var form_data = form2object('buy_number_form');
-
-                                            form_data.extra = { number: $('#picked_number', wrapper).html().replace(/\s|\-|\(|\)/g,'') };
-                                            var number = form_data.extra.number;
-
-                                            THIS.clean_form_data(form_data);
-
-                                            winkstart.request(true, 'phone_number.create', {
-                                                    api_url: winkstart.apps['auth'].api_url,
-                                                    account_id: winkstart.apps['auth'].account_id,
-                                                    number: number,
-                                                    data: form_data
-                                                },
-                                                function (_data, status) {
-                                                    buy_number_html.dialog('close');
-                                                    //add option to list
-                                                },
-                                                function (_data, status) {
-                                                    winkstart.alert('error', _data.message || _data.data.message || _data.data.dash_e911 || ' ');
-                                                }
-                                            );
-                                  //      }
-                                  //  },
-                                  //  function() {
-                                  //      winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
-                                  //  }
-                                //);
-                            });
-
-
-                        });
-
-                        $('#add_number_text', popup).blur();
-
-                        $('button.add_number', popup).click(function(event) {
-                            event.preventDefault();
-
-                            var type_number = $('input[name=type_number]:checked', popup).val(),
-                                number,
-                                add_number = function() {
-                                    THIS.flow.numbers.push(number);
-                                    popup.dialog('close');
-
-                                    THIS.renderFlow();
-                                };
-
-                            if(type_number === 'extension') {
-                                number = $('#extension_number', popup).val();
                             }
-                            else if(type_number === 'full_number') {
-                                number = $('#phone_numbers option:selected').dataset('phone_number');
-                            }
-
-                            console.log(number);
-
-                            if(number === '_') {
-                                winkstart.alert('Please select a phone number in the list.');
-                            }
-                            else if(number === '') {
-                                winkstart.confirm('Are you sure that you want to add an empty number?', function() { add_number(); });
-                            }
-                            else {
-                                add_number();
-                            }
-                        });
-
-                        $('#create_no_match', popup).click(function(event) {
-                            event.preventDefault();
-                            THIS.flow.numbers.push('no_match');
-
-                            popup.dialog('close');
-
-                            THIS.renderFlow();
-                        });
+                        );
                     });
 
                     $('.number_column .delete', node_html).click(function() {
@@ -998,6 +895,143 @@ winkstart.module('voip', 'callflow', {
                     }
                 }
             );
+        },
+
+        render_buy_number: function(parent) {
+            var THIS = this,
+                current_step = 1,
+                area_code = '',
+                number = '',
+                prev_area_code,
+                quantity = 15,
+                nb_result,
+                random = 0,
+                prev_random,
+                list_number;
+                buy_number_html = parent;
+
+            winkstart.validate.set(THIS.config.validation.buy_number, buy_number_html);
+
+            $('.pick_number_right', buy_number_html).hide();
+            $('#e911_block', buy_number_html).hide();
+            $('#e911_country_block', buy_number_html).hide();
+            $('.submit_block', buy_number_html).hide();
+            $('#e911_country', buy_number_html).attr('disabled','disabled');
+
+            $('#change_number, #change_number_link', buy_number_html).click(function(ev) {
+                ev.preventDefault();
+                area_code = $('#area_code', buy_number_html).val();
+                $('#e911_block', buy_number_html).hide();
+                $('.pick_number_right', buy_number_html).hide();
+                $('.pick_number_left', buy_number_html).css('float', 'none');
+
+                if(area_code.match(/[0-9]{3}/)) {
+                    var display_fields = function() {
+                        $('.pick_number_left', buy_number_html).css('float', 'left');
+                        $('.pick_number_right', buy_number_html).show();
+                        $('#e911_block', buy_number_html).show();
+                        $('.submit_block', buy_number_html).show();
+                        $('#e911_postal_code', buy_number_html).focus();
+                    };
+
+                    //If the list of number is empty or the area code changed, then re-run the request.
+                    if(!list_number || prev_area_code != area_code) {
+                        winkstart.request(true, 'callflow.search_numbers', {
+                                api_url: winkstart.apps['voip'].api_url,
+                                prefix: area_code,
+                                quantity: quantity
+                            },
+                            function(_data, status) {
+                                if(_data.data.length > 0) {
+                                    nb_result = _data.data.length;
+                                    list_number = _data.data;
+                                    prev_random = 0;
+                                    prev_area_code = area_code;
+                                    number = list_number[0];
+                                    $('.pick_number_left', buy_number_html).css('float', 'left');
+                                    $('#picked_number', buy_number_html).attr('data-number', number);
+                                    $('#picked_number', buy_number_html).show()
+                                                                     .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                                    display_fields();
+                                }
+                                else {
+                                    winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        if(nb_result > 1) {
+                            random = Math.floor(Math.random()*nb_result);
+                            random == prev_random ? (random != 0 ? random-- : random++) : true;
+                            prev_random = random;
+                            number = list_number[random];
+                            $('#picked_number', buy_number_html).attr('data-number', number);
+                            $('#picked_number', buy_number_html).show()
+                                                             .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                            display_fields();
+                        }
+                        else {
+                            winkstart.alert('This number is the only number available for this Area Code at the moment');
+                        }
+                    }
+                }
+                else {
+                    winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
+                }
+            });
+
+            $('#e911_country', buy_number_html).change(function() {
+                if($(this).val() == 'Other') {
+                   $('#e911_country_block', buy_number_html).show();
+                }
+                else {
+                   $('#e911_country_block', buy_number_html).hide();
+                }
+            });
+
+            $('#e911_postal_code', buy_number_html).blur(function() {
+                if($('#e911_country', buy_number_html).val() != 'Other' && $(this).val() != '') {
+                    $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#e911_country', buy_number_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
+                        if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
+                            $('#e911_locality', buy_number_html).val(response.postalcodes[0].placeName);
+                            $('#e911_region', buy_number_html).val(response.postalcodes[0].adminName1);
+                        }
+                    });
+                }
+            });
+
+            $('#buy_number_btn', buy_number_html).unbind().click(function(event) {
+                event.preventDefault();
+                winkstart.validate.is_valid(THIS.config.validation['buy_number'], function() {
+                    var form_data = form2object('buy_number_form');
+
+                        var number = $('#picked_number', buy_number_html).html().replace(/\s|\-|\(|\)/g,'');
+
+                        delete form_data.field_data;
+                        console.log(form_data);
+
+                        winkstart.request(true, 'callflow.buy_number', {
+                                api_url: winkstart.apps['voip'].api_url,
+                                account_id: winkstart.apps['voip'].account_id,
+                                number: number,
+                                data: form_data
+                            },
+                            function (_data, status) {
+                                buy_number_html.dialog('close');
+
+                                $('#phone_numbers', popup).append('<option id="'+ number +'"+ value="' + number + '" selected="selected">' + number.replace(regex, '($1) $2-$3') + '</option>');
+                            },
+                            function (_data, status) {
+                                winkstart.alert('data' in _data ?  _data.message || _data.data.message || _data.data.dash_e911 || 'error: '+status : 'error: '+status);
+                            }
+                        );
+                    },
+                    function() {
+                        winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
+                    }
+                );
+            });
         },
 
         define_callflow_nodes: function(callflow_nodes) {
