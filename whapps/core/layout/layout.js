@@ -5,13 +5,15 @@ winkstart.module('core', 'layout', {
             'css/tabs.css',
             'css/icons.css',
             'css/buttons.css',
+            'css/popups.css',
             'css/jquery.override.css'
         ],
 
         templates: {
             layout: 'tmpl/layout.html',
             layout_welcome: 'tmpl/layout_welcome.html',
-            left_welcome: '../../../config/tmpl/left_welcome.html'
+            left_welcome: '../../../config/tmpl/left_welcome.html',
+            not_supported_browsers: 'tmpl/not_supported_browsers.html'
         },
 
         subscribe: {
@@ -85,12 +87,17 @@ winkstart.module('core', 'layout', {
 
         render_welcome: function() {
             var THIS = this;
-            layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
-            THIS.templates.left_welcome.tmpl().appendTo($('.left_div', layout_welcome_html));
+            if(navigator.appName == 'Microsoft Internet Explorer') {
+                THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
+            }
+            else {
+                layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
+                THIS.templates.left_welcome.tmpl().appendTo($('.left_div', layout_welcome_html));
+            }
         },
 
         detect_and_set_logo: function() {
-            var host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1],
+            var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
                 host_parts = host.split('.'),
                 partial_host = host_parts.slice(1).join('.'),
                 logo_html = $('.header > .logo > .img'),

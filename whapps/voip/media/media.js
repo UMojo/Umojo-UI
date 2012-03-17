@@ -287,7 +287,7 @@ winkstart.module('voip', 'media', {
                                     }
                                 }
                             },
-                            callbacks.save_error
+                            winkstart.error_message.process_error(callbacks.save_error)
                         );
                     },
                     function() {
@@ -299,7 +299,9 @@ winkstart.module('voip', 'media', {
             $('.media-delete', media_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_media(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this media?', function() {
+                    THIS.delete_media(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             (target)

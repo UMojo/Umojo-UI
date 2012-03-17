@@ -3,7 +3,9 @@ winkstart.module('voip', 'callflow', {
             'css/style.css',
             'css/popups.css',
             'css/two_columns.css',
-            'css/callflow.css'
+            'css/callflow.css',
+            'css/action_popups.css',
+            'css/ring_groups.css'
         ],
 
         templates: {
@@ -17,7 +19,10 @@ winkstart.module('voip', 'callflow', {
             add_number: 'tmpl/add_number.html',
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
-            ring_group_dialog: 'tmpl/ring_group_dialog.html'
+            disa_callflow: 'tmpl/disa_callflow.html',
+            ring_group_dialog: 'tmpl/ring_group_dialog.html',
+            ring_group_element: 'tmpl/ring_group_element.html',
+            prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
         elements: {
@@ -468,17 +473,19 @@ winkstart.module('voip', 'callflow', {
                     });
 
                     $('.bottom_bar .delete', node_html).click(function() {
-                        winkstart.deleteJSON('callflow.delete', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                callflow_id: THIS.flow.id
-                            },
-                            function() {
-                                $('#ws_cf_flow').empty();
-                                THIS.renderList();
-                                THIS._resetFlow();
-                            }
-                        );
+                        winkstart.confirm('Are you sure you want to delete this callflow?', function() {
+                            winkstart.deleteJSON('callflow.delete', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    callflow_id: THIS.flow.id
+                                },
+                                function() {
+                                    $('#ws_cf_flow').empty();
+                                    THIS.renderList();
+                                    THIS._resetFlow();
+                                }
+                            );
+                        });
                     });
                 }
                 else {
@@ -835,7 +842,281 @@ winkstart.module('voip', 'callflow', {
         },
 
         define_callflow_nodes: function(callflow_nodes) {
-            var THIS = this;
+            var THIS = this,
+                edit_ring_group = function(node, callback) {
+                    var default_timeout = '20',
+                        default_delay = '0',
+                        node = node,
+                        callback = callback;
+
+                    winkstart.request(true, 'device.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(data, status) {
+                            var popup, popup_html, index, endpoints
+                                selected_endpoints = {},
+                                unselected_endpoints = [],
+                                unselected_devices = [],
+                                unselected_users = [];
+
+                            if(endpoints = node.getMetadata('endpoints')) {
+                                // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
+                                // we also need to clone to prevent managing of objects
+                                $.each($.extend(true, {}, endpoints), function(i, obj) {
+                                    obj.name = 'Undefined';
+                                    selected_endpoints[obj.id] = obj;
+                                });
+                            }
+
+                            $.each(data.data, function(i, obj) {
+                                obj.endpoint_type = 'device';
+                                if(obj.id in selected_endpoints) {
+                                    selected_endpoints[obj.id].endpoint_type = 'device';
+                                    selected_endpoints[obj.id].owner_id = obj.owner_id;
+                                    selected_endpoints[obj.id].name = obj.name;
+                                }
+                                else {
+                                    obj.delay = default_delay;
+                                    obj.timeout = default_timeout;
+                                    unselected_devices.push(obj);
+                                }
+                            });
+
+                            winkstart.request('user.list', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url
+                                },
+                                function(_data, status) {
+                                    $.each(_data.data, function(i, obj) {
+                                        obj.name = obj.first_name + ' ' + obj.last_name;
+                                        obj.endpoint_type = 'user';
+                                        if(obj.id in selected_endpoints) {
+                                            selected_endpoints[obj.id].endpoint_type = 'user',
+                                            selected_endpoints[obj.id].name = obj.name;
+                                        }
+                                        else {
+                                            obj.delay = default_delay;
+                                            obj.timeout = default_timeout;
+                                            unselected_users.push(obj);
+                                        }
+                                    });
+
+                                    popup_html = THIS.templates.ring_group_dialog.tmpl({
+                                        form: {
+                                            name: node.getMetadata('name') || '',
+                                            strategy: {
+                                                items: [
+                                                    {
+                                                        id: 'simultaneous',
+                                                        name: 'At the same time'
+                                                    },
+                                                    {
+                                                        id: 'single',
+                                                        name: 'In order'
+                                                    }
+                                                ],
+                                                selected: node.getMetadata('strategy') || 'simultaneous'
+                                            },
+                                            timeout: node.getMetadata('timeout') || '30'
+                                        }
+                                    });
+
+                                    $.each(unselected_devices, function() {
+                                        $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                    });
+
+                                    $.each(unselected_users, function() {
+                                        $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                    });
+
+                                    $.each(selected_endpoints, function() {
+                                        $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                    });
+
+                                    $('#name', popup_html).bind('keyup blur change', function() {
+                                        $('.column.right .title').html('Ring Group - ' + $(this).val());
+                                    });
+
+                                    $('ul.settings1 > li > a', popup_html).click(function(item) {
+                                        $('.pane_content', popup_html).hide();
+
+                                        //Reset Search field
+                                        $('.searchfield', popup_html).val('');
+                                        $('.column.left li', popup_html).show();
+
+                                        $('ul.settings1 > li', popup_html).removeClass('current');
+
+                                        var tab_id = $(this).attr('id');
+
+                                        if(tab_id  === 'users_tab_link') {
+                                            $('#users_pane', popup_html).show();
+                                        }
+                                        else if(tab_id === 'devices_tab_link') {
+                                            $('#devices_pane', popup_html).show();
+                                        }
+
+                                        $(this).parent().addClass('current');
+                                    });
+
+                                    $('.searchsubmit2', popup_html).click(function() {
+                                        $('.searchfield', popup_html).val('');
+                                        $('.column li', popup_html).show();
+                                    });
+
+                                    $('#devices_pane .searchfield', popup_html).keyup(function() {
+                                        $('#devices_pane .column.left li').each(function() {
+                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                $(this).hide();
+                                            }
+                                            else {
+                                                $(this).show();
+                                            }
+                                        });
+                                    });
+
+                                    $('#users_pane .searchfield', popup_html).keyup(function() {
+                                        $('#users_pane .column.left li').each(function() {
+                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                $(this).hide();
+                                            }
+                                            else {
+                                                $(this).show();
+                                            }
+                                        });
+                                    });
+
+                                    if(jQuery.isEmptyObject(selected_endpoints)) {
+                                        $('.column.right .connect', popup_html).addClass('no_element');
+                                    }
+                                    else {
+                                        $('.column.right .connect', popup_html).removeClass('no_element');
+                                    }
+
+                                    $('.column.left .options', popup_html).hide();
+                                    $('.column.left .actions', popup_html).hide();
+
+                                    $('.options .option.delay', popup_html).bind('keyup', function() {
+                                        $(this).parents('li').dataset('delay', $(this).val());
+                                    });
+
+                                    $('.options .option.timeout', popup_html).bind('keyup', function() {
+                                        $(this).parents('li').dataset('timeout', $(this).val());
+                                    });
+
+                                    $('#save_ring_group', popup_html).click(function() {
+                                        var name = $('#name', popup_html).val();
+
+                                        endpoints = [];
+
+                                        $('.right .connect li', popup_html).each(function() {
+                                            $(this).removeAttr('data-owner_id');
+                                            endpoints.push($(this).dataset());
+                                        });
+
+                                        node.setMetadata('endpoints', endpoints);
+                                        node.setMetadata('name', name);
+                                        node.setMetadata('strategy', $('#strategy', popup_html).val());
+                                        node.setMetadata('timeout', $('#timeout', popup_html).val());
+
+                                        node.caption = name;
+
+                                        popup.dialog('close');
+                                    });
+
+                                    popup = winkstart.dialog(popup_html, {
+                                        title: 'Ring Group',
+                                        beforeClose: function() {
+                                            if(typeof callback == 'function') {
+                                                callback();
+                                            }
+                                        }
+                                    });
+
+                                    $('.scrollable', popup).jScrollPane({
+                                        horizontalDragMinWidth: 0,
+                                        horizontalDragMaxWidth: 0
+                                    });
+
+                                    $('.connect', popup).sortable({
+                                        connectWith: $('.connect.right', popup),
+                                        zIndex: 2000,
+                                        helper: 'clone',
+                                        appendTo: $('.wrapper', popup),
+                                        scroll: false,
+                                        receive: function(ev, ui) {
+                                            var data = ui.item.dataset(),
+                                                list_li = [],
+                                                confirm_text;
+
+                                            if(data.endpoint_type === 'device') {
+                                                confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
+                                                $('.connect.right li', popup_html).each(function() {
+                                                    if($(this).dataset('id') === data.owner_id) {
+                                                        list_li.push($(this));
+                                                    }
+                                                });
+                                            }
+                                            else if(data.endpoint_type === 'user') {
+                                                confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
+                                                $('.connect.right li', popup_html).each(function() {
+                                                    if($(this).dataset('owner_id') === data.id) {
+                                                        list_li.push($(this));
+                                                    }
+                                                });
+                                            }
+
+                                            if(list_li.length > 0) {
+                                                winkstart.confirm(confirm_text,
+                                                    function() {
+                                                        $.each(list_li, function() {
+                                                            remove_element(this);
+                                                        });
+                                                    },
+                                                    function() {
+                                                        remove_element(ui.item);
+                                                    }
+                                                );
+                                            }
+
+                                            if($(this).hasClass('right')) {
+                                                $('.options', ui.item).show();
+                                                $('.actions', ui.item).show();
+                                                //$('.item_name', ui.item).addClass('right');
+                                                $('.column.right .connect', popup).removeClass('no_element');
+                                            }
+                                        }
+                                    });
+
+                                    $(popup_html).delegate('.trash', 'click', function() {
+                                        var $parent_li = $(this).parents('li').first();
+                                        remove_element($parent_li);
+                                    });
+
+                                    $('.pane_content', popup_html).hide();
+                                    //$('#users_pane', popup_html).show();
+                                    $('#devices_pane', popup_html).show();
+
+                                    var remove_element = function(li) {
+                                        var $parent_li = li;
+                                        var data = $parent_li.dataset();
+                                        data.name = jQuery.trim($('.item_name', $parent_li).html());
+                                        $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
+                                        $parent_li.remove();
+
+                                        if($('.connect.right li', popup_html).size() == 0) {
+                                            $('.column.right .connect', popup).addClass('no_element');
+                                        }
+
+                                        if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                            $('#'+data.id, popup_html).hide();
+                                        }
+                                    };
+                                }
+                            );
+                        }
+                    );
+                };
 
             $.extend(callflow_nodes, {
                 'root': {
@@ -894,7 +1175,7 @@ winkstart.module('voip', 'callflow', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#object-selector', popup_html).val());
 
                                     node.caption = $('#object-selector option:selected', popup_html).text();
@@ -935,136 +1216,7 @@ winkstart.module('voip', 'callflow', {
                         return node.getMetadata('name') || '';
                     },
                     edit: function(node, callback) {
-                        winkstart.request(true, 'device.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html, index, endpoints
-                                    selected_endpoints = {},
-                                    unselected_endpoints = [];
-
-                                if(endpoints = node.getMetadata('endpoints')) {
-                                    // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
-                                    // we also need to clone to prevent managing of objects
-                                    $.each($.extend(true, {}, endpoints), function(i, obj) {
-                                        obj.name = 'Undefined';
-                                        selected_endpoints[obj.id] = obj;
-                                    });
-
-                                    $.each(data.data, function(i, obj) {
-                                        if(obj.id in selected_endpoints) {
-                                            selected_endpoints[obj.id].name = obj.name;
-                                        }
-                                        else {
-                                            unselected_endpoints.push(obj);
-                                        }
-                                    });
-                                }
-                                else {
-                                    unselected_endpoints = data.data;
-                                }
-
-                                popup_html = THIS.templates.ring_group_dialog.tmpl({
-                                    left: {
-                                        title: 'Unselected devices',
-                                        items: unselected_endpoints
-                                    },
-                                    right: {
-                                        title: 'Selected devices',
-                                        items: selected_endpoints
-                                    },
-                                    form: {
-                                        name: node.getMetadata('name') || '',
-                                        strategy: {
-                                            items: [
-                                                {
-                                                    id: 'simultaneous',
-                                                    name: 'At the same time'
-                                                },
-                                                {
-                                                    id: 'single',
-                                                    name: 'In order'
-                                                }
-                                            ],
-                                            selected: node.getMetadata('strategy') || 'simultaneous'
-                                        },
-                                        timeout: node.getMetadata('timeout') || '30'
-                                    }
-                                });
-
-                                $('.options .option', popup_html).each(function() {
-                                    $(this).tooltip({ attach: $('body'), relative: false });
-                                });
-
-                                $('.column.left .options', popup_html).hide();
-
-                                $('.options .option.delay', popup_html).bind('keyup', function() {
-                                    $(this).parents('li').dataset('delay', $(this).val());
-                                });
-
-                                $('.options .option.timeout', popup_html).bind('keyup', function() {
-                                    $(this).parents('li').dataset('timeout', $(this).val());
-                                });
-
-                                $('.submit_btn', popup_html).click(function() {
-                                    var name = $('#name', popup_html).val();
-
-                                    endpoints = [];
-
-                                    $('.right .connect li', popup_html).each(function() {
-                                        endpoints.push($(this).dataset());
-                                    });
-
-                                    node.setMetadata('endpoints', endpoints);
-                                    node.setMetadata('name', name);
-                                    node.setMetadata('strategy', $('#strategy', popup_html).val());
-                                    node.setMetadata('timeout', $('#timeout', popup_html).val());
-
-                                    node.caption = name;
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Ring Group',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-
-                                $('.scrollable', popup).jScrollPane({
-                                    horizontalDragMinWidth: 0,
-                                    horizontalDragMaxWidth: 0
-                                });
-
-                                $('.connect', popup).sortable({
-                                    connectWith: $('.connect', popup),
-                                    zIndex: 2000,
-                                    helper: 'clone',
-                                    appendTo: $('.wrapper', popup),
-                                    scroll: false,
-                                    receive: function(ev, ui) {
-                                        if($(this).parents('.column').hasClass('left')) {
-                                            $('.options', ui.item).hide();
-                                            $('.item_name', ui.item).removeClass('right');
-                                        }
-                                        else {
-                                            $('.options', ui.item).show();
-                                            $('.item_name', ui.item).addClass('right');
-                                        }
-
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    },
-                                    remove: function(ev, ui) {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    }
-                                });
-
-                            }
-                        );
+                        edit_ring_group(node, callback);
                     }
                 },
                 'call_forward[action=activate]': {
@@ -1145,7 +1297,7 @@ winkstart.module('voip', 'callflow', {
                 'dynamic_cid[]': {
                     name: 'Dynamic cid',
                     icon: 'rightarrow',
-                    category: 'Advanced',
+                    category: 'Caller ID',
                     module: 'dynamic_cid',
                     tip: 'Set your CallerId by entering it on the phone',
                     isUsable: 'true',
@@ -1156,6 +1308,142 @@ winkstart.module('voip', 'callflow', {
                         if(typeof callback == 'function') {
                             callback();
                         }
+                    }
+                },
+                'prepend_cid[action=prepend]': {
+                    name: 'Prepend',
+                    icon: 'plus_circle',
+                    category: 'Caller ID',
+                    module: 'prepend_cid',
+                    tip: 'Prepend Caller ID with a text.',
+                    data: {
+                        action: 'prepend',
+                        caller_id_name_prefix: '',
+                        caller_id_number_prefix: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.prepend_cid_callflow.tmpl({
+                            data_cid: {
+                                'caller_id_name_prefix': node.getMetadata('caller_id_name_prefix') || '',
+                                'caller_id_number_prefix': node.getMetadata('caller_id_number_prefix') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('caller_id_name_prefix', $('#cid_name_prefix', popup_html).val());
+                            node.setMetadata('caller_id_number_prefix', $('#cid_number_prefix', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Prepend Caller-ID',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'prepend_cid[action=reset]': {
+                    name: 'Reset Prepend',
+                    icon: 'loop2',
+                    category: 'Caller ID',
+                    module: 'prepend_cid',
+                    tip: 'Reset all the prepended texts before the Caller ID.',
+                    data: {
+                        action: 'reset'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'disa[]': {
+                    name: 'DISA',
+                    icon: 'conference',
+                    category: 'Advanced',
+                    module: 'disa',
+                    tip: 'DISA allows external callers to make outbound calls as though they originated from the system',
+                    data: {
+                        pin: '',
+                        retries: '3'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.disa_callflow.tmpl({
+                            data_disa: {
+                                'pin': node.getMetadata('pin') || '',
+                                'retries': node.getMetadata('retries') || '3'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var save_disa = function() {
+                                node.setMetadata('pin', $('#disa_pin_input', popup_html).val());
+                                node.setMetadata('retries', $('#disa_retries_input', popup_html).val());
+
+                                popup.dialog('close');
+                            };
+                            if($('#disa_pin_input', popup_html).val() == '') {
+                                winkstart.confirm('Not setting a PIN is a security risk, are you sure you don\'t want to set a PIN?', function() {
+                                    save_disa();
+                                });
+                            }
+                            else {
+                                save_disa();
+                            }
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'DISA',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 }
             });

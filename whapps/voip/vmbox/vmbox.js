@@ -385,7 +385,7 @@ winkstart.module('voip', 'vmbox', {
                             delete data.field_data;
                         }
 
-                        THIS.save_vmbox(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_vmbox(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
@@ -396,7 +396,9 @@ winkstart.module('voip', 'vmbox', {
             $('.vmbox-delete', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_vmbox(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this voicemail box?', function() {
+                    THIS.delete_vmbox(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             (target)

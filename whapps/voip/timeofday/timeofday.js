@@ -390,7 +390,7 @@ winkstart.module('voip', 'timeofday', {
 
                         form_data = THIS.clean_form_data(form_data);
 
-                        THIS.save_timeofday(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_timeofday(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
@@ -401,7 +401,9 @@ winkstart.module('voip', 'timeofday', {
             $('.timeofday-delete', timeofday_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this time of day rule?', function() {
+                    THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             _after_render = callbacks.after_render;

@@ -23,9 +23,9 @@ winkstart.module('voip', 'user', {
                 { name: '#username',                  regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
                 { name: '#email',                     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
+                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^.{0,15}$/ },
+                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
@@ -436,7 +436,7 @@ winkstart.module('voip', 'user', {
                                     callbacks.save_success(data, status, action);
                                 }
                             }
-                        }, callbacks.save_error);
+                        }, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
@@ -447,7 +447,9 @@ winkstart.module('voip', 'user', {
             $('.user-delete', user_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this user?', function() {
+                    THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             if(!$('#music_on_hold_media_id', user_html).val()) {
@@ -812,8 +814,6 @@ winkstart.module('voip', 'user', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        /*var name = node.getMetadata('name');
-                        return (name) ? name : '';*/
                         var id = node.getMetadata('id');
                         return (id && id != '') ? caption_map[id].name : '';
                     },
@@ -830,8 +830,15 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup_html = THIS.templates.user_callflow.tmpl({
-                                    items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    can_call_self: node.getMetadata('can_call_self') || false,
+                                    parameter: {
+                                        name: 'timeout (s)',
+                                        value: node.getMetadata('timeout') || '20'
+                                    },
+                                    objects: {
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
                                 });
 
                                 if($('#user_selector option:selected', popup_html).val() == undefined) {
@@ -846,6 +853,8 @@ winkstart.module('voip', 'user', {
 
                                     winkstart.publish('user.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                        node.setMetadata('can_call_self', $('#user_can_call_self', popup_html).is(':checked'));
 
                                         node.caption = (_data.data.first_name || '') + ' ' + (_data.data.last_name || '');
 
@@ -855,7 +864,11 @@ winkstart.module('voip', 'user', {
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
+                                    node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                    node.setMetadata('can_call_self', $('#user_can_call_self', popup_html).is(':checked'));
+
                                     node.caption = $('#user_selector option:selected', popup_html).text();
+
                                     popup.dialog('close');
                                 });
 
