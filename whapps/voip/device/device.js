@@ -89,7 +89,7 @@ winkstart.module('voip', 'device', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('subnav.add', {
+        winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
             label: 'Devices',
@@ -707,7 +707,15 @@ winkstart.module('voip', 'device', {
                     /* Cell Phones are always registered */
                     $.each(data.data, function(k, v) {
                         if($.inArray(v.device_type, ['cellphone']) > -1) {
-                            $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                            if(v.enabled === false) {
+                                $('#' + v.id, $('#device-listpanel', parent)).addClass('disabled');
+                            }
+                            else {
+                                $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                            }
+                        }
+                        else if(v.enabled === false) {
+                            $('#' + v.id, $('#device-listpanel', parent)).addClass('disabled');
                         }
                     });
                 }
@@ -760,7 +768,7 @@ winkstart.module('voip', 'device', {
                 'device[id=*]': {
                     name: 'Device',
                     icon: 'phone',
-                    category: 'Advanced',
+                    category: 'Basic',
                     module: 'device',
                     tip: 'Ring a VoIP or cell phone or other device',
                     data: {

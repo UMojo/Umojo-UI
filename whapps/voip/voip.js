@@ -4,7 +4,8 @@ winkstart.module('voip', 'voip', {
         },
 
         templates: {
-            voip: 'voip.html'
+            voip: 'voip.html',
+            voip_welcome: 'voip_welcome.html'
         },
 
         subscribe: {
@@ -38,7 +39,7 @@ winkstart.module('voip', 'voip', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('appnav.add', {
+            winkstart.publish('whappnav.add', {
                 name: THIS.__module,
                 columns: 2
             });
@@ -68,6 +69,7 @@ winkstart.module('voip', 'voip', {
             'timeofday': false,
             'featurecode': false,
             'cdr': false,
+            'queue': false,
             'directory': false
         },
 
@@ -87,7 +89,7 @@ winkstart.module('voip', 'voip', {
             THIS.is_initialized = true;
 
             //Disabling post lazy loading behavior
-            //winkstart.publish('subnav.show', THIS.__module);
+            //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
         },
 
@@ -162,47 +164,301 @@ winkstart.module('voip', 'voip', {
         setup_page: function() {
             var THIS = this;
 
-            $('#ws-content').empty();
-            THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
+            THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
+        },
 
-            $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
+        execute_request: function(data) {
+            var THIS = this,
+                data_default = {
+                    api_url: winkstart.apps.voip.api_url,
+                    account_id: winkstart.apps.voip.account_id,
+                    account_name: 'N/A',
+                    account_realm: 'N/A',
+                    children_accounts: 'N/A',
+                    descendants_accounts: 'N/A',
+                    support_number: 'N/A',
+                    support_email: 'N/A',
+                    carrier: 'N/A',
+                    devices: 'N/A',
+                    registered_devices: 'N/A',
+                    unregistered_devices: 'N/A',
+                    disabled_devices: 'N/A',
+                    users: 'N/A',
+                    vmboxes: 'N/A',
+                    conferences: 'N/A',
+                    callflows: 'N/A',
+                    feature_codes: 'N/A',
+                    field_data: {
+                        sub_accounts: {}
+                    }
+                },
+                welcome_html = $('#ws-content').empty()
+                                               .append(THIS.templates.voip_welcome.tmpl(data_default)),
+                account_id = data.account_id;
 
-            // Link the main buttons
-            $('.options #users').click(function() {
-                winkstart.publish('user.activate');
+            $('.edit_icon', welcome_html).click(function() {
+                winkstart.publish($(this).dataset('module') + '.activate');
             });
 
-            $('.options #devices').click(function() {
-                winkstart.publish('device.activate');
+            $('.masquerade', welcome_html).click(function() {
+                var account = {
+                        name: $('#sub_accounts option:selected').text(),
+                        id: $('#sub_accounts').val()
+                    };
+
+                winkstart.confirm('Do you really want to use ' + account.name + '\'s account?', function() {
+                    if(!('masquerade' in winkstart.apps['voip'])) {
+                        winkstart.apps['voip'].masquerade = [];
+                    }
+
+                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
+
+                    winkstart.apps['voip'].account_id = account.id;
+
+                    //update label
+                    THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
+
+                    winkstart.alert('info', 'You are now using ' + account.name + '\'s account');
+                });
             });
 
-            $('.options #users').click(function() {
-                winkstart.publish('user.activate');
+            $('.restore').click(function() {
+                var id = winkstart.apps['voip'].masquerade.pop();
+
+                if(winkstart.apps['voip'].masquerade.length) {
+                    winkstart.getJSON('account.get', {
+                            api_url: winkstart.apps['voip'].api_url,
+                            account_id: id
+                        },
+                        function(data, status) {
+                            winkstart.apps['voip'].account_id = data.data.id;
+
+                            THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
+                        }
+                    );
+                }
+                else {
+                    winkstart.apps['voip'].account_id = id;
+
+                    //masquerading over display in label normal
+                    delete winkstart.apps['voip'].masquerade;
+
+                    THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
+                }
             });
 
-            $('.options #auto_attendant').click(function() {
-                winkstart.publish('menu.activate');
+            /*
+            $('.restore', welcome_html).click(function() {
+                THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
             });
 
-            $('.options #ring_groups').click(function() {
-                winkstart.publish('callflow.activate');
-            });
+            $('.masquerade', welcome_html).click(function() {
+                var account_id = $('#sub_accounts').val();
 
-            $('.options #conferences').click(function() {
-                winkstart.publish('conference.activate');
+                if(account_id) {
+                    THIS.execute_request({ account_id: account_id });
+                }
+                else {
+                    winkstart.alert('This is not a valid sub account');
+                }
             });
+            */
+            $('.masquerade', welcome_html).hide();
+            if(!('masquerade' in winkstart.apps.voip)) {
+                $('.restore', welcome_html).hide();
+            }
 
-            $('.options #registrations').click(function() {
-                winkstart.publish('registration.activate');
-            });
+            /* Account ID */
+            $('.account_id', welcome_html).html(account_id);
 
-            $('.options #stats').click(function() {
-                winkstart.publish('stats.activate');
-            });
+            /* # of devices, # of enabled devices, # of disabled devices */
+            winkstart.request('device.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    var cpt_disabled = 0,
+                        cpt_devices = _data.data.length,
+                        cpt_enabled_cell = 0;
 
-            $('.options #time_of_day').click(function() {
-                winkstart.publish('timeofday.activate');
-            });
+                    $.each(_data.data, function(k, v) {
+                        this.enabled === false ? cpt_disabled++ : (this.device_type === 'cellphone' ? cpt_enabled_cell ++ : true);
+                    });
+
+                    $('.devices', welcome_html).html(cpt_devices);
+                    $('.disabled_devices', welcome_html).html(cpt_disabled);
+
+                    /* # of registered devices */
+                    winkstart.request('device.status', {
+                            account_id: account_id,
+                            api_url: winkstart.apps.voip.api_url
+                        },
+                        function(_data, status) {
+                            var cpt_registered = _data.data.length + cpt_enabled_cell,
+                                cpt_unregistered = cpt_devices - cpt_registered - cpt_disabled;
+
+                            $('.registered_devices', welcome_html).html(cpt_registered);
+                            $('.unregistered_devices', welcome_html).html(cpt_unregistered);
+
+                            var data_pie;
+                            if(cpt_devices > 0) {
+                                data_pie = [
+                                    ['Registered Devices', cpt_registered],['Unregistered Devices', cpt_unregistered], ['Disabled Devices', cpt_disabled]
+                                ];
+                            }
+                            else {
+                                //Hack to display a pie even if there is no data
+                                data_pie = [['Registered Devices', 1]];
+                            }
+
+                            var plot1 = $.jqplot('pie_registration', [data_pie],
+                                {
+                                    grid: {
+                                        background: '#333333',
+                                        borderColor: '#333333',
+                                        shadow: false
+                                    },
+                                    seriesDefaults:{
+                                        renderer:$.jqplot.PieRenderer,
+                                        rendererOptions: {
+                                            padding: 0,
+                                            showDataLabels: true,
+                                            startAngle: '-90',
+                                            shadow: false
+                                        },
+                                    },
+                                    seriesColors: ['#5dc151', '#e62727', '#444444']
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+
+            /* # of users */
+            winkstart.request('user.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.users', welcome_html).html(_data.data.length);
+                }
+            );
+
+            /* # of vmboxes */
+            winkstart.request('vmbox.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.vmboxes', welcome_html).html(_data.data.length);
+                }
+            );
+
+            /* # of conferences */
+            winkstart.request('conference.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.conferences', welcome_html).html(_data.data.length);
+                }
+            );
+
+            /* # of descendant accounts */
+            winkstart.request('account.list_descendants', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    var cpt_descendants = _data.data.length - 1;
+                    $('.descendants_accounts', welcome_html).html(cpt_descendants);
+
+                    /* # of children accounts */
+                    winkstart.request('account.list', {
+                            account_id: account_id,
+                            api_url: winkstart.apps.voip.api_url
+                        },
+                        function(_data, status) {
+                            $.each(_data.data, function() {
+                                $('#sub_accounts', welcome_html).append('<option value="'+this.id+'">'+this.name+'</option>');
+                            });
+
+                            if(_data.data.length === 0) {
+                                $('#sub_accounts', welcome_html).append('<option value="">-- Empty --</option>');
+                                $('#sub_accounts', welcome_html).attr('disabled', 'disabled');
+                            }
+                            else {
+                                $('.masquerade', welcome_html).show();
+                            }
+
+                            $('.children_accounts', welcome_html).html(_data.data.length);
+                            $('.children_accounts', welcome_html).siblings('.progress_bar').first().css('width', Math.round((_data.data.length / cpt_descendants)*100) + 'px');
+                        }
+                    );
+                }
+            );
+
+            /* Account details */
+            winkstart.request('account.get', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.account_realm', welcome_html).html(_data.data.realm);
+                    $('.account_name', welcome_html).html(_data.data.name);
+                    if('notifications' in _data.data && 'voicemail_to_email' in _data.data.notifications) {
+                        $('.support_number', welcome_html).html(_data.data.notifications.voicemail_to_email.support_number);
+                        $('.support_email', welcome_html).html(_data.data.notifications.voicemail_to_email.support_email);
+                    }
+                }
+            );
+
+            /* # of Callflows */
+            winkstart.request('callflow.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    var cpt_callflows = 0;
+                    $.each(_data.data, function() {
+                        this.featurecode === false ? cpt_callflows++ : true;
+                    });
+
+                    $('.feature_codes', welcome_html).html(_data.data.length - cpt_callflows);
+                    $('.callflows', welcome_html).html(cpt_callflows);
+                }
+            );
+
+            /* Carrier */
+            winkstart.request('callflow.get_no_match', {
+                    account_id: account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    if(_data.data[0]) {
+                        winkstart.request('callflow.get', {
+                                account_id: account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                callflow_id: _data.data[0].id
+                            },
+                            function(_data, status) {
+                                if(_data.data.flow && 'module' in _data.data.flow) {
+                                    var carrier;
+
+                                    if(_data.data.flow.module === 'offnet') {
+                                        carrier = winkstart.config.company_name;
+                                    }
+                                    else if(_data.data.flow.module === 'resources') {
+                                        carrier = 'External Carrier';
+                                    }
+                                    $('.carrier', welcome_html).html(carrier);
+                                }
+                            }
+                        );
+                    }
+                }
+            );
         },
 
         _bootstrap: function() {

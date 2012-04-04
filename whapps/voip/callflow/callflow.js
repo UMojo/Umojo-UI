@@ -4,7 +4,6 @@ winkstart.module('voip', 'callflow', {
             'css/popups.css',
             'css/two_columns.css',
             'css/callflow.css',
-            'css/action_popups.css',
             'css/ring_groups.css'
         ],
 
@@ -22,6 +21,7 @@ winkstart.module('voip', 'callflow', {
             disa_callflow: 'tmpl/disa_callflow.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
             ring_group_element: 'tmpl/ring_group_element.html',
+            buttons: 'tmpl/buttons.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -50,6 +50,11 @@ winkstart.module('voip', 'callflow', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'callflow.get_no_match': {
+                url: '{api_url}/accounts/{account_id}/callflows?filter_numbers=no_match',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'callflow.create': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -72,7 +77,7 @@ winkstart.module('voip', 'callflow', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('subnav.add', {
+        winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
             label: 'Callflows',
@@ -94,16 +99,42 @@ winkstart.module('voip', 'callflow', {
             });
 
             winkstart.publish('callflow.define_callflow_nodes', THIS.actions);
+        },
 
-            $(this.config.elements.save).click(function() {
+        renderButtons: function() {
+            var THIS = this,
+                buttons_html = THIS.templates.buttons.tmpl();
+
+            $('.buttons').empty();
+
+            $('.save', buttons_html).click(function() {
                 THIS.save();
-            }).hover(function() {
-                    $(this).addClass('active');
-                },
-                function() {
-                    $(this).removeClass('active');
+            });
+
+            $('.delete', buttons_html).click(function() {
+                if(THIS.flow.id) {
+                    winkstart.confirm('Are you sure you want to delete this callflow?', function() {
+                        winkstart.deleteJSON('callflow.delete', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                callflow_id: THIS.flow.id
+                            },
+                            function() {
+                                $('#ws_cf_flow').empty();
+                                $('.buttons').empty();
+                                $('#ws_cf_tools').empty();
+                                THIS.renderList();
+                                THIS._resetFlow();
+                            }
+                        );
+                    });
                 }
-            );
+                else {
+                    winkstart.alert('This callflow has not been created or doesn\'t exist anymore.');
+                }
+            });
+
+            $('.buttons').append(buttons_html);
         },
 
         editCallflow: function(data) {
@@ -138,6 +169,7 @@ winkstart.module('voip', 'callflow', {
             }
 
             THIS.renderTools();
+            THIS.renderButtons();
         },
 
         buildFlow: function (json, parent, id, key) {
@@ -468,25 +500,6 @@ winkstart.module('voip', 'callflow', {
                         THIS.renderFlow();
                     });
 
-                    $('.bottom_bar .save', node_html).click(function() {
-                        THIS.save();
-                    });
-
-                    $('.bottom_bar .delete', node_html).click(function() {
-                        winkstart.confirm('Are you sure you want to delete this callflow?', function() {
-                            winkstart.deleteJSON('callflow.delete', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url,
-                                    callflow_id: THIS.flow.id
-                                },
-                                function() {
-                                    $('#ws_cf_flow').empty();
-                                    THIS.renderList();
-                                    THIS._resetFlow();
-                                }
-                            );
-                        });
-                    });
                 }
                 else {
                     node_html = THIS.templates.node.tmpl({
@@ -658,18 +671,25 @@ winkstart.module('voip', 'callflow', {
                 $(this).siblings('.content').show();
             });
 
+            var help_box = $('.callflow_helpbox_wrapper', '#callflow-view').first();
+
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
                     $('.tool_name', '#callflow-view').removeClass('active');
                     $('.tool_name', $(this)).addClass('active');
-                    $(this).attr('help') ? $('#help_box', tools).html($(this).attr('help')) : true;
+                    if($(this).attr('help')) {
+                        $('#help_box', help_box).html($(this).attr('help'));
+                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top - 78)
+                                                                        .show();
+                    }
                 },
                 function () {
-                    $('#help_box', tools).html('Drag the following elements and drop them on a callflow item!');
                     $(this).removeClass('active');
+                    $('.callflow_helpbox_wrapper', '#callflow-view').hide();
                 }
             );
+
 
             function action (el) {
                 el.draggable({
@@ -685,6 +705,7 @@ winkstart.module('voip', 'callflow', {
                         $(this).addClass('active');
                     },
                     drag: function () {
+                        $('.callflow_helpbox_wrapper', '#callflow-view').hide();
                     },
                     stop: function () {
                         THIS._disableDestinations();
@@ -702,11 +723,6 @@ winkstart.module('voip', 'callflow', {
             target.append(tools);
 
             $('#ws_cf_tools', '#callflow-view').disableSelection();
-
-            $('*[tooltip]', target).each(function() {
-                $(this).tooltip({ xMove: -80, yMove: -80, height: '40px', width: '100px' });
-            });
-
         },
 
         _enableDestinations: function(el) {
@@ -761,6 +777,9 @@ winkstart.module('voip', 'callflow', {
                     function(json) {
                         THIS.renderList();
                         THIS.editCallflow({id: json.data.id});
+                    },
+                    function(json, status) {
+                        winkstart.alert('Error: ' + status);
                     }
                 );
             }
@@ -776,6 +795,9 @@ winkstart.module('voip', 'callflow', {
                     function(json) {
                         THIS.renderList();
                         THIS.editCallflow({id: json.data.id});
+                    },
+                    function(json, status) {
+                        winkstart.alert('Error: ' + status);
                     }
                 );
             }
@@ -801,10 +823,9 @@ winkstart.module('voip', 'callflow', {
                                 if(elem.numbers) {
                                     for(var i = 0; i < elem.numbers.length; i++) {
                                         elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
-                                        elem.numbers[i] = elem.numbers[i].replace(/^no_match$/, 'Catch all');
                                     }
                                 }
-                                if(elem.featurecode == false) {
+                                if(elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
                                     new_list.push({
                                         id: elem.id,
                                         title: (elem.numbers) ? elem.numbers.toString() : ''
@@ -1005,19 +1026,42 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('#save_ring_group', popup_html).click(function() {
-                                        var name = $('#name', popup_html).val();
+                                        var name = $('#name', popup_html).val(),
+                                            global_timeout = 0,
+                                            strategy = $('#strategy', popup_html).val();
 
                                         endpoints = [];
 
+                                        if(strategy === 'simultaneous') {
+                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                var duration = delay + local_timeout;
+
+                                                if(duration > global_timeout) {
+                                                    global_timeout = duration;
+                                                }
+
+                                                return global_timeout;
+                                            }
+                                        }
+                                        else {
+                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                global_timeout += delay + local_timeout;
+
+                                                return global_timeout;
+                                            }
+                                        }
+
                                         $('.right .connect li', popup_html).each(function() {
-                                            $(this).removeAttr('data-owner_id');
-                                            endpoints.push($(this).dataset());
+                                            var item_data = $(this).dataset();
+                                            delete item_data.owner_id;
+                                            endpoints.push(item_data);
+                                            global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
                                         });
 
                                         node.setMetadata('endpoints', endpoints);
                                         node.setMetadata('name', name);
-                                        node.setMetadata('strategy', $('#strategy', popup_html).val());
-                                        node.setMetadata('timeout', $('#timeout', popup_html).val());
+                                        node.setMetadata('strategy', strategy);
+                                        node.setMetadata('timeout', global_timeout);
 
                                         node.caption = name;
 
@@ -1094,8 +1138,7 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('.pane_content', popup_html).hide();
-                                    //$('#users_pane', popup_html).show();
-                                    $('#devices_pane', popup_html).show();
+                                    $('#users_pane', popup_html).show();
 
                                     var remove_element = function(li) {
                                         var $parent_li = li;

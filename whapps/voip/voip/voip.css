@@ -1,54 +1,228 @@
-/* 
+/*
     Document   : voip
     Created on : Jun 23, 2011, 9:24:17 PM
     Author     : dman
     Description:
         Purpose of the stylesheet follows.
 */
-
-.quick_access {
+#voip_welcome-view {
     text-align: center;
-    margin: auto;
-    height:618px;
-    width:990px;
-    background-image: url('home.jpg');
-    background-repeat: no-repeat;
-}
-
-.quick_access .content {
-    text-align: center;
-    padding: 10px;
-}
-
-.quick_access .welcome h1 {
-    line-height: 40px;
-    text-align: left;
-    font-size: 27px;
-    padding-left: 19px;
-    padding-top: 5px;
     padding-bottom: 20px;
 }
 
-.quick_access .subtitle {
-    font-size: 16px;
+#voip_welcome-view #voip_api_url {
+    margin-top: 25px;
+}
+
+#voip_welcome-view .welcome_div {
+    margin: 20px auto auto;
+    width: 702px;
+    box-shadow: 2px 2px 2px #333333;
+    background: #333333;
+    color: #bbbbbb;
+    border-radius: 5px;
+}
+
+#voip_welcome-view .welcome_div h1 {
+    color: #bbbbbb;
+    font-size: 30px;
+    text-shadow: 1px 1px 1px #000;
+}
+
+#voip_welcome-view .welcome_div .welcome_header {
+    padding: 20px 0px;
+}
+
+#voip_welcome-view .welcome_div .content_title {
+    background: url('images/header_bar.png') repeat-x center;
+    height: 24px;
+    line-height: 24px;
+    box-shadow: 1px 1px 3px #181818;
     text-align: left;
 }
 
-.quick_access .options div {
+#voip_welcome-view .welcome_div .content_title div {
+    color: #05addc;
+    width: 320px;
+    padding-left: 30px;
     float: left;
-    position: relative;
-    width: 33%;
-    height: 40px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    padding-top: 96px;
-    margin-top:20px;
-    margin-bottom:20px;
+    text-shadow: 1px 1px 2px #222;
+    font-size: 15px;
 }
 
-#cur_api_url {
+#voip_welcome-view .welcome_div .content .title {
+    color: #05addc;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .content_line {
+    width: 250px;
+    margin: auto;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .content_line .right{
     float: right;
-    margin-top: -50px;
+    margin-top: 3px;
+}
+
+#voip_welcome-view .welcome_div .content .content_half {
+    float: left;
+    width: 350px;
+    height: 405px;
+    text-align: left;
+    border-right: 1px solid #181818;
+    border-left: 1px solid #666666;
+}
+
+#voip_welcome-view .welcome_div .content .content_half:last-child {
+    border-right: none;
+}
+
+#voip_welcome-view .welcome_div .content .content_half:first-child {
+    border-left: none;
+}
+
+#voip_welcome-view .welcome_div .content .content_half .content_block:last-child {
+    border-bottom: none;
+}
+
+#voip_welcome-view .welcome_div .content .content_half .content_block:first-child {
+    border-top: none;
+}
+
+#voip_welcome-view .welcome_div .content .content_half .content_block {
+    padding: 10px;
+    border-bottom: 1px solid #181818;
+    border-top: 1px solid #666666;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .edit_icon {
+    display: inline-block;
+    background: url('images/edit_icon.png') no-repeat center;
+    width: 20px;
+    height: 18px;
+    margin: 0 0 -3px 10px;
+    cursor: pointer;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .icon {
     margin-right: 10px;
 }
+
+#voip_welcome-view .welcome_div .content .content_block .field {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 10px;
+    color: #5dc151;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .field.text {
+    font-size: 12px;
+    color: #fff;
+    font-weight: normal;
+}
+
+#voip_welcome-view .welcome_div .content .content_block #sub_accounts {
+    margin-left: 5px;
+    width: 150px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .button_accounts {
+    padding: 5px;
+    margin-top: 11px;
+    text-align: center;
+    height: 27px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .button_accounts .fancy_button {
+    width: auto;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .carrier_wrapper {
+    float: right;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper {
+    height: 100px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .content_line.account {
+    padding: 10px 0;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .account_bars .field {
+    color: #05addc;
+    padding: 0px;
+    text-align: left;
+    width: 30px;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .account_bars .content_line {
+    width: 300px;
+    padding-bottom: 10px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .account_bars .bar_wrapper {
+    float: right;
+    height: 18px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .account_bars .progress_bar {
+    background-color: #05addc;
+    display: inline-block;
+    width: 100px;
+    height: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px #333333;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .field.account_name {
+    color: #05addc;
+    font-size: 15px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper {
+    width: 300px;
+    height: 120px;
+    margin: auto;
+    padding-top: 11px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .unregistered_devices {
+    color: #e62727;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .disabled_devices {
+    color: #bbbbbb;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper #pie_registration {
+    width: 150px;
+    height: 120px;
+    float: left;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper #pie_registration .jqplot-data-label {
+    color: #222222;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend {
+    width: 150px;
+    padding-top: 25px;
+    height: 80px;
+    float: left;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend .field {
+    float: right;
+    padding: 0 5px;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend .content_line {
+    width: 130px;
+}
+

@@ -199,6 +199,17 @@
                                 <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
                                 <a class="inline_action_media" data-action="create" href="#">Create</a>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory).">
+                                    <span class="tooltip"/><label for="queue_pin">Enable Agent / PIN:</label>
+                                </span>
+                                {{if data.enable_pin === true}}
+                                <input id="enable_pin" name="enable_pin" type="checkbox" CHECKED="CHECKED"/>
+                                {{else}}
+                                <input id="enable_pin" name="enable_pin" type="checkbox"/>
+                                {{/if}}
+                                <input id="queue_pin" size="6" name="queue_pin" type="text" value="${data.queue_pin}" disabled="disabled"/>
+                            </li>
                         </ul>
                     </fieldset>
                     <div class="clear"></div>
@@ -340,10 +351,10 @@
             </div>
         <div class="buttons_wrapper">
             <ul class="buttons right users">
-                <li><a class="user-save save-btn fancy_button green" href="#">Save</a></li>
                 {{if data.id}}
                     <li><a class="user-delete delete-btn fancy_button red" href="#">Delete</a></li>
                 {{/if}}
+                <li><a class="user-save save-btn fancy_button green" href="#">Save</a></li>
             </ul>
             <div class="clear"/>
         </div>

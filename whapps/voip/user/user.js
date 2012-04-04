@@ -18,9 +18,9 @@ winkstart.module('voip', 'user', {
         },
 
         validation : [
-                { name: '#first_name',                regex: /^[a-zA-Z\s\-\']+$/ },
-                { name: '#last_name',                 regex: /^[a-zA-Z\s\-\']+$/ },
-                { name: '#username',                  regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
+                { name: '#first_name',                regex: /^[0-9a-zA-Z\s\-\']+$/ },
+                { name: '#last_name',                 regex: /^[0-9a-zA-Z\s\-\']+$/ },
+                { name: '#username',                  regex: /^[0-9a-zA-Z+@._-]{3,256}$/ },
                 { name: '#email',                     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
@@ -28,6 +28,7 @@ winkstart.module('voip', 'user', {
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
+                { name: '#queue_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
         ],
 
@@ -80,7 +81,7 @@ winkstart.module('voip', 'user', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('subnav.add', {
+        winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
             label: 'Users',
@@ -311,7 +312,7 @@ winkstart.module('voip', 'user', {
             }
         },
 
-        update_single_device: function($checkbox) {
+        update_single_device: function($checkbox, parent) {
             $checkbox.attr('disabled', 'disabled');
 
             var device_id = $checkbox.dataset('device_id'),
@@ -335,6 +336,12 @@ winkstart.module('voip', 'user', {
                         },
                         function(_data, status) {
                             $checkbox.removeAttr('disabled');
+                            if(_data.data.enabled === true) {
+                                $('#'+ _data.data.id + ' .column.third', parent).removeClass('disabled');
+                            }
+                            else {
+                                $('#'+ _data.data.id + ' .column.third', parent).addClass('disabled');
+                            }
                         },
                         function(_data, status) {
                             $checkbox.removeAttr('disabled');
@@ -368,6 +375,14 @@ winkstart.module('voip', 'user', {
             $('ul.settings2', user_html).tabs($('.advanced_pane > div', user_html));
 
             $('#username', user_html).focus();
+
+            if(data.data.enable_pin) {
+                $('#queue_pin', user_html).removeAttr('disabled');
+            }
+
+            $('#enable_pin', user_html).click(function() {
+                $(this).is(':checked') ? $('#queue_pin', user_html).removeAttr('disabled') : $('#queue_pin', user_html).val('').attr('disabled', 'disabled');
+            });
 
             $('.advanced_pane', user_html).hide();
             $('.advanced_tabs_wrapper', user_html).hide();
@@ -413,11 +428,16 @@ winkstart.module('voip', 'user', {
                 winkstart.validate.is_valid(THIS.config.validation, user_html, function() {
                         var form_data = form2object('user-form');
 
+                        if(form_data.enable_pin === false) {
+                            delete data.data.queue_pin;
+                        }
+
                         THIS.clean_form_data(form_data);
 
                         if('field_data' in data) {
                             delete data.field_data;
                         }
+
 
                         THIS.save_user(form_data, data, function(data, status, action) {
                             if(action == 'create') {
@@ -489,7 +509,7 @@ winkstart.module('voip', 'user', {
             });
 
             $(user_html).delegate('.enabled_checkbox', 'click', function() {
-                THIS.update_single_device($(this));
+                THIS.update_single_device($(this), user_html);
             });
 
             $(user_html).delegate('.action_device.edit', 'click', function() {
@@ -599,7 +619,7 @@ winkstart.module('voip', 'user', {
                                 },
                                 function(_data, status) {
                                     $.each(_data.data, function(key, val) {
-                                        $('.column.second', '#' + val.device_id).addClass('registered');
+                                        $('.column.third', '#' + val.device_id).addClass('registered');
                                     });
                                 }
                             );
@@ -630,6 +650,7 @@ winkstart.module('voip', 'user', {
 
         format_data: function(data) {
             // Do work
+            data.data.queue_pin === undefined ? data.data.enable_pin = false : data.data.enable_pin = true;
 
             return data;
         },
@@ -645,6 +666,10 @@ winkstart.module('voip', 'user', {
 
             if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
                 form_data.password = form_data.pwd_mngt_pwd1;
+            }
+
+            if(form_data.enable_pin === false) {
+                delete form_data.queue_pin;
             }
 
             delete form_data.pwd_mngt_pwd1;
@@ -681,6 +706,8 @@ winkstart.module('voip', 'user', {
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
             }
+
+            delete data.enable_pin;
 
             /* Yes, I am aware that the admin does not lose access to the userportal (if switched) */
             if(data.priv_level == 'admin') {

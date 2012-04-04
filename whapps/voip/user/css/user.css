@@ -1,3 +1,7 @@
+#user-form input[disabled=disabled] {
+    background: #ccc;
+}
+
 #user-form #equipment {
     text-align: center;
 }
@@ -81,6 +85,10 @@
 
 #user-form #equipment #tab_devices .rows .column.third.registered, #user-form #equipment #tab_devices .rows .column.third.cellphone {
     background-image: url('../../device/images/green.png');
+}
+
+#user-form #equipment #tab_devices .rows .column.third.disabled {
+    background-image: url('../../device/images/gray.png') !important;
 }
 
 #user-form #equipment #tab_devices .column.fourth {
