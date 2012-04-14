@@ -225,7 +225,7 @@ winkstart.module('auth', 'auth',
                             alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else {
-                            alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
                         }
                     }
                 );
