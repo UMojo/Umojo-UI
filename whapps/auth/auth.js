@@ -197,6 +197,7 @@ winkstart.module('auth', 'auth',
                                 }
                             };
                             winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                                $.cookie('c_winkstart.login', null);
                                 winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
                                 dialogRegister.dialog('close');
                             });
@@ -247,17 +248,20 @@ winkstart.module('auth', 'auth',
                 username = (typeof args == 'object' && 'username' in args) ? args.username : '',
                 account_name = THIS.get_account_name_from_url(),
                 realm = THIS.get_realm_from_url(),
-                login_html = THIS.templates.new_login.tmpl({
-                    username: username,
+                cookie_login = $.parseJSON($.cookie('c_winkstart.login')) || {},
+                data_tmpl = {
+                    username: username || cookie_login.login || '',
                     request_account_name: (realm || account_name) ? false : true,
-                    account_name: account_name
-                });
+                    account_name: account_name || cookie_login.account_name || '',
+                    remember_me: cookie_login.login || cookie_login.account_name ? true : false
+                };
 
-            var contentDiv = $('.right_div', '#content_welcome_page');
-            contentDiv.empty();
-            contentDiv.append(login_html);
+            var login_html = THIS.templates.new_login.tmpl(data_tmpl);
 
-            if(username != '') {
+            var contentDiv = $('.right_div', '#content_welcome_page').empty()
+                                                                     .append(login_html);
+
+            if(data_tmpl.username != '') {
                 $('#password', contentDiv).focus();
             }
             else {
@@ -301,6 +305,16 @@ winkstart.module('auth', 'auth',
                         // Deleting the welcome message
                         $('#ws-content').empty();
 
+                        if($('#remember_me', contentDiv).is(':checked')) {
+                            var cookie_login = {};
+                            login_username ? cookie_login.login = login_username : true;
+                            login_data.account_name ? cookie_login.account_name = login_data.account_name : true;
+                            $.cookie('c_winkstart_login', JSON.stringify(cookie_login));
+                        }
+                        else{
+                            $.cookie('c_winkstart_login', null);
+                        }
+
                         $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
 
                         winkstart.publish('auth.load_account');
@@ -313,7 +327,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
                         }
                         else {
-                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
                         }
                     }
                 );
@@ -346,8 +360,8 @@ winkstart.module('auth', 'auth',
             var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
                 resizable : false,
-                modal: true,
-                width: '315px'
+                width: '340',
+                modal: true
             });
 
             if(username != '') {
@@ -406,7 +420,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
                         }
                         else {
-                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
                         }
                     }
                 );
@@ -555,7 +569,7 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                width: '340px',
+                width: '320px',
                 title: 'Recover Password'
             });
 
