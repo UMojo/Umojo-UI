@@ -58,7 +58,7 @@ body > .topbar .topbar-inner > .container-fluid {
     height: 72px;
 }
 
-#ws-topbar .links > .link a {
+#ws-topbar .links > .link > a {
     line-height: 51px;
 }
 
