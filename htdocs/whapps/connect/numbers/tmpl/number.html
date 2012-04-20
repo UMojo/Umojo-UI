@@ -1,0 +1,18 @@
+<div>
+    <div class="number_entry">
+        {{if serverid}}
+            <span class="number ${status}" data-did="${did}" data-serverid="${serverid}">${did}</span>
+        {{else}}
+            <span class="number ${status}" data-did="${did}">${did}</span>
+        {{/if}}
+
+        <span class="amount">$1.00</span>
+
+        {{if server_name}}
+            <span class="did-status">${server_name}</span>
+        {{else}}
+            <span class="did-status">Unassigned</span>
+            <a class="cancel_number" href="#">Cancel</a>
+        {{/if}}
+    </div>
+</div>

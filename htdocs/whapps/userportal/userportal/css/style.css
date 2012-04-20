@@ -1,0 +1,11 @@
+.welcome {
+    width:100%;
+    text-align:center;
+}
+
+.quick_access {
+    width:100%;
+    text-align:center;
+    line-height: 60px;
+    font-size: 18px;
+}

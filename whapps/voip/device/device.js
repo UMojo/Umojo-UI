@@ -7,6 +7,7 @@ winkstart.module('voip', 'device', {
             device: 'tmpl/device.html',
             general_edit: 'tmpl/general_edit.html',
             cellphone: 'tmpl/cellphone.html',
+            softphone: 'tmpl/softphone.html',
             sip_device: 'tmpl/edit.html',
             device_callflow: 'tmpl/device_callflow.html'
         },
@@ -32,6 +33,15 @@ winkstart.module('voip', 'device', {
             cellphone: [
                 { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
                 { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
+            ],
+            softphone: [
+                { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
+                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#sip_username',              regex: /^[^\s]+$/ },
+                { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ]
         },
 
@@ -372,7 +382,7 @@ winkstart.module('voip', 'device', {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
 
                 /* Do device type specific things here */
-                if(data.data.device_type == 'sip_device') {
+                if($.inArray(data.data.device_type, ['softphone', 'sip_device']) > -1) {
                     device_html.delegate('#sip_password[type="password"]', 'focus', function() {
                         var value = $(this).val();
                         $('<input id="sip_password" name="sip.password" type="text"/>').insertBefore($(this)).val(value).focus();
@@ -640,8 +650,11 @@ winkstart.module('voip', 'device', {
                 form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
             }
 
-            if(form_data.media) {
+            if(form_data.media.audio) {
                 form_data.media.audio.codecs = $.map(form_data.media.audio.codecs, function(val) { return (val) ? val : null });
+            }
+
+            if(form_data.media.video) {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
@@ -649,6 +662,15 @@ winkstart.module('voip', 'device', {
                 form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
                 form_data.enabled = form_data.call_forward.enabled;
             }
+
+            if(form_data.extra.notify_unregister === true) {
+                form_data.suppress_unregister_notifications = false;
+            }
+            else {
+                form_data.suppress_unregister_notifications = true;
+            }
+
+            delete form_data.extra;
 
             return form_data;
         },

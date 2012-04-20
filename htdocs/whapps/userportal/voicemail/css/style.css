@@ -1,0 +1,44 @@
+#voicemail-view {
+    width: 90%;
+    margin : auto;
+}
+
+#voicemail-view .table-wrapper {
+    margin-top: 30px;
+}
+
+#voicemail-view .button-wrapper {
+    text-align: right;
+}
+
+#voicemail-view .button-wrapper a {
+    display: inline-block;
+    width: 81px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    color: #fff;
+    background-image: url(../../../../whapps/core/layout/images/button_bg.png);
+    text-decoration: none;
+    text-align: center;
+}
+
+#voicemail-view .button-wrapper a:hover {
+    color: #29abe1;
+}
+
+#voicemail-view .focusField { 
+    border: solid 10px #09F;
+    background: #FFF;
+    color: #000;
+}
+
+#voicemail-view .idleField {
+    background: #EEE;
+    color: #000;
+    border: solid 1px #999 !important;
+}
+
+#voicemail-view .clickable {
+    cursor: pointer;
+}

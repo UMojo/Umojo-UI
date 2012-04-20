@@ -1,0 +1,9 @@
+<div>
+   <div>
+      <div class="label">${item.description}</div>
+{{each(i, option) item.data}}
+      <input id="${id}" type="radio" name="${id}" value="${option.value}" class="variable" />
+      <div class="option">${option.text}</div>
+{{/each}}
+   </div>
+</div>

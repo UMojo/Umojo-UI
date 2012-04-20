@@ -1,0 +1,39 @@
+<div>
+   <div class="groups">
+{{each(i, group) item.data}}
+      <a href="javascript:" class="group">.</a>
+{{/each}}
+   </div>
+{{each(i, group) item.data}}
+   <hr>
+   <div class="group" >
+      <div><h1>${group.description}</h1></div>
+   {{each(j, el) group.item}}
+      {{if el.type === "break"}}
+      <br><br>
+      {{else}}
+      <div class="label">${el.description}</div>
+      <div>
+         {{if el.type === "radio"}}
+            {{each(k, op) el.data}}
+         <input type="radio" value="${op.value}" />
+         <div class="label">${op.text}</div>
+            {{/each}}
+         {{/if}}
+         {{if el.type === "input"}}
+         <input type="input" value="${el.value}" />
+         {{/if}}
+         {{if el.type === "list"}}
+         <select>
+            {{each(k, op) el.data}}
+            <option value="${op.value}">${op.text}</option>
+            {{/each}}
+         </select>
+         {{/if}}
+      </div>
+      {{/if}}
+   {{/each}}
+   </div>
+   <hr>
+{{/each}}
+</div>

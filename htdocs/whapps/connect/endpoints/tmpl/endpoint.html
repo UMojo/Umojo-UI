@@ -1,0 +1,38 @@
+<div>
+    <div class="endpoint">
+        <div class="title">
+            <a class="remove_server" data-serverid="${serverid}" href="#" title="Remove Server - ${server_name}" style="display:none; vertical-align: middle; float: left; max-width: 1.5em;"><img class="icon error" style="max-width: 1.5em; vertical-align: middle;"></a>
+            <span class="name">${server_name}</span>
+            <span class="status"><a href="#" class="modifyServerDefaults" data-serverid="${serverid}">Update</a> - <a href="#" class="deleteServer" data-serverid="${serverid}">Delete</a></span>
+        </div>
+        <div class="sip" style="display:none;">
+            {{if auth.auth_method == "IP"}}
+            <div class="area ip_auth_area">
+
+                <ul class="title ip_list"><li>Authorized IPs:</li>
+                    <ul class="info menu_ip_list">
+                        {{each(i, ip) auth.auth_ip}}
+                        <li class="ip_list_ip">
+                            <a class="remove_auth_IP" data-serverid="${serverid}" data-removeip="${ip}" href="#"><img class="icon error remove_auth_IP" /></a>${ip}
+                        </li>
+                        {{/each}}
+                    </ul>
+                </ul>
+            </div>
+            {{else}}
+            <div class="area">
+                <span class="title">SIP Username</span>
+                <span class="info">${auth.auth_user}</span>
+            </div>
+            <div class="area">
+                <span class="title">SIP Password</span>
+                <span class="info">${auth.auth_password}</span>
+            </div>
+            {{/if}}
+        </div>
+        <p>Phone Numbers For This Server:</p>
+        <div class="did_list numbers"/>
+        <div class="dropzone"/>
+        <div class="behavior" />
+    </div>
+</div>

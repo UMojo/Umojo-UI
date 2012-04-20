@@ -1,0 +1,314 @@
+/* Add your custom CSS here */
+
+/* If you are building a widget that could be used by EVERYONE, please consider adding your CSS
+ * to the global CSS stylesheet (talk to Dhruvi). Otherwise, add it here only */
+
+/* DO NOT USE IDs FOR CSS! CLASSES ONLY! */
+
+/*************************************
+----LEFT SIDE BAR MEDIA MANAGEMENT----
+**************************************/
+
+
+
+.media_list{
+	height: 490px;
+	border-bottom: 1px solid #8b8a8a;
+	filter:alpha(opacity=80);
+    -moz-opacity:0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+}
+
+.media_list ul{
+	background-color:#989898;
+	
+}
+
+.media_list ul li{
+	height:27px;
+	line-height:27px;
+	border-bottom: 1px solid #E3E3E3;
+	border-top: 1px solid #8b8a8a;
+	list-style-type: none;
+	width: 190px;
+	
+}
+
+.media_list ul li a{
+	float: left;
+	display:block;
+	color: #464747;
+	width: 150px;
+	height: 27px;
+	padding-left: 35px;
+	color: #474747;
+	text-decoration: none;
+	background-color:#989898;
+	border-right: 1px solid #7a7a7a;
+	
+	
+}
+
+.media_list ul li a:hover{
+	background-color:#bebebe;
+}
+
+/**************************
+----TOP TABS MEDIA---------
+****************************/
+
+.media_tabs {
+	background-color: #848484;
+	width: 788px;
+	height: 130px;
+	margin: 50px 0 0 18px; 
+	padding: 0 6px;
+	position:relative;	
+	z-index:600;
+	
+}
+
+.buttons{
+	width: 191px;
+	height: 130px;
+	float: left; 
+	position: relative;
+	margin: 0 3px;	
+}
+
+.buttons a.upload{
+	width: 191px;
+	height: 130px;
+	display: block;
+	background-image:url(../images/uploadfile_btn.png);
+	background-position: 0px 0px;		
+}
+
+.buttons a.audio{
+	width: 191px;
+	height: 130px;
+	display: block;
+	background-image:url(../images/audiostream_btn.png);
+	background-position: 0px 0px;		
+}
+
+.buttons a.text{
+	width: 191px;
+	height: 130px;
+	display: block;
+	background-image:url(../images/texttospeech_btn.png);
+	background-position: 0px 0px;		
+}
+
+.buttons a.record{
+	width: 191px;
+	height: 130px;
+	display: block;
+	background-image:url(../images/record_btn.png);
+	background-position: 0px 0px;		
+}
+
+.buttons a:hover{
+	background-position: 0px -130px;		
+}
+
+.buttons a.current, .buttons a.current:hover{
+	background-position: 0px -130px;		
+	cursor:default !important; 
+	-moz-box-shadow: 3px 5px 10px #383838;
+	-webkit-box-shadow: 3px 5px 10px #383838;
+	box-shadow: 3px 5px 10px #383838;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+}
+
+.media_pane{
+	width:760px;
+	margin-left:18px;
+	padding: 64px 20px 20px 20px;
+	background-color: #c8c8c8;
+	position:relative;
+	top: 7px;
+	color: #6d6d6d;
+}
+
+.media_pane form{
+	margin-bottom: 23px;
+}
+
+.media_pane form p{
+	font-size: 16px;
+	margin-bottom: 3px;
+}
+
+.media_pane form input{
+	border: 1px solid #7d7d7d;	
+	height: 25px;
+	width: 184px;
+}
+.media_pane form input.record_name{
+	margin-left: 40px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+.media_pane form input.record_file_name{
+	margin-left: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+.control_btns{
+	width: 682px;
+	height: 98px;
+	background-color:#FFF;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border: 2px solid #7dbad4;
+	margin-left: 86px;	
+}
+
+.control_btns a.record_red_btn{
+	background-image: url(../images/record_red_btn.png);
+	width: 88px;
+	height: 85px;
+	display: block;
+	margin: 7px 0 0 59px;
+	float: left;
+		
+}
+
+.control_btns .controler_bar{
+	background-image:url(../images/record_bar.jpg);
+	width: 480px;
+	height: 26px;
+	float: left;
+	margin: 42px 0 0 45px;
+	
+}
+
+.controler_bar a.play_btn{
+	background-image:url(../images/play_btn.png);
+	width: 11px;
+	height: 13px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 40px;
+	display: block;
+}
+
+.controler_bar a.play_btn:hover{
+	background-position: 0px -13px;
+}
+
+.controler_bar a.pause_btn{
+	background-image:url(../images/pause_btn.png);
+	width: 10px;
+	height: 12px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.pause_btn:hover{
+	background-position: 0px -12px;
+}
+
+.controler_bar a.stop_btn{
+	background-image:url(../images/stop_btn.png);
+	width: 12px;
+	height: 12px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 5px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.stop_btn:hover{
+	background-position: 0px -12px;
+}
+
+.controler_bar a.rewind_btn{
+	background-image:url(../images/rewind_btn.png);
+	width: 17px;
+	height: 13px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.rewind_btn:hover{
+	background-position: 0px -13px;
+}
+
+.controler_bar a.forward_btn{
+	background-image:url(../images/forward_btn.png);
+	width: 17px;
+	height: 13px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.forward_btn:hover{
+	background-position: 0px -13px;
+}
+
+.controler_bar a.skip_f_btn{
+	background-image:url(../images/skip_f_btn.png);
+	width: 21px;
+	height: 13px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.skip_f_btn:hover{
+	background-position: 0px -13px;
+}
+
+.controler_bar a.skip_b_btn{
+	background-image:url(../images/skip_b_btn.png);
+	width: 21px;
+	height: 13px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 6px 0 0 15px;
+	display: block;
+}
+
+.controler_bar a.skip_b_btn:hover{
+	background-position: 0px -13px;
+}
+
+.controler_bar a.trash_btn{
+	background-image:url(../images/trash_btn.png);
+	width: 14px;
+	height: 18px;
+	background-position: 0px 0px;
+	float: left;
+	margin: 3px 0 0 83px;
+	display: block;
+}
+
+.controler_bar a.trash_btn:hover{
+	background-position: 0px -18px;
+}
+
+.controler_bar .time_bar{
+	background-image:url(../images/time_bar.png);
+	width: 112px;
+	height: 19px;
+	float: left;
+	margin: 3px 0 0 10px;
+}
+

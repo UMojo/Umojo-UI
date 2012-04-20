@@ -1,0 +1,54 @@
+<div>
+    <div id="edit_server" class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <form id="endpoint" action="#">
+                    <input type="hidden" name="serverid" value="${serverid}" />
+                    <label>Server Nickname</label><input type="text" name="server_name" value="${server_name}" class="field_last" />
+
+                    <div class="clear"/>
+
+                    <h3>Authentication Method</h3><div class="icon authentication"></div>
+
+                    <div class="clear"/>
+
+                    <p>Your switch or PBX will connect to our service using a username and password:</p>
+                    <label>Register To</label><input type="text" disabled="true" name="realm" value="${realm}" />
+                    <input type="hidden" name="auth.auth_method" value="Password" />
+                    <label>Username</label><input type="text" name="auth.auth_user" value="${auth.auth_user}"/>
+                    <label>Password</label><input type="text" name="auth.auth_password" class="field_last" value="${auth.auth_password}"/>
+
+                    <div class="clear"/>
+
+                    <h3>Service Location</h3><div class="icon location"></div>
+                    <div class="clear"></div>
+                    <p style="margin-top:4px">The default E911 and service location information:</p>
+                    <label>Address</label>
+                    <input type="text" name="options.e911_info.Address" value="${options.e911_info.Address}" />
+
+                    <label>City</label>
+                    <input type="text" name="options.e911_info.City" value="${options.e911_info.City}" />
+
+                    <label>State</label>
+                    <input type="text" name="options.e911_info.State" value="${options.e911_info.State}" />
+
+                    <label>Postal Code</label>
+                    <input type="text" name="options.e911_info.ZIP" class="field_last" value="${options.e911_info.ZIP}" />
+
+                    <div class="clear"/>
+
+                    <h3>Service Limits</h3><div class="icon limit"></div>
+                    <label>Channel Limit</label>
+                    <input id="max_trunks" type="text" name="options.max_trunks" value="${options.max_trunks}" />
+
+                    <div class="clear"/>
+
+                    <div class="btn_wrapper">
+                        <a href="#" class="endpoint edit submit_btn ctr">Submit</a><br>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

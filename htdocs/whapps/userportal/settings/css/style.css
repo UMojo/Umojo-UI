@@ -1,0 +1,86 @@
+#settings-view label {
+    display: block;
+    width: 100%;
+    text-align: right;
+    color: #FFFFFF;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#settings-view input {
+    font-size: 10px;
+    padding: 4px 2px;
+    border: solid 1px #999; /* #09f; */
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+#settings-view input[type="text"] {
+    height: 12px;
+    width: 150px;
+}
+
+#settings-view .fields {
+    margin-top: 60px;
+}
+
+#settings-view .field {
+    margin-top: 5px;
+    text-align:center;
+}
+
+#settings-view .field-label {
+    display: inline-block;
+    width: 200px;
+    text-align: right;
+    vertical-align: middle;
+}
+
+#settings-view .field-input {
+    display: inline-block;
+    width: 200px;
+    text-align: left;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+#settings-view .field .checkbox {
+    text-align:left;
+}
+
+#settings-view .button-wrapper {
+    margin-top: 60px;
+    text-align: center;
+}
+
+#settings-view .button-wrapper a {
+    display: inline-block;
+    width: 81px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    color: #fff;
+    background-image: url(../../../../whapps/core/layout/images/button_bg.png);
+    text-decoration: none;
+    text-align:center;
+}
+
+#settings-view .button-wrapper a:hover {
+    color: #29abe1;
+}
+
+#settings-view .focusField {  
+    background: #FFF; 
+    border: solid 1px #09f; 
+    color: #000;  
+} 
+ 
+#settings-view .idleField {  
+    background: #BBB;  
+    color: #000;  
+    border: solid 1px #999 !important;
+}  
+

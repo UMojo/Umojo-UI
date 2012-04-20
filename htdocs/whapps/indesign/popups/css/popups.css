@@ -1,0 +1,627 @@
+/* CSS RESET */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, 
+dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/************************************************/
+/*************** START FORM CSS *****************/
+
+.container_resize { 
+    color: #424242;
+    height: auto; 
+    min-height: 100%; 
+}
+
+.container_resize .resize {
+    width: auto;
+    /*height: 300px;*/
+    background-color: #F9F9F9;
+    border: 4px solid #A6A6A6;
+    position:absolute;
+    min-width: 420px;
+    min-height: 250px;
+}
+
+.container_resize h2 {
+	color: #05AFDC;
+	font-size: 18px;
+	text-align: center;
+	margin: 30px 0 20px 0;
+}
+
+.container_resize h3 {
+	font-size: 14.5px;
+	font-weight: bold;
+	margin: 0 20px 9px;
+	clear: both;
+	letter-spacing: 0.05em;
+	float: left;
+}
+
+.container_resize p {
+	text-align: left;
+	padding: 0 20px; /*0 17px*/
+	margin-bottom: 15px;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+/*************** SUBMIT BTN, REGISTER BTN *****************/
+.container_resize a.submit_btn {
+    background-image: url("../images/regular_btn.png");
+    bottom: -14px;
+    display: block;
+    font-weight: bold;
+    height: 27px;
+    line-height: 27px;
+    right: 34px;
+    text-align: center;
+    width: 81px;
+	margin-bottom: 20px;
+}
+
+.container_resize a.register_btn {
+    background: url("../images/regular_btn.png") no-repeat;
+    /*bottom: -10px;*/
+    display: block;
+    font-weight: bold;
+    /*height: 27px;*/
+	line-height: 27px;
+    /*right: 34px;*/
+    text-align: center;
+    width: 81px;
+	clear: both;
+	margin: 0 0 20px 150px;
+}
+
+.container_resize .ctr_btn {
+	background: url("../images/regular_btn.png") no-repeat;
+    display: block;
+    font-weight: bold;
+    /*height: 27px;*/
+    width: 81px;
+	line-height: 27px;
+    text-align: center;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.container_resize .form {
+	margin: 0 auto;
+	width: auto;
+	margin-left: 5px;
+	/*padding-top: 25px;*/
+}
+
+.container_resize .center {
+	margin: 0 auto;
+}
+
+.container_resize .inline {
+	width: 250px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.container_resize .inline>label {
+	clear: none;
+	text-align: left;
+	margin-left: 10px;
+	width: 300px;
+}
+
+.container_resize .stack {
+	clear: both;
+	margin-left: 137px;
+}
+
+.container_resize .stack label {
+	clear: none;
+	text-align: left;
+	margin-left: 10px;
+	margin-top: -12px;
+}
+
+.container_resize .stack input[type="radio"] {
+	margin-top: -15px;
+}
+
+.container_resize .lg {
+	width: 425px;
+	padding: 1px 10px;
+}
+
+.container_resize .inline>label.failover {
+	/*text-align: right;*/
+	/*width: 180px;*/
+	width: auto;
+	float: left;
+}
+
+
+/*************** POPUP REGISTER *****************/
+/* ----------- My Form ----------- */
+.container_resize .myform{
+    margin: 0 auto;
+    padding: 5px;
+    height: auto;
+}
+
+.container_resize .small{
+    width: 410px;
+}
+
+.container_resize .popup_bar {
+    width: auto;
+    margin-bottom: 25px;
+}
+
+.container_resize h1 {
+    line-height: 25px;
+    background: url(../images/titlebar.png) repeat-x scroll 50% 50% #6B6B6B;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.container_resize a.cancel {
+    background-image: url("../images/cancel_btn.png");
+    background-position: 0 0;
+    display: block;
+    float: right;
+    height: 15px;
+    width: 15px;
+    margin: -28px 5px 0 0;
+    text-indent: -9999px;
+}
+
+.container_resize a.cancel:hover {
+	background-position: 0 -15px;
+}
+
+.container_resize .focusField{  
+	border: solid 1px #09F;  
+	background: #FFF;  
+	color: #000;  
+}  
+.container_resize .idleField{  
+	background: #EEE;  
+	color: #BEBEBE;  
+	border: solid 1px #999 !important;
+}  
+
+/* ----------- stylized ----------- */
+.container_resize .myform h1 {
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	padding-left: 10px;
+}
+
+.myform label {
+	display: block;
+	text-align: right;
+	width: 140px;
+	float: left;
+	margin-top: 8px;
+	clear: both;
+}
+
+.myform input {
+	float: left;
+	font-size: 12px;
+	padding: 4px 2px;
+	border: solid 1px #09f;
+	width: 200px;
+	margin: 2px 0 5px 10px;
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+}
+
+.container_resize input.field_round {
+	width: 50px;
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+	padding: 4px 2px;
+}
+
+.container_resize .checkbox {
+	float: left;
+	padding: 4px 2px;
+	border: solid 1px #09f;
+	width: 200px;
+	margin: 2px 0 5px 10px;
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+}
+
+
+/* ----------- LOGIN ----------- */
+
+.container_resize a.popup_link {
+	color: #424242;
+}
+
+.container_resize a.popup_link:hover {
+	color: #05AFDC;
+}
+
+.container_resize .popup_bottom {
+	margin: 20px 0 auto;
+	text-align: center;
+}
+
+.container_resize .popup_bottom>h3 {
+	/*margin: 20px 0 auto;*/
+	text-align: left;
+	margin-bottom: 20px;
+}
+
+.container_resize .popup_bottom>hr {
+	width: 95%;
+	margin-bottom: 25px;
+	clear: both;
+}
+
+.container_resize .popup_content {
+	padding: 0 10px;
+	margin: 0 auto;
+	width: 500px;
+	clear: both;
+}
+
+.container_resize .ctr {
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.container_resize p.note_box {
+	background-color: #E7E7E7;
+	padding: 15px 10px;
+	font-size: 10px;
+	line-height:15px;
+	margin-bottom: 20px;
+}
+
+/* ----------- 3 COLUMN CC ADD BILLING ----------- */
+
+.container_resize .popup_cleft {
+	float: left;
+	width: 165px;
+}
+
+.container_resize .popup_cmiddle {
+	float: left;
+	width: 165px;
+}
+
+.container_resize .popup_cright {
+	float: right;
+	width: 165px;
+	text-align: center;
+}
+
+.container_resize .popup_cright a {
+	color: #424242;
+	text-decoration: underline;
+	line-height: 20px;
+	font-size: 14px;
+}
+
+
+.container_resize .col_wrapper {
+	margin-bottom: 20px;
+	height: auto;
+}
+
+.container_resize .stylized input[type=checkbox] {
+	width: 15px;
+	height: 15px;
+	margin-top: 5px; /*webkit: 7px*/
+}
+
+.container_resize select.styled {
+	width: 200px;
+	margin: 4px 0 0 1px;
+	/*border: 1px solid #424242;
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	border-radius: 5px; 
+*/
+}
+
+.container_resize .select {
+    background: url("../images/bar.png") no-repeat scroll 0 0 transparent;
+    font: 12px/21px arial,sans-serif;
+    height: 28px;
+    overflow: hidden;
+    padding: 4px 10px 0 8px;
+    position: absolute;
+    width: 250px;
+	letter-spacing: 1px;
+}
+
+
+.stylized input[type=radio] {
+	width: 15px;
+	height: 15px;
+	margin-top: 6px;
+	/*position: absolute;*/
+}
+
+.container_resize .radio {
+	margin-left: 10px;
+}
+
+.container_resize .form>p {
+	display: block;
+	overflow: hidden;
+	position: relative;
+}
+
+.container_resize .form>p>input {
+	float: left;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+
+.container_resize .form>p>label {
+	-moz-transition: color 1s ease 0s;
+    float: left;
+    line-height: 16px;
+    margin-left: -10px;
+	width: 50px;
+}
+
+.container_resize .col { 
+	width: 100px;
+}
+
+.container_resize .radio_wrap {
+	width: 100px;
+	display: inline;
+}
+
+.box1, .box2, .box3, .box4, .box5, .box6 {
+	float: left;
+	padding: 0 0 20px 0;
+	width: 85px;
+}
+
+.box1 p, .box2 p, .box3 p, .box4 p, .box5 p, .box6 p {
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
+.box1 input[type="radio"], .box2 input[type="radio"], .box3 input[type="radio"], .box4 input[type="radio"], .box5 input[type="radio"], .box6 input[type="radio"] {
+	float: left;
+	position: relative;
+	text-align: right;
+}
+
+.box1 label, .box2 label, .box3 label, .box4 label, .box5 label, .box6 label {
+	margin: -20px 0 0 30px;
+	text-align: left;
+}
+
+p label {
+	margin: 0 33px 0 0;
+}
+
+.stylized input.field_last {
+	margin-bottom: 20px;
+}
+
+/************** ICONS ************/
+
+.account_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: 0 -357px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -7px 15px 10px -20px;
+}
+
+.cc_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -577px -357px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -7px 15px 10px -15px;
+}
+
+.billing_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -769px -357px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -10px 15px 10px -15px;
+}
+
+.location_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -32px -260px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -10px 15px 10px -20px;
+}
+
+.limit_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -830px -290px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -12px 15px 10px -18px;
+}
+
+.charge_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -192px -356px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -10px 15px 10px -15px;
+}
+
+.monitoring_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -321px -419px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -10px 15px 10px -15px;
+}
+
+.robot_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -736px -387px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -10px 15px 10px -15px;
+}
+
+.rightarrow_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -860px -2px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -7px 15px 10px -15px;
+}
+
+.cart_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -700px -292px;
+	width: 33px;
+	height: 32px;
+	float: left;
+	margin: -6px 15px 10px -15px;
+}
+
+.authentication_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: 0 -290px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -12px 15px 10px -15px;
+}
+
+.recharge_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -473px 0;
+	width: 38px;
+	height: 32px;
+	float: left;
+	margin: -12px 15px 10px -15px;
+}
+
+.dollar_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -960px -419px;
+	width: 38px;
+	height: 32px;
+	float: left;
+	margin: -12px 15px 10px -15px;
+}
+
+.search_icon {
+	background: url(../images/Icons_32x32_Blue.png);
+	background-position: -895px -424px;
+	width: 32px;
+	height: 32px;
+	float: left;
+	margin: -6px 15px 10px -15px;
+}
+
+/************** TABLE ************/
+
+.container_resize table {
+    border-collapse: collapse;
+    border-style: hidden hidden none;
+	color: #424242;
+	margin: 20px;
+}
+
+.container_resize table th {
+    border-bottom: thin solid;
+    border-left: thin solid;
+    border-right: thin solid;
+    padding: 5px;
+    vertical-align: top;
+}
+
+.container_resize table td {
+    border-left: thin solid;
+    border-right: thin solid;
+    padding: 7px;
+    vertical-align: top;
+}
+
+.stylized label.label_right {
+	float: right;
+	text-align: left;
+	clear: both;
+}
+
+
+/******MOCKUP IMAGE PLS DELETE*******/
+.orderhis {
+    background-image: url(../images/orderhis.png);
+    width: 660px;
+    height: 149px;
+    margin-left: 15px;
+}
+
+.table1 {
+    background: url(../images/table1.png) no-repeat scroll transparent;
+    width: 570px;
+    height: 249px;
+}
+
+.table2 {
+    background: url(../images/table2.png) no-repeat scroll transparent;
+    width: 570px;
+    height: 100px;
+}
+
+

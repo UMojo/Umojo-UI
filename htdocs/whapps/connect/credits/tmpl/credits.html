@@ -1,0 +1,14 @@
+<div>
+    <div class="info" style="background-repeat: repeat-y; ">
+        {{if account.credits}}
+            <span class="amount">&#36;${parseFloat(account.credits.prepay).toFixed(2)}</span>
+        {{else}}
+            <span class="amount">Loading...</span>
+        {{/if}}
+
+        <span class="ppm">per-minute credit</span>
+        <span id="addCredsSpan">
+            <a href="#" id="add_prepay_button" class="credits manage button">Manage Credit</a>
+        </span>
+    </div>
+</div>
