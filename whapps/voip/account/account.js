@@ -1,11 +1,11 @@
 winkstart.module('voip', 'account', {
         css: [
-            'css/account.css'
         ],
 
         templates: {
             account: 'tmpl/account.html',
-            edit: 'tmpl/edit.html'
+            edit: 'tmpl/edit.html',
+            edit_bootstrap: 'tmpl/edit_bootstrap.html'
         },
 
         subscribe: {
@@ -305,16 +305,25 @@ winkstart.module('voip', 'account', {
 
         render_account: function(data, target, callbacks) {
             var THIS = this,
-                account_html = THIS.templates.edit.tmpl(data);
+                account_html = THIS.templates.edit.tmpl(data),
+                account_bootstrap_html = THIS.templates.edit_bootstrap.tmpl(data);
 
             winkstart.validate.set(THIS.config.validation, account_html);
+
+             $('*[rel=popover]', account_bootstrap_html).popover({
+                    trigger: 'focus',
+                    title: function(){
+                        return 'Help';
+                    }
+                });
+
 
             $('*[tooltip]', account_html).each(function() {
                 $(this).tooltip({ attach: account_html });
             });
 
-            $('ul.settings1', account_html).tabs($('.pane > div', account_html));
-            $('ul.settings2', account_html).tabs($('.advanced_pane > div', account_html));
+            //$('ul.settings1', account_html).tabs($('.pane > div', account_html));
+            //$('ul.settings2', account_html).tabs($('.advanced_pane > div', account_html));
 
             $('#name', account_html).focus();
 
@@ -434,7 +443,9 @@ winkstart.module('voip', 'account', {
 
             (target)
                 .empty()
-                .append(account_html);
+                .append(account_bootstrap_html);
+
+
         },
 
         render_list: function(parent) {
