@@ -176,16 +176,20 @@
         tabs_html.hide();
         
         $('.basic', buttons_html).click(function(){
-            $('.btn', buttons_html).removeClass('activate');
-            $(this).addClass('activate');
-            $('li:first-child > a', tabs_html).trigger('click');
-            tabs_html.hide();
+            if(!$(this).hasClass('activate')){
+                $('.btn', buttons_html).removeClass('activate');
+                $(this).addClass('activate');
+                $('li:first-child > a', tabs_html).trigger('click');
+                tabs_html.hide('blind');
+            }
         });
 
         $('.advance', buttons_html).click(function(){
-            $('.btn', buttons_html).removeClass('activate');
-            $(this).addClass('activate');
-            tabs_html.show();
+            if(!$(this).hasClass('activate')){
+                $('.btn', buttons_html).removeClass('activate');
+                $(this).addClass('activate');
+                tabs_html.show('blind');
+            }
         });
     };
 

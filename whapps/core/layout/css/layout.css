@@ -72,8 +72,8 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .main_content {
-    padding-top: 10px;
-    padding-left: 10px;
+    float:left;
+    margin-top: 2%;
 }
 
 .background {
