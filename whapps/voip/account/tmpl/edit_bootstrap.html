@@ -1,19 +1,25 @@
 <div>
 	<div class="row">
-		<div class="span8 offset1">
-			<div class="page-header">
-				<h1>Edit Account</h1>
+		<div class="span12 offset1 whapp-header">
+			<h1>Edit Account</h1>
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advance">Advance</button>
 			</div>
-
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12 offset1">
 			<ul class="tabs" data-tabs="tabs">
 			 	<li class="active"><a href="#basic">Basic</a></li>
 			 	<li><a href="#caller_id">Caller ID</a></li>
 			 	<li><a href="#voicemail_to_email">Voicemail To Email Template</a></li>
 			 	<li><a href="#options">Options</a></li>
+			 	<li><a href="#monitoring">Monitoring</a></li>
 			</ul>
-			<form action="#">
+			<form action="#" id="account-form">
 				<div class="pill-content">
-					<div class="active" id="basic">
+					<div class="active basic_view" id="basic">
 						<div class="clearfix">
 							<label for="name">Name</label>
 							<div class="input">
@@ -43,6 +49,7 @@
 								<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
 							</div>
 						</div>
+						<hr />
 
 						<h3>Outbound Calls</h3>
 						<div class="clearfix">
@@ -57,6 +64,7 @@
 								<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
 							</div>
 						</div>
+						<hr />
 
 						<h3>Emergency</h3>
 						<div class="clearfix">
@@ -95,6 +103,7 @@
 								<input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
 							</div>
 						</div>
+						<hr />
 
 						<h3>Template fields for sub-accounts</h3>
 						<div class="clearfix">
@@ -119,7 +128,7 @@
 						</div>
 					</div>
 
-					<div id="options">		
+					<div id="options">
 						<div class="clearfix">
 							<label for="music_on_hold">Music on Hold</label>
 							<div class="input">
@@ -136,6 +145,7 @@
                                 <a class="inline_action_media" data-action="create" href="#">Create</a>
 							</div>
 						</div>
+						<hr />
 
 						<div class="clearfix">
 							<label for="format_from_uri">Pass Realm in INVITE</label>
@@ -155,15 +165,46 @@
 						</div>
 					</div>
 
+					<div id="monitoring">
+						<div class="clearfix">
+							<label for="deregister">Notify on de-register</label>
+							<div class="input">
+								<ul class="inputs-list">
+	              					<li>
+		              					<label>
+											{{if field_data.deregister}}
+			                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content=""By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters./>
+			                                {{else}}
+			                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content=""By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters./>
+			                                {{/if}}
+                                		</label>
+	                                </li>
+                                </ul>
+							</div>
+						</div>
+
+						<div class="clearfix deregister_email">
+							<label for="deregister_email">Email to notify</label>
+							<div class="input">
+								{{if field_data.deregister}}
+                                <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="Email to notify"/>
+                                {{else}}
+                                <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="Email to notify"/>
+                                {{/if}}
+							</div>
+						</div>
+					</div>
 				</div>
 			</form>
-			{{if data.id}}
-				<a class="btn primary account-save">Use account</a>
-	        {{/if}}
-	        {{if data.id}}
-	            <a class="btn danger account-save">Delete</a>
-	        {{/if}}
-            <a class="btn success account-save">Save</a>
+			<div class="buttons-right">
+				{{if data.id}}
+				<button class="btn primary account-save">Use account</button>
+		        {{/if}}
+		        {{if data.id}}
+		            <button class="btn danger account-save">Delete</button>
+		        {{/if}}
+	            <button class="btn success account-save">Save</button>
+			</div>
 		</div>	
 	</div>
 </div>

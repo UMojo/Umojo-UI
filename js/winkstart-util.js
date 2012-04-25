@@ -152,4 +152,41 @@
         return random_string;
     };
 
+    winkstart.link_form = function(html){
+        $('input', html).bind('change.link keyup.link focus.link', function() {
+            var name = $(this).attr('name'),
+                type = $(this).attr('type'),
+                input_fields = $('input[name="' + name + '"]', html);
+        
+            if(input_fields.size() > 1) {
+                if(type == 'checkbox'){
+                    ($(this).attr('checked')) ? input_fields.attr('checked', 'checked') : input_fields.removeAttr('checked');
+                } 
+                else {
+                    input_fields.val($(this).val());   
+                }
+            } 
+            else {
+                $(this).unbind('.link');
+            }
+        });
+    };
+
+    winkstart.tabs = function(buttons_html, tabs_html) {
+        tabs_html.hide();
+        
+        $('.basic', buttons_html).click(function(){
+            $('.btn', buttons_html).removeClass('activate');
+            $(this).addClass('activate');
+            $('li:first-child > a', tabs_html).trigger('click');
+            tabs_html.hide();
+        });
+
+        $('.advance', buttons_html).click(function(){
+            $('.btn', buttons_html).removeClass('activate');
+            $(this).addClass('activate');
+            tabs_html.show();
+        });
+    };
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
