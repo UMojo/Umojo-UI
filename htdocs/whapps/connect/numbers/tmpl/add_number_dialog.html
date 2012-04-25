@@ -1,0 +1,40 @@
+<div>
+    <div id="edit_number" class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <p class="note_box">
+                    You can specify the area code and up to 3 numbers of the local prefix.
+                    For Toll Free number please enter 800, 888, 877, 866, 855 in the area code.<br /><br />
+                    If you order from an area showing only six digits, we'll randomly select a new number in that area.
+                </p>
+
+                <form id="sdidform" action="" onsubmit="return false;">
+                    <div id="sdiddiv">
+                        <span id="ACspan">(</span><input type="text" id="sdid_npa" name="NPA" maxlength="3" pattern="^[2-9][0-8][0-9]$" />&nbsp;
+                        <span id="COCspan">) -</span><input type="text" id="sdid_nxx"  name="NXX" maxlength="3" pattern="^[2-9]\d\d$" />&nbsp;
+                        <span id="help_did_add_dids" class="help_bt">&nbsp;</span>
+                    </div>
+                </form>
+
+                <a id="search_numbers_button" class="ctr_btn clear" href="#">Search</a>
+
+                <div id="foundDIDList"/>
+
+                <div class="search_icon"/>
+
+                <br /><br />
+
+                <div class="table1"/>
+
+                <br />
+
+                <div class="table2"/>
+
+                <p class="note_box">Each number you select will be added to your monthly invoice.</p>
+
+                <a id="add_numbers_button" class="ctr_btn" href="#">Add</a>
+                <div class="helpertext">Clicking the "Add Button" will charge your credit card</div>
+            </div>
+        </div>
+    </div>
+</div>

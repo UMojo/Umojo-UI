@@ -1,0 +1,92 @@
+#ws_prov { min-height: 600px; }
+
+#ws_prov .hidden { visibility: hidden; }
+
+#ws_prov ol, #ws_prov ul, #ws_prov li { list-style: none;}
+
+#ws_prov #selector .brand { display: inline-block; width: 150px; vertical-align: top; }
+#ws_prov #selector .brand .name { width: 150px; height: 20px; margin: 4px; text-align: center; }
+#ws_prov #selector .brand:hover .models { display: block; }
+#ws_prov #selector .brand .models { display: none; position: absolute; width: 150px; border: 1px solid #808080; }
+#ws_prov #selector .brand .models .model { display: block; width: 150px; padding-top: 5px; padding-bottom: 5px; text-align: center; border: 1px solid; color: #fff; text-decoration: none; }
+
+#ws_prov #categories { width: 100%; text-align: center; margin-top: 70px; }
+
+#ws_prov #categories .save_load { height: 40px; text-align: left; }
+#ws_prov #categories .save_load .load { display: inline-block; float: left; }
+#ws_prov #categories .save_load .load input { width: 300px; }
+#ws_prov #categories .save_load .save { display: inline-block; float: right; }
+#ws_prov #categories .save_load a { margin-left: 20px; color: #fff; text-decoration: none; }
+#ws_prov #categories .save_load .label { display: inline-block; width: 150px; }
+
+#ws_prov #categories .category { display: inline-block; text-transform: uppercase; font-size: 10px; height: 40px; line-height: 40px; background: url(../images/bottom_bar.jpg) center -4px; color: #fff; text-decoration: none; }
+#ws_prov #categories .category:hover { background-image: url(../images/btm_tab_active.jpg); }
+#ws_prov #categories .category.current { background-image: url(../images/btm_tab_active.jpg); }
+#ws_prov #categories em { display:block; padding-top: 26px; height: 40px; width: 80px; background: no-repeat center -4px; }
+
+#ws_prov #categories em.lines { background-image: url(../images/ico/lines.png); }
+#ws_prov #categories em.audio { background-image: url(../images/ico/audio.png); }
+#ws_prov #categories em.display { background-image: url(../images/ico/display.png); }
+#ws_prov #categories em.features { background-image: url(../images/ico/features.png); }
+#ws_prov #categories em.sip { background-image: url(../images/ico/sip.png); }
+#ws_prov #categories em.network { background-image: url(../images/ico/network.png); }
+#ws_prov #categories em.general { background-image: url(../images/ico/general.png); }
+#ws_prov #categories em.expansion { background-image: url(../images/ico/expansion.png); }
+
+
+#ws_prov #endpoint .window.phone {
+   background: url(../images/phone.png) center 20px no-repeat;
+}
+
+#ws_prov #endpoint .group { margin: 20px; display: inline-block; text-align: left; }
+#ws_prov #endpoint .group h1 { font-weight: bold; text-align: center; }
+#ws_prov #endpoint .label { display: inline-block; width: 275px; }
+#ws_prov #endpoint .option { display: inline-block; width: 75px; }
+
+
+/*
+#ws_prov #endpoint #categories { background: url(../images/bottom_bar.jpg) no-repeat; width: 988px; height: 60px; margin: 30px 0;}
+#ws_prov #endpoint #categories ul { width: 918px; margin: auto; font-size: 10px;}
+#ws_prov #endpoint #categories li { float: left; text-transform: uppercase; height:40px; line-height:40px; }
+#ws_prov #endpoint #categories li a { display: block; float: left;  padding: 0 35px;}
+#ws_prov #endpoint #categories li a:link, #ws_prov#endpoint #categories li a:visited  { color: #fff;}
+#ws_prov #endpoint #categories li a:hover, #ws_prov#endpoint #categories li a:active  { color: #ccc;}
+#ws_prov #endpoint #categories li.current a { color:#FFFFFF; background:url(../images/btm_tab_active.jpg) no-repeat center top;} 
+#ws_prov #endpoint #categories li a:hover { color:#FFFFFF; background: url(../images/btm_tab_active.jpg) no-repeat center top;}
+
+#ws_prov #endpoint #categories li a em { display:block; float:left; padding-top: 16px; height:40px;}
+
+#ws_prov #endpoint #categories li a em.lines { background: url(../images/ico/lines.png) no-repeat center -4px; }
+#ws_prov #endpoint #categories li a em.audio { background: url(../images/ico/audio.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.display { background: url(../images/ico/display.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.features { background: url(../images/ico/features.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.sip { background: url(../images/ico/sip.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.network { background: url(../images/ico/network.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.general { background: url(../images/ico/general.png) no-repeat center -4px;}
+#ws_prov #endpoint #categories li a em.expansion { background: url(../images/ico/expansion.png) no-repeat center -4px;}
+
+
+
+#ws_prov #endpoint { width: 988px; margin: auto; text-align: center;}
+
+#ws_prov #endpoint { padding-top: 10px;}
+
+#ws_prov #endpoint #col_left { width: 225px; float: left;}
+
+#ws_prov #endpoint #col_middle { width: 488px; float: left; margin: 0 22px;}
+
+#ws_prov #endpoint #col_right { width: 225px; float: left;}
+
+#ws_prov #endpoint .subcategory { display: inline-block; background: #f3f3f3; border: 1px solid #c4c4c4; height: 200px; margin-bottom: 20px; padding: 10px; width: 30%; vertical-align: top; overflow: hidden; }
+#ws_prov #endpoint .subcategory.expand {width: 988px; min-height: 800px; position: absolute; overflow: scroll; }
+#ws_prov #endpoint .phone { background: #fff url(../images/phone2.jpg) center 20px no-repeat; border: 1px solid #c4c4c4; height: 200px; margin-bottom: 20px;}
+
+#ws_prov #endpoint .subcategory_tabs { background: #f3f3f3;  margin-bottom: 20px;}
+#ws_prov #endpoint ul.tabs { background: #7d93a8; height: 20px; line-height: 20px;}
+#ws_prov #endpoint ul.tabs li { border-right: 1px solid #005b7b; font-size: 10px; text-align: center; width: 74px; float: left;}
+#ws_prov #endpoint ul.tabs li.last { border:none;}
+#ws_prov #endpoint ul.tabs li a { color: #fff;}
+#ws_prov #endpoint ul.tabs p { font-size: 12px;}
+#ws_prov #endpoint ul.tabs li:hover { background: #2b91bf;}
+#ws_prov #endpoint .tab_content {  border: 1px solid #C4C4C4; padding: 10px;}
+*/

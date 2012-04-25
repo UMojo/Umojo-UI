@@ -1,0 +1,31 @@
+.phone_model {
+   background-image: url(../images/phone.jpg);
+}
+.inline {
+   display: inline-block;
+}
+
+.left {
+   width: 30%;
+   float: left;
+}
+
+.right {
+   width: 30%;
+   float: right;
+}
+
+.middle {
+   width: 30%;
+}
+
+#settings {
+   vertical-align: top;
+}
+
+.col_box {
+   display: inline-block;
+   vertical-align: top;
+   width: 300px;
+   margin: 10px;
+}

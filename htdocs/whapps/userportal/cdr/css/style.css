@@ -1,0 +1,81 @@
+#cdr-view {
+    margin: auto;
+    width: 90%;
+}
+
+#cdr-view .table-wrapper {
+    margin-top: 30px;
+}
+
+#cdr-view .button-wrapper{
+    text-align: right;
+}
+
+#cdr-view .button-wrapper a{
+    display: inline-block;
+    width: 81px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    color: #fff;
+    background-image: url(../../../../whapps/core/layout/images/button_bg.png);
+    text-decoration: none;
+    text-align: center;
+}
+
+#cdr-view .button-wrapper a:hover{
+    color: #29abe1;
+}
+
+#cdr-view .button-search {
+    display: inline-block;
+    width: 81px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    color: #fff;
+    background-image: url(../../../../whapps/core/layout/images/button_bg.png);
+    text-decoration: none;
+    text-align: center;
+}
+
+#cdr-view .button-search a:hover{
+    color: #29abe1;
+}
+
+#cdr-view .date {
+    width: 45%;
+    float: left;
+    margin-bottom: 18px;
+}
+
+#cdr-view .date input{
+    font-size: 11px;
+    padding: 4px 2px;
+    border: solid 1px #999; 
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#cdr-view .date a {
+    vertical-align: middle;
+}
+
+#cdr-view .date a:hover{
+    color: #29abe1;
+}
+
+#cdr-view .date input[type="text"] {
+    height: 12px;
+    width: 100px;
+}
+
+#cdr-view .date .focusField {
+    background: #FFF;
+    border: solid 1px #09f;
+    color: #000;
+}

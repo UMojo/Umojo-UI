@@ -1,0 +1,25 @@
+<div>
+    <div class="server" server_id="${server_id}" id="${server_id}">
+        <div class="server_header" >${server_name.substr(0,15)}<a class="question_icon" href="#" tooltip="${tooltip}"></a><a class="cancel_btn" href="#"></a></div>
+        <div class="server_content">
+            
+            <!--
+            {{if server_state != 'Update'}}
+            <div class="server_progress"></div>
+            {{else}}
+            <div class="server_progress" style="display:none"></div>
+            {{/if}}
+            -->
+
+            <!--<div id="loglist">
+                
+            </div>-->
+            <ul>
+                {{each server_roles}}
+                <li>${$value}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="server_footer ${server_state}">Deployment Status : <a class="update_status" href="#">${server_state}</a></div>
+    </div>
+</div>

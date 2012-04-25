@@ -1,0 +1,27 @@
+<div>
+    <div class="popup edit_failover">
+        <div class="stylized myform">
+            <form id="failover" action="#">
+                {{if did}}
+                <h3>Failover for ${did}</h3>
+                {{else}}
+                <h3>Default Failover</h3>
+                {{/if}}
+                <div class="icon failover blue"></div>
+
+                <p class="note_box">If your phone system is unreachable for any reason, we can redirect a caller <br>to an alternate phone system, phone number or VoIP device.<br><br>Note: Failover places an outbound call to connect to your alternate device. <br>This will utilize another trunk/circuit on your account and bill accordingly, <br>the same way it would if you made an outbound call from a phone.</p>
+
+                <div class="inline lg">
+                    <label class="failover">Failover number</label>
+                    <input type="text" name="failover" value="${failover}">
+                </div>
+                <a class="submit_btn clear ctr" href="#">Activate</a>
+
+                <div class="clear"/>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

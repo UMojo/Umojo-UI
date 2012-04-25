@@ -1,0 +1,62 @@
+<div>
+    <h2>${model}</h2>
+    <div class="clear"/>
+    <div>Ringer Type: ${settings.ringer_type}</div>
+    <div>Ringer On: ${settings.ringer_on}</div>
+    <style>
+    	#photo{
+    		height: ${img_height}px; 
+    		width: ${img_width}px;
+    		background-image:url('${img_base64}');
+    	}
+    	.transparent_class {
+			-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+			filter: alpha(opacity=50);
+			-moz-opacity: 0.5;
+			-khtml-opacity: 0.5;
+			opacity: 0.5;
+		}
+		.resizable {
+			position: absolute;
+			cursor: pointer;
+			border: 1px solid #05ADDC;
+			z-index: 2;
+		}
+		#photo {
+			margin: 10px 300px 0 0;
+			position: relative;
+		}
+		fieldset.provisioner{
+			margin: 5px;
+			padding: 5px;
+			border: 1px solid #BFBAB0;
+			width:325px;
+		}
+		
+		.provisioner label, .provisioner input
+	    {
+	        display: block;
+	        width: 120px;
+	        float: left;
+	        margin-bottom: 10px;
+	    }
+	 
+	    .provisioner label
+	    {
+	        text-align: right;
+	        padding-right: 20px;
+	    }
+	    .provisioner br
+	    {
+	        clear: left;
+	    }
+    </style> 
+	<div id="main">
+    	<div id="text">
+    </div>
+    <div id="photo" class="ui-widget-content ui-corner-all"></div>
+    <span id="move_update"></span><span id="size_update"></span>
+    <script>
+    getExistingResizables(function(data){data = $.parseJSON(data);$.each(data, function(){addExistingResizables(this);});});
+    </script>
+</div>

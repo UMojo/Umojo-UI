@@ -1,0 +1,520 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* top menu */
+#endpoints #auth_realm { color:#4E4D4D; font-weight:bold; font-size: 18px }
+#endpoints { width:940px; margin:0px auto; }
+#endpoints a#add_server { float:right; background:url(../images/button_add_server.jpg) top left no-repeat; display:block; width:99px; height:29px; margin: 5px 15px 0 0; }
+#endpoints a#add_server:hover { background-position:0 -29px; }
+#endpoints select { float:right; margin:10px 55px 0 5px; }
+
+#container { width:940px; margin:0px auto; background-color: #FFFFFF; margin-top: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 8px 8px 8px 8px; }
+
+#control_area { width:463px; float:left; }
+
+/* my numbers area */
+#control_area #numbers { width:423px; margin:0 0 20px 20px; }
+#control_area #numbers .title { width:363px; height:23px; background:url(../images/bg_numbers_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px; }
+#control_area #numbers .number_entry { background:url(../images/bg_numbers_li.jpg) top left no-repeat; width:423px; height:34px; font-size:12px; clear: left; }
+
+#control_area #numbers .numbers .cancel_number { color:#d93636; float:right; margin: 10px 25px 0 0; }
+#control_area #numbers .numbers .cancel_number:hover { text-decoration:none; }
+
+#control_area #numbers .numbers .number { color:#4e4d4d; float:left; margin:10px 0 0 25px; }
+#control_area #numbers .numbers .amount { color:#999999; float:left; margin:10px 0 0 55px; }
+
+#control_area #numbers .view { background:url(../images/bg_numbers_li_view.jpg) top left no-repeat; width:423px; height:28px; font-size:12px; }
+#control_area #numbers .view .more { color:#d93636; float:right; margin: 6px 25px 0 0; }
+#control_area #numbers .view .more:hover { text-decoration:none; }
+#control_area #numbers .view .showing { color:#4e4d4d; float:left; margin:6px 0 0 25px; }
+
+#control_area #numbers .buttons, #control_area #my_services .buttons { height:22px; margin:0 0 0 15px; clear: both; }
+#control_area #numbers .buttons li, #control_area #my_services .buttons li { width:187px; height:22px; background:url(../images/button_controlarea_bottom.jpg) top left no-repeat; float:left; margin:0 0 0 6px; list-style: none; }
+#control_area #numbers .buttons li a, #control_area #my_services .buttons li a { display:block; width:157px; height:17px; font-size:11px; color:#dcdcdc; text-decoration:none;  }
+#control_area #numbers .buttons li a:hover, #control_area #my_services .buttons li a:hover { text-decoration:underline; }
+#control_area #numbers .buttons li .add {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
+#control_area #numbers .buttons li .import {background:url(../images/button_ca_bottom_import.png) top left no-repeat; }
+
+
+/* my services area */
+#control_area #my_services { width:423px; margin:0 0 15px 20px; }
+#control_area #my_services .title { width:363px; height:23px; background:url(../images/bg_trunks_header.jpg) top left no-repeat; color:#fff; padding:6px 0 0 60px;  }
+#control_area #my_services .info { background:url(../images/bg_trunk_li.jpg) top left no-repeat; width:423px; height:45px; color:#4e4d4d; padding-top:0em; }
+#control_area #my_services .info .amount { float:left; font-size:27px; margin:10px 0 0 30px; }
+#control_area #my_services .info .ppm { float:left; font-size:13px; font-weight:bold; margin:22px 0 0 10px; }
+#control_area #my_services .info .channels.num { float:left; font-size:27px; margin:10px 0 0 30px; }
+#control_area #my_services .info .channels.detail { float:left; font-size:12px; font-weight:bold; margin:10px 0 0 10px; }
+#control_area #my_services .info .channels.detail em {font-weight:normal; font-size:11px; }
+#control_area #my_services .info .e_num { float:left; font-size:27px; margin:10px 0 0 30px; }
+#control_area #my_services .info .e_detail { float:left; font-size:12px; font-weight:bold; margin:24px 0 0 10px; }
+
+#control_area #my_services .addl { background:url(../images/bg_trunk_li_addl.jpg); height:70px; font-size:12px; float: left; width:423px; }
+#control_area #my_services .addl span { display:block; width:100%; float:left; }
+#control_area #my_services .addl span .number, #control_area #my_services .addl span .edit { display:inline; width:auto; float:none; }
+#control_area #my_services .addl span .edit a {color:#d93636;  }
+#control_area #my_services .addl span .edit a:hover { text-decoration:none;  }
+#control_area #my_services .addl .alert { color:#d93636; margin:4px 0 5px 30px; }
+#control_area #my_services .addl .cc {  margin:0px 0 5px 30px; }
+#control_area #my_services .addl .cc_back {  margin:0px 0 5px 30px; }
+
+#control_area #my_services .buttons li .history {background:url(../images/button_ca_bottom_plus.png) top left no-repeat; }
+#control_area #my_services .buttons li .account {background:url(../images/button_ca_bottom_account.png) top left no-repeat; }
+
+/* server area */
+#endpoint_list { width:445px; float:left; height:490px; overflow-y: scroll }
+#endpoint_list .endpoint { width:425px; color:#4e4d4d; margin: 0 0 30px 0; }
+#endpoint_list .endpoint .title { height:31px; width:425px; background:url(../images/bg_server_title.jpg) top left no-repeat; }
+#endpoint_list .endpoint .title .name { font-size:14px; float:left; margin:8px 0 0 18px; }
+#endpoint_list .endpoint .title .status { font-size:11px; font-weight:bold; float:right; margin:8px 15px 0 0;  }
+#endpoint_list .endpoint .title .status .state { margin: 0 3px 0 2px; color:#d93636; font-size:14px; }
+#endpoint_list .endpoint .title .status a { color:#4e4d4d; }
+#endpoint_list .endpoint .title .status a:hover { text-decoration:none; color:#2AB9E1; }
+
+/* server area -> SIP */
+#endpoint_list .endpoint .sip { height:59px; width:425px; background:url(../images/bg_server_sip.jpg) top left no-repeat; font-size:12px; }
+#endpoint_list .endpoint .sip .area { width:100px; margin:0 0 0 20px; float:left; }
+#endpoint_list .endpoint .sip .area .title { display:block; width:100px; margin:6px 0 0 0; background:none; color:#2585a5; font-weight:bold; height:27px; }
+#endpoint_list .endpoint .sip .area .info { display:block; width:145px;  max-width: 125px; overflow-x: hidden; text-overflow:ellipsis; font-size:12px; }
+#endpoint_list .endpoint .sip .area:hover .info  { display:block; width:145px;  max-width: 345px; overflow-x: visible; z-index: 55; font-weight:bold ;   }
+#endpoint_list .endpoint .sip .area:hover +.area .info  { visibility: hidden;  }
+
+
+#endpoint_list .endpoint p { display:block; margin:6px 0 6px 18px; font-size:14px; }
+
+/* server area -> server numbers */
+#endpoint_list .endpoint .number_entry { height:32px; border-bottom:1px solid #ccc; font-size:12px; }
+#endpoint_list .endpoint .numbers span { float:left; margin:12px 0 0 18px;  }
+#endpoint_list .endpoint .numbers a { float:left; margin:1px 0 0 15px; padding:11px 0 0 0; color:#2585a5;  }
+#endpoint_list .endpoint .numbers a:hover { color:#417911; }
+#endpoint_list .endpoint .numbers .unassign { float:right; color:#d93636; margin-right:15px; }
+#endpoint_list .endpoint .numbers .unassign:hover { color:#d93636; text-decoration:none; }
+#endpoint_list .endpoint .numbers .active { color:#417911; background:url(../images/button_server_active.jpg) top center no-repeat; }
+
+/* server area -> misc */
+#endpoint_list .endpoint .drop_area { width:425px; height:100px; background:url(../images/bg_server_drag.jpg) top left no-repeat; text-indent:-9999px; }
+#endpoint_list .endpoint .behavior { width:425px; height:34px; background: url(../images/bg_server_behavior.jpg) 0 -5px no-repeat; font-size:12px; }
+#endpoint_list .endpoint .behavior a { color:#4e4d4d; padding: 0 0 0 20px; }
+#endpoint_list .endpoint .behavior a:hover { text-decoration:none; }
+
+
+
+
+
+
+
+
+
+
+
+/* added */
+.sm_info {font-size: smaller;}
+#add_auth_ip_area {margin-left: 1.5em;}
+#endpoint_list .endpoint .sip .area.ip_auth_area { width:12em;} /* must fit ipv6 */
+#endpoint_list .endpoint .sip .area span.ip_list.title { width:12em;}
+#endpoint_list .endpoint .sip .area span.ip_list.info {overflow: hidden; height:1em; width:12em;}
+#endpoint_list .endpoint .sip .area span.ip_list.info:hover {overflow: visible;  padding: .4em;  }
+span.ip_list_ip { display:block; z-index:5;}
+#endpoint_list .endpoint .sip .area span.ip_list.info:hover span.ip_list_ip {background-color: rgba(0,0,0,0.75); padding: .3em; color: white; z-index:50; font-weight: bold;}
+
+
+
+
+/*.error.errMsg:before {content: url(/../images/error-icon_sm.png); display:inline-block; vertical-align:middle; }
+.warning.errMsg:before {content: url(/../images/warning-icon_sm.png); display:inline-block; vertical-align:middle; }
+.info.errMsg:before {content: url(/../images/info-icon_sm.png); display:inline-block; vertical-align:middle; }*/
+
+.error.errMsg {display:inline-block; vertical-align:middle;}
+.warning.errMsg {display:inline-block; vertical-align:middle; }
+.info.errMsg { display:inline-block; vertical-align:middle; }
+
+.helpertext {font-size: smaller; color: gray;}
+
+/* on/off */
+#endpoint_list .endpoint .numbers a.edit_misc {display:none;}
+/*#endpoint_list .endpoint .title .status  {display:none;}*/
+
+
+
+
+
+/* scrollbars */
+#all_numbers_list {
+    max-height: 16em;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+#all_numbers_list:hover {
+    max-height: 16em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+
+
+/* jq vs trans CSS3 */
+/*
+*/
+#endpoint_list .endpoint .sip .area  a:link {
+    color: blue;
+    text-decoration: none;
+    -webkit-transition: color .25s ease-in 0s;
+    transition: color .25s ease-out 0s;
+}
+
+#endpoint_list .endpoint .sip .area  a:hover {
+    color: red;
+    -webkit-transition: color .25s ease-in .1s;
+    transition: color .25s ease-out .1s;
+}
+
+#endpoint_list .endpoint .sip .area  a:active {
+    color: green;
+    transition: color .25s ease;
+}
+
+#endpoint_list .endpoint .sip .area   ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#server_area .endpoint .sip .area  .title.ip_list:hover {
+    display: block;
+    position: fixed;
+    /*top: .9em;
+    left: 0;
+    */
+    padding: 10px;
+    height: auto;
+    width: 300px;
+    border: 8px solid rgba(204,204,204,.5);
+    cursor: pointer;
+    background-color: rgba(255,255,255,.75);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    z-index: 5000;
+}
+
+#endpoint_list .endpoint .sip .area   ul.title.ip_list  li {
+    font-weight: normal;
+    list-style: none;
+}
+
+#endpoint_list .endpoint .sip .area   ul.title.ip_list  li a:link {
+    font-weight: normal;
+    list-style: none;
+    font-size: 12px;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#endpoint_list .endpoint .sip .area   ul.title.ip_list ul li {
+    font-weight: normal;
+    padding: 5px 0;
+    margin:0;
+    border-top: 1px solid rgb(204,204,204);
+    background-color: rgb(255,255,255);
+    -webkit-transition: background-color .5s ease;
+    transition: background-color .2s ease;
+}
+
+#0server_area .endpoint .sip .area   .menu_ip_list {
+    display: block;
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    /*width: 100px;*/
+    opacity: 0;
+    -webkit-transition: opacity .25s linear 0s, height .25s ease-out .1s;
+    transition: opacity .25s linear 0s, height .25s ease-out .1s;
+}
+
+#endpoint_list .endpoint .sip .area   ul.title.ip_list ul li:hover {
+    background-color: rgb(234,234,234);
+    -webkit-transition: background-color .5s ease;
+    transition: background-color .2s ease;
+}
+
+
+#0server_area .endpoint .sip .area   ul.title.ip_list:hover>.menu_ip_list {
+    height: 140px;
+    opacity: 1;
+    -webkit-transition: opacity .25s linear 0s,  height .25s linear 0s;
+    transition: opacity .25s linear 0s,  height .25s linear 0s;
+}
+
+
+.remove_auth_IP {content: url(/../images/error-icon_sm.png); max-width: 1.5em; vertical-align: text-top;}
+
+.shortInt {width: 3em; max-width: 4em;}
+
+
+
+
+/* dialog stuff */
+#dialog-overlay {
+
+    /* set it to fill the whil screen */
+    width:100%;
+    height:100%;
+
+    /* transparency for different browsers */
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    background:#000;
+
+    /* make sure it appear behind the dialog box but above everything else */
+    position:absolute;
+    top:0; left:0;
+    z-index:3000;
+
+    /* hide it by default */
+    display:none;
+}
+
+
+#dialog-box {
+
+    /* css3 drop shadow */
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+
+    /* css3 border radius */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+
+    background:#eee;
+    /* styling of the dialog box, i have a fixed dimension for this demo */
+    width:528px;
+
+    /* make sure it has the highest z-index */
+    position:absolute;
+    z-index:5000;
+
+    /* hide it by default */
+    display:none;
+}
+
+#dialog-box .dialog-content {
+    /* style the content */
+    text-align:left;
+    padding:10px;
+    margin:13px;
+    color:#666;
+    font-family:arial;
+    font-size:11px;
+}
+
+/* extra styling */
+#dialog-box .dialog-content p {
+    font-weight:700; margin:0;
+}
+
+#dialog-box .dialog-content ul {
+    margin:10px 0 10px 20px;
+    padding:0;
+    height:50px;
+}
+
+
+
+/* jQuery UI 2600hz edits */
+
+/*.ui-dialog { position: absolute; padding: .2em; width: auto; overflow: hidden;  background: #f9f9f9; border-color: #c2c2c2;}
+.ui-dialog .ui-dialog-titlebar { background: #2280a2;  position: relative; background-image: url(/../images/ui-dialog-title-bar-bkgd.png); height: 22px; }
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; color:#fffcfd;}
+.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+.ui-dialog .ui-dialog-content { position: relative; border: 0; padding: .5em 1em; background: none; overflow: auto; zoom: 1; font-size: 13.5px;}
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
+.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
+.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }*/
+
+
+
+
+
+
+#dialog-message {clear: both;} /* fixes a FF issue */
+
+
+.ui-dialog a.button {
+    /* styles for button */
+    margin:10px 10px 0 auto;
+    text-align:center;
+    background-color: #e33100;
+    display: block;
+    /*padding: 5px 10px 6px;*/
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 24px;
+
+    /* css3 implementation :) */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    /*border-bottom: 1px solid rgba(0,0,0,0.25);*/
+    position: relative;
+    cursor: pointer;
+
+}
+
+.ui-dialog a.button:hover {
+    background-color: #c33100;
+}
+
+
+
+/* same for non jq-ui */
+
+a.button_small {
+    margin: 0.25em 2.25em 0.25em 1em;
+    font-size:smaller;
+}
+
+a.button {
+    /* styles for button */
+    margin:10px 10px 0 auto;
+    text-align:center;
+    background-color: #4E4D4D;
+    display: block;
+    /*padding: 5px 10px 6px;*/
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 24px;
+
+    /* css3 implementation :) */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    /*border-bottom: 1px solid rgba(0,0,0,0.25);*/
+    position: relative;
+    cursor: pointer;
+
+}
+
+a.button:hover {
+    background-color: #c33100;
+}
+
+
+/* end that jq-ui thing */
+.ui-draggable {cursor:pointer;}
+
+.edit.discount {cursor:pointer;}
+
+
+#control_area #numbers .numbers .unassigned {color: #437B3D;;}
+
+body span.number.ui-draggable-dragging { border: solid black 2px; padding: .3em; border-radius: .5em; -moz-border-radius: .5em; -webkit-border-radius: .5em; background: #859ED4; font-weight: bold; cursor: pointer; color: black;}
+
+.ui-state-highlight {background-color: red;}
+
+
+
+
+
+
+
+
+.ui-dialog a.button.info: {background-color: #005BE3;}
+.ui-dialog input.button.info {background-color: #005BE3;}
+.ui-dialog a.button.info:hover {background-color: #0152CA;}
+.ui-dialog input.button.info:hover {background-color: #0152CA;}
+#control_area #numbers .numbers .did-status {
+                                                white-space:nowrap;
+                                                color: #999;
+                                                float: left;
+                                                margin: 10px 0px 0px 20px;
+
+}
+#control_area #numbers .numbers:hover .did-status {
+    display: inline;
+}
+/* =================== END jQuery UI 2600hz Edits =================== */
+
+
+/* for CC area */
+#cc_list_div { overflow-y: hidden; max-height: 8em;}
+#cc_list_div:hover { overflow-y: scroll; }
+tr.ccRow td { padding-right: 1.2em; font-size: smaller;}
+#cc_list_table a.smallfont.button {font-size: x-small; padding: 3px 6px;}
+
+#cc_list_table thead td {font-weight: bold; padding-right: 1.75em; text-align: center;}
+
+
+
+form.filterform {
+    float: right;
+    margin-left: 2em;
+    padding: 0.25em 1.0em 0.1em 0.5em;
+}
+
+form.filterform input.filterinput	{
+    max-width: 100px;
+}
+
+
+/* experimental */
+/*
+input[type="password"],  input[type="text"], input[type="number"] {
+background-color: #EDF2F7;
+border: 1px solid #85B1DE;
+border-bottom-left-radius: 0.35em 0.35em;
+border-bottom-right-radius: 0.35em 0.35em;
+border-top-left-radius: 0.35em 0.35em;
+border-top-right-radius: 0.35em 0.35em;
+padding: 2px 0.45em;
+}
+*/
+input[type="search"] {
+    border: 2px inset;
+    border-bottom-left-radius: 0.8em 0.8em;
+    border-bottom-right-radius: 0.8em 0.8em;
+    border-top-left-radius: 0.8em 0.8em;
+    border-top-right-radius: 0.8em 0.8em;
+    padding: 0px .8em;
+
+}
+
+#addCredsSpan {float: right; /*padding-right:2em */ }
+
+/*.no_cc_warning:before {content: url(/../images/warning-icon_sm.png); vertical-align: middle;}*/
+.no_cc_warning { font-size: 14px; }
+
+#add_a_server_first {font-weight: bold; vertical-align: middle; color: #646464; padding: 40% 20%;}
+
+#be_sure_about_cc { font-weight: bold; color: #646464; padding: 0.25em 10%; }
+
+
+#diagnostics_toolbox.toolbox { display:none; }
+
+input[type="search"] {
+    border: 2px inset;
+    border-bottom-left-radius: 0.8em 0.8em;
+    border-bottom-right-radius: 0.8em 0.8em;
+    border-top-left-radius: 0.8em 0.8em;
+    border-top-right-radius: 0.8em 0.8em;
+    -moz-border-radius: 0.8em;
+    padding: 0px .8em;
+
+}
+
+#edit_server .icon {
+    margin-left: -20px;
+    margin-top: -10px;
+}

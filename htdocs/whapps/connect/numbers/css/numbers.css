@@ -1,0 +1,29 @@
+#sdidform #sdid_npa {
+    width: 2em;
+    float: none;
+}
+
+#sdidform #sdid_nxx {
+    width: 2em;
+    float: none;
+}
+
+#sdiddiv {
+    display: block;
+    text-align: center;
+}
+
+.foundDID {
+    text-align: center;
+}
+
+.did_ratecenter {
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    width: 20%;
+}
+
+.needCreditAdj {
+    height: 12px;
+}

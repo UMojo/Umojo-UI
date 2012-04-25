@@ -1,0 +1,260 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+/*************************************
+-------------DEPLOYMENT---------------
+**************************************/
+
+.deployment_nav_container {
+    width: 90%;
+    height: 25px;
+    margin: 13px 40px 0;
+    background-color: #6b6b6b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#6b6b6b), to(#444444)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #6b6b6b, #444444); /* Chrome 10+, Saf5.1+ */
+    background-image: -moz-linear-gradient(top, #6b6b6b, #444444); /* FF3.6 */
+    background-image: -ms-linear-gradient(top, #6b6b6b, #444444); /* IE10 */
+    background-image: -o-linear-gradient(top, #6b6b6b, #444444); /* Opera 11.10+ */
+    background-image: linear-gradient(top, #6b6b6b, #444444);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#6b6b6b', EndColorStr='#444444'); /* IE6‚ÄìIE9 */
+}
+
+.deployment_nav_container ul.deployment_nav {
+    list-style: none;
+    line-height: 25px;
+    margin-left: 7px;
+}
+
+.deployment_nav_container ul.deployment_nav li {
+    float: left;
+}
+
+.deployment_nav_container ul.deployment_nav li a{
+    display: block;
+    padding: 0 13px;
+    line-height: 24px;
+}
+
+.deployment_nav_container ul.deployment_nav li a:active{
+    color: #323232;
+}
+
+.deployment_nav_container ul.deployment_nav li a.current{
+    background-color: #929292;
+    color: #323232;
+    font-weight: bold;
+    border-bottom: #9a9999 solid 1px;
+}
+
+a.plus {
+    background-image: url(../img/plus_btn.png);
+    background-position: 0px 0px;
+    width: 25px;
+    height: 25px;
+    float: right;
+    display: block;
+    text-indent: -9999px;
+    margin-right: 5px;
+}
+
+a.plus:hover {
+    background-position: 0px -25px;
+
+}
+
+.cluster_container {
+    width: 90%;
+    float: left;
+    margin-left: 19px;
+    padding: 41px 20px;
+    background-color: #929292;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#929292), to(#d1d1d1)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #929292, #d1d1d1); /* Chrome 10+, Saf5.1+ */
+    background-image:    -moz-linear-gradient(top, #929292, #d1d1d1); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, #929292, #d1d1d1); /* IE10 */
+    background-image:      -o-linear-gradient(top, #929292, #d1d1d1); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, #929292, #d1d1d1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#929292', EndColorStr='#d1d1d1'); /* IE6‚ÄìIE9 */
+    position: relative;
+    border-right: #646464 solid 1px;
+    border-left: #646464 solid 1px;
+    border-bottom: #646464 solid 1px;
+}
+
+a.add_server {
+    background-image: url(../img/add_server.png);
+    width: 170px;
+    height: 121px;
+    background-position: 0px 0px;
+    display: block;
+    float: left;
+    margin: 0 9px 39px;
+}
+
+a.add_server:hover {
+    background-position: 0px -121px;
+    color: #fff;
+}
+
+a.add_server h2 {
+    padding: 100px 0;
+    text-align: center;
+}
+
+a.remove_btn {
+    position: absolute;
+    width: 81px;
+    height: 27px;
+    background-image: url(../img/regular_btn.png);
+    text-align: center;
+    font-weight: bold;
+    line-height: 27px;
+    display: block;
+    right: 119px;
+    bottom: -44px
+}
+
+a.save_btn {
+    position: absolute;
+    width: 81px;
+    height: 27px;
+    background-image: url(../img/regular_btn.png);
+    text-align: center;
+    font-weight: bold;
+    line-height: 27px;
+    display: block;
+    right: 34px;
+    bottom: -44px;
+}
+
+a.save_btnServer {
+    background-image: url(../img/regular_btn.png);
+    width: 81px;
+    height: 27px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    line-height: 27px;
+    margin: auto;
+    margin-top: 10px;
+    color: white;
+}
+
+a.save_btnServer:hover {
+    color: #05AFDC;
+    cursor: pointer;
+}
+
+.heading{
+    width: 100%;
+    height: 85px;
+    background-color: #383838;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#383838), to(#505050)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #383838, #505050); /* Chrome 10+, Saf5.1+ */
+    background-image:    -moz-linear-gradient(top, #383838, #505050); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, #383838, #505050); /* IE10 */
+    background-image:      -o-linear-gradient(top, #383838, #505050); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, #383838, #505050);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#383838', EndColorStr='#505050'); /* IE6‚ÄìIE9 */
+    border-top: #404040 solid 2px;
+    border-bottom: #2a2a2a solid 2px;
+}
+
+.heading h1 {
+    font-family: TitilliumText22LRegular, sans-serif;
+    font-size: 45px;
+    margin: auto;
+    line-height: 85px;
+    display: block;
+    width: 580px;
+    text-shadow: 0px 1px 1px #000;
+}
+
+.heading h1 img {
+    margin: 0 45px -5px 0;
+}
+
+.deployment_steps {
+    font-family: TitilliumText22LRegular, sans-serif;
+    width: 600px;
+    margin: 60px auto 0;
+}
+
+.deployment_steps a{
+    background-image: url(../img/deploy_now_btn.png);
+    width: 370px;
+    height: 70px;
+    background-position: 0 0;
+    margin: auto;
+    text-indent: -9999px;
+    display: block;
+}
+
+.deployment_steps a:hover{
+    background-position: 0 -70px;
+}
+
+.step {
+    height: 52px;
+    margin-bottom: 47px;
+}
+
+.step img{
+    float: left;
+    margin-right: 37px;
+}
+
+.step p{
+    display: block;
+    height: 47px;
+    float: left;
+    font-size: 14px;
+    padding-top: 5px;
+    line-height: 20px;
+}
+
+.step p:first-line {
+    font-size: 18px; font-family: TitilliumText22LBold, sans-serif;
+
+}
+
+.dialog {
+    display:none;
+}
+
+.newServerLbl {
+    width: 100px;
+}
+
+.checkboxRoleServer {
+    margin-left: 20px;
+}
+
+.content_form {
+    float: right;
+    width: 60%;
+    max-height: 500px;
+    overflow: auto;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+p.note_box {
+    background-color: #E7E7E7;
+    padding: 15px 10px;
+    font-size: 10px;
+    line-height:15px;
+}
+
+input[disabled=disabled] {
+    border: none;
+    background: none;
+}
+
+#ssh_port {
+    width: 50px;
+}

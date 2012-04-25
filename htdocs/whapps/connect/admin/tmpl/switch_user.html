@@ -1,0 +1,27 @@
+    <div>
+    <div id="edit_server" class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <form name="form" method="post" action="#">
+                <h3>Switch accounts</h3><div class="authentication_icon"></div>
+                <p class="clear">Switch accounts....</p>
+                <form name="form" method="post" action="#">
+                    <label>Switch to acount: </label>
+                    <select id="account">
+                    {{each(i,account) accounts}}
+                        <option value="${account.id}">${account.name} (${account.id})</option>
+                    {{/each}}
+                    </select>
+                </form>   
+                <form name="form" method="post" action="#">
+                    <div class="btn_wrapper">
+                        <a href="#" id="switch" class="submit_btn ctr">Switch</a><br>
+                        <a href="#" id="add" class="submit_btn ctr">Add</a><br>
+                    </div>
+                </form>    
+
+            </div>
+        </div>
+    </div>
+
+</div>
