@@ -1,9 +1,5 @@
 @import "utility.less";
 
-form .clearfix {
-	margin-bottom: 30px;
-}
-
 form .clearfix:last-child {
 	margin-bottom: 0;
 }
@@ -61,6 +57,8 @@ form .clearfix:last-child {
 	border-right: none;
 }
 
+.tabs > li > a > .icon {
+}
 
 .tabs > li > a:hover {
 	color: @white;
@@ -93,6 +91,7 @@ form .clearfix:last-child {
 	.gradient_light;
 	padding: 30px;
 	border: 1px solid @blue;
+	.shadow(4px, 5px, 10px, 1px, lighten(#000000, 15%));
 }
 .pill-content h3 {
 	margin-bottom: 20px;
@@ -121,6 +120,10 @@ form .clearfix:last-child {
 
 .buttons-right {
 	float: right;
+}
+
+.buttons-right > .btn:not(:last-child) {
+	margin-right: 6px;
 }
 
 .pasted > .btn:first-child {

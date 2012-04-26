@@ -25,8 +25,7 @@ winkstart.module('myaccount', 'nav', {
                 user_name = user_data.first_name + ' ' + user_data.last_name || 'Username',
                 container = THIS.templates.myaccount_navbar.tmpl({
                     user_name: user_name,
-                    company_name: winkstart.config.company_name
-                    
+                    company_name: winkstart.config.company_name 
                 });
 
             winkstart.publish('linknav.add', {

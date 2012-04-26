@@ -172,8 +172,14 @@
         });
     };
 
-    winkstart.tabs = function(buttons_html, tabs_html) {
-        tabs_html.hide();
+    winkstart.tabs = function(buttons_html, tabs_html, advanced) {
+
+        if(advanced) {
+            $('.btn', buttons_html).removeClass('activate');
+            $('.advanced', buttons_html).addClass('activate');
+        } else {
+            tabs_html.hide();
+        }
         
         $('.basic', buttons_html).click(function(){
             if(!$(this).hasClass('activate')){
@@ -184,7 +190,7 @@
             }
         });
 
-        $('.advance', buttons_html).click(function(){
+        $('.advanced', buttons_html).click(function(){
             if(!$(this).hasClass('activate')){
                 $('.btn', buttons_html).removeClass('activate');
                 $(this).addClass('activate');

@@ -178,12 +178,10 @@ winkstart.module('core', 'linknav', {
                 }
             }
 
-            /* Make sure all the sub menus are aligned correctly */
             $('.category > .dropdown-menu', link_dropdown_html).css('left', -(link_dropdown_html).width());
 
             if(data.modifier) {
                 if(typeof data.modifier == 'function') {
-                    //No, this is not a typo. Let the dev chose if they want 'this' or a param 
                     data.modifier.call(link_sublink_html, link_sublink_html);
                 }
             }
@@ -196,46 +194,5 @@ winkstart.module('core', 'linknav', {
                 .addClass('dropdown')
                 .dataset('dropdown', 'dropdown');
         }
-        /*
-        edit: function(args, target) {
-            var THIS = this,
-                link_html = target;
-
-            if(!link_html) {
-                link_html = $('.link[data-link="' + args.name + '"]', THIS.config.targets.link_nav);
-            }
-
-            if(args.content) {
-                $('> a', link_html)
-                    .empty()
-                    .append(args.content);
-            }
-
-            if(args.href) {
-                $('> a', link_html)
-                    .attr('href', args.href);
-            }
-
-            if(args.new_page) {
-                $('> a', link_html)
-                    .attr('target', '_blank');
-            }
-
-            if(args.publish) {
-                $('> a', link_html)
-                    .unbind('click.linknav')
-                    .bind('click.linknav', function(ev) {
-                        var href = $(this).attr('href');
-
-                        if(!href || href == '#') {
-                            ev.preventDefault();
-
-                            winkstart.publish(args.publish, {});
-                        }
-                    });
-            }           
-        }*/
-
-        /* This is modeled much like whappnav, there should be no problem implementing dropdowns */
     }
 );
