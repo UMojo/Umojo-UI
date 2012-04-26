@@ -325,7 +325,7 @@ winkstart.module('voip', 'account', {
             deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
 
             deregister.change(function() {
-                $(this).is(':checked') ? deregister_email.show() : deregister_email.hide();
+                $(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
             });
 
             $('.account-save', account_html).click(function(ev) {
