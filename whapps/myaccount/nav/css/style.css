@@ -30,6 +30,7 @@
     color: #05ADDC;
     padding: 10px 0;
 }
+
 #myaccount_info > div:nth-child(2) {
     float: left;
     margin: 5px 0 0 0;
@@ -48,7 +49,3 @@
     height: 73px;
     margin-top: -1px;
 }
-
-
-
-

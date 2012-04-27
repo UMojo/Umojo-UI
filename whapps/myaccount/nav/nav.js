@@ -11,7 +11,6 @@ winkstart.module('myaccount', 'nav', {
             'nav.activate': 'activate',
             'nav.add_sublink': 'add_sublink',
             'myaccount.initialized': 'activate'
-
         }
     },
 
@@ -37,14 +36,14 @@ winkstart.module('myaccount', 'nav', {
                 }
             });
             winkstart.publish('nav.add_sublink', 'nav', 'logout', 'logout', '20', 'auth.activate',
-                function(sub_link){
-                    var width = $('#myaccount_navbar').css('width');
+                function(sub_link) {
+                    var width = $(container).css('width');
                     $('.dropdown-menu').css('width', width);
                 }
             );
         },
 
-        add_sublink: function(link, sublink, label, weight, publish, modifier){
+        add_sublink: function(link, sublink, label, weight, publish, modifier) {
             winkstart.publish('linknav.sub_add', {
                 link: link,
                 sublink: sublink,

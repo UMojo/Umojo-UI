@@ -23,15 +23,7 @@ winkstart.module('core', 'linknav', {
     },
 
     function() {
-        /*winkstart.publish('linknav.add', {
-            name: 'help',
-            weight: 50,
-            content: 'Help',
-            new_page: true,
-            href: (winkstart.config.nav || {}).help
-        });*/
     },
-
     {
         add: function(args) {
             var THIS = this,
