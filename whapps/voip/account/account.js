@@ -3,14 +3,13 @@ winkstart.module('voip', 'account', {
         ],
 
         less: [
-            'less/account.less',
+            'less/whapp.less',
             'less/popover.less'
         ],
 
         templates: {
             account: 'tmpl/account.html',
-            edit: 'tmpl/edit.html',
-            edit_bootstrap: 'tmpl/edit_bootstrap.html'
+            edit: 'tmpl/edit.html'
         },
 
         subscribe: {
@@ -310,7 +309,7 @@ winkstart.module('voip', 'account', {
 
         render_account: function(data, target, callbacks) {
             var THIS = this,
-                account_html = THIS.templates.edit_bootstrap.tmpl(data),
+                account_html = THIS.templates.edit.tmpl(data),
                 deregister = $('#deregister', account_html),
                 deregister_email = $('.deregister_email', account_html);
 
