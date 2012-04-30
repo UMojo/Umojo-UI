@@ -141,8 +141,10 @@
 	                                    {{/if}}
                                 	{{/each}}
 								</select>
-								<a class="inline_action_media" data-action="edit" href="#">Edit</a> |
-                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+								<div>
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+                                	<a class="inline_action_media" data-action="create" href="#">Create</a>
+								</div>
 							</div>
 						</div>
 						<hr />
@@ -198,10 +200,10 @@
 			</form>
 			<div class="buttons-right">
 				{{if data.id}}
-				<button class="btn primary account-save">Use account</button>
+				<button class="btn primary account-switch">Use account</button>
 		        {{/if}}
 		        {{if data.id}}
-		            <button class="btn danger account-save">Delete</button>
+		            <button class="btn danger account-delete">Delete</button>
 		        {{/if}}
 	            <button class="btn success account-save">Save</button>
 			</div>
