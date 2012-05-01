@@ -74,6 +74,7 @@ body > .topbar .topbar-inner > .container-fluid {
 .main_content {
     float:left;
     margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .background {
