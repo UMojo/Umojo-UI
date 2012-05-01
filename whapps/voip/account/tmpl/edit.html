@@ -1,6 +1,6 @@
 <div>
 	<div class="row">
-		<div class="span16 offset4 whapp-header">
+		<div class="whapp-header">
 			<h1>Edit Account</h1>
 			<div class="buttons-right pasted view-buttons">
 				<button class="btn black basic activate">Basic</button>
@@ -9,204 +9,202 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="span16 offset4">
-			<ul class="tabs" data-tabs="tabs">
-			 	<li class="active"><a href="#basic">Basic</a></li>
-			 	<li><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>
-			 	<li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
-			 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
-			 	<li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
-			</ul>
-			<form action="#" id="account-form">
-				<div class="pill-content">
-					<div class="active basic_view" id="basic">
-						<div class="clearfix">
-							<label for="name">Name</label>
-							<div class="input">
-								<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this account"/>
-							</div>
-						</div>
-						<div class="clearfix">
-							<label for="realm">Realm</label>
-							<div class="input">
-								<input class="span4" id="realm" name="realm" type="text" placeholder="Realm (unique)" value="${data.realm}"
-								 rel="popover" data-content="Realm of this account" />
-							</div>
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>
+		 	<li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
+		</ul>
+		<form action="#" id="account-form">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this account"/>
 						</div>
 					</div>
-
-					<div id="caller_id">
-						<h3>In-House Calls</h3>
-						<div class="clearfix">
-							<label for="caller_id_name_internal">Caller ID Name</label>
-							<div class="input">
-								<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
-							</div>
-						</div>
-						<div class="clearfix">
-							<label for="caller_id_number_internal">Caller ID Number</label>
-							<div class="input">
-								<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
-							</div>
-						</div>
-						<hr />
-
-						<h3>Outbound Calls</h3>
-						<div class="clearfix">
-							<label for="caller_id_name_external">Caller ID Name</label>
-							<div class="input">
-								<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
-							</div>
-						</div>
-						<div class="clearfix">
-							<label for="caller_id_number_external">Caller ID Number</label>
-							<div class="input">
-								<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
-							</div>
-						</div>
-						<hr />
-
-						<h3>Emergency</h3>
-						<div class="clearfix">
-							<label for="caller_id_name_emergency">Caller ID Name</label>
-							<div class="input">
-								<input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Emergency Calls." />
-							</div>
-						</div>
-						<div class="clearfix">
-							<label for="caller_id_number_emergency">Caller ID Number</label>
-							<div class="input">
-								<input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Emergency Calls."/>
-							</div>
-						</div>
-					</div>
-
-					<div id="voicemail_to_email">
-						<h3>Template fields</h3>
-						<div class="clearfix">
-							<label for="vm_to_email_support_number">Support Number</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>
-							</div>
-						</div>
-
-						<div class="clearfix">
-							<label for="vm_to_email_support_email">Support Email</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="Support Email" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="Input the support email address that will be inserted in the voicemail-to-email template"/>
-							</div>
-						</div>
-
-						<div class="clearfix">
-							<label for="vm_to_email_send_from">Send From</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
-							</div>
-						</div>
-						<hr />
-
-						<h3>Template fields for sub-accounts</h3>
-						<div class="clearfix">
-							<label for="vm_to_email_service_url">Service URL</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="Input the Service URL"/>
-							</div>
-						</div>
-
-						<div class="clearfix">
-							<label for="vm_to_email_service_name">Service Name</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="Input the service name"/>
-							</div>
-						</div>
-
-						<div class="clearfix">
-							<label for="vm_to_email_service_provider">Service Provider</label>
-							<div class="input">
-								<input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="Input the service provider"/>
-							</div>
-						</div>
-					</div>
-
-					<div id="options">
-						<div class="clearfix">
-							<label for="music_on_hold">Music on Hold</label>
-							<div class="input">
-								<select name="music_on_hold.media_id" id="music_on_hold" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
-									{{each field_data.media}}
-	                                    {{if data.music_on_hold.media_id == id}}
-	                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
-	                                    {{else}}
-	                                    <option id="${id}" value="${id}">${name}</option>
-	                                    {{/if}}
-                                	{{/each}}
-								</select>
-								<div>
-									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                                	<a class="inline_action_media" data-action="create" href="#">Create</a>
-								</div>
-							</div>
-						</div>
-						<hr />
-
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-	              					<li>
-		              					<label>
-											{{if data.format_from_uri == true}}
-			                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" checked="checked" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
-			                                {{else}}
-			                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
-			                                {{/if}}
-			                                <span>Pass Realm in INVITE</span>
-		                                </label>
-	                                </li>
-                                </ul>
-							</div>
-						</div>
-					</div>
-
-					<div id="monitoring">
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-	              					<li>
-		              					<label>
-											{{if field_data.deregister}}
-			                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters."/>
-			                                {{else}}
-			                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
-			                                {{/if}}
-			                                <span>Notify on de-register</span>
-                                		</label>
-	                                </li>
-                                </ul>
-							</div>
-						</div>
-
-						<div class="clearfix deregister_email">
-							<label for="deregister_email">Email to notify</label>
-							<div class="input">
-								{{if field_data.deregister}}
-                                <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="Email to notify"/>
-                                {{else}}
-                                <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="Email to notify"/>
-                                {{/if}}
-							</div>
+					<div class="clearfix">
+						<label for="realm">Realm</label>
+						<div class="input">
+							<input class="span4" id="realm" name="realm" type="text" placeholder="Realm (unique)" value="${data.realm}"
+							 rel="popover" data-content="Realm of this account" />
 						</div>
 					</div>
 				</div>
-			</form>
-			<div class="buttons-right">
-				{{if data.id}}
-				<button class="btn primary account-switch">Use account</button>
-		        {{/if}}
-		        {{if data.id}}
-		            <button class="btn danger account-delete">Delete</button>
-		        {{/if}}
-	            <button class="btn success account-save">Save</button>
+
+				<div id="caller_id">
+					<h3>In-House Calls</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_internal">Caller ID Name</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="caller_id_number_internal">Caller ID Number</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+						</div>
+					</div>
+					<hr />
+
+					<h3>Outbound Calls</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_external">Caller ID Name</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="caller_id_number_external">Caller ID Number</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+						</div>
+					</div>
+					<hr />
+
+					<h3>Emergency</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_emergency">Caller ID Name</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Emergency Calls." />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="caller_id_number_emergency">Caller ID Number</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Emergency Calls."/>
+						</div>
+					</div>
+				</div>
+
+				<div id="voicemail_to_email">
+					<h3>Template fields</h3>
+					<div class="clearfix">
+						<label for="vm_to_email_support_number">Support Number</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="vm_to_email_support_email">Support Email</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="Support Email" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="Input the support email address that will be inserted in the voicemail-to-email template"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="vm_to_email_send_from">Send From</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
+						</div>
+					</div>
+					<hr />
+
+					<h3>Template fields for sub-accounts</h3>
+					<div class="clearfix">
+						<label for="vm_to_email_service_url">Service URL</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="Input the Service URL"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="vm_to_email_service_name">Service Name</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="Input the service name"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="vm_to_email_service_provider">Service Provider</label>
+						<div class="input">
+							<input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="Input the service provider"/>
+						</div>
+					</div>
+				</div>
+
+				<div id="options">
+					<div class="clearfix">
+						<label for="music_on_hold">Music on Hold</label>
+						<div class="input">
+							<select name="music_on_hold.media_id" id="music_on_hold" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+								{{each field_data.media}}
+                                    {{if data.music_on_hold.media_id == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                            	{{/each}}
+							</select>
+							<div>
+								<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+							</div>
+						</div>
+					</div>
+					<hr />
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+              					<li>
+	              					<label>
+										{{if data.format_from_uri == true}}
+		                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" checked="checked" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+		                                {{else}}
+		                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+		                                {{/if}}
+		                                <span>Pass Realm in INVITE</span>
+	                                </label>
+                                </li>
+                            </ul>
+						</div>
+					</div>
+				</div>
+
+				<div id="monitoring">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+              					<li>
+	              					<label>
+										{{if field_data.deregister}}
+		                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters."/>
+		                                {{else}}
+		                                <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
+		                                {{/if}}
+		                                <span>Notify on de-register</span>
+                            		</label>
+                                </li>
+                            </ul>
+						</div>
+					</div>
+
+					<div class="clearfix deregister_email">
+						<label for="deregister_email">Email to notify</label>
+						<div class="input">
+							{{if field_data.deregister}}
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="Email to notify"/>
+                            {{else}}
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="Email to notify"/>
+                            {{/if}}
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>	
+		</form>
+		<div class="buttons-right">
+			{{if data.id}}
+			<button class="btn primary account-switch">Use account</button>
+	        {{/if}}
+	        {{if data.id}}
+	            <button class="btn danger account-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success account-save">Save</button>
+		</div>
 	</div>
 </div>
