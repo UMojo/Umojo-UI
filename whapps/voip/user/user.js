@@ -10,7 +10,7 @@ winkstart.module('voip', 'user', {
 
         templates: {
             user: 'tmpl/user.html',
-            edit: 'tmpl/edit_bootstrap.html',
+            edit: 'tmpl/edit.html',
             user_callflow: 'tmpl/user_callflow.html',
             device_row: 'tmpl/device_row.html'
         },
@@ -370,6 +370,8 @@ winkstart.module('voip', 'user', {
                 data_devices,
                 enable_pin = $('#enable_pin', user_html),
                 queue_pin = $('.queue_pin', user_html);
+                hotdesk_pin =   $('.hotdesk_pin', user_html),
+                hotdesk_pin_require = $('#hotdesk_require_pin', user_html);
 
             THIS.render_device_list(data, user_html);
 
@@ -385,17 +387,14 @@ winkstart.module('voip', 'user', {
             winkstart.link_form(user_html);
 
             enable_pin.is(':checked') ? queue_pin.show() : queue_pin.hide();
+            hotdesk_pin_require.is(':checked') ? hotdesk_pin.show() : hotdesk_pin.hide();
 
             enable_pin.change(function() {
                 $(this).is(':checked') ? queue_pin.show('blind') : queue_pin.hide('blind');
             });
 
-            if(!data.data.hotdesk.require_pin) {
-                $('.hotdesk_pin', user_html).hide();
-            }
-
-            $('#hotdesk_require_pin', user_html).change(function() {
-                $('.hotdesk_pin', user_html).slideToggle();
+            hotdesk_pin_require.change(function() {
+                $(this).is(':checked') ? hotdesk_pin.show('bind') : hotdesk_pin.hide('bind');
             });
 
             $('.user-save', user_html).click(function(ev) {
@@ -783,7 +782,7 @@ winkstart.module('voip', 'user', {
         popup_edit_user: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('user.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {
