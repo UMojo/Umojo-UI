@@ -8,7 +8,7 @@ body {
 body > .topbar {
     position: absolute;
     height: 72px;
-    min-width: 980px;
+    min-width: 1029px;
     -moz-box-shadow: 0px 5px 5px #222;
     -webkit-box-shadow: 0px 5px 5px #222;
     box-shadow: 0px 5px 5px #222;
@@ -72,9 +72,25 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .main_content {
-    float:left;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    margin: 0 auto 0 auto;
+    width: 800px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.inline_content.main_content > .row {
+    margin-left: 0;
+}
+
+.container-fluid > .sidebar.list_panel {
+    width: 192px;
+    left: 0;
+}
+
+.container-fluid > .content {
+    margin-left: 212px;
 }
 
 .background {
