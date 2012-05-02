@@ -217,9 +217,9 @@
 					</div>
 
 					<div class="clearfix">
-						<label for="music_on_hold">Music on Hold</label>
+						<label for="music_on_hold_media_id">Music on Hold</label>
 						<div class="input">
-							<select name="music_on_hold.media_id" id="music_on_hold" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
 								{{each field_data.media}}
                                     {{if data.music_on_hold.media_id == id}}
                                     <option id="${id}" value="${id}" selected="selected">${name}</option>
@@ -228,7 +228,7 @@
                                     {{/if}}
                             	{{/each}}
 							</select>
-							<div>
+							<div class="edit_create">
 								<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
                             	<a class="inline_action_media" data-action="create" href="#">Create</a>
 							</div>
