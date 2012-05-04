@@ -93,27 +93,7 @@ winkstart.module('voip', 'featurecode', {
                     var data = {'categories': THIS.categories, 'label':'data' },
                         featurecode_html = THIS.templates.featurecode.tmpl(data);
 
-                    $('.tabs > li:first-child', featurecode_html).addClass('active');
-                    $('.pill-content > div:first-child', featurecode_html).addClass('active');
-
-
-                    //Hack to do prepend & append text on inputs
-                    $('span.add-on', featurecode_html).css({
-                        'border-radius': '3px 0 0 3px',
-                        '-webkit-border-radius': '3px 0 0 3px',
-                        '-moz-border-radius': '3px 0 0 3px',
-                        'margin': 0,
-                        'margin-right': '-1px',
-                        'font-size': '16px',
-                        'font-weight': 'bold'
-                    });
-                    
-                    //Hack to do prepend & append text on inputs
-                    $('.featurecode_number', featurecode_html).css({
-                        'boder-radius': 0,
-                        '-webkit-border-radius': 0,
-                        '-moz-border-radius': 0
-                    });
+                    winkstart.accordion(featurecode_html);
 
                     $('*[rel=popover]', featurecode_html).popover({
                         trigger: 'focus'
@@ -132,13 +112,15 @@ winkstart.module('voip', 'featurecode', {
                     });
 
                     $('.featurecode_enabled', featurecode_html).each(function() {
-                            var action_wrapper = $(this).parents('.action_wrapper');
-                            var number_field = action_wrapper.find('.featurecode_number');
+                            var action_wrapper = $(this).parents('.action_wrapper'),
+                                number_field = action_wrapper.find('.featurecode_number');
+
                             !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
                     });
 
                     $('.featurecode_enabled', featurecode_html).change(function() {
                         var action_wrapper = $(this).parents('.action_wrapper');
+                        
                         if(!$(this).is(':checked') && action_wrapper.dataset('enabled') == 'true') {
                             action_wrapper.addClass('disabled');
                         } else if($(this).is(':checked') && action_wrapper.dataset('enabled') == 'false'){
