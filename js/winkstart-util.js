@@ -199,4 +199,22 @@
         });
     };
 
+    winkstart.accordion = function(html){
+        $('.toggled', html).hide();
+
+        $('.toggle-all', html).click(function(ev){
+            ev.preventDefault();
+            $('.toggle', html).trigger('click');
+        });
+
+        $('.toggle', html).click(function(ev){
+            var btn = $(this),
+                div = $('#' + btn.data('toggle'));
+
+            ev.preventDefault();
+            (btn.hasClass('activate')) ? btn.removeClass('activate') : btn.addClass('activate');
+            div.slideToggle();
+        });
+    };
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
