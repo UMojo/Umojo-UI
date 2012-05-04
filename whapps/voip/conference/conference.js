@@ -255,33 +255,11 @@ winkstart.module('voip', 'conference', {
 
             winkstart.validate.set(THIS.config.validation, conference_html);
 
-            $('*[tooltip]', conference_html).each(function() {
-                $(this).tooltip({ attach: conference_html });
+            $('*[rel=popover]', conference_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', conference_html).tabs($('.pane > div', conference_html));
-            $('ul.settings2', conference_html).tabs($('.advanced_pane > div', conference_html));
-
-            $('#name', conference_html).focus();
-
-            $('.advanced_pane', conference_html).hide();
-            $('.advanced_tabs_wrapper', conference_html).hide();
-
-            $('#advanced_settings_link', conference_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-                    $('.advanced_pane', conference_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', conference_html).animate({width: 'toggle'});
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', conference_html).animate({width: 'toggle'}, function() {
-                        $('.advanced_pane', conference_html).slideToggle();
-                    });
-                }
-            });
+            winkstart.tabs($('.view-buttons', conference_html), $('.tabs', conference_html), true);
 
             if(!$('#owner_id', conference_html).val()) {
                 $('#edit_link', conference_html).hide();
