@@ -4,7 +4,7 @@ winkstart.module('voip', 'featurecode', {
         ],
 
         templates: {
-            featurecode: 'tmpl/featurecode.html',
+            featurecode: 'tmpl/featurecode_bootstrap.html',
        },
 
         subscribe: {
@@ -79,6 +79,7 @@ winkstart.module('voip', 'featurecode', {
                     api_url: winkstart.apps['voip'].api_url
                 },
                 function(data, status) {
+                    
                     $.each(data.data, function() {
                         if('featurecode' in this && this.featurecode != false) {
                             if(this.featurecode.name in THIS.actions) {
@@ -88,9 +89,35 @@ winkstart.module('voip', 'featurecode', {
                             }
                         }
                     });
-                    var data = {'categories': THIS.categories, 'label':'data' };
-                    $('#ws-content').empty();
-                    var featurecode_html = THIS.templates.featurecode.tmpl(data).appendTo($('#ws-content'));
+
+                    var data = {'categories': THIS.categories, 'label':'data' },
+                        featurecode_html = THIS.templates.featurecode.tmpl(data);
+
+                    $('.tabs > li:first-child', featurecode_html).addClass('active');
+                    $('.pill-content > div:first-child', featurecode_html).addClass('active');
+
+
+                    //Hack to do prepend & append text on inputs
+                    $('span.add-on', featurecode_html).css({
+                        'border-radius': '3px 0 0 3px',
+                        '-webkit-border-radius': '3px 0 0 3px',
+                        '-moz-border-radius': '3px 0 0 3px',
+                        'margin': 0,
+                        'margin-right': '-1px',
+                        'font-size': '16px',
+                        'font-weight': 'bold'
+                    });
+                    
+                    //Hack to do prepend & append text on inputs
+                    $('.featurecode_number', featurecode_html).css({
+                        'boder-radius': 0,
+                        '-webkit-border-radius': 0,
+                        '-moz-border-radius': 0
+                    });
+
+                    $('*[rel=popover]', featurecode_html).popover({
+                        trigger: 'focus'
+                    });
 
                     $('.featurecode_number', featurecode_html).bind('blur keyup focus', function(){
                         var action_wrapper = $(this).parents('.action_wrapper');
@@ -104,29 +131,10 @@ winkstart.module('voip', 'featurecode', {
                         }
                     });
 
-                    $.each($('body').find('*[tooltip]'), function(){
-                            $(this).tooltip({attach:'body'});
-                    });
-
-                    $('.arrow:not(:first)', featurecode_html).parents('.category_header').siblings('.featurecode_list').hide();
-                    $('.arrow:not(:first)', featurecode_html).removeClass('down_arrow_circle')
-                                                             .addClass('right_arrow_circle');
-
                     $('.featurecode_enabled', featurecode_html).each(function() {
                             var action_wrapper = $(this).parents('.action_wrapper');
                             var number_field = action_wrapper.find('.featurecode_number');
                             !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
-                    });
-
-                    $('.arrow', featurecode_html).click(function() {
-                        $(this).parents('.category_header').siblings('.featurecode_list').toggle();
-                        if($(this).hasClass('right_arrow_circle')) {
-                            $(this).removeClass('right_arrow_circle')
-                                   .addClass('down_arrow_circle');;
-                        } else {
-                            $(this).removeClass('down_arrow_circle')
-                                   .addClass('right_arrow_circle');;
-                        }
                     });
 
                     $('.featurecode_enabled', featurecode_html).change(function() {
@@ -145,7 +153,6 @@ winkstart.module('voip', 'featurecode', {
 
                     });
 
-                    /* Listen for the submit event (i.e. they click "save") */
                     $('.featurecode-save', featurecode_html).click(function() {
                         var form_data = THIS.clean_form_data();
 
@@ -153,9 +160,14 @@ winkstart.module('voip', 'featurecode', {
 
                         return false;
                     });
+
+                    $('#ws-content')
+                        .empty()
+                        .append(featurecode_html);
                 }
             );
         },
+
         update_list_featurecodes: function(form_data) {
             var THIS = this,
                 count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
@@ -225,8 +237,8 @@ winkstart.module('voip', 'featurecode', {
                     }
                 );
             });
-
         },
+
         render_featurecodes: function() {
             var THIS = this;
 
@@ -245,12 +257,16 @@ winkstart.module('voip', 'featurecode', {
                             }
                         }
                     });
-                    var data = {'categories': THIS.categories, 'label':'data' };
-                    $('#ws-content').empty();
-                    var featurecode_html = THIS.templates.featurecode.tmpl(data).appendTo($('#ws-content'));
+                    var data = {'categories': THIS.categories, 'label':'data' },
+                        featurecode_html = THIS.templates.featurecode.tmpl(data);
+
+                    $('#ws-content')
+                        .empty()
+                        .append(featurecode_html);
                 }
             );
         },
+
         clean_form_data: function() {
             var THIS = this;
 
@@ -396,7 +412,7 @@ winkstart.module('voip', 'featurecode', {
                 'hotdesk[action=login]': {
                     name: 'Enable Hot Desking',
                     icon: 'phone',
-                    category: 'Hot Desking',
+                    category: 'Hot-Desking',
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {
@@ -412,7 +428,7 @@ winkstart.module('voip', 'featurecode', {
                 'hotdesk[action=logout]': {
                     name: 'Disable Hot Desking',
                     icon: 'phone',
-                    category: 'Hot Desking',
+                    category: 'Hot-Desking',
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {
@@ -428,7 +444,7 @@ winkstart.module('voip', 'featurecode', {
                 'hotdesk[action=toggle]': {
                     name: 'Toggle Hot Desking',
                     icon: 'phone',
-                    category: 'Hot Desking',
+                    category: 'Hot-Desking',
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {

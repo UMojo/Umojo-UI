@@ -1,0 +1,50 @@
+<div> 
+    <div id="featurecode-content" class="container-fluid page">
+        <div class="content">
+        	<div id="featurecode-view"  class="main_content">
+        		<div class="row">
+					<div class="whapp-header">
+						<h1>Feature Codes</h1>
+					</div>
+				</div>
+
+				<div class="row">
+					<ul class="tabs" data-tabs="tabs">
+						{{each(i, actions) categories}}
+					 		<li><a href="#${i}">${i}</a></li>
+					 	{{/each}}
+					</ul>
+					<form>
+						<div class="pill-content">
+							{{each(i, actions) categories}}
+								<div id="${i}">
+									{{each(j, action) actions}}
+										<div class="clearfix action_wrapper" data-id=${id} data-action=${tag} data-number=${number} data-type=${number_type} data-enabled=${enabled}>
+								            <label for="${name}">${name}</label>
+								            <div class="input">
+								            	<div class="input-append">
+								            		<span class="add-on">*</span>
+								                	<input class="featurecode_number mini" id="${name}" name="${name}" size="16" type="text" value=${number} rel="popover" data-content="The star is mandatory for any feature code, that's why it has been added by default.">
+								                	<label class="add-on">
+								                		{{if enabled}}
+					                                        <input type="checkbox" class="featurecode_enabled" checked="checked">
+					                                    {{else}}
+					                                        <input type="checkbox" class="featurecode_enabled">
+					                                    {{/if}}
+								                	</label>
+								              	</div>
+								            </div>
+								        </div>
+							        {{/each}}
+								</div>
+							{{/each}}
+						</div>
+					</form>
+					<div class="buttons-right">
+			            <button class="btn success featurecode-save">Save</button>
+					</div>
+				</div>
+        	</div>
+        </div>
+    </div>
+</div>
