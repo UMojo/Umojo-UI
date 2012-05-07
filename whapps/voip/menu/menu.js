@@ -409,7 +409,7 @@ winkstart.module('voip', 'menu', {
         popup_edit_menu: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('menu.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {
