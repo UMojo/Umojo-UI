@@ -200,21 +200,47 @@
     };
 
     winkstart.accordion = function(html){
+
+        function toggle(btn, state) {
+            var div = $('#' + btn.data('toggle'));
+
+            if(state) {
+                btn.addClass('activate');
+                btn.html('Hide');
+                div.slideDown();
+            } else {
+                btn.removeClass('activate');
+                btn.html('Show');
+                div.slideUp();
+            }
+        }
+
         $('.toggled', html).hide();
 
         $('.toggle-all', html).click(function(ev){
+            var btn = $(this);
             ev.preventDefault();
-            $('.toggle', html).trigger('click');
+
+            $('.toggle', html).each(function(i) {
+                toggle($(this), !btn.hasClass('activate'));
+            });
+
+            if(btn.hasClass('activate')) {
+                btn.removeClass('activate');
+                btn.html('Show All');
+            } else {
+                btn.addClass('activate');
+                btn.html('Hide All');
+            }
         });
 
         $('.toggle', html).click(function(ev){
-            var btn = $(this),
-                div = $('#' + btn.data('toggle'));
-
+            var btn = $(this);
             ev.preventDefault();
-            (btn.hasClass('activate')) ? btn.removeClass('activate') : btn.addClass('activate');
-            div.slideToggle();
+
+            toggle(btn, !btn.hasClass('activate'));
         });
+
     };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
