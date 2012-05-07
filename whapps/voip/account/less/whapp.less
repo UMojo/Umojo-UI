@@ -73,7 +73,7 @@ form .clearfix:last-child {
 }
 
 .tabs > li:first-child.active {
-	border-left: none;
+	border-left: 1px solid @blue;
 }
 
 .tabs > li:last-child.active {
@@ -109,6 +109,10 @@ form .clearfix:last-child {
 	border-right: 1px solid;
 	border-right-color: @blue; 
 	font-weight: bold;
+}
+
+.tabs li:first-child.active > a {
+	border-left: none;
 }
 
 .pill-content {

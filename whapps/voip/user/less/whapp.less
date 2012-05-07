@@ -4,12 +4,34 @@ form .clearfix:last-child {
 	margin-bottom: 0;
 }
 
-.whapp-header > h1{
+.toggled {
+	.gradient_light;
+	padding: 30px;
+	border: 1px solid @blue;
+	.shadow(4px, 5px, 10px, 1px, lighten(#000000, 15%));
+	margin-bottom: 20px;
+}
+
+.whapp-header > h1, .whapp-header > h2, .whapp-header > h3 {
 	float: left;
 }
 
 .whapp-header > .buttons-right{
 	margin-top: 10px;
+}
+
+
+/* HACK to add append an prepend on inputs*/
+.input-append > span.add-on {
+	.border-radius(3px, 0, 0, 3px);
+    .reset_margin;
+    margin-right: -1px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.input-append > input {
+	.border-radius;
 }
 
 /*  TABS */
@@ -51,7 +73,7 @@ form .clearfix:last-child {
 }
 
 .tabs > li:first-child.active {
-	border-left: none;
+	border-left: 1px solid @blue;
 }
 
 .tabs > li:last-child.active {
@@ -89,6 +111,10 @@ form .clearfix:last-child {
 	font-weight: bold;
 }
 
+.tabs li:first-child.active > a {
+	border-left: none;
+}
+
 .pill-content {
 	.gradient_light;
 	padding: 30px;
@@ -96,17 +122,17 @@ form .clearfix:last-child {
 	.shadow(4px, 5px, 10px, 1px, lighten(#000000, 15%));
 }
 
-.pill-content h3 {
+.pill-content h3, .row h3 {
 	margin-bottom: 20px;
 	color: #0AC9FF;
 }
 
-.pill-content > #options > .clearfix > .input > div {
+.pill-content .edit_create {
 	margin-left: 20px;
 	display: inline;
 }
 
-.pill-content > #options > .clearfix > .input > div > a:not(:first-child) {
+.pill-content .edit_create > a:not(:first-child) {
 	margin-left: 5px;
 }
 
@@ -146,5 +172,3 @@ form .clearfix:last-child {
 .pasted > .btn:last-child {
 	.border-radius(0, 4px, 4px, 0);
 }
-
-
