@@ -89,10 +89,11 @@ winkstart.module('voip', 'callflow', {
         actions: {},
 
         activate: function () {
-            var THIS = this;
+            var THIS = this,
+                callflow_html = THIS.templates.callflow_main.tmpl();
 
-            $('#ws-content').empty();
-            THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
+            $('#ws-content').empty()
+                            .append(callflow_html);
 
             THIS.renderList(function() {
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
