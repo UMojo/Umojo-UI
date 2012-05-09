@@ -2,11 +2,6 @@ winkstart.module('voip', 'account', {
         css: [
         ],
 
-        less: [
-            'less/whapp.less',
-            'less/popover.less'
-        ],
-
         templates: {
             account: 'tmpl/account.html',
             edit: 'tmpl/edit.html'
