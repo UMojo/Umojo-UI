@@ -15,7 +15,7 @@
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>	
+		 	<li><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>
 		 	<li><a href="#options"><span class="icon conference"></span>Options</a></li>
 		 	<li><a href="#call_forward"><span class="icon cdr"></span>Call Forward</a></li>
 		 	<li><a href="#password_management"><span class="icon sip"></span>Password Management</a></li>
@@ -241,9 +241,9 @@
               					<li>
 	              					<label>
 										{{if data.enable_pin === true}}
-		                                <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters."/>
+		                                <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory)."/>
 		                                {{else}}
-		                                <input id="enable_pin" type="checkbox" name="enable_pin" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
+		                                <input id="enable_pin" type="checkbox" name="enable_pin" rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory)." />
 		                                {{/if}}
 		                                <span>Enable Agent / PIN</span>
                             		</label>
@@ -326,9 +326,9 @@
 								<li>
 									<label>
 										{{if data.call_forward.keep_caller_id}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded.<br/> If false it will use the caller-id of the user."/>
+						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded. If false it will use the caller-id of the user."/>
 						                {{else}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded.<br/> If false it will use the caller-id of the user."/>
+						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded. If false it will use the caller-id of the user."/>
 						                {{/if}}
 						                <span>Keep Caller ID</span>
 						            </label>

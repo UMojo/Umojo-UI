@@ -70,7 +70,7 @@
 					<div class="clearfix">
 						<label for="sip_password">Password</label>
 						<div class="input">
-							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}" rel="popover" data-content="Enter your SIP Password <br /> Click on the input to make the password appear"/>
+							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}" rel="popover" data-content="Enter your SIP Password. Click on the input to make the password appear"/>
 						</div>
 					</div>
 
@@ -170,7 +170,7 @@
 					<div class="clearfix">
 						<label for="music_on_hold">Music on Hold</label>
 						<div class="input">
-							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
 								{{each field_data.music_on_hold}}
                                     {{if data.music_on_hold.media_id == id}}
                                     <option id="${id}" value="${id}" selected="selected">${name}</option>

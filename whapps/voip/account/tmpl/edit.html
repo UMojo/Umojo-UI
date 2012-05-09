@@ -39,13 +39,13 @@
 					<div class="clearfix">
 						<label for="caller_id_name_internal">Caller ID Name</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Account for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
 						</div>
 					</div>
 					<div class="clearfix">
 						<label for="caller_id_number_internal">Caller ID Number</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
 						</div>
 					</div>
 					<hr />
@@ -54,13 +54,13 @@
 					<div class="clearfix">
 						<label for="caller_id_name_external">Caller ID Name</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
 						</div>
 					</div>
 					<div class="clearfix">
 						<label for="caller_id_number_external">Caller ID Number</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
 						</div>
 					</div>
 					<hr />
@@ -131,7 +131,7 @@
 					<div class="clearfix">
 						<label for="music_on_hold">Music on Hold</label>
 						<div class="input">
-							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
 								{{each field_data.media}}
                                     {{if data.music_on_hold.media_id == id}}
                                     <option id="${id}" value="${id}" selected="selected">${name}</option>
