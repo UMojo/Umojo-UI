@@ -63,7 +63,7 @@
 					<div class="clearfix">
 						<label for="media_unavailable">Unavailable Message</label>
 						<div class="input">
-							<select name="media.unavailable" id="media_unavailable" class="medium" rel="popover" data-content="Select the Unavailable message that you want to use for this this device.<br/>If you select - Not set -, then no media file will be played.">
+							<select name="media.unavailable" id="media_unavailable" class="medium" rel="popover" data-content="Select the Unavailable message that you want to use for this this device. If you select - Not set -, then no media file will be played.">
 								{{each field_data.media}}
                                     {{if data.media.unavailable == id}}
                                         <option value="${id}" id="${id}" selected="selected">${name}</option>
@@ -95,9 +95,9 @@
 								<li>
 									<label>
 										{{if data.is_setup}}
-						                    <input type="checkbox" id="is_setup" name="is_setup" checked="checked" rel="popover" data-content="Is this voicemail box already considered initialized?<br>If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
+						                    <input type="checkbox" id="is_setup" name="is_setup" checked="checked" rel="popover" data-content="Is this voicemail box already considered initialized? If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
 						                {{else}}
-						                    <input type="checkbox" id="is_setup" name="is_setup" rel="popover" data-content="Is this voicemail box already considered initialized?<br>If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
+						                    <input type="checkbox" id="is_setup" name="is_setup" rel="popover" data-content="Is this voicemail box already considered initialized? If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
 						                {{/if}}
 						                <span>Already Setup</span>
 						            </label>
@@ -129,9 +129,9 @@
 								<li>
 									<label>
 										{{if data.check_if_owner}}
-						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" checked="checked" rel="popover" data-content="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)"/>
+						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" checked="checked" rel="popover" data-content="Do you want to enable auto-login for this voicemail box? (If the user call his own voicemail, it goes straight to his messages)"/>
 						                {{else}}
-						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" rel="popover" data-content="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)"/>
+						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" rel="popover" data-content="Do you want to enable auto-login for this voicemail box? (If the user call his own voicemail, it goes straight to his messages)"/>
 						                {{/if}}
 						                <span>Auto-login enabled</span>
 						            </label>
