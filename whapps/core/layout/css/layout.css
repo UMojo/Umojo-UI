@@ -315,6 +315,7 @@ button.fancy_button {
     margin: 15px 15px 0;
     max-height: 200px;
     overflow-y: auto;
+    text-align: center;
 }
 
 .alert_img {
