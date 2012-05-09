@@ -528,6 +528,8 @@ winkstart.module('voip', 'device', {
 
             winkstart.tabs($('.view-buttons', device_html), $('.tabs', device_html), true);
 
+            $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
+
             /* Awesome sauce for provisioning goodness */
             render = function() {
                 (target)
@@ -731,7 +733,7 @@ winkstart.module('voip', 'device', {
         popup_edit_device: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('device.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

@@ -80,7 +80,7 @@ body > .topbar .topbar-inner > .container-fluid {
     padding-right: 8px;
 }
 
-.inline_content.main_content > .row {
+.inline_content.main_content .row {
     margin-left: 0;
 }
 
