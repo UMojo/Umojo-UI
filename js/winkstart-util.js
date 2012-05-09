@@ -180,6 +180,10 @@
         } else {
             tabs_html.hide();
         }
+
+        if($('li', tabs_html).length < 2){
+            buttons_html.hide();
+        }
         
         $('.basic', buttons_html).click(function(){
             if(!$(this).hasClass('activate')){
