@@ -1,7 +1,7 @@
 winkstart.module('voip', 'callflow', {
         css: [
             'css/style.css',
-            'css/popups.css',
+            /*'css/popups.css',*/
             'css/two_columns.css',
             'css/callflow.css',
             'css/ring_groups.css'
@@ -957,7 +957,7 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('#name', popup_html).bind('keyup blur change', function() {
-                                        $('.column.right .title').html('Ring Group - ' + $(this).val());
+                                        $('.column.right .title', popup_html).html('Ring Group - ' + $(this).val());
                                     });
 
                                     $('ul.settings1 > li > a', popup_html).click(function(item) {

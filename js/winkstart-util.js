@@ -29,7 +29,7 @@
             options = {},
             ok = false;
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a id="confirm_button" class="fancy_button green confirm_button" href="javascript:void(0);">OK</a><a id="cancel_button" class="fancy_button red confirm_button" href="javascript:void(0);">Cancel</a></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
 
         options.title = 'Please confirm';
         options.maxWidth = '400px';
@@ -68,16 +68,16 @@
             type_temp = type.toLowerCase();
 
         if(type_temp == 'error') {
-            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
+            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
         }
         else if(type_temp == 'info'){
-            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
+            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
         }
         else {
             callback = content;
             content = type;
             type_temp = 'warning';
-            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
+            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
         }
 
         options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);
@@ -91,7 +91,7 @@
 
         popup = winkstart.dialog(html, options);
 
-        $('.fancy_button', html).click(function() {
+        $('.btn', html).click(function() {
             popup.dialog('close');
         });
 
@@ -157,15 +157,15 @@
             var name = $(this).attr('name'),
                 type = $(this).attr('type'),
                 input_fields = $('input[name="' + name + '"]', html);
-        
+
             if(input_fields.size() > 1) {
                 if(type == 'checkbox'){
                     ($(this).attr('checked')) ? input_fields.attr('checked', 'checked') : input_fields.removeAttr('checked');
-                } 
-                else {
-                    input_fields.val($(this).val());   
                 }
-            } 
+                else {
+                    input_fields.val($(this).val());
+                }
+            }
             else {
                 $(this).unbind('.link');
             }
@@ -184,7 +184,7 @@
         if($('li', tabs_html).length < 2){
             buttons_html.hide();
         }
-        
+
         $('.basic', buttons_html).click(function(){
             if(!$(this).hasClass('activate')){
                 $('.btn', buttons_html).removeClass('activate');

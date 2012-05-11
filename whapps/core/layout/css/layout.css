@@ -306,7 +306,6 @@ button.fancy_button {
 .alert_buttons_wrapper {
     text-align: center;
     padding: 15px;
-    height: 35px;
 }
 
 .alert_text_wrapper {
@@ -364,11 +363,7 @@ button.fancy_button {
 }
 
 .alert_buttons_wrapper .confirm_button {
-    margin-left: 55px;
-    display: block;
-    width: 81px;
-    float:left;
-    /*padding:10px;*/
+    margin: 0 40px;
 }
 
 /* Not supported browser template */
