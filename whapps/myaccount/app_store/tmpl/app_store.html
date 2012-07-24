@@ -6,9 +6,12 @@
 		<div class="app-store-inner">
 			<ul class="app-store-ul">
 				{{each(i, app) available_apps}}
-					<li class="app" data-id="${app.id}" rel="popover" data-content="${app.desc}">
-						<div class="img ${app.id}"></div>
-						<h3>${app.label}</h3>
+					<li class="app" data-id="${app.id}">
+						<div class="desc" data-id="${app.id}">
+							<div class="img ${app.id}"></div>
+							<h3>${app.label}</h3>
+						</div>
+						
 						<div class="on-off">
 							{{if apps[app.id]}}
 								<input type="checkbox" name="${app.id}" class="switch" checked="checked" />

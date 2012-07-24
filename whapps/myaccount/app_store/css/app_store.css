@@ -64,13 +64,14 @@
     border-left: 1px solid #525252;
     border-right: 1px solid #353535;
     text-align: center;
+    cursor: pointer;
 }
 
 #app_store .app-store-inner .app-store-ul li:hover {
     box-shadow: inset 0px 0px 70px 10px #353535;
 }
 
-#app_store .app-store-inner .app-store-ul li .img {
+#app_store .app-store-inner .app-store-ul li .img , .app-store-desc .img {
     width: 58px;
     height: 54px;
     background-repeat: no-repeat;
@@ -78,35 +79,35 @@
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.voip {
+#app_store .app-store-inner .app-store-ul li .img.voip , .app-store-desc .img.voip {
     background-image: url('../images/HostedPBX.png');
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.cluster {
+#app_store .app-store-inner .app-store-ul li .img.cluster , .app-store-desc .img.cluster {
     background-image: url('../images/CloudManager.png');
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.pbxs {
+#app_store .app-store-inner .app-store-ul li .img.pbxs , .app-store-desc .img.pbxs {
     background-image: url('../images/PBXConnector.png');
 }
 
-#app_store .app-store-inner .app-store-ul li .img.numbers {
+#app_store .app-store-inner .app-store-ul li .img.numbers , .app-store-desc .img.numbers {
     background-image: url('../images/NumberManager.png');
 }
 
-#app_store .app-store-inner .app-store-ul li .img.userportal {
+#app_store .app-store-inner .app-store-ul li .img.userportal , .app-store-desc .img.userportal {
     background-image: url('../images/UserPortal.png');
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.accounts {
+#app_store .app-store-inner .app-store-ul li .img.accounts , .app-store-desc .img.accounts {
     background-image: url('../images/AccountManager.png');
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.developer {
+#app_store .app-store-inner .app-store-ul li .img.developer , .app-store-desc .img.developer {
     background-image: url('../images/DevelopersTool.png');
 }
 
@@ -122,7 +123,67 @@
 }
 
 
+.app-store-desc {
+    width: auto;
+}
 
+.app-store-desc h1 {
+    padding-top: 15px;
+}
+
+.app-store-desc p {
+    color: white;
+}
+
+.app-store-desc .container-fluid {
+    min-width: 0;
+}
+
+.app-store-desc .container-fluid > .content {
+    margin-right: 260px;
+    margin-left: 0;
+}
+
+.app-store-desc .container-fluid > .sidebar {
+    position: absolute;
+    right: 20px;
+    left: auto;;
+    top: 0;
+    width: 240px;
+
+    border: 1px black solid;
+    border-radius: 5px;
+    background-color: #a3a1a1;
+}
+
+.app-store-desc .container-fluid > .sidebar div.row:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+
+.app-store-desc .container-fluid > .sidebar h3 {
+    color: black;
+    text-shadow: none;
+    margin-bottom: 0;
+}
+
+.app-store-desc .container-fluid > .sidebar ul {
+    margin: 0 10px 5px 20px;
+}
+
+.app-store-desc .container-fluid > .sidebar li {
+    color: black;
+}
+
+.app-store-desc .screenshot {
+    background-repeat: no-repeat;
+    margin: 20px;
+    height: 306px;
+    width: 561px;
+}
+
+.app-store-desc .screenshot.voip{
+    background-image: url('../images/voip_screenshot.png');
+}
 
 
 

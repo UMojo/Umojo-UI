@@ -170,46 +170,53 @@
 
         available_apps: {
             'voip': {
+                features: [
+                    "Manage call flows",
+                    "Create individual extensions for your entire small office ",
+                    "Auto-provision phones and ",
+                    "Create customized feature codes ",
+                    "Manage devices for all users",
+                ],
                 id: 'voip',
                 label: 'Hosted PBX',
                 icon: 'device',
-                desc: 'Manage vmboxes, callflows ...'
+                desc: "This application gives you full access to add, edit and control all the PBX features you need including call flows, voicemails, conferencing, time of day call routing, etc. It's a complete web portal that allows you to visualize and manage your PBX without an ounce of hardware. "
             },
             'cluster': {
                 id: 'cluster',
                 label: 'Cluster Manager',
                 icon: 'cluster_manager',
-                desc: 'Manage Servers and Infrastructure'
+                desc: "Having a fully redundant system often means having several servers in various different data centers around the world. This application allows you to control and manage all those servers spread out across the full range of your data centers. An easy manager allows you to add and delete servers, shows you all the servers in your cluster, the role and location of each server and most importantly - the status of each one. "
             },
             'userportal': {
                 id: 'userportal',
                 label: 'Userportal',
                 icon: 'user',
-                desc: 'Let the user manage is own vmbox ...'
+                desc: "This application gives you access to all the information you need to know about your personal account. It's your simple one-stop location to access call history, devices. Now, the user can have all the information about their devices and phone system from the web. "
             },
             'accounts': {
                 id: 'accounts',
                 label: 'Accounts',
                 icon: 'account',
-                desc: 'Manage your sub-accounts'
+                desc: "This application allows you to easily see and manage all the sub-accounts you have under your main account. Now you can easily edit and configure all the accounts while saving time and money. "
             },
             'developer': {
                 id: 'developer',
                 label: 'Developer',
                 icon: 'connectivity',
-                desc: 'Api Developer Tool'
+                desc: "This application gives you access to over 15 APIs where you can  build your own applications or customize and edit the Kazoo applications  using these simple APIs. Here, you will be able to understand how to add, edit, and build with our APIs using different buttons such as GET, PUT, POST, and DELETE to see the APIs in action with some sample code.  "
             },
             'pbxs': {
                 id: 'pbxs',
                 label: 'PBX Connector',
                 icon: 'device',
-                desc: 'Manage your pbxs'
+                desc: "PBX Connector is an application that allows you to bring your existing PBX to Kazoo. So you can continue using the PBX you've always had and only use Kazoo minutes and phone lines. "
             },
             'numbers': {
                 id: 'numbers',
                 label: 'Number Manager',
                 icon: 'menu1',
-                desc: 'Manage your numbers'
+                desc: "When you're managing a PBX or running a business there are more numbers in your hands than you can manage. Number Manager is an application that allows you to purchase and delete numbers, port numbers from other carriers, and see which ones are assigned and which ones are available to assign to new customers. "
             }
         }
     };

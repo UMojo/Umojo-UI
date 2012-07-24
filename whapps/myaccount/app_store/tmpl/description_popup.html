@@ -1,0 +1,52 @@
+<div>
+	<div class="container-fluid">
+	    <div class="content">
+		    <div class="row">
+				<div class="span">
+					<div class="img ${app.id}"></div>
+				</div>
+				<div class="span">
+					<h1>${app.label}</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span screenshot ${app.id}"></div>
+			</div>
+			<div class="row">
+				<div class="span8">
+					<h3>Description</h3>
+					<p>${app.desc}</p> 
+				</div>
+			</div>
+		</div>
+
+		<div class="sidebar">
+			{{if app.features}}
+		  		<div class="row">
+		  			<div class="span">
+		  				<h3>Features</h3>
+		  				<ul>
+		  					{{each(i, feature) app.features}}
+		  						<li>${feature}</li>
+		  					{{/each}}
+		  				</ul>
+		  			</div>
+		  		</div>
+	  		{{/if}}
+	  		{{if app.links}}
+		  		<div class="row">
+		  			<div class="span">
+		  				<h3>Help & Documentation</h3>
+		  				<ul>
+		  					{{each(k, link) app.links}}
+		  						<li>
+		  							<a href="${app.links[k]}" target="_blank">${k}</a>
+		  						</li>
+		  					{{/each}}
+		  				</ul>
+		  			</div>
+		  		</div>
+		  	{{/if}}
+		</div>
+  	</div>
+</div>

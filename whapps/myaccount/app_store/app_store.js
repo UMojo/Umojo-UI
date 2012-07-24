@@ -4,12 +4,14 @@ winkstart.module('myaccount', 'app_store', {
         ],
 
         templates: {
-            app_store: 'tmpl/app_store.html'
+            app_store: 'tmpl/app_store.html',
+            description_popup: 'tmpl/description_popup.html'
         },
 
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
-            'app_store.popup': 'popup'
+            'app_store.popup': 'popup',
+            'app_store.description_popup': 'description_popup'
         },
 
         resources: {
@@ -104,7 +106,7 @@ winkstart.module('myaccount', 'app_store', {
 
                         $.each(_data.data.available_apps, function(k, v) {
                             if(v in winkstart.config.available_apps) {
-                                data.available_apps[k] = winkstart.config.available_apps[v];
+                                data.available_apps[v] = winkstart.config.available_apps[v];
                             }
                         });
 
@@ -112,13 +114,6 @@ winkstart.module('myaccount', 'app_store', {
                             count = 0,
                             total = $('.app-store-ul li', app_store_html).length;
 
-                        $('*[rel=popover]:not([type="text"])', app_store_html).popover({
-                            trigger: 'hover'
-                        });
-
-                        $('*[rel=popover][type="text"]', app_store_html).popover({
-                            trigger: 'focus'
-                        });
 
                         $('.switch', app_store_html)['switch']();
 
@@ -142,6 +137,11 @@ winkstart.module('myaccount', 'app_store', {
                                 );
                                 count++;
                             }
+                        });
+
+                        $('li.app .desc', app_store_html).click(function() {
+                            var id = $(this).data('id');
+                            winkstart.publish('app_store.description_popup', data.available_apps[id]);
                         });
 
                         $('#app_store_save', app_store_html).click(function(e) {
@@ -194,6 +194,42 @@ winkstart.module('myaccount', 'app_store', {
                     }
                 );
             });
+        },
+
+        render_description_popup: function(data, target, callback) { 
+
+            if(!data.app.links) {
+                data.app.links = {
+                    'Wiki': "https://2600hz.atlassian.net/wiki",
+                    'Videos': "http://www.youtube.com/user/2600hzOfficial/videos"
+                };
+            }
+
+            var description_popup_html = this.templates.description_popup.tmpl(data);
+
+            (target)
+                .empty()
+                .append(description_popup_html);
+
+            if(typeof callback == "function") {
+                callback();
+            }   
+        },
+
+        description_popup: function(data) {
+            var THIS = this,
+                popup_html = $('<div class="inline_popup"><div class="inline_content main_content app-store-desc"/></div>');
+
+            THIS.render_description_popup({app: data}, $('.inline_content', popup_html),
+                function() {
+                    winkstart.dialog(popup_html, {
+                        height: 'auto',
+                        modal: true,
+                        title: 'Description',
+                        autoOpen: true
+                    });
+                }
+            );
         },
 
         popup: function(){
