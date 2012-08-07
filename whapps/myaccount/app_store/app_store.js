@@ -114,11 +114,25 @@ winkstart.module('myaccount', 'app_store', {
                             count = 0,
                             total = $('.app-store-ul li', app_store_html).length;
 
-
                         $('.switch', app_store_html)['switch']();
 
-                        $('#left_scroll', app_store_html).click(function() {
-                            if(count > 0){
+                        var left_scroll = $('#left_scroll', app_store_html),
+                            right_scroll = $('#right_scroll', app_store_html),
+                            arrow = function(count) {
+                                $('.icon', left_scroll).addClass('blue');
+                                $('.icon', right_scroll).addClass('blue');
+
+                                if(count <= 0) {
+                                    $('.icon', left_scroll).removeClass('blue');
+                                }
+
+                                if(count+5 >= total) {
+                                    $('.icon', right_scroll).removeClass('blue');
+                                }
+                            };
+
+                        left_scroll.click(function() {
+                            if(count > 0) {
                                 var width = $('.app-store-ul li', app_store_html).outerWidth();
                                 $('.app-store-ul').animate(
                                     {left: '+=' + width},
@@ -126,9 +140,10 @@ winkstart.module('myaccount', 'app_store', {
                                 );
                                 count--;
                             }
+                            arrow(count);
                         });
 
-                        $('#right_scroll', app_store_html).click(function() {
+                        right_scroll.click(function() {
                             if(count+5 < total) {
                                 var width = $('.app-store-ul li', app_store_html).outerWidth();
                                 $('.app-store-ul').animate(
@@ -137,6 +152,7 @@ winkstart.module('myaccount', 'app_store', {
                                 );
                                 count++;
                             }
+                            arrow(count);
                         });
 
                         $('li.app .desc', app_store_html).click(function() {
@@ -172,7 +188,6 @@ winkstart.module('myaccount', 'app_store', {
 
                                             });
                                             tmp.apps = apps;
-
 
                                             THIS.update_acct(tmp, {}, function() {
                                                 window.location.reload();
